@@ -123,7 +123,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      */
     public function createPullFindEnemyForGuidEnd(): void
     {
-        $this->start(__METHOD__);
+        $this->end(__METHOD__);
     }
 
     /**
@@ -187,6 +187,14 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols(): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck(): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     /**

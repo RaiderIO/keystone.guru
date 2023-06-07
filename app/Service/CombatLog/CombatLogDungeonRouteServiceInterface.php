@@ -17,6 +17,7 @@ interface CombatLogDungeonRouteServiceInterface
         Dungeon $dungeon, 
         MappingVersion $mappingVersion, 
         Collection $resultEvents,
-        ?DungeonRoute $dungeonRoute = null
+        ?DungeonRoute $dungeonRoute = null,
+        bool $save = false
     ): Collection;
 }

@@ -70,38 +70,6 @@ abstract class MapContext
 
             $mapIcons = $this->mappingVersion->mapIcons;
 
-            $combatLogFilePath = null;
-
-            if ($this->floor->dungeon->key === Dungeon::DUNGEON_NELTHARIONS_LAIR) {
-                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log';
-            } elseif ($this->floor->dungeon->key === Dungeon::DUNGEON_THE_UNDERROT) {
-                $combatLogFilePath = 'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log';
-            } elseif ($this->floor->dungeon->key === Dungeon::DUNGEON_BRACKENHIDE_HOLLOW) {
-                $combatLogFilePath = base_path('WoWCombatLog-060223_181049_20_brackenhide-hollow.zip');
-            }
-
-            if ($combatLogFilePath !== null) {
-
-                try {
-                    /** @var CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService */
-                    $combatLogDungeonRouteService = App::make(CombatLogDungeonRouteServiceInterface::class);
-
-                    $resultEvents  = $combatLogDungeonRouteService->getResultEvents($combatLogFilePath);
-                    $dungeonRoute  = $this->context instanceof DungeonRoute ? $this->context : null;
-                    $eventMapIcons = $combatLogDungeonRouteService->generateMapIconsFromEvents(
-                        $this->floor->dungeon,
-                        $this->mappingVersion,
-                        $resultEvents,
-                        $dungeonRoute
-                    );
-
-                    $mapIcons = $mapIcons->merge($eventMapIcons);
-
-                } catch (\Exception $exception) {
-                    dd($exception);
-                }
-            }
-
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
                 'latestMappingVersion'      => $dungeon->getCurrentMappingVersion(),

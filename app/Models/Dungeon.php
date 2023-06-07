@@ -707,7 +707,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
                 $builder->where('npc_enemy_forces.enemy_forces', '>', 0)
                     ->orWhereIn('npcs.classification_id', [
                         NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]
+                    ])
+                    ->orWhereIn('npcs.id', [
+                        // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
+                        // They're in the mapping because they're dangerous af
+                        101437,
+                        // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                        // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
+                        190407
                     ]);
             })
             ->get()

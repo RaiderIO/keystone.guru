@@ -23,7 +23,7 @@ class StructuredLogging implements StructuredLoggingInterface
     public function addContext(string $key, ...$context): void
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
-        $this->groupedContexts[$key] = $context;
+        $this->groupedContexts[$key] = call_user_func_array('array_merge', $context);
         $this->cachedContext         = call_user_func_array('array_merge', $this->groupedContexts);
     }
 

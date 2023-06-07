@@ -119,7 +119,13 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         // Store found enemy positions in the database for analyzing
         $this->saveEnemyPositions($resultEvents);
 
-        return (new DungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
+        $dungeonRoute = (new DungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
+
+        if (config('app.env') !== 'production') {
+            $this->generateMapIconsFromEvents($dungeonRoute->dungeon, $dungeonRoute->mappingVersion, $resultEvents, $dungeonRoute, true);
+        }
+
+        return $dungeonRoute;
     }
 
     //    /**
@@ -318,6 +324,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @param MappingVersion               $mappingVersion
      * @param Collection|BaseResultEvent[] $resultEvents
      * @param DungeonRoute|null            $dungeonRoute
+     * @param bool                         $save
      *
      * @return Collection
      */
@@ -325,7 +332,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         Dungeon $dungeon,
         MappingVersion $mappingVersion,
         Collection $resultEvents,
-        ?DungeonRoute $dungeonRoute = null
+        ?DungeonRoute $dungeonRoute = null,
+        bool $save = false
     ): Collection {
         $result = collect();
 
@@ -393,12 +401,16 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                 'permanent_tooltip'  => 0,
             ]);
 
-            $mapIcon->id             = $id;
             $mapIcon->seasonal_index = null;
+            if ($save) {
+                $mapIcon->save();
+            } else {
+                $mapIcon->id = $id;
+
+                $id++;
+            }
 
             $result->push($mapIcon);
-
-            $id++;
         }
 
         return $result;

@@ -42,6 +42,8 @@ interface DungeonRouteBuilderLoggingInterface
     
     public function findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols(): void;
     
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck(): void;
+    
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $closestEnemyDistance, int $maxDistance): void;
     
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $closestEnemyDistance): void;

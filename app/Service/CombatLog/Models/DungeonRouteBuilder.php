@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Models;
 use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
@@ -26,6 +27,14 @@ class DungeonRouteBuilder
 
     /** @var int The distance in yards that an enemy must be away from before we completely ignore him - it must be an error. */
     private const MAX_DISTANCE_IGNORE = 100;
+    
+    /** @var array Dungeons for which the floor check for enemies is disabled due to issues on Blizzard's side */
+    private const DUNGEON_ENEMY_FLOOR_CHECK_DISABLED = [
+        // With this check for example, the Gulping Goliath in Halls of Infusion will not be killed as the floor switch only happens til
+        // after the boss and as a result we can't find it. Maybe in the future we have to enable this check for certain dungeons such as
+        // The Azure Vaults since that's a Z-layered dungeon. You can run into issues then when enemies are accidentally assigned between floors
+        Dungeon::DUNGEON_HALLS_OF_INFUSION
+    ];
 
     private DungeonRoute $dungeonRoute;
 
@@ -61,7 +70,7 @@ class DungeonRouteBuilder
         $this->enemiesKilledInCurrentPull = collect();
         $this->currentEnemiesInCombat     = collect();
         $this->currentFloor               = null;
-        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies()->with(['enemyPack', 'enemyPatrol'])->get()->sort(function (
+        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies()->with(['floor', 'enemyPack', 'enemyPatrol'])->get()->sort(function (
             Enemy $enemy
         ) {
             return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
@@ -218,7 +227,7 @@ class DungeonRouteBuilder
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemyDistance = 99999999999;
             /** @var Enemy|null $closestEnemy */
-            $closestEnemy         = null;
+            $closestEnemy = null;
 
             /** @var Collection|Enemy[] $filteredEnemies */
             $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId)
@@ -231,7 +240,9 @@ class DungeonRouteBuilder
                     return false;
                 }
 
-                if ($availableEnemy->floor_id !== $this->currentFloor->id) {
+                // I'd like to have the check for floor_ids here but in-game a new floor is not always navigated when you expect it to.
+                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) && 
+                    $availableEnemy->floor_id !== $this->currentFloor->id) {
                     return false;
                 }
 
@@ -260,7 +271,7 @@ class DungeonRouteBuilder
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
                     $closestEnemy->id, $closestEnemyDistance, $closestEnemy->enemyPack->group
                 );
-            } else{
+            } else {
                 foreach ($filteredEnemies as $availableEnemy) {
                     $this->findClosestEnemyAndDistance($availableEnemy, $availableEnemy->lat, $availableEnemy->lng,
                         $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
@@ -294,10 +305,14 @@ class DungeonRouteBuilder
                 }
 
                 if ($closestEnemyDistance > self::MAX_DISTANCE_IGNORE) {
-                    $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
-                        optional($closestEnemy)->id, $closestEnemyDistance, self::MAX_DISTANCE_IGNORE
-                    );
-                    $closestEnemy = null;
+                    if ($closestEnemy !== null && $closestEnemy->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                        $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
+                    } else {
+                        $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
+                            optional($closestEnemy)->id, $closestEnemyDistance, self::MAX_DISTANCE_IGNORE
+                        );
+                        $closestEnemy = null;
+                    }
                 }
             }
 
