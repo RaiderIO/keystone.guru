@@ -34,6 +34,8 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function buildEnd(): void;
     
+    public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
+    
     public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void;
     
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void;

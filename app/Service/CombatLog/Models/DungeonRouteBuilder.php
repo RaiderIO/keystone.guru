@@ -27,13 +27,18 @@ class DungeonRouteBuilder
 
     /** @var int The distance in yards that an enemy must be away from before we completely ignore him - it must be an error. */
     private const MAX_DISTANCE_IGNORE = 100;
-    
+
     /** @var array Dungeons for which the floor check for enemies is disabled due to issues on Blizzard's side */
     private const DUNGEON_ENEMY_FLOOR_CHECK_DISABLED = [
         // With this check for example, the Gulping Goliath in Halls of Infusion will not be killed as the floor switch only happens til
         // after the boss and as a result we can't find it. Maybe in the future we have to enable this check for certain dungeons such as
         // The Azure Vaults since that's a Z-layered dungeon. You can run into issues then when enemies are accidentally assigned between floors
-        Dungeon::DUNGEON_HALLS_OF_INFUSION
+        Dungeon::DUNGEON_HALLS_OF_INFUSION,
+    ];
+
+    private const NPC_ID_MAPPING = [
+        // Brackenhide Gnolls transform into Witherlings after engaging them
+        194373 => 187238,
     ];
 
     private DungeonRoute $dungeonRoute;
@@ -70,7 +75,11 @@ class DungeonRouteBuilder
         $this->enemiesKilledInCurrentPull = collect();
         $this->currentEnemiesInCombat     = collect();
         $this->currentFloor               = null;
-        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies()->with(['floor', 'enemyPack', 'enemyPatrol'])->get()->sort(function (
+        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies()->with([
+            'floor',
+            'enemyPack',
+            'enemyPatrol',
+        ])->get()->sort(function (
             Enemy $enemy
         ) {
             return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
@@ -158,8 +167,18 @@ class DungeonRouteBuilder
                 $this->log->createPullFindEnemyForGuidStart($guid);
                 /** @var EnemyEngaged $enemyEngagedEvent */
                 $advancedData = $enemyEngagedEvent->getEngagedEvent()->getAdvancedData();
-                $enemy        = $this->findUnkilledEnemyForNpcAtIngameLocation(
-                    $enemyEngagedEvent->getGuid()->getId(),
+                $npcId        = $enemyEngagedEvent->getGuid()->getId();
+
+                // See if we actually need to go look for another NPC
+                if (isset(self::NPC_ID_MAPPING[$npcId])) {
+                    $this->log->createPullFindEnemyForGuidStartMappingToDifferentNpcId(
+                        $npcId, self::NPC_ID_MAPPING[$npcId]
+                    );
+                    $npcId = self::NPC_ID_MAPPING[$npcId];
+                }
+
+                $enemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                    $npcId,
                     $advancedData->getPositionX(),
                     $advancedData->getPositionY(),
                     $groupsPulled
@@ -167,7 +186,7 @@ class DungeonRouteBuilder
 
                 if ($enemy === null) {
                     $this->log->createPullEnemyNotFound(
-                        $enemyEngagedEvent->getGuid()->getId(),
+                        $npcId,
                         $advancedData->getPositionX(),
                         $advancedData->getPositionY()
                     );
@@ -184,14 +203,14 @@ class DungeonRouteBuilder
                         $groupsPulled->put($enemy->enemyPack->group, true);
                     }
                     $this->log->createPullEnemyAttachedToKillZone(
-                        $enemyEngagedEvent->getGuid()->getId(),
+                        $npcId,
                         $advancedData->getPositionX(),
                         $advancedData->getPositionY()
                     );
                 }
             }
             finally {
-                $this->log->createPullFindEnemyForGuidEnd($guid);
+                $this->log->createPullFindEnemyForGuidEnd();
             }
         }
 
@@ -241,7 +260,7 @@ class DungeonRouteBuilder
                 }
 
                 // I'd like to have the check for floor_ids here but in-game a new floor is not always navigated when you expect it to.
-                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) && 
+                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) &&
                     $availableEnemy->floor_id !== $this->currentFloor->id) {
                     return false;
                 }

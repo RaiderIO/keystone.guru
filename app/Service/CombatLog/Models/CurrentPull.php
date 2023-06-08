@@ -35,6 +35,9 @@ class CurrentPull
 
         // Uldaman: Chrono-Lord Deios goes "ENOUGH" at 1hp, makes himself immune and teleports away
         184125 => 0.01,
+        
+        // Brackenhide Hollow: Decatriarch Wratheye is defeated at 5%
+        186121 => 0.05
     ];
 
     /**

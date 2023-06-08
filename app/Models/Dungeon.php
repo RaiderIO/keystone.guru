@@ -742,7 +742,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     ]);
             })
             ->get()
-            ->pluck('id');
+            ->pluck('id')
+            // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so 
+            // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert
+            // into Witherlings which ARE on the mapping. Without this exception, they wouldn't turn up and the
+            // Witherlings would never get mapped properly
+            ->push(194373);
     }
 
     /**
