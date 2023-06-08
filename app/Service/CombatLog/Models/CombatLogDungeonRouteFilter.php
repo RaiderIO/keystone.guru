@@ -41,7 +41,6 @@ class CombatLogDungeonRouteFilter
      */
     public function filter(): Collection
     {
-        // @TODO Fetch current mapping version, fetch enemy forces for said mapping version and filter in the query instead
         $validNpcIds = $this->dungeonRoute->dungeon->getNpcIdsWithEnemyForces();
 
         // All events that are necessary to build the final route
@@ -51,6 +50,7 @@ class CombatLogDungeonRouteFilter
         // Keep track of our current pull
         $currentPull = new CurrentPull($resultEvents, $validNpcIds);
 
+        $lineNr = 1;
         foreach ($this->combatLogEvents as $combatLogEvent) {
             $this->filterSpecialEvents($resultEvents, $combatLogEvent);
 
@@ -58,12 +58,14 @@ class CombatLogDungeonRouteFilter
             $partyState->parse($combatLogEvent);
 
             // Keep our current pull up to date with relevant events
-            $currentPull->parse($combatLogEvent);
+            $currentPull->parse($combatLogEvent, $lineNr);
 
             // Notify the current pull if we wiped
             if ($partyState->isPartyWiped()) {
                 $currentPull->partyWiped();
             }
+
+            $lineNr++;
         }
 
         // Ensure events are in chronological order

@@ -7,27 +7,87 @@ use App\Logging\StructuredLogging;
 class CurrentPullLogging extends StructuredLogging implements CurrentPullLoggingInterface
 {
     /**
+     * @param int $lineNr
+     *
      * @return void
      */
-    public function parseChallengeModeStarted(): void
+    public function parseChallengeModeStarted(int $lineNr): void
     {
         $this->info(__METHOD__);
     }
-    
+
     /**
+     * @param int $lineNr
+     *
      * @return void
      */
-    public function parseChallengeModeEnded(): void
+    public function parseChallengeModeEnded(int $lineNr): void
     {
         $this->info(__METHOD__);
     }
-    
+
     /**
+     * @param int    $lineNr
      * @param string $destGuid
      *
      * @return void
      */
-    public function parseUnitDied(string $destGuid): void
+    public function parseUnitDied(int $lineNr, string $destGuid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitInCurrentPullKilled(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitSummoned(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitFirstSighted(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitEvadedRemovedFromCurrentPull(int $lineNr, string $guid): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $newEnemyGuid
+     *
+     * @return void
+     */
+    public function parseUnitAddedToCurrentPull(int $lineNr, string $newEnemyGuid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -37,7 +97,7 @@ class CurrentPullLogging extends StructuredLogging implements CurrentPullLogging
      *
      * @return void
      */
-    public function parseUnitInCurrentPullKilled(string $guid): void
+    public function getEnemyEngagedEventUsingFirstSightedEvent(string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -47,27 +107,7 @@ class CurrentPullLogging extends StructuredLogging implements CurrentPullLogging
      *
      * @return void
      */
-    public function parseUnitSummoned(string $guid): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-    
-    /**
-     * @param string $guid
-     *
-     * @return void
-     */
-    public function parseUnitEvadedRemovedFromCurrentPull(string $guid): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-    
-    /**
-     * @param string $newEnemyGuid
-     *
-     * @return void
-     */
-    public function parseUnitAddedToCurrentPull(string $newEnemyGuid): void
+    public function getEnemyEngagedEventUsingEngagedEvent(string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

@@ -64,7 +64,7 @@ abstract class Guid
         $result = null;
 
         $parameters = explode('-', $guid);
-        $guidType   = array_shift($parameters);
+        $guidType   = $parameters[0];
 
         foreach (self::GUID_TYPE_CLASS_MAPPING as $guidTypeCandidate => $className) {
             if ($guidType === $guidTypeCandidate) {

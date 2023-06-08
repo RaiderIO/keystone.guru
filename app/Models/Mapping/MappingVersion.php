@@ -143,7 +143,7 @@ class MappingVersion extends Model
      */
     public function mapIcons(): HasMany
     {
-        return $this->hasMany(MapIcon::class);
+        return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id');
     }
 
     /**

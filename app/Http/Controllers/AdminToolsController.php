@@ -64,10 +64,10 @@ class AdminToolsController extends Controller
 //                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
 //                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
 //                    'WoWCombatLog-051223_185606_14_brackenhide-hollow.zip'
-//                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
+                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
 //                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
 //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
-                'WoWCombatLog-060223_181049_20_neltharus.zip'
+//                'WoWCombatLog-060223_181049_20_neltharus.zip'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'

@@ -66,15 +66,11 @@ abstract class MapContext
         // Get the DungeonData
         $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function ()
         {
-            $dungeon = $this->floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons', 'mountableareas']);
-
-            $mapIcons = $this->mappingVersion->mapIcons;
-
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
-                'latestMappingVersion'      => $dungeon->getCurrentMappingVersion(),
+                'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
                 'enemies'                   => $this->mappingVersion->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
-                'npcs'                      => $dungeon->npcs()->with([
+                'npcs'                      => $this->floor->dungeon->npcs()->with([
                     'spells',
                     // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
                     'enemyForces' => function (HasOne $query)
@@ -85,7 +81,7 @@ abstract class MapContext
                 'auras'                     => Spell::where('aura', true)->get(),
                 'enemyPacks'                => $this->mappingVersion->enemyPacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
                 'enemyPatrols'              => $this->mappingVersion->enemyPatrols,
-                'mapIcons'                  => $mapIcons,
+                'mapIcons'                  => $this->mappingVersion->mapIcons,
                 'dungeonFloorSwitchMarkers' => $this->mappingVersion->dungeonFloorSwitchMarkers,
                 'mountableAreas'            => $this->mappingVersion->mountableAreas,
             ]);

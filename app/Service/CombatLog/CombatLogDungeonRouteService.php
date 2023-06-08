@@ -90,6 +90,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      */
     public function convertCombatLogToDungeonRoute(string $combatLogFilePath): DungeonRoute
     {
+        ini_set('max_execution_time', 1800);
         ini_set('memory_limit', '2G');
         $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
 
@@ -371,8 +372,9 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             $destGuid   = $combatLogEvent->getGenericData()->getDestGuid();
             if ($sourceGuid instanceof Creature && $sourceGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
                 $comment = sprintf(
-                    '%s: source: %s -> %s @ %s,%s',
+                    '%s: source (%s): %s -> %s @ %s,%s',
                     $combatLogEvent->getTimestamp()->toDateTimeString('millisecond'),
+                    $sourceGuid->getUnitType(),
                     $sourceGuid->getGuid(),
                     $combatLogEvent->getGenericData()->getSourceName(),
                     $combatLogEvent->getAdvancedData()->getPositionX(),
@@ -380,8 +382,9 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                 );
             } elseif ($destGuid instanceof Creature) {
                 $comment = sprintf(
-                    '%s: dest: %s -> %s @ %s,%s',
+                    '%s: dest (%s): %s -> %s @ %s,%s',
                     $combatLogEvent->getTimestamp()->toDateTimeString('millisecond'),
+                    $destGuid->getUnitType(),
                     $destGuid->getGuid(),
                     $combatLogEvent->getGenericData()->getDestName(),
                     $combatLogEvent->getAdvancedData()->getPositionX(),

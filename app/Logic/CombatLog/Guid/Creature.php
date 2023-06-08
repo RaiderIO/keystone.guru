@@ -10,6 +10,8 @@ class Creature extends Guid
     const CREATURE_UNIT_TYPE_VEHICLE     = 'Vehicle';
 
     private string $unitType;
+    
+    private int $unknown1;
 
     private int $serverId;
 
@@ -26,11 +28,12 @@ class Creature extends Guid
         parent::__construct($guid);
 
         $this->unitType   = $parameters[0];
-        $this->serverId   = $parameters[1];
-        $this->instanceId = $parameters[2];
-        $this->zoneUID    = $parameters[3];
-        $this->id         = $parameters[4];
-        $this->spawnUID   = $parameters[5];
+        $this->unknown1   = $parameters[1];
+        $this->serverId   = $parameters[2];
+        $this->instanceId = $parameters[3];
+        $this->zoneUID    = $parameters[4];
+        $this->id         = $parameters[5];
+        $this->spawnUID   = $parameters[6];
     }
 
     /**
@@ -39,6 +42,13 @@ class Creature extends Guid
     public function getUnitType(): string
     {
         return $this->unitType;
+    }
+    /**
+     * @return int
+     */
+    public function getUnknown1(): int
+    {
+        return $this->unknown1;
     }
 
     /**
