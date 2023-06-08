@@ -735,6 +735,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
                         190407,
                         // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                         194273,
+                        // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
+                        194745,
+                        // Wild Lashers give 0 enemy forces but are in the mapping regardless
+                        191243,
                     ]);
             })
             ->get()
