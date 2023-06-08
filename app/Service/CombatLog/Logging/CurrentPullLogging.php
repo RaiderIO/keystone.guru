@@ -28,11 +28,55 @@ class CurrentPullLogging extends StructuredLogging implements CurrentPullLogging
 
     /**
      * @param int    $lineNr
-     * @param string $destGuid
+     * @param string $guid
      *
      * @return void
      */
-    public function parseUnitDied(int $lineNr, string $destGuid): void
+    public function parseUnitDied(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasAlreadyKilled(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+    
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasSummoned(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedInvalidNpcId(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

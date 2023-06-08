@@ -35,9 +35,9 @@ class CurrentPull
 
         // Uldaman: Chrono-Lord Deios goes "ENOUGH" at 1hp, makes himself immune and teleports away
         184125 => 0.01,
-        
+
         // Brackenhide Hollow: Decatriarch Wratheye is defeated at 5%
-        186121 => 0.05
+        186121 => 0.05,
     ];
 
     /**
@@ -120,25 +120,43 @@ class CurrentPull
         if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
             $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
+            
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
-            if ($this->currentPull->has($destGuid->getGuid()) &&
-                $this->killedEnemies->search($destGuid->getGuid()) === false &&
-                $this->summonedEnemies->search($destGuid->getGuid()) === false) {
-                // Then we're interested in the first time we saw this enemy
-                // Push a new result event - we successfully killed this enemy, and it gave count!
-                $this->resultEvents->push((new EnemyEngaged($this->getEnemyEngagedEvent($destGuid), $destGuid)));
-                // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
-                $this->resultEvents->push((new EnemyKilled($combatLogEvent)));
-                // This enemy is no longer part of our current pull
-                $this->currentPull->forget($destGuid->getGuid());
-
-                // We have officially killed this enemy
-                $this->killedEnemies->push($destGuid);
-
-                $this->log->parseUnitInCurrentPullKilled($lineNr, $destGuid->getGuid());
-
-                return true;
+            if (!$this->currentPull->has($destGuid->getGuid())) {
+                $this->log->parseUnitDiedEnemyWasNotPartOfCurrentPull($lineNr, $destGuid->getGuid());
+                return false;
             }
+            
+            if ($this->killedEnemies->search($destGuid->getGuid()) !== false) {
+                $this->log->parseUnitDiedEnemyWasAlreadyKilled($lineNr, $destGuid->getGuid());
+                return false;
+            }
+            
+            if ($this->summonedEnemies->search($destGuid->getGuid()) !== false) {
+                $this->log->parseUnitDiedEnemyWasSummoned($lineNr, $destGuid->getGuid());
+                return false;
+            }
+
+            /** @var Creature $destGuid */
+            if ($this->validNpcIds->search($destGuid->getId()) === false) {
+                $this->log->parseUnitDiedInvalidNpcId($lineNr, $destGuid->getGuid());
+                return false;
+            }
+            
+            // Then we're interested in the first time we saw this enemy
+            // Push a new result event - we successfully killed this enemy, and it gave count!
+            $this->resultEvents->push((new EnemyEngaged($this->getEnemyEngagedEvent($destGuid), $destGuid)));
+            // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
+            $this->resultEvents->push((new EnemyKilled($combatLogEvent)));
+            // This enemy is no longer part of our current pull
+            $this->currentPull->forget($destGuid->getGuid());
+
+            // We have officially killed this enemy
+            $this->killedEnemies->push($destGuid);
+
+            $this->log->parseUnitInCurrentPullKilled($lineNr, $destGuid->getGuid());
+
+            return true;
         }
 
         $newEnemyGuid = null;
