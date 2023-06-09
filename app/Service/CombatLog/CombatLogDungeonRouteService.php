@@ -4,9 +4,11 @@ namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
+use App\Logic\CombatLog\SpecialEvents\GenericSpecialEvent;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\EnemyPosition;
@@ -19,18 +21,19 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
+use App\Service\CombatLog\Builders\DungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Exceptions\NoChallangeModeStartFoundException;
+use App\Service\CombatLog\Filters\CombatLogDungeonRouteFilter;
+use App\Service\CombatLog\Filters\DungeonRouteFilter;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
-use App\Service\CombatLog\Models\CombatLogDungeonRouteFilter;
-use App\Service\CombatLog\Models\DungeonRouteBuilder;
-use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
-use App\Service\CombatLog\Models\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
-use App\Service\CombatLog\Models\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
-use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
-use App\Service\CombatLog\Models\ResultEvents\EnemyKilled;
-use App\Service\CombatLog\Models\ResultEvents\MapChange as MapChangeResultEvent;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
+use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
+use App\Service\CombatLog\ResultEvents\EnemyEngaged;
+use App\Service\CombatLog\ResultEvents\EnemyKilled;
+use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use Exception;
@@ -59,22 +62,35 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         $this->seasonService    = $seasonService;
         $this->log              = $log;
     }
+
     /**
-     * @param string $combatLogFilePath
+     * @param string            $combatLogFilePath
+     * @param DungeonRoute|null $dungeonRoute
      *
      * @return Collection
-     * @throws AdvancedLogNotEnabledException
-     * @throws DungeonNotSupportedException
-     * @throws NoChallangeModeStartFoundException
+     * @throws Exception
      */
-    public function getResultEvents(string $combatLogFilePath): Collection
+    public function getResultEvents(string $combatLogFilePath, ?DungeonRoute &$dungeonRoute = null): Collection
     {
-        ini_set('memory_limit', '2G');
-        $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
+        $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
+        $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
-        $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
+        $this->combatLogService->parseCombatLogStreaming($combatLogFilePath,
+            function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter)
+            {
+                // If parsing was successful, it generated a dungeonroute, so then construct our filter
+                if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
+                    $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
+                }
 
-        return (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
+                $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
+            }
+        );
+
+        // Output the dungeon route as well
+        $dungeonRoute = $dungeonRouteFilter->getDungeonRoute();
+
+        return $combatLogDungeonRouteFilter->getResultEvents();
     }
 
     /**
@@ -91,12 +107,12 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     public function convertCombatLogToDungeonRoute(string $combatLogFilePath): DungeonRoute
     {
         ini_set('max_execution_time', 1800);
-        ini_set('memory_limit', '2G');
-        $combatLogEvents = $this->combatLogService->parseCombatLogToEvents($combatLogFilePath);
 
-        $dungeonRoute = $this->initDungeonRoute($combatLogEvents);
-
-        $resultEvents = (new CombatLogDungeonRouteFilter($dungeonRoute, $combatLogEvents))->filter();
+        $dungeonRoute = null;
+        $resultEvents = $this->getResultEvents($combatLogFilePath, $dungeonRoute);
+        if (!($dungeonRoute instanceof DungeonRoute)) {
+            throw new Exception('Unable to generate dungeon route from combat log!');
+        }
 
 //        dd($resultEvents->map(function (BaseResultEvent $resultEvent)
 //        {
@@ -107,10 +123,17 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 //                    $resultEvent->getGuid()->getGuid()
 //                );
 //            } elseif ($resultEvent instanceof EnemyKilled) {
+//                $baseEvent = $resultEvent->getBaseEvent();
+//                if ($baseEvent instanceof GenericSpecialEvent || $baseEvent instanceof CombatLogEvent) {
+//                    $genericData = $baseEvent->getGenericData();
+//                } else {
+//                    return 'EVENT HAS NO GENERIC DATA';
+//                }
+//
 //                return sprintf('%s: %s -> %s',
 //                    $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
 //                    get_class($resultEvent),
-//                    $resultEvent->getUnitDiedEvent()->getGenericData()->getDestGuid()->getGuid()
+//                    $genericData->getDestGuid()->getGuid()
 //                );
 //            } else {
 //                return get_class($resultEvent);
@@ -123,7 +146,13 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         $dungeonRoute = (new DungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
 
         if (config('app.env') !== 'production') {
-            $this->generateMapIconsFromEvents($dungeonRoute->dungeon, $dungeonRoute->mappingVersion, $resultEvents, $dungeonRoute, true);
+            $this->generateMapIconsFromEvents(
+                $dungeonRoute->dungeon,
+                $dungeonRoute->mappingVersion,
+                $resultEvents,
+                $dungeonRoute,
+                true
+            );
         }
 
         return $dungeonRoute;
@@ -212,7 +241,6 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 
                 break;
             } // Otherwise, we skip all events until we are fully initialized
-
         }
 
         if ($dungeonRoute === null) {
@@ -223,7 +251,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     }
 
     /**
-     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param Collection|\App\Service\CombatLog\ResultEvents\BaseResultEvent[] $resultEvents
      *
      * @return void
      */
@@ -321,11 +349,11 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     //    }
 
     /**
-     * @param Dungeon                      $dungeon
-     * @param MappingVersion               $mappingVersion
-     * @param Collection|BaseResultEvent[] $resultEvents
-     * @param DungeonRoute|null            $dungeonRoute
-     * @param bool                         $save
+     * @param Dungeon                                                          $dungeon
+     * @param MappingVersion                                                   $mappingVersion
+     * @param Collection|\App\Service\CombatLog\ResultEvents\BaseResultEvent[] $resultEvents
+     * @param DungeonRoute|null                                                $dungeonRoute
+     * @param bool                                                             $save
      *
      * @return Collection
      */

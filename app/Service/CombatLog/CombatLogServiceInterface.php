@@ -16,6 +16,14 @@ interface CombatLogServiceInterface
     public function parseCombatLogToEvents(string $filePath): Collection;
 
     /**
+     * @param string   $filePath
+     * @param callable $callable
+     *
+     * @return void
+     */
+    public function parseCombatLogStreaming(string $filePath, callable $callable): void;
+
+    /**
      * @param string $filePath
      *
      * @return Collection|ChallengeMode[]

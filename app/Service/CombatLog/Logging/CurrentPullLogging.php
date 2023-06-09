@@ -87,6 +87,17 @@ class CurrentPullLogging extends StructuredLogging implements CurrentPullLogging
      *
      * @return void
      */
+    public function parseUnitDiedEnemyWasNotEngaged(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
     public function parseUnitInCurrentPullKilled(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());

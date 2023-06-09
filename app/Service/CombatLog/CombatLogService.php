@@ -56,6 +56,26 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
+     * @param string   $filePath
+     * @param callable $callable
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function parseCombatLogStreaming(string $filePath, callable $callable): void
+    {
+        $this->parseCombatLog($filePath, function (string $rawEvent, int $lineNr) use ($callable) {
+            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent();
+
+            if ($parsedEvent !== null) {
+                $callable($parsedEvent, $lineNr);
+            } else {
+                $this->log->parseCombatLogToEventsUnableToParseRawEvent($rawEvent);
+            }
+        });
+    }
+
+    /**
      * @param string $filePath
      *
      * @return Collection|ChallengeMode

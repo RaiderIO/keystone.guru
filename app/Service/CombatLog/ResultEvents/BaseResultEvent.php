@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Models\ResultEvents;
+namespace App\Service\CombatLog\ResultEvents;
 
 use App\Logic\CombatLog\BaseEvent;
 

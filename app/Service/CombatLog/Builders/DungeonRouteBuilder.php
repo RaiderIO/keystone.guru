@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Models;
+namespace App\Service\CombatLog\Builders;
 
 use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
@@ -13,10 +13,10 @@ use App\Models\Floor;
 use App\Models\KillZone;
 use App\Models\KillZoneEnemy;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
-use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
-use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
-use App\Service\CombatLog\Models\ResultEvents\EnemyKilled;
-use App\Service\CombatLog\Models\ResultEvents\MapChange as MapChangeResultEvent;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\ResultEvents\EnemyEngaged;
+use App\Service\CombatLog\ResultEvents\EnemyKilled;
+use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -165,7 +165,7 @@ class DungeonRouteBuilder
         foreach ($this->enemiesKilledInCurrentPull as $guid => $enemyEngagedEvent) {
             try {
                 $this->log->createPullFindEnemyForGuidStart($guid);
-                /** @var EnemyEngaged $enemyEngagedEvent */
+                /** @var \App\Service\CombatLog\ResultEvents\EnemyEngaged $enemyEngagedEvent */
                 $advancedData = $enemyEngagedEvent->getEngagedEvent()->getAdvancedData();
                 $npcId        = $enemyEngagedEvent->getGuid()->getId();
 

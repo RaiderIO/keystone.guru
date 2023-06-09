@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Models;
+namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
@@ -12,19 +12,19 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Logic\CombatLog\Guid\Evade;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Logic\Utils\MathUtils;
+use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\Logging\CurrentPullLoggingInterface;
-use App\Service\CombatLog\Models\ResultEvents\BaseResultEvent;
-use App\Service\CombatLog\Models\ResultEvents\EnemyEngaged;
-use App\Service\CombatLog\Models\ResultEvents\EnemyKilled;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\ResultEvents\EnemyEngaged;
+use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
-class CurrentPull
+class CombatFilter implements CombatLogParserInterface
 {
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
     private const DEFEATED_PERCENTAGE = [
@@ -44,6 +44,12 @@ class CurrentPull
      * @var int The maximum distance since our absolute first sighting before we disregard any other events and return to the original distance.
      * If we aggroed an enemy using some spell (max range 40) and we proceed to drag the enemy 100 yards away before beating it to death, we're better
      * off taking the original position of the caster even if it's max 40 yards off. Better 40 yards than 100 yards.
+     *
+     * Also consider that if we max range pull an enemy and then proceed to pull that enemy in the direction away from the caster,
+     * they will trigger this MAX_LEASH_DISTANCE quickly. However - the caster's location is even then probably a better reference
+     * since we know that area is safe - be it from killed enemies or it's just clear, otherwise the player would be in combat already.
+     * Using the target's current location to identify the enemy actually can resolve to an incorrect enemy quicker since it will
+     * consider unpulled enemies quicker.
      */
     private const MAX_LEASH_DISTANCE = 40;
 
@@ -57,7 +63,7 @@ class CurrentPull
     private Collection $firstEnemySightings;
 
     /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
-    private Collection $currentPull;
+    private Collection $accurateEnemySightings;
 
     /** @var Collection|string[] List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
     private Collection $summonedEnemies;
@@ -71,18 +77,26 @@ class CurrentPull
     /** @var CurrentPullLoggingInterface */
     protected $log;
 
-    public function __construct(Collection $resultEvents, Collection $validNpcIds)
+    public function __construct(Collection $resultEvents)
     {
-        $this->resultEvents        = $resultEvents;
-        $this->validNpcIds         = $validNpcIds;
-        $this->firstEnemySightings = collect();
-        $this->currentPull         = collect();
-        $this->summonedEnemies     = collect();
-        $this->killedEnemies       = collect();
+        $this->resultEvents           = $resultEvents;
+        $this->validNpcIds            = collect();
+        $this->firstEnemySightings    = collect();
+        $this->accurateEnemySightings = collect();
+        $this->summonedEnemies        = collect();
+        $this->killedEnemies          = collect();
 
         /** @var CurrentPullLoggingInterface $log */
         $log       = App::make(CurrentPullLoggingInterface::class);
         $this->log = $log;
+    }
+    
+    /**
+     * @param Collection $validNpcIds
+     */
+    public function setValidNpcIds(Collection $validNpcIds): void
+    {
+        $this->validNpcIds = $validNpcIds;
     }
 
     /**
@@ -96,8 +110,8 @@ class CurrentPull
         // First, we wait for the challenge mode to start
         if ($combatLogEvent instanceof ChallengeModeStart) {
             $this->log->parseChallengeModeStarted($lineNr);
-            $this->currentPull          = collect();
-            $this->challengeModeStarted = true;
+            $this->accurateEnemySightings = collect();
+            $this->challengeModeStarted   = true;
 
             return false;
         }
@@ -110,8 +124,8 @@ class CurrentPull
         // If we ended it, stop all processing and drop combat of all enemies
         if ($combatLogEvent instanceof ChallengeModeEnd) {
             $this->log->parseChallengeModeEnded($lineNr);
-            $this->currentPull          = collect();
-            $this->challengeModeStarted = false;
+            $this->accurateEnemySightings = collect();
+            $this->challengeModeStarted   = false;
 
             return false;
         }
@@ -120,36 +134,46 @@ class CurrentPull
         if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
             $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
-            
+
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
-            if (!$this->currentPull->has($destGuid->getGuid())) {
+            if (!$this->firstEnemySightings->has($destGuid->getGuid())) {
                 $this->log->parseUnitDiedEnemyWasNotPartOfCurrentPull($lineNr, $destGuid->getGuid());
+
                 return false;
             }
-            
+
             if ($this->killedEnemies->search($destGuid->getGuid()) !== false) {
                 $this->log->parseUnitDiedEnemyWasAlreadyKilled($lineNr, $destGuid->getGuid());
+
                 return false;
             }
-            
+
             if ($this->summonedEnemies->search($destGuid->getGuid()) !== false) {
                 $this->log->parseUnitDiedEnemyWasSummoned($lineNr, $destGuid->getGuid());
+
                 return false;
             }
 
             /** @var Creature $destGuid */
             if ($this->validNpcIds->search($destGuid->getId()) === false) {
                 $this->log->parseUnitDiedInvalidNpcId($lineNr, $destGuid->getGuid());
+
                 return false;
             }
-            
-            // Then we're interested in the first time we saw this enemy
+
+            $enemyEngagedEvent = $this->getEnemyEngagedEvent($destGuid);
+            if ($enemyEngagedEvent === null) {
+                $this->log->parseUnitDiedEnemyWasNotEngaged($lineNr, $destGuid->getGuid());
+
+                return false;
+            }
+
             // Push a new result event - we successfully killed this enemy, and it gave count!
-            $this->resultEvents->push((new EnemyEngaged($this->getEnemyEngagedEvent($destGuid), $destGuid)));
+            $this->resultEvents->push((new EnemyEngaged($enemyEngagedEvent, $destGuid)));
             // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
             $this->resultEvents->push((new EnemyKilled($combatLogEvent)));
-            // This enemy is no longer part of our current pull
-            $this->currentPull->forget($destGuid->getGuid());
+            // Speed up parsing by getting rid of the accurate enemy sighting - it's part of killed enemies now so won't get handled anymore
+            $this->accurateEnemySightings->forget($destGuid->getGuid());
 
             // We have officially killed this enemy
             $this->killedEnemies->push($destGuid);
@@ -181,22 +205,11 @@ class CurrentPull
         // Ignore all irrelevant non-combat events going forward
         if ($this->isEnemyCombatLogEntry($combatLogEvent)) {
             /** @var AdvancedCombatLogEvent $combatLogEvent */
-            // Dest GUID may be empty in case of SPELL_CAST_SUCCESS with cone/AoE attacks that don't have a target but hit everyone
-            $destGuid = optional($combatLogEvent->getGenericData()->getDestGuid())->getGuid();
-
-            // Evade means we are no longer in combat with this enemy, so we must drop aggro
-            if ($combatLogEvent->getAdvancedData()->getInfoGuid() instanceof Evade) {
-                $this->currentPull->forget($destGuid);
-                $this->log->parseUnitEvadedRemovedFromCurrentPull($lineNr, $destGuid);
-
-                return false;
-            }
-
             // Check if this combat event is relevant and if it has a new NPC that we're interested in
             $newEnemyGuid = $newEnemyGuid ?? $this->hasGenericDataNewEnemy($combatLogEvent->getGenericData());
             if ($newEnemyGuid !== null) {
                 // If it does we want to keep this event
-                $this->currentPull->put($newEnemyGuid, $combatLogEvent);
+                $this->accurateEnemySightings->put($newEnemyGuid, $combatLogEvent);
                 $this->log->parseUnitAddedToCurrentPull($lineNr, $newEnemyGuid);
 
                 return true;
@@ -204,29 +217,6 @@ class CurrentPull
         }
 
         return false;
-    }
-
-    /**
-     * Notify the current pull that the party has wiped.
-     *
-     * @return void
-     */
-    public function partyWiped(): void
-    {
-        // We no longer have any enemies in-combat with us
-        $this->currentPull = collect();
-    }
-
-    /**
-     * Combat log is empty - we no longer have any events left. Perform sanity checks.
-     *
-     * @return void
-     */
-    public function noMoreEvents(): void
-    {
-        if ($this->currentPull->isNotEmpty()) {
-            dd(['We have unkilled enemies!', $this->currentPull->toArray()]);
-        }
     }
 
     /**
@@ -245,6 +235,7 @@ class CurrentPull
         if (!($combatLogEvent->getSuffix() instanceof Damage)) {// && !($combatLogEvent->getSuffix() instanceof CastSuccess)) {
             return false;
         }
+
         // Spells return the location of the source, not the target.
         // So for non-creatures (such as players) we don't care about them since they can be 0..40 yards off the mark
         // But if the source is the creature itself we ARE interested in everything it can throw at us. Unless they are a pet,
@@ -258,6 +249,13 @@ class CurrentPull
                 return false;
             }
             if ($combatLogEvent->getPrefix() instanceof SpellPeriodic) {
+                return false;
+            }
+        } else {
+            // Ignore creature-on-creature events, such as an enemy empowering another. But make an exception if 
+            // the target was a pet - creatures attacking a pet should still register
+            $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+            if ($destGuid instanceof Creature && $destGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
                 return false;
             }
         }
@@ -294,7 +292,7 @@ class CurrentPull
                 continue;
             }
 
-            if ($this->currentPull->has($guid->getGuid()) === false) {
+            if ($this->accurateEnemySightings->has($guid->getGuid()) === false) {
                 // We MAY find 2 new enemies if there's perhaps a combat log event between two enemies and we may miss this
                 // But this will happen so little that it's not worth the complexity plus the 2nd enemy will get picked up
                 // when it's hit by a player anyways
@@ -358,17 +356,23 @@ class CurrentPull
     }
 
     /**
+     * Get the event where we first engaged the event. Be it the first time we actually saw this enemy
+     * or the first time this enemy made its exact position known, based on
+     *
      * @param string $guid
      *
-     * @return AdvancedCombatLogEvent
+     * @return AdvancedCombatLogEvent|null
      */
-    private function getEnemyEngagedEvent(string $guid): AdvancedCombatLogEvent
+    private function getEnemyEngagedEvent(string $guid): ?AdvancedCombatLogEvent
     {
         /** @var AdvancedCombatLogEvent $engagedEvent */
-        $engagedEvent = $this->currentPull->get($guid);
+        $engagedEvent = $this->accurateEnemySightings->get($guid);
 
         /** @var AdvancedCombatLogEvent $firstSightedEvent */
         $firstSightedEvent = $this->firstEnemySightings->get($guid);
+        if ($engagedEvent === null) {
+            return $firstSightedEvent;
+        }
 
         if (MathUtils::distanceBetweenPoints(
                 $engagedEvent->getAdvancedData()->getPositionX(),
