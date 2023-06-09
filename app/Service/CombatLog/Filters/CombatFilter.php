@@ -9,6 +9,7 @@ use App\Logic\CombatLog\CombatEvents\GenericData;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Prefixes\SpellBuilding;
 use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
+use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
@@ -90,7 +91,7 @@ class CombatFilter implements CombatLogParserInterface
         $log       = App::make(CurrentPullLoggingInterface::class);
         $this->log = $log;
     }
-    
+
     /**
      * @param Collection $validNpcIds
      */
@@ -232,7 +233,7 @@ class CombatFilter implements CombatLogParserInterface
         }
 
         // Skip events that are not damage - they contain the location of the source (the player usually)
-        if (!($combatLogEvent->getSuffix() instanceof Damage)) {// && !($combatLogEvent->getSuffix() instanceof CastSuccess)) {
+        if (!($combatLogEvent->getSuffix() instanceof Damage) && !($combatLogEvent->getSuffix() instanceof CastSuccess)) {
             return false;
         }
 

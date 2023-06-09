@@ -17,9 +17,6 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
 
     private CombatFilter $combatFilter;
 
-    /**
-     * @param DungeonRoute $dungeonRoute
-     */
     public function __construct()
     {
         $this->resultEvents        = collect();
