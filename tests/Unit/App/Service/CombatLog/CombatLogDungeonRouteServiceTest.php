@@ -34,7 +34,7 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
         );
 
         // Act
-        $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
+        $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
             $combatLogPath
         );
 

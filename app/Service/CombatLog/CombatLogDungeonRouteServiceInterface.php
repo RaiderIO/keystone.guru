@@ -11,7 +11,7 @@ interface CombatLogDungeonRouteServiceInterface
 {
     public function getResultEvents(string $combatLogFilePath): Collection;
     
-    public function convertCombatLogToDungeonRoute(string $combatLogFilePath): DungeonRoute;
+    public function convertCombatLogToDungeonRoutes(string $combatLogFilePath): Collection;
 
     public function generateMapIconsFromEvents(
         Dungeon $dungeon, 

@@ -56,7 +56,7 @@ class AdminToolsController extends Controller
     public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): RedirectResponse
     {
         try {
-            $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoute(
+            $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
 //                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
                 base_path(
 //                    'WoWCombatLog-050923_172619_7_freehold.zip'

@@ -96,7 +96,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     /**
      * @param string $combatLogFilePath
      *
-     * @return DungeonRoute
+     * @return Collection|DungeonRoute[]
      *
      * @throws InvalidArgumentException If combat log does not exist
      * @throws AdvancedLogNotEnabledException
@@ -104,7 +104,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @throws NoChallangeModeStartFoundException
      * @throws Exception
      */
-    public function convertCombatLogToDungeonRoute(string $combatLogFilePath): DungeonRoute
+    public function convertCombatLogToDungeonRoutes(string $combatLogFilePath): Collection
     {
         ini_set('max_execution_time', 1800);
 
@@ -155,7 +155,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             );
         }
 
-        return $dungeonRoute;
+        return collect([$dungeonRoute]);
     }
 
     //    /**
