@@ -12,6 +12,7 @@ class MapChange extends BaseResultEvent
     // bosses) and put them on the main floor without introducing a 2nd floor.
     private const UI_MAP_ID_MAPPING = [
         // Court of Stars
+        762 => 761,
         763 => 761,
     ];
 
@@ -41,7 +42,7 @@ class MapChange extends BaseResultEvent
 //        }
         return $this->floor;
     }
-    
+
     /**
      * @return MapChangeEvent
      */

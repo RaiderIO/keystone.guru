@@ -33,22 +33,22 @@ interface DungeonRouteBuilderLoggingInterface
     public function buildCreateNewFinalPull(array $keys): void;
 
     public function buildEnd(): void;
-    
+
     public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $closestEnemyDistance): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols(): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck(): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $closestEnemyDistance, int $maxDistance): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $closestEnemyDistance): void;
-    
+
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 }

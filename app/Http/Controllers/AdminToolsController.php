@@ -56,17 +56,19 @@ class AdminToolsController extends Controller
     public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): RedirectResponse
     {
         try {
-            $dungeonRoute = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
+            $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
 //                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
+//                    '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip',
                 base_path(
 //                    'WoWCombatLog-050923_172619_7_freehold.zip'
 //                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
 //                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
 //                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
 //                    'WoWCombatLog-051223_185606_14_brackenhide-hollow.zip'
-                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
+//                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
 //                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
 //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
+                'WoWCombatLog-051323_095734_13_neltharus.zip',
 //                'WoWCombatLog-060223_181049_20_neltharus.zip'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
@@ -77,6 +79,8 @@ class AdminToolsController extends Controller
         } catch (Exception $exception) {
             dd($exception);
         }
+
+        $dungeonRoute = $dungeonRoutes->first();
 
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonRoute->dungeon,

@@ -31,9 +31,10 @@ class DungeonRouteBuilder
     /** @var array Dungeons for which the floor check for enemies is disabled due to issues on Blizzard's side */
     private const DUNGEON_ENEMY_FLOOR_CHECK_DISABLED = [
         // With this check for example, the Gulping Goliath in Halls of Infusion will not be killed as the floor switch only happens til
-        // after the boss and as a result we can't find it. Maybe in the future we have to enable this check for certain dungeons such as
-        // The Azure Vaults since that's a Z-layered dungeon. You can run into issues then when enemies are accidentally assigned between floors
+        // after the boss and as a result we can't find it.
         Dungeon::DUNGEON_HALLS_OF_INFUSION,
+        // Spawned in enemies right before final boss will not get picked up otherwise
+        Dungeon::DUNGEON_NELTHARUS,
     ];
 
     private const NPC_ID_MAPPING = [
@@ -336,8 +337,9 @@ class DungeonRouteBuilder
             }
 
             if ($closestEnemy !== null) {
+                $enemyXY = $this->currentFloor->calculateIngameLocationForMapLocation($closestEnemy->lat, $closestEnemy->lng);
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
-                    $closestEnemy->id, $closestEnemyDistance
+                    $closestEnemy->id, $enemyXY['x'], $enemyXY['y'], $closestEnemyDistance
                 );
 
                 $this->availableEnemies->forget($closestEnemy->id);
@@ -370,7 +372,8 @@ class DungeonRouteBuilder
         float &$closestEnemyDistance,
         ?Enemy &$closestEnemy
     ): void {
-        $enemyXY = $this->currentFloor->calculateIngameLocationForMapLocation($enemyLat, $enemyLng);
+        // Always use the floor that the enemy itself is on, not $this->currentFloor
+        $enemyXY = $availableEnemy->floor->calculateIngameLocationForMapLocation($enemyLat, $enemyLng);
 
         $distance = App\Logic\Utils\MathUtils::distanceBetweenPoints(
             $enemyXY['x'],

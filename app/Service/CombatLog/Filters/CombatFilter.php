@@ -253,10 +253,10 @@ class CombatFilter implements CombatLogParserInterface
                 return false;
             }
         } else {
-            // Ignore creature-on-creature events, such as an enemy empowering another. But make an exception if 
+            // Ignore creature-on-creature events, such as an enemy empowering another. But make an exception if
             // the target was a pet - creatures attacking a pet should still register
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
-            if ($destGuid instanceof Creature && $destGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
+            if ($destGuid === null || $destGuid instanceof Creature && $destGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
                 return false;
             }
         }
