@@ -44,11 +44,11 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        $this->specialEventsFilter->parse($combatLogEvent, $lineNr);
+        $specialEventsFilterResult = $this->specialEventsFilter->parse($combatLogEvent, $lineNr);
 
-        $this->combatFilter->parse($combatLogEvent, $lineNr);
+        $combatFilterResult = $this->combatFilter->parse($combatLogEvent, $lineNr);
 
-        return true;
+        return $specialEventsFilterResult || $combatFilterResult;
     }
 
     /**

@@ -65,7 +65,8 @@ class CombatLogService implements CombatLogServiceInterface
     public function parseCombatLogStreaming(string $filePath, callable $callable): void
     {
         $this->parseCombatLog($filePath, function (string $rawEvent, int $lineNr) use ($callable) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent();
+            $combatLogEntry = new CombatLogEntry($rawEvent);
+            $parsedEvent = $combatLogEntry->parseEvent();
 
             if ($parsedEvent !== null) {
                 $callable($parsedEvent, $lineNr);

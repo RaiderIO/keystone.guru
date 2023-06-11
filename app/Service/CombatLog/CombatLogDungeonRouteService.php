@@ -5,6 +5,7 @@ namespace App\Service\CombatLog;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
@@ -70,8 +71,10 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @return Collection
      * @throws Exception
      */
-    public function getResultEvents(string $combatLogFilePath, ?DungeonRoute &$dungeonRoute = null): Collection
-    {
+    public function getResultEvents(
+        string $combatLogFilePath, 
+        ?DungeonRoute &$dungeonRoute = null
+    ): Collection {
         $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
         $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 

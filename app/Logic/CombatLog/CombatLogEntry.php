@@ -66,14 +66,14 @@ class CombatLogEntry
 
             try {
                 if (in_array($eventName, SpecialEvent::SPECIAL_EVENT_ALL)) {
-                    $this->parsedEvent = SpecialEvent::createFromEventName($this->parsedTimestamp, $eventName, $parameters);
+                    $this->parsedEvent = SpecialEvent::createFromEventName($this->parsedTimestamp, $eventName, $parameters, $this->rawEvent);
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
                 else if (count($parameters) > 23) {
-                    $this->parsedEvent = (new AdvancedCombatLogEvent($this->parsedTimestamp, $eventName))->setParameters($parameters);
+                    $this->parsedEvent = (new AdvancedCombatLogEvent($this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 } else {
-                    $this->parsedEvent = (new CombatLogEvent($this->parsedTimestamp, $eventName))->setParameters($parameters);
+                    $this->parsedEvent = (new CombatLogEvent($this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
 
             } catch (\Error|Exception $exception) {

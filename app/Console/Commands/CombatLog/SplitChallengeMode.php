@@ -33,39 +33,23 @@ class SplitChallengeMode extends Command
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
-        // Assume error
-        $result = -1;
 
-        if (is_dir($filePath)) {
-            $this->info(sprintf('%s is a dir, parsing all files in the dir..', $filePath));
-            $files = glob(sprintf('%s/*', $filePath));
-            foreach ($files as $filePath) {
-                $this->splitCombatLog($combatLogSplitService, $filePath);
-            }
-        } else {
-            $this->splitCombatLog($combatLogSplitService, $filePath);
-        }
-
-        return $result;
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogSplitService)
+        {
+            return $this->splitCombatLog($combatLogSplitService, $filePath);
+        });
     }
 
     /**
      * @param CombatLogSplitServiceInterface $combatLogSplitService
      * @param string                         $filePath
      *
-     * @return void
+     * @return int
      */
-    private function splitCombatLog(CombatLogSplitServiceInterface $combatLogSplitService, string $filePath): void
+    private function splitCombatLog(CombatLogSplitServiceInterface $combatLogSplitService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
-
-        // While have a successful result, keep parsing
-        if (!is_file($filePath)) {
-            $this->warn('- Is a dir - cannot parse');
-
-            return;
-        }
-
+        
         $resultingFiles = $combatLogSplitService->splitCombatLogOnChallengeModes($filePath);
         foreach ($resultingFiles as $resultingFile) {
             $this->comment(sprintf('- Created file %s', $resultingFile));
@@ -76,5 +60,7 @@ class SplitChallengeMode extends Command
             $this->info(sprintf('Renaming original file %s', $filePath));
             rename($filePath, str_replace('.zip', '.bak', $filePath));
         }
+
+        return 0;
     }
 }

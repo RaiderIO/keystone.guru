@@ -6,7 +6,7 @@ use App\Service\CombatLog\CombatLogServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class EnsureChallengeMode extends Command
+class EnsureChallengeMode extends BaseCombatLogCommand
 {
     /**
      * The name and signature of the console command.
@@ -32,27 +32,11 @@ class EnsureChallengeMode extends Command
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
+        
         // Assume error
-        $result = -1;
-
-        if (is_dir($filePath)) {
-            $this->info(sprintf('%s is a dir, parsing all files in the dir..', $filePath));
-            foreach (glob(sprintf('%s/*', $filePath)) as $filePath) {
-                // While have a successful result, keep parsing
-                if (!is_file($filePath)) {
-                    continue;
-                }
-
-                $result = $this->analyzeCombatLog($combatLogService, $filePath);
-                if ($result !== 0) {
-                    break;
-                }
-            }
-        } else {
-            $result = $this->analyzeCombatLog($combatLogService, $filePath);
-        }
-
-        return $result;
+        return $this->parseCombatLogRecursively($filePath, function(string $filePath) use($combatLogService){
+            return $this->analyzeCombatLog($combatLogService, $filePath);
+        });
     }
 
     /**
@@ -63,11 +47,6 @@ class EnsureChallengeMode extends Command
     private function analyzeCombatLog(CombatLogServiceInterface $combatLogService, string $filePath): int
     {
         $this->comment(sprintf('- Analyzing %s', $filePath));
-
-        if (!file_exists($filePath)) {
-            $this->error('File does not exist!');
-            return -1;
-        }
 
         if (($challengeModes = $combatLogService->getChallengeModes($filePath))->isEmpty()) {
             $this->info('Does NOT contain challenge modes!');

@@ -5,8 +5,9 @@ namespace App\Console\Commands\CombatLog;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use function Clue\StreamFilter\fun;
 
-class ExtractUiMapIds extends Command
+class ExtractUiMapIds extends BaseCombatLogCommand
 {
     /**
      * The name and signature of the console command.
@@ -32,29 +33,10 @@ class ExtractUiMapIds extends Command
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
-        // Assume error
-        $result = -1;
-
-        if (is_dir($filePath)) {
-            $this->info(sprintf('%s is a dir, parsing all files in the dir..', $filePath));
-            foreach (glob(sprintf('%s/*.zip', $filePath)) as $filePath) {
-                // While have a successful result, keep parsing
-                if (!is_file($filePath)) {
-                    continue;
-                }
-
-                $this->info(sprintf('- Parsing %s', $filePath));
-
-                $result = $this->extractUiMapIds($combatLogService, $filePath);
-                if ($result !== 0) {
-                    break;
-                }
-            }
-        } else {
-            $result = $this->extractUiMapIds($combatLogService, $filePath);
-        }
-
-        return $result;
+        
+        return $this->parseCombatLogRecursively($filePath, function(string $filePath) use($combatLogService){
+            return $this->extractUiMapIds($combatLogService, $filePath);
+        });
     }
 
     /**
@@ -64,11 +46,6 @@ class ExtractUiMapIds extends Command
      */
     private function extractUiMapIds(CombatLogServiceInterface $combatLogService, string $filePath): int
     {
-        if (!file_exists($filePath)) {
-            $this->error('File does not exist!');
-            return -1;
-        }
-
         if (($uiMapIds = $combatLogService->getUiMapIds($filePath))->isNotEmpty()) {
             foreach ($uiMapIds as $uiMapId => $floorName) {
                 $this->info(sprintf('%d: %s', $uiMapId, $floorName));
