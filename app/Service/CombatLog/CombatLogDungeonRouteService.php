@@ -39,6 +39,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use function optional;
 
 class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterface
 {
@@ -72,9 +73,10 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @throws Exception
      */
     public function getResultEvents(
-        string $combatLogFilePath, 
+        string        $combatLogFilePath,
         ?DungeonRoute &$dungeonRoute = null
-    ): Collection {
+    ): Collection
+    {
         try {
             $this->log->getResultEventsStart($combatLogFilePath);
             $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
@@ -168,8 +170,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                     $dungeonRoute->dungeon,
                     $dungeonRoute->mappingVersion,
                     $resultEvents,
-                    $dungeonRoute,
-                    true
+                    $dungeonRoute
                 );
             }
 
@@ -381,22 +382,18 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @param MappingVersion $mappingVersion
      * @param Collection|\App\Service\CombatLog\ResultEvents\BaseResultEvent[] $resultEvents
      * @param DungeonRoute|null $dungeonRoute
-     * @param bool $save
      *
-     * @return Collection
+     * @return void
      */
     public function generateMapIconsFromEvents(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         Collection     $resultEvents,
-        ?DungeonRoute  $dungeonRoute = null,
-        bool           $save = false
-    ): Collection
+        ?DungeonRoute  $dungeonRoute = null
+    ): void
     {
-        $result = collect();
-
-        $id           = 10000000;
-        $currentFloor = null;
+        $currentFloor      = null;
+        $mapIconAttributes = collect();
         foreach ($resultEvents as $resultEvent) {
             if ($resultEvent instanceof MapChangeResultEvent) {
                 $currentFloor = $resultEvent->getFloor();
@@ -443,7 +440,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                 );
             }
 
-            $mapIcon = new MapIcon([
+            $mapIconAttributes->push([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
                 'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
@@ -454,19 +451,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                 'comment'            => $comment,
                 'permanent_tooltip'  => 0,
             ]);
-
-            $mapIcon->seasonal_index = null;
-            if ($save) {
-                $mapIcon->save();
-            } else {
-                $mapIcon->id = $id;
-
-                $id++;
-            }
-
-            $result->push($mapIcon);
         }
 
-        return $result;
+        MapIcon::insert($mapIconAttributes->toArray());
     }
 }

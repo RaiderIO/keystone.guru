@@ -21,7 +21,8 @@ use Exception;
 class DungeonRouteFilter implements CombatLogParserInterface
 {
     private SeasonServiceInterface $seasonService;
-    private ?DungeonRoute          $dungeonRoute = null;
+    private ?DungeonRoute $dungeonRoute = null;
+
     /**
      * @param SeasonServiceInterface $seasonService
      */
@@ -32,7 +33,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
+     * @param int $lineNr
      *
      * @return bool
      * @throws AdvancedLogNotEnabledException
@@ -44,7 +45,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
             throw new AdvancedLogNotEnabledException(
                 'Advanced combat logging must be enabled in order to create a dungeon route from a combat log!'
             );
-        } elseif ($combatLogEvent instanceof ChallengeModeStart) {
+        } else if ($combatLogEvent instanceof ChallengeModeStart) {
             try {
                 $dungeon = Dungeon::where('map_id', $combatLogEvent->getInstanceID())->firstOrFail();
             } catch (Exception $exception) {

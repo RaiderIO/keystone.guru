@@ -708,7 +708,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return Collection
      */
-    public function getNpcIdsWithEnemyForces(): Collection
+    public function getInUseNpcIds(): Collection
     {
         return Npc::select('npcs.id')
             ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')

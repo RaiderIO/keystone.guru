@@ -35,15 +35,19 @@ class OutputResultEvents extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogDungeonRouteService)
-        {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogDungeonRouteService) {
+            if (str_contains($filePath, '_events.txt')) {
+                $this->comment(sprintf('- Skipping output file %s', $filePath));
+                return 0;
+            }
+
             return $this->outputResultEvents($combatLogDungeonRouteService, $filePath);
         });
     }
 
     /**
      * @param CombatLogDungeonRouteService $combatLogDungeonRouteService
-     * @param string                       $filePath
+     * @param string $filePath
      *
      * @return int
      * @throws \Exception
@@ -56,8 +60,7 @@ class OutputResultEvents extends BaseCombatLogCommand
 
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
-        $result = file_put_contents(base_path($resultingFile), $resultEvents->map(function (BaseResultEvent $resultEvent)
-        {
+        $result = file_put_contents(base_path($resultingFile), $resultEvents->map(function (BaseResultEvent $resultEvent) {
             return $resultEvent->getBaseEvent()->getRawEvent();
         })->implode(''));
 
@@ -67,6 +70,6 @@ class OutputResultEvents extends BaseCombatLogCommand
             $this->warn(sprintf('- Unable to write to file %s', $resultingFile));
         }
 
-        return $result;
+        return $result > 0 ? 0 : -1;
     }
 }

@@ -28,14 +28,12 @@ interface CombatLogDungeonRouteServiceInterface
      * @param \App\Models\Mapping\MappingVersion $mappingVersion
      * @param \Illuminate\Support\Collection $resultEvents
      * @param \App\Models\DungeonRoute|null $dungeonRoute
-     * @param bool $save
-     * @return Collection|MapIcon[]
+     * @return void
      */
     public function generateMapIconsFromEvents(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         Collection     $resultEvents,
-        ?DungeonRoute  $dungeonRoute = null,
-        bool           $save = false
-    ): Collection;
+        ?DungeonRoute  $dungeonRoute = null
+    ): void;
 }

@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Jobs\RefreshEnemyForces;
+use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
+use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
@@ -32,6 +35,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 use Session;
 use Throwable;
@@ -51,9 +55,10 @@ class AdminToolsController extends Controller
 
     /**
      * @param CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService
-     * @return RedirectResponse
+     * @return View
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): RedirectResponse
+    public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): View
     {
         try {
             $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
@@ -68,8 +73,10 @@ class AdminToolsController extends Controller
 //                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
 //                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
 //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
-                'WoWCombatLog-051323_095734_13_neltharus.zip',
+//                'WoWCombatLog-051323_095734_13_neltharus.zip',
 //                'WoWCombatLog-060223_181049_20_neltharus.zip'
+                'tests/samples/WoWCombatLog-050923_172619_7_freehold.txt',
+//                    'tests/samples/WoWCombatLog-050923_172619_7_freehold_events.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
@@ -80,12 +87,23 @@ class AdminToolsController extends Controller
             dd($exception);
         }
 
+        /** @var DungeonRoute $dungeonRoute */
         $dungeonRoute = $dungeonRoutes->first();
 
-        return redirect()->route('dungeonroute.edit', [
+        // Reload to re-populate all kinds of fields
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::find($dungeonRoute->id);
+
+        /** @var Floor $floor */
+        $floor = $dungeonRoute->dungeon->floors()->first();
+
+        return view('dungeonroute.edit', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
             'title'        => $dungeonRoute->getTitleSlug(),
+            'floor'        => $floor,
+            'mapContext'   => (new MapContextDungeonRoute($dungeonRoute, $floor))->getProperties(),
+            'floorindex'   => 1,
         ]);
     }
 

@@ -72,8 +72,11 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'lat',
         'lng',
     ];
-    public    $appends    = ['active_auras'];
-    public    $with       = ['npc', 'enemyactiveauras'];
+//    public    $appends    = ['active_auras'];
+    public    $with       = [
+        'npc',
+//        'enemyactiveauras'
+    ];
     public    $hidden     = ['laravel_through_key'];
     public    $timestamps = false;
     protected $casts      = [
@@ -124,9 +127,10 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     {
         $result = [];
 
-        foreach ($this->enemyActiveAuras as $activeaura) {
-            $result[] = $activeaura->spell_id;
-        }
+        // Temporarily disabled to improve performance - not using this anyway
+//        foreach ($this->enemyActiveAuras as $activeaura) {
+//            $result[] = $activeaura->spell_id;
+//        }
 
         return $result;
     }

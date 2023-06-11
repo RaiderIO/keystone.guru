@@ -31,8 +31,8 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self
     {
-        $this->combatFilter->setValidNpcIds($dungeonRoute->dungeon->getNpcIdsWithEnemyForces());
-        
+        $this->combatFilter->setValidNpcIds($dungeonRoute->dungeon->getInUseNpcIds());
+
         return $this;
     }
 
