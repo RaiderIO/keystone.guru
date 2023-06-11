@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Cache\RedisClearIdleKeys;
+use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
 use App\Console\Commands\CombatLog\OutputResultEvents;
@@ -68,6 +69,7 @@ class Kernel extends ConsoleKernel
         EnsureChallengeMode::class,
         SplitChallengeMode::class,
         ExtractUiMapIds::class,
+        CreateDungeonRoutes::class,
         OutputResultEvents::class,
 
         // Database
