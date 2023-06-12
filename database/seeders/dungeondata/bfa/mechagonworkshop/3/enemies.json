@@ -18,9 +18,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -176.5,
-        "lng": 165.75,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 165.75
     },
     {
         "id": 4257,
@@ -41,9 +39,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -173,
-        "lng": 208.91,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 208.91
     },
     {
         "id": 4258,
@@ -64,9 +60,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -170.22,
-        "lng": 219.31,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 219.31
     },
     {
         "id": 4259,
@@ -87,9 +81,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -173.5,
-        "lng": 221.12,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 221.12
     },
     {
         "id": 4260,
@@ -110,9 +102,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -167.53,
-        "lng": 222.31,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 222.31
     },
     {
         "id": 4261,
@@ -133,9 +123,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -170.34,
-        "lng": 223.38,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 223.38
     },
     {
         "id": 4262,
@@ -156,9 +144,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -172.62,
-        "lng": 224.47,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 224.47
     },
     {
         "id": 4263,
@@ -179,9 +165,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -160.78,
-        "lng": 240.38,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 240.38
     },
     {
         "id": 4264,
@@ -202,9 +186,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -164.44,
-        "lng": 237.97,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 237.97
     },
     {
         "id": 4265,
@@ -225,9 +207,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -162.31,
-        "lng": 243.62,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 243.62
     },
     {
         "id": 4266,
@@ -248,9 +228,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -167.34,
-        "lng": 240.34,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 240.34
     },
     {
         "id": 4267,
@@ -271,9 +249,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -165.62,
-        "lng": 244.31,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 244.31
     },
     {
         "id": 4269,
@@ -294,9 +270,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -149.28,
-        "lng": 248.34,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 248.34
     },
     {
         "id": 4270,
@@ -317,9 +291,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -143.81,
-        "lng": 247.47,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 247.47
     },
     {
         "id": 4271,
@@ -340,9 +312,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -140.28,
-        "lng": 245.38,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 245.38
     },
     {
         "id": 4272,
@@ -363,9 +333,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -138.53,
-        "lng": 248.59,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 248.59
     },
     {
         "id": 4273,
@@ -386,9 +354,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -138.97,
-        "lng": 252.66,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 252.66
     },
     {
         "id": 4274,
@@ -409,9 +375,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -142.75,
-        "lng": 251.06,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 251.06
     },
     {
         "id": 4275,
@@ -432,9 +396,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -128.19,
-        "lng": 248.03,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 248.03
     },
     {
         "id": 4276,
@@ -455,9 +417,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -105.88,
-        "lng": 186.25,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 186.25
     },
     {
         "id": 4464,
@@ -478,9 +438,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -178.31,
-        "lng": 188.31,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 188.31
     },
     {
         "id": 4508,
@@ -501,9 +459,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -131.25,
-        "lng": 243.09,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 243.09
     },
     {
         "id": 4510,
@@ -524,9 +480,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -148,
-        "lng": 256.12,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 256.12
     },
     {
         "id": 8480,
@@ -547,9 +501,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -180.27384808735,
-        "lng": 167.20740429926,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 167.20740429926
     },
     {
         "id": 8481,
@@ -570,9 +522,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -123.05431127906,
-        "lng": 231.24733759034,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 231.24733759034
     },
     {
         "id": 8524,
@@ -593,9 +543,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -161.34375,
-        "lng": 235.03125,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 235.03125
     },
     {
         "id": 10531,
@@ -616,9 +564,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -180.1875,
-        "lng": 169.9375,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 169.9375
     },
     {
         "id": 10532,
@@ -639,9 +585,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -162.75,
-        "lng": 236.59375,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 236.59375
     },
     {
         "id": 10533,
@@ -662,8 +606,6 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -121.1875,
-        "lng": 233.9375,
-        "active_auras": [],
-        "enemyactiveauras": []
+        "lng": 233.9375
     }
 ]

@@ -22,6 +22,42 @@
         "dungeon_difficulty": null,
         "created_at": "2022-08-27T09:52:56+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 40,
+            "expansion_id": 9,
+            "map_id": 1195,
+            "key": "irondocks",
+            "name": "dungeons.wod.iron_docks.name",
+            "speedrun_enabled": 0,
+            "floor_count": 1,
+            "expansion": {
+                "name": "expansions.wod.name",
+                "shortname": "wod",
+                "color": "#875f03",
+                "released_at": "2014-11-13 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 105,
+                    "index": 1,
+                    "mdt_sub_level": 1,
+                    "ui_map_id": null,
+                    "name": "dungeons.wod.iron_docks.floors.iron_docks",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 1332.5,
+                    "ingame_min_y": 6327.5,
+                    "ingame_max_x": 200,
+                    "ingame_max_y": 7082.5,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -33,7 +69,7 @@
         ],
         "brushlines": [],
         "paths": [],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

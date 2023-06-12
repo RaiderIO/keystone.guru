@@ -22,6 +22,102 @@
         "dungeon_difficulty": null,
         "created_at": "2020-07-04T09:55:03+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 23,
+            "expansion_id": 2,
+            "map_id": 1862,
+            "key": "waycrestmanor",
+            "name": "dungeons.bfa.waycrest_manor.name",
+            "speedrun_enabled": 0,
+            "floor_count": 5,
+            "expansion": {
+                "name": "expansions.battle_for_azeroth.name",
+                "shortname": "bfa",
+                "color": "#906554",
+                "released_at": "2018-08-14 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 60,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Grand Foyer",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 477.5,
+                    "ingame_min_y": -665,
+                    "ingame_max_x": 27.5,
+                    "ingame_max_y": -365,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 61,
+                    "index": 2,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Upstairs",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 415,
+                    "ingame_min_y": -645.83,
+                    "ingame_max_x": 90,
+                    "ingame_max_y": -429.17,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 62,
+                    "index": 3,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Cellar",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 338.75,
+                    "ingame_min_y": -555,
+                    "ingame_max_x": 181.25,
+                    "ingame_max_y": -450,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 63,
+                    "index": 4,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Catacombs",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 347.5,
+                    "ingame_min_y": -605,
+                    "ingame_max_x": 167.5,
+                    "ingame_max_y": -485,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 64,
+                    "index": 5,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Rupture",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 410,
+                    "ingame_min_y": -508.33,
+                    "ingame_max_x": 255,
+                    "ingame_max_y": -405,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -49,7 +145,7 @@
                 ]
             }
         ],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

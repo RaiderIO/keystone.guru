@@ -22,6 +22,42 @@
         "dungeon_difficulty": null,
         "created_at": "2020-07-04T09:53:10+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 18,
+            "expansion_id": 2,
+            "map_id": 1822,
+            "key": "siegeofboralus",
+            "name": "dungeons.bfa.siege_of_boralus.name",
+            "speedrun_enabled": 0,
+            "floor_count": 1,
+            "expansion": {
+                "name": "expansions.battle_for_azeroth.name",
+                "shortname": "bfa",
+                "color": "#906554",
+                "released_at": "2018-08-14 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 47,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Siege of Boralus",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 1060.42,
+                    "ingame_min_y": 137.5,
+                    "ingame_max_x": -733.33,
+                    "ingame_max_y": 1333.33,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -94,7 +130,7 @@
                 ]
             }
         ],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",
