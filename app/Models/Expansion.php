@@ -113,7 +113,6 @@ class Expansion extends CacheModel
         $region = GameServerRegion::getUserOrDefaultRegion();
 
         return $this->hasOne(Season::class)
-            ->where('expansion_id', $this->id)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
                 [$region->reset_day_offset, $region->reset_hours_offset, $this->getUserNow()]
             )

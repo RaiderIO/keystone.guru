@@ -102,7 +102,7 @@ class User extends Authenticatable
         'initials',
     ];
 
-    protected $with = 'iconfile';
+    protected $with = ['iconfile', 'patreonUserLink'];
 
     /**
      * @return string

@@ -79,20 +79,20 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Carbon $expires_at
  *
  * @property MappingVersion $mappingVersion
- * @property Dungeon $dungeon
- * @property Path $route
- * @property Faction $faction
- * @property User|null $author Can be null in case of temporary route
- * @property MDTImport $mdtImport
- * @property Team $team
+ * @property Dungeon        $dungeon
+ * @property Path           $route
+ * @property Faction        $faction
+ * @property User|null      $author Can be null in case of temporary route
+ * @property MDTImport      $mdtImport
+ * @property Team           $team
  * @property PublishedState $publishedState
  *
- * @property Collection $specializations
- * @property Collection $classes
- * @property Collection $races
+ * @property Collection     $specializations
+ * @property Collection     $classes
+ * @property Collection     $races
  *
- * @property Collection $playerspecializations
- * @property Collection $playerclasses
+ * @property Collection                               $playerspecializations
+ * @property Collection                               $playerclasses
  * @property Collection                               $playerraces
  *
  * @property Collection|AffixGroup[]                  $affixes
@@ -114,7 +114,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|Tag[]                         $tags
  *
  * @property Collection                               $routeattributes
- * @property Collection $routeattributesraw
+ * @property Collection                               $routeattributesraw
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -158,7 +158,7 @@ class DungeonRoute extends Model
         'enemy_forces',
     ];
 
-    protected $with = ['faction', 'specializations', 'classes', 'races', 'affixes'];
+    protected $with = ['dungeon', 'faction', 'specializations', 'classes', 'races', 'affixes'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270

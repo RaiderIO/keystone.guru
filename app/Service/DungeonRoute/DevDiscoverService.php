@@ -24,7 +24,7 @@ class DevDiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with(['author', 'affixes', 'ratings'])
+            ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->when($this->season === null, function (Builder $builder) {
@@ -51,7 +51,7 @@ class DevDiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit(10)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with(['author', 'affixes', 'ratings'])
+            ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon'])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->when($this->season === null, function (Builder $builder) {
