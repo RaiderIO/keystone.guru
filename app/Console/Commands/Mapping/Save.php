@@ -200,7 +200,7 @@ class Save extends Command
                 'mapIconsForExport',
                 'mountableAreasForExport',
             ])->get();
-            
+
             foreach ($floors as $floor) {
                 $this->saveFloor($floor, $rootDirPath);
             }
@@ -225,7 +225,7 @@ class Save extends Command
             // for each and every re-import
             $demoRoute->setHidden(['id', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
                                    'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
-                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews']);
+                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                               'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyraidmarkers',
                               'pridefulEnemies', 'mapicons']);
