@@ -16,30 +16,30 @@ use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
- * @property int $id The ID of this Dungeon.
- * @property int $expansion_id The linked expansion to this dungeon.
- * @property int $zone_id The ID of the location that WoW has given this dungeon.
- * @property int $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int $mdt_id The ID that MDT has given this dungeon.
- * @property string $name The name of the dungeon.
- * @property string $slug The url friendly slug of the dungeon.
- * @property string $key Shorthand key of the dungeon
- * @property boolean $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
- * @property boolean $active True if this dungeon is active, false if it is not.
+ * @property int                                     $id The ID of this Dungeon.
+ * @property int                                     $expansion_id The linked expansion to this dungeon.
+ * @property int                                     $zone_id The ID of the location that WoW has given this dungeon.
+ * @property int                                     $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int                                     $mdt_id The ID that MDT has given this dungeon.
+ * @property string                                  $name The name of the dungeon.
+ * @property string                                  $slug The url friendly slug of the dungeon.
+ * @property string                                  $key Shorthand key of the dungeon
+ * @property boolean                                 $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
+ * @property boolean                                 $active True if this dungeon is active, false if it is not.
  *
- * @property Expansion $expansion
+ * @property Expansion                               $expansion
  *
- * @property Collection|MappingVersion[] $mappingVersions
- * @property Collection|Floor[] $floors
- * @property Collection|DungeonRoute[] $dungeonroutes
- * @property Collection|Npc[] $npcs
+ * @property Collection|MappingVersion[]             $mappingVersions
+ * @property Collection|Floor[]                      $floors
+ * @property Collection|DungeonRoute[]               $dungeonRoutes
+ * @property Collection|Npc[]                        $npcs
  *
- * @property Collection|Enemy[] $enemies
- * @property Collection|EnemyPack[] $enemypacks
- * @property Collection|EnemyPatrol[] $enemypatrols
- * @property Collection|MapIcon[] $mapicons
- * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
- * @property Collection|MountableArea[] $mountableareas
+ * @property Collection|Enemy[]                      $enemies
+ * @property Collection|EnemyPack[]                  $enemypacks
+ * @property Collection|EnemyPatrol[]                $enemypatrols
+ * @property Collection|MapIcon[]                    $mapicons
+ * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
+ * @property Collection|MountableArea[]              $mountableareas
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs10Man
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs25Man
  *
@@ -63,7 +63,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends = ['floor_count'];
+    protected $appends  = ['floor_count'];
     protected $fillable = [
         'expansion_id',
         'active',
@@ -76,10 +76,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
-    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $with       = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
-
 
     // Classic
     const DUNGEON_BLACKFANTHOM_DEEPS        = 'blackfanthom_deeps';
@@ -479,19 +478,21 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return HasMany
      */
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
 
     /**
      * @param bool $includeGlobalNpcs
+     *
      * @return HasMany
      */
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany(Npc::class)
-            ->when($includeGlobalNpcs, function (Builder $builder) {
+            ->when($includeGlobalNpcs, function (Builder $builder)
+            {
                 $builder->orWhere('dungeon_id', -1);
             });
     }
@@ -526,7 +527,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
-            ->where(function (Builder $builder) {
+            ->where(function (Builder $builder)
+            {
                 return $builder
                     ->whereNull('dungeon_route_id');
             });
@@ -570,6 +572,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      * Scope a query to only the Siege of Boralus dungeon.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeFactionSelectionRequired(Builder $query): Builder
@@ -581,6 +584,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      * Scope a query to only include active dungeons.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeActive(Builder $query): Builder
@@ -592,6 +596,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      * Scope a query to only include inactive dungeons.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeInactive(Builder $query): Builder
@@ -606,6 +611,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = $this->mappingVersions()->limit(1)->first();
+
         return $mappingVersion;
     }
 
@@ -630,7 +636,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
+     *
      * @param SeasonServiceInterface $seasonService
+     *
      * @return Season|null
      */
     public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
@@ -652,7 +660,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
+     *
      * @param MappingVersion $mappingVersion
+     *
      * @return int
      */
     public function getNpcsMinHealth(MappingVersion $mappingVersion): int
@@ -660,7 +670,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->npcs(false)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion)
+            {
                 // @TODO This should exclude all raids
                 return $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
@@ -672,7 +683,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the maximum amount of health of all NPCs in this dungeon.
+     *
      * @param MappingVersion $mappingVersion
+     *
      * @return int
      */
     public function getNpcsMaxHealth(MappingVersion $mappingVersion): int
@@ -681,7 +694,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('aggressiveness', '<>', 'friendly')
             // Exclude Beguiling enemies - their health values are wrong at the moment
             ->whereNotIn('npcs.id', [155432, 155433, 155434])
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion)
+            {
                 // @TODO This should exclude all raids
                 return $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
@@ -689,6 +703,55 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     ->where('npc_enemy_forces.enemy_forces', '>', 0);
             })
             ->max('base_health') ?? 100000;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getInUseNpcIds(): Collection
+    {
+        return Npc::select('npcs.id')
+            ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
+            ->where(function (Builder $builder)
+            {
+                return $builder->where('npcs.dungeon_id', $this->id)
+                    ->orWhere('npcs.dungeon_id', -1);
+            })
+            ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
+            ->where(function (Builder $builder)
+            {
+                $builder->where('npc_enemy_forces.enemy_forces', '>', 0)
+                    ->orWhereIn('npcs.classification_id', [
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+                    ])
+                    ->orWhereIn('npcs.id', [
+                        // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
+                        // They're in the mapping because they're dangerous af
+                        101437,
+                        // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                        // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
+                        190407,
+                        // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                        194273,
+                        // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
+                        194745,
+                        // Wild Lashers give 0 enemy forces but are in the mapping regardless
+                        191243,
+                        // Wither Slashers give 0 enemy forces but are in the mapping regardless
+                        194469,
+                        // Gutstabbers give 0 enemy forces but are in the mapping regardless
+                        197857
+                    ]);
+            })
+            ->get()
+            ->pluck('id')
+            // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so
+            // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert
+            // into Witherlings which ARE on the mapping. Without this exception, they wouldn't turn up and the
+            // Witherlings would never get mapped properly
+            ->push(194373);
     }
 
     /**
@@ -778,6 +841,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * @param string $key
+     *
      * @return string
      */
     public static function findExpansionByKey(string $key): ?string
@@ -794,14 +858,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-
     public
     static function boot()
     {
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
+        static::deleting(function ($someModel)
+        {
             return false;
         });
     }

@@ -232,7 +232,7 @@ class APIDungeonRouteController extends Controller
             $expansion = $expansionService->getCurrentExpansion();
         }
 
-        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon'])
+        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id',  'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
             ->when($expansion !== null, function (Builder $builder) use ($expansion) {

@@ -25,7 +25,8 @@ class DebugInfoContextLogger
             ]);
         }
 
-        \Log::withContext($context);
+        // @TODO Re-enable this
+//        \Log::withContext($context);
 
         return $next($request);
     }

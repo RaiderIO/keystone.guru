@@ -44,7 +44,7 @@ class APIEnemyController extends APIMappingModelBaseController
             $activeAuras = $request->get('active_auras', []);
 
             // Clear current active auras
-            $enemy->enemyactiveauras()->delete();
+            $enemy->enemyActiveAuras()->delete();
             foreach ($activeAuras as $activeAura) {
                 if (!empty($activeAura)) {
                     $spell = Spell::findOrFail($activeAura);

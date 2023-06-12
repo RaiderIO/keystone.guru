@@ -24,13 +24,13 @@ class Stopwatch
      * @param $timerName string The name of the timer
      * @return void
      */
-    public static function start($timerName = 'default'): void
+    public static function start(string $timerName = 'default'): void
     {
         // Do not use a $now variable to make the results as accurate as possible, the latest possible moment
         // to grab the time is best.
 
         // Resuming a paused timer
-        if (isset(self::$timers[$timerName]) && isset(self::$timers[$timerName]['end'])) {
+        if (isset(self::$timers[$timerName]['end'])) {
             // Add the difference to the start to simulate the pause!
             self::$timers[$timerName]['start'] += (self::_getTime() - self::$timers[$timerName]['end']);
             self::$timers[$timerName]['count']++;
@@ -64,7 +64,7 @@ class Stopwatch
      * @param $timerName string The name of the timer to start
      * @return float The elapsed time since start() was called
      */
-    public static function elapsed($timerName = 'default'): float
+    public static function elapsed(string $timerName = 'default'): float
     {
         // We've now ended, grab time asap
         $now        = self::_getTime();
@@ -84,7 +84,7 @@ class Stopwatch
      * @param $timerName
      * @return string
      */
-    private static function getElapsedString($timerName): string
+    private static function getElapsedString(string $timerName): string
     {
         return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : " ($timerName)", StopWatch::elapsed($timerName));
     }
@@ -94,7 +94,7 @@ class Stopwatch
      *
      * @param string $timerName The name of the timer that you want to echo.
      */
-    public static function dump($timerName = 'default'): void
+    public static function dump(string $timerName = 'default'): void
     {
         dump(sprintf('%s (%sx)', self::getElapsedString($timerName), self::$timers[$timerName]['count']));
     }

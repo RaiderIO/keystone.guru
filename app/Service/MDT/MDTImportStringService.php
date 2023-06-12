@@ -463,7 +463,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     if ($save) {
                         $killZone->save();
                     } else {
-                        $dungeonRoute->killzones->push($killZone);
+                        $dungeonRoute->killZones->push($killZone);
                     }
                     $newPullIndex++;
                 }
@@ -710,7 +710,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Pre-emptively save the route
             $dungeonRoute->save();
         } else {
-            $dungeonRoute->killzones  = new Collection();
+            $dungeonRoute->killZones  = new Collection();
             $dungeonRoute->brushlines = new Collection();
             $dungeonRoute->mapicons   = new Collection();
             $dungeonRoute->paths      = new Collection();

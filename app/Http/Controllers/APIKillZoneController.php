@@ -230,7 +230,7 @@ class APIKillZoneController extends Controller
                     broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $killZone));
                 }
 
-                $dungeonRoute->load('killzones');
+                $dungeonRoute->load('killZones');
                 $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();
@@ -261,10 +261,10 @@ class APIKillZoneController extends Controller
 
         if ($validated['confirm'] === 'yes') {
             try {
-                $killZones       = $dungeonRoute->killzones;
+                $killZones       = $dungeonRoute->killZones;
                 $pridefulEnemies = $dungeonRoute->pridefulEnemies;
 
-                $dungeonRoute->killzones()->delete();
+                $dungeonRoute->killZones()->delete();
                 $dungeonRoute->pridefulEnemies()->delete();
 
                 if (Auth::check()) {
@@ -277,7 +277,7 @@ class APIKillZoneController extends Controller
                     }
                 }
 
-                $dungeonRoute->load('killzones');
+                $dungeonRoute->load('killZones');
                 $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();

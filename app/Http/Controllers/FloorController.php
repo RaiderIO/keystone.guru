@@ -41,6 +41,7 @@ class FloorController extends Controller
 
         $floor->index          = $request->get('index');
         $floor->mdt_sub_level  = $request->get('mdt_sub_level');
+        $floor->ui_map_id      = $request->get('ui_map_id');
         $floor->name           = $request->get('name');
         $floor->default        = $request->get('default', false);
         $defaultMinEnemySize   = config('keystoneguru.min_enemy_size_default');

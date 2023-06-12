@@ -4,14 +4,14 @@ namespace Tests\Unit\App\Logic\SimulationCraft;
 
 use App\Logic\SimulationCraft\RaidEventPullEnemy;
 use App\Models\Enemy;
+use Tests\Unit\Fixtures\Traits\CreatesEnemy;
+use Tests\Unit\Fixtures\Traits\CreatesNpc;
+use Tests\Unit\Fixtures\Traits\CreatesRaidEventPullEnemy;
+use Tests\Unit\Fixtures\Traits\CreatesSimulationCraftRaidEventsOptions;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
-use Tests\Unit\Traits\CreatesEnemy;
-use Tests\Unit\Traits\CreatesNpc;
-use Tests\Unit\Traits\CreatesRaidEventPullEnemy;
-use Tests\Unit\Traits\CreatesSimulationCraftRaidEventsOptions;
 
 class RaidEventPullEnemyTest extends TestCase
 {

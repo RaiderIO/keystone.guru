@@ -22,7 +22,7 @@ abstract class DatatablesHandler
     /**  @var Builder */
     protected Builder $builder;
 
-    /** @var array */
+    /** @var DatatablesColumnHandler[] */
     protected array $columnHandlers;
 
     public function __construct(Request $request)
@@ -49,6 +49,7 @@ abstract class DatatablesHandler
 
     /**
      * @param Builder $builder
+     *
      * @return $this
      */
     public function setBuilder(Builder $builder): DatatablesHandler
@@ -60,6 +61,7 @@ abstract class DatatablesHandler
 
     /**
      * @param DatatablesColumnHandler|array $dtColumnHandlers
+     *
      * @return $this
      */
     public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
@@ -86,24 +88,27 @@ abstract class DatatablesHandler
         $this->builder->offset((int)$this->request->get('start'));
         $this->builder->limit((int)$this->request->get('length'));
 
-        // For any custom column handlers, handle their wishes
-        foreach ($this->columnHandlers as $columnHandler) {
-            $columnHandler->applyToBuilder();
-        }
+        // For any custom column handlers, handle their wishes inside a single where
+        $this->builder->where(function (Builder $subBuilder)
+        {
+            foreach ($this->columnHandlers as $columnHandler) {
+                $columnHandler->applyToBuilder($subBuilder);
+            }
 
-        // Handle default filtering/sorting
-        $columns = $this->request->get('columns', []);
-        foreach ($columns as $column) {
-            $columnName = $column['name'];
-            // Only if the column name was set
-            if (!empty($columnName)) {
-                // Only if not handled by a custom column handler
-                if (!isset($this->columnHandlers[$columnName])) {
-                    // Handle filtering/sorting by this column
-                    (new SimpleColumnHandler($this, $columnName))->applyToBuilder();
+            // Handle default filtering/sorting
+            $columns = $this->request->get('columns', []);
+            foreach ($columns as $column) {
+                $columnName = $column['name'];
+                // Only if the column name was set
+                if (!empty($columnName)) {
+                    // Only if not handled by a custom column handler
+                    if (!isset($this->columnHandlers[$columnName])) {
+                        // Handle filtering/sorting by this column
+                        (new SimpleColumnHandler($this, $columnName))->applyToBuilder($subBuilder);
+                    }
                 }
             }
-        }
+        });
 
         return $this;
     }

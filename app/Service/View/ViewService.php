@@ -82,7 +82,7 @@ class ViewService implements ViewServiceInterface
                 )->latest()->first();
 
             $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::orderBy('released_at', 'desc')->get();
+            $allExpansions = Expansion::with(['dungeons', 'currentSeason'])->orderBy('released_at', 'desc')->get();
 
             /** @var Collection|ExpansionData[] $expansionsData */
             $expansionsData = collect();
