@@ -183,7 +183,7 @@ class Save extends Command
      */
     private function saveDungeonData(string $dungeonDataDir)
     {
-        foreach (Dungeon::all() as $dungeon) {
+        foreach (Dungeon::with(['dungeonRoutes'])->get() as $dungeon) {
             /** @var $dungeon Dungeon */
             $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
 
@@ -193,7 +193,15 @@ class Save extends Command
             $this->saveDungeonNpcs($dungeon, $rootDirPath);
 
             /** @var Dungeon $dungeon */
-            foreach ($dungeon->floors as $floor) {
+            $floors = $dungeon->floors()->with([
+                'enemyPacksForExport',
+                'enemyPatrolsForExport',
+                'dungeonFloorSwitchMarkersForExport',
+                'mapIconsForExport',
+                'mountableAreasForExport',
+            ])->get();
+            
+            foreach ($floors as $floor) {
                 $this->saveFloor($floor, $rootDirPath);
             }
         }
