@@ -22,6 +22,87 @@
         "dungeon_difficulty": null,
         "created_at": "2022-08-27T10:25:13+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 36,
+            "expansion_id": 3,
+            "map_id": 2441,
+            "key": "tazaveshstreetsofwonder",
+            "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.name",
+            "speedrun_enabled": 0,
+            "floor_count": 4,
+            "expansion": {
+                "name": "expansions.shadowlands.name",
+                "shortname": "shadowlands",
+                "color": "#5832a8",
+                "released_at": "2020-11-24 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 101,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_veiled_market",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 3155,
+                    "ingame_min_y": -1970.25,
+                    "ingame_max_x": 4050,
+                    "ingame_max_y": -627.75,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 102,
+                    "index": 2,
+                    "mdt_sub_level": 1,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_grand_menagerie",
+                    "default": 0,
+                    "min_enemy_size": 24,
+                    "max_enemy_size": 40,
+                    "ingame_min_x": 3300,
+                    "ingame_min_y": -1427.5,
+                    "ingame_max_x": 3520,
+                    "ingame_max_y": -1097.5,
+                    "percentage_display_zoom": 1
+                },
+                {
+                    "id": 103,
+                    "index": 3,
+                    "mdt_sub_level": 1,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.the_post",
+                    "default": 0,
+                    "min_enemy_size": 24,
+                    "max_enemy_size": 40,
+                    "ingame_min_x": 3625,
+                    "ingame_min_y": -1201.25,
+                    "ingame_max_x": 3750,
+                    "ingame_max_y": -1013.75,
+                    "percentage_display_zoom": 1
+                },
+                {
+                    "id": 104,
+                    "index": 4,
+                    "mdt_sub_level": 1,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.floors.myzas_oasis",
+                    "default": 0,
+                    "min_enemy_size": 24,
+                    "max_enemy_size": 40,
+                    "ingame_min_x": 3775,
+                    "ingame_min_y": -1291.25,
+                    "ingame_max_x": 3970,
+                    "ingame_max_y": -998.75,
+                    "percentage_display_zoom": 1
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -33,7 +114,7 @@
         ],
         "brushlines": [],
         "paths": [],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

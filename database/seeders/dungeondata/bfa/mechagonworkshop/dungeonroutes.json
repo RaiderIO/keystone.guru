@@ -22,6 +22,72 @@
         "dungeon_difficulty": null,
         "created_at": "2022-08-27T10:26:15+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 25,
+            "expansion_id": 2,
+            "map_id": 2097,
+            "key": "mechagonworkshop",
+            "name": "dungeons.bfa.mechagon_workshop.name",
+            "speedrun_enabled": 0,
+            "floor_count": 3,
+            "expansion": {
+                "name": "expansions.battle_for_azeroth.name",
+                "shortname": "bfa",
+                "color": "#906554",
+                "released_at": "2018-08-14 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 67,
+                    "index": 1,
+                    "mdt_sub_level": 1,
+                    "ui_map_id": null,
+                    "name": "The Robodrome",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 380,
+                    "ingame_min_y": 19.77,
+                    "ingame_max_x": 586.98,
+                    "ingame_max_y": 330.23,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 68,
+                    "index": 3,
+                    "mdt_sub_level": 2,
+                    "ui_map_id": null,
+                    "name": "The Under Junk",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 396.67,
+                    "ingame_min_y": -1.25,
+                    "ingame_max_x": 715,
+                    "ingame_max_y": 476.25,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 69,
+                    "index": 4,
+                    "mdt_sub_level": 3,
+                    "ui_map_id": null,
+                    "name": "Mechagon City",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 585,
+                    "ingame_min_y": 180,
+                    "ingame_max_x": 945,
+                    "ingame_max_y": 720,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -43,7 +109,7 @@
             }
         ],
         "paths": [],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

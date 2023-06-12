@@ -22,6 +22,102 @@
         "dungeon_difficulty": null,
         "created_at": "2020-07-04T09:55:03+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 23,
+            "expansion_id": 2,
+            "map_id": 1862,
+            "key": "waycrestmanor",
+            "name": "dungeons.bfa.waycrest_manor.name",
+            "speedrun_enabled": 0,
+            "floor_count": 5,
+            "expansion": {
+                "name": "expansions.battle_for_azeroth.name",
+                "shortname": "bfa",
+                "color": "#906554",
+                "released_at": "2018-08-14 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 60,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Grand Foyer",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -665,
+                    "ingame_min_y": -477.5,
+                    "ingame_max_x": -365,
+                    "ingame_max_y": -27.5,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 61,
+                    "index": 2,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Upstairs",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -645.83,
+                    "ingame_min_y": -415,
+                    "ingame_max_x": -429.17,
+                    "ingame_max_y": -90,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 62,
+                    "index": 3,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Cellar",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -555,
+                    "ingame_min_y": -338.75,
+                    "ingame_max_x": -450,
+                    "ingame_max_y": -181.25,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 63,
+                    "index": 4,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Catacombs",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -605,
+                    "ingame_min_y": -347.5,
+                    "ingame_max_x": -485,
+                    "ingame_max_y": -167.5,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 64,
+                    "index": 5,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Rupture",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -508.33,
+                    "ingame_min_y": -410,
+                    "ingame_max_x": -405,
+                    "ingame_max_y": -255,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -49,7 +145,7 @@
                 ]
             }
         ],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

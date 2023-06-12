@@ -22,6 +22,57 @@
         "dungeon_difficulty": null,
         "created_at": "2020-07-04T09:53:49+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 19,
+            "expansion_id": 2,
+            "map_id": 1877,
+            "key": "templeofsethraliss",
+            "name": "dungeons.bfa.temple_of_sethraliss.name",
+            "speedrun_enabled": 0,
+            "floor_count": 2,
+            "expansion": {
+                "name": "expansions.battle_for_azeroth.name",
+                "shortname": "bfa",
+                "color": "#906554",
+                "released_at": "2018-08-14 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 48,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Temple of Sethraliss",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 3187.5,
+                    "ingame_min_y": 2789.58,
+                    "ingame_max_x": 3937.5,
+                    "ingame_max_y": 3916.67,
+                    "percentage_display_zoom": null
+                },
+                {
+                    "id": 49,
+                    "index": 2,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "Atrium of the Wardens",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 3760.42,
+                    "ingame_min_y": 3185.42,
+                    "ingame_max_x": 4285.42,
+                    "ingame_max_y": 3972,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -94,7 +145,7 @@
                 ]
             }
         ],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

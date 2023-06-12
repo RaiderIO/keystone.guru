@@ -22,6 +22,72 @@
         "dungeon_difficulty": null,
         "created_at": "2021-01-08T16:17:19+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 34,
+            "expansion_id": 3,
+            "map_id": 2286,
+            "key": "necroticwake_a",
+            "name": "dungeons.shadowlands.the_necrotic_wake.name",
+            "speedrun_enabled": 0,
+            "floor_count": 3,
+            "expansion": {
+                "name": "expansions.shadowlands.name",
+                "shortname": "shadowlands",
+                "color": "#5832a8",
+                "released_at": "2020-11-24 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 89,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.the_necrotic_wake.floors.the_necrotic_wake",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -3575,
+                    "ingame_min_y": -3945.83,
+                    "ingame_max_x": -3143.75,
+                    "ingame_max_y": -3300,
+                    "percentage_display_zoom": 2
+                },
+                {
+                    "id": 90,
+                    "index": 2,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.the_necrotic_wake.floors.stitchwerks",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -1000000,
+                    "ingame_min_y": -1500000,
+                    "ingame_max_x": 1000000,
+                    "ingame_max_y": 1500000,
+                    "percentage_display_zoom": 1
+                },
+                {
+                    "id": 91,
+                    "index": 3,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "dungeons.shadowlands.the_necrotic_wake.floors.zolramus",
+                    "default": 0,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": -1000000,
+                    "ingame_min_y": -1000000,
+                    "ingame_max_x": 1000000,
+                    "ingame_max_y": 1000000,
+                    "percentage_display_zoom": 1
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [
             {
@@ -77,7 +143,7 @@
             }
         ],
         "paths": [],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",
