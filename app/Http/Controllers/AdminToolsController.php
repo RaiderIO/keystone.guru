@@ -75,7 +75,7 @@ class AdminToolsController extends Controller
 //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
 //                'WoWCombatLog-051323_095734_13_neltharus.zip',
 //                'WoWCombatLog-060223_181049_20_neltharus.zip'
-                'tests/samples/WoWCombatLog-050923_172619_7_freehold.txt',
+                'tests/Samples/WoWCombatLog-050923_172619_7_freehold.txt',
 //                    'tests/samples/WoWCombatLog-050923_172619_7_freehold_events.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
@@ -226,7 +226,7 @@ class AdminToolsController extends Controller
     {
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
-            'brushlines', 'paths', 'author', 'killzones', 'pridefulEnemies', 'publishedstate',
+            'brushlines', 'paths', 'author', 'killZones', 'pridefulEnemies', 'publishedstate',
             'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
         ])->where('public_key', $request->get('public_key'))->firstOrFail();
 
@@ -410,7 +410,7 @@ class AdminToolsController extends Controller
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
                 ->getDungeonRoute(new Collection(), false, false);
-            $dungeonRoute->makeVisible(['affixes', 'killzones']);
+            $dungeonRoute->makeVisible(['affixes', 'killZones']);
 
             dd($dungeonRoute);
         } catch (InvalidMDTString $ex) {

@@ -62,7 +62,7 @@ class MDTImportController extends Controller
                 'dungeon'                    => $dungeonRoute->dungeon !== null ? __($dungeonRoute->dungeon->name) : __('controller.mdtimport.unknown_dungeon'),
                 'affixes'                    => $affixes,
                 'has_this_weeks_affix_group' => $currentAffixGroupForDungeon !== null && $dungeonRoute->affixes->pluck('id')->search($currentAffixGroupForDungeon->id) !== false,
-                'pulls'                      => $dungeonRoute->killzones->count(),
+                'pulls'                      => $dungeonRoute->killZones->count(),
                 'paths'                      => $dungeonRoute->paths->count(),
                 'lines'                      => $dungeonRoute->brushlines->count(),
                 'notes'                      => $dungeonRoute->mapicons->count(),

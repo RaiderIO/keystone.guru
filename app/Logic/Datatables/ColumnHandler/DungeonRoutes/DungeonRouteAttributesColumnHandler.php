@@ -21,18 +21,18 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'routeattributes.name');
     }
 
-    protected function applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
         $routeattributes = $columnData['search']['value'];
         // If filtering or ordering
         if (!empty($routeattributes) || $order !== null) {
             // $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
-            $builder->groupBy('dungeon_routes.id');
+            $subBuilder->groupBy('dungeon_routes.id');
         }
 
         // If filtering OR ordering add the join
         if (!empty($routeattributes) || $order !== null) {
-            $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
+            $subBuilder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
 
             // If filtering
             if (!empty($routeattributes)) {
@@ -50,7 +50,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
                 // If we should account for dungeon routes having no attributes
                 if (in_array(-1, $routeAttributeIds)) {
                     // Wrap this in a where so both these statements get brackets around them
-                    $builder->where(function ($query) use (&$filterFn) {
+                    $subBuilder->where(function ($query) use (&$filterFn) {
                         /** @var $query Builder */
                         // May not have attributes at all
                         $query->whereHas('routeattributes', null, '=', 0);
@@ -58,15 +58,15 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
                     });
                 } else {
                     // Must have attributes
-                    $builder->whereHas('routeattributes');
+                    $subBuilder->whereHas('routeattributes');
                     // But may not have some specific attributes
-                    $builder->whereHas('routeattributes', $filterFn, '=', 0);
+                    $subBuilder->whereHas('routeattributes', $filterFn, '=', 0);
                 }
             }
 
             // If ordering
             if ($order !== null) {
-                $builder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
+                $subBuilder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
             }
         }
     }

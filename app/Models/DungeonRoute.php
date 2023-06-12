@@ -93,27 +93,27 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @property Collection $playerspecializations
  * @property Collection $playerclasses
- * @property Collection $playerraces
+ * @property Collection                               $playerraces
  *
- * @property Collection|AffixGroup[] $affixes
- * @property Collection|DungeonRouteAffixGroup[] $affixgroups
- * @property Collection|DungeonRouteRating[] $ratings
- * @property Collection|DungeonRouteFavorite[] $favorites
- * @property Collection|LiveSession[] $livesessions
+ * @property Collection|AffixGroup[]                  $affixes
+ * @property Collection|DungeonRouteAffixGroup[]      $affixgroups
+ * @property Collection|DungeonRouteRating[]          $ratings
+ * @property Collection|DungeonRouteFavorite[]        $favorites
+ * @property Collection|LiveSession[]                 $livesessions
  *
- * @property Collection|Brushline[] $brushlines
- * @property Collection|Path[] $paths
- * @property Collection|KillZone[] $killzones
- * @property Collection|PridefulEnemy[] $pridefulEnemies
- * @property Collection|OverpulledEnemy[] $overpulledenemies
+ * @property Collection|Brushline[]                   $brushlines
+ * @property Collection|Path[]                        $paths
+ * @property Collection|KillZone[]                    $killZones
+ * @property Collection|PridefulEnemy[]               $pridefulEnemies
+ * @property Collection|OverpulledEnemy[]             $overpulledenemies
  *
  * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
- * @property Collection|MapIcon[] $mapicons
- * @property Collection|PageView[] $pageviews
+ * @property Collection|MapIcon[]                     $mapicons
+ * @property Collection|PageView[]                    $pageviews
  *
- * @property Collection|Tag[] $tags
+ * @property Collection|Tag[]                         $tags
  *
- * @property Collection $routeattributes
+ * @property Collection                               $routeattributes
  * @property Collection $routeattributesraw
  *
  * @method static Builder visible()
@@ -140,7 +140,7 @@ class DungeonRoute extends Model
     protected $appends = ['setup', 'avg_rating', 'rating_count', 'has_thumbnail', 'views', 'has_team', 'published'];
 
     protected $hidden = ['id', 'author_id', 'dungeon_id', 'faction_id', 'team_id', 'unlisted', 'demo',
-                         'killzones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
+                         'killZones', 'faction', 'pageviews', 'specializations', 'races', 'classes', 'ratings',
                          'created_at', 'updated_at', 'expires_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at',
                          'published_at', 'published_state_id', 'published_state'];
 
@@ -300,7 +300,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function killzones(): HasMany
+    public function killZones(): HasMany
     {
         return $this->hasMany(KillZone::class)->orderBy('index');
     }
@@ -902,7 +902,7 @@ class DungeonRoute extends Model
                         $templateRoute->cloneRelationsInto($this, [
                             $templateRoute->paths,
                             $templateRoute->brushlines,
-                            $templateRoute->killzones,
+                            $templateRoute->killZones,
                             $templateRoute->enemyraidmarkers,
                             $templateRoute->mapicons,
                         ]);
@@ -952,7 +952,7 @@ class DungeonRoute extends Model
             $this->affixgroups,
             $this->paths,
             $this->brushlines,
-            $this->killzones,
+            $this->killZones,
             $this->pridefulEnemies,
             $this->enemyraidmarkers,
             $this->mapicons,
@@ -1025,7 +1025,7 @@ class DungeonRoute extends Model
     public function migrateToSeasonalType(ExpansionServiceInterface $expansionService, string $seasonalType): bool
     {
         // Remove all seasonal type enemies that were assigned to pulls before
-        foreach ($this->killzones as $killZone) {
+        foreach ($this->killZones as $killZone) {
             // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
             $killZone->load(['killzoneenemies']);
 
@@ -1086,7 +1086,7 @@ class DungeonRoute extends Model
 
         // If we kill a pack that contains enemies with the new seasonal type, we must assign these enemies to the pulls as well
         $checkedEnemyPacks = collect();
-        foreach ($this->killzones as $killZone) {
+        foreach ($this->killZones as $killZone) {
             foreach ($killZone->getEnemies() as $enemy) {
                 // Just in case the mapping was changed since then
                 if ($enemy === null) {
@@ -1178,7 +1178,7 @@ class DungeonRoute extends Model
     {
         $result = false;
 
-        foreach ($this->killzones as $killZone) {
+        foreach ($this->killZones as $killZone) {
             if ($killZone->getEnemies()->filter(function ($enemy) use ($enemyId) {
                 return $enemy->id === $enemyId;
             })->isNotEmpty()) {
@@ -1421,7 +1421,7 @@ class DungeonRoute extends Model
             foreach ($dungeonRoute->paths as $path) {
                 $path->delete();
             }
-            foreach ($dungeonRoute->killzones as $killZone) {
+            foreach ($dungeonRoute->killZones as $killZone) {
                 $killZone->delete();
             }
             $dungeonRoute->mapicons()->delete();
