@@ -48,10 +48,10 @@
                     "default": 1,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": -118.75,
-                    "ingame_min_y": -3097.92,
-                    "ingame_max_x": 364.58,
-                    "ingame_max_y": -2372.92,
+                    "ingame_min_x": 3097.92,
+                    "ingame_min_y": -118.75,
+                    "ingame_max_x": 2372.92,
+                    "ingame_max_y": 364.58,
                     "percentage_display_zoom": null
                 },
                 {
@@ -63,10 +63,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 55,
-                    "ingame_min_y": -2817.5,
-                    "ingame_max_x": 225,
-                    "ingame_max_y": -2562.5,
+                    "ingame_min_x": 2817.5,
+                    "ingame_min_y": 55,
+                    "ingame_max_x": 2562.5,
+                    "ingame_max_y": 225,
                     "percentage_display_zoom": null
                 },
                 {
@@ -78,10 +78,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 76.48,
-                    "ingame_min_y": -2817.34,
-                    "ingame_max_x": 244.27,
-                    "ingame_max_y": -2555.18,
+                    "ingame_min_x": 2817.34,
+                    "ingame_min_y": 76.48,
+                    "ingame_max_x": 2555.18,
+                    "ingame_max_y": 244.27,
                     "percentage_display_zoom": null
                 },
                 {
@@ -93,10 +93,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 70,
-                    "ingame_min_y": -2801.25,
-                    "ingame_max_x": 225,
-                    "ingame_max_y": -2568.75,
+                    "ingame_min_x": 2801.25,
+                    "ingame_min_y": 70,
+                    "ingame_max_x": 2568.75,
+                    "ingame_max_y": 225,
                     "percentage_display_zoom": null
                 },
                 {
@@ -108,10 +108,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 70,
-                    "ingame_min_y": -2801.25,
-                    "ingame_max_x": 225,
-                    "ingame_max_y": -2568.75,
+                    "ingame_min_x": 2801.25,
+                    "ingame_min_y": 70,
+                    "ingame_max_x": 2568.75,
+                    "ingame_max_y": 225,
                     "percentage_display_zoom": null
                 },
                 {
@@ -123,10 +123,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 29.42,
-                    "ingame_min_y": -2870,
-                    "ingame_max_x": 275.58,
-                    "ingame_max_y": -2500.75,
+                    "ingame_min_x": 2870,
+                    "ingame_min_y": 29.42,
+                    "ingame_max_x": 2500.75,
+                    "ingame_max_y": 275.58,
                     "percentage_display_zoom": null
                 },
                 {
@@ -138,10 +138,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 70,
-                    "ingame_min_y": -2808.75,
-                    "ingame_max_x": 235,
-                    "ingame_max_y": -2561.25,
+                    "ingame_min_x": 2808.75,
+                    "ingame_min_y": 70,
+                    "ingame_max_x": 2561.25,
+                    "ingame_max_y": 235,
                     "percentage_display_zoom": null
                 }
             ],

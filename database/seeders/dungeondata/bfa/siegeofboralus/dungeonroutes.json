@@ -48,10 +48,10 @@
                     "default": 1,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 137.5,
-                    "ingame_min_y": -1060.42,
-                    "ingame_max_x": 1333.33,
-                    "ingame_max_y": 733.33,
+                    "ingame_min_x": 1060.42,
+                    "ingame_min_y": 137.5,
+                    "ingame_max_x": -733.33,
+                    "ingame_max_y": 1333.33,
                     "percentage_display_zoom": null
                 }
             ],

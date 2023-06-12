@@ -13,7 +13,7 @@ class AddGuidKeyToEnemyPositionsTable extends Migration
      */
     public function up()
     {
-        Schema::connection('combatlog')->table('enemy_positions', function (Blueprint $table) {
+        Schema::table('enemy_positions', function (Blueprint $table) {
             $table->unique('guid');
         });
     }
@@ -25,7 +25,7 @@ class AddGuidKeyToEnemyPositionsTable extends Migration
      */
     public function down()
     {
-        Schema::connection('combatlog')->table('enemy_positions', function (Blueprint $table) {
+        Schema::table('enemy_positions', function (Blueprint $table) {
             $table->dropUnique('guid');
         });
     }

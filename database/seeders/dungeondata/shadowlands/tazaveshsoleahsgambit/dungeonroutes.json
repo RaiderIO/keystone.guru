@@ -48,10 +48,10 @@
                     "default": 1,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 12279.2,
-                    "ingame_min_y": 13839.6,
-                    "ingame_max_x": 12695.8,
-                    "ingame_max_y": 14464.6,
+                    "ingame_min_x": -13839.6,
+                    "ingame_min_y": 12279.2,
+                    "ingame_max_x": -14464.6,
+                    "ingame_max_y": 12695.8,
                     "percentage_display_zoom": null
                 },
                 {
@@ -63,10 +63,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 12327.5,
-                    "ingame_min_y": 13838.8,
-                    "ingame_max_x": 12512.5,
-                    "ingame_max_y": 14116.3,
+                    "ingame_min_x": -13838.8,
+                    "ingame_min_y": 12327.5,
+                    "ingame_max_x": -14116.3,
+                    "ingame_max_y": 12512.5,
                     "percentage_display_zoom": 1
                 },
                 {
@@ -78,10 +78,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": -12887.5,
-                    "ingame_min_y": -11927.1,
-                    "ingame_max_x": -12287.5,
-                    "ingame_max_y": -11027.1,
+                    "ingame_min_x": 11927.1,
+                    "ingame_min_y": -12887.5,
+                    "ingame_max_x": 11027.1,
+                    "ingame_max_y": -12287.5,
                     "percentage_display_zoom": 1
                 },
                 {
@@ -93,10 +93,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 3460,
-                    "ingame_min_y": -975,
-                    "ingame_max_x": 3690,
-                    "ingame_max_y": -630,
+                    "ingame_min_x": 975,
+                    "ingame_min_y": 3460,
+                    "ingame_max_x": 630,
+                    "ingame_max_y": 3690,
                     "percentage_display_zoom": 1
                 }
             ],

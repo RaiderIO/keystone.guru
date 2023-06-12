@@ -48,10 +48,10 @@
                     "default": 1,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 545.83,
-                    "ingame_min_y": 697.92,
-                    "ingame_max_x": 1227.08,
-                    "ingame_max_y": 1718.75,
+                    "ingame_min_x": -697.92,
+                    "ingame_min_y": 545.83,
+                    "ingame_max_x": -1718.75,
+                    "ingame_max_y": 1227.08,
                     "percentage_display_zoom": null
                 },
                 {
@@ -63,10 +63,10 @@
                     "default": 0,
                     "min_enemy_size": null,
                     "max_enemy_size": null,
-                    "ingame_min_x": 1060,
-                    "ingame_min_y": 1248.13,
-                    "ingame_max_x": 1300,
-                    "ingame_max_y": 1608.13,
+                    "ingame_min_x": -1248.13,
+                    "ingame_min_y": 1060,
+                    "ingame_max_x": -1608.13,
+                    "ingame_max_y": 1300,
                     "percentage_display_zoom": null
                 }
             ],

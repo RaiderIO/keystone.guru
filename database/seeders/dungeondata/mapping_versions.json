@@ -1985,7 +1985,7 @@
         "mdt_mapping_hash": "aa62f83195a54b4937219463e400153e",
         "created_at": "2023-05-26T06:01:15.000000Z",
         "updated_at": "2023-05-26T06:01:15.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 145,
@@ -1999,7 +1999,7 @@
         "mdt_mapping_hash": "aaa1a63fc45f62c2c4ece547886d514b",
         "created_at": "2023-05-26T06:01:17.000000Z",
         "updated_at": "2023-05-26T06:01:17.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 146,
@@ -2013,7 +2013,7 @@
         "mdt_mapping_hash": "0f4cde2573fc28aca26202f8be8c80a3",
         "created_at": "2023-05-26T06:01:21.000000Z",
         "updated_at": "2023-05-26T06:01:21.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 147,
@@ -2027,7 +2027,7 @@
         "mdt_mapping_hash": "032a31f8c59627a50dad2a83a1e81084",
         "created_at": "2023-05-26T06:01:23.000000Z",
         "updated_at": "2023-05-26T06:01:23.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 148,
@@ -2041,7 +2041,7 @@
         "mdt_mapping_hash": "49d6d6bb2d698401cd33c766cdff0f30",
         "created_at": "2023-05-26T06:01:25.000000Z",
         "updated_at": "2023-05-26T06:01:25.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 149,
@@ -2055,7 +2055,7 @@
         "mdt_mapping_hash": "b5e4f0e1818a5dee26593f70a1d562a4",
         "created_at": "2023-05-26T06:01:26.000000Z",
         "updated_at": "2023-05-26T06:01:26.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 150,
@@ -2069,7 +2069,7 @@
         "mdt_mapping_hash": "73af9042d3a23af97dfbfeff3a3b8bf4",
         "created_at": "2023-05-26T06:01:29.000000Z",
         "updated_at": "2023-05-26T06:01:29.000000Z",
-        "merged": true
+        "merged": false
     },
     {
         "id": 151,
@@ -2083,6 +2083,6 @@
         "mdt_mapping_hash": "ffe18432fb93dc3b45287ec9d135e56d",
         "created_at": "2023-05-26T06:01:31.000000Z",
         "updated_at": "2023-05-26T06:01:31.000000Z",
-        "merged": true
+        "merged": false
     }
 ]
