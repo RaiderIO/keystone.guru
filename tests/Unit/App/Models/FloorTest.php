@@ -50,12 +50,12 @@ class FloorTest extends TestCase
             [
                 ['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 100, 'ingame_max_y' => 1000],
                 ['lng' => Floor::MAP_MAX_LNG / 4, 'lat' => Floor::MAP_MAX_LAT / 4],
-                ['x' => 325, 'y' => 325],
+                ['x' => 775, 'y' => 775],
             ],
             [
                 ['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 50, 'ingame_max_y' => 100],
                 ['lng' => Floor::MAP_MAX_LNG / 4, 'lat' => Floor::MAP_MAX_LAT / 10],
-                ['x' => 325, 'y' => 55],
+                ['x' => 775, 'y' => 95],
             ],
         ];
     }

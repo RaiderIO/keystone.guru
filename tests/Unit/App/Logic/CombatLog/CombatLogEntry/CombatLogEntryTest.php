@@ -36,12 +36,12 @@ class CombatLogEntryTest extends PublicTestCase
         $parseEventResult = $combatLogEntry->parseEvent();
 
         // Assert
-        Assert::assertEquals($expectedDay, $combatLogEntry->getTimestamp()->day);
-        Assert::assertEquals($expectedMonth, $combatLogEntry->getTimestamp()->month);
-        Assert::assertEquals($expectedHour, $combatLogEntry->getTimestamp()->hour);
-        Assert::assertEquals($expectedMinute, $combatLogEntry->getTimestamp()->minute);
-        Assert::assertEquals($expectedSecond, $combatLogEntry->getTimestamp()->second);
-        Assert::assertEquals($expectedMilliseconds, $combatLogEntry->getTimestamp()->millisecond);
+        Assert::assertEquals($expectedDay, $combatLogEntry->getParsedTimestamp()->day);
+        Assert::assertEquals($expectedMonth, $combatLogEntry->getParsedTimestamp()->month);
+        Assert::assertEquals($expectedHour, $combatLogEntry->getParsedTimestamp()->hour);
+        Assert::assertEquals($expectedMinute, $combatLogEntry->getParsedTimestamp()->minute);
+        Assert::assertEquals($expectedSecond, $combatLogEntry->getParsedTimestamp()->second);
+        Assert::assertEquals($expectedMilliseconds, $combatLogEntry->getParsedTimestamp()->millisecond);
     }
 
     public function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array

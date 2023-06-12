@@ -20,12 +20,11 @@ class ChallengeModeStartTest extends PublicTestCase
     public function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent(
         string $challengeModeStartEvent,
         string $expectedZoneName,
-        int    $expectedInstanceId,
-        int    $expectedChallengeModeId,
-        int    $expectedKeystoneLevel,
-        string $expectedAffixIds
-    )
-    {
+        int $expectedInstanceId,
+        int $expectedChallengeModeId,
+        int $expectedKeystoneLevel,
+        array $expectedAffixIds
+    ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($challengeModeStartEvent);
 
@@ -51,14 +50,15 @@ class ChallengeModeStartTest extends PublicTestCase
                 1841,
                 251,
                 2,
-                '[9]',
-            ], [
+                [9],
+            ],
+            [
                 '5/15 21:53:59.958  CHALLENGE_MODE_START,"Neltharus",2519,404,4,[9]',
                 'Neltharus',
                 2519,
                 404,
                 4,
-                '[9]',
+                [9],
             ],
         ];
     }
