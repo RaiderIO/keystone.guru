@@ -19,29 +19,29 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $dungeon_id
- * @property int $version
- * @property int $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
- * @property int $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
- * @property int $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
- * @property int $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
- * @property int $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
- * @property string|null $mdt_mapping_hash
- * @property bool $merged Not saved in the database
+ * @property int                                   $id
+ * @property int                                   $dungeon_id
+ * @property int                                   $version
+ * @property int                                   $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
+ * @property int                                   $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property int                                   $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
+ * @property int                                   $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
+ * @property int                                   $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
+ * @property string|null                           $mdt_mapping_hash
+ * @property bool                                  $merged Not saved in the database
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon                                $updated_at
+ * @property Carbon                                $created_at
  *
- * @property Dungeon $dungeon
- * @property Collection|DungeonRoute[] $dungeonRoutes
+ * @property Dungeon                               $dungeon
+ * @property Collection|DungeonRoute[]             $dungeonRoutes
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
- * @property Collection|Enemy[] $enemies
- * @property Collection|EnemyPack[] $enemyPacks
- * @property Collection|EnemyPatrol[] $enemyPatrols
- * @property Collection|MapIcon[] $mapIcons
- * @property Collection|MountableArea[] $mountableAreas
- * @property Collection|NpcEnemyForces[] $npcEnemyForces
+ * @property Collection|Enemy[]                    $enemies
+ * @property Collection|EnemyPack[]                $enemyPacks
+ * @property Collection|EnemyPatrol[]              $enemyPatrols
+ * @property Collection|MapIcon[]                  $mapIcons
+ * @property Collection|MountableArea[]            $mountableAreas
+ * @property Collection|NpcEnemyForces[]           $npcEnemyForces
  *
  * @mixin Eloquent
  */
@@ -77,6 +77,10 @@ class MappingVersion extends Model
         'merged',
     ];
 
+    protected $with = [
+        'dungeon',
+    ];
+
     public $timestamps = true;
 
     /**
@@ -88,7 +92,6 @@ class MappingVersion extends Model
 
         return $mostRecentlyMergedMappingCommitLog !== null && $mostRecentlyMergedMappingCommitLog->created_at->gte($this->created_at);
     }
-
 
     /**
      * @return BelongsTo
@@ -143,7 +146,7 @@ class MappingVersion extends Model
      */
     public function mapIcons(): HasMany
     {
-        return $this->hasMany(MapIcon::class);
+        return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id');
     }
 
     /**
@@ -184,13 +187,13 @@ class MappingVersion extends Model
         );
     }
 
-
     public static function boot()
     {
         parent::boot();
 
         // If we create a new mapping version, we must create a complete copy of the previous mapping and re-save that to the database.
-        static::created(function (MappingVersion $newMappingVersion) {
+        static::created(function (MappingVersion $newMappingVersion)
+        {
             /** @var Collection|MappingVersion[] $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
 
@@ -273,7 +276,8 @@ class MappingVersion extends Model
         });
 
         // Deleting a mapping version also causes their relations to be deleted (as does creating a mapping version duplicates them)
-        static::deleting(function (MappingVersion $mappingVersion) {
+        static::deleting(function (MappingVersion $mappingVersion)
+        {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
             foreach ($mappingVersion->enemyPacks as $enemyPack) {

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Service\Cache\CacheServiceInterface;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -57,8 +58,8 @@ class GameServerRegion extends CacheModel
     {
         if (Auth::check()) {
             $user = Auth::user();
-            if ($user->game_server_region_id > 0 && $user->gameserverregion !== null) {
-                return $user->gameserverregion;
+            if ($user->game_server_region_id > 0 && $user->gameServerRegion !== null) {
+                return $user->gameServerRegion;
             }
         }
 

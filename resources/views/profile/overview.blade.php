@@ -7,7 +7,7 @@
 @section('content')
     @include('common.general.messages')
 
-    @if( Auth::user()->dungeonroutes()->count() === 0)
+    @if( Auth::user()->dungeonRoutes()->count() === 0)
         <div class="row form-group text-center">
             <div class="col">
                 {{ __('views/profile.overview.welcome_text') }}

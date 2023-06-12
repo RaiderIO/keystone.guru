@@ -71,6 +71,10 @@
                         'name': 'classification.name',
                         'searchable': false,
                         'render': function (data, type, row, meta) {
+                            if( row.classification === null ){
+                                console.log(row);
+                                return 'Unknown';
+                            }
                             return lang.get(row.classification.name);
                         },
                     },

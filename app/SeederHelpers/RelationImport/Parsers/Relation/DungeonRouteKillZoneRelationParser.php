@@ -34,7 +34,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
      */
     public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'killzones';
+        return $name === 'killzones' || $name === 'kill_zones';
     }
 
     /**

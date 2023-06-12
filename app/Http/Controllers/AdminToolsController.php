@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Jobs\RefreshEnemyForces;
+use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
+use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -31,6 +35,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 use Session;
 use Throwable;
@@ -46,6 +51,60 @@ class AdminToolsController extends Controller
     public function index()
     {
         return view('admin.tools.list');
+    }
+
+    /**
+     * @param CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService
+     * @return View
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): View
+    {
+        try {
+            $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
+//                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
+//                    '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip',
+                base_path(
+//                    'WoWCombatLog-050923_172619_7_freehold.zip'
+//                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
+//                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
+//                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
+//                    'WoWCombatLog-051223_185606_14_brackenhide-hollow.zip'
+//                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
+//                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
+//                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
+//                'WoWCombatLog-051323_095734_13_neltharus.zip',
+//                'WoWCombatLog-060223_181049_20_neltharus.zip'
+                'tests/Samples/WoWCombatLog-050923_172619_7_freehold.txt',
+//                    'tests/samples/WoWCombatLog-050923_172619_7_freehold_events.txt'
+//                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
+//                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
+//                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
+//                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
+                )
+            );
+        } catch (Exception $exception) {
+            dd($exception);
+        }
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = $dungeonRoutes->first();
+
+        // Reload to re-populate all kinds of fields
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::find($dungeonRoute->id);
+
+        /** @var Floor $floor */
+        $floor = $dungeonRoute->dungeon->floors()->first();
+
+        return view('dungeonroute.edit', [
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
+            'floor'        => $floor,
+            'mapContext'   => (new MapContextDungeonRoute($dungeonRoute, $floor))->getProperties(),
+            'floorindex'   => 1,
+        ]);
     }
 
     /**
@@ -167,7 +226,7 @@ class AdminToolsController extends Controller
     {
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
-            'brushlines', 'paths', 'author', 'killzones', 'pridefulEnemies', 'publishedstate',
+            'brushlines', 'paths', 'author', 'killZones', 'pridefulEnemies', 'publishedstate',
             'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
         ])->where('public_key', $request->get('public_key'))->firstOrFail();
 
@@ -351,7 +410,7 @@ class AdminToolsController extends Controller
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
                 ->getDungeonRoute(new Collection(), false, false);
-            $dungeonRoute->makeVisible(['affixes', 'killzones']);
+            $dungeonRoute->makeVisible(['affixes', 'killZones']);
 
             dd($dungeonRoute);
         } catch (InvalidMDTString $ex) {

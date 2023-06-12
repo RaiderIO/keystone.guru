@@ -30,7 +30,7 @@ return [
         ],
         'levels' => [
             'min' => 2,
-            'max' => 28,
+            'max' => 30,
         ],
 
         'scaling_factor'         => 1.08,

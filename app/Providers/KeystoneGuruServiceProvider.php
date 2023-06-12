@@ -16,6 +16,12 @@ use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\CombatLog\CombatLogDungeonRouteService;
+use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogService;
+use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\CombatLogSplitService;
+use App\Service\CombatLog\CombatLogSplitServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\DungeonRoute\CoverageService;
@@ -95,6 +101,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
+        $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
+        $this->app->bind(CombatLogDungeonRouteServiceInterface::class, CombatLogDungeonRouteService::class);
+        $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
+
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -268,7 +278,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $explode = explode(';', $routeKeyLevel);
             if (count($explode) !== 2) {
                 $routeKeyLevel = $routeKeyLevelDefault;
-                $explode = explode(';', $routeKeyLevel);
+                $explode       = explode(';', $routeKeyLevel);
             }
             $view->with('routeKeyLevelFrom', $explode[0]);
             $view->with('routeKeyLevelTo', $explode[1]);

@@ -332,6 +332,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::group(['prefix' => 'tools'], function () {
                 Route::get('/', [AdminToolsController::class, 'index'])->name('admin.tools');
 
+                Route::get('/combatlog', [AdminToolsController::class, 'combatlog'])->name('admin.combatlog');
+
                 Route::get('/npcimport', [AdminToolsController::class, 'npcimport'])->name('admin.tools.npcimport');
                 Route::post('/npcimport', [AdminToolsController::class, 'npcimportsubmit'])->name('admin.tools.npcimport.submit');
 

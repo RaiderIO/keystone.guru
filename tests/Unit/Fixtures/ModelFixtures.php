@@ -1,6 +1,6 @@
 <?php
 
-namespace Fixtures;
+namespace Tests\Unit\Fixtures;
 
 use App\Models\Season;
 use Tests\PublicTestCase;

@@ -146,7 +146,7 @@ class DungeonRouteController extends Controller
      */
     public function preview(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, string $floorIndex)
     {
-        $this->authorize('preview', [$dungeonroute, $request->get('secret', '')]);
+        $this->authorize('preview', [$dungeonroute, $request->get('secret', '') ?? '']);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
@@ -294,7 +294,6 @@ class DungeonRouteController extends Controller
      * @param string|null $title
      *
      * @return \Illuminate\Http\RedirectResponse
-     * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
     public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
@@ -420,11 +419,11 @@ class DungeonRouteController extends Controller
      * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @param DungeonRoute $dungeonroute
-     * @return Factory|View
+     * @return \Illuminate\Http\RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
-    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute)
+    public function update(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): RedirectResponse
     {
         $this->authorize('edit', $dungeonroute);
 

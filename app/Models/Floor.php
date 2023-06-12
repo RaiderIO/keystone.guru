@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @property int $dungeon_id
  * @property int $index
  * @property int|null $mdt_sub_level
+ * @property int|null $ui_map_id
  * @property string $name
  * @property boolean $default
  * @property int $min_enemy_size
@@ -61,7 +62,13 @@ class Floor extends CacheModel implements MappingModelInterface
     /** @var int X */
     const MAP_MAX_LNG = 384;
 
-    protected $fillable = ['ingame_min_x', 'ingame_min_y', 'ingame_max_x', 'ingame_max_y'];
+    protected $fillable = [
+        'ui_map_id',
+        'ingame_min_x',
+        'ingame_min_y',
+        'ingame_max_x',
+        'ingame_max_y',
+    ];
 
     public $timestamps = false;
 
@@ -273,8 +280,9 @@ class Floor extends CacheModel implements MappingModelInterface
         $ingameMapSizeX = $this->ingame_max_x - $this->ingame_min_x;
         $ingameMapSizeY = $this->ingame_max_y - $this->ingame_min_y;
 
-        $factorLat = ($lat / self::MAP_MAX_LAT);
-        $factorLng = ($lng / self::MAP_MAX_LNG);
+        // Invert the lat/lngs
+        $factorLat = ((self::MAP_MAX_LAT - $lat) / self::MAP_MAX_LAT);
+        $factorLng = ((self::MAP_MAX_LNG - $lng) / self::MAP_MAX_LNG);
 
         return [
             'x' => ($ingameMapSizeX * $factorLng) + $this->ingame_min_x,
@@ -285,19 +293,19 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param float $x
      * @param float $y
-     * @return array{x: float, y: float}
+     * @return array{lat: float, lng: float}
      */
     public function calculateMapLocationForIngameLocation(float $x, float $y): array
     {
         $ingameMapSizeX = $this->ingame_max_x - $this->ingame_min_x;
         $ingameMapSizeY = $this->ingame_max_y - $this->ingame_min_y;
 
-        $factorX = (($x - $this->ingame_min_x) / $ingameMapSizeX);
-        $factorY = (($y - $this->ingame_min_y) / $ingameMapSizeY);
+        $factorX = (($this->ingame_min_x - $x) / $ingameMapSizeX);
+        $factorY = (($this->ingame_min_y - $y) / $ingameMapSizeY);
 
         return [
-            'lat' => (self::MAP_MAX_LAT * $factorY),
-            'lng' => (self::MAP_MAX_LNG * $factorX),
+            'lat' => (self::MAP_MAX_LAT * $factorY) + self::MAP_MAX_LAT,
+            'lng' => (self::MAP_MAX_LNG * $factorX) + self::MAP_MAX_LNG,
         ];
     }
 

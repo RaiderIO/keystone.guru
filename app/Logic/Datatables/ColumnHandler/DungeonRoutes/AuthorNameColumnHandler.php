@@ -20,12 +20,12 @@ class AuthorNameColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'author.name');
     }
 
-    protected function applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
         // Only order
         if ($order !== null) {
-            $builder->leftJoin('users', 'dungeon_routes.author_id', '=', 'users.id');
-            $builder->orderBy('users.name', $order['dir'] === 'asc' ? 'asc' : 'desc');
+            $subBuilder->leftJoin('users', 'dungeon_routes.author_id', '=', 'users.id');
+            $subBuilder->orderBy('users.name', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
     }
 }

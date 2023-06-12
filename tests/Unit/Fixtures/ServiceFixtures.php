@@ -3,6 +3,12 @@
 namespace Tests\Unit\Fixtures;
 
 use App\Models\Season;
+use App\Service\CombatLog\CombatLogDungeonRouteService;
+use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogService;
+use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
+use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
@@ -14,6 +20,51 @@ use Tests\PublicTestCase;
 
 class ServiceFixtures
 {
+    /**
+     * @param PublicTestCase $testCase
+     * @param CombatLogServiceLoggingInterface $log
+     * @param array $methodsNotToMock
+     * @return MockObject|CombatLogServiceInterface
+     */
+    public static function getCombatLogServiceMock(
+        PublicTestCase                   $testCase,
+        CombatLogServiceLoggingInterface $log,
+        array                            $methodsNotToMock = []
+    ): MockObject
+    {
+        return $testCase
+            ->getMockBuilder(CombatLogService::class)
+            ->setConstructorArgs([
+                $log,
+            ])
+            ->setMethods(null)
+            ->getMock();
+    }
+
+    /**
+     * @param PublicTestCase $testCase
+     * @param CombatLogService $combatLogService
+     * @param CombatLogDungeonRouteServiceLoggingInterface $log
+     * @param array $methodsNotToMock
+     * @return MockObject|CombatLogDungeonRouteServiceInterface
+     */
+    public static function getCombatLogDungeonRouteServiceMock(
+        PublicTestCase                               $testCase,
+        CombatLogService                             $combatLogService,
+        CombatLogDungeonRouteServiceLoggingInterface $log,
+        array                                        $methodsNotToMock = []
+    ): MockObject
+    {
+        return $testCase
+            ->getMockBuilder(CombatLogDungeonRouteService::class)
+            ->setConstructorArgs([
+                $combatLogService,
+                $log,
+            ])
+            ->setMethods(null)
+            ->getMock();
+    }
+
     /**
      * @param PublicTestCase $testCase
      * @param array $methodsNotToMock
