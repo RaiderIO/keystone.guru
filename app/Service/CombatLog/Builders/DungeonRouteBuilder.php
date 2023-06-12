@@ -146,6 +146,11 @@ class DungeonRouteBuilder
             $this->createPull();
         }
 
+        // Direct update doesn't work.. no clue why
+        $enemyForces = $this->dungeonRoute->getEnemyForces();
+        DungeonRoute::find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
+        $this->dungeonRoute->enemy_forces = $enemyForces;
+
         return $this->dungeonRoute;
     }
 
