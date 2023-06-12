@@ -13,7 +13,7 @@ class CreateEnemyPositionsTable extends Migration
      */
     public function up()
     {
-        Schema::connection('combatlog')->create('enemy_positions', function (Blueprint $table) {
+        Schema::create('enemy_positions', function (Blueprint $table) {
             $table->id();
             $table->string('guid');
             $table->integer('floor_id');
@@ -36,6 +36,6 @@ class CreateEnemyPositionsTable extends Migration
      */
     public function down()
     {
-        Schema::connection('combatlog')->dropIfExists('enemy_positions');
+        Schema::dropIfExists('enemy_positions');
     }
 }

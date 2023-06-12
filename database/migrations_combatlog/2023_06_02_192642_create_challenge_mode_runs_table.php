@@ -13,7 +13,7 @@ class CreateChallengeModeRunsTable extends Migration
      */
     public function up()
     {
-        Schema::connection('combatlog')->create('challenge_mode_runs', function (Blueprint $table) {
+        Schema::create('challenge_mode_runs', function (Blueprint $table) {
             $table->id();
             $table->integer('dungeon_id');
             $table->integer('level');
@@ -34,6 +34,6 @@ class CreateChallengeModeRunsTable extends Migration
      */
     public function down()
     {
-        Schema::connection('combatlog')->dropIfExists('challenge_mode_runs');
+        Schema::dropIfExists('challenge_mode_runs');
     }
 }
