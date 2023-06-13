@@ -167,7 +167,7 @@
                 ]
             }
         ],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",
@@ -688,7 +688,7 @@
         ],
         "brushlines": [],
         "paths": [],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",

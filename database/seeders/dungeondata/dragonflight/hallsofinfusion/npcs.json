@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 106801,
         "name": "Watcher Irideus",
-        "base_health": 25688129,
+        "base_health": 25649870,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -18,6 +18,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8645,
+                "mapping_version_id": 152,
+                "npc_id": 189719,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8430,
                 "mapping_version_id": 144,
@@ -77,7 +84,7 @@
         "npc_class_id": 1,
         "display_id": 110696,
         "name": "Gulping Goliath",
-        "base_health": 6916035,
+        "base_health": 6905734,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -88,6 +95,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8652,
+                "mapping_version_id": 152,
+                "npc_id": 189722,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8437,
                 "mapping_version_id": 144,
@@ -147,7 +161,7 @@
         "npc_class_id": 1,
         "display_id": 107064,
         "name": "Khajin the Unyielding",
-        "base_health": 6916035,
+        "base_health": 6905734,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -158,6 +172,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8657,
+                "mapping_version_id": 152,
+                "npc_id": 189727,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8442,
                 "mapping_version_id": 144,
@@ -217,7 +238,7 @@
         "npc_class_id": 1,
         "display_id": 106934,
         "name": "Primal Tsunami",
-        "base_health": 7311237,
+        "base_health": 7300348,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -228,6 +249,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8660,
+                "mapping_version_id": 152,
+                "npc_id": 189729,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8445,
                 "mapping_version_id": 144,
@@ -287,7 +315,7 @@
         "npc_class_id": 1,
         "display_id": 105949,
         "name": "Refti Defender",
-        "base_health": 1087308,
+        "base_health": 1086806,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -298,6 +326,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8641,
+                "mapping_version_id": 152,
+                "npc_id": 190340,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8426,
                 "mapping_version_id": 144,
@@ -357,7 +392,7 @@
         "npc_class_id": 1,
         "display_id": 109168,
         "name": "Containment Apparatus",
-        "base_health": 889616,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -368,6 +403,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8644,
+                "mapping_version_id": 152,
+                "npc_id": 190342,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8429,
                 "mapping_version_id": 144,
@@ -427,7 +469,7 @@
         "npc_class_id": 4,
         "display_id": 102959,
         "name": "Primalist Geomancer",
-        "base_health": 988461,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -438,6 +480,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8643,
+                "mapping_version_id": 152,
+                "npc_id": 190345,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8428,
                 "mapping_version_id": 144,
@@ -497,7 +546,7 @@
         "npc_class_id": 1,
         "display_id": 102946,
         "name": "Primalist Ravager",
-        "base_health": 889616,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -508,6 +557,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8642,
+                "mapping_version_id": 152,
+                "npc_id": 190348,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8427,
                 "mapping_version_id": 144,
@@ -567,7 +623,7 @@
         "npc_class_id": 1,
         "display_id": 107114,
         "name": "Skulking Zealot",
-        "base_health": 790769,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -578,6 +634,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8649,
+                "mapping_version_id": 152,
+                "npc_id": 190359,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8434,
                 "mapping_version_id": 144,
@@ -637,7 +700,7 @@
         "npc_class_id": 1,
         "display_id": 100688,
         "name": "Dazzling Dragonfly",
-        "base_health": 790769,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -648,6 +711,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8648,
+                "mapping_version_id": 152,
+                "npc_id": 190362,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8433,
                 "mapping_version_id": 144,
@@ -707,7 +777,7 @@
         "npc_class_id": 1,
         "display_id": 102560,
         "name": "Curious Swoglet",
-        "base_health": 296539,
+        "base_health": 296402,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -718,6 +788,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8647,
+                "mapping_version_id": 152,
+                "npc_id": 190366,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8432,
                 "mapping_version_id": 144,
@@ -777,7 +854,7 @@
         "npc_class_id": 1,
         "display_id": 107117,
         "name": "Flamecaller Aymi",
-        "base_health": 2372307,
+        "base_health": 2371212,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -788,6 +865,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8650,
+                "mapping_version_id": 152,
+                "npc_id": 190368,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8435,
                 "mapping_version_id": 144,
@@ -847,7 +931,7 @@
         "npc_class_id": 1,
         "display_id": 107118,
         "name": "Squallbringer Cyraz",
-        "base_health": 2372307,
+        "base_health": 2371212,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -858,6 +942,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8651,
+                "mapping_version_id": 152,
+                "npc_id": 190370,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8436,
                 "mapping_version_id": 144,
@@ -917,7 +1008,7 @@
         "npc_class_id": 1,
         "display_id": 102880,
         "name": "Primalist Earthshaker",
-        "base_health": 1186154,
+        "base_health": 1185606,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -928,6 +1019,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8654,
+                "mapping_version_id": 152,
+                "npc_id": 190371,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8439,
                 "mapping_version_id": 144,
@@ -987,7 +1085,7 @@
         "npc_class_id": 1,
         "display_id": 102874,
         "name": "Primalist Galesinger",
-        "base_health": 889616,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -998,6 +1096,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8656,
+                "mapping_version_id": 152,
+                "npc_id": 190373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8441,
                 "mapping_version_id": 144,
@@ -1057,7 +1162,7 @@
         "npc_class_id": 1,
         "display_id": 102900,
         "name": "Primalist Icecaller",
-        "base_health": 889616,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1068,6 +1173,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8653,
+                "mapping_version_id": 152,
+                "npc_id": 190377,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8438,
                 "mapping_version_id": 144,
@@ -1190,7 +1302,7 @@
         "npc_class_id": 1,
         "display_id": 110962,
         "name": "Glacial Proto-Dragon",
-        "base_health": 1779230,
+        "base_health": 1778409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1201,6 +1313,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8655,
+                "mapping_version_id": 152,
+                "npc_id": 190403,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8440,
                 "mapping_version_id": 144,
@@ -1323,7 +1442,7 @@
         "npc_class_id": 1,
         "display_id": 107124,
         "name": "Infuser Sariya",
-        "base_health": 2965384,
+        "base_health": 2964015,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1334,6 +1453,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8659,
+                "mapping_version_id": 152,
+                "npc_id": 190405,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8444,
                 "mapping_version_id": 144,
@@ -1456,7 +1582,7 @@
         "npc_class_id": 1,
         "display_id": 102510,
         "name": "Aqua Rager",
-        "base_health": 494231,
+        "base_health": 494003,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1467,6 +1593,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8658,
+                "mapping_version_id": 152,
+                "npc_id": 190407,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8443,
                 "mapping_version_id": 144,
@@ -2030,7 +2163,7 @@
         "npc_class_id": 1,
         "display_id": 102898,
         "name": "Primalist Shocktrooper",
-        "base_health": 988461,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2041,6 +2174,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 8646,
+                "mapping_version_id": 152,
+                "npc_id": 199037,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 8431,
                 "mapping_version_id": 144,

@@ -55,6 +55,11 @@ class WebhookController extends Controller
         // We don't need duplicate messages in Discord since mapping is automatically managed
         if ($branch !== 'mapping') {
             $embeds = [];
+
+            // https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
+            $totalCharacterCount = 0;
+            $totalEmbedCharacterLimit = 5950;
+            
             foreach ($commits as $commit) {
                 // Skip system commits (such as merge branch X into Y)
                 if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
@@ -68,43 +73,56 @@ class WebhookController extends Controller
 
                 $lines = explode('\\n', $commit['message']);
 
+                $commitDescription = substr(trim(view('app.commit.commit', [
+                    'commit' => $commit,
+                    'lines'  => $lines,
+                ])->render()), 0, $totalEmbedCharacterLimit);
+
+                $totalCharacterCount += strlen($commitDescription);
+                
                 $embeds[] = [
                     'title'       => sprintf(
                         '%s: %s',
                         $branch,
                         substr(array_shift($lines), 0, 256)
                     ),
-                    'description' => substr(trim(view('app.commit.commit', [
-                        'commit' => $commit,
-                        'lines'  => $lines,
-                    ])->render()), 0, 2000),
+                    'description' => $commitDescription,
                     'url'         => $commit['url'],
                 ];
 
-                if (!empty($commit['added'])) {
+                if (!empty($commit['added']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
+                    $addedDescription = substr(trim(view('app.commit.added', [
+                        'added' => $commit['added'],
+                    ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
+                    $totalCharacterCount += strlen($addedDescription);
+                    
                     $embeds[] = [
                         'color'       => 2328118, // #238636
-                        'description' => substr(trim(view('app.commit.added', [
-                            'commit' => $commit,
-                        ])->render()), 0, 2000),
+                        'description' => $addedDescription,
                     ];
                 }
 
-                if (!empty($commit['modified'])) {
+                if (!empty($commit['modified']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
+                    $modifiedDescription = substr(trim(view('app.commit.modified', [
+                        'modified' => $commit['modified'],
+                    ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
+                    $totalCharacterCount += strlen($modifiedDescription);
+                    
                     $embeds[] = [
                         'color'       => 25284, // #0062C4
-                        'description' => substr(trim(view('app.commit.modified', [
-                            'commit' => $commit,
-                        ])->render()), 0, 2000),
+                        'description' => $modifiedDescription,
                     ];
                 }
 
-                if (!empty($commit['removed'])) {
+                if (!empty($commit['removed']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
+                    $removedDescription = substr(trim(view('app.commit.removed', [
+                        'removed' => $commit['removed'],
+                    ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
+                    $totalCharacterCount += strlen($removedDescription);
+                    
                     $embeds[] = [
                         'color'       => 14300723, // #DA3633
-                        'description' => substr(trim(view('app.commit.removed', [
-                            'commit' => $commit,
-                        ])->render()), 0, 2000),
+                        'description' => $removedDescription,
                     ];
                 }
 

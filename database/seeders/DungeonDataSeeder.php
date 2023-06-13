@@ -304,7 +304,9 @@ class DungeonDataSeeder extends Seeder
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
         /** @var DungeonRoute[]|Collection $demoRoutes */
-        $demoRoutes = DungeonRoute::where('demo', true)->get();
+        $demoRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
+            ->where('demo', true)
+            ->get();
 
         // Delete each found route that was a demo (controlled by me only)
         // This will remove all killzones, brushlines, paths etc related to the route.
