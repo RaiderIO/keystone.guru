@@ -144,6 +144,8 @@ class MDTDungeon
                 $floors = [$floors];
             }
 
+            $floors->load(['dungeon']);
+
             // NPC_ID => list of clones
             $npcClones = [];
             // Find the enemy in a list of enemies
