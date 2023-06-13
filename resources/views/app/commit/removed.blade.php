@@ -1,6 +1,6 @@
-@if(!empty($commit['removed']))
-    **{{ __('views/app.commit.removed.removed') }}**:
-    @foreach($commit['removed'] as $removed)
-        - {{ $removed }}
+@if(!empty($removed))
+**{{ __('views/app.commit.removed.removed') }}**:
+    @foreach($removed as $file)
+- {{ $file }}
     @endforeach
 @endif
