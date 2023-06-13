@@ -22,6 +22,7 @@
         "dungeon_difficulty": null,
         "created_at": "2021-01-08T15:29:35+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "ratings": [],
         "playerspecializations": [],
         "playerraces": [
             {
