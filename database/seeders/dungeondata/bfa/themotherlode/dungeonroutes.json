@@ -22,6 +22,42 @@
         "dungeon_difficulty": null,
         "created_at": "2020-07-04T09:54:00+00:00",
         "updated_at": "2022-11-21T22:31:21+00:00",
+        "dungeon": {
+            "id": 20,
+            "expansion_id": 2,
+            "map_id": 1594,
+            "key": "themotherlode",
+            "name": "dungeons.bfa.the_motherlode.name",
+            "speedrun_enabled": 0,
+            "floor_count": 1,
+            "expansion": {
+                "name": "expansions.battle_for_azeroth.name",
+                "shortname": "bfa",
+                "color": "#906554",
+                "released_at": "2018-08-14 00:00:00",
+                "active": 1,
+                "timewalkingevent": null
+            },
+            "floors": [
+                {
+                    "id": 50,
+                    "index": 1,
+                    "mdt_sub_level": null,
+                    "ui_map_id": null,
+                    "name": "The Motherlode",
+                    "default": 1,
+                    "min_enemy_size": null,
+                    "max_enemy_size": null,
+                    "ingame_min_x": 4350,
+                    "ingame_min_y": 489.58,
+                    "ingame_max_x": 2877.08,
+                    "ingame_max_y": 1470.83,
+                    "percentage_display_zoom": null
+                }
+            ],
+            "dungeon_speedrun_required_npcs10_man": [],
+            "dungeon_speedrun_required_npcs25_man": []
+        },
         "playerspecializations": [],
         "playerraces": [],
         "playerclasses": [],
@@ -94,7 +130,7 @@
                 ]
             }
         ],
-        "killzones": [
+        "kill_zones": [
             {
                 "floor_id": null,
                 "color": "#ff3eff",
