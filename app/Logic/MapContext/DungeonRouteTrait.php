@@ -42,7 +42,7 @@ trait DungeonRouteTrait
             ]),
 
             // Relations
-            'killZones'                => $dungeonRoute->killzones,
+            'killZones'                => $dungeonRoute->killZones,
             'mapIcons'                 => $dungeonRoute->mapicons,
             'paths'                    => $dungeonRoute->paths,
             'brushlines'               => $dungeonRoute->brushlines,

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\APICombatLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,5 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['prefix' => 'v1'], function () {
-
+    Route::group(['prefix' => 'combatlog'], function () {
+        Route::post('route', [APICombatLogController::class, 'createRoute'])->name('api.v1.combatlog.route.create');
+    });
 });

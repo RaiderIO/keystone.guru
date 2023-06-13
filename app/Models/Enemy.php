@@ -13,36 +13,36 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $mapping_version_id
- * @property int|null $enemy_pack_id
- * @property int|null $enemy_patrol_id
- * @property int|null $npc_id
- * @property int $floor_id
- * @property int|null $mdt_id The ID in MDT (clone index) that this enemy is coupled to
- * @property int|null $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
- * @property string $seasonal_type The type of of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
- * @property int $seasonal_index Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
- * @property int $mdt_npc_index The index of the NPC in MDT (not saved in DB)
- * @property int $enemy_id Only used for temp MDT enemies (not saved in DB)
- * @property bool $is_mdt Only used for temp MDT enemies (not saved in DB)
- * @property string $teeming
- * @property string $faction
- * @property boolean $required
- * @property boolean $skippable
- * @property int|null $enemy_forces_override
- * @property int|null $enemy_forces_override_teeming
- * @property int|null $dungeon_difficulty Show this enemy only in this difficulty setting (null is show always)
- * @property double $lat
- * @property double $lng
+ * @property int                          $id
+ * @property int                          $mapping_version_id
+ * @property int|null                     $enemy_pack_id
+ * @property int|null                     $enemy_patrol_id
+ * @property int|null                     $npc_id
+ * @property int                          $floor_id
+ * @property int|null                     $mdt_id The ID in MDT (clone index) that this enemy is coupled to
+ * @property int|null                     $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
+ * @property string                       $seasonal_type The type of of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
+ * @property int                          $seasonal_index Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
+ * @property int                          $mdt_npc_index The index of the NPC in MDT (not saved in DB)
+ * @property int                          $enemy_id Only used for temp MDT enemies (not saved in DB)
+ * @property bool                         $is_mdt Only used for temp MDT enemies (not saved in DB)
+ * @property string                       $teeming
+ * @property string                       $faction
+ * @property boolean                      $required
+ * @property boolean                      $skippable
+ * @property int|null                     $enemy_forces_override
+ * @property int|null                     $enemy_forces_override_teeming
+ * @property int|null                     $dungeon_difficulty Show this enemy only in this difficulty setting (null is show always)
+ * @property double                       $lat
+ * @property double                       $lng
  *
- * @property EnemyPack|null $enemyPack
- * @property Npc|null $npc
- * @property Floor $floor
- * @property EnemyPatrol|null $enemypatrol
- * @property MappingVersion $mappingVersion
+ * @property EnemyPack|null               $enemyPack
+ * @property Npc|null                     $npc
+ * @property Floor                        $floor
+ * @property EnemyPatrol|null             $enemyPatrol
+ * @property MappingVersion               $mappingVersion
  *
- * @property EnemyActiveAura[]|Collection $enemyactiveauras
+ * @property Collection|EnemyActiveAura[] $enemyActiveAuras
  *
  * @mixin Eloquent
  */
@@ -51,7 +51,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     use CloneForNewMappingVersionNoRelations;
     use Reportable;
 
-    protected $fillable = [
+    protected $fillable   = [
         'id',
         'mapping_version_id',
         'floor_id',
@@ -72,11 +72,14 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'lat',
         'lng',
     ];
-    public $appends = ['active_auras'];
-    public $with = ['npc', 'enemyactiveauras'];
-    public $hidden = ['laravel_through_key'];
-    public $timestamps = false;
-    protected $casts = [
+//    public    $appends    = ['active_auras'];
+    public    $with       = [
+        'npc',
+//        'enemyactiveauras'
+    ];
+    public    $hidden     = ['laravel_through_key'];
+    public    $timestamps = false;
+    protected $casts      = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'enemy_pack_id'      => 'integer',
@@ -124,9 +127,10 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     {
         $result = [];
 
-        foreach ($this->enemyactiveauras as $activeaura) {
-            $result[] = $activeaura->spell_id;
-        }
+        // Temporarily disabled to improve performance - not using this anyway
+//        foreach ($this->enemyActiveAuras as $activeaura) {
+//            $result[] = $activeaura->spell_id;
+//        }
 
         return $result;
     }
@@ -144,7 +148,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
      */
     public function enemyPack(): BelongsTo
     {
-        return $this->belongsTo(EnemyPack::class, 'enemy_pack_id');
+        return $this->belongsTo(EnemyPack::class);
     }
 
     /**
@@ -158,9 +162,9 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     /**
      * @return BelongsTo
      */
-    public function enemypatrol(): BelongsTo
+    public function enemyPatrol(): BelongsTo
     {
-        return $this->belongsTo(EnemyPatrol::class, 'enemy_patrol_id');
+        return $this->belongsTo(EnemyPatrol::class);
     }
 
     /**
@@ -174,7 +178,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     /**
      * @return HasMany
      */
-    public function enemyactiveauras(): HasMany
+    public function enemyActiveAuras(): HasMany
     {
         return $this->hasMany(EnemyActiveAura::class);
     }

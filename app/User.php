@@ -25,36 +25,36 @@ use Illuminate\Support\Collection;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
- * @property int $id
- * @property string $public_key
- * @property int $game_server_region_id
- * @property int $patreon_user_link_id
- * @property string $timezone
- * @property string $name
- * @property string $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string $email
- * @property string $locale
- * @property string $theme
- * @property string $echo_color
- * @property boolean $echo_anonymous
- * @property string $password
- * @property string $raw_patreon_response_data
- * @property boolean $legal_agreed
- * @property int $legal_agreed_ms
- * @property boolean $analytics_cookie_opt_out
- * @property boolean $changed_username
+ * @property int                       $id
+ * @property string                    $public_key
+ * @property int                       $game_server_region_id
+ * @property int                       $patreon_user_link_id
+ * @property string                    $timezone
+ * @property string                    $name
+ * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string                    $email
+ * @property string                    $locale
+ * @property string                    $theme
+ * @property string                    $echo_color
+ * @property boolean                   $echo_anonymous
+ * @property string                    $password
+ * @property string                    $raw_patreon_response_data
+ * @property boolean                   $legal_agreed
+ * @property int                       $legal_agreed_ms
+ * @property boolean                   $analytics_cookie_opt_out
+ * @property boolean                   $changed_username
  *
- * @property PatreonUserLink $patreonUserLink
- * @property GameServerRegion $gameserverregion
- * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
+ * @property PatreonUserLink           $patreonUserLink
+ * @property GameServerRegion          $gameServerRegion
+ * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
  *
- * @property boolean $is_admin
+ * @property boolean                   $is_admin
  *
- * @property DungeonRoute[]|Collection $dungeonroutes
- * @property UserReport[]|Collection $reports
- * @property Team[]|Collection $teams
- * @property Role[]|Collection $roles
- * @property Tag[]|Collection $tags
+ * @property DungeonRoute[]|Collection $dungeonRoutes
+ * @property UserReport[]|Collection   $reports
+ * @property Team[]|Collection         $teams
+ * @property Role[]|Collection         $roles
+ * @property Tag[]|Collection          $tags
  *
  * @mixin Eloquent
  */
@@ -102,7 +102,7 @@ class User extends Authenticatable
         'initials',
     ];
 
-    protected $with = 'iconfile';
+    protected $with = ['iconfile', 'patreonUserLink'];
 
     /**
      * @return string
@@ -123,7 +123,7 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
     }
@@ -147,10 +147,10 @@ class User extends Authenticatable
     /**
      * @return BelongsTo
      */
-    public function gameserverregion(): BelongsTo
+    public function gameServerRegion(): BelongsTo
     {
         // Don't know why it won't work without the foreign key specified..
-        return $this->belongsTo(GameServerRegion::class, 'game_server_region_id');
+        return $this->belongsTo(GameServerRegion::class);
     }
 
     /**
@@ -308,7 +308,7 @@ class User extends Authenticatable
                 'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes()->count() - $this->dungeonroutes()->isSandbox()->count()),
+                'delete_count' => ($this->dungeonRoutes()->count() - $this->dungeonRoutes()->isSandbox()->count()),
             ],
             'reports'       => [
                 'delete_count' => ($this->reports()->where('status', 0)->count()),
@@ -322,7 +322,7 @@ class User extends Authenticatable
 
         // Delete user properly if it gets deleted
         static::deleting(function (User $user) {
-            $user->dungeonroutes()->delete();
+            $user->dungeonRoutes()->delete();
             $user->reports()->delete();
 
             $user->patreonUserLink()->delete();

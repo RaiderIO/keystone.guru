@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Traits;
 
+use App\Traits\SavesStringToTempDisk;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -10,9 +11,10 @@ use Symfony\Component\Process\Process;
  */
 trait ConvertsMDTStrings
 {
+    use SavesStringToTempDisk;
 
     /** @var string The location to save files - this currently uses the memfs so it's super fast */
-    private static string $TMP_FILE_BASE_DIR = '/dev/shm/keystone.guru/mdt/';
+    private static string $TMP_FILE_SUB_DIR = 'mdt';
 
     /** @var string */
     private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/sudo /usr/bin/cli_weakauras_parser encode %s';
@@ -34,31 +36,6 @@ trait ConvertsMDTStrings
     }
 
     /**
-     * @param string $string
-     * @return string|null
-     */
-    private function saveFile(string $string): ?string
-    {
-        $result = null;
-
-        // Make sure the dir exists
-        if (file_exists(self::$TMP_FILE_BASE_DIR) || mkdir(self::$TMP_FILE_BASE_DIR, 0777, true)) {
-
-            do {
-                // Generate a file name
-                $fileName = sprintf('%s%d', self::$TMP_FILE_BASE_DIR, rand());
-            } while (file_exists($fileName));
-
-            // Save to disk
-            if (file_put_contents($fileName, $string)) {
-                $result = $fileName;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * @param bool $encode True to encode, false to decode it.
      * @param string $string The string you want to encode/decode.
      * @return string|null
@@ -70,7 +47,7 @@ trait ConvertsMDTStrings
         // Save a temp file so that the parser can handle it
         $fileName = null;
         try {
-            $fileName = $this->saveFile($string);
+            $fileName = $this->saveFile(self::$TMP_FILE_SUB_DIR, $string);
 
             if ($fileName !== null) {
                 $cmd     = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);

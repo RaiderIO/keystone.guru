@@ -12,29 +12,29 @@
 */
 
 use App\Http\Controllers\AdminToolsController;
-use App\Http\Controllers\Api\APIMappingVersionController;
-use App\Http\Controllers\Api\APIMountableAreaController;
-use App\Http\Controllers\Api\APISiteController;
-use App\Http\Controllers\APIBrushlineController;
-use App\Http\Controllers\APIDungeonFloorSwitchMarkerController;
-use App\Http\Controllers\APIDungeonRouteController;
-use App\Http\Controllers\APIEchoController;
-use App\Http\Controllers\APIEnemyController;
-use App\Http\Controllers\APIEnemyPackController;
-use App\Http\Controllers\APIEnemyPatrolController;
-use App\Http\Controllers\APIKillZoneController;
-use App\Http\Controllers\APILiveSessionController;
-use App\Http\Controllers\APIMapIconController;
-use App\Http\Controllers\APIMetricController;
-use App\Http\Controllers\APINpcController;
-use App\Http\Controllers\APIOverpulledEnemyController;
-use App\Http\Controllers\APIPathController;
-use App\Http\Controllers\APIPridefulEnemyController;
-use App\Http\Controllers\APIProfileController;
-use App\Http\Controllers\APITagController;
-use App\Http\Controllers\APITeamController;
-use App\Http\Controllers\APIUserController;
-use App\Http\Controllers\APIUserReportController;
+use App\Http\Controllers\Ajax\APIBrushlineController;
+use App\Http\Controllers\Ajax\APIDungeonFloorSwitchMarkerController;
+use App\Http\Controllers\Ajax\APIDungeonRouteController;
+use App\Http\Controllers\Ajax\APIEchoController;
+use App\Http\Controllers\Ajax\APIEnemyController;
+use App\Http\Controllers\Ajax\APIEnemyPackController;
+use App\Http\Controllers\Ajax\APIEnemyPatrolController;
+use App\Http\Controllers\Ajax\APIKillZoneController;
+use App\Http\Controllers\Ajax\APILiveSessionController;
+use App\Http\Controllers\Ajax\APIMapIconController;
+use App\Http\Controllers\Ajax\APIMappingVersionController;
+use App\Http\Controllers\Ajax\APIMetricController;
+use App\Http\Controllers\Ajax\APIMountableAreaController;
+use App\Http\Controllers\Ajax\APINpcController;
+use App\Http\Controllers\Ajax\APIOverpulledEnemyController;
+use App\Http\Controllers\Ajax\APIPathController;
+use App\Http\Controllers\Ajax\APIPridefulEnemyController;
+use App\Http\Controllers\Ajax\APIProfileController;
+use App\Http\Controllers\Ajax\APISiteController;
+use App\Http\Controllers\Ajax\APITagController;
+use App\Http\Controllers\Ajax\APITeamController;
+use App\Http\Controllers\Ajax\APIUserController;
+use App\Http\Controllers\Ajax\APIUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -331,6 +331,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::group(['prefix' => 'tools'], function () {
                 Route::get('/', [AdminToolsController::class, 'index'])->name('admin.tools');
+
+                Route::get('/combatlog', [AdminToolsController::class, 'combatlog'])->name('admin.combatlog');
 
                 Route::get('/npcimport', [AdminToolsController::class, 'npcimport'])->name('admin.tools.npcimport');
                 Route::post('/npcimport', [AdminToolsController::class, 'npcimportsubmit'])->name('admin.tools.npcimport.submit');

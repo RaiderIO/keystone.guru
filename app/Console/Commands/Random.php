@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
-use App\Models\GameServerRegion;
-use App\Service\Expansion\ExpansionService;
-use App\Service\Mapping\MappingService;
-use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
-use App\Service\WowTools\WowToolsServiceInterface;
+use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\CombatLogSplitServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -41,9 +37,13 @@ class Random extends Command
      *
      * @return int
      */
-    public function handle(WowToolsServiceInterface $wowToolsService)
+    public function handle(CombatLogSplitServiceInterface $combatLogSplitService)
     {
-        (new UpdateDungeonRoutePopularity())->__invoke();
+        dd($combatLogSplitService->splitCombatLogOnChallengeModes(
+            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')
+        ));
+
+//        (new UpdateDungeonRoutePopularity())->__invoke();
 
 //        dd($wowToolsService->getDisplayId(12345));
 

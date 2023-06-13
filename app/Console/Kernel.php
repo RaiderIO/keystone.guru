@@ -3,6 +3,11 @@
 namespace App\Console;
 
 use App\Console\Commands\Cache\RedisClearIdleKeys;
+use App\Console\Commands\CombatLog\CreateDungeonRoutes;
+use App\Console\Commands\CombatLog\EnsureChallengeMode;
+use App\Console\Commands\CombatLog\ExtractUiMapIds;
+use App\Console\Commands\CombatLog\OutputResultEvents;
+use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
@@ -59,6 +64,13 @@ class Kernel extends ConsoleKernel
 
         // Cache
         RedisClearIdleKeys::class,
+
+        // CombatLog
+        EnsureChallengeMode::class,
+        SplitChallengeMode::class,
+        ExtractUiMapIds::class,
+        CreateDungeonRoutes::class,
+        OutputResultEvents::class,
 
         // Database
         Backup::class,

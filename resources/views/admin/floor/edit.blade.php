@@ -41,6 +41,13 @@ $floor = $floor ?? null;
         @include('common.forms.form-error', ['key' => 'mdt_sub_level'])
     </div>
 
+    <div class="form-group{{ $errors->has('ui_map_id') ? ' has-error' : '' }}">
+        {!! Form::label('ui_map_id', __('views/admin.floor.edit.ui_map_id'), ['class' => 'font-weight-bold']) !!}
+        <span class="form-required">*</span>
+        {!! Form::text('ui_map_id', optional($floor)->ui_map_id, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'ui_map_id'])
+    </div>
+
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         {!! Form::label('name', __('views/admin.floor.edit.floor_name'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>

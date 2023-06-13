@@ -21,7 +21,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'dungeon_id');
     }
 
-    protected function applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
@@ -31,10 +31,11 @@ class DungeonColumnHandler extends DatatablesColumnHandler
                 $explode = explode('-', $searchValue);
                 if (count($explode) === 2) {
                     $seasonId = $explode[1];
-                    $builder->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId))
-                        ->whereColumn('dungeon_routes.dungeon_id', 'season_dungeons.dungeon_id');
+                    // Joins need to be added to the main builder
+                    $this->getDtHandler()->getBuilder()->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
+                    $subBuilder->whereColumn('dungeon_routes.dungeon_id', '=', 'season_dungeons.dungeon_id');
                 } else {
-                    $builder->where('dungeon_routes.dungeon_id', $searchValue);
+                    $subBuilder->where('dungeon_routes.dungeon_id', $searchValue);
                 }
             }
         }
@@ -44,7 +45,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
             // Order on this column?
             if (!is_null($order)) {
                 // Always order based on expansion - the most recent expansion should always come on top
-                $builder->orderby('dungeons.expansion_id', 'DESC')
+                $subBuilder->orderby('dungeons.expansion_id', 'DESC')
                     // Order either asc or desc, nothing else
                     ->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }

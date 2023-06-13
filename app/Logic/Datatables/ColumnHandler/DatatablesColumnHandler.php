@@ -34,13 +34,14 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @param Builder $builder
+     * @param Builder $subBuilder
      * @param $columnData
      * @param $order
      * @param $generalSearch
+     *
      * @return mixed
      */
-    protected abstract function applyFilter(Builder $builder, $columnData, $order, $generalSearch);
+    protected abstract function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
 
     /**
      * @return DatatablesHandler
@@ -67,10 +68,12 @@ abstract class DatatablesColumnHandler
     }
 
     /**
+     * @param Builder $subBuilder
+     *
      * @return $this
      * @throws Exception
      */
-    public function applyToBuilder(): self
+    public function applyToBuilder(Builder $subBuilder): self
     {
         $request = $this->dtHandler->getRequest();
 
@@ -100,7 +103,7 @@ abstract class DatatablesColumnHandler
             $order = $order['column'] == $columnIndex ? $order : null;
 
             // Handle the filtering of this column
-            $this->applyFilter($this->dtHandler->getBuilder(), $column, $order, $generalSearch);
+            $this->applyFilter($subBuilder, $column, $order, $generalSearch);
             // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
 

@@ -174,7 +174,7 @@ class PatreonApiService implements PatreonApiServiceInterface
             $requestResult['data'] = $resultData;
         }
 
-        return $requestResult;
+        return $requestResult ?? [];
     }
 
     /**

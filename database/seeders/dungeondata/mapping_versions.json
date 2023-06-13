@@ -1985,7 +1985,7 @@
         "mdt_mapping_hash": "aa62f83195a54b4937219463e400153e",
         "created_at": "2023-05-26T06:01:15.000000Z",
         "updated_at": "2023-05-26T06:01:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 145,
@@ -1999,7 +1999,7 @@
         "mdt_mapping_hash": "aaa1a63fc45f62c2c4ece547886d514b",
         "created_at": "2023-05-26T06:01:17.000000Z",
         "updated_at": "2023-05-26T06:01:17.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 146,
@@ -2013,7 +2013,7 @@
         "mdt_mapping_hash": "0f4cde2573fc28aca26202f8be8c80a3",
         "created_at": "2023-05-26T06:01:21.000000Z",
         "updated_at": "2023-05-26T06:01:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 147,
@@ -2027,7 +2027,7 @@
         "mdt_mapping_hash": "032a31f8c59627a50dad2a83a1e81084",
         "created_at": "2023-05-26T06:01:23.000000Z",
         "updated_at": "2023-05-26T06:01:23.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 148,
@@ -2041,7 +2041,7 @@
         "mdt_mapping_hash": "49d6d6bb2d698401cd33c766cdff0f30",
         "created_at": "2023-05-26T06:01:25.000000Z",
         "updated_at": "2023-05-26T06:01:25.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 149,
@@ -2055,7 +2055,7 @@
         "mdt_mapping_hash": "b5e4f0e1818a5dee26593f70a1d562a4",
         "created_at": "2023-05-26T06:01:26.000000Z",
         "updated_at": "2023-05-26T06:01:26.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 150,
@@ -2069,7 +2069,7 @@
         "mdt_mapping_hash": "73af9042d3a23af97dfbfeff3a3b8bf4",
         "created_at": "2023-05-26T06:01:29.000000Z",
         "updated_at": "2023-05-26T06:01:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 151,
@@ -2083,6 +2083,118 @@
         "mdt_mapping_hash": "ffe18432fb93dc3b45287ec9d135e56d",
         "created_at": "2023-05-26T06:01:31.000000Z",
         "updated_at": "2023-05-26T06:01:31.000000Z",
+        "merged": true
+    },
+    {
+        "id": 152,
+        "dungeon_id": 69,
+        "version": 8,
+        "enemy_forces_required": 435,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "0e8836f578313f4969abb4f5a5ba67bf",
+        "created_at": "2023-06-13T14:17:15.000000Z",
+        "updated_at": "2023-06-13T14:17:15.000000Z",
+        "merged": false
+    },
+    {
+        "id": 153,
+        "dungeon_id": 68,
+        "version": 9,
+        "enemy_forces_required": 723,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "8e2eb4414a1fc301b0ebc367aa81af06",
+        "created_at": "2023-06-13T14:17:27.000000Z",
+        "updated_at": "2023-06-13T14:17:27.000000Z",
+        "merged": false
+    },
+    {
+        "id": 154,
+        "dungeon_id": 74,
+        "version": 7,
+        "enemy_forces_required": 575,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "2b610280e743b533eae1d70790e07b7f",
+        "created_at": "2023-06-13T14:17:30.000000Z",
+        "updated_at": "2023-06-13T14:17:30.000000Z",
+        "merged": false
+    },
+    {
+        "id": 155,
+        "dungeon_id": 70,
+        "version": 6,
+        "enemy_forces_required": 525,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "b5f382ca734c00f44445c533d5d4ee4a",
+        "created_at": "2023-06-13T14:17:32.000000Z",
+        "updated_at": "2023-06-13T14:17:32.000000Z",
+        "merged": false
+    },
+    {
+        "id": 156,
+        "dungeon_id": 10,
+        "version": 8,
+        "enemy_forces_required": 220,
+        "enemy_forces_required_teeming": 264,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "230d069cb0517a16fb725bb9b198596d",
+        "created_at": "2023-06-13T14:17:34.000000Z",
+        "updated_at": "2023-06-13T14:17:34.000000Z",
+        "merged": false
+    },
+    {
+        "id": 157,
+        "dungeon_id": 15,
+        "version": 8,
+        "enemy_forces_required": 400,
+        "enemy_forces_required_teeming": 313,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "bcf8f81ec35143d49b47b28a91ccaf20",
+        "created_at": "2023-06-13T14:17:35.000000Z",
+        "updated_at": "2023-06-13T14:17:35.000000Z",
+        "merged": false
+    },
+    {
+        "id": 158,
+        "dungeon_id": 21,
+        "version": 8,
+        "enemy_forces_required": 320,
+        "enemy_forces_required_teeming": 286,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "72148ccc132e3e47c02330c912a89632",
+        "created_at": "2023-06-13T14:17:38.000000Z",
+        "updated_at": "2023-06-13T14:17:38.000000Z",
+        "merged": false
+    },
+    {
+        "id": 159,
+        "dungeon_id": 77,
+        "version": 7,
+        "enemy_forces_required": 420,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "380c91957a425f575094a41a18bfb93c",
+        "created_at": "2023-06-13T14:17:40.000000Z",
+        "updated_at": "2023-06-13T14:17:40.000000Z",
         "merged": false
     }
 ]

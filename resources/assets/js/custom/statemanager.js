@@ -496,7 +496,7 @@ class StateManager extends Signalable {
 
     /**
      * Gets the data of the currently selected floor
-     * @returns {boolean|Object}
+     * @returns {boolean|{Object}}
      */
     getCurrentFloor() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);

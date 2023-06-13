@@ -183,7 +183,7 @@ class Save extends Command
      */
     private function saveDungeonData(string $dungeonDataDir)
     {
-        foreach (Dungeon::all() as $dungeon) {
+        foreach (Dungeon::with(['dungeonRoutes'])->get() as $dungeon) {
             /** @var $dungeon Dungeon */
             $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
 
@@ -193,7 +193,15 @@ class Save extends Command
             $this->saveDungeonNpcs($dungeon, $rootDirPath);
 
             /** @var Dungeon $dungeon */
-            foreach ($dungeon->floors as $floor) {
+            $floors = $dungeon->floors()->with([
+                'enemyPacksForExport',
+                'enemyPatrolsForExport',
+                'dungeonFloorSwitchMarkersForExport',
+                'mapIconsForExport',
+                'mountableAreasForExport',
+            ])->get();
+
+            foreach ($floors as $floor) {
                 $this->saveFloor($floor, $rootDirPath);
             }
         }
@@ -207,7 +215,7 @@ class Save extends Command
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
-        $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
+        $demoRoutes = $dungeon->dungeonRoutes->where('demo', true)->values();
         foreach ($demoRoutes as $demoRoute) {
             /** @var $demoRoute DungeonRoute */
             unset($demoRoute->relations);
@@ -217,9 +225,9 @@ class Save extends Command
             // for each and every re-import
             $demoRoute->setHidden(['id', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
                                    'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
-                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews']);
+                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers',
+                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyraidmarkers',
                               'pridefulEnemies', 'mapicons']);
 
             // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
@@ -252,7 +260,7 @@ class Save extends Command
                 $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
                 $toHide->add($item);
             }
-            foreach ($demoRoute->killzones as $item) {
+            foreach ($demoRoute->killZones as $item) {
                 // Hidden by default to save data
                 $item->makeVisible(['floor_id']);
                 $toHide->add($item);

@@ -265,7 +265,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 // Add patrol if any
                 if ($enemy->enemy_patrol_id !== null && !$savedEnemyPatrols->has($enemy->enemy_patrol_id)) {
                     $patrolVertices   = [];
-                    $polylineVertices = json_decode($enemy->enemypatrol->polyline->vertices_json, true);
+                    $polylineVertices = json_decode($enemy->enemyPatrol->polyline->vertices_json, true);
                     $vertexIndex      = 0;
                     foreach ($polylineVertices as $vertex) {
                         $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($vertex);
@@ -274,7 +274,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
                     // Cache it only if the patrol was tied to a group
                     if ($enemy->enemy_pack_id !== null) {
-                        $savedEnemyPatrols->put($enemy->enemy_patrol_id, $enemy->enemypatrol);
+                        $savedEnemyPatrols->put($enemy->enemy_patrol_id, $enemy->enemyPatrol);
                     }
                 }
             }

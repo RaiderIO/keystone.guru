@@ -458,12 +458,14 @@ class DrawControls extends MapControl {
                 (self.map.getMapState() instanceof PatherMapState ? ' leaflet-draw-toolbar-button-enabled' : ''),
             href: '#',
         });
+        
+        let hotkey = this._findHotkeyByCssClass('brushline');
         $brushlineButton.html(
             this._getButtonHtml(
                 'fa-paint-brush',
                 lang.get('messages.brushline'),
-                this._findHotkeyByCssClass('brushline'),
-                lang.get('messages.brushline_title')
+                hotkey,
+                lang.get('messages.brushline_title', {hotkey: hotkey})
             )
         );
         $brushlineButton.unbind('click').bind('click', function () {

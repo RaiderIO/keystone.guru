@@ -123,7 +123,7 @@ class ProfileController extends Controller
                 Session::flash('status', __('controller.profile.flash.profile_updated'));
 
                 // Drop the caches for all of their routes since their profile name/icon may have changed
-                foreach ($user->dungeonroutes as $dungeonroute) {
+                foreach ($user->dungeonRoutes as $dungeonroute) {
                     $dungeonroute->dropCaches($dungeonroute->id);
                 }
 
