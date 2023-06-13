@@ -601,8 +601,8 @@ class DungeonRoute extends Model
     public function getSetupAttribute(): array
     {
         // Temp test to fix a bug "Attempted to lazy load [faction] on model [App\Models\DungeonRoute] but lazy loading is disabled."
-        $this->load(['faction']);
-        
+        $this->load(['faction', 'specializations', 'classes', 'races']);
+
         return [
             'faction'         => $this->faction,
             'specializations' => $this->specializations,
