@@ -337,6 +337,17 @@ class Enemy extends VersionableMapObject {
                 edit: false,
                 save: false,
                 default: false
+            }),
+            new Attribute({
+                name: 'kill_priority',
+                type: 'select',
+                admin: true,
+                default: null,
+                values: [
+                    {id: -10, name: 'Low'},
+                    {id: 0, name: 'Normal'},
+                    {id: 10, name: 'High'},
+                ],
             })
         ]);
     }
