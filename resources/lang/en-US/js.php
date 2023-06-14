@@ -74,7 +74,6 @@ return [
     'publish_state_title_world_with_link'   => 'Public with link',
     'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route (Patreon only)',
 
-
     'publish_label'              => 'Publish',
     'unpublish_label'            => 'Unpublish',
     'add_remove_tag_label'       => 'Add/remove tags',
@@ -173,7 +172,6 @@ return [
     'npc_type_label'                              => 'Type',
     'npc_class_label'                             => 'Class',
     'enemy_portrait_label'                        => 'Portrait',
-
 
     // Admin
     'object.deleted'                              => 'Objects deleted successfully.',
@@ -285,6 +283,8 @@ return [
     'sidebar_enemy_bolstering_whitelist_npcs_label'      => 'Bolsters only',
     'sidebar_enemy_spell_label'                          => 'Spells',
     'sidebar_enemy_skippable_label'                      => 'Skippable',
+    'sidebar_enemy_kill_priority_label'                  => 'Kill priority',
+    'sidebar_enemy_kill_priority_select_default_label'   => 'Select kill priority',
     'sidebar_enemy_health_fortified_label'               => 'This health value is scaled by the Fortified affix',
     'sidebar_enemy_health_tyrannical_label'              => 'This health value is scaled by the Tyrannical affix',
     'sidebar_enemy_skippable_info_label'                 => 'A skippable enemy is an enemy that can be skipped without using invisibility potions or Rogue Shroud. These enemies may be excluded from your routes once you mark enemies as overpulled during a live session.',
@@ -375,7 +375,6 @@ return [
     'admin_enemy_pack_faction_label'                                => 'Faction',
     'admin_enemy_pack_teeming_label'                                => 'Teeming',
     'admin_enemy_pack_label_label'                                  => 'Label',
-
 
     // Brushline
     'brushline_color_label'                                         => 'Color',

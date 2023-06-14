@@ -75,8 +75,8 @@ class AdminToolsController extends Controller
 //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
 //                'WoWCombatLog-051323_095734_13_neltharus.zip',
 //                'WoWCombatLog-060223_181049_20_neltharus.zip'
-                'tests/Samples/WoWCombatLog-050923_172619_7_freehold.txt',
-//                    'tests/samples/WoWCombatLog-050923_172619_7_freehold_events.txt'
+                'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip',
+//                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold_events.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'

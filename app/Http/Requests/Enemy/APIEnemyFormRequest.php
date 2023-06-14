@@ -46,6 +46,7 @@ class APIEnemyFormRequest extends FormRequest
             'faction'                       => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
             'required'                      => 'boolean',
             'skippable'                     => 'boolean',
+            'kill_priority'                 => 'nullable|int',
             'enemy_forces_override'         => 'nullable|int',
             'enemy_forces_override_teeming' => 'nullable|int',
             'dungeon_difficulty'            => [Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, ['-1', '', null]))],

@@ -30,6 +30,7 @@ use Illuminate\Support\Collection;
  * @property string                       $faction
  * @property boolean                      $required
  * @property boolean                      $skippable
+ * @property int|null                     $kill_priority Used for determining the group in which enemies are scanned for and killed when parsing a combat log. Null = default, negative = lower priority, positive = higher priority
  * @property int|null                     $enemy_forces_override
  * @property int|null                     $enemy_forces_override_teeming
  * @property int|null                     $dungeon_difficulty Show this enemy only in this difficulty setting (null is show always)
@@ -51,7 +52,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     use CloneForNewMappingVersionNoRelations;
     use Reportable;
 
-    protected $fillable   = [
+    protected $fillable = [
         'id',
         'mapping_version_id',
         'floor_id',
@@ -66,26 +67,33 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'faction',
         'required',
         'skippable',
+        'kill_priority',
         'enemy_forces_override',
         'enemy_forces_override_teeming',
         'dungeon_difficulty',
         'lat',
         'lng',
     ];
-//    public    $appends    = ['active_auras'];
+    //    public    $appends    = ['active_auras'];
     public    $with       = [
         'npc',
-//        'enemyactiveauras'
+        //        'enemyactiveauras'
     ];
     public    $hidden     = ['laravel_through_key'];
     public    $timestamps = false;
     protected $casts      = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
+        'npc_id'             => 'integer',
+        'mdt_id'             => 'integer',
+        'mdt_npc_id'         => 'integer',
         'enemy_pack_id'      => 'integer',
         'enemy_patrol_id'    => 'integer',
+        'required'           => 'integer',
+        'skippable'          => 'integer',
         'lat'                => 'double',
         'lng'                => 'double',
+        'kill_priority'      => 'integer',
     ];
 
     const SEASONAL_TYPE_BEGUILING          = 'beguiling';
@@ -128,9 +136,9 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         $result = [];
 
         // Temporarily disabled to improve performance - not using this anyway
-//        foreach ($this->enemyActiveAuras as $activeaura) {
-//            $result[] = $activeaura->spell_id;
-//        }
+        //        foreach ($this->enemyActiveAuras as $activeaura) {
+        //            $result[] = $activeaura->spell_id;
+        //        }
 
         return $result;
     }
