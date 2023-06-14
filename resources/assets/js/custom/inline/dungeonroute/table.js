@@ -413,7 +413,7 @@ class DungeonrouteTable extends InlineCode {
                     let result = '-';
 
                     if (row.rating_count !== 0) {
-                        result = row.avg_rating;
+                        result = row.rating;
                         if (row.rating_count === 1) {
                             result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
                         } else {

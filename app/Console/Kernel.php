@@ -44,6 +44,7 @@ use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
+use App\Logic\Scheduler\UpdateDungeonRouteRating;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -147,6 +148,7 @@ class Kernel extends ConsoleKernel
         $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
+        $schedule->call(new UpdateDungeonRouteRating)->everyFifteenMinutes();
         $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 

@@ -580,7 +580,7 @@ class CommonMapsMap extends InlineCode {
             },
             success: function (json) {
                 // Update the new average rating
-                $('#rating').barrating('set', Math.round(json.new_avg_rating));
+                $('#rating').barrating('set', Math.round(json.new_rating));
             }
         });
     }
