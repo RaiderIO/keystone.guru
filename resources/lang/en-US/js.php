@@ -74,7 +74,6 @@ return [
     'publish_state_title_world_with_link'   => 'Public with link',
     'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route (Patreon only)',
 
-
     'publish_label'              => 'Publish',
     'unpublish_label'            => 'Unpublish',
     'add_remove_tag_label'       => 'Add/remove tags',
@@ -173,7 +172,6 @@ return [
     'npc_type_label'                              => 'Type',
     'npc_class_label'                             => 'Class',
     'enemy_portrait_label'                        => 'Portrait',
-
 
     // Admin
     'object.deleted'                              => 'Objects deleted successfully.',
@@ -368,6 +366,8 @@ return [
     'enemy_dungeon_difficulty_label'                                => 'Dungeon difficulty',
     'enemy_required_label'                                          => 'Required',
     'enemy_skippable_label'                                         => 'Skippable',
+    'enemy_kill_priority_label'                                     => 'Kill priority',
+    'enemy_kill_priority_select_default_label'                      => 'Select kill priority',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
     'enemy_mdt_npc_id_select_default_label'                         => 'Select NPC',
 
@@ -375,7 +375,6 @@ return [
     'admin_enemy_pack_faction_label'                                => 'Faction',
     'admin_enemy_pack_teeming_label'                                => 'Teeming',
     'admin_enemy_pack_label_label'                                  => 'Label',
-
 
     // Brushline
     'brushline_color_label'                                         => 'Color',

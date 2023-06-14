@@ -72,7 +72,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    public $hidden = ['dungeon_id', 'created_at', 'updated_at'];
+    public $hidden = ['dungeon', 'dungeon_id', 'created_at', 'updated_at'];
 
     /**
      * @return BelongsTo

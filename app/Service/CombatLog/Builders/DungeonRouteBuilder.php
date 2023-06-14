@@ -80,11 +80,16 @@ class DungeonRouteBuilder
             'floor',
             'enemyPack',
             'enemyPatrol',
-        ])->get()->sort(function (
-            Enemy $enemy
-        ) {
-            return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
-        })->keyBy('id');
+        ])
+            ->get()
+            ->each(function (Enemy $enemy) {
+                // Ensure that the kill priority is 0 if it wasn't set
+                $enemy->kill_priority = $enemy->kill_priority ?? 0;
+            })
+            ->sort(function (Enemy $enemy) {
+                return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
+            })
+            ->keyBy('id');
     }
 
     /**
@@ -287,10 +292,7 @@ class DungeonRouteBuilder
                 return $preferredGroups->has($availableEnemy->enemyPack->group);
             });
 
-            foreach ($preferredEnemiesInEngagedGroups as $availableEnemy) {
-                $this->findClosestEnemyAndDistance($availableEnemy, $availableEnemy->lat, $availableEnemy->lng,
-                    $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
-            }
+            $this->findClosestEnemyAndDistanceFromList($preferredEnemiesInEngagedGroups, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
 
             // If we found an enemy in one of our preferred packs, we must not continue searching
             if ($closestEnemy !== null) {
@@ -298,10 +300,7 @@ class DungeonRouteBuilder
                     $closestEnemy->id, $closestEnemyDistance, $closestEnemy->enemyPack->group
                 );
             } else {
-                foreach ($filteredEnemies as $availableEnemy) {
-                    $this->findClosestEnemyAndDistance($availableEnemy, $availableEnemy->lat, $availableEnemy->lng,
-                        $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
-                }
+                $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
 
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
                     optional($closestEnemy)->id, $closestEnemyDistance
@@ -311,23 +310,7 @@ class DungeonRouteBuilder
                 if ($closestEnemyDistance > self::MAX_AGGRO_DISTANCE_FOR_PATROLS) {
                     $this->log->findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols();
 
-                    foreach ($filteredEnemies as $availableEnemy) {
-                        if (!($availableEnemy->enemyPatrol instanceof EnemyPatrol)) {
-                            continue;
-                        }
-
-                        // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
-                        $points   = [];
-                        $vertices = json_decode($availableEnemy->enemyPatrol->polyline->vertices_json, true);
-                        foreach ($vertices as $vertex) {
-                            $points[] = $vertex;
-                        }
-
-                        foreach ($points as $pointLatLng) {
-                            $this->findClosestEnemyAndDistance($availableEnemy, $pointLatLng['lat'], $pointLatLng['lng'],
-                                $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
-                        }
-                    }
+                    $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy, true);
                 }
 
                 if ($closestEnemyDistance > self::MAX_DISTANCE_IGNORE) {
@@ -343,9 +326,8 @@ class DungeonRouteBuilder
             }
 
             if ($closestEnemy !== null) {
-                $enemyXY = $this->currentFloor->calculateIngameLocationForMapLocation($closestEnemy->lat, $closestEnemy->lng);
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
-                    $closestEnemy->id, $enemyXY['x'], $enemyXY['y'], $closestEnemyDistance
+                    $closestEnemy->id, $closestEnemyDistance
                 );
 
                 $this->availableEnemies->forget($closestEnemy->id);
@@ -358,6 +340,78 @@ class DungeonRouteBuilder
     }
 
     /**
+     * @param Collection $enemies
+     * @param float $ingameX
+     * @param float $ingameY
+     * @param float $closestEnemyDistance
+     * @param Enemy|null $closestEnemy
+     * @param bool $considerPatrols
+     * @return bool
+     */
+    private function findClosestEnemyAndDistanceFromList(
+        Collection $enemies,
+        float      $ingameX,
+        float      $ingameY,
+        float      &$closestEnemyDistance,
+        ?Enemy     &$closestEnemy,
+        bool       $considerPatrols = false
+    ): bool
+    {
+        $result = false;
+
+        // Sort descending - higher priorties go first
+        foreach ($enemies->groupBy('kill_priority')->sortDesc() as $killPriority => $availableEnemies) {
+            // For each group of enemies
+            /** @var Collection|Enemy[] $availableEnemies */
+            foreach ($availableEnemies as $availableEnemy) {
+                if ($considerPatrols) {
+                    if (!($availableEnemy->enemyPatrol instanceof EnemyPatrol)) {
+                        continue;
+                    }
+
+                    // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
+                    $points   = [];
+                    $vertices = json_decode($availableEnemy->enemyPatrol->polyline->vertices_json, true);
+                    foreach ($vertices as $vertex) {
+                        $points[] = $vertex;
+                    }
+
+                    foreach ($points as $pointLatLng) {
+                        $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
+                            $availableEnemy,
+                            $pointLatLng['lat'],
+                            $pointLatLng['lng'],
+                            $ingameX,
+                            $ingameY,
+                            $closestEnemyDistance,
+                            $closestEnemy
+                        );
+                        $result               = $result || $foundNewClosestEnemy;
+                    }
+                } else {
+                    $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
+                        $availableEnemy,
+                        $availableEnemy->lat,
+                        $availableEnemy->lng,
+                        $ingameX,
+                        $ingameY,
+                        $closestEnemyDistance,
+                        $closestEnemy
+                    );
+                    $result               = $result || $foundNewClosestEnemy;
+                }
+            }
+
+            // If we found a matching enemy in the above list, stop completely
+            if ($result) {
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param Enemy $availableEnemy
      * @param float $enemyLat
      * @param float $enemyLng
@@ -366,7 +420,7 @@ class DungeonRouteBuilder
      * @param float $closestEnemyDistance
      * @param Enemy|null $closestEnemy
      *
-     * @return void
+     * @return bool True if an enemy close enough was found
      */
     private function findClosestEnemyAndDistance(
         Enemy  $availableEnemy,
@@ -376,8 +430,10 @@ class DungeonRouteBuilder
         float  $ingameY,
         float  &$closestEnemyDistance,
         ?Enemy &$closestEnemy
-    ): void
+    ): bool
     {
+        $result = false;
+
         // Always use the floor that the enemy itself is on, not $this->currentFloor
         $enemyXY = $availableEnemy->floor->calculateIngameLocationForMapLocation($enemyLat, $enemyLng);
 
@@ -391,6 +447,9 @@ class DungeonRouteBuilder
         if ($closestEnemyDistance > $distance) {
             $closestEnemyDistance = $distance;
             $closestEnemy         = $availableEnemy;
+            $result               = $closestEnemyDistance < self::MAX_DISTANCE_IGNORE;
         }
+
+        return $result;
     }
 }
