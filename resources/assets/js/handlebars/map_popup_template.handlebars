@@ -2,7 +2,9 @@
     <h4>
         {{map_object_name_pretty}}
     </h4>
-    {{{html}}}
+    <div id="map_{{map_object_name}}_edit_popup_accordion_{{id}}">
+        {{{html}}}
+    </div>
 
     {{#unless readonly}}
         <button id="map_{{map_object_name}}_edit_popup_submit_{{id}}" class="btn btn-info"

@@ -147,12 +147,14 @@ class Enemy extends VersionableMapObject {
             new Attribute({
                 name: 'enemy_forces_override',
                 type: 'int',
-                admin: true
+                admin: true,
+                category: 'legacy',
             }),
             new Attribute({
                 name: 'enemy_forces_override_teeming',
                 type: 'int',
-                admin: true
+                admin: true,
+                category: 'legacy',
             }),
             new Attribute({
                 name: 'dungeon_difficulty',
@@ -168,7 +170,8 @@ class Enemy extends VersionableMapObject {
                 default: null,
                 getter: function () {
                     return self.dungeon_difficulty === null || self.dungeon_difficulty <= 0 ? null : self.dungeon_difficulty;
-                }
+                },
+                category: 'advanced',
             }),
             // new Attribute({
             //     name: 'npc',
@@ -238,7 +241,8 @@ class Enemy extends VersionableMapObject {
                     // Values from a select are always strings, cast this
                     let parsed = parseInt(value);
                     self.mdt_npc_id = value === null || parsed === -1 ? null : parsed;
-                }
+                },
+                category: 'legacy'
             }),
             new Attribute({
                 name: 'seasonal_type',
@@ -260,7 +264,8 @@ class Enemy extends VersionableMapObject {
                 ],
                 setter: function (value) {
                     self.seasonal_type = value <= 0 ? null : value;
-                }
+                },
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'seasonal_index',
@@ -280,7 +285,8 @@ class Enemy extends VersionableMapObject {
                         value = null;
                     }
                     self.seasonal_index = value;
-                }
+                },
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'active_auras',
@@ -291,19 +297,22 @@ class Enemy extends VersionableMapObject {
                 multiple: true,
                 setter: function (value) {
                     self.active_auras = value;
-                }
+                },
+                category: 'legacy'
             }),
             new Attribute({
                 name: 'required',
                 type: 'bool',
                 admin: true,
-                default: false
+                default: false,
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'skippable',
                 type: 'bool',
                 admin: true,
-                default: false
+                default: false,
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'lat',
@@ -348,6 +357,7 @@ class Enemy extends VersionableMapObject {
                     {id: 0, name: 'Normal'},
                     {id: 10, name: 'High'},
                 ],
+                category: 'advanced',
             })
         ]);
     }

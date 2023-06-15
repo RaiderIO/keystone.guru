@@ -321,6 +321,9 @@ return [
     // Popups
     // Map Object
     'map_object_readonly_label'                          => 'This mapping version is read-only',
+    'map_object_category_general_label'                  => 'General',
+    'map_object_category_legacy_label'                   => 'Legacy',
+    'map_object_category_advanced_label'                 => 'Advanced',
 
     'mapicon_faction_select_default_label'                          => 'Select faction',
     'mapicon_teeming_select_default_label'                          => 'Select teeming',
@@ -352,7 +355,7 @@ return [
     'enemy_faction_label'                                           => 'Faction',
     'enemy_teeming_label'                                           => 'Teeming',
     'enemy_npc_id_label'                                            => 'Npc',
-    'enemy_mdt_id_label'                                            => 'MDT ID (optional)',
+    'enemy_mdt_id_label'                                            => 'MDT ID',
     'enemy_mdt_npc_id_label'                                        => 'MDT Npc (optional)',
     'enemy_seasonal_type_label'                                     => 'Seasonal type',
     'enemy_seasonal_type_select_default_label'                      => 'Not set',
