@@ -123,7 +123,8 @@ class MapObject extends Signalable {
                 type: 'select',
                 values: selectTeemingOptions,
                 admin: true,
-                show_default: false
+                show_default: false,
+                category: 'legacy',
             })
         ];
     }
@@ -262,12 +263,6 @@ class MapObject extends Signalable {
                 // This also cannot be a private function since that'll apparently give different signatures as well
                 // (and thus trigger the submit function multiple times when clicked once)
                 let popupOpenFn = function (event) {
-                    // Prevent multiple binds to click
-                    let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
-                    $submitBtn.unbind('click').bind('click', function () {
-                        self._popupSubmitClicked();
-                    });
-
                     self._initPopup();
                 };
 
@@ -286,6 +281,12 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         let self = this;
+
+        // Prevent multiple binds to click
+        let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
+        $submitBtn.unbind('click').bind('click', function () {
+            self._popupSubmitClicked();
+        });
 
         refreshSelectPickers();
 
@@ -330,6 +331,15 @@ class MapObject extends Signalable {
                 }
             }
         }
+
+        $(`#map_${mapObjectName}_edit_popup_accordion_${this.id}`)
+            .off('hide.bs.collapse').on('hide.bs.collapse', function (e) {
+            let category = $(e.target).data('category');
+            Cookies.set(`map_object_category_visibility_${category}`, 0);
+        }).off('show.bs.collapse').on('show.bs.collapse', function (e) {
+            let category = $(e.target).data('category');
+            Cookies.set(`map_object_category_visibility_${category}`, 1);
+        });
     }
 
     /**
@@ -400,12 +410,12 @@ class MapObject extends Signalable {
     /**
      * Get the html for the popup as defined by the attributes of this map object
      * @param parentAttribute {Attribute|null}
-     * @returns {string}
+     * @returns {string|array}
      * @private
      */
     _getPopupHtml(parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
-        let result = '';
+        let attributeHtmlByCategory = [];
 
         let mapObjectName = this.options.name;
         let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
@@ -417,42 +427,48 @@ class MapObject extends Signalable {
                 let name = attribute.name;
 
                 if (attribute.isEditable()) {
-                    let handlebarsString = '';
+                    let handlebarsTemplate = '';
+                    let category = attribute.getCategory();
+                    if (!attributeHtmlByCategory.hasOwnProperty(category)) {
+                        attributeHtmlByCategory[category] = [];
+                    }
 
                     switch (attribute.type) {
                         // Nested objects should recursively handled
                         case 'object':
-                            result += this._getPopupHtml(attribute);
+                            attributeHtmlByCategory = _.merge(attributeHtmlByCategory, this._getPopupHtml(attribute));
                             continue;
                         case 'select':
-                            handlebarsString = 'map_popup_type_select_template';
+                            handlebarsTemplate = 'map_popup_type_select_template';
                             console.assert(attribute.hasOwnProperty('values'), `Attribute must have 'values' property if you choose 'select'!`, attribute);
                             break;
                         case 'textarea':
-                            handlebarsString = 'map_popup_type_textarea_template';
+                            handlebarsTemplate = 'map_popup_type_textarea_template';
                             break;
                         case 'bool':
-                            handlebarsString = 'map_popup_type_bool_template';
+                            handlebarsTemplate = 'map_popup_type_bool_template';
                             break;
                         case 'color':
-                            handlebarsString = 'map_popup_type_color_template';
+                            handlebarsTemplate = 'map_popup_type_color_template';
                             break;
                         case 'button':
-                            handlebarsString = 'map_popup_type_button_template';
+                            handlebarsTemplate = 'map_popup_type_button_template';
                             break;
-                        case 'string':
-                        case 'text':
                         case 'int':
                         case 'float':
                         case 'double':
+                            handlebarsTemplate = 'map_popup_type_number_template';
+                            break;
+                        case 'string':
+                        case 'text':
                         default:
-                            handlebarsString = 'map_popup_type_text_template';
+                            handlebarsTemplate = 'map_popup_type_text_template';
                             break;
                     }
 
-                    let typeTemplate = Handlebars.templates[handlebarsString];
+                    let typeTemplate = Handlebars.templates[handlebarsTemplate];
 
-                    result += typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
+                    attributeHtmlByCategory[category].push(typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
                         property: name,
                         map_object_name: mapObjectName,
@@ -467,7 +483,7 @@ class MapObject extends Signalable {
                         multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
                         buttonType: attribute.hasOwnProperty('buttonType') ? attribute.buttonType : 'info',
                         buttonText: attribute.buttonText ?? 'Do action'
-                    }));
+                    })));
                 }
             }
         }
@@ -478,15 +494,38 @@ class MapObject extends Signalable {
             let translatedMapObjectName = lang.get(`messages.${mapObjectName}`);
             let mapObjectNamePretty = getState().isMapAdmin() ? `${translatedMapObjectName} ${this.id}` : translatedMapObjectName;
 
+            let resultHtml = '';
+            let categoryTemplate = Handlebars.templates['map_popup_type_category_template'];
+            for (let category in attributeHtmlByCategory) {
+                // Don't introduce a category if we didn't want one
+                if (category === 'general') {
+                    resultHtml += attributeHtmlByCategory[category].join('');
+                } else {
+                    let visible = Cookies.get(`map_object_category_visibility_${category}`);
+                    visible = typeof visible === 'undefined' ? 1 : visible;
+
+                    resultHtml += categoryTemplate($.extend({}, getHandlebarsDefaultVariables(), {
+                        id: this.id,
+                        html: attributeHtmlByCategory[category].join(''),
+                        label: lang.get(`messages.map_object_category_${category}_label`),
+                        category: category,
+                        map_object_name: mapObjectName,
+                        map_object_name_pretty: mapObjectNamePretty,
+                        readonly: this.map.options.readonly,
+                        show: visible === 1
+                    }));
+                }
+            }
+
             return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                 id: this.id,
-                html: result,
+                html: resultHtml,
                 map_object_name: mapObjectName,
                 map_object_name_pretty: mapObjectNamePretty,
                 readonly: this.map.options.readonly
             }));
         } else {
-            return result;
+            return attributeHtmlByCategory;
         }
     }
 

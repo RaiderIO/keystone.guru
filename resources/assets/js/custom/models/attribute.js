@@ -51,4 +51,12 @@ class Attribute {
         // Save by default, but allow people to override the behaviour
         return this.options.hasOwnProperty('save') ? this.options.save : true;
     }
+
+    /**
+     *
+     * @returns {*|string}
+     */
+    getCategory() {
+        return this.options.hasOwnProperty('category') ? this.options.category : 'general';
+    }
 }
