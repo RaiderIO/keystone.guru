@@ -41,6 +41,10 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
             <i class="fas {{ $defaultState ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
+        @if($edit)
+            @include('common.maps.controls.pullsworkbench')
+        @endif
+
         <?php
         // We don't want the enemy forces code for $embedding - that's true. BUT if we have a speedrun enabled we do not show
         // the enemy forces, so then we DO want to have this executed to add the speedrun npcs in that scenario.

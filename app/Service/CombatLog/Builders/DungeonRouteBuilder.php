@@ -210,7 +210,7 @@ class DungeonRouteBuilder
                         'mdt_id'       => $enemy->mdt_id,
                     ]);
 
-                    $killZone->killzoneEnemies->push($enemy);
+                    $killZone->killZoneEnemies->push($enemy);
                     // If this enemy was part of a pack, ensure that we know that this group has been pulled
                     if ($enemy->enemy_pack_id !== null) {
                         $groupsPulled->put($enemy->enemyPack->group, true);

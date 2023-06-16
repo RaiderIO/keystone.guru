@@ -1017,7 +1017,7 @@ class DungeonRoute extends Model
 
                 // KillZone, save the enemies that were attached to them
                 if ($model instanceof KillZone) {
-                    foreach ($model->killzoneEnemies as $killZoneEnemy) {
+                    foreach ($model->killZoneEnemies as $killZoneEnemy) {
                         $killZoneEnemy->id           = 0;
                         $killZoneEnemy->exists       = false;
                         $killZoneEnemy->kill_zone_id = $model->id;
@@ -1054,7 +1054,7 @@ class DungeonRoute extends Model
             // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
             $killZone->load(['killzoneenemies']);
 
-            foreach ($killZone->killzoneEnemies as $kzEnemy) {
+            foreach ($killZone->killZoneEnemies as $kzEnemy) {
                 if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [
                         Enemy::SEASONAL_TYPE_PRIDEFUL,
                         Enemy::SEASONAL_TYPE_TORMENTED,
