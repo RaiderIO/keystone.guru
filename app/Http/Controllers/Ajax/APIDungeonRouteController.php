@@ -110,8 +110,8 @@ class APIDungeonRouteController extends Controller
         if (array_search('enough_enemy_forces', $requirements) !== false) {
             // Clear group by
             $routes = $routes
-                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)');
+                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)');
         }
 
         $tags = $request->get('tags', []);
@@ -305,8 +305,8 @@ class APIDungeonRouteController extends Controller
 
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
-            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)');
+            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)');
         }
 
         // User handling
