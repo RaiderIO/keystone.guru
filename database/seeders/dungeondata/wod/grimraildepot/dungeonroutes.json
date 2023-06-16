@@ -39,6 +39,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 1,
@@ -52,6 +53,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 2,
@@ -65,6 +67,7 @@
             {
                 "floor_id": null,
                 "color": "#3e9eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 3,
@@ -76,6 +79,7 @@
             {
                 "floor_id": null,
                 "color": "#fffb3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 4,
@@ -87,6 +91,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 5,
@@ -98,6 +103,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 6,
@@ -111,6 +117,7 @@
             {
                 "floor_id": null,
                 "color": "#3effff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 7,
@@ -124,6 +131,7 @@
             {
                 "floor_id": null,
                 "color": "#ff9b3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 8,
@@ -138,6 +146,7 @@
             {
                 "floor_id": null,
                 "color": "#3e3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 9,
@@ -152,6 +161,7 @@
             {
                 "floor_id": null,
                 "color": "#a1ff3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 10,
@@ -166,6 +176,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 11,
@@ -176,6 +187,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 12,
@@ -199,6 +211,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 13,
