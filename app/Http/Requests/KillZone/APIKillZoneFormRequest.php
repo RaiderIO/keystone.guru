@@ -29,18 +29,19 @@ class APIKillZoneFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'        => 'nullable|int',
-            'floor_id'  => ['nullable', Rule::exists(Floor::class, 'id')],
-            'color'     => [
+            'id'          => 'nullable|int',
+            'floor_id'    => ['nullable', Rule::exists(Floor::class, 'id')],
+            'color'       => [
                 'nullable',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'lat'       => 'nullable|numeric',
-            'lng'       => 'nullable|numeric',
-            'index'     => 'int',
-            'enemies'   => 'array',
-            'enemies.*' => 'int',
+            'description' => 'string|max:255',
+            'lat'         => 'nullable|numeric',
+            'lng'         => 'nullable|numeric',
+            'index'       => 'int',
+            'enemies'     => 'array',
+            'enemies.*'   => 'int',
         ];
     }
 }

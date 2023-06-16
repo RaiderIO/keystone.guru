@@ -100,10 +100,10 @@ return [
 
     'select_category_label' => 'Select category...',
 
-    'show_details_label'     => 'Show details',
-    'add_kill_area_label'    => 'Add kill area',
-    'remove_kill_area_label' => 'Remove kill area',
-    'delete_killzone_label'  => 'Delete pull',
+    'pull_workbench_header_label'           => 'P:index',
+    'pull_workbench_add_kill_area_label'    => 'Add kill area',
+    'pull_workbench_remove_kill_area_label' => 'Remove kill area',
+    'pull_workbench_pull_description_label' => 'Pull :index description',
 
     'kill_zone_has_boss_label'               => 'Boss in pull',
     'kill_zone_has_awakened_label'           => 'Awakened enemy in pull',

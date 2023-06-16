@@ -333,6 +333,32 @@ html, body, #map, #app, .wrapper {
     cursor: pointer;
 }
 
+#pulls_sidebar .pull_workbench {
+    background-color: #2E2E2E;
+    left: -54px;
+    /*padding: 10px 15px;*/
+    position: absolute;
+    top: 130px;
+    width: 54px;
+    height: 304px;
+}
+
+/* Make the selection fill the width of the parent */
+.pull_workbench .pickr .pcr-button {
+    width: 39px;
+    height: 39px;
+}
+
+.pull_workbench .pull_workbench_row {
+    margin-top: 11px;
+    width: 39px;
+    height: 39px;
+}
+
+.pull_workbench .pull_workbench_row.pull_workbench_header {
+    margin-top: 0;
+}
+
 /** Pulls section of the sidebar, with ad loaded, when viewing, without a speedrun enabled */
 #pulls_sidebar.ad_loaded .pulls_container:not(.has_speedrun) {
     max-height: calc(100vh - (250px + 163px));

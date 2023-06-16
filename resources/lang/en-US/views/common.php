@@ -247,11 +247,11 @@ return [
     ],
     'maps'         => [
         'controls' => [
-            'draw'      => [
+            'draw'           => [
                 'admin'           => 'Admin',
                 'view_this_route' => 'View',
             ],
-            'elements'  => [
+            'elements'       => [
                 'dungeonrouteinfo'         => [
                     'timer'            => 'Timer',
                     'timer_title'      => '+2: %s, +3: %s',
@@ -287,11 +287,11 @@ return [
                     'your_rating'              => 'Your rating',
                 ],
             ],
-            'enemyinfo' => [
+            'enemyinfo'      => [
                 'enemy_info'      => 'Enemy info',
                 'report_an_issue' => 'Report an issue',
             ],
-            'header'    => [
+            'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',
                 'start'                          => 'Start',
@@ -315,7 +315,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'You cannot rate your own route - thank you for using live sessions!',
                 'review_live_session'            => 'Review live session',
             ],
-            'pulls'     => [
+            'pulls'          => [
                 'settings_title'              => 'Map/pull settings',
                 'new_pull'                    => 'New pull',
                 'delete_all_pulls_title'      => 'Delete all pulls',
@@ -324,7 +324,20 @@ return [
                 'no_pulls_created_edit'       => 'No pulls created. Click on the button above or on an enemy to add them to your first pull.',
                 'no_pulls_created_view'       => 'No pulls created.',
             ],
-            'view'      => [
+            'pullsworkbench' => [
+                'modal'            => [
+                    'description' => [
+                        'label' => 'Description',
+                        'save'  => 'Save',
+                    ],
+                ],
+                'description'      => 'Edit description',
+                'spells'           => 'Edit spells',
+                'add_kill_area'    => 'Add kill area',
+                'remove_kill_area' => 'Remove kill area',
+                'delete_killzone'  => 'Delete pull',
+            ],
+            'view'           => [
                 'edit_this_route_title'          => 'Edit',
                 'clone_this_route_title'         => 'Clone',
                 'report_for_moderation'          => 'Report',
