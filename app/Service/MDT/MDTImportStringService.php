@@ -26,6 +26,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Service\MDT\Models\ImportStringDetails;
+use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
 use App\Service\Season\SeasonService;
 use Exception;
@@ -509,188 +510,173 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     /**
      * Parse any saved objects from the MDT string to a $dungeonRoute, optionally $save'ing the objects to the database.
-     * @param $warnings Collection A Collection of Warnings that this parsing may produce.
-     * @param $decoded array
-     * @param $dungeonRoute DungeonRoute
-     * @param $save bool
+     * @param ImportStringObjects $importStringObjects
+     * @return ImportStringObjects
      */
-    private
-    function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
+    private function parseObjects(ImportStringObjects $importStringObjects): ImportStringObjects
     {
-        $floors = $dungeonRoute->dungeon->floors;
+        $floors = $importStringObjects->getDungeon()->floors;
 
-        if (isset($decoded['objects'])) {
-            foreach ($decoded['objects'] as $objectIndex => $object) {
-                try {
-                    /*
-                     * Note
-                     * 1 = x (size in case of line)
-                     * 2 = y (smooth in case of line)
-                     * 3 = sublevel
-                     * 4 = enabled/visible?
-                     * 5 = text (color in case of line)
-                     *
-                     * Line
-                     * 1 = size (weight?)
-                     * 2 = linefactor
-                     * 3 = sublevel
-                     * 4 = enabled/visible?
-                     * 5 = color
-                     * 6 = drawlayer
-                     * 7 = smooth
-                     */
-                    // Fix a strange issue where 6 would sometimes not be set - and then the array may look like this:
-                    /** d: {
-                     * 1: 3,
-                     * 2: 1.1,
-                     * 3: 1,
-                     * 4: false,
-                     * 5: "fafff9",
-                     * 7: true
-                     * } */
-                    if (!isset($object['d'][0])) {
-                        if (!isset($object['d'][6])) {
-                            $object['d'][6] = 0;
-                        }
-                        $details = array_values($object['d']);
-                    } else {
-                        $details = $object['d'];
+        foreach ($importStringObjects->getMdtObjects() as $objectIndex => $object) {
+            try {
+                /*
+                 * Note
+                 * 1 = x (size in case of line)
+                 * 2 = y (smooth in case of line)
+                 * 3 = sublevel
+                 * 4 = enabled/visible?
+                 * 5 = text (color in case of line)
+                 *
+                 * Line
+                 * 1 = size (weight?)
+                 * 2 = linefactor
+                 * 3 = sublevel
+                 * 4 = enabled/visible?
+                 * 5 = color
+                 * 6 = drawlayer
+                 * 7 = smooth
+                 */
+                // Fix a strange issue where 6 would sometimes not be set - and then the array may look like this:
+                /** d: {
+                 * 1: 3,
+                 * 2: 1.1,
+                 * 3: 1,
+                 * 4: false,
+                 * 5: "fafff9",
+                 * 7: true
+                 * } */
+                if (!isset($object['d'][0])) {
+                    if (!isset($object['d'][6])) {
+                        $object['d'][6] = 0;
                     }
+                    $details = array_values($object['d']);
+                } else {
+                    $details = $object['d'];
+                }
 
-                    // Get the proper index of the floor, validated for length
-                    $mdtSubLevel = ((int)$details[2]);
+                // Get the proper index of the floor, validated for length
+                $mdtSubLevel = ((int)$details[2]);
 
-                    /** @var Floor $floor */
-                    $floor = $floors->first(function (Floor $floor) use ($mdtSubLevel) {
-                        return ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel;
-                    });
+                /** @var Floor $floor */
+                $floor = $floors->first(function (Floor $floor) use ($mdtSubLevel) {
+                    return ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel;
+                });
 
-                    if ($floor === null) {
-                        throw new ImportWarning(
-                            sprintf(__('logic.mdt.io.import_string.category.object'), $objectIndex),
-                            sprintf(__('logic.mdt.io.import_string.unable_to_find_floor_for_object'), $mdtSubLevel),
-                            ['details' => __('logic.mdt.io.import_string.unable_to_find_floor_for_object_details') . json_encode($details)]
-                        );
+                if ($floor === null) {
+                    throw new ImportWarning(
+                        sprintf(__('logic.mdt.io.import_string.category.object'), $objectIndex),
+                        sprintf(__('logic.mdt.io.import_string.unable_to_find_floor_for_object'), $mdtSubLevel),
+                        ['details' => __('logic.mdt.io.import_string.unable_to_find_floor_for_object_details') . json_encode($details)]
+                    );
+                }
+
+                // If not shown/visible, ignore it
+                if (!$details[3]) {
+                    continue;
+                }
+
+                // If it's a line
+                // MethodDungeonTools.lua:2529
+                if (isset($object['l'])) {
+                    $this->parseObjectLine($importStringObjects, $floor, $details, $object);
+                }
+                // Map comment (n = note)
+                // MethodDungeonTools.lua:2523
+                else if (isset($object['n']) && $object['n']) {
+                    $this->parseObjectComment($importStringObjects, $floor, $details);
+                }
+                // Triangles (t = triangle)
+                // MethodDungeonTools.lua:2554
+                // else if (isset($object['t']) && $object['t']) {
+
+                // }
+
+            } catch (ImportWarning $warning) {
+                $importStringObjects->getWarnings()->push($warning);
+            }
+        }
+
+        return $importStringObjects;
+    }
+
+    /**
+     * @param ImportStringObjects $importStringObjects
+     * @param Floor $floor
+     * @param array $details
+     * @param array $line
+     * @return void
+     */
+    private function parseObjectLine(ImportStringObjects $importStringObjects, Floor $floor, array $details, array $line): void
+    {
+        $isFreeDrawn = isset($details[6]) && $details[6];
+
+        $vertices = [];
+        for ($i = 0; $i < count($line); $i += 2) {
+            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
+        }
+
+        $lineOrPathAttribute = [
+            'floor_id' => $floor->id,
+            'polyline' => [
+                // Make sure there is a pound sign in front of the value at all times, but never double up should
+                // MDT decide to suddenly place it here
+                'color'         => (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4],
+                'weight'        => (int)$details[0],
+                'vertices_json' => json_encode($vertices),
+                // To be set later
+                // 'model_id' => ?,
+                'model_class'   => $isFreeDrawn ? Brushline::class : Path::class,
+            ],
+        ];
+
+        if ($isFreeDrawn) {
+            $importStringObjects->getLines()->push($lineOrPathAttribute);
+        } else {
+            $importStringObjects->getPaths()->push($lineOrPathAttribute);
+        }
+    }
+
+    /**
+     * @param ImportStringObjects $importStringObjects
+     * @param Floor $floor
+     * @param array $details
+     * @return void
+     */
+    private function parseObjectComment(ImportStringObjects $importStringObjects, Floor $floor, array $details): void
+    {
+
+        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
+
+        $mapIconType  = MapIconType::MAP_ICON_TYPE_COMMENT;
+        $commentLower = strtolower(trim($details[4]));
+        if ($commentLower === 'heroism') {
+            $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_HEROISM;
+        } else if ($commentLower === 'bloodlust') {
+            $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
+        } else {
+            foreach ($importStringObjects->getKillZoneAttributes() as &$killZoneAttribute) {
+                foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
+                    if (MathUtils::distanceBetweenPoints(
+                            $killZoneEnemy['enemy']->lat, $latLng['lat'],
+                            $killZoneEnemy['enemy']->lng, $latLng['lng']
+                        ) < self::IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE) {
+                        $killZoneAttribute['description'] = $details[4];
+
+                        // Map icon was assigned to killzone instead - return, we're done
+                        return;
                     }
-
-                    // Only if shown/visible
-                    if ($details[3]) {
-                        // If it's a line
-                        // MethodDungeonTools.lua:2529
-                        if (isset($object['l'])) {
-                            $line = $object['l'];
-
-                            $isFreeDrawn = isset($details[6]) && $details[6];
-                            /** @var Brushline|Path $lineOrPath */
-                            $lineOrPath = $isFreeDrawn ? new Brushline() : new Path();
-                            // Assign the proper ID
-                            $lineOrPath->floor_id    = $floor->id;
-                            $lineOrPath->polyline_id = -1;
-
-                            $polyline = new Polyline();
-
-                            // Make sure there is a pound sign in front of the value at all times, but never double up should
-                            // MDT decide to suddenly place it here
-                            $polyline->color  = (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4];
-                            $polyline->weight = (int)$details[0];
-
-                            $vertices = [];
-                            for ($i = 0; $i < count($line); $i += 2) {
-                                $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
-                            }
-
-                            $polyline->vertices_json = json_encode($vertices);
-
-                            if ($save) {
-                                // Only assign when saving
-                                $lineOrPath->dungeon_route_id = $dungeonRoute->id;
-                                $lineOrPath->save();
-
-                                $polyline->model_id    = $lineOrPath->id;
-                                $polyline->model_class = get_class($lineOrPath);
-                                $polyline->save();
-
-                                $lineOrPath->polyline_id = $polyline->id;
-                                $lineOrPath->save();
-                            } else {
-                                // Otherwise inject
-                                $lineOrPath->polyline = $polyline;
-                                if ($isFreeDrawn) {
-                                    $dungeonRoute->brushlines->push($lineOrPath);
-                                } else {
-                                    $dungeonRoute->paths->push($lineOrPath);
-                                }
-                            }
-                        }
-                        // Map comment (n = note)
-                        // MethodDungeonTools.lua:2523
-                        else if (isset($object['n']) && $object['n']) {
-                            $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
-
-                            $mapIconTypeId = MapIconType::MAP_ICON_TYPE_COMMENT;
-                            $commentLower  = strtolower(trim($details[4]));
-                            if ($commentLower === 'heroism') {
-                                $mapIconTypeId = MapIconType::MAP_ICON_TYPE_SPELL_HEROISM;
-                            } else if ($commentLower === 'bloodlust') {
-                                $mapIconTypeId = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
-                            }
-
-                            // Check if we can assign this map icon to a killzone instead
-                            $savedAsKillZoneDescription = false;
-
-                            if ($mapIconTypeId === MapIconType::MAP_ICON_TYPE_COMMENT) {
-                                foreach ($dungeonRoute->killZones as $killZone) {
-                                    foreach ($killZone->killZoneEnemies as $killZoneEnemy) {
-                                        if (MathUtils::distanceBetweenPoints(
-                                                $killZoneEnemy->enemy->lat, $latLng['lat'],
-                                                $killZoneEnemy->enemy->lng, $latLng['lng']
-                                            ) < self::IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE) {
-                                            $killZone->description = $details[4];
-
-                                            if ($save) {
-                                                $killZone->save();
-                                            }
-
-                                            $savedAsKillZoneDescription = true;
-                                            break 2;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if ($savedAsKillZoneDescription) {
-                                continue;
-                            }
-
-                            $mapComment = new MapIcon([
-                                'mapping_version_id' => null,
-                                'floor_id'           => $floor->id,
-                                'map_icon_type_id'   => MapIconType::where('key', $mapIconTypeId)->firstOrFail()->id,
-                                'comment'            => $details[4],
-                                'lat'                => $latLng['lat'],
-                                'lng'                => $latLng['lng'],
-                            ]);
-
-                            if ($save) {
-                                // Save
-                                $mapComment->dungeon_route_id = $dungeonRoute->id;
-                                $mapComment->save();
-                            } else {
-                                // Inject
-                                $dungeonRoute->mapicons->push($mapComment);
-                            }
-                        }
-                        // Triangles (t = triangle)
-                        // MethodDungeonTools.lua:2554
-                        // else if (isset($object['t']) && $object['t']) {
-
-                        // }
-                    }
-                } catch (ImportWarning $warning) {
-                    $warnings->push($warning);
                 }
             }
         }
+
+        $importStringObjects->getMapIcons()->push([
+            'mapping_version_id' => null,
+            'floor_id'           => $floor->id,
+            'map_icon_type_id'   => MapIconType::ALL[$mapIconType],
+            'comment'            => $details[4],
+            'lat'                => $latLng['lat'],
+            'lng'                => $latLng['lng'],
+        ]);
     }
 
     /**
@@ -828,7 +814,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
 
         // For each object the user created
-        $this->parseObjects($warnings, $decoded, $dungeonRoute, $save);
+        $importStringObjects = $this->parseObjects(new ImportStringObjects(
+            $warnings,
+            $dungeonRoute->dungeon,
+            $importStringPulls->getKillZoneAttributes(),
+            $decoded['objects']
+        ));
+
+        $this->applyObjectsToDungeonRoute($importStringObjects, $dungeonRoute);
 
         return $dungeonRoute;
     }
@@ -889,6 +882,34 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         // Apply the seasonal index to the route
         $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index]);
+    }
+
+    private function applyObjectsToDungeonRoute(ImportStringObjects $importStringObjects, DungeonRoute $dungeonRoute)
+    {
+        $brushlines = [];
+
+        foreach ($importStringObjects->getLines() as $line) {
+            $brushlines[] = [
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $line['floor_id'],
+                'polyline_id'      => -1,
+            ];
+        }
+
+        Brushline::insert($brushlines);
+
+        $paths      = [];
+
+        foreach ($importStringObjects->getPaths() as $path) {
+            $brushlines[] = [
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $path['floor_id'],
+                'polyline_id'      => -1,
+            ];
+        }
+
+
+        $dungeonRoute->load(['brushlines', 'paths']);
     }
 
     /**
