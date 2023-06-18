@@ -5,13 +5,15 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTString;
+use App\Logic\Utils\MathUtils;
 use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
-use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\KillZone;
@@ -19,17 +21,19 @@ use App\Models\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\NpcClassification;
 use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
+use App\Service\MDT\Models\ImportStringDetails;
+use App\Service\MDT\Models\ImportStringPulls;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
 
 /**
  * Class MDTImportStringService
@@ -39,6 +43,9 @@ use Illuminate\Support\Facades\Auth;
  */
 class MDTImportStringService extends MDTBaseService implements MDTImportStringServiceInterface
 {
+    /** @var int */
+    private const IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE = 5;
+
     /** @var string $encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
 
@@ -49,6 +56,29 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     function __construct(SeasonService $seasonService)
     {
         $this->seasonService = $seasonService;
+    }
+
+    /**
+     * @param Collection $warnings
+     * @param array $decoded
+     * @param Dungeon $dungeon
+     * @param bool $importAsThisWeek
+     * @return AffixGroup|null
+     * @throws Exception
+     */
+    private function parseAffixes(Collection $warnings, array $decoded, Dungeon $dungeon, bool $importAsThisWeek = false): ?AffixGroup
+    {
+        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeon, $decoded['week']);
+
+        // If affix group not found or
+        if ($importAsThisWeek || $affixGroup === null) {
+            $activeSeason = $dungeon->getActiveSeason($this->seasonService);
+            if ($activeSeason !== null) {
+                $affixGroup = $activeSeason->getCurrentAffixGroup();
+            }
+        }
+
+        return $affixGroup;
     }
 
     /**
@@ -179,51 +209,47 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * Parse the $decoded['value']['pulls'] value and put it in the $dungeonRoute object, optionally $save'ing the
-     * values to the database.
-     * @param Collection $warnings A Collection of Warnings that this parsing may produce.
-     * @param array $decoded
-     * @param DungeonRoute $dungeonRoute
-     * @param boolean $save
-     * @throws Exception
+     * Parse the $decoded['value']['pulls'] value and save the result in the ImportStringPulls object.
+     *
+     * @param ImportStringPulls $importStringPulls
+     * @return ImportStringPulls
+     * @throws InvalidMDTDungeonException
+     * @throws InvalidArgumentException
      */
-    private function parseValuePulls(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save): void
+    private function parseValuePulls(
+        ImportStringPulls $importStringPulls
+    ): ImportStringPulls
     {
-        $floors = $dungeonRoute->dungeon->floors;
+        $floors = $importStringPulls->getDungeon()->floors;
         /** @var Collection|Enemy[] $enemies */
-        $enemies = $dungeonRoute->mappingVersion->enemies->each(function (Enemy $enemy) {
+        $enemies = $importStringPulls->getMappingVersion()->enemies->each(function (Enemy $enemy) {
             $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
         });
 
-        // We only need to take the prideful enemies into account if the route is prideful
-        $isRoutePrideful = $dungeonRoute->hasUniqueAffix(Affix::AFFIX_PRIDEFUL);
         // Keep a list of prideful enemies to assign
-        $pridefulEnemies    = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
-        $pridefulEnemyCount = config('keystoneguru.prideful.count');
+//        $pridefulEnemies    = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
+//        $pridefulEnemyCount = config('keystoneguru.prideful.count');
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $enemiesByNpcId = $enemies->groupBy('npc_id');
 
         // Fetch all enemies of this dungeon
-        $mdtEnemies = (new MDTDungeon($dungeonRoute->dungeon))->getClonesAsEnemies($floors);
+        $mdtEnemies = (new MDTDungeon($importStringPulls->getDungeon()))->getClonesAsEnemies($floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 
         // Required for calculating when to add prideful enemies
-        $enemyForcesRequired = $dungeonRoute->teeming ? $dungeonRoute->mappingVersion->enemy_forces_required_teeming : $dungeonRoute->mappingVersion->enemy_forces_required;
+//        $enemyForcesRequired = $importStringPulls->isRouteTeeming() ?
+//            $importStringPulls->getMappingVersion()->enemy_forces_required_teeming :
+//            $importStringPulls->getMappingVersion()->enemy_forces_required;
 
         // For each pull the user created
         $newPullIndex = 1;
-        foreach ($decoded['value']['pulls'] as $pullIndex => $pull) {
-            // Create a killzone
-            $killZone        = new KillZone();
-            $killZone->index = $newPullIndex;
-            if ($save) {
-                $killZone->dungeon_route_id = $dungeonRoute->id;
-                // Save it so we have an ID that we can use later on
-                $killZone->save();
-            } else {
-                $killZone->enemies = new Collection();
-            }
+        foreach ($importStringPulls->getMdtPulls() as $pullIndex => $pull) {
+            // Keep track of KillZone attributes
+            $killZoneAttributes = [
+                'index'           => $newPullIndex,
+                'killZoneEnemies' => [],
+            ];
 
             // The amount of enemies selected in MDT pull
             $totalEnemiesSelected = 0;
@@ -232,256 +258,253 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Keeps track of the amount of prideful enemies to add, a pull can in theory require us to add multiple
             // But mostly since we add them in the center in the pack, we need to know all coordinates of the pack enemies
             // first before we can place the prideful enemies
-            $totalPridefulEnemiesToAdd = 0;
+//            $totalPridefulEnemiesToAdd = 0;
 
             try {
                 $seasonalIndexSkip = false;
 
                 // For each NPC that is killed in this pull (and their clones)
                 foreach ($pull as $pullKey => $pullValue) {
-                    // Numeric means it's an index of the dungeon's NPCs
-                    if (is_numeric($pullKey)) {
-                        $npcIndex  = (int)$pullKey;
-                        $mdtClones = $pullValue;
-
-                        $totalEnemiesSelected += count($mdtClones);
-                        // Only if filled
-                        foreach ($mdtClones as $index => $cloneIndex) {
-                            // This comes in through as a double, cast to int
-                            $cloneIndex = (int)$cloneIndex;
-
-                            // Hacky fix for a MDT bug where there's duplicate NPCs with the same npc_id etc.
-                            if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
-                                if ($npcIndex === 35) {
-                                    $cloneIndex += 15;
-                                }
-                            } else if ($dungeonRoute->dungeon->isTolDagor()) {
-                                if ($npcIndex === 11) {
-                                    $cloneIndex += 2;
-                                }
-                            } else if ($dungeonRoute->dungeon->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
-                                if ($npcIndex === 23) {
-                                    $cloneIndex += 5;
-                                }
-                            }
-
-                            // Find the matching enemy of the clones
-                            /** @var Enemy $mdtEnemy */
-                            $mdtEnemy = null;
-                            if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
-                                foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
-                                    /** @var $mdtEnemyCandidate Enemy */
-                                    if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
-                                        // Found it
-                                        $mdtEnemy = $mdtEnemyCandidate;
-
-                                        // Skip Emissaries (Season 3), season is over
-                                        if (in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
-                                            break 2;
-                                        }
-
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if ($mdtEnemy === null) {
-                                $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                                    sprintf(__('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index'), $cloneIndex, $npcIndex),
-                                    ['details' => __('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index_details')]
-                                ));
-                                continue;
-                            }
-
-                            // We now know the MDT enemy that the user was trying to import. However, we need to know
-                            // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-                            /** @var Enemy $enemy */
-                            $enemy = null;
-                            // Only if we have the npc assigned at all
-                            if ($enemiesByNpcId->has($mdtEnemy->npc_id)) {
-                                foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
-                                    /** @var $enemyCandidate Enemy */
-                                    if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
-                                        $enemy = $enemyCandidate;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if ($enemy === null) {
-                                // Teeming is gone, and its enemies have not always been mapped on purpose. So if we cannot find a Teeming enemy
-                                // we can skip this warning as to not alert people to something that shouldn't be there in the first place
-                                // Secondly, MDT does something weird with shrouded enemies. It has both the normal enemy and a shrouded infiltrator
-                                // mapped. The shrouded infiltrator is what you kill in MDT, but the normal enemy is somehow put in other pulls.
-                                // Since an enemy on my side can only be mapped to one MDT enemy I now choose the Infiltrator and we can discard the other one.
-                                // The other enemy is marked as shrouded, so if we cannot find a shrouded normal mob we skip it and don't alert
-                                if (!$mdtEnemy->teeming && $mdtEnemy->seasonal_type !== Enemy::SEASONAL_TYPE_SHROUDED) {
-                                    $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                                        sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
-                                        ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
-                                    ));
-                                }
-                                continue;
-                            }
-
-                            // Don't add any teeming enemies
-                            if (!$dungeonRoute->teeming && $enemy->teeming === 'visible') {
-                                continue;
-                            }
-
-                            // Skip mdt placeholders - we found it, great, but we don't show this on our mapping so get rid of it
-                            if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
-                                continue;
-                            }
-
-                            // Skip enemies that don't belong to our current seasonal index
-                            if ($enemy->seasonal_index === null || $enemy->seasonal_index === $dungeonRoute->seasonal_index) {
-                                $kzEnemy = new KillZoneEnemy([
-                                    'kill_zone_id' => $killZone->id,
-                                    'npc_id'       => $enemy->npc_id,
-                                    'mdt_id'       => $enemy->mdt_id,
-                                ]);
-
-                                // Couple the KillZoneEnemy to its KillZone
-                                if ($save) {
-                                    $kzEnemy->save();
-                                }
-
-                                // Cache for the hasFinalBoss check below - it's slow otherwise, don't set it above here since
-                                // save will trip over it
-                                $kzEnemy->enemy = $enemy;
-
-                                // Keep track of our enemy forces
-                                if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
-                                    $dungeonRoute->enemy_forces += $dungeonRoute->mappingVersion->enemy_forces_shrouded;
-                                } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
-                                    $dungeonRoute->enemy_forces += $dungeonRoute->mappingVersion->enemy_forces_shrouded_zul_gamux;
-                                } else {
-
-                                    /** @var NpcEnemyForces $npcEnemyForces */
-                                    $npcEnemyForces = $enemy->npc->enemyForcesByMappingVersion($dungeonRoute->mappingVersion->id)->first();
-
-                                    $dungeonRoute->enemy_forces += $dungeonRoute->teeming ? $npcEnemyForces->enemy_forces_teeming : $npcEnemyForces->enemy_forces;
-                                }
-
-                                // No point doing this if we're not saving
-                                if ($save && $isRoutePrideful) {
-                                    // Do not add more than 5 regardless of circumstance
-                                    if ($dungeonRoute->pridefulEnemies->count() + $totalPridefulEnemiesToAdd < $pridefulEnemyCount) {
-                                        // If we should add a prideful enemy in this pull ..
-                                        $currentPercentage = ($dungeonRoute->enemy_forces / $enemyForcesRequired) * 100;
-                                        // Add one so that we start adding at 20%
-                                        if ($currentPercentage >= ($dungeonRoute->pridefulEnemies->count() + $totalPridefulEnemiesToAdd + 1) * (100 / $pridefulEnemyCount)) {
-                                            $totalPridefulEnemiesToAdd++;
-                                        }
-                                    }
-                                }
-
-
-                                // Save enemies to the killzones regardless
-                                $killZone->killZoneEnemies->push($kzEnemy);
-                                $killZone->enemies->push($enemy->id);
-                                $totalEnemiesMatched++;
-                            } else {
-                                $seasonalIndexSkip = true;
-                            }
-                        }
-
-                    } // Color is randomly put in here
-                    else if ($pullKey === 'color') {
+                    if ($pullKey === 'color') {
                         // Make sure there is a pound sign in front of the value at all times, but never double up should
                         // MDT decide to suddenly place it here
-                        $killZone->color = (substr($pullValue, 0, 1) !== '#' ? '#' : '') . $pullValue;
+                        $killZoneAttributes['color'] = (substr($pullValue, 0, 1) !== '#' ? '#' : '') . $pullValue;
+                        continue;
+                    } // Numeric means it's an index of the dungeon's NPCs, if it isn't numeric skip to the next pull
+                    else if (!is_numeric($pullKey)) {
+                        continue;
                     }
-                }
 
-                // No point doing this if we're not saving
-                if ($save) {
-                    for ($i = 0; $i < $totalPridefulEnemiesToAdd; $i++) {
-                        /** @var Enemy $pridefulEnemyEnemy */
-                        $pridefulEnemyEnemy = $pridefulEnemies->slice($dungeonRoute->pridefulEnemies->count(), 1)->first();
-                        $pridefulEnemy      = PridefulEnemy::create([
-                            'dungeon_route_id' => $dungeonRoute->id,
-                            'enemy_id'         => $pridefulEnemyEnemy->id,
-                            'floor_id'         => $killZone->enemies->first()->floor_id,
-                            'lat'              => $killZone->enemies->avg('lat'),
-                            'lng'              => $killZone->enemies->avg('lng'),
-                        ]);
+                    $npcIndex  = (int)$pullKey;
+                    $mdtClones = $pullValue;
 
-                        $dungeonRoute->pridefulEnemies->push($pridefulEnemy);
+                    $totalEnemiesSelected += count($mdtClones);
+                    // Only if filled
+                    foreach ($mdtClones as $index => $cloneIndex) {
+                        // This comes in through as a double, cast to int
+                        $cloneIndex = (int)$cloneIndex;
 
-                        // Couple the prideful enemy to this pull
-                        KillZoneEnemy::create([
-                            'kill_zone_id' => $killZone->id,
-                            'npc_id'       => $pridefulEnemyEnemy->npc_id,
-                            'mdt_id'       => $pridefulEnemyEnemy->mdt_id,
-                        ]);
-                    }
-                }
-
-                if ($totalEnemiesMatched > 0) {
-                    // In order to import Awakened Bosses that are killed at the final boss, we need to identify if this
-                    // pull contains the final boss, and if so, convert all its Awakened enemies to the correct enemies
-                    // that are around the boss instead
-                    $hasFinalBoss = false;
-                    foreach ($killZone->killZoneEnemies as $kzEnemy) {
-                        if ($kzEnemy->npc !== null && $kzEnemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]) {
-                            $hasFinalBoss = true;
-                            break;
+                        // Hacky fix for a MDT bug where there's duplicate NPCs with the same npc_id etc.
+                        if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_SIEGE_OF_BORALUS) {
+                            if ($npcIndex === 35) {
+                                $cloneIndex += 15;
+                            }
+                        } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
+                            if ($npcIndex === 11) {
+                                $cloneIndex += 2;
+                            }
+                        } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
+                            if ($npcIndex === 23) {
+                                $cloneIndex += 5;
+                            }
                         }
-                    }
 
-                    if ($hasFinalBoss) {
-                        foreach ($killZone->killZoneEnemies as $kzEnemy) {
-                            if ($kzEnemy->npc !== null && $kzEnemy->npc->isAwakened()) {
-                                // Find the equivalent Awakened Enemy that's next to the boss.
-                                /** @var Enemy $bossAwakenedEnemy */
-                                $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy->npc_id)
-                                    ->where('mdt_id', $kzEnemy->mdt_id)
-                                    ->where('seasonal_index', $kzEnemy->enemy->seasonal_index)
-                                    ->whereNotNull('enemy_pack_id')
-                                    ->first();
+                        // Find the matching enemy of the clones
+                        /** @var Enemy $mdtEnemy */
+                        $mdtEnemy = null;
+                        if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
+                            foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
+                                // Skip Emissaries (Season 3), season is over
+                                if (in_array($mdtEnemyCandidate->npc_id, [155432, 155433, 155434])) {
+                                    break 2;
+                                }
 
-                                if ($bossAwakenedEnemy !== null) {
-                                    $kzEnemy->enemy_id = $bossAwakenedEnemy->id;
-                                    // Just to be sure
-                                    $kzEnemy->unsetRelation('enemy');
+                                /** @var $mdtEnemyCandidate Enemy */
+                                if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
+                                    // Found it
+                                    $mdtEnemy = $mdtEnemyCandidate;
 
-                                    if ($save) {
-                                        $kzEnemy->save();
-                                    }
-                                } else {
-                                    throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                                        sprintf(__('unable_to_find_awakened_enemy_for_final_boss'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, __($dungeonRoute->dungeon->name)),
-                                        ['details' => __('logic.mdt.io.import_string.unable_to_find_awakened_enemy_for_final_boss_details')]
-                                    );
+                                    break;
                                 }
                             }
                         }
+
+                        // No matching MDT enemy found - skip to the next enemy
+                        if ($mdtEnemy === null) {
+                            $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                                sprintf(__('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index'), $cloneIndex, $npcIndex),
+                                ['details' => __('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index_details')]
+                            ));
+                            continue;
+                        }
+
+                        // We now know the MDT enemy that the user was trying to import. However, we need to know
+                        // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
+                        /** @var Enemy $enemy */
+                        $enemy = null;
+                        // Only if we have the npc assigned at all
+                        if ($enemiesByNpcId->has($mdtEnemy->npc_id)) {
+                            foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
+                                /** @var $enemyCandidate Enemy */
+                                if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
+                                    $enemy = $enemyCandidate;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if ($enemy === null) {
+                            // Teeming is gone, and its enemies have not always been mapped on purpose. So if we cannot find a Teeming enemy
+                            // we can skip this warning as to not alert people to something that shouldn't be there in the first place
+                            // Secondly, MDT does something weird with shrouded enemies. It has both the normal enemy and a shrouded infiltrator
+                            // mapped. The shrouded infiltrator is what you kill in MDT, but the normal enemy is somehow put in other pulls.
+                            // Since an enemy on my side can only be mapped to one MDT enemy I now choose the Infiltrator and we can discard the other one.
+                            // The other enemy is marked as shrouded, so if we cannot find a shrouded normal mob we skip it and don't alert
+                            if (!$mdtEnemy->teeming && $mdtEnemy->seasonal_type !== Enemy::SEASONAL_TYPE_SHROUDED) {
+                                $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                                    sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name, $mdtEnemy->npc_id),
+                                    ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
+                                ));
+                            }
+                            continue;
+                        }
+
+                        // Don't add any teeming enemies
+                        if (!$importStringPulls->isRouteTeeming() && $enemy->teeming === Enemy::TEEMING_VISIBLE) {
+                            continue;
+                        }
+
+                        // Skip mdt placeholders - we found it, great, but we don't show this on our mapping so get rid of it
+                        if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
+                            continue;
+                        }
+
+                        // Skip enemies that don't belong to our current seasonal index
+                        if ($enemy->seasonal_index !== null && $enemy->seasonal_index !== $importStringPulls->getSeasonalIndex()) {
+                            $seasonalIndexSkip = true;
+                            continue;
+                        }
+
+                        $killZoneAttributes['killZoneEnemies'][] = [
+                            'npc_id' => $enemy->npc_id,
+                            'mdt_id' => $enemy->mdt_id,
+                            // Cache for the hasFinalBoss check below - it's slow otherwise
+                            'enemy'  => $enemy,
+                        ];
+
+                        // Keep track of our enemy forces
+                        if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
+                            $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded);
+                        } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+                            $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
+                        } else {
+                            /** @var NpcEnemyForces $npcEnemyForces */
+                            $npcEnemyForces = $enemy->npc->enemyForcesByMappingVersion($importStringPulls->getMappingVersion()->id)->first();
+
+                            $importStringPulls->addEnemyForces(
+                                $importStringPulls->isRouteTeeming() ?
+                                    $npcEnemyForces->enemy_forces_teeming :
+                                    $npcEnemyForces->enemy_forces
+                            );
+                        }
+
+                        // <editor-fold desc="Prideful">
+//                        if ($importStringPulls->isRoutePrideful()) {
+//                            // Do not add more than 5 regardless of circumstance
+//                            if ($dungeonRoute->pridefulEnemies->count() + $totalPridefulEnemiesToAdd < $pridefulEnemyCount) {
+//                                // If we should add a prideful enemy in this pull ..
+//                                $currentPercentage = ($dungeonRoute->enemy_forces / $enemyForcesRequired) * 100;
+//                                // Add one so that we start adding at 20%
+//                                if ($currentPercentage >= ($dungeonRoute->pridefulEnemies->count() + $totalPridefulEnemiesToAdd + 1) * (100 / $pridefulEnemyCount)) {
+//                                    $totalPridefulEnemiesToAdd++;
+//                                }
+//                            }
+//                        }
+                        // </editor-fold>
+
+                        $totalEnemiesMatched++;
                     }
 
-                    if ($save) {
-                        $killZone->save();
-                    } else {
-                        $dungeonRoute->killZones->push($killZone);
+                    // <editor-fold desc="Prideful">
+                    // No point doing this if we're not saving
+//                    if ($save) {
+//                        for ($i = 0; $i < $totalPridefulEnemiesToAdd; $i++) {
+//                            /** @var Enemy $pridefulEnemyEnemy */
+//                            $pridefulEnemyEnemy = $pridefulEnemies->slice($dungeonRoute->pridefulEnemies->count(), 1)->first();
+//                            $pridefulEnemy      = PridefulEnemy::create([
+//                                'dungeon_route_id' => $dungeonRoute->id,
+//                                'enemy_id'         => $pridefulEnemyEnemy->id,
+//                                'floor_id'         => $killZoneEnemies->first()->floor_id,
+//                                'lat'              => $killZoneEnemies->avg('lat'),
+//                                'lng'              => $killZoneEnemies->avg('lng'),
+//                            ]);
+//
+//                            $dungeonRoute->pridefulEnemies->push($pridefulEnemy);
+//
+//                            // Couple the prideful enemy to this pull
+//                            KillZoneEnemy::create([
+//                                'kill_zone_id' => $killZoneAttributes->id,
+//                                'npc_id'       => $pridefulEnemyEnemy->npc_id,
+//                                'mdt_id'       => $pridefulEnemyEnemy->mdt_id,
+//                            ]);
+//                        }
+//                    }
+                    // </editor-fold>
+
+                    if ($totalEnemiesMatched > 0) {
+                        // <editor-fold desc="Awakened">
+//                        // In order to import Awakened Bosses that are killed at the final boss, we need to identify if this
+//                        // pull contains the final boss, and if so, convert all its Awakened enemies to the correct enemies
+//                        // that are around the boss instead
+//                        $hasFinalBoss = false;
+//                        foreach ($killZoneAttributes['killZoneEnemies'] as $kzEnemy) {
+//                            if ($kzEnemy['enemy']->npc !== null &&
+//                                $kzEnemy['enemy']->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]) {
+//                                $hasFinalBoss = true;
+//                                break;
+//                            }
+//                        }
+//
+//                        if ($hasFinalBoss) {
+//                            foreach ($killZoneAttributes['killZoneEnemies'] as $kzEnemy) {
+//                                if ($kzEnemy['enemy']->npc !== null && $kzEnemy['enemy']->npc->isAwakened()) {
+//                                    // Find the equivalent Awakened Enemy that's next to the boss.
+//                                    /** @var Enemy $bossAwakenedEnemy */
+//                                    $bossAwakenedEnemy = Enemy::where('npc_id', $kzEnemy['npc_id'])
+//                                        ->where('mdt_id', $kzEnemy['mdt_id'])
+//                                        ->where('seasonal_index', $kzEnemy['enemy']->seasonal_index)
+//                                        ->whereNotNull('enemy_pack_id')
+//                                        ->first();
+//
+//                                    if ($bossAwakenedEnemy !== null) {
+//                                        $kzEnemy->enemy_id = $bossAwakenedEnemy->id;
+//                                        // Just to be sure
+//                                        $kzEnemy->unsetRelation('enemy');
+//
+//                                        if ($save) {
+//                                            $kzEnemy->save();
+//                                        }
+//                                    } else {
+//                                        throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+//                                            sprintf(__('unable_to_find_awakened_enemy_for_final_boss'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, __($dungeonRoute->dungeon->name)),
+//                                            ['details' => __('logic.mdt.io.import_string.unable_to_find_awakened_enemy_for_final_boss_details')]
+//                                        );
+//                                    }
+//                                }
+//                            }
+//                        }
+                        // </editor-fold>
+
+                        $newPullIndex++;
                     }
-                    $newPullIndex++;
-                }
-                // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
-                // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
-                else if (!$seasonalIndexSkip && $totalEnemiesSelected > 0) {
-                    if ($save) {
-                        $killZone->delete();
+                    // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
+                    // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
+                    else if (!$seasonalIndexSkip && $totalEnemiesSelected > 0) {
+                        throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                            __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
+                            ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
+                        );
                     }
-                    throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                        __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
-                        ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
-                    );
                 }
+
+                // Save the attributes of this killzone
+                $importStringPulls->addKillZoneAttributes($killZoneAttributes);
             } catch (ImportWarning $warning) {
-                $warnings->push($warning);
+                $importStringPulls->getWarnings()->push($warning);
             }
         }
+
+        return $importStringPulls;
     }
 
     /**
@@ -491,7 +514,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @param $dungeonRoute DungeonRoute
      * @param $save bool
      */
-    private function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
+    private
+    function parseObjects(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
     {
         $floors = $dungeonRoute->dungeon->floors;
 
@@ -507,7 +531,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                      * 5 = text (color in case of line)
                      *
                      * Line
-                     *
                      * 1 = size (weight?)
                      * 2 = linefactor
                      * 3 = sublevel
@@ -605,11 +628,38 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
 
                             $mapIconTypeId = MapIconType::MAP_ICON_TYPE_COMMENT;
-                            $commentLower  = strtolower($details[4]);
+                            $commentLower  = strtolower(trim($details[4]));
                             if ($commentLower === 'heroism') {
                                 $mapIconTypeId = MapIconType::MAP_ICON_TYPE_SPELL_HEROISM;
                             } else if ($commentLower === 'bloodlust') {
                                 $mapIconTypeId = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
+                            }
+
+                            // Check if we can assign this map icon to a killzone instead
+                            $savedAsKillZoneDescription = false;
+
+                            if ($mapIconTypeId === MapIconType::MAP_ICON_TYPE_COMMENT) {
+                                foreach ($dungeonRoute->killZones as $killZone) {
+                                    foreach ($killZone->killZoneEnemies as $killZoneEnemy) {
+                                        if (MathUtils::distanceBetweenPoints(
+                                                $killZoneEnemy->enemy->lat, $latLng['lat'],
+                                                $killZoneEnemy->enemy->lng, $latLng['lng']
+                                            ) < self::IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE) {
+                                            $killZone->description = $details[4];
+
+                                            if ($save) {
+                                                $killZone->save();
+                                            }
+
+                                            $savedAsKillZoneDescription = true;
+                                            break 2;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($savedAsKillZoneDescription) {
+                                continue;
                             }
 
                             $mapComment = new MapIcon([
@@ -649,11 +699,61 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     public function getDecoded(): ?array
     {
-//        $lua = $this->_getLua();
-        // Import it to a table
-//        return $lua->call("StringToTable", [$this->_encodedString, true]);
         return $this->decode($this->encodedString);
     }
+
+    /**
+     * @param Collection $warnings
+     * @return ImportStringDetails
+     * @throws InvalidMDTString
+     * @throws \Exception
+     */
+    public function getDetails(Collection $warnings): ImportStringDetails
+    {
+        $decoded = $this->decode($this->encodedString);
+        // Check if it's valid
+        $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
+
+        if (!$isValid) {
+            throw new InvalidMDTString('Unable to validate MDT import string in Lua');
+        }
+
+        $warnings = collect();
+
+        $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+
+        /** @var AffixGroup|null $affixGroup */
+        $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeon);
+
+        $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
+            $warnings,
+            $dungeon,
+            $dungeon->getCurrentMappingVersion(),
+            optional($affixGroup)->hasAffix(Affix::AFFIX_TEEMING),
+            null,
+            $decoded['value']['pulls']
+        ));
+
+        $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
+        $currentAffixGroupForDungeon = optional($currentSeason)->getCurrentAffixGroup();
+
+        return new ImportStringDetails(
+            $warnings,
+            $dungeon,
+            collect([$affixGroup->getTextAttribute()]),
+            $affixGroup !== null && $currentAffixGroupForDungeon !== null &&
+            optional($affixGroup)->id === optional($currentAffixGroupForDungeon)->id,
+            $importStringPulls->getKillZoneAttributes()->count(),
+            0,
+            0,
+            0,
+            $importStringPulls->getEnemyForces(),
+            $importStringPulls->isRouteTeeming() ?
+                $importStringPulls->getMappingVersion()->enemy_forces_required :
+                $importStringPulls->getMappingVersion()->enemy_forces_required_teeming,
+        );
+    }
+
 
     /**
      * Gets the dungeon route based on the currently encoded string.
@@ -667,25 +767,22 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     public function getDungeonRoute(Collection $warnings, bool $sandbox = false, bool $save = false, bool $importAsThisWeek = false): DungeonRoute
     {
-        $lua = $this->getLua();
-        // Import it to a table
-//        $decoded = $lua->call("StringToTable", [$this->_encodedString, true]);
         $decoded = $this->decode($this->encodedString);
         // Check if it's valid
-        $isValid = $lua->call("ValidateImportPreset", [$decoded]);
+        $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
         if (!$isValid) {
             throw new InvalidMDTString('Unable to validate MDT import string in Lua');
         }
 
+        $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
         // Create a dungeon route
-        $dungeonRoute             = new DungeonRoute();
-        $dungeonRoute->author_id  = $sandbox ? -1 : Auth::id();
-        $dungeonRoute->dungeon_id = Conversion::convertMDTDungeonID($decoded['value']['currentDungeonIdx']);
-        // Set some relations here so we can reference them later
-        $dungeonRoute->dungeon            = Dungeon::findOrFail($dungeonRoute->dungeon_id);
-        $dungeonRoute->mappingVersion     = $dungeonRoute->dungeon->getCurrentMappingVersion();
-        $dungeonRoute->mapping_version_id = $dungeonRoute->mappingVersion->id;
+        $dungeonRoute                     = new DungeonRoute();
+        $dungeonRoute->author_id          = $sandbox ? -1 : Auth::id();
+        $dungeonRoute->dungeon_id         = $dungeon->id;
+        $dungeonRoute->mapping_version_id = $mappingVersion->id;
 
         // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
         $dungeonRoute->faction_id         = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
@@ -702,72 +799,96 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
         }
 
-        if ($save) {
-            // Can't save these relations to database
-            unset($dungeonRoute->dungeon);
-            unset($dungeonRoute->mappingVersion);
+        // Ensure we have an ID at this point
+        $dungeonRoute->save();
 
-            // Pre-emptively save the route
-            $dungeonRoute->save();
-        } else {
-            $dungeonRoute->killZones  = new Collection();
-            $dungeonRoute->brushlines = new Collection();
-            $dungeonRoute->mapicons   = new Collection();
-            $dungeonRoute->paths      = new Collection();
-            $dungeonRoute->affixes    = new Collection();
-        }
+        // Set some relations here so we can reference them later
+        $dungeonRoute->setRelation('dungeon', $dungeon);
+        $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
 
         // Set the affix for this route
-        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeonRoute->dungeon, $decoded['week']);
+        $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeonRoute->dungeon, $importAsThisWeek);
 
-        // If affix group not found or
-        if ($importAsThisWeek || $affixGroup === null) {
-            $activeSeason = $dungeonRoute->dungeon->getActiveSeason($this->seasonService);
-            if ($activeSeason !== null) {
-                $affixGroup = $activeSeason->getCurrentAffixGroup();
-            }
-        }
-
-        if ($affixGroup !== null) {
-            if ($save) {
-                // Something we can save to the database
-                DungeonRouteAffixGroup::create([
-                    'affix_group_id'   => $affixGroup->id,
-                    'dungeon_route_id' => $dungeonRoute->id,
-                ]);
-            } else {
-                // Something we can just return and have the user read
-                $dungeonRoute->affixes->push($affixGroup);
-            }
-
-            // Apply the seasonal index to the route
-            $dungeonRoute->seasonal_index = $affixGroup->seasonal_index;
-        }
-
-        // Update seasonal index
-        if ($save) {
-            $dungeonRoute->save();
-        }
+        $this->applyAffixGroupToDungeonRoute($affixGroup, $dungeonRoute);
 
         // Create a path and map icons for MDT rift offsets
         $this->parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save);
 
         // Create killzones and attach enemies
-        $this->parseValuePulls($warnings, $decoded, $dungeonRoute, $save);
+        $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
+            $warnings,
+            $dungeonRoute->dungeon,
+            $dungeonRoute->mappingVersion,
+            $dungeonRoute->teeming,
+            $dungeonRoute->seasonal_index,
+            $decoded['value']['pulls']
+        ));
+
+        // Parse the result
+        $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
 
         // For each object the user created
         $this->parseObjects($warnings, $decoded, $dungeonRoute, $save);
 
-        // Re-calculate the enemy forces
-        if ($save) {
-            $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
-        }
-        // else {
-        // Do not do this - the enemy_forces are incremented while creating the route
-        // $dungeonRoute->enemy_forces = $dungeonRoute->getEnemyForces();
-        // }
-
         return $dungeonRoute;
+    }
+
+    /**
+     * @param ImportStringPulls $importStringPulls
+     * @param DungeonRoute $dungeonRoute
+     * @return void
+     */
+    private function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute)
+    {
+        $dungeonRoute->update(['enemy_forces' => $importStringPulls->getEnemyForces()]);
+
+        $killZones       = [];
+        $killZoneEnemies = [];
+        foreach ($importStringPulls->getKillZoneAttributes() as $killZoneAttributes) {
+            $killZones[]                                   = [
+                'dungeon_route_id' => $dungeonRoute->id,
+                'color'            => $killZoneAttributes['color'] ?? randomHexColor(),
+                'description'      => $killZoneAttributes['description'] ?? null,
+                'index'            => $killZoneAttributes['index'],
+            ];
+            $killZoneEnemies[$killZoneAttributes['index']] = $killZoneAttributes['killZoneEnemies'];
+        }
+
+        KillZone::insert($killZones);
+        $dungeonRoute->load(['killZones']);
+
+        // For each of the saved killzones, assign the enemies
+        $flatKillZoneEnemies = [];
+        foreach ($dungeonRoute->killZones as $killZone) {
+            foreach ($killZoneEnemies[$killZone->index] as &$killZoneEnemy) {
+                $killZoneEnemy['kill_zone_id'] = $killZone->id;
+                unset($killZoneEnemy['enemy']);
+                $flatKillZoneEnemies[] = $killZoneEnemy;
+            }
+        }
+
+        KillZoneEnemy::insert($flatKillZoneEnemies);
+    }
+
+    /**
+     * @param AffixGroup|null $affixGroup
+     * @param DungeonRoute $dungeonRoute
+     * @return void
+     */
+    private function applyAffixGroupToDungeonRoute(?AffixGroup $affixGroup, DungeonRoute $dungeonRoute): void
+    {
+        if ($affixGroup === null) {
+            return;
+        }
+
+        // Something we can save to the database
+        DungeonRouteAffixGroup::create([
+            'affix_group_id'   => $affixGroup->id,
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+
+        // Apply the seasonal index to the route
+        $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index]);
     }
 
     /**

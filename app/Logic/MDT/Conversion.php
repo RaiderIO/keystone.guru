@@ -191,14 +191,14 @@ class Conversion
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
      * @param $mdtDungeonId int
-     * @return int
+     * @return Dungeon
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
-    public static function convertMDTDungeonID(int $mdtDungeonId): int
+    public static function convertMDTDungeonIDToDungeon(int $mdtDungeonId): Dungeon
     {
         $dungeon = Dungeon::where('mdt_id', $mdtDungeonId)->first();
         if ($dungeon instanceof Dungeon) {
-            return $dungeon->id;
+            return $dungeon;
         } else {
             throw new Exception('Unsupported dungeon found.');
         }

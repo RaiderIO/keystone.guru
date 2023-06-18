@@ -185,6 +185,71 @@ class KillZone extends Model
     }
 
     /**
+     * @return array|null The coordinates of a rectangle that perfectly fits all enemies inside this pull.
+     */
+    public function getEnemiesBoundingBox(int $margin = 0): ?array
+    {
+        $enemies = $this->getEnemies();
+
+        if ($enemies->isEmpty()) {
+            return null;
+        }
+
+        $result = [
+            'latMin' => 999999,
+            'latMax' => -999999,
+            'lngMin' => 999999,
+            'lngMax' => -999999,
+        ];
+
+        foreach ($enemies as $enemy) {
+            if ($result['latMin'] > $enemy->lat) {
+                $result['latMin'] = $enemy->lat;
+            }
+            if ($result['latMax'] < $enemy->lat) {
+                $result['latMax'] = $enemy->lat;
+            }
+
+            if ($result['lngMin'] > $enemy->lng) {
+                $result['lngMin'] = $enemy->lng;
+            }
+            if ($result['lngMax'] < $enemy->lng) {
+                $result['lngMax'] = $enemy->lng;
+            }
+        }
+
+        if ($margin > 0) {
+            $result['latMin'] -= $margin;
+            $result['latMax'] += $margin;
+            $result['lngMin'] -= $margin;
+            $result['lngMax'] += $margin;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calculate the bounding box of all enemies that this pull kills, take the north edge of that bounding box
+     * and return the middle of that edge as a lat/lng.
+     *
+     * @param int $boundingBoxMargin
+     * @return array|null
+     */
+    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?array
+    {
+        $boundingBox = $this->getEnemiesBoundingBox($boundingBoxMargin);
+        if ($boundingBox === null) {
+            return null;
+        }
+
+        return [
+            // Max lat is at the top
+            'lat' => $boundingBox['latMax'],
+            'lng' => $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
+        ];
+    }
+
+    /**
      * Gets a list of enemy forces that this kill zone kills that may be skipped.
      *
      * @param bool $teeming
