@@ -147,7 +147,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         if (isset($mdtXy['sublevel'])) {
                             throw new ImportWarning('Awakened Obelisks',
                                 __('logic.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
-                                    ['name' => $obeliskMapIcon->mapicontype->name])
+                                    ['name' => __($obeliskMapIcon->mapicontype->name)])
                             );
                         }
 
@@ -156,7 +156,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             'floor_id'           => $enemy->floor_id,
                             'dungeon_route_id'   => $dungeonRoute->id,
                             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
-                            'comment'            => $obeliskMapIcon->mapicontype->name,
+                            'comment'            => __($obeliskMapIcon->mapicontype->name),
                             // MDT has the x and y inverted here
                         ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
 
@@ -234,7 +234,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         //        $pridefulEnemies    = $enemies->where('npc_id', config('keystoneguru.prideful.npc_id'));
         //        $pridefulEnemyCount = config('keystoneguru.prideful.count');
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
-        $enemiesByNpcId = $enemies->groupBy('npc_id');
+        $enemiesByNpcId      = $enemies->groupBy('npc_id');
+        $enemyForcesByNpcIds = NpcEnemyForces::where('mapping_version_id', $importStringPulls->getMappingVersion()->id)->get()->keyBy('npc_id');
 
         // Fetch all enemies of this dungeon
         $mdtEnemies = (new MDTDungeon($importStringPulls->getDungeon()))->getClonesAsEnemies($floors);
@@ -268,20 +269,19 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // For each NPC that is killed in this pull (and their clones)
                 foreach ($pull as $pullKey => $pullValue) {
                     $this->parsePull(
-                            $importStringPulls,
-                            $mdtEnemiesByMdtNpcIndex,
-                            $enemiesByNpcId,
-                            $totalEnemiesSelected,
-                            $totalEnemiesMatched,
-                            $killZoneAttributes,
-                            $newPullIndex,
-                            $pullKey,
-                            $pullValue
-                        );
+                        $importStringPulls,
+                        $mdtEnemiesByMdtNpcIndex,
+                        $enemiesByNpcId,
+                        $enemyForcesByNpcIds,
+                        $totalEnemiesSelected,
+                        $totalEnemiesMatched,
+                        $killZoneAttributes,
+                        $newPullIndex,
+                        $pullKey,
+                        $pullValue
+                    );
                 }
-                
-//                dd($killZoneAttributes);
-                
+
                 // Save the attributes of this killzone
                 $importStringPulls->addKillZoneAttributes($killZoneAttributes);
 
@@ -298,6 +298,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @param ImportStringPulls $importStringPulls
      * @param Collection        $mdtEnemiesByMdtNpcIndex
      * @param Collection        $enemiesByNpcId
+     * @param Collection        $enemyForcesByNpcIds
      * @param int               $totalEnemiesSelected
      * @param int               $totalEnemiesMatched
      * @param array             $killZoneAttributes
@@ -312,6 +313,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ImportStringPulls $importStringPulls,
         Collection $mdtEnemiesByMdtNpcIndex,
         Collection $enemiesByNpcId,
+        Collection $enemyForcesByNpcIds,
         int &$totalEnemiesSelected,
         int &$totalEnemiesMatched,
         array &$killZoneAttributes,
@@ -449,7 +451,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
             } else {
                 /** @var NpcEnemyForces $npcEnemyForces */
-                $npcEnemyForces = $enemy->npc->enemyForcesByMappingVersion($importStringPulls->getMappingVersion()->id)->first();
+                $npcEnemyForces = $enemyForcesByNpcIds->get($enemy->npc->id);
 
                 $importStringPulls->addEnemyForces(
                     $importStringPulls->isRouteTeeming() ?

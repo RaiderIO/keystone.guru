@@ -113,6 +113,7 @@ class NpcController extends Controller
                 if (isset($changes['dungeon_id'])) {
                     // Fetch the existing enemy forces for the most recent mapping so we can propagate that to the
                     // new dungeon
+                    $npc->load(['enemyForces']);
                     $existingEnemyForces = $npc->enemyForces->enemy_forces;
                     // Get rid of all existing enemy forces
                     $npc->npcEnemyForces()->delete();
