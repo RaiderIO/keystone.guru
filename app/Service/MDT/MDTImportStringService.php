@@ -703,7 +703,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseObjectComment(ImportStringObjects $importStringObjects, Floor $floor, array $details): void
     {
-
         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
 
         $mapIconType  = MapIconType::MAP_ICON_TYPE_COMMENT;
@@ -713,13 +712,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         } else if ($commentLower === 'bloodlust') {
             $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
         } else {
-            foreach ($importStringObjects->getKillZoneAttributes() as &$killZoneAttribute) {
+            foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
                 foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
                     if (MathUtils::distanceBetweenPoints(
                             $killZoneEnemy['enemy']->lat, $latLng['lat'],
                             $killZoneEnemy['enemy']->lng, $latLng['lng']
                         ) < self::IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE) {
-                        $killZoneAttribute['description'] = $details[4];
+                        // Set description directly on the object
+                        $importStringObjects->getKillZoneAttributes()->put(
+                            $killZoneIndex,
+                            array_merge($killZoneAttribute, ['description' => $details[4]])
+                        );
 
                         // Map icon was assigned to killzone instead - return, we're done
                         return;
@@ -879,9 +882,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $decoded['value']['pulls']
         ));
 
-        // Parse the result
-        $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
-
         // For each object the user created
         $importStringObjects = $this->parseObjects(new ImportStringObjects(
             $warnings,
@@ -889,6 +889,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $importStringPulls->getKillZoneAttributes(),
             $decoded['objects']
         ));
+
+        // Only after parsing objects too since they may adjust the pulls before inserting
+        $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
 
         $this->applyObjectsToDungeonRoute($importStringObjects, $dungeonRoute);
 
@@ -1033,6 +1036,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             $polyLineIndex++;
         }
+
+        // Assign map objects to the route
+        $mapIconsAttributes = [];
+        foreach ($importStringObjects->getMapIcons() as $mapIcon) {
+            $mapIconsAttributes[] = array_merge($mapIcon, [
+                'dungeon_route_id' => $dungeonRoute->id,
+            ]);
+        }
+
+        MapIcon::insert($mapIconsAttributes);
     }
 
     /**
