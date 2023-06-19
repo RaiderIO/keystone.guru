@@ -64,6 +64,11 @@ class CreateDungeonRoutes extends Command
             return;
         }
 
+        if (!str_contains($filePath, '_events.txt')) {
+            $this->comment(sprintf('- Skipping non-events file %s', $filePath));
+            return;
+        }
+
         $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes($filePath);
         foreach ($dungeonRoutes as $dungeonRoute) {
             $this->comment(sprintf('- Created dungeon route %s (%s)', $dungeonRoute->public_key, __($dungeonRoute->dungeon->name)));

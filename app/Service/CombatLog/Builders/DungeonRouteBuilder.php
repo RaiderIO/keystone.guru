@@ -78,6 +78,7 @@ class DungeonRouteBuilder
         $this->currentFloor               = null;
         $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies()->with([
             'floor',
+            'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
         ])

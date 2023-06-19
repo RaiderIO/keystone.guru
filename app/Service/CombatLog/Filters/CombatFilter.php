@@ -3,14 +3,9 @@
 namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\GenericData;
-use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
-use App\Logic\CombatLog\CombatEvents\Prefixes\SpellBuilding;
-use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
-use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
@@ -187,7 +182,7 @@ class CombatFilter implements CombatLogParserInterface
         $newEnemyGuid = null;
         if ($combatLogEvent instanceof CombatLogEvent) {
             if ($combatLogEvent instanceof AdvancedCombatLogEvent) {
-                $newEnemyGuid = $this->hasGenericDataNewEnemy($combatLogEvent->getGenericData());
+                $newEnemyGuid = $this->hasAdvancedDataNewGuid($combatLogEvent->getAdvancedData());
                 if ($newEnemyGuid !== null && !$this->firstEnemySightings->has($newEnemyGuid)) {
                     $this->firstEnemySightings->put($newEnemyGuid, $combatLogEvent);
                     $this->log->parseUnitFirstSighted($lineNr, $newEnemyGuid);
@@ -207,7 +202,7 @@ class CombatFilter implements CombatLogParserInterface
         if ($this->isEnemyCombatLogEntry($combatLogEvent)) {
             /** @var AdvancedCombatLogEvent $combatLogEvent */
             // Check if this combat event is relevant and if it has a new NPC that we're interested in
-            $newEnemyGuid = $newEnemyGuid ?? $this->hasGenericDataNewEnemy($combatLogEvent->getGenericData());
+            $newEnemyGuid = $newEnemyGuid ?? $this->hasAdvancedDataNewGuid($combatLogEvent->getAdvancedData());
             if ($newEnemyGuid !== null) {
                 // If it does we want to keep this event
                 $this->accurateEnemySightings->put($newEnemyGuid, $combatLogEvent);
@@ -232,77 +227,41 @@ class CombatFilter implements CombatLogParserInterface
             return false;
         }
 
-        // Skip events that are not damage - they contain the location of the source (the player usually)
-        if (!($combatLogEvent->getSuffix() instanceof Damage) && !($combatLogEvent->getSuffix() instanceof CastSuccess)) {
-            return false;
-        }
-
-        // Spells return the location of the source, not the target.
-        // So for non-creatures (such as players) we don't care about them since they can be 0..40 yards off the mark
-        // But if the source is the creature itself we ARE interested in everything it can throw at us. Unless they are a pet,
-        // then the same rules apply as players since they effectively are players
-        $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
-        if (!($sourceGuid instanceof Creature) || $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_PET) {
-            if ($combatLogEvent->getPrefix() instanceof Spell) {
-                return false;
-            }
-            if ($combatLogEvent->getPrefix() instanceof SpellBuilding) {
-                return false;
-            }
-            if ($combatLogEvent->getPrefix() instanceof SpellPeriodic) {
-                return false;
-            }
-        } else {
-            // Ignore creature-on-creature events, such as an enemy empowering another. But make an exception if
-            // the target was a pet - creatures attacking a pet should still register
-            $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
-            if ($destGuid === null || $destGuid instanceof Creature && $destGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
-                return false;
-            }
-        }
-
-        return true;
+        // The info GUID is the GUID for which the advanced data is valid for
+        // So if the info GUID is for an enemy we're 100% interested in this info
+        $guid = $combatLogEvent->getAdvancedData()->getInfoGuid();
+        return $guid instanceof Creature && $guid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
     }
 
     /**
-     * @param GenericData $genericData
+     * @param AdvancedData $advancedData
      *
      * @return string|null
      */
-    private function hasGenericDataNewEnemy(GenericData $genericData): ?string
+    private function hasAdvancedDataNewGuid(AdvancedData $advancedData): ?string
     {
-        $guids = [
-            $genericData->getSourceGuid(),
-            $genericData->getDestGuid(),
-        ];
+        $guid = $advancedData->getInfoGuid();
 
-        $result = null;
-        foreach ($guids as $guid) {
-            // We're not interested in events if they don't contain a creature
-            if (!$guid instanceof Creature) {
-                continue;
-            }
-
-            // Invalid NPC ID, ignore it since it can never be part of the route anyways
-            if ($this->validNpcIds->search($guid->getId()) === false) {
-                continue;
-            }
-
-            // We already killed this enemy - don't aggro it again (we may have dots from this enemy on our players)
-            if ($this->killedEnemies->search($guid->getGuid()) !== false) {
-                continue;
-            }
-
-            if ($this->accurateEnemySightings->has($guid->getGuid()) === false) {
-                // We MAY find 2 new enemies if there's perhaps a combat log event between two enemies and we may miss this
-                // But this will happen so little that it's not worth the complexity plus the 2nd enemy will get picked up
-                // when it's hit by a player anyways
-                $result = $guid->getGuid();
-                break;
-            }
+        // We're not interested in events if they don't contain a creature
+        if (!$guid instanceof Creature) {
+            return null;
         }
 
-        return $result;
+        // Invalid NPC ID, ignore it since it can never be part of the route anyways
+        if ($this->validNpcIds->search($guid->getId()) === false) {
+            return null;
+        }
+
+        // We already killed this enemy - don't aggro it again (we may have dots from this enemy on our players)
+        if ($this->killedEnemies->search($guid->getGuid()) !== false) {
+            return null;
+        }
+
+        if ($this->accurateEnemySightings->has($guid->getGuid()) === false) {
+            return $guid->getGuid();
+        }
+
+        return null;
     }
 
     /**
