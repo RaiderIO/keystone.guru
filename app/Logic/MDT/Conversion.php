@@ -131,11 +131,11 @@ class Conversion
     /**
      * Rounds a number to the nearest two decimals.
      * @param $nr
-     * @return int
+     * @return float
      */
-    private static function round($nr): int
+    private static function round($nr): float
     {
-        return (int)($nr * 100) / 100;
+        return ((int)($nr * 100)) / 100;
     }
 
     /**
