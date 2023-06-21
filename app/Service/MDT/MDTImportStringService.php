@@ -28,6 +28,7 @@ use App\Models\PublishedState;
 use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
+use App\Service\MDT\Models\ImportStringRiftOffsets;
 use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,8 +37,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 
-/**
- * Class MDTImportStringService
+/** * Class MDTImportStringService
  *
  * @package App\Service\MDT
  * @author Wouter
@@ -84,130 +84,115 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param Collection $warnings
-     * @param array $decoded
-     * @param DungeonRoute $dungeonRoute
-     * @param boolean $save
-     *
+     * @param ImportStringRiftOffsets $importStringRiftOffsets
      * @throws ImportWarning
      */
-    private function parseRiftOffsets(Collection $warnings, array $decoded, DungeonRoute $dungeonRoute, bool $save)
+    private function parseRiftOffsets(ImportStringRiftOffsets $importStringRiftOffsets)
     {
         // Build an array with a structure that makes more sense
-        $rifts = [];
+        $rifts = $importStringRiftOffsets->getRiftOffsets()[$importStringRiftOffsets->getWeek()] ?? [];
 
-        if (isset($decoded['value']['riftOffsets'])) {
-            foreach ($decoded['value']['riftOffsets'] as $weekIndex => $riftOffsets) {
-                if ($weekIndex === (int)$decoded['week']) {
-                    $rifts = $riftOffsets;
-                    break;
-                }
-            }
+        if (empty($rifts)) {
+            return;
+        }
 
-            if (!empty($rifts)) {
-                // Loaded for the comment import
-                $floorIds = $dungeonRoute->dungeon->floors->pluck('id');
+        // Loaded for the comment import
+        $floorIds = $importStringRiftOffsets->getDungeon()->floors->pluck('id');
 
-                try {
-                    $seasonalIndexWhere = function (Builder $query) use ($dungeonRoute) {
-                        $query->whereNull('seasonal_index')
-                            ->orWhere('seasonal_index', $dungeonRoute->seasonal_index ?? 1);
-                    };
+        try {
+            $seasonalIndexWhere = function (Builder $query) use ($importStringRiftOffsets) {
+                $query->whereNull('seasonal_index')
+                    ->orWhere('seasonal_index', $importStringRiftOffsets->getSeasonalIndex() ?? 1);
+            };
 
-                    $npcIdToMapIconMapping = [
-                        161124 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL])
-                            ->whereIn('floor_id', $floorIds) // Urg'roth, Brutal spire
-                            ->where($seasonalIndexWhere)->firstOrFail(),
-                        161241 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_CURSED])
-                            ->whereIn('floor_id', $floorIds) // Cursed spire
-                            ->where($seasonalIndexWhere)->firstOrFail(),
-                        161244 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_DEFILED])
-                            ->whereIn('floor_id', $floorIds) // Blood of the Corruptor, Defiled spire
-                            ->where($seasonalIndexWhere)->firstOrFail(),
-                        161243 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_ENTROPIC])
-                            ->whereIn('floor_id', $floorIds) // Samh'rek, Entropic spire
-                            ->where($seasonalIndexWhere)->firstOrFail(),
-                    ];
+            $npcIdToMapIconMapping = [
+                161124 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL])
+                    ->whereIn('floor_id', $floorIds) // Urg'roth, Brutal spire
+                    ->where($seasonalIndexWhere)->firstOrFail(),
+                161241 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_CURSED])
+                    ->whereIn('floor_id', $floorIds) // Cursed spire
+                    ->where($seasonalIndexWhere)->firstOrFail(),
+                161244 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_DEFILED])
+                    ->whereIn('floor_id', $floorIds) // Blood of the Corruptor, Defiled spire
+                    ->where($seasonalIndexWhere)->firstOrFail(),
+                161243 => MapIcon::where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_ENTROPIC])
+                    ->whereIn('floor_id', $floorIds) // Samh'rek, Entropic spire
+                    ->where($seasonalIndexWhere)->firstOrFail(),
+            ];
 
-                } catch (Exception $exception) {
+        } catch (Exception $exception) {
+            throw new ImportWarning('Awakened Obelisks',
+                __('logic.mdt.io.import_string.unable_to_find_awakened_obelisks')
+            );
+        }
+
+        // From the built array, construct our map icons / paths
+        foreach ($rifts as $npcId => $mdtXy) {
+            try {
+                // Find out the floor where the NPC is standing on
+                /** @var Enemy $enemy */
+                $enemy = Enemy::where('npc_id', $npcId)
+                    ->where('mapping_version_id', $importStringRiftOffsets->getMappingVersion()->id)
+                    ->whereNotNull('enemy_pack_id')
+                    ->whereIn('floor_id', $floorIds)
+                    ->firstOrFail();
+
+                /** @var MapIcon $obeliskMapIcon */
+                $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
+
+                if (isset($mdtXy['sublevel'])) {
                     throw new ImportWarning('Awakened Obelisks',
-                        __('logic.mdt.io.import_string.unable_to_find_awakened_obelisks')
+                        __('logic.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
+                            ['name' => __($obeliskMapIcon->mapicontype->name)])
                     );
                 }
 
-                // From the built array, construct our map icons / paths
-                foreach ($rifts as $npcId => $mdtXy) {
-                    try {
-                        // Find out the floor where the NPC is standing on
-                        /** @var Enemy $enemy */
-                        $enemy = Enemy::where('npc_id', $npcId)->whereNotNull('enemy_pack_id')->whereIn('floor_id', $floorIds)->firstOrFail();
-                        /** @var MapIcon $obeliskMapIcon */
-                        $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
+                $mapIconEndAttributes = array_merge([
+                    'mapping_version_id' => null,
+                    'floor_id'           => $enemy->floor_id,
+                    'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
+                    'comment'            => __($obeliskMapIcon->mapicontype->name),
+                    // MDT has the x and y inverted here
+                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']]));
 
-                        if (isset($mdtXy['sublevel'])) {
-                            throw new ImportWarning('Awakened Obelisks',
-                                __('logic.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
-                                    ['name' => __($obeliskMapIcon->mapicontype->name)])
-                            );
-                        }
+                $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
 
-                        $mapIconEnd = new MapIcon(array_merge([
-                            'mapping_version_id' => null,
-                            'floor_id'           => $enemy->floor_id,
-                            'dungeon_route_id'   => $dungeonRoute->id,
-                            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
-                            'comment'            => __($obeliskMapIcon->mapicontype->name),
-                            // MDT has the x and y inverted here
-                        ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])));
+                $pathAttributes = [
+                    'floor_id'         => $enemy->floor_id,
+                    'polyline'         => [
+                        'model_class'    => Path::class,
+                        'color'          => '#80FF1A',
+                        'color_animated' => $hasAnimatedLines ? '#244812' : null,
+                        'weight'         => 3,
+                        'vertices_json'  => json_encode([
+                            [
+                                'lat' => $obeliskMapIcon->lat,
+                                'lng' => $obeliskMapIcon->lng,
+                            ],
+                            [
+                                'lat' => $mapIconEndAttributes['lat'],
+                                'lng' => $mapIconEndAttributes['lng'],
+                            ],
+                        ]),
+                    ],
+                ];
 
-                        $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
+//                if ($save) {
+//                    $mapIconEndAttributes->save();
+//                    $path->save();
+//                    $polyLine->model_id = $path->id;
+//                    $polyLine->save();
+//
+//                    // Link it now that the IDs are known
+//                    $mapIconEndAttributes->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
+//                    $path->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
+//                } else {
+//                    $dungeonRoute->mapicons->push($mapIconEndAttributes);
+//                    $dungeonRoute->paths->push($path);
+//                }
 
-                        $polyLine = new Polyline([
-                            'model_id'       => -1,
-                            'model_class'    => Path::class,
-                            'color'          => '#80FF1A',
-                            'color_animated' => $hasAnimatedLines ? '#244812' : null,
-                            'weight'         => 3,
-                            'vertices_json'  => json_encode([
-                                [
-                                    'lat' => $obeliskMapIcon->lat,
-                                    'lng' => $obeliskMapIcon->lng,
-                                ],
-                                [
-                                    'lat' => $mapIconEnd->lat,
-                                    'lng' => $mapIconEnd->lng,
-                                ],
-                            ]),
-                        ]);
-
-                        if ($save) {
-                            $polyLine->save();
-                        }
-
-                        $path = new Path([
-                            'floor_id'         => $enemy->floor_id,
-                            'dungeon_route_id' => $dungeonRoute->id,
-                            'polyline_id'      => $polyLine->id,
-                        ]);
-
-                        if ($save) {
-                            $mapIconEnd->save();
-                            $path->save();
-                            $polyLine->model_id = $path->id;
-                            $polyLine->save();
-
-                            // Link it now that the IDs are known
-                            $mapIconEnd->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
-                            $path->setLinkedAwakenedObeliskByMapIconId($obeliskMapIcon->id);
-                        } else {
-                            $dungeonRoute->mapicons->push($mapIconEnd);
-                            $dungeonRoute->paths->push($path);
-                        }
-
-                    } catch (ImportWarning $warning) {
-                        $warnings->add($warning);
-                    }
-                }
+            } catch (ImportWarning $warning) {
+                $importStringRiftOffsets->getWarnings()->add($warning);
             }
         }
     }
@@ -870,7 +855,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $this->applyAffixGroupToDungeonRoute($affixGroup, $dungeonRoute);
 
         // Create a path and map icons for MDT rift offsets
-        $this->parseRiftOffsets($warnings, $decoded, $dungeonRoute, $save);
+        if (isset($decoded['value']['riftOffsets'])) {
+            $this->parseRiftOffsets(new ImportStringRiftOffsets(
+                $warnings,
+                $dungeon,
+                $mappingVersion,
+                $dungeonRoute->seasonal_index,
+                $decoded['value']['riftOffsets'],
+                $decoded['week'],
+            ));
+        }
 
         // Create killzones and attach enemies
         $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
