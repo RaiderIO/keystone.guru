@@ -20,22 +20,34 @@ class ImportStringRiftOffsets
 
     private int $week;
 
+    private Collection $mapIcons;
+
+    private Collection $paths;
+
     /**
-     * @param Collection $warnings
-     * @param Dungeon $dungeon
+     * @param Collection     $warnings
+     * @param Dungeon        $dungeon
      * @param MappingVersion $mappingVersion
-     * @param int|null $seasonalIndex
-     * @param array $riftOffsets
-     * @param int $week
+     * @param int|null       $seasonalIndex
+     * @param array          $riftOffsets
+     * @param int            $week
      */
-    public function __construct(Collection $warnings, Dungeon $dungeon, MappingVersion $mappingVersion, ?int $seasonalIndex, array $riftOffsets, int $week)
-    {
+    public function __construct(
+        Collection $warnings,
+        Dungeon $dungeon,
+        MappingVersion $mappingVersion,
+        ?int $seasonalIndex,
+        array $riftOffsets,
+        int $week
+    ) {
         $this->warnings       = $warnings;
         $this->dungeon        = $dungeon;
         $this->mappingVersion = $mappingVersion;
         $this->seasonalIndex  = $seasonalIndex;
         $this->riftOffsets    = $riftOffsets;
         $this->week           = $week;
+        $this->mapIcons       = collect();
+        $this->paths          = collect();
     }
 
     /**
@@ -84,5 +96,20 @@ class ImportStringRiftOffsets
     public function getWeek(): int
     {
         return $this->week;
+    }
+    
+    /**
+     * @return Collection
+     */
+    public function getMapIcons(): Collection
+    {
+        return $this->mapIcons;
+    }
+    /**
+     * @return Collection
+     */
+    public function getPaths(): Collection
+    {
+        return $this->paths;
     }
 }
