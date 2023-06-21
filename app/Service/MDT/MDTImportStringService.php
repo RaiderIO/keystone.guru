@@ -815,28 +815,23 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
         // Create a dungeon route
-        $dungeonRoute                     = new DungeonRoute();
-        $dungeonRoute->author_id          = $sandbox ? -1 : Auth::id();
-        $dungeonRoute->dungeon_id         = $dungeon->id;
-        $dungeonRoute->mapping_version_id = $mappingVersion->id;
+        $dungeonRoute = DungeonRoute::create([
+            'author_id'          => $sandbox ? -1 : Auth::id(),
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
 
-        // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
-        $dungeonRoute->faction_id         = isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1;
-        $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED]; // Needs to be explicit otherwise redirect to edit will not have this value
-        $dungeonRoute->public_key         = DungeonRoute::generateRandomPublicKey();
-        $dungeonRoute->teeming            = boolval($decoded['value']['teeming']);
-        $dungeonRoute->title              = empty($decoded['text']) ? 'No title' : $decoded['text'];
-        $dungeonRoute->difficulty         = 'Casual';
-        $dungeonRoute->level_min          = $decoded['difficulty'] ?? 2;
-        $dungeonRoute->level_max          = $decoded['difficulty'] ?? 2;
-
-        // Must expire if we're trying
-        if ($sandbox) {
-            $dungeonRoute->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
-        }
-
-        // Ensure we have an ID at this point
-        $dungeonRoute->save();
+            // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
+            'faction_id'         => isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            // Needs to be explicit otherwise redirect to edit will not have this value
+            'public_key'         => DungeonRoute::generateRandomPublicKey(),
+            'teeming'            => boolval($decoded['value']['teeming']),
+            'title'              => empty($decoded['text']) ? 'No title' : $decoded['text'],
+            'difficulty'         => 'Casual',
+            'level_min'          => $decoded['difficulty'] ?? 2,
+            'level_max'          => $decoded['difficulty'] ?? 2,
+            'expires_at'         => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
+        ]);
 
         // Set some relations here so we can reference them later
         $dungeonRoute->setRelation('dungeon', $dungeon);
@@ -1107,7 +1102,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             $polyLineIndex++;
         }
-        
+
         // Assign awakened obelisks
         $obeliskMapIcons = $dungeonRoute->mapicons()
             ->whereIn('map_icon_type_id', [
@@ -1118,9 +1113,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ])
             ->orderBy('id')
             ->get();
-        
+
         $obeliskMapIconIndex = 0;
-        foreach($obeliskMapIcons as $obeliskMapIcon){
+        foreach ($obeliskMapIcons as $obeliskMapIcon) {
             /** @var MapIcon $obeliskMapIcon */
             $obeliskMapIcon->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$obeliskMapIconIndex]['obelisk_map_icon']->id);
 
