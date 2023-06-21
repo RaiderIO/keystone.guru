@@ -89,8 +89,6 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     getClosestMarker(floorId, targetFloorId, latLng = null) {
         let result = this._findMarkerByTargetFloorId(floorId, targetFloorId, latLng);
 
-        let foundPath = false;
-
         // If not found, try to find it across all objects we have
         if (result === null) {
             let path = [];
@@ -110,9 +108,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
                     if (foundMarkerOnTargetFloor !== null) {
                         result = object;
-                        // path.push(object);
-                        // path.push(foundMarkerOnTargetFloor);
-                        foundPath = true;
+
                         break;
                     }
                 }
