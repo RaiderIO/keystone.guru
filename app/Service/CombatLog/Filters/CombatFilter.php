@@ -36,27 +36,11 @@ class CombatFilter implements CombatLogParserInterface
         186121 => 0.05,
     ];
 
-    /**
-     * @var int The maximum distance since our absolute first sighting before we disregard any other events and return to the original distance.
-     * If we aggroed an enemy using some spell (max range 40) and we proceed to drag the enemy 100 yards away before beating it to death, we're better
-     * off taking the original position of the caster even if it's max 40 yards off. Better 40 yards than 100 yards.
-     *
-     * Also consider that if we max range pull an enemy and then proceed to pull that enemy in the direction away from the caster,
-     * they will trigger this MAX_LEASH_DISTANCE quickly. However - the caster's location is even then probably a better reference
-     * since we know that area is safe - be it from killed enemies or it's just clear, otherwise the player would be in combat already.
-     * Using the target's current location to identify the enemy actually can resolve to an incorrect enemy quicker since it will
-     * consider unpulled enemies quicker.
-     */
-    private const MAX_LEASH_DISTANCE = 40;
-
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
 
     /** @var Collection|int[] */
     private Collection $validNpcIds;
-
-    /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for the absolute first sighting of an enemy. Used as a backup */
-    private Collection $firstEnemySightings;
 
     /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
     private Collection $accurateEnemySightings;
@@ -77,7 +61,6 @@ class CombatFilter implements CombatLogParserInterface
     {
         $this->resultEvents           = $resultEvents;
         $this->validNpcIds            = collect();
-        $this->firstEnemySightings    = collect();
         $this->accurateEnemySightings = collect();
         $this->summonedEnemies        = collect();
         $this->killedEnemies          = collect();
@@ -132,7 +115,7 @@ class CombatFilter implements CombatLogParserInterface
             $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
 
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
-            if (!$this->firstEnemySightings->has($destGuid->getGuid())) {
+            if (!$this->accurateEnemySightings->has($destGuid->getGuid())) {
                 $this->log->parseUnitDiedEnemyWasNotPartOfCurrentPull($lineNr, $destGuid->getGuid());
 
                 return false;
@@ -157,7 +140,7 @@ class CombatFilter implements CombatLogParserInterface
                 return false;
             }
 
-            $enemyEngagedEvent = $this->getEnemyEngagedEvent($destGuid);
+            $enemyEngagedEvent = $this->accurateEnemySightings->get($destGuid->getGuid());
             if ($enemyEngagedEvent === null) {
                 $this->log->parseUnitDiedEnemyWasNotEngaged($lineNr, $destGuid->getGuid());
 
@@ -165,7 +148,7 @@ class CombatFilter implements CombatLogParserInterface
             }
 
             // Push a new result event - we successfully killed this enemy, and it gave count!
-            $this->resultEvents->push((new EnemyEngaged($enemyEngagedEvent, $destGuid)));
+            $this->resultEvents->push((new EnemyEngaged($enemyEngagedEvent)));
             // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
             $this->resultEvents->push((new EnemyKilled($combatLogEvent)));
             // Speed up parsing by getting rid of the accurate enemy sighting - it's part of killed enemies now so won't get handled anymore
@@ -181,14 +164,6 @@ class CombatFilter implements CombatLogParserInterface
 
         $newEnemyGuid = null;
         if ($combatLogEvent instanceof CombatLogEvent) {
-            if ($combatLogEvent instanceof AdvancedCombatLogEvent) {
-                $newEnemyGuid = $this->hasAdvancedDataNewGuid($combatLogEvent->getAdvancedData());
-                if ($newEnemyGuid !== null && !$this->firstEnemySightings->has($newEnemyGuid)) {
-                    $this->firstEnemySightings->put($newEnemyGuid, $combatLogEvent);
-                    $this->log->parseUnitFirstSighted($lineNr, $newEnemyGuid);
-                }
-            }
-
             if ($combatLogEvent->getSuffix() instanceof Summon) {
                 // Specially handle summoned enemies
                 $this->summonedEnemies->push($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
@@ -202,7 +177,7 @@ class CombatFilter implements CombatLogParserInterface
         if ($this->isEnemyCombatLogEntry($combatLogEvent)) {
             /** @var AdvancedCombatLogEvent $combatLogEvent */
             // Check if this combat event is relevant and if it has a new NPC that we're interested in
-            $newEnemyGuid = $newEnemyGuid ?? $this->hasAdvancedDataNewGuid($combatLogEvent->getAdvancedData());
+            $newEnemyGuid = $this->hasAdvancedDataNewGuid($combatLogEvent->getAdvancedData());
             if ($newEnemyGuid !== null) {
                 // If it does we want to keep this event
                 $this->accurateEnemySightings->put($newEnemyGuid, $combatLogEvent);
@@ -313,40 +288,5 @@ class CombatFilter implements CombatLogParserInterface
         $advancedData = $combatLogEvent->getAdvancedData();
 
         return ($advancedData->getCurrentHP() / $advancedData->getMaxHP()) <= self::DEFEATED_PERCENTAGE[$destGuid->getId()];
-    }
-
-    /**
-     * Get the event where we first engaged the event. Be it the first time we actually saw this enemy
-     * or the first time this enemy made its exact position known, based on
-     *
-     * @param string $guid
-     *
-     * @return AdvancedCombatLogEvent|null
-     */
-    private function getEnemyEngagedEvent(string $guid): ?AdvancedCombatLogEvent
-    {
-        /** @var AdvancedCombatLogEvent $engagedEvent */
-        $engagedEvent = $this->accurateEnemySightings->get($guid);
-
-        /** @var AdvancedCombatLogEvent $firstSightedEvent */
-        $firstSightedEvent = $this->firstEnemySightings->get($guid);
-        if ($engagedEvent === null) {
-            return $firstSightedEvent;
-        }
-
-        if (MathUtils::distanceBetweenPoints(
-                $engagedEvent->getAdvancedData()->getPositionX(),
-                $firstSightedEvent->getAdvancedData()->getPositionX(),
-                $engagedEvent->getAdvancedData()->getPositionY(),
-                $firstSightedEvent->getAdvancedData()->getPositionY(),
-            ) >= self::MAX_LEASH_DISTANCE) {
-            $this->log->getEnemyEngagedEventUsingFirstSightedEvent($guid);
-
-            return $firstSightedEvent;
-        } else {
-            $this->log->getEnemyEngagedEventUsingEngagedEvent($guid);
-
-            return $engagedEvent;
-        }
     }
 }

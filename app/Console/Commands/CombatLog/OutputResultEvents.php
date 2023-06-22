@@ -61,8 +61,9 @@ class OutputResultEvents extends BaseCombatLogCommand
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
         $result = file_put_contents(base_path($resultingFile), $resultEvents->map(function (BaseResultEvent $resultEvent) {
-            return $resultEvent->getBaseEvent()->getRawEvent();
-        })->implode(''));
+            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+            return trim($resultEvent->getBaseEvent()->getRawEvent());
+        })->implode(PHP_EOL));
 
         if ($result) {
             $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));
