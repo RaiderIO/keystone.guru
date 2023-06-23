@@ -5,21 +5,21 @@ namespace App\Console\Commands\CombatLog;
 use App\Service\CombatLog\CombatLogDungeonRouteService;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 
-class OutputResultEvents extends BaseCombatLogCommand
+class OutputCreateRouteJson extends BaseCombatLogCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputresultevents {filePath}';
+    protected $signature = 'combatlog:outputcreateroutejson {filePath}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Takes a combat log and outputs the result events in a file next to the combat log.';
+    protected $description = 'Takes a combat log and outputs the result events as a .json file which you can use to create routes using the API.';
 
     /**
      * Execute the console command.
@@ -41,7 +41,7 @@ class OutputResultEvents extends BaseCombatLogCommand
                 return 0;
             }
 
-            return $this->outputResultEvents($combatLogDungeonRouteService, $filePath);
+            return $this->outputCreateRouteJson($combatLogDungeonRouteService, $filePath);
         });
     }
 
@@ -52,21 +52,16 @@ class OutputResultEvents extends BaseCombatLogCommand
      * @return int
      * @throws \Exception
      */
-    private function outputResultEvents(CombatLogDungeonRouteService $combatLogDungeonRouteService, string $filePath): int
+    private function outputCreateRouteJson(CombatLogDungeonRouteService $combatLogDungeonRouteService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultEvents = $combatLogDungeonRouteService->getResultEvents($filePath);
+        $resultingFile = str_replace(['.txt', '.zip'], '.json', $filePath);
 
-        $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
-
-        $result = file_put_contents(base_path($resultingFile), $resultEvents->map(function (BaseResultEvent $resultEvent) {
-            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
-            return trim($resultEvent->getBaseEvent()->getRawEvent());
-        })->implode(PHP_EOL));
+        $result = file_put_contents(base_path($resultingFile), json_encode($combatLogDungeonRouteService->getCreateRouteBody($filePath), JSON_PRETTY_PRINT));
 
         if ($result) {
-            $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));
+            $this->comment(sprintf('- Wrote request body to %s', $resultingFile));
         } else {
             $this->warn(sprintf('- Unable to write to file %s', $resultingFile));
         }

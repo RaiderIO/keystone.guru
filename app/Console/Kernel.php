@@ -6,6 +6,7 @@ use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
+use App\Console\Commands\CombatLog\OutputCreateRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
 use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\Database\Backup;
@@ -72,6 +73,7 @@ class Kernel extends ConsoleKernel
         ExtractUiMapIds::class,
         CreateDungeonRoutes::class,
         OutputResultEvents::class,
+        OutputCreateRouteJson::class,
 
         // Database
         Backup::class,
