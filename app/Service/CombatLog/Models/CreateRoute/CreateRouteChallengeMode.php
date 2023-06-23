@@ -2,37 +2,51 @@
 
 namespace App\Service\CombatLog\Models\CreateRoute;
 
-use Carbon\Carbon;
-
 class CreateRouteChallengeMode
 {
-    public Carbon $start;
+    public string $start;
 
-    public Carbon $end;
+    public string $end;
 
     public int $durationMs;
 
-    public int $zoneId;
+    public int $mapId;
 
     public int $level;
 
     public array $affixes;
 
     /**
-     * @param Carbon $start
-     * @param Carbon $end
-     * @param int    $durationMs
-     * @param int    $zoneId
-     * @param int    $level
-     * @param array  $affixes
+     * @param string $start
+     * @param string $end
+     * @param int $durationMs
+     * @param int $mapId
+     * @param int $level
+     * @param array $affixes
      */
-    public function __construct(Carbon $start, Carbon $end, int $durationMs, int $zoneId, int $level, array $affixes)
+    public function __construct(string $start, string $end, int $durationMs, int $mapId, int $level, array $affixes)
     {
         $this->start      = $start;
         $this->end        = $end;
         $this->durationMs = $durationMs;
-        $this->zoneId     = $zoneId;
+        $this->mapId      = $mapId;
         $this->level      = $level;
         $this->affixes    = $affixes;
+    }
+
+    /**
+     * @param array $body
+     * @return CreateRouteChallengeMode
+     */
+    public static function createFromArray(array $body): CreateRouteChallengeMode
+    {
+        return new CreateRouteChallengeMode(
+            $body['start'],
+            $body['end'],
+            $body['durationMs'],
+            $body['mapId'],
+            $body['level'],
+            $body['affixes'],
+        );
     }
 }

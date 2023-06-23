@@ -16,4 +16,23 @@ class CreateRouteBody
         $this->challengeMode = $createRouteChallengeMode;
         $this->npcs          = $npcs;
     }
+
+    /**
+     * @param array $body
+     * @return CreateRouteBody
+     */
+    public static function createFromArray(array $body): CreateRouteBody
+    {
+        $challengeMode = CreateRouteChallengeMode::createFromArray($body['challengeMode']);
+
+        $npcs = collect();
+        foreach($body['npcs'] as $npc){
+            $npcs->push(CreateRouteNpc::createFromArray($npc));
+        }
+
+        return new CreateRouteBody(
+            $challengeMode,
+            $npcs
+        );
+    }
 }

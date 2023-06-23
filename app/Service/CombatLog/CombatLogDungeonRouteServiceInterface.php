@@ -24,6 +24,12 @@ interface CombatLogDungeonRouteServiceInterface
     public function convertCombatLogToDungeonRoutes(string $combatLogFilePath): Collection;
 
     /**
+     * @param CreateRouteBody $createRouteBody
+     * @return DungeonRoute
+     */
+    public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute;
+
+    /**
      * @param string $combatLogFilePath
      *
      * @return CreateRouteBody

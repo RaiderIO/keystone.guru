@@ -58,7 +58,10 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
 
         $resultingFile = str_replace(['.txt', '.zip'], '.json', $filePath);
 
-        $result = file_put_contents(base_path($resultingFile), json_encode($combatLogDungeonRouteService->getCreateRouteBody($filePath), JSON_PRETTY_PRINT));
+        $result = file_put_contents(
+            base_path($resultingFile),
+            json_encode($combatLogDungeonRouteService->getCreateRouteBody($filePath), JSON_PRETTY_PRINT)
+        );
 
         if ($result) {
             $this->comment(sprintf('- Wrote request body to %s', $resultingFile));

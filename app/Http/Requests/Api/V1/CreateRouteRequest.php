@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Logic\CombatLog\CombatLogEntry;
+use DateTime;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 
 class CreateRouteRequest extends FormRequest
@@ -27,15 +27,15 @@ class CreateRouteRequest extends FormRequest
      */
     public function rules(): array
     {
-        $dateFormat = sprintf('date_format:"%s"', CombatLogEntry::DATE_FORMAT);
+        $dateFormat = sprintf('date_format:"%s"', DateTime::ATOM);
         return [
-            'challengemode.start'      => $dateFormat,
-            'challengemode.end'        => $dateFormat,
-            'challengemode.durationMs' => 'int',
-            'challengemode.zoneId'     => Rule::exists('dungeons', 'zone_id'),
-            'challengemode.level'      => 'int',
-            'challengemode.affixes'    => 'array',
-            'challengemode.affixes.*'  => Rule::exists('affixes', 'affix_id'),
+            'challengeMode.start'      => $dateFormat,
+            'challengeMode.end'        => $dateFormat,
+            'challengeMode.durationMs' => 'int',
+            'challengeMode.mapId'     => Rule::exists('dungeons', 'map_id'),
+            'challengeMode.level'      => 'int',
+            'challengeMode.affixes'    => 'array',
+            'challengeMode.affixes.*'  => Rule::exists('affixes', 'affix_id'),
             'npcs'                     => 'array',
             'npcs.npcId'               => Rule::exists('npcs', 'id'),
             'npcs.spawnUid'            => 'string|max:10',

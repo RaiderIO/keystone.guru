@@ -124,7 +124,7 @@ class DungeonRouteBuilder
                     /** @var $baseEvent UnitDied */
                     // Check if we had this enemy in combat, if so, we just killed it in our current pull
                     // UnitDied only has DestGuid
-                    $guid = $baseEvent->getGenericData()->getDestGuid()->getGuid();
+                    $guid = $resultEvent->getGuid()->getGuid();
                     if ($this->currentEnemiesInCombat->has($guid)) {
                         $this->enemiesKilledInCurrentPull->put($guid, $this->currentEnemiesInCombat->get($guid));
 

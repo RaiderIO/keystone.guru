@@ -23,17 +23,20 @@ use App\Service\CombatLog\Filters\DungeonRouteFilter;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteChallengeMode;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpcCoord;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
-use App\Service\CombatLog\ResultEvents\EnemyEngaged;
+use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
+use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
-use function optional;
 
 class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterface
 {
@@ -177,7 +180,12 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 
         return $result;
     }
-    
+
+    public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
+    {
+
+    }
+
     /**
      * @param string $combatLogFilePath
      *
@@ -191,34 +199,59 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         try {
             $this->log->convertCombatLogToDungeonRoutesStart($combatLogFilePath);
 
-            
+
             $dungeonRoute = null;
             $resultEvents = $this->getResultEvents($combatLogFilePath, $dungeonRoute);
             if (!($dungeonRoute instanceof DungeonRoute)) {
                 throw new Exception('Unable to generate dungeon route from combat log!');
             }
-            
+
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(function(BaseResultEvent $resultEvent){
+            $challengeModeStartEvent = $resultEvents->filter(function (BaseResultEvent $resultEvent) {
                 return $resultEvent instanceof ChallengeModeStartResultEvent;
             })->first()->getChallengeModeStartEvent();
 
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(function(BaseResultEvent $resultEvent){
+            $challengeModeEndEvent = $resultEvents->filter(function (BaseResultEvent $resultEvent) {
                 return $resultEvent instanceof ChallengeModeEndResultEvent;
             })->first()->getChallengeModeEndEvent();
-            
+
             $challengeMode = new CreateRouteChallengeMode(
-                $challengeModeStartEvent->getTimestamp(),
-                $challengeModeEndEvent->getTimestamp(),
+                $challengeModeStartEvent->getTimestamp()->format(DateTime::ATOM),
+                $challengeModeEndEvent->getTimestamp()->format(DateTime::ATOM),
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $challengeModeStartEvent->getInstanceID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
                 $challengeModeStartEvent->getAffixIDs()
             );
-            
-            $npcs = collect();
-                
+
+            $npcs             = collect();
+            $npcEngagedEvents = collect();
+            foreach ($resultEvents as $resultEvent) {
+                if ($resultEvent instanceof EnemyEngagedResultEvent) {
+                    $npcEngagedEvents->put($resultEvent->getGuid()->getGuid(), $resultEvent);
+                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
+                    $guid = $resultEvent->getGuid();
+                    /** @var EnemyEngagedResultEvent $npcEngagedEvent */
+                    $npcEngagedEvent = $npcEngagedEvents->get($guid->getGuid());
+
+                    $npcs->push(
+                        new CreateRouteNpc(
+                            $guid->getId(),
+                            $guid->getSpawnUID(),
+                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(DateTime::ATOM),
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(DateTime::ATOM),
+                            new CreateRouteNpcCoord(
+                                $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
+                                $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
+                                $guid->getInstanceId()
+                            )
+                        )
+                    );
+
+                }
+            }
+
             return new CreateRouteBody(
                 $challengeMode,
                 $npcs
@@ -264,7 +297,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                 }
 
                 // Only looking for points of engagement
-                if (!($resultEvent instanceof EnemyEngaged) || $currentFloor === null) {
+                if (!($resultEvent instanceof EnemyEngagedResultEvent) || $currentFloor === null) {
                     continue;
                 }
 
