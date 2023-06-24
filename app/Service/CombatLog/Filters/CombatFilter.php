@@ -6,6 +6,11 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
+use App\Logic\CombatLog\CombatEvents\Prefixes\SpellBuilding;
+use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
+use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
@@ -202,10 +207,34 @@ class CombatFilter implements CombatLogParserInterface
             return false;
         }
 
-        // The info GUID is the GUID for which the advanced data is valid for
-        // So if the info GUID is for an enemy we're 100% interested in this info
-        $guid = $combatLogEvent->getAdvancedData()->getInfoGuid();
-        return $guid instanceof Creature && $guid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
+        $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
+
+        // If it IS a pet we want to accept the event
+        if ($sourceGuid instanceof Creature && $sourceGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
+            // Ignore creature-on-creature events, such as an enemy empowering another. But make an exception if
+            // the target was a pet - creatures attacking a pet should still register
+            $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+            // If dest is null it may be a self buff - ignore these (we may not be in combat with them)
+            if ($destGuid === null ||
+                ($destGuid instanceof Creature && $destGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET)) {
+                return false;
+            }
+        }
+
+        return true;
+
+//        // We skip all non-advanced combat log events, we need positional information of NPCs.
+//        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+//            return false;
+//        }
+//
+//        // The info GUID is the GUID for which the advanced data is valid for
+//        // So if the info GUID is for an enemy we're 100% interested in this info
+//        $infoGuid = $combatLogEvent->getAdvancedData()->getInfoGuid();
+//        // Ignore events that did not originate from
+//        return !($combatLogEvent->getGenericData()->getSourceGuid() instanceof Creature) &&
+//            $infoGuid instanceof Creature &&
+//            $infoGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
     }
 
     /**

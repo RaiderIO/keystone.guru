@@ -11,10 +11,13 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\EnemyPosition;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
+use App\Models\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
 use App\Service\CombatLog\Builders\DungeonRouteBuilder;
+use App\Service\CombatLog\Builders\ResultEventDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Exceptions\NoChallangeModeStartFoundException;
@@ -162,11 +165,10 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             // Store found enemy positions in the database for analyzing
             $this->saveEnemyPositions($resultEvents);
 
-            $dungeonRoute = (new DungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
+            $dungeonRoute = (new ResultEventDungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
 
             if (config('app.debug')) {
                 $this->generateMapIconsFromEvents(
-                    $dungeonRoute->dungeon,
                     $dungeonRoute->mappingVersion,
                     $resultEvents,
                     $dungeonRoute
@@ -181,9 +183,21 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
         return $result;
     }
 
+    /**
+     * @param CreateRouteBody $createRouteBody
+     * @return DungeonRoute
+     */
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
+        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $createRouteBody))->build();
 
+        $this->generateMapIconsFromCreateRouteBody(
+            $dungeonRoute->mappingVersion,
+            $createRouteBody,
+            $dungeonRoute
+        );
+
+        return $dungeonRoute;
     }
 
     /**
@@ -235,6 +249,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                     /** @var EnemyEngagedResultEvent $npcEngagedEvent */
                     $npcEngagedEvent = $npcEngagedEvents->get($guid->getGuid());
 
+                    $npcEngagedEvents->forget($guid->getGuid());
+
                     $npcs->push(
                         new CreateRouteNpc(
                             $guid->getId(),
@@ -244,12 +260,16 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                             new CreateRouteNpcCoord(
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
-                                $guid->getInstanceId()
+                                $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getUiMapId()
                             )
                         )
                     );
 
                 }
+            }
+
+            if ($npcEngagedEvents->isNotEmpty()) {
+                throw new Exception('Found enemies that weren\'t killed!');
             }
 
             return new CreateRouteBody(
@@ -263,7 +283,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     }
 
     /**
-     * @param Collection|\App\Service\CombatLog\ResultEvents\BaseResultEvent[] $resultEvents
+     * @param Collection|BaseResultEvent[] $resultEvents
      *
      * @return void
      */
@@ -343,7 +363,6 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     }
 
     /**
-     * @param Dungeon $dungeon
      * @param MappingVersion $mappingVersion
      * @param Collection|\App\Service\CombatLog\ResultEvents\BaseResultEvent[] $resultEvents
      * @param DungeonRoute|null $dungeonRoute
@@ -351,7 +370,6 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
      * @return void
      */
     private function generateMapIconsFromEvents(
-        Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         Collection     $resultEvents,
         ?DungeonRoute  $dungeonRoute = null
@@ -404,6 +422,51 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                     $combatLogEvent->getAdvancedData()->getPositionY(),
                 );
             }
+
+            $mapIconAttributes->push([
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $currentFloor->id,
+                'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
+                'team_id'            => null,
+                'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
+                'lat'                => $latLng['lat'],
+                'lng'                => $latLng['lng'],
+                'comment'            => $comment,
+                'permanent_tooltip'  => 0,
+            ]);
+        }
+
+        MapIcon::insert($mapIconAttributes->toArray());
+    }
+
+
+    /**
+     * @param MappingVersion $mappingVersion
+     * @param CreateRouteBody $createRouteBody
+     * @param DungeonRoute|null $dungeonRoute
+     *
+     * @return void
+     */
+    private function generateMapIconsFromCreateRouteBody(
+        MappingVersion  $mappingVersion,
+        CreateRouteBody $createRouteBody,
+        ?DungeonRoute   $dungeonRoute = null
+    ): void
+    {
+        $currentFloor      = null;
+        $mapIconAttributes = collect();
+        foreach ($createRouteBody->npcs as $npc) {
+            $realUiMapId = Floor::UI_MAP_ID_MAPPING[$npc->coord->uiMapId] ?? $npc->coord->uiMapId;
+            if ($currentFloor === null || $realUiMapId !== $currentFloor->ui_map_id) {
+                $currentFloor = Floor::findByUiMapId($npc->coord->uiMapId);
+            }
+
+            $latLng = $currentFloor->calculateMapLocationForIngameLocation(
+                $npc->coord->x,
+                $npc->coord->y,
+            );
+
+            $comment = json_encode($npc);
 
             $mapIconAttributes->push([
                 'mapping_version_id' => $mappingVersion->id,

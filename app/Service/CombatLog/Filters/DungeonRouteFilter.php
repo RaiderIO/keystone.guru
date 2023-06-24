@@ -71,8 +71,8 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 )->toDateTimeString(),
             ]);
 
-            $this->dungeonRoute->dungeon        = $dungeon;
-            $this->dungeonRoute->mappingVersion = $currentMappingVersion;
+            $this->dungeonRoute->setRelation('dungeon', $dungeon);
+            $this->dungeonRoute->setRelation('mappingVersion', $currentMappingVersion);
 
             // Find the correct affix groups that match the affix combination the dungeon was started with
             $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);

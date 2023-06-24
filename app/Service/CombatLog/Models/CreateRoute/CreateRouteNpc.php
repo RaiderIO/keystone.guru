@@ -3,6 +3,7 @@
 namespace App\Service\CombatLog\Models\CreateRoute;
 
 use Carbon\Carbon;
+use DateTime;
 
 class CreateRouteNpc
 {
@@ -15,6 +16,10 @@ class CreateRouteNpc
     public string $diedAt;
 
     public CreateRouteNpcCoord $coord;
+
+    private Carbon $engagedAtCarbon;
+
+    private Carbon $diedAtCarbon;
 
     /**
      * @param int $npcId
@@ -30,6 +35,32 @@ class CreateRouteNpc
         $this->engagedAt = $engagedAt;
         $this->diedAt    = $diedAt;
         $this->coord     = $coord;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getEngagedAt(): Carbon
+    {
+        return $this->engagedAtCarbon ??
+            $this->engagedAtCarbon = Carbon::createFromFormat(DateTime::ATOM, $this->engagedAt);
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getDiedAt(): Carbon
+    {
+        return $this->diedAtCarbon ??
+            $this->diedAtCarbon = Carbon::createFromFormat(DateTime::ATOM, $this->diedAt);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueUid(): string
+    {
+        return sprintf('%d-%s', $this->npcId, $this->spawnUid);
     }
 
     /**

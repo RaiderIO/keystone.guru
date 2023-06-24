@@ -8,7 +8,7 @@ class CreateRouteBody
 {
     public CreateRouteChallengeMode $challengeMode;
 
-    /** @var Collection|CreateRouteNpc */
+    /** @var Collection|CreateRouteNpc[] */
     public Collection $npcs;
 
     public function __construct(CreateRouteChallengeMode $createRouteChallengeMode, Collection $npcs)

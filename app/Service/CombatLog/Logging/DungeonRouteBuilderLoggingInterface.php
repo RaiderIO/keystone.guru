@@ -6,22 +6,6 @@ use Exception;
 
 interface DungeonRouteBuilderLoggingInterface
 {
-    public function buildStart(string $toDateTimeString, string $eventName): void;
-
-    public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
-
-    public function buildNoFloorFoundYet(): void;
-
-    public function buildChallengeModeEnded(): void;
-
-    public function buildInCombatWithEnemy(string $guid): void;
-
-    public function buildUnitDiedNoLongerInCombat(string $guid): void;
-
-    public function buildUnitDiedNotInCombat(string $guid): void;
-
-    public function buildCreateNewPull(array $keys): void;
-
     public function createPullFindEnemyForGuidStart(string $guid): void;
 
     public function createPullEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void;
@@ -30,11 +14,9 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function createPullEnemyAttachedToKillZone(int $npcId, float $ingameX, float $ingameY): void;
 
-    public function buildCreateNewFinalPull(array $keys): void;
-
-    public function buildEnd(): void;
-
     public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
+
+    public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void;
 

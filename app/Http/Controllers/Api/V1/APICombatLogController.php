@@ -25,12 +25,8 @@ class APICombatLogController extends Controller
     {
         $validated = $request->validated();
 
-        dd(CreateRouteBody::createFromArray($validated));
-
-        $targetFile = $this->saveFile('combatlog', $validated['combatlog']);
-
-        $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes($targetFile);
-
-        return new DungeonRouteResource($dungeonRoutes->first());
+        return new DungeonRouteResource($combatLogDungeonRouteService->convertCreateRouteBodyToDungeonRoute(
+            CreateRouteBody::createFromArray($validated)
+        ));
     }
 }

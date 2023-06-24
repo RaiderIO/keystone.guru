@@ -7,6 +7,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -61,6 +62,15 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /** @var int X */
     const MAP_MAX_LNG = 384;
+
+
+    // Can map certain floors to others here, so that we can put enemies that are on their own floor (like some final
+    // bosses) and put them on the main floor without introducing a 2nd floor.
+    const UI_MAP_ID_MAPPING = [
+        // Court of Stars
+        762 => 761,
+        763 => 761,
+    ];
 
     protected $fillable = [
         'ui_map_id',
@@ -315,5 +325,16 @@ class Floor extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->dungeon_id;
+    }
+
+    /**
+     * @param int $uiMapId
+     * @return Floor
+     */
+    public static function findByUiMapId(int $uiMapId): Floor
+    {
+           return Floor
+                ::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
+                ->firstOrFail();
     }
 }
