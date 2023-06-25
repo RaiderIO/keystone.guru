@@ -5,8 +5,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
         super(options);
 
         this.sidebar = new Sidebar(options);
+        this.pullWorkBench = new PullWorkBench(this);
 
-        this._colorPickers = [];
         this._currentlyActiveColorPicker = null;
         this._newPullKillZone = null;
         this._draggable = null;
@@ -397,7 +397,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 killZoneMapObjectGroup.applyPullGradient();
             }
 
-            killZoneMapObjectGroup.massSave(['index', 'color'], function(){
+            killZoneMapObjectGroup.massSave(['index', 'color'], function () {
 
             });
         }
@@ -433,6 +433,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let self = this;
 
         this.sidebar.activate();
+
+        if (this.map.options.edit) {
+            this.pullWorkBench.activate();
+        }
 
         // Setup new pull button
         $(this.options.newKillZoneSelector).unbind('click').bind('click', this._newPullClicked.bind(this));

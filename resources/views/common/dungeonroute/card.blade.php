@@ -154,9 +154,9 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     <small class="text-muted">
                         {{ __('views/common.dungeonroute.card.by_author') }}
                         @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
-                        @if( $dungeonroute->avg_rating > 1 )
+                        @if( $dungeonroute->rating > 1 )
                             -
-                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->avg_rating])
+                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])
                         @endif
                         -
                         <span data-toggle="tooltip" title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">

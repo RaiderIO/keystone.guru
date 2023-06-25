@@ -56,7 +56,7 @@ class APIKillZoneController extends Controller
         if ($success) {
             // Only when the enemies are actually set
             if ($enemyIds !== null) {
-                $killZone->killzoneEnemies()->delete();
+                $killZone->killZoneEnemies()->delete();
 
                 // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
                 $validEnemyIds   = [];

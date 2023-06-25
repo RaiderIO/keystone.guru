@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $dungeon_route_id
  * @property int $floor_id
  * @property string $color
+ * @property string $description
  * @property int $index
  * @property double $lat
  * @property double $lng
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\DB;
  * @property Floor $floor
  *
  * @property Collection|int[] $enemies
- * @property Collection|KillZoneEnemy[] $killzoneEnemies
+ * @property Collection|KillZoneEnemy[] $killZoneEnemies
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -33,12 +34,37 @@ use Illuminate\Support\Facades\DB;
  */
 class KillZone extends Model
 {
-    public $visible = ['id', 'floor_id', 'color', 'lat', 'lng', 'index', 'enemies'];
+    public $visible = [
+        'id',
+        'floor_id',
+        'color',
+        'description',
+        'lat',
+        'lng',
+        'index',
+        'enemies',
+    ];
+
     protected $appends = ['enemies'];
-    protected $fillable = ['id', 'dungeon_route_id', 'floor_id', 'color', 'index', 'lat', 'lng', 'updated_at', 'created_at'];
+
+    protected $fillable = [
+        'id',
+        'dungeon_route_id',
+        'floor_id',
+        'color',
+        'description',
+        'index',
+        'lat',
+        'lng',
+        'updated_at',
+        'created_at',
+    ];
+
     protected $casts = [
         'floor_id' => 'integer',
         'index'    => 'integer',
+        'lat'      => 'float',
+        'lng'      => 'float',
     ];
 
     /**
@@ -76,7 +102,7 @@ class KillZone extends Model
     /**
      * @return HasMany
      */
-    public function killzoneEnemies(): HasMany
+    public function killZoneEnemies(): HasMany
     {
         return $this->hasMany(KillZoneEnemy::class);
     }
@@ -114,7 +140,7 @@ class KillZone extends Model
     {
         if (isset($this->floor_id) && $this->floor_id > 0) {
             return $this->floor;
-        } else if ($this->killzoneEnemies()->count() > 0) {
+        } else if ($this->killZoneEnemies()->count() > 0) {
             $floorTotals = [];
             foreach ($this->getEnemies() as $enemy) {
                 if (!isset($floorTotals[$enemy->floor_id])) {
@@ -156,6 +182,71 @@ class KillZone extends Model
 
             return ['lat' => $totalLat / $enemies->count(), 'lng' => $totalLng / $enemies->count()];
         }
+    }
+
+    /**
+     * @return array|null The coordinates of a rectangle that perfectly fits all enemies inside this pull.
+     */
+    public function getEnemiesBoundingBox(int $margin = 0): ?array
+    {
+        $enemies = $this->getEnemies();
+
+        if ($enemies->isEmpty()) {
+            return null;
+        }
+
+        $result = [
+            'latMin' => 999999,
+            'latMax' => -999999,
+            'lngMin' => 999999,
+            'lngMax' => -999999,
+        ];
+
+        foreach ($enemies as $enemy) {
+            if ($result['latMin'] > $enemy->lat) {
+                $result['latMin'] = $enemy->lat;
+            }
+            if ($result['latMax'] < $enemy->lat) {
+                $result['latMax'] = $enemy->lat;
+            }
+
+            if ($result['lngMin'] > $enemy->lng) {
+                $result['lngMin'] = $enemy->lng;
+            }
+            if ($result['lngMax'] < $enemy->lng) {
+                $result['lngMax'] = $enemy->lng;
+            }
+        }
+
+        if ($margin > 0) {
+            $result['latMin'] -= $margin;
+            $result['latMax'] += $margin;
+            $result['lngMin'] -= $margin;
+            $result['lngMax'] += $margin;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calculate the bounding box of all enemies that this pull kills, take the north edge of that bounding box
+     * and return the middle of that edge as a lat/lng.
+     *
+     * @param int $boundingBoxMargin
+     * @return array|null
+     */
+    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?array
+    {
+        $boundingBox = $this->getEnemiesBoundingBox($boundingBoxMargin);
+        if ($boundingBox === null) {
+            return null;
+        }
+
+        return [
+            // Max lat is at the top
+            'lat' => $boundingBox['latMax'],
+            'lng' => $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
+        ];
     }
 
     /**
@@ -234,7 +325,7 @@ class KillZone extends Model
 
         // Delete kill zone properly if it gets deleted
         static::deleting(function (KillZone $item) {
-            $item->killzoneEnemies()->delete();
+            $item->killZoneEnemies()->delete();
         });
     }
 }

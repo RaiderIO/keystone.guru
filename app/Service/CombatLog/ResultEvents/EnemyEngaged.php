@@ -12,17 +12,12 @@ use App\Logic\CombatLog\Guid\Creature;
  */
 class EnemyEngaged extends BaseResultEvent
 {
-    private Creature $guid;
-
     /**
      * @param AdvancedCombatLogEvent $baseEvent
-     * @param Creature $guid
      */
-    public function __construct(AdvancedCombatLogEvent $baseEvent, Creature $guid)
+    public function __construct(AdvancedCombatLogEvent $baseEvent)
     {
         parent::__construct($baseEvent);
-
-        $this->guid = $guid;
     }
 
     /**
@@ -41,6 +36,9 @@ class EnemyEngaged extends BaseResultEvent
      */
     public function getGuid(): Creature
     {
-        return $this->guid;
+        /** @var Creature $guid */
+        $guid = $this->getEngagedEvent()->getAdvancedData()->getInfoGuid();
+        
+        return $guid;
     }
 }

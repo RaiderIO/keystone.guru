@@ -74,7 +74,6 @@ return [
     'publish_state_title_world_with_link'   => 'Public with link',
     'publish_state_subtext_world_with_link' => 'Anyone with the link may see your route (Patreon only)',
 
-
     'publish_label'              => 'Publish',
     'unpublish_label'            => 'Unpublish',
     'add_remove_tag_label'       => 'Add/remove tags',
@@ -101,10 +100,10 @@ return [
 
     'select_category_label' => 'Select category...',
 
-    'show_details_label'     => 'Show details',
-    'add_kill_area_label'    => 'Add kill area',
-    'remove_kill_area_label' => 'Remove kill area',
-    'delete_killzone_label'  => 'Delete pull',
+    'pull_workbench_header_label'           => 'P:index',
+    'pull_workbench_add_kill_area_label'    => 'Add kill area',
+    'pull_workbench_remove_kill_area_label' => 'Remove kill area',
+    'pull_workbench_pull_description_label' => 'Pull :index description',
 
     'kill_zone_has_boss_label'               => 'Boss in pull',
     'kill_zone_has_awakened_label'           => 'Awakened enemy in pull',
@@ -173,7 +172,6 @@ return [
     'npc_type_label'                              => 'Type',
     'npc_class_label'                             => 'Class',
     'enemy_portrait_label'                        => 'Portrait',
-
 
     // Admin
     'object.deleted'                              => 'Objects deleted successfully.',
@@ -323,6 +321,9 @@ return [
     // Popups
     // Map Object
     'map_object_readonly_label'                          => 'This mapping version is read-only',
+    'map_object_category_general_label'                  => 'General',
+    'map_object_category_legacy_label'                   => 'Legacy',
+    'map_object_category_advanced_label'                 => 'Advanced',
 
     'mapicon_faction_select_default_label'                          => 'Select faction',
     'mapicon_teeming_select_default_label'                          => 'Select teeming',
@@ -354,7 +355,7 @@ return [
     'enemy_faction_label'                                           => 'Faction',
     'enemy_teeming_label'                                           => 'Teeming',
     'enemy_npc_id_label'                                            => 'Npc',
-    'enemy_mdt_id_label'                                            => 'MDT ID (optional)',
+    'enemy_mdt_id_label'                                            => 'MDT ID',
     'enemy_mdt_npc_id_label'                                        => 'MDT Npc (optional)',
     'enemy_seasonal_type_label'                                     => 'Seasonal type',
     'enemy_seasonal_type_select_default_label'                      => 'Not set',
@@ -368,6 +369,8 @@ return [
     'enemy_dungeon_difficulty_label'                                => 'Dungeon difficulty',
     'enemy_required_label'                                          => 'Required',
     'enemy_skippable_label'                                         => 'Skippable',
+    'enemy_kill_priority_label'                                     => 'Kill priority',
+    'enemy_kill_priority_select_default_label'                      => 'Select kill priority',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',
     'enemy_mdt_npc_id_select_default_label'                         => 'Select NPC',
 
@@ -375,7 +378,6 @@ return [
     'admin_enemy_pack_faction_label'                                => 'Faction',
     'admin_enemy_pack_teeming_label'                                => 'Teeming',
     'admin_enemy_pack_label_label'                                  => 'Label',
-
 
     // Brushline
     'brushline_color_label'                                         => 'Color',

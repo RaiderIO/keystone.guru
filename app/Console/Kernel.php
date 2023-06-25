@@ -6,6 +6,7 @@ use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
+use App\Console\Commands\CombatLog\OutputCreateRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
 use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\Database\Backup;
@@ -44,6 +45,7 @@ use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
+use App\Logic\Scheduler\UpdateDungeonRouteRating;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -71,6 +73,7 @@ class Kernel extends ConsoleKernel
         ExtractUiMapIds::class,
         CreateDungeonRoutes::class,
         OutputResultEvents::class,
+        OutputCreateRouteJson::class,
 
         // Database
         Backup::class,
@@ -147,6 +150,7 @@ class Kernel extends ConsoleKernel
         $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
+        $schedule->call(new UpdateDungeonRouteRating)->everyFifteenMinutes();
         $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 

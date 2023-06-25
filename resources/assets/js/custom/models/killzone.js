@@ -42,6 +42,7 @@ class KillZone extends MapObject {
         this.floor_id = null;
         this.label = 'KillZone';
         this.color = '#000'; // This is just a default that should never be used anywhere
+        this.description = '';
         this.index = 0;
         // May be changed based on the amount of enemies in our pull (see redrawConnectionsToEnemies())
         this.indexLabelDirection = 'center';
@@ -122,6 +123,12 @@ class KillZone extends MapObject {
                 type: 'color',
                 setter: this._setColor.bind(this),
                 default: this._getColorDefault.bind(this)
+            }),
+            new Attribute({
+                name: 'description',
+                type: 'text',
+                edit: false, // Not directly changeable by user
+                default: null
             }),
             new Attribute({
                 name: 'lat',

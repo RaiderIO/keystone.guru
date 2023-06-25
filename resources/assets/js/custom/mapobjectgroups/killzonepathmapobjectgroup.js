@@ -135,8 +135,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
                             centeroidTarget = killZoneCenteroid;
                         }
                     } else if (previousKillZoneOnCurrentFloor) {
-
-                        let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], killZoneCenteroid);
+                        let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], previousKillZoneCenteroid);
                         // It can be null if someone skips a floor and there's no direct connection from previous to current floor
                         if (closestMarker !== null) {
                             centeroidSource = previousKillZoneCenteroid;

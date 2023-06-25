@@ -12,7 +12,6 @@ use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
-use App\Http\Requests\DungeonRoute\APIDungeonRouteMDTExportFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
 use App\Http\Requests\PublishFormRequest;
@@ -25,7 +24,6 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\Exception\ImportWarning;
-use App\Logic\MDT\IO\ExportString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteFavorite;
@@ -72,7 +70,7 @@ class APIDungeonRouteController extends Controller
      * @return mixed
      * @throws Exception
      */
-    function list(Request $request)
+    public function list(Request $request)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -112,8 +110,8 @@ class APIDungeonRouteController extends Controller
         if (array_search('enough_enemy_forces', $requirements) !== false) {
             // Clear group by
             $routes = $routes
-                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)');
+                ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)');
         }
 
         $tags = $request->get('tags', []);
@@ -216,7 +214,7 @@ class APIDungeonRouteController extends Controller
      * @return Response|string
      * @throws Exception
      */
-    function htmlsearch(APIDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService)
+    public function htmlsearch(APIDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService)
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -307,8 +305,8 @@ class APIDungeonRouteController extends Controller
 
         // Enemy forces
         if ($request->has('enemy_forces') && (int)$request->get('enemy_forces') === 1) {
-            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required_teeming,
-                                    dungeon_routes.enemy_forces > mapping_versions.enemy_forces_required)');
+            $query->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
+                                    dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)');
         }
 
         // User handling
@@ -356,7 +354,7 @@ class APIDungeonRouteController extends Controller
      * @param ExpansionServiceInterface $expansionService
      * @return Response|string
      */
-    function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
+    public function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
     {
         $result = collect();
 
@@ -441,7 +439,7 @@ class APIDungeonRouteController extends Controller
      * @return DungeonRoute
      * @throws AuthorizationException
      */
-    function store(
+    public function store(
         APIDungeonRouteFormRequest $request,
         SeasonService              $seasonService,
         ExpansionServiceInterface  $expansionService,
@@ -471,7 +469,7 @@ class APIDungeonRouteController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute)
+    public function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute)
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -492,7 +490,7 @@ class APIDungeonRouteController extends Controller
      * @return Response
      * @throws Exception
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute)
+    public function delete(Request $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('delete', $dungeonRoute);
 
@@ -510,7 +508,7 @@ class APIDungeonRouteController extends Controller
      * @return Response
      * @throws Exception
      */
-    function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute)
+    public function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('publish', $dungeonRoute);
 
@@ -537,7 +535,7 @@ class APIDungeonRouteController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team)
+    public function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team)
     {
         $this->authorize('clone', $dungeonRoute);
 
@@ -561,7 +559,7 @@ class APIDungeonRouteController extends Controller
      * @return Application|ResponseFactory|Response
      * @throws AuthorizationException
      */
-    function migrateToSeasonalType(
+    public function migrateToSeasonalType(
         ExpansionServiceInterface $expansionService,
         Request                   $request,
         DungeonRoute              $dungeonRoute,
@@ -580,7 +578,7 @@ class APIDungeonRouteController extends Controller
      * @return array
      * @throws Exception
      */
-    function rate(Request $request, DungeonRoute $dungeonRoute)
+    public function rate(Request $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('rate', $dungeonRoute);
 
@@ -594,9 +592,8 @@ class APIDungeonRouteController extends Controller
             $dungeonRouteRating->save();
         }
 
-        $dungeonRoute->unsetRelation('ratings');
         DungeonRoute::dropCaches($dungeonRoute->id);
-        return ['new_avg_rating' => $dungeonRoute->getAvgRatingAttribute()];
+        return ['new_rating' => $dungeonRoute->updateRating()];
     }
 
     /**
@@ -605,7 +602,7 @@ class APIDungeonRouteController extends Controller
      * @return array
      * @throws Exception
      */
-    function rateDelete(Request $request, DungeonRoute $dungeonRoute)
+    public function rateDelete(Request $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('rate', $dungeonRoute);
 
@@ -619,7 +616,7 @@ class APIDungeonRouteController extends Controller
 
         $dungeonRoute->unsetRelation('ratings');
         DungeonRoute::dropCaches($dungeonRoute->id);
-        return ['new_avg_rating' => $dungeonRoute->getAvgRatingAttribute()];
+        return ['new_rating' => $dungeonRoute->updateRating()];
     }
 
     /**
@@ -628,7 +625,7 @@ class APIDungeonRouteController extends Controller
      * @return Response
      * @throws Exception
      */
-    function favorite(Request $request, DungeonRoute $dungeonRoute)
+    public function favorite(Request $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('favorite', $dungeonRoute);
 
@@ -647,7 +644,7 @@ class APIDungeonRouteController extends Controller
      * @return Response
      * @throws Exception
      */
-    function favoriteDelete(Request $request, DungeonRoute $dungeonRoute)
+    public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('favorite', $dungeonRoute);
 
@@ -668,7 +665,7 @@ class APIDungeonRouteController extends Controller
      * @return array
      * @throws Exception
      */
-    function data(Request $request, string $publickey)
+    public function data(Request $request, string $publickey)
     {
         // Init the fields we should get for this request
         $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
@@ -730,7 +727,7 @@ class APIDungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws Throwable
      */
-    function mdtExport(Request                         $request,
+    public function mdtExport(Request                         $request,
                        MDTExportStringServiceInterface $mdtExportStringService,
                        DungeonRoute                    $dungeonRoute)
     {
@@ -772,7 +769,7 @@ class APIDungeonRouteController extends Controller
      * @return array
      * @throws AuthorizationException
      */
-    function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
+    public function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
     {
         $this->authorize('view', $dungeonRoute);
 
@@ -791,7 +788,7 @@ class APIDungeonRouteController extends Controller
      * @param DungeonRoute $dungeonroute
      * @return Response
      */
-    function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
+    public function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
     {
         $thumbnailService->queueThumbnailRefresh($dungeonroute);
 

@@ -22,11 +22,6 @@ class RowElementKillZone extends RowElement {
         /** @type Pickr|null */
         this.colorPicker = null;
 
-        getState().getDungeonMap().register('map:mapstatechanged', this, function (mapStateChangedEvent) {
-            if (mapStateChangedEvent.data.previousMapState instanceof AddKillZoneMapState) {
-                self.refresh();
-            }
-        });
         this.killZone.register('killzone:changed', this, this.updateText.bind(this));
     }
 
@@ -41,34 +36,6 @@ class RowElementKillZone extends RowElement {
             'color': this.killZone.color, // For viewing
             'has_kill_area': this.killZone.hasKillArea() ? '1' : '0'
         };
-    }
-
-    /**
-     * Initializes a color picker.
-     * @returns {*}
-     * @private
-     */
-    _initColorPicker() {
-        console.assert(this instanceof RowElementKillZone, 'this is not a RowElementKillZone', this);
-
-        let self = this;
-
-        // Simple example, see optional options for more configuration.
-        return Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-            el: `#map_killzonessidebar_killzone_${self.killZone.id}_color`,
-            default: self.killZone.color
-        })).on('save', (color, instance) => {
-            // Apply the new color
-            let newColor = '#' + color.toHEXA().join('');
-            // Only save when the color is valid
-            if (self.killZone.color !== newColor && newColor.length === 7) {
-                self.killZone.color = newColor;
-                self.killZone.save();
-            }
-
-            // Reset ourselves
-            instance.hide();
-        });
     }
 
     /**
@@ -143,48 +110,6 @@ class RowElementKillZone extends RowElement {
     }
 
     /**
-     * Called whenever the trash icon is clicked and the killzone should be deleted
-     * @private
-     */
-    _deleteKillZoneClicked() {
-        let self = this;
-
-        let trashIcon = 'fa-trash';
-        let loadingIcon = 'fa-circle-notch fa-spin';
-
-        // Prevent double deletes if user presses the button twice in a row
-        if ($(self).find('i').hasClass(trashIcon)) {
-            let selectedKillZoneId = parseInt($(this).closest('.map_killzonessidebar_killzone').data('id'));
-            let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-            let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
-
-            $(this).find('i').removeClass(trashIcon).addClass(loadingIcon);
-
-            killZone.register('object:deleted', '123123', function () {
-                showSuccessNotification(lang.get('messages.object.deleted'));
-
-                // Bit hacky?
-                if (killZone.isKillAreaVisible()) {
-                    getState().getDungeonMap().drawnLayers.removeLayer(killZone.layer);
-                    getState().getDungeonMap().editableLayers.removeLayer(killZone.layer);
-                }
-
-                killZone.unregister('object:deleted', '123123');
-            });
-            killZone.register('object:changed', '123123', function () {
-                if (!killZone.synced) {
-                    // Failed to delete
-                    $(self).find('i').addClass(trashIcon).removeClass(loadingIcon)
-                }
-
-                killZone.unregister('object:changed', '123123');
-            });
-
-            killZone.delete();
-        }
-    }
-
-    /**
      * @inheritDoc
      */
     updateText() {
@@ -248,6 +173,7 @@ class RowElementKillZone extends RowElement {
             .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_shrouded_zul_gamux:not(.draggable--original)`).toggle(hasShroudedZulGamux)
             .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_description:not(.draggable--original)`).text(this.killZone.description);
 
         // $(`#map_killzonessidebar_killzone_${this.killZone.id}_grip:not(.draggable--original)`).css('color', this.killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);
@@ -356,43 +282,6 @@ class RowElementKillZone extends RowElement {
         $row.toggleClass('bg-success', overpulledNpcs.length > 0);
         $row.toggleClass('bg-danger', obsoleteNpcs.length > 0);
 
-        if (this.killZonesSidebar.options.edit) {
-            /**
-             * Code to prevent calling refreshTooltips too often
-             */
-            let $killAreaLabel = $(`#map_killzonessidebar_killzone_${this.killZone.id}_kill_area_label`);
-            // We are displaying 'has kill area' now (somehow using .data() does not work at all)
-            let $hasKillArea = parseInt($killAreaLabel.attr('data-haskillarea'));
-
-            let resultMessage = '';
-            // Set and is currently 0
-            if (this.killZone.hasKillArea()) {
-                // It was not, update it
-                resultMessage = lang.get('messages.remove_kill_area_label');
-            } else {
-                // Default
-                resultMessage = lang.get('messages.add_kill_area_label');
-            }
-
-            // Write result regardless
-            // $killAreaLabel.attr('data-haskillarea', killZone.hasKillArea() ? '1' : '0');
-            // If something was changed
-            if (!this.initialized || $hasKillArea !== (this.killZone.hasKillArea() ? 1 : 0)) {
-                $killAreaLabel.attr('title', resultMessage).refreshTooltips();
-            }
-
-
-            if (this.colorPicker !== null) {
-                // SetColor is slow, check if we really need to set it
-                let oldColor = '#' + this.colorPicker.getColor().toHEXA().join('');
-                if (oldColor !== this.killZone.color) {
-                    this.colorPicker.setColor(this.killZone.color);
-                }
-            } else {
-                console.warn('Color picker not found!', killZone, killZone.id);
-            }
-        }
-
         this.initialized = true;
     }
 
@@ -409,49 +298,10 @@ class RowElementKillZone extends RowElement {
         $(`#map_killzonessidebar_killzone_${self.killZone.id}.selectable`).unbind('click').bind('click', this._killZoneRowClicked);
 
         if (this.killZonesSidebar.options.edit) {
-            $(`#map_killzonessidebar_killzone_${self.killZone.id}_color`).unbind('click').bind('click', function (clickedEvent) {
-                // Only one at a time
-                let currentlyActiveColorPicker = self.killZonesSidebar.getCurrentlyActiveColorPicker();
-                if (currentlyActiveColorPicker !== null) {
-                    currentlyActiveColorPicker.hide();
-                }
-
-                // Show the new color picker
-                self.killZonesSidebar.setCurrentlyActiveColorPicker(self.colorPicker);
-                self.colorPicker.show();
+            $(`#map_killzonessidebar_killzone_${self.killZone.id}_edit`).unbind('click').bind('click', function (clickedEvent) {
+                // User wants to edit this pull
+                self.killZonesSidebar.pullWorkBench.editPull(self.killZone.id);
             });
-            let $hasKillZone = $(`#map_killzonessidebar_killzone_${self.killZone.id}_has_killzone`).unbind('click').bind('click', function () {
-                // Inject the selectable in the _selectKillZone call to simulate selecting the actual killzone
-                self._selectKillZoneByMapObject(self.killZone);
-
-                if (self.killZone.layer === null) {
-                    getState().getDungeonMap().setMapState(
-                        new AddKillZoneMapState(getState().getDungeonMap(), self.killZone)
-                    );
-                } else {
-                    // @TODO This entire piece of code is hacky, should be done differently eventually
-                    getState().getDungeonMap().drawnLayers.removeLayer(self.killZone.layer);
-                    getState().getDungeonMap().editableLayers.removeLayer(self.killZone.layer);
-
-                    let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-                    // It's been removed; unset it
-                    killZoneMapObjectGroup.setLayerToMapObject(null, self.killZone);
-
-                    self.killZone.floor_id = null;
-                    // Update its visuals
-                    self.killZone.redrawConnectionsToEnemies();
-                    self.killZone.save();
-                }
-            });
-            // If we have a killzone layer
-            if (self.killZone.hasKillArea()) {
-                // Was inactive (always starts inactive), is active now
-                $hasKillZone.button('toggle');
-            }
-            $(`#map_killzonessidebar_killzone_${self.killZone.id}_delete`).unbind('click').bind('click', this._deleteKillZoneClicked);
-            this.colorPicker = this._initColorPicker();
-            // Small hack to get it to look better
-            $(`#map_killzonessidebar_killzone_${self.killZone.id} .pcr-button`).addClass('h-100 w-100');
         }
     }
 

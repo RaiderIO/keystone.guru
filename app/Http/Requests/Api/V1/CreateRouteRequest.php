@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use DateTime;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
 
 class CreateRouteRequest extends FormRequest
 {
@@ -25,8 +27,23 @@ class CreateRouteRequest extends FormRequest
      */
     public function rules(): array
     {
+        $dateFormat = sprintf('date_format:"%s"', DateTime::ATOM);
         return [
-            'combatlog' => 'string',
+            'challengeMode.start'      => $dateFormat,
+            'challengeMode.end'        => $dateFormat,
+            'challengeMode.durationMs' => 'int',
+            'challengeMode.mapId'     => Rule::exists('dungeons', 'map_id'),
+            'challengeMode.level'      => 'int',
+            'challengeMode.affixes'    => 'array',
+            'challengeMode.affixes.*'  => Rule::exists('affixes', 'affix_id'),
+            'npcs'                     => 'array',
+            'npcs.npcId'               => Rule::exists('npcs', 'id'),
+            'npcs.spawnUid'            => 'string|max:10',
+            'npcs.engagedAt'           => $dateFormat,
+            'npcs.diedAt'              => $dateFormat,
+            'npcs.coord.x'             => 'float',
+            'npcs.coord.y'             => 'float',
+            'npcs.coord.uiMapId'       => Rule::exists('floors', 'ui_map_id'),
         ];
     }
 

@@ -9,12 +9,14 @@
 namespace App\Logic\MDT\Exception;
 
 
+use Illuminate\Contracts\Support\Arrayable;
+
 /**
  * @package App\Logic\MDT\Exception
  * @author Wouter
  * @since 05/01/2019
  */
-class ImportWarning extends \Exception
+class ImportWarning extends \Exception implements Arrayable
 {
     private $_category;
     private $_data;

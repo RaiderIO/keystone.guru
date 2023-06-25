@@ -30,8 +30,10 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
 class Brushline extends Model
 {
     public $visible = ['id', 'floor_id', 'polyline'];
-    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id'];
+    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
     public $with = ['polyline'];
+
+    public $timestamps = true;
 
     /**
      * Get the dungeon route that this brushline is attached to.
