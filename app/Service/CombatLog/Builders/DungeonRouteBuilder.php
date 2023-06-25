@@ -3,21 +3,15 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
-use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Logic\Utils\MathUtils;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
-use App\Models\KillZone;
-use App\Models\KillZoneEnemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
-use App\Service\CombatLog\ResultEvents\BaseResultEvent;
-use App\Service\CombatLog\ResultEvents\EnemyEngaged;
-use App\Service\CombatLog\ResultEvents\EnemyKilled;
-use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use Exception;
 use Illuminate\Support\Collection;
 

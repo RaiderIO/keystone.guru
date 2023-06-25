@@ -6,5 +6,13 @@
         "name": "Bone Shield",
         "schools_mask": 0,
         "aura": 1
+    },
+    {
+        "id": 397744,
+        "dispel_type": "Magic",
+        "icon_name": "ability_evoker_furyoftheaspects",
+        "name": "Fury of the Aspects",
+        "schools_mask": 0,
+        "aura": 0
     }
 ]

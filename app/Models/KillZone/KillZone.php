@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\KillZone;
 
+use App\Models\Affix;
+use App\Models\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\Floor;
+use App\Models\Spell;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +32,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @property Collection|int[] $enemies
  * @property Collection|KillZoneEnemy[] $killZoneEnemies
+ * @property Collection|KillZoneSpell[] $killZoneSpells
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -67,12 +74,23 @@ class KillZone extends Model
         'lng'      => 'float',
     ];
 
+    private Collection $enemiesCache;
+
+    /**
+     * @param Collection $enemyIds
+     * @return void
+     */
+    public function setEnemiesCache(Collection $enemyIds): void
+    {
+        $this->enemiesCache = $enemyIds;
+    }
+
     /**
      * @return Collection
      */
     public function getEnemiesAttribute(): Collection
     {
-        return Enemy::select('enemies.id')
+        return $this->enemiesCache ?? Enemy::select('enemies.id')
             ->join('kill_zone_enemies', function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
@@ -105,6 +123,22 @@ class KillZone extends Model
     public function killZoneEnemies(): HasMany
     {
         return $this->hasMany(KillZoneEnemy::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function killZoneSpells(): HasMany
+    {
+        return $this->hasMany(KillZoneSpell::class);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function spells(): HasManyThrough
+    {
+        return $this->hasManyThrough(Spell::class, KillZoneSpell::class);
     }
 
     /**

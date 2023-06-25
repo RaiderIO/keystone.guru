@@ -37,71 +37,55 @@ class MDTImportController extends Controller
         $validated = $request->validated();
         $string    = $validated['import_string'];
 
-        try {
+//        try {
             $warnings     = new Collection();
-            $dungeonRoute = $mdtImportStringService
+            $mdtImportDetails = $mdtImportStringService
                 ->setEncodedString($string)
-                ->getDungeonRoute($warnings, false, false);
+                ->getDetails($warnings);
 
-            $affixes = [];
-            foreach ($dungeonRoute->affixes as $affixGroup) {
-                /** @var $affixGroup AffixGroup */
-                $affixes[] = $affixGroup->getTextAttribute();
-            }
+//            $result = [
+//                'dungeon'                    => $dungeonRoute->dungeon !== null ? __($dungeonRoute->dungeon->name) : __('controller.mdtimport.unknown_dungeon'),
+//                'affixes'                    => $affixes,
+//                'pulls'                      => $dungeonRoute->killZones->count(),
+//                'paths'                      => $dungeonRoute->paths->count(),
+//                'lines'                      => $dungeonRoute->brushlines->count(),
+//                'notes'                      => $dungeonRoute->mapicons->count(),
+//                'enemy_forces'               => $dungeonRoute->enemy_forces ?? 0,
+//                'enemy_forces_max'           => $dungeonRoute->teeming ? $dungeonRoute->mappingVersion->enemy_forces_required_teeming : $dungeonRoute->mappingVersion->enemy_forces_required,
+//                'warnings'                   => $warningResult,
+//            ];
 
-            $warningResult = [];
-            foreach ($warnings as $warning) {
-                /** @var $warning ImportWarning */
-                $warningResult[] = $warning->toArray();
-            }
+//            // Siege of Boralus faction but hide it otherwise
+//            if ($dungeonRoute->dungeon->isFactionSelectionRequired()) {
+//                $result['faction'] = __($dungeonRoute->faction->name);
+//            }
 
-            $currentSeason               = $seasonService->getCurrentSeason($dungeonRoute->dungeon->expansion);
-            $currentAffixGroupForDungeon = optional($currentSeason)->getCurrentAffixGroup();
-
-            $result = [
-                'dungeon'                    => $dungeonRoute->dungeon !== null ? __($dungeonRoute->dungeon->name) : __('controller.mdtimport.unknown_dungeon'),
-                'affixes'                    => $affixes,
-                'has_this_weeks_affix_group' => $currentAffixGroupForDungeon !== null && $dungeonRoute->affixes->pluck('id')->search($currentAffixGroupForDungeon->id) !== false,
-                'pulls'                      => $dungeonRoute->killZones->count(),
-                'paths'                      => $dungeonRoute->paths->count(),
-                'lines'                      => $dungeonRoute->brushlines->count(),
-                'notes'                      => $dungeonRoute->mapicons->count(),
-                'enemy_forces'               => $dungeonRoute->enemy_forces ?? 0,
-                'enemy_forces_max'           => $dungeonRoute->teeming ? $dungeonRoute->mappingVersion->enemy_forces_required_teeming : $dungeonRoute->mappingVersion->enemy_forces_required,
-                'warnings'                   => $warningResult,
-            ];
-
-            // Siege of Boralus faction but hide it otherwise
-            if ($dungeonRoute->dungeon->isFactionSelectionRequired()) {
-                $result['faction'] = __($dungeonRoute->faction->name);
-            }
-
-            return $result;
-        } catch (InvalidMDTString $ex) {
-            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
-        } catch (Exception $ex) {
-            // Different message based on our deployment settings
-            if (config('app.debug')) {
-                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
-            } else {
-                $message = __('controller.admintools.error.invalid_mdt_string');
-            }
-
-            // We're not interested if the string was 100% not an MDT string - it will never work then
-            if (isValidBase64($string)) {
-                report($ex);
-            }
-
-            Log::error($ex->getMessage());
-            return abort(400, $message);
-        } catch (Throwable $error) {
-            if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
-            }
-            Log::error($error->getMessage());
-
-            throw $error;
-        }
+            return $mdtImportDetails;
+//        } catch (InvalidMDTString $ex) {
+//            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+//        } catch (Exception $ex) {
+//            // Different message based on our deployment settings
+//            if (config('app.debug')) {
+//                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
+//            } else {
+//                $message = __('controller.admintools.error.invalid_mdt_string');
+//            }
+//
+//            // We're not interested if the string was 100% not an MDT string - it will never work then
+//            if (isValidBase64($string)) {
+//                report($ex);
+//            }
+//
+//            Log::error($ex->getMessage());
+//            return abort(400, $message);
+//        } catch (Throwable $error) {
+//            if ($error->getMessage() === "Class 'Lua' not found") {
+//                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
+//            }
+//            Log::error($error->getMessage());
+//
+//            throw $error;
+//        }
     }
 
     /**

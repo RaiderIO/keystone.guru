@@ -6,7 +6,7 @@ use App\Logic\SimulationCraft\Models\MountableAreaIntersection;
 use App\Logic\Utils\MathUtils;
 use App\Models\Enemy;
 use App\Models\Floor;
-use App\Models\KillZone;
+use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Collection;

@@ -2,23 +2,24 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
- * @property int $id
- * @property string $icon_name
- * @property string $name
- * @property string $dispel_type
- * @property int $schools_mask
+ * @property int     $id
+ * @property string  $icon_name
+ * @property string  $name
+ * @property string  $dispel_type
+ * @property int     $schools_mask
  * @property boolean $aura
  *
- * @property string $icon_url
+ * @property string  $icon_url
  *
  * @mixin Eloquent
  */
-class Spell extends CacheModel
+class Spell extends CacheModel implements MappingModelInterface
 {
     const SCHOOL_PHYSICAL = 1;
     const SCHOOL_HOLY     = 2;
@@ -76,5 +77,14 @@ class Spell extends CacheModel
     public function getIconUrlAttribute()
     {
         return url(sprintf('/images/spells/%s.png', $this->icon_name));
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDungeonId(): ?int
+    {
+        // Spells aren't tied to a specific dungeon, but they're part of the mapping
+        return 0;
     }
 }
