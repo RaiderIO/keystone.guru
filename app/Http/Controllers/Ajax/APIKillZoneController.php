@@ -91,7 +91,7 @@ class APIKillZoneController extends Controller
 
             // May be null for mass request
             if ($spellIds !== null) {
-                $killZone->spells()->delete();
+                $killZone->killZoneSpells()->delete();
 
                 $spellsAttributes = [];
                 foreach ($spellIds as $spellId) {
