@@ -20,6 +20,8 @@
         "pull_gradient": "",
         "pull_gradient_apply_always": 0,
         "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
         "created_at": "2022-08-27T10:26:29+00:00",
         "updated_at": "2023-04-12T10:27:41+00:00",
         "playerspecializations": [],
@@ -37,6 +39,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 1,
@@ -54,6 +57,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 2,
@@ -70,6 +74,7 @@
             {
                 "floor_id": null,
                 "color": "#3e9eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 3,
@@ -88,6 +93,7 @@
             {
                 "floor_id": null,
                 "color": "#fffb3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 4,
@@ -99,6 +105,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 5,
@@ -116,6 +123,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 6,
@@ -134,6 +142,7 @@
             {
                 "floor_id": null,
                 "color": "#3effff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 7,
@@ -171,6 +180,7 @@
             {
                 "floor_id": null,
                 "color": "#ff9b3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 8,
@@ -181,6 +191,7 @@
             {
                 "floor_id": null,
                 "color": "#3e3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 9,
@@ -199,6 +210,7 @@
             {
                 "floor_id": null,
                 "color": "#a1ff3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 10,
@@ -221,6 +233,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 11,
@@ -235,6 +248,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 12,
@@ -251,6 +265,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 13,
@@ -265,6 +280,7 @@
             {
                 "floor_id": null,
                 "color": "#3e9eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 14,
@@ -278,6 +294,7 @@
             {
                 "floor_id": null,
                 "color": "#fffb3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 15,
@@ -292,6 +309,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 16,
@@ -302,6 +320,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 17,
@@ -318,6 +337,7 @@
             {
                 "floor_id": null,
                 "color": "#3effff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 18,
@@ -338,6 +358,7 @@
             {
                 "floor_id": null,
                 "color": "#ff9b3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 19,
@@ -357,6 +378,7 @@
             {
                 "floor_id": null,
                 "color": "#3e3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 20,
@@ -371,6 +393,7 @@
             {
                 "floor_id": null,
                 "color": "#a1ff3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 21,
@@ -383,6 +406,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3eff",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 22,
@@ -397,6 +421,7 @@
             {
                 "floor_id": null,
                 "color": "#3eff9e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 23,
@@ -410,6 +435,7 @@
             {
                 "floor_id": null,
                 "color": "#ff3e3e",
+                "description": null,
                 "lat": null,
                 "lng": null,
                 "index": 24,

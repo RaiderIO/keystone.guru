@@ -18,7 +18,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -149.25071565857,
-        "lng": 183.68590140398
+        "lng": 183.68590140398,
+        "kill_priority": null
     },
     {
         "id": 7197,
@@ -39,7 +40,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -145.5561565277,
-        "lng": 189.74876767002
+        "lng": 189.74876767002,
+        "kill_priority": null
     },
     {
         "id": 7198,
@@ -60,7 +62,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -134.5198452778,
-        "lng": 193.585425229
+        "lng": 193.585425229,
+        "kill_priority": null
     },
     {
         "id": 7199,
@@ -81,7 +84,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -139.25645954814,
-        "lng": 202.86918919888
+        "lng": 202.86918919888,
+        "kill_priority": null
     },
     {
         "id": 7200,
@@ -102,7 +106,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -133.43042399562,
-        "lng": 208.6952247514
+        "lng": 208.6952247514,
+        "kill_priority": null
     },
     {
         "id": 7201,
@@ -123,7 +128,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -128.55171129716,
-        "lng": 189.60666924191
+        "lng": 189.60666924191,
+        "kill_priority": null
     },
     {
         "id": 8489,
@@ -144,7 +150,8 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -62.841564250559,
-        "lng": 174.66985968856
+        "lng": 174.66985968856,
+        "kill_priority": null
     },
     {
         "id": 10508,
@@ -165,6 +172,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -68.229400398334,
-        "lng": 177.15703963076
+        "lng": 177.15703963076,
+        "kill_priority": null
     }
 ]
