@@ -13,15 +13,27 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
 
+    /** @var Collection|CombatLogParserInterface[] */
+    private Collection $filters;
+
     private SpecialEventsFilter $specialEventsFilter;
 
     private CombatFilter $combatFilter;
+
+    private SpellFilter $spellFilter;
 
     public function __construct()
     {
         $this->resultEvents        = collect();
         $this->specialEventsFilter = new SpecialEventsFilter($this->resultEvents);
         $this->combatFilter        = new CombatFilter($this->resultEvents);
+        $this->spellFilter         = new SpellFilter($this->resultEvents);
+
+        $this->filters = collect([
+            $this->specialEventsFilter,
+            $this->combatFilter,
+            $this->spellFilter,
+        ]);
     }
 
     /**
@@ -44,11 +56,13 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        $specialEventsFilterResult = $this->specialEventsFilter->parse($combatLogEvent, $lineNr);
+        $result = false;
 
-        $combatFilterResult = $this->combatFilter->parse($combatLogEvent, $lineNr);
+        foreach ($this->filters as $filter) {
+            $result = $filter->parse($combatLogEvent, $lineNr) || $result;
+        }
 
-        return $specialEventsFilterResult || $combatFilterResult;
+        return $result;
     }
 
     /**
@@ -56,8 +70,7 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
-        return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent)
-        {
+        return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
             return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs();
         });
     }

@@ -827,7 +827,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         // Create a dungeon route
         $dungeonRoute = DungeonRoute::create([
-            'author_id'          => $sandbox ? -1 : Auth::id(),
+            'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
 
