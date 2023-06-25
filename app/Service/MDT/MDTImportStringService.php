@@ -266,9 +266,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     );
                 }
 
+                // If the pull never contained any enemies at all, completely skip it
+                if ($totalEnemiesSelected === 0) {
+                    continue;
+                }
+
                 // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
                 // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
-                if (!$seasonalIndexSkip && $totalEnemiesSelected > 0 && $totalEnemiesMatched === 0) {
+                if (!$seasonalIndexSkip && $totalEnemiesMatched === 0) {
                     throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
                         __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
                         ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
