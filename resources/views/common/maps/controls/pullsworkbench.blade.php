@@ -19,16 +19,16 @@
         </div>
     </div>
 
-    <div class="row no-gutters pull_workbench_row">
-        <div class="col">
-            <div data-toggle="tooltip"
-                 title="{{ __('views/common.maps.controls.pullsworkbench.spells') }}">
-                <button id="map_killzonessidebar_killzone_spells" class="btn btn-primary">
-                    <i class="fas fa-magic"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+{{--    <div class="row no-gutters pull_workbench_row">--}}
+{{--        <div class="col">--}}
+{{--            <div data-toggle="tooltip"--}}
+{{--                 title="{{ __('views/common.maps.controls.pullsworkbench.spells') }}">--}}
+{{--                <button id="map_killzonessidebar_killzone_spells" class="btn btn-primary">--}}
+{{--                    <i class="fas fa-magic"></i>--}}
+{{--                </button>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
     <div class="row no-gutters pull_workbench_row">
         <div class="col">

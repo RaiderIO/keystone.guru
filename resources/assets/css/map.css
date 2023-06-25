@@ -336,11 +336,8 @@ html, body, #map, #app, .wrapper {
 #pulls_sidebar .pull_workbench {
     background-color: #2E2E2E;
     left: -54px;
-    /*padding: 10px 15px;*/
     position: absolute;
     top: 130px;
-    width: 54px;
-    height: 304px;
 }
 
 /* Make the selection fill the width of the parent */
