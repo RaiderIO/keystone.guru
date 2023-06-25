@@ -203,7 +203,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseValuePulls(
         ImportStringPulls $importStringPulls
-    ): ImportStringPulls {
+    ): ImportStringPulls
+    {
         $floors = $importStringPulls->getDungeon()->floors;
         /** @var Collection|Enemy[] $enemies */
         $enemies = $importStringPulls->getMappingVersion()->enemies->each(function (Enemy $enemy) {
@@ -240,6 +241,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $totalEnemiesSelected = 0;
             // The amount of enemies that we actually matched with
             $totalEnemiesMatched = 0;
+            // If the pull was empty because all enemies in it were skipped based on seasonal index
+            $seasonalIndexSkip = false;
             // Keeps track of the amount of prideful enemies to add, a pull can in theory require us to add multiple
             // But mostly since we add them in the center in the pack, we need to know all coordinates of the pack enemies
             // first before we can place the prideful enemies
@@ -247,18 +250,28 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             try {
                 // For each NPC that is killed in this pull (and their clones)
-                foreach ($pull as $pullKey => $pullValue) {
-                    $this->parsePull(
+                foreach ($pull as $mdtNpcIndex => $mdtClones) {
+                    $this->parseMdtNpcClonesInPull(
                         $importStringPulls,
                         $mdtEnemiesByMdtNpcIndex,
                         $enemiesByNpcId,
                         $enemyForcesByNpcIds,
                         $totalEnemiesSelected,
                         $totalEnemiesMatched,
+                        $seasonalIndexSkip,
                         $killZoneAttributes,
                         $newPullIndex,
-                        $pullKey,
-                        $pullValue
+                        $mdtNpcIndex,
+                        $mdtClones
+                    );
+                }
+
+                // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
+                // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
+                if (!$seasonalIndexSkip && $totalEnemiesSelected > 0 && $totalEnemiesMatched === 0) {
+                    throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+                        __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
+                        ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
                     );
                 }
 
@@ -281,40 +294,42 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @param Collection        $enemyForcesByNpcIds
      * @param int               $totalEnemiesSelected
      * @param int               $totalEnemiesMatched
+     * @param bool              $seasonalIndexSkip
      * @param array             $killZoneAttributes
      * @param int               $newPullIndex
-     * @param string            $pullKey
-     * @param string|array      $pullValue
+     * @param string            $mdtNpcIndex
+     * @param string|array      $mdtNpcClones
      *
      * @return bool
-     * @throws \App\Logic\MDT\Exception\ImportWarning
      */
-    private function parsePull(
+    private function parseMdtNpcClonesInPull(
         ImportStringPulls $importStringPulls,
-        Collection $mdtEnemiesByMdtNpcIndex,
-        Collection $enemiesByNpcId,
-        Collection $enemyForcesByNpcIds,
-        int &$totalEnemiesSelected,
-        int &$totalEnemiesMatched,
-        array &$killZoneAttributes,
-        int $newPullIndex,
-        string $pullKey,
-        $pullValue
-    ): bool {
-        if ($pullKey === 'color') {
+        Collection        $mdtEnemiesByMdtNpcIndex,
+        Collection        $enemiesByNpcId,
+        Collection        $enemyForcesByNpcIds,
+        int               &$totalEnemiesSelected,
+        int               &$totalEnemiesMatched,
+        bool              &$seasonalIndexSkip,
+        array             &$killZoneAttributes,
+        int               $newPullIndex,
+        string            $mdtNpcIndex,
+                          $mdtNpcClones
+    ): bool
+    {
+        if ($mdtNpcIndex === 'color') {
             // Make sure there is a pound sign in front of the value at all times, but never double up should
             // MDT decide to suddenly place it here
-            $killZoneAttributes['color'] = (substr($pullValue, 0, 1) !== '#' ? '#' : '') . $pullValue;
+            $killZoneAttributes['color'] = (substr($mdtNpcClones, 0, 1) !== '#' ? '#' : '') . $mdtNpcClones;
 
             return false;
         } // Numeric means it's an index of the dungeon's NPCs, if it isn't numeric skip to the next pull
-        elseif (!is_numeric($pullKey)) {
+        else if (!is_numeric($mdtNpcIndex)) {
             return false;
         }
 
         $seasonalIndexSkip = false;
-        $npcIndex          = (int)$pullKey;
-        $mdtClones         = $pullValue;
+        $npcIndex          = (int)$mdtNpcIndex;
+        $mdtClones         = $mdtNpcClones;
 
         $totalEnemiesSelected += count($mdtClones);
         // Only if filled
@@ -327,11 +342,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 if ($npcIndex === 35) {
                     $cloneIndex += 15;
                 }
-            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
+            } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
                 if ($npcIndex === 11) {
                     $cloneIndex += 2;
                 }
-            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
+            } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
                 if ($npcIndex === 23) {
                     $cloneIndex += 5;
                 }
@@ -427,7 +442,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Keep track of our enemy forces
             if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded);
-            } elseif ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+            } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
             } else {
                 /** @var NpcEnemyForces $npcEnemyForces */
@@ -528,15 +543,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         // } else
         // </editor-fold>
 
-        // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
-        // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
-        if (!$seasonalIndexSkip && $totalEnemiesSelected > 0 && $totalEnemiesMatched === 0) {
-            throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
-                ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
-            );
-        }
-
         return true;
     }
 
@@ -616,7 +622,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 }
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
-                elseif (isset($object['n']) && $object['n']) {
+                else if (isset($object['n']) && $object['n']) {
                     $this->parseObjectComment($importStringObjects, $floor, $details);
                 }
                 // Triangles (t = triangle)
@@ -687,7 +693,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $commentLower = strtolower(trim($details[4]));
         if ($commentLower === 'heroism') {
             $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_HEROISM;
-        } elseif ($commentLower === 'bloodlust') {
+        } else if ($commentLower === 'bloodlust') {
             $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
         } else {
             foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
