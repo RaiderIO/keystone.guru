@@ -277,6 +277,20 @@ class RowElementKillZone extends RowElement {
             }
         }
 
+        // Add spells to the pull if applicable
+        let $spellList = $(`#map_killzonessidebar_killzone_${this.killZone.id}_spell_list`);
+        let template = Handlebars.templates['map_killzonessidebar_killzone_row_spell_template'];
+        
+        for (let index in this.killZone.spells) {
+            let spell = this.killZone.spells[index];
+
+            let data = $.extend({}, getHandlebarsDefaultVariables(), spell, {
+                'pull_color': this.killZone.color,
+            });
+
+            $spellList.append($(template(data)));
+        }
+
         // Toggle the row color based on overpulled or obsolete npcs
         let $row = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);
         $row.toggleClass('bg-success', overpulledNpcs.length > 0);

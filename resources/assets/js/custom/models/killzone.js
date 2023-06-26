@@ -241,14 +241,19 @@ class KillZone extends MapObject {
     _setSpellsFromRemote(remoteSpells) {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
-        console.log(remoteSpells);
-
         if (typeof remoteSpells === 'undefined') {
             return;
         }
+        
+        let mapContext = getState().getMapContext();
+        this.spells = [];
+        for (let i = 0; i < remoteSpells.length; i++) {
+            let remoteSpell = remoteSpells[i];
+            
+            this.spells.push(mapContext.getSpell(remoteSpell.id));
+        }
 
-        this.spells = remoteSpells;
-        this.signal('spells:changed');
+        this.signal('killzone:spellschanged');
     }
 
     /**

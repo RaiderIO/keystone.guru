@@ -312,7 +312,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             this._addKillZone(killZone);
 
             // Listen to changes in the killzone
-            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], this, function (killZoneChangedEvent) {
+            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:spellschanged', 'object:changed'], this, function (killZoneChangedEvent) {
                 // Ignore killzones that haven't saved yet
                 if (killZoneChangedEvent.context.id <= 0) {
                     return;
@@ -322,7 +322,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 let isMassSave = killZoneChangedEvent.data.hasOwnProperty('mass_save') && killZoneChangedEvent.data.mass_save;
 
                 if (!isMassSave) {
-                    self._onKillZoneEnemyChanged(killZoneChangedEvent.context);
+                    self._onKillZoneStateChanged(killZoneChangedEvent.context);
                 }
             });
         }
@@ -333,7 +333,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
      * @param killZone
      * @private
      */
-    _onKillZoneEnemyChanged(killZone) {
+    _onKillZoneStateChanged(killZone) {
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
         // Do not change the sidebar as we're refreshing the map; that's pointless (lots of adds/removes going on)

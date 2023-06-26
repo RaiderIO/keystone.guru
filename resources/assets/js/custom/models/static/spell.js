@@ -2,6 +2,8 @@ class Spell {
     constructor(remoteObject) {
         console.assert(remoteObject instanceof Object, 'Passed remoteObject is not an Object!', remoteObject);
 
+        /** @type Number */
+        this.id = remoteObject.id;
         /** @type string */
         this.dispel_type = remoteObject.dispel_type;
         /** @type string */
