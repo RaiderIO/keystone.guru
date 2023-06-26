@@ -1,3 +1,7 @@
+<?php
+/** @var \Illuminate\Support\Collection $spellsSelect */
+?>
+
 <div id="pull_sidebar_workbench" class="pull_workbench p-2" style="display: none;">
     <div class="row no-gutters pull_workbench_row pull_workbench_header">
         <div class="col">
@@ -19,16 +23,17 @@
         </div>
     </div>
 
-{{--    <div class="row no-gutters pull_workbench_row">--}}
-{{--        <div class="col">--}}
-{{--            <div data-toggle="tooltip"--}}
-{{--                 title="{{ __('views/common.maps.controls.pullsworkbench.spells') }}">--}}
-{{--                <button id="map_killzonessidebar_killzone_spells" class="btn btn-primary">--}}
-{{--                    <i class="fas fa-magic"></i>--}}
-{{--                </button>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    <div class="row no-gutters pull_workbench_row">
+        <div class="col">
+            <div data-toggle="tooltip"
+                 title="{{ __('views/common.maps.controls.pullsworkbench.spells') }}">
+                <button id="map_killzonessidebar_killzone_spells" class="btn btn-primary"
+                        data-toggle="modal" data-target="#map_killzonessidebar_killzone_spells_modal">
+                    <i class="fas fa-magic"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="row no-gutters pull_workbench_row">
         <div class="col">
@@ -82,6 +87,41 @@
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-dismiss="modal">
                 {{ __('views/common.maps.controls.pullsworkbench.modal.description.save') }}
+            </div>
+        </div>
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_spells_modal'])
+        <div class="form-group">
+            {!! Form::label(
+                'map_killzonessidebar_killzone_spells_modal_select',
+                __('views/common.maps.controls.pullsworkbench.modal.spells.label'),
+                ['id' => 'map_killzonessidebar_killzone_spells_modal_label']
+            ) !!}
+            <select id="map_killzonessidebar_killzone_spells_modal_select"
+                    class="form-control selectpicker"
+                    data-live-search="true"
+                    multiple>
+                @foreach($spellsSelect as $group => $spells)
+                    <optgroup label="{{$group}}">
+                        @foreach($spells as $spell)
+                                <?php ob_start() ?>
+
+                            @include('common.forms.select.imageoption', [
+                                'url' => $spell['icon_url'],
+                                'name' => $spell['name'],
+                            ])
+
+                                <?php $html = ob_get_clean(); ?>
+                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ $spell['name'] }}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
+            <div id="map_killzonessidebar_killzone_spells_modal_save" class="btn btn-primary" data-dismiss="modal">
+                {{ __('views/common.maps.controls.pullsworkbench.modal.spells.save') }}
             </div>
         </div>
     @endcomponent

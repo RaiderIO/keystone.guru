@@ -48,6 +48,7 @@ class KillZone extends MapObject {
         this.indexLabelDirection = 'center';
         // List of IDs of selected enemies
         this.enemies = [];
+        this.spellIds = [];
         this.spells = [];
         // List of IDs of enemies that
         this.overpulledEnemies = [];
@@ -168,6 +169,9 @@ class KillZone extends MapObject {
                 edit: false,
                 default: [],
                 setter: this._setSpellsFromRemote.bind(this),
+                getter: function () {
+                    return self.spellIds;
+                }
             }),
         ]);
     }
@@ -244,16 +248,17 @@ class KillZone extends MapObject {
         if (typeof remoteSpells === 'undefined') {
             return;
         }
-        
-        let mapContext = getState().getMapContext();
+
+        let spellIds = [];
+
         this.spells = [];
         for (let i = 0; i < remoteSpells.length; i++) {
             let remoteSpell = remoteSpells[i];
-            
-            this.spells.push(mapContext.getSpell(remoteSpell.id));
+
+            spellIds.push(remoteSpell.id);
         }
 
-        this.signal('killzone:spellschanged');
+        this.setSpells(spellIds);
     }
 
     /**
@@ -867,6 +872,25 @@ class KillZone extends MapObject {
         }
 
         return result;
+    }
+
+    /**
+     *
+     * @param {Array} spellIds
+     */
+    setSpells(spellIds) {
+        this.spellIds = [];
+        this.spells = [];
+
+        let mapContext = getState().getMapContext();
+        for (let i = 0; i < spellIds.length; i++) {
+            let spellId = parseInt(spellIds[i]);
+
+            this.spellIds.push(spellId);
+            this.spells.push(mapContext.getSpell(spellId));
+        }
+
+        this.signal('killzone:spellschanged');
     }
 
     /**

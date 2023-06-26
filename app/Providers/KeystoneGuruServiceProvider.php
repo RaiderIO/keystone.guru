@@ -385,6 +385,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
         });
 
+        view()->composer('common.maps.controls.pullsworkbench', function (View $view) use ($globalViewVariables) {
+            $view->with('spellsSelect', $globalViewVariables['selectableSpellsByCategory']);
+        });
+
         // Admin
         view()->composer('admin.dungeon.edit', function (View $view) use ($mappingService) {
             /** @var Dungeon|null $dungeon */

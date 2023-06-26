@@ -7,7 +7,7 @@ class PullWorkBench extends Signalable {
         super();
 
         this.killZonesSidebar = killZonesSidebar;
-        /** @type KillZone|null */
+        /** @type {KillZone|null} */
         this.killZone = null;
         /** @type Pickr|null */
         this.colorPicker = null;
@@ -119,8 +119,16 @@ class PullWorkBench extends Signalable {
         $(`#map_killzonessidebar_killzone_description_modal_textarea`).val(
             this.killZone.description ?? ''
         );
+        $(`#map_killzonessidebar_killzone_spells_modal_select`).val(
+            this.killZone.spellIds
+        );
+        refreshSelectPickers();
         $(`#map_killzonessidebar_killzone_description_modal_save`).unbind('click').bind('click', function () {
             self.killZone.description = $(`#map_killzonessidebar_killzone_description_modal_textarea`).val();
+            self.killZone.save();
+        });
+        $(`#map_killzonessidebar_killzone_spells_modal_save`).unbind('click').bind('click', function () {
+            self.killZone.setSpells($(`#map_killzonessidebar_killzone_spells_modal_select`).val());
             self.killZone.save();
         });
     }

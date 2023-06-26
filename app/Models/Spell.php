@@ -9,11 +9,13 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * @property int     $id
+ * @property string  $category
  * @property string  $icon_name
  * @property string  $name
  * @property string  $dispel_type
  * @property int     $schools_mask
  * @property boolean $aura
+ * @property boolean $selectable
  *
  * @property string  $icon_url
  *
@@ -50,6 +52,21 @@ class Spell extends CacheModel implements MappingModelInterface
         self::DISPEL_TYPE_POISON,
         self::DISPEL_TYPE_CURSE,
     ];
+
+    const CATEGORY_GENERAL      = 'general';
+    const CATEGORY_WARRIOR      = 'warrior';
+    const CATEGORY_HUNTER       = 'hunter';
+    const CATEGORY_DEATH_KNIGHT = 'death_knight';
+    const CATEGORY_MAGE         = 'mage';
+    const CATEGORY_PRIEST       = 'priest';
+    const CATEGORY_MONK         = 'monk';
+    const CATEGORY_ROGUE        = 'rogue';
+    const CATEGORY_WARLOCK      = 'warlock';
+    const CATEGORY_SHAMAN       = 'shaman';
+    const CATEGORY_PALADIN      = 'paladin';
+    const CATEGORY_DRUID        = 'druid';
+    const CATEGORY_DEMON_HUNTER = 'demon_hunter';
+    const CATEGORY_EVOKER       = 'evoker';
 
     public $incrementing = false;
     public $timestamps = false;

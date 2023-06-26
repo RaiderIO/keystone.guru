@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\DB;
  * @property Collection|int[]           $enemies
  * @property Collection|KillZoneEnemy[] $killZoneEnemies
  * @property Collection|KillZoneSpell[] $killZoneSpells
+ * @property Collection|Spell[]         $spells
  *
  * @property Carbon                     $updated_at
  * @property Carbon                     $created_at

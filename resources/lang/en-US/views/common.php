@@ -330,6 +330,10 @@ return [
                         'label' => 'Description',
                         'save'  => 'Save',
                     ],
+                    'spells'      => [
+                        'label' => 'Spells',
+                        'save'  => 'Save',
+                    ],
                 ],
                 'description'      => 'Edit description',
                 'spells'           => 'Edit spells',

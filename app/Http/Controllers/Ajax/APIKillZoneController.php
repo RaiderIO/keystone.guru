@@ -102,6 +102,7 @@ class APIKillZoneController extends Controller
                 }
 
                 KillZoneSpell::insert($spellsAttributes);
+                $killZone->load(['spells:id']);
             }
 
             if ($recalculateEnemyForces) {
