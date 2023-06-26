@@ -48,10 +48,10 @@ class KillZone extends MapObject {
         this.indexLabelDirection = 'center';
         // List of IDs of selected enemies
         this.enemies = [];
+        this.spells = [];
         // List of IDs of enemies that
         this.overpulledEnemies = [];
         // Temporary list of enemies when we received them from the server
-        this.remoteEnemies = [];
         this.enemyConnectionsLayerGroup = null;
         // Layer that is shown to the user and that he/she can click on to make adjustments to this killzone. May be null
         this.enemiesLayer = null;
@@ -162,6 +162,13 @@ class KillZone extends MapObject {
                 default: [],
                 setter: this._setEnemiesFromRemote.bind(this),
             }),
+            new Attribute({
+                name: 'spells',
+                type: 'array',
+                edit: false,
+                default: [],
+                setter: this._setSpellsFromRemote.bind(this),
+            }),
         ]);
     }
 
@@ -202,26 +209,46 @@ class KillZone extends MapObject {
         console.assert(this instanceof KillZone, 'this is not a KillZone', this);
 
         // Reconstruct the enemies we're coupled with in a format we expect
-        if (typeof remoteEnemies !== 'undefined') {
-            // Check if the remote enemies differ in one shape or form of our current list
-            let enemiesEqual = this.enemies.length === remoteEnemies.length;
-            let enemies = [];
-            for (let i = 0; i < remoteEnemies.length; i++) {
-                let enemyId = remoteEnemies[i];
-                enemies.push(enemyId);
+        if (typeof remoteEnemies === 'undefined') {
+            return;
+        }
 
-                // If we haven't already signified the enemies are not equal
-                // If we do not have an enemy at this index or if the enemy's ID at this index is not the same
-                if (enemiesEqual && (!this.enemies.hasOwnProperty(i) || this.enemies[i] !== enemyId)) {
-                    enemiesEqual = false;
-                }
-            }
+        // Check if the remote enemies differ in one shape or form of our current list
+        let enemiesEqual = this.enemies.length === remoteEnemies.length;
+        let enemies = [];
+        for (let i = 0; i < remoteEnemies.length; i++) {
+            let enemyId = remoteEnemies[i];
+            enemies.push(enemyId);
 
-            // Do not unnecessarily call this function - it can be heavy
-            if (!enemiesEqual) {
-                this.setEnemies(enemies);
+            // If we haven't already signified the enemies are not equal
+            // If we do not have an enemy at this index or if the enemy's ID at this index is not the same
+            if (enemiesEqual && (!this.enemies.hasOwnProperty(i) || this.enemies[i] !== enemyId)) {
+                enemiesEqual = false;
             }
         }
+
+        // Do not unnecessarily call this function - it can be heavy
+        if (!enemiesEqual) {
+            this.setEnemies(enemies);
+        }
+    }
+
+    /**
+     *
+     * @param {Object} remoteSpells
+     * @private
+     */
+    _setSpellsFromRemote(remoteSpells) {
+        console.assert(this instanceof KillZone, 'this is not a KillZone', this);
+
+        console.log(remoteSpells);
+
+        if (typeof remoteSpells === 'undefined') {
+            return;
+        }
+
+        this.spells = remoteSpells;
+        this.signal('spells:changed');
     }
 
     /**

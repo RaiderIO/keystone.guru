@@ -11,31 +11,31 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $floor_id
- * @property string $color
- * @property string $description
- * @property int $index
- * @property double $lat
- * @property double $lng
+ * @property int                        $id
+ * @property int                        $dungeon_route_id
+ * @property int                        $floor_id
+ * @property string                     $color
+ * @property string                     $description
+ * @property int                        $index
+ * @property double                     $lat
+ * @property double                     $lng
  *
- * @property DungeonRoute $dungeonRoute
- * @property Floor $floor
+ * @property DungeonRoute               $dungeonRoute
+ * @property Floor                      $floor
  *
- * @property Collection|int[] $enemies
+ * @property Collection|int[]           $enemies
  * @property Collection|KillZoneEnemy[] $killZoneEnemies
  * @property Collection|KillZoneSpell[] $killZoneSpells
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon                     $updated_at
+ * @property Carbon                     $created_at
  *
  * @mixin Eloquent
  */
@@ -50,9 +50,11 @@ class KillZone extends Model
         'lng',
         'index',
         'enemies',
+        'spells',
     ];
 
     protected $appends = ['enemies'];
+    protected $with = ['spells'];
 
     protected $fillable = [
         'id',
@@ -134,11 +136,11 @@ class KillZone extends Model
     }
 
     /**
-     * @return HasManyThrough
+     * @return BelongsToMany
      */
-    public function spells(): HasManyThrough
+    public function spells(): BelongsToMany
     {
-        return $this->hasManyThrough(Spell::class, KillZoneSpell::class);
+        return $this->belongsToMany(Spell::class, 'kill_zone_spells');
     }
 
     /**

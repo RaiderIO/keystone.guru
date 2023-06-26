@@ -167,6 +167,8 @@ let scripts = [
     'resources/assets/js/custom/hotkeys.js',
 
     // Models
+    'resources/assets/js/custom/models/static/mapicontype.js',
+    'resources/assets/js/custom/models/static/spell.js',
     'resources/assets/js/custom/models/attribute.js',
     'resources/assets/js/custom/models/mapobject.js',
     'resources/assets/js/custom/models/versionablemapobject.js',
@@ -181,7 +183,6 @@ let scripts = [
     'resources/assets/js/custom/models/icon.js',
     'resources/assets/js/custom/models/mapicon.js',
     'resources/assets/js/custom/models/mapiconawakenedobelisk.js',
-    'resources/assets/js/custom/models/mapicontype.js',
     'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/models/brushline.js',
     'resources/assets/js/custom/models/usermouseposition.js',
