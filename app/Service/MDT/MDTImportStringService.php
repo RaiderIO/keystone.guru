@@ -706,7 +706,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         $enemyIngameXY['y'], $ingameXY['y']
                     ) < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS) {
 
-                    $bloodLustNames = ['bloodlust', 'heroism', 'fury of the ancients', 'time warp', 'timewarp'];
+                    $bloodLustNames = ['bloodlust', 'heroism', 'fury of the ancients', 'time warp', 'timewarp', 'ancient hysteria'];
 
                     // If the user wants to put heroism/bloodlust on this pull, directly assign it instead
                     $commentLower = strtolower(trim($details[4]));
@@ -721,6 +721,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
                         } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
                             $spellId = Spell::SPELL_TIME_WARP;
+                        } elseif ($commentLower === 'ancient hysteria') {
+                            $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
                         }
 
                         $newAttributes = $killZoneAttribute['spells'][] = [
