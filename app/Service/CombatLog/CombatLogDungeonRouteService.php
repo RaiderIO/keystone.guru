@@ -5,18 +5,17 @@ namespace App\Service\CombatLog;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\EnemyPosition;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
-use App\Service\CombatLog\Builders\DungeonRouteBuilder;
 use App\Service\CombatLog\Builders\ResultEventDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -26,14 +25,16 @@ use App\Service\CombatLog\Filters\DungeonRouteFilter;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteChallengeMode;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteCoord;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
-use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpcCoord;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteSpell;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
+use App\Service\CombatLog\ResultEvents\SpellCast;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use DateTime;
@@ -50,8 +51,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     private CombatLogDungeonRouteServiceLoggingInterface $log;
 
     /**
-     * @param CombatLogService $combatLogService
-     * @param SeasonServiceInterface $seasonService
+     * @param CombatLogService                             $combatLogService
+     * @param SeasonServiceInterface                       $seasonService
      * @param CombatLogDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
@@ -66,7 +67,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     }
 
     /**
-     * @param string $combatLogFilePath
+     * @param string            $combatLogFilePath
      * @param DungeonRoute|null $dungeonRoute
      *
      * @return Collection
@@ -231,8 +232,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
             })->first()->getChallengeModeEndEvent();
 
             $challengeMode = new CreateRouteChallengeMode(
-                $challengeModeStartEvent->getTimestamp()->format(DateTime::ATOM),
-                $challengeModeEndEvent->getTimestamp()->format(DateTime::ATOM),
+                $challengeModeStartEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
+                $challengeModeEndEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $challengeModeStartEvent->getInstanceID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
@@ -241,6 +242,7 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 
             $npcs             = collect();
             $npcEngagedEvents = collect();
+            $spells           = collect();
             foreach ($resultEvents as $resultEvent) {
                 if ($resultEvent instanceof EnemyEngagedResultEvent) {
                     $npcEngagedEvents->put($resultEvent->getGuid()->getGuid(), $resultEvent);
@@ -255,9 +257,9 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                         new CreateRouteNpc(
                             $guid->getId(),
                             $guid->getSpawnUID(),
-                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(DateTime::ATOM),
-                            $resultEvent->getBaseEvent()->getTimestamp()->format(DateTime::ATOM),
-                            new CreateRouteNpcCoord(
+                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
+                            new CreateRouteCoord(
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getUiMapId()
@@ -265,6 +267,22 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
                         )
                     );
 
+                } else if ($resultEvent instanceof SpellCast) {
+                    /** @var Player $guid */
+                    $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
+
+                    $spells->push(
+                        new CreateRouteSpell(
+                            $resultEvent->getSpellId(),
+                            $advancedData->getInfoGuid()->getGuid(),
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
+                            new CreateRouteCoord(
+                                $advancedData->getPositionX(),
+                                $advancedData->getPositionY(),
+                                $advancedData->getUiMapId()
+                            )
+                        )
+                    );
                 }
             }
 
@@ -274,7 +292,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 
             return new CreateRouteBody(
                 $challengeMode,
-                $npcs
+                $npcs,
+                $spells
             );
 
         } finally {
@@ -363,9 +382,9 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
     }
 
     /**
-     * @param MappingVersion $mappingVersion
-     * @param Collection|\App\Service\CombatLog\ResultEvents\BaseResultEvent[] $resultEvents
-     * @param DungeonRoute|null $dungeonRoute
+     * @param MappingVersion               $mappingVersion
+     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param DungeonRoute|null            $dungeonRoute
      *
      * @return void
      */
@@ -441,8 +460,8 @@ class CombatLogDungeonRouteService implements CombatLogDungeonRouteServiceInterf
 
 
     /**
-     * @param MappingVersion $mappingVersion
-     * @param CreateRouteBody $createRouteBody
+     * @param MappingVersion    $mappingVersion
+     * @param CreateRouteBody   $createRouteBody
      * @param DungeonRoute|null $dungeonRoute
      *
      * @return void

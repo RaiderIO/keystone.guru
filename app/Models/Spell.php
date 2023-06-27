@@ -72,7 +72,7 @@ class Spell extends CacheModel implements MappingModelInterface
     const SPELL_BLOODLUST           = 2825;
     const SPELL_HEROISM             = 32182;
     const SPELL_TIME_WARP           = 80353;
-    const SPELL_FURY_OF_THE_ASPECTS = 397744;
+    const SPELL_FURY_OF_THE_ASPECTS = 390386;
     const SPELL_ANCIENT_HYSTERIA    = 90355;
 
     public $incrementing = false;

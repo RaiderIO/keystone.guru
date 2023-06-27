@@ -71,7 +71,7 @@ class CreateDungeonRoutes extends Command
 
         $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes($filePath);
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $this->comment(sprintf('- Created dungeon route %s (%s)', $dungeonRoute->public_key, __($dungeonRoute->dungeon->name)));
+            $this->info(sprintf('- Created dungeon route %s (%s)', $dungeonRoute->public_key, __($dungeonRoute->dungeon->name)));
         }
     }
 }

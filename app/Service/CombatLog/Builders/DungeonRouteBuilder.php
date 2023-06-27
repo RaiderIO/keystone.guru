@@ -11,6 +11,7 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\KillZone\KillZoneSpell;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use Exception;
 use Illuminate\Support\Collection;
@@ -45,7 +46,10 @@ abstract class DungeonRouteBuilder
     protected Collection $availableEnemies;
 
     /** @var Collection */
-    protected Collection $enemiesKilledInCurrentPull;
+    protected Collection $currentPullEnemiesKilled;
+
+    /** @var Collection */
+    protected Collection $currentPullSpellsCast;
 
     /** @var Collection */
     protected Collection $currentEnemiesInCombat;
@@ -80,8 +84,9 @@ abstract class DungeonRouteBuilder
             })
             ->keyBy('id');
 
-        $this->enemiesKilledInCurrentPull = collect();
-        $this->currentEnemiesInCombat     = collect();
+        $this->currentPullEnemiesKilled = collect();
+        $this->currentPullSpellsCast    = collect();
+        $this->currentEnemiesInCombat   = collect();
     }
 
     /**
@@ -176,7 +181,7 @@ abstract class DungeonRouteBuilder
         }
 
         // Clear the collection - we just created a pull for all enemies
-        $this->enemiesKilledInCurrentPull = collect();
+        $this->currentPullEnemiesKilled = collect();
 
         if ($killZoneEnemiesAttributes->isNotEmpty()) {
             KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
@@ -185,13 +190,29 @@ abstract class DungeonRouteBuilder
             $killZone->delete();
         }
 
+        // Assign spells to the pull
+        $killZoneSpellsAttributes = collect();
+        foreach ($this->currentPullSpellsCast as $spellId) {
+            $killZoneSpellsAttributes->push([
+                'kill_zone_id' => $killZone->id,
+                'spell_id'     => $spellId,
+            ]);
+        }
+        $this->currentPullSpellsCast = collect();
+
+        if ($killZoneSpellsAttributes->isNotEmpty()) {
+            KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
+            $spellCount = $killZoneSpellsAttributes->count();
+            $this->log->createPullSpellsAttachedToKillZone($spellCount);
+        }
+
         return $killZone;
     }
 
     /**
-     * @param int $npcId
-     * @param float $ingameX
-     * @param float $ingameY
+     * @param int        $npcId
+     * @param float      $ingameX
+     * @param float      $ingameY
      * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      *
      * @return Enemy|null
@@ -290,11 +311,11 @@ abstract class DungeonRouteBuilder
 
     /**
      * @param Collection $enemies
-     * @param float $ingameX
-     * @param float $ingameY
-     * @param float $closestEnemyDistance
+     * @param float      $ingameX
+     * @param float      $ingameY
+     * @param float      $closestEnemyDistance
      * @param Enemy|null $closestEnemy
-     * @param bool $considerPatrols
+     * @param bool       $considerPatrols
      * @return bool
      */
     private function findClosestEnemyAndDistanceFromList(
@@ -361,12 +382,12 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Enemy $availableEnemy
-     * @param float $enemyLat
-     * @param float $enemyLng
-     * @param float $ingameX
-     * @param float $ingameY
-     * @param float $closestEnemyDistance
+     * @param Enemy      $availableEnemy
+     * @param float      $enemyLat
+     * @param float      $enemyLng
+     * @param float      $ingameX
+     * @param float      $ingameY
+     * @param float      $closestEnemyDistance
      * @param Enemy|null $closestEnemy
      *
      * @return bool True if an enemy close enough was found

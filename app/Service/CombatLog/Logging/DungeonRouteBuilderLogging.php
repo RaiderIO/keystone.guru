@@ -30,14 +30,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @return void
-     */
-    public function createPullFindEnemyForGuidEnd(): void
-    {
-        $this->end(__METHOD__);
-    }
-
-    /**
      * @param int $npcId
      * @param float $ingameX
      * @param float $ingameY
@@ -48,6 +40,24 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    /**
+     * @return void
+     */
+    public function createPullFindEnemyForGuidEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    /**
+     * @param int $spellCount
+     * @return void
+     */
+    public function createPullSpellsAttachedToKillZone(int $spellCount): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
 
     /**
      * @param int $npcId

@@ -11,10 +11,11 @@ use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
+use App\Service\CombatLog\ResultEvents\SpellCast;
 use Illuminate\Support\Collection;
 
 /**
- * @property Collection|EnemyEngaged[] $enemiesKilledInCurrentPull
+ * @property Collection|EnemyEngaged[] $currentPullEnemiesKilled
  * @property Collection|EnemyEngaged[] $currentEnemiesInCombat
  *
  * @package App\Service\CombatLog\Builders
@@ -31,7 +32,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
     public function __construct(DungeonRoute $dungeonRoute, Collection $resultEvents)
     {
         parent::__construct($dungeonRoute);
-
 
         $this->resultEvents = $resultEvents;
 
@@ -72,7 +72,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     // UnitDied only has DestGuid
                     $guid = $resultEvent->getGuid()->getGuid();
                     if ($this->currentEnemiesInCombat->has($guid)) {
-                        $this->enemiesKilledInCurrentPull->put($guid, $this->currentEnemiesInCombat->get($guid));
+                        $this->currentPullEnemiesKilled->put($guid, $this->currentEnemiesInCombat->get($guid));
 
                         $this->currentEnemiesInCombat->forget($guid);
                         $this->log->buildUnitDiedNoLongerInCombat($guid);
@@ -82,10 +82,17 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
                     // If we just killed the last enemy that we were in combat with, we just completed a pull
                     if ($this->currentEnemiesInCombat->isEmpty()) {
-                        $this->log->buildCreateNewPull($this->enemiesKilledInCurrentPull->keys()->toArray());
+                        $this->log->buildCreateNewPull($this->currentPullEnemiesKilled->keys()->toArray());
 
                         $this->createPull();
                     }
+                } else if ($resultEvent instanceof SpellCast) {
+                    $this->log->buildSpellCast(
+                        $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getInfoGuid()->getGuid(),
+                        $resultEvent->getSpellId()
+                    );
+
+                    $this->currentPullSpellsCast->push($resultEvent->getSpellId());
                 }
             } finally {
                 $this->log->buildEnd();
@@ -93,8 +100,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         }
 
         // Ensure that we create a final pull if need be
-        if ($this->enemiesKilledInCurrentPull->isNotEmpty()) {
-            $this->log->buildCreateNewFinalPull($this->enemiesKilledInCurrentPull->keys()->toArray());
+        if ($this->currentPullEnemiesKilled->isNotEmpty()) {
+            $this->log->buildCreateNewFinalPull($this->currentPullEnemiesKilled->keys()->toArray());
             $this->createPull();
         }
 
@@ -108,7 +115,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
      */
     public function convertEnemiesKilledInCurrentPull(): Collection
     {
-        return $this->enemiesKilledInCurrentPull->map(function (EnemyEngaged $resultEvent) {
+        return $this->currentPullEnemiesKilled->map(function (EnemyEngaged $resultEvent) {
             return [
                 'npcId' => $resultEvent->getGuid()->getId(),
                 'x'     => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),

@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 class SpellFilter implements CombatLogParserInterface
 {
     private Collection $resultEvents;
-    
+
     private Collection $spellsToTrack;
 
     /**
@@ -23,7 +23,7 @@ class SpellFilter implements CombatLogParserInterface
     public function __construct(Collection $resultEvents)
     {
         $this->resultEvents = $resultEvents;
-        
+
         $this->spellsToTrack = Spell::where('selectable', true)->get()->pluck('id');
     }
 
