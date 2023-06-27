@@ -4,8 +4,6 @@ namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
-use App\Models\Dungeon;
-use App\Models\DungeonRoute;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
@@ -14,7 +12,6 @@ use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\App;

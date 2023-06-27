@@ -1164,7 +1164,15 @@ class KillZone extends MapObject {
                 }
 
                 try {
-                    this.enemiesLayer.bindTooltip(tooltipText, {
+                    let spellTemplate = Handlebars.templates['map_killzone_tooltip'];
+
+                    let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                        tooltipText: tooltipText,
+                        pull_color: this.color,
+                        spells: this.spells,
+                    });
+                    
+                    this.enemiesLayer.bindTooltip(spellTemplate(data), {
                         direction: this.indexLabelDirection,
                         className: 'leaflet-tooltip-killzone-index',
                         permanent: true

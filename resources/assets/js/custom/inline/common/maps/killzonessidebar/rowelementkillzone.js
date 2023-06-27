@@ -279,6 +279,7 @@ class RowElementKillZone extends RowElement {
 
         // Add spells to the pull if applicable
         let $spellList = $(`#map_killzonessidebar_killzone_${this.killZone.id}_spell_list`);
+        $spellList.children().remove();
         let template = Handlebars.templates['map_killzonessidebar_killzone_row_spell_template'];
         
         for (let index in this.killZone.spells) {

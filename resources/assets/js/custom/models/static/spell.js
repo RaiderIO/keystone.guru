@@ -14,5 +14,7 @@ class Spell {
         this.schools_mask = remoteObject.schools_mask;
         /** @type int */
         this.aura = remoteObject.aura;
+        /** @type string */
+        this.icon_url = remoteObject.icon_url;
     }
 }

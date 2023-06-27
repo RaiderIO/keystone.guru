@@ -1,0 +1,14 @@
+<div class="row no-gutters text-center">
+    <div class="col">
+        {{tooltipText}}
+    </div>
+</div>
+<div class="row no-gutters spells_row">
+    <div class="col-auto mx-auto">
+        {{#each spells}}
+            <img src="{{icon_url}}"
+                 class="spell_small"
+                 style="border: 1px solid {{../pull_color}}"/>
+        {{/each}}
+    </div>
+</div>

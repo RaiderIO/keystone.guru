@@ -5,6 +5,7 @@ return [
     'death_knight' => 'Death Knight',
     'demon_hunter' => 'Demon Hunter',
     'druid'        => 'Druid',
+    'evoker'       => 'Evoker',
     'hunter'       => 'Hunter',
     'mage'         => 'Mage',
     'monk'         => 'Monk',
