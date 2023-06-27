@@ -448,8 +448,8 @@ return [
             ],
             'simulate_thundering_clear_seconds'       => 'Seconds to clear Thundering',
             'simulate_thundering_clear_seconds_title' => 'The amount of time before you clear the Thundering stacks. More seconds equals more dps as you get the additional damage effects longer. Setting this value to 0 disables Thundering affix altogether.',
-            'bloodlust'                               => 'Bloodlust/Heroism',
-            'bloodlust_title'                         => 'Allows you to enable/disable Bloodlust/Heroism globally. Note: when disabled, Bloodlust/Heroism per pull does not do anything.',
+            'bloodlust'                               => 'Bloodlust enabled',
+            'bloodlust_title'                         => 'Allows you to enable/disable Bloodlust/Heroism/Time Warp/Fury of the Aspects globally. Note: when disabled, Bloodlust/Heroism/Time Warp/Fury of the Aspects per pull does not do anything.',
             'arcane_intellect'                        => 'Arcane Intellect',
             'power_word_fortitude'                    => 'PW: Fortitude',
             'battle_shout'                            => 'Battle Shout',
@@ -457,8 +457,8 @@ return [
             'chaos_brand'                             => 'Chaos Brand',
             'hp_percent'                              => 'HP percentage',
             'hp_percent_title'                        => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-            'bloodlust_per_pull'                      => 'Bloodlust/Heroism per pull.',
-            'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism. Note: placing an Icon with Bloodlust/Heroism on the map will automatically assign Bloodlust/Heroism to the pull closest to the icon.',
+            'bloodlust_per_pull'                      => 'Bloodlust/Heroism/Time Warp/Fury of the Aspects per pull.',
+            'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism/Time Warp/Fury of the Aspects. Assigning these spells to a pull automatically populates this dropdown.',
             'ranged_pull_compensation_yards'          => 'Ranged pull compensation in yards.',
             'ranged_pull_compensation_yards_title'    => 'When doing a M+ run you never run from pack to pack and body pull them -
                 you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities

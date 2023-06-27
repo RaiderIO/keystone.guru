@@ -68,10 +68,20 @@ class Spell extends CacheModel implements MappingModelInterface
     const CATEGORY_DEMON_HUNTER = 'demon_hunter';
     const CATEGORY_EVOKER       = 'evoker';
 
-    public $incrementing = false;
-    public $timestamps = false;
+    // Some hard coded spells that we have exceptions for in the code
+    const SPELL_BLOODLUST           = 2825;
+    const SPELL_HEROISM             = 32182;
+    const SPELL_TIME_WARP           = 80353;
+    const SPELL_FURY_OF_THE_ASPECTS = 397744;
+    
+    const SPELL_BLOODLUST_ALL = [
+        
+    ];
 
-    public $hidden = ['pivot'];
+    public $incrementing = false;
+    public $timestamps   = false;
+
+    public    $hidden  = ['pivot'];
     protected $appends = ['icon_url'];
 
     /**
