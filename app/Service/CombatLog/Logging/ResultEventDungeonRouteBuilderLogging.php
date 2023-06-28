@@ -61,7 +61,7 @@ class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements
      */
     public function buildUnitDiedNotInCombat(string $guid): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     /**

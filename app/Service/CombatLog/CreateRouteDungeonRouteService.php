@@ -33,17 +33,18 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     protected SeasonServiceInterface $seasonService;
 
     protected CreateRouteDungeonRouteServiceLoggingInterface $log;
-    
+
     /**
      * @param CombatLogService                               $combatLogService
      * @param SeasonServiceInterface                         $seasonService
      * @param CreateRouteDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
-        CombatLogService $combatLogService,
-        SeasonServiceInterface $seasonService,
+        CombatLogService                               $combatLogService,
+        SeasonServiceInterface                         $seasonService,
         CreateRouteDungeonRouteServiceLoggingInterface $log
-    ) {
+    )
+    {
         $this->combatLogService = $combatLogService;
         $this->seasonService    = $seasonService;
         $this->log              = $log;
@@ -86,6 +87,9 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 throw new Exception('Unable to generate dungeon route from combat log!');
             }
 
+            // #1818 Filter out any NPC ids that are invalid
+            $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
+
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
             $challengeModeStartEvent = $resultEvents->filter(function (BaseResultEvent $resultEvent) {
                 return $resultEvent instanceof ChallengeModeStartResultEvent;
@@ -110,9 +114,20 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $spells           = collect();
             foreach ($resultEvents as $resultEvent) {
                 if ($resultEvent instanceof EnemyEngagedResultEvent) {
-                    $npcEngagedEvents->put($resultEvent->getGuid()->getGuid(), $resultEvent);
-                } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
                     $guid = $resultEvent->getGuid();
+                    if ($validNpcIds->search($guid->getId()) === false) {
+                        $this->log->getCreateRouteBodyEnemyEngagedInvalidNpcId($guid->getId());
+                        continue;
+                    }
+
+                    $npcEngagedEvents->put($guid->getGuid(), $resultEvent);
+                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
+                    $guid = $resultEvent->getGuid();
+                    if ($validNpcIds->search($guid->getId()) === false) {
+                        $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
+                        continue;
+                    }
+
                     /** @var EnemyEngagedResultEvent $npcEngagedEvent */
                     $npcEngagedEvent = $npcEngagedEvents->get($guid->getGuid());
 
@@ -132,7 +147,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                         )
                     );
 
-                } elseif ($resultEvent instanceof SpellCast) {
+                } else if ($resultEvent instanceof SpellCast) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -161,8 +176,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 $spells
             );
 
-        }
-        finally {
+        } finally {
             $this->log->getCreateRouteBodyEnd();
         }
     }

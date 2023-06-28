@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\V1;
 
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
-use DateTime;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -38,7 +37,7 @@ class CreateRouteRequest extends FormRequest
             'challengeMode.affixes'    => ['required', 'array'],
             'challengeMode.affixes.*'  => ['required', Rule::exists('affixes', 'affix_id')],
             'npcs'                     => ['required', 'array'],
-            'npcs.*.npcId'             => ['required', Rule::exists('npcs', 'id')],
+            'npcs.*.npcId'             => ['required', 'integer'], // #1818 Rule::exists('npcs', 'id')
             'npcs.*.spawnUid'          => ['required', 'string', 'max:10'],
             'npcs.*.engagedAt'         => ['required', $dateFormat],
             'npcs.*.diedAt'            => ['required', $dateFormat],
