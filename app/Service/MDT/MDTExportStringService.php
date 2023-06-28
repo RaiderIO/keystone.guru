@@ -7,10 +7,9 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
-use App\Models\KillZone;
+use App\Models\KillZone\KillZone;
 use App\Models\NpcClassification;
 use App\Models\Path;
-use App\Service\Season\SeasonService;
 use Exception;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -23,6 +22,9 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
 {
+    /** @var int How far away do we create notes in MDT  */
+    private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
+
     /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
 
@@ -39,7 +41,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
-        foreach ($this->dungeonRoute->mapicons as $mapIcon) {
+        foreach ($this->dungeonRoute->mapicons()->with(['floor'])->get() as $mapIcon) {
             $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
 
             $result[$currentObjectIndex++] = [
@@ -54,7 +56,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             ];
         }
 
-        $lines = $this->dungeonRoute->brushlines->merge($this->dungeonRoute->paths);
+        $lines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->merge(
+            $this->dungeonRoute->paths()->with(['floor'])->get()
+        );
 
         foreach ($lines as $line) {
             /** @var Path|Brushline $line */
@@ -96,6 +100,29 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $result[$currentObjectIndex++] = $mdtLine;
         }
 
+        // For each killzone, ensure we extract the comments into something MDT understands
+        foreach ($this->dungeonRoute->killZones as $killZone) {
+            if (!isset($killZone->description)) {
+                continue;
+            }
+
+            $floor  = $killZone->getDominantFloor();
+            $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
+
+            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
+
+            $result[$currentObjectIndex++] = [
+                'n' => true,
+                'd' => [
+                    1 => $mdtCoordinates['x'],
+                    2 => $mdtCoordinates['y'],
+                    3 => $floor->mdt_sub_level ?? $floor->index,
+                    4 => true,
+                    5 => $killZone->description,
+                ],
+            ];
+        }
+
         return $result;
     }
 
@@ -120,8 +147,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $pull = [];
 
             // Lua is 1 based, not 0 based
-            $enemyIndex   = 1;
-            $enemiesAdded = 0;
+            $enemyIndex      = 1;
+            $enemiesAdded    = 0;
             $killZoneEnemies = $killZone->getEnemies();
             foreach ($killZoneEnemies as $enemy) {
                 // MDT does not handle prideful NPCs

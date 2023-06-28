@@ -12,6 +12,8 @@ use InvalidArgumentException;
 
 class CombatLogEntry
 {
+    public const DATE_FORMAT = 'm/d H:i:s.v';
+
     private const RAW_EVENT_IGNORE = [
         'Search the gold piles for magic items!',
         'Everyone within 10 yards will be consumed!',
@@ -47,7 +49,7 @@ class CombatLogEntry
             return null;
         }
 
-        $this->parsedTimestamp = Carbon::createFromFormat('m/d H:i:s.v', $matches[1]);
+        $this->parsedTimestamp = Carbon::createFromFormat(self::DATE_FORMAT, $matches[1]);
         $eventData             = $matches[2];
         $mayParseEvent         = empty($eventWhiteList);
 

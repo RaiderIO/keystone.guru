@@ -16,6 +16,7 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
+use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -111,6 +112,14 @@ class ViewService implements ViewServiceInterface
                 $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
             }
 
+            // Spells
+            $selectableSpellsByCategory = Spell::where('selectable', true)
+                ->get()
+                ->groupBy('category')
+                ->mapWithKeys(function (Collection $spells, string $key) {
+                    return [__($key) => $spells];
+                });
+
             return [
                 'isProduction'                     => config('app.env') === 'production',
                 'demoRoutes'                       => $demoRoutes,
@@ -147,6 +156,7 @@ class ViewService implements ViewServiceInterface
                 'affixes'                          => Affix::all(),
                 'allRouteAttributes'               => RouteAttribute::all(),
                 'allPublishedStates'               => PublishedState::all(),
+                'selectableSpellsByCategory'       => $selectableSpellsByCategory,
 
                 // Misc
                 'activeExpansions'                 => $activeExpansions, // Show most recent expansions first

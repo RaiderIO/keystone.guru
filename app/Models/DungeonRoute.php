@@ -6,6 +6,8 @@ use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -171,7 +173,9 @@ class DungeonRoute extends Model
         'mapping_version_id',
         'faction_id',
         'published_state_id',
+        'teeming',
         'title',
+        'difficulty',
         'level_min',
         'level_max',
         'expires_at',

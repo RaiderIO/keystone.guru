@@ -5,6 +5,9 @@ namespace App\Http\Middleware;
 use App\Models\DungeonRoute;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Log;
+use Ramsey\Uuid\Uuid;
 
 class DebugInfoContextLogger
 {
@@ -13,9 +16,9 @@ class DebugInfoContextLogger
         $dungeonRoute = $request->route('dungeonroute');
 
         $context = [
-            'url'    => $request->url(),
-            'method' => $request->method(),
-            'params' => $request->all(),
+            'url'           => $request->url(),
+            'method'        => $request->method(),
+            'correlationId' => Uuid::uuid4()->toString(),
         ];
 
         if ($dungeonRoute instanceof DungeonRoute) {
@@ -26,8 +29,14 @@ class DebugInfoContextLogger
         }
 
         // @TODO Re-enable this
-//        \Log::withContext($context);
+        Log::withContext($context);
 
-        return $next($request);
+        /** @var Response $response */
+        $response = $next($request);
+        $response->header('X-Correlation-Id', $context['correlationId']);
+
+
+
+        return $response;
     }
 }

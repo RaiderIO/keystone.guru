@@ -1,10 +1,10 @@
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$spell ?? null],
     'showAds' => false,
-    'title' => $spell ? __('views/admin.spell.edit.title_edit') : __('views/admin.spell.edit.title_new')
+    'title' => isset($spell) ? __('views/admin.spell.edit.title_edit') : __('views/admin.spell.edit.title_new')
     ])
 @section('header-title')
-    {{ $spell ? __('views/admin.spell.edit.header_edit') : __('views/admin.spell.edit.header_new') }}
+    {{ isset($spell) ? __('views/admin.spell.edit.header_edit') : __('views/admin.spell.edit.header_new') }}
 @endsection
 <?php
 /**

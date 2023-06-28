@@ -856,7 +856,7 @@ class AdminToolsController extends Controller
         $value    = $request->get('value');
 
         /** @var Npc $npc */
-        $npc = Npc::find($npcId);
+        $npc = Npc::with(['enemyForces'])->find($npcId);
 
         switch ($category) {
             case 'mismatched_health':

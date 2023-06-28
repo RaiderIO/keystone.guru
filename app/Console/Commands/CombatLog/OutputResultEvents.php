@@ -36,8 +36,8 @@ class OutputResultEvents extends BaseCombatLogCommand
         $filePath = $this->argument('filePath');
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogDungeonRouteService) {
-            if (str_contains($filePath, '_events.txt')) {
-                $this->comment(sprintf('- Skipping output file %s', $filePath));
+            if (!str_contains($filePath, '.zip')) {
+                $this->comment(sprintf('- Skipping file %s', $filePath));
                 return 0;
             }
 
@@ -61,8 +61,9 @@ class OutputResultEvents extends BaseCombatLogCommand
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
         $result = file_put_contents(base_path($resultingFile), $resultEvents->map(function (BaseResultEvent $resultEvent) {
-            return $resultEvent->getBaseEvent()->getRawEvent();
-        })->implode(''));
+            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+            return trim($resultEvent->getBaseEvent()->getRawEvent());
+        })->implode(PHP_EOL));
 
         if ($result) {
             $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));

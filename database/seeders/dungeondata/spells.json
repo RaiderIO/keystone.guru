@@ -1,10 +1,62 @@
 [
     {
+        "id": 2825,
+        "category": "spells.shaman",
+        "dispel_type": "Magic",
+        "icon_name": "spell_nature_bloodlust",
+        "name": "Bloodlust",
+        "schools_mask": 0,
+        "aura": 0,
+        "selectable": 1
+    },
+    {
+        "id": 32182,
+        "category": "spells.shaman",
+        "dispel_type": "Magic",
+        "icon_name": "ability_shaman_heroism",
+        "name": "Heroism",
+        "schools_mask": 0,
+        "aura": 0,
+        "selectable": 1
+    },
+    {
+        "id": 80353,
+        "category": "spells.mage",
+        "dispel_type": "Magic",
+        "icon_name": "ability_mage_timewarp",
+        "name": "Time Warp",
+        "schools_mask": 0,
+        "aura": 0,
+        "selectable": 1
+    },
+    {
+        "id": 90355,
+        "category": "spells.hunter",
+        "dispel_type": "Magic",
+        "icon_name": "spell_shadow_unholyfrenzy",
+        "name": "Ancient Hysteria",
+        "schools_mask": 0,
+        "aura": 0,
+        "selectable": 1
+    },
+    {
         "id": 333293,
+        "category": "spells.death_knight",
         "dispel_type": "Magic",
         "icon_name": "spell_deathknight_boneshield",
         "name": "Bone Shield",
         "schools_mask": 0,
-        "aura": 1
+        "aura": 1,
+        "selectable": 0
+    },
+    {
+        "id": 390386,
+        "category": "spells.evoker",
+        "dispel_type": "Magic",
+        "icon_name": "ability_evoker_furyoftheaspects",
+        "name": "Fury of the Aspects",
+        "schools_mask": 0,
+        "aura": 0,
+        "selectable": 1
     }
 ]

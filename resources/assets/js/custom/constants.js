@@ -112,8 +112,8 @@ const AFFIX_UNKNOWN = 'Unknown';
 const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 const AFFIX_SHROUDED = 'Shrouded';
-const AFFIX_AFFLICTED   = 'Afflicted';
-const AFFIX_ENTANGLING  = 'Entangling';
+const AFFIX_AFFLICTED = 'Afflicted';
+const AFFIX_ENTANGLING = 'Entangling';
 const AFFIX_INCORPOREAL = 'Incorporeal';
 
 // Dungeon Speedrun Required Npcs
@@ -148,6 +148,12 @@ const EXPANSION_SHADOWLANDS = 'shadowlands';
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
 const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
+
+// Spells
+const SPELL_BLOODLUST = 2825;
+const SPELL_HEROISM = 32182;
+const SPELL_TIME_WARP = 80353;
+const SPELL_FURY_OF_THE_ASPECTS = 390386;
 
 // Metrics
 const METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;

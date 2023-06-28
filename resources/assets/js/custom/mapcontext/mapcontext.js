@@ -16,6 +16,15 @@ class MapContext extends Signalable {
             )
         }
 
+        // Init spells
+        let spells = this._options.static.spells;
+        this.spells = [];
+        for (let i = 0; i < spells.length; i++) {
+            this.spells.push(
+                new Spell(spells[i])
+            )
+        }
+
         this.unknownMapIconType = this.getMapIconType(this._options.static.unknownMapIconType.id);
         this.awakenedObeliskGatewayMapIconType = this.getMapIconType(this._options.static.awakenedObeliskGatewayMapIconType.id);
     }
@@ -83,6 +92,29 @@ class MapContext extends Signalable {
      */
     getAwakenedObeliskGatewayMapIconType() {
         return this.awakenedObeliskGatewayMapIconType;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getSpells() {
+        return this.spells;
+    }
+
+    /**
+     * @param spellId {Number}
+     * @returns {Spell}
+     */
+    getSpell(spellId) {
+        let spell = null;
+        for (let i = 0; i < this.spells.length; i++) {
+            if (this.spells[i].id === spellId) {
+                spell = this.spells[i];
+                break;
+            }
+        }
+        return spell;
     }
 
     /**

@@ -85,6 +85,8 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
+            let bloodlustKeys = [SPELL_BLOODLUST, SPELL_HEROISM, SPELL_FURY_OF_THE_ASPECTS, SPELL_TIME_WARP];
+
             for (let i = 0; i < sortedKillZones.length; i++) {
                 let killZone = sortedKillZones[i];
 
@@ -94,37 +96,18 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 });
 
                 $bloodlustPerPullSelect.append($option);
-            }
 
-            let bloodlustKeys = [MAP_ICON_TYPE_SPELL_BLOODLUST, MAP_ICON_TYPE_SPELL_HEROISM];
-            let mapIconMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
-            for (let index in mapIconMapObjectGroup.objects) {
-                let mapIcon = mapIconMapObjectGroup.objects[index];
+                // Determine if this pull activated Bloodlust~ spells
+                for (let index in killZone.spellIds) {
+                    let spellId = killZone.spellIds[index];
 
-                // If we are a bloodlust icon...
-                if (bloodlustKeys.includes(mapIcon.map_icon_type.key)) {
-                    // Find the closest killzone
-                    let closestKillZone = null;
-                    let closestKillZoneDistance = 9999999;
-                    for (let i = 0; i < sortedKillZones.length; i++) {
-                        let killZone = sortedKillZones[i];
-                        // Killzone not on the same floor as the icon - ignore
-                        if (!killZone.getFloorIds().includes(mapIcon.floor_id)) {
-                            continue;
-                        }
-
-                        let distance = getLatLngDistance(killZone.getLayerCenteroid(), mapIcon.layer.getLatLng());
-                        if (closestKillZoneDistance > distance) {
-                            closestKillZone = killZone;
-                            closestKillZoneDistance = distance;
-                        }
-                    }
-
-                    if (closestKillZone !== null) {
-                        selectedPulls.push(closestKillZone.id);
+                    if (bloodlustKeys.includes(spellId)) {
+                        selectedPulls.push(killZone.id);
+                        break;
                     }
                 }
             }
+
 
             $bloodlustPerPullSelect.val(selectedPulls);
         }

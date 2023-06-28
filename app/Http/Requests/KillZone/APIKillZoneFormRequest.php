@@ -3,9 +3,8 @@
 namespace App\Http\Requests\KillZone;
 
 use App\Models\Enemy;
-use App\Models\Faction;
 use App\Models\Floor;
-use App\Models\Mapping\MappingVersion;
+use App\Models\Spell;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -36,12 +35,15 @@ class APIKillZoneFormRequest extends FormRequest
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'description' => 'string|max:255',
+            'description' => 'nullable|string|max:255',
             'lat'         => 'nullable|numeric',
             'lng'         => 'nullable|numeric',
             'index'       => 'int',
             'enemies'     => 'array',
+            // Do not validate here - it's slow and we validate ourselves against the accurate mapping version
             'enemies.*'   => 'int',
+            'spells'      => 'array',
+            'spells.*'    => Rule::exists(Spell::class, 'id'),
         ];
     }
 }

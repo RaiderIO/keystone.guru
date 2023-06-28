@@ -27,9 +27,10 @@ class Path extends Model
     use HasLinkedAwakenedObelisk;
 
     public $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
-    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id'];
+    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
     public $with = ['polyline', 'linkedawakenedobelisks'];
     protected $appends = ['linked_awakened_obelisk_id'];
+    public $timestamps = true;
 
     /**
      * Get the dungeon route that this route is attached to.

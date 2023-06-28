@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CreateRouteRequest;
 use App\Http\Resources\DungeonRouteResource;
 use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Traits\SavesStringToTempDisk;
 
 class APICombatLogController extends Controller
@@ -24,10 +25,8 @@ class APICombatLogController extends Controller
     {
         $validated = $request->validated();
 
-        $targetFile = $this->saveFile('combatlog', $validated['combatlog']);
-
-        $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes($targetFile);
-
-        return new DungeonRouteResource($dungeonRoutes->first());
+        return new DungeonRouteResource($combatLogDungeonRouteService->convertCreateRouteBodyToDungeonRoute(
+            CreateRouteBody::createFromArray($validated)
+        ));
     }
 }

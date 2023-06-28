@@ -2,7 +2,7 @@
 
 namespace App\Logic\SimulationCraft;
 
-use App\Models\KillZone;
+use App\Models\KillZone\KillZone;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Collection;
 

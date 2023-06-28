@@ -62,6 +62,8 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            'debug_info_context_logger' => DebugInfoContextLogger::class,
+            'read_only_mode'            => ReadOnlyMode::class,
         ],
     ];
 

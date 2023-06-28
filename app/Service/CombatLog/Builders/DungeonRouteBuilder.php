@@ -3,24 +3,20 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
-use App\Logic\CombatLog\SpecialEvents\UnitDied;
+use App\Logic\Utils\MathUtils;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Floor;
-use App\Models\KillZone;
-use App\Models\KillZoneEnemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
+use App\Models\KillZone\KillZoneSpell;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
-use App\Service\CombatLog\ResultEvents\BaseResultEvent;
-use App\Service\CombatLog\ResultEvents\EnemyEngaged;
-use App\Service\CombatLog\ResultEvents\EnemyKilled;
-use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use Exception;
 use Illuminate\Support\Collection;
 
-class DungeonRouteBuilder
+abstract class DungeonRouteBuilder
 {
     /** @var int How much yards the closest enemy must be away from in order to consider if we maybe aggroed a patrol */
     private const MAX_AGGRO_DISTANCE_FOR_PATROLS = 50;
@@ -37,47 +33,44 @@ class DungeonRouteBuilder
         Dungeon::DUNGEON_NELTHARUS,
     ];
 
-    private const NPC_ID_MAPPING = [
+    protected const NPC_ID_MAPPING = [
         // Brackenhide Gnolls transform into Witherlings after engaging them
         194373 => 187238,
     ];
 
-    private DungeonRoute $dungeonRoute;
+    protected DungeonRoute $dungeonRoute;
 
-    /** @var Collection|BaseResultEvent[] */
-    private Collection $resultEvents;
-
-    /** @var Collection|EnemyEngaged[] */
-    private Collection $enemiesKilledInCurrentPull;
-
-    /** @var Collection|EnemyEngaged[] */
-    private Collection $currentEnemiesInCombat;
-
-    private ?Floor $currentFloor;
-
-    private int $killZoneIndex = 1;
+    protected ?Floor $currentFloor;
 
     /** @var Collection|Enemy[] */
-    private Collection $availableEnemies;
+    protected Collection $availableEnemies;
+
+    /** @var Collection */
+    protected Collection $currentPullEnemiesKilled;
+
+    /** @var Collection */
+    protected Collection $currentPullSpellsCast;
+
+    /** @var Collection */
+    protected Collection $currentEnemiesInCombat;
+
+    private int $killZoneIndex = 1;
 
     private DungeonRouteBuilderLoggingInterface $log;
 
     /**
      * @param DungeonRoute $dungeonRoute
-     * @param Collection|BaseResultEvent[] $resultEvents
      */
-    public function __construct(DungeonRoute $dungeonRoute, Collection $resultEvents)
+    public function __construct(DungeonRoute $dungeonRoute)
     {
         $this->dungeonRoute = $dungeonRoute;
-        $this->resultEvents = $resultEvents;
         /** @var DungeonRouteBuilderLoggingInterface $log */
-        $log                              = App::make(DungeonRouteBuilderLoggingInterface::class);
-        $this->log                        = $log;
-        $this->enemiesKilledInCurrentPull = collect();
-        $this->currentEnemiesInCombat     = collect();
-        $this->currentFloor               = null;
-        $this->availableEnemies           = $this->dungeonRoute->mappingVersion->enemies()->with([
+        $log                    = App::make(DungeonRouteBuilderLoggingInterface::class);
+        $this->log              = $log;
+        $this->currentFloor     = null;
+        $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
             'floor',
+            'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
         ])
@@ -90,80 +83,42 @@ class DungeonRouteBuilder
                 return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
             })
             ->keyBy('id');
+
+        $this->currentPullEnemiesKilled = collect();
+        $this->currentPullSpellsCast    = collect();
+        $this->currentEnemiesInCombat   = collect();
     }
 
     /**
      * @return DungeonRoute
      * @throws Exception
      */
-    public function build(): DungeonRoute
+    public abstract function build(): DungeonRoute;
+
+    /**
+     * @return Collection|array{array{npcId: int, x: float, y: float}}
+     */
+    public abstract function convertEnemiesKilledInCurrentPull(): Collection;
+
+    /**
+     * @return void
+     */
+    protected function recalculateEnemyForcesOnDungeonRoute()
     {
-        foreach ($this->resultEvents as $resultEvent) {
-            try {
-                $baseEvent = $resultEvent->getBaseEvent();
-                $this->log->buildStart(
-                    $baseEvent->getTimestamp()->toDateTimeString(),
-                    $baseEvent->getEventName()
-                );
-
-                if ($resultEvent instanceof MapChangeResultEvent) {
-                    /** @var $baseEvent MapChangeCombatLogEvent */
-                    $this->currentFloor = $resultEvent->getFloor();
-                } else if ($this->currentFloor === null) {
-                    $this->log->buildNoFloorFoundYet();
-                    continue;
-                }
-
-                if ($resultEvent instanceof EnemyEngaged) {
-                    // We are in combat with this enemy now
-                    $this->currentEnemiesInCombat->put($resultEvent->getGuid()->getGuid(), $resultEvent);
-
-                    $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
-                } else if ($resultEvent instanceof EnemyKilled) {
-                    /** @var $baseEvent UnitDied */
-                    // Check if we had this enemy in combat, if so, we just killed it in our current pull
-                    // UnitDied only has DestGuid
-                    $guid = $baseEvent->getGenericData()->getDestGuid()->getGuid();
-                    if ($this->currentEnemiesInCombat->has($guid)) {
-                        $this->enemiesKilledInCurrentPull->put($guid, $this->currentEnemiesInCombat->get($guid));
-
-                        $this->currentEnemiesInCombat->forget($guid);
-                        $this->log->buildUnitDiedNoLongerInCombat($guid);
-                    } else {
-                        $this->log->buildUnitDiedNotInCombat($guid);
-                    }
-
-                    // If we just killed the last enemy that we were in combat with, we just completed a pull
-                    if ($this->currentEnemiesInCombat->isEmpty()) {
-                        $this->log->buildCreateNewPull($this->enemiesKilledInCurrentPull->keys()->toArray());
-
-                        $this->createPull();
-                    }
-                }
-            } finally {
-                $this->log->buildEnd();
-            }
-        }
-
-        // Ensure that we create a final pull if need be
-        if ($this->enemiesKilledInCurrentPull->isNotEmpty()) {
-            $this->log->buildCreateNewFinalPull($this->enemiesKilledInCurrentPull->keys()->toArray());
-            $this->createPull();
-        }
-
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
         DungeonRoute::find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
         $this->dungeonRoute->enemy_forces = $enemyForces;
-
-        return $this->dungeonRoute;
     }
 
     /**
      * @return KillZone
      */
-    private function createPull(): KillZone
+    protected function createPull(): KillZone
     {
+        /** @var Collection|array{array{npcId: int, x: float, y: float}} $killedEnemies */
+        $killedEnemies = $this->convertEnemiesKilledInCurrentPull();
+
         $killZone = KillZone::create([
             'dungeon_route_id' => $this->dungeonRoute->id,
             'color'            => randomHexColor(),
@@ -173,34 +128,33 @@ class DungeonRouteBuilder
         // Keep track of which groups we're in combat with
         $groupsPulled              = collect();
         $killZoneEnemiesAttributes = collect();
-        foreach ($this->enemiesKilledInCurrentPull as $guid => $enemyEngagedEvent) {
+        foreach ($killedEnemies as $guid => $killedEnemy) {
             /** @var string $guid */
+            /** @var array{npcId: int, x: float, y: float} $killedEnemy */
+
             try {
                 $this->log->createPullFindEnemyForGuidStart($guid);
-                /** @var \App\Service\CombatLog\ResultEvents\EnemyEngaged $enemyEngagedEvent */
-                $advancedData = $enemyEngagedEvent->getEngagedEvent()->getAdvancedData();
-                $npcId        = $enemyEngagedEvent->getGuid()->getId();
 
                 // See if we actually need to go look for another NPC
-                if (isset(self::NPC_ID_MAPPING[$npcId])) {
+                if (isset(self::NPC_ID_MAPPING[$killedEnemy['npcId']])) {
                     $this->log->createPullFindEnemyForGuidStartMappingToDifferentNpcId(
-                        $npcId, self::NPC_ID_MAPPING[$npcId]
+                        $killedEnemy['npcId'], self::NPC_ID_MAPPING[$killedEnemy['npcId']]
                     );
-                    $npcId = self::NPC_ID_MAPPING[$npcId];
+                    $killedEnemy['npcId'] = self::NPC_ID_MAPPING[$killedEnemy['npcId']];
                 }
 
                 $enemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
-                    $npcId,
-                    $advancedData->getPositionX(),
-                    $advancedData->getPositionY(),
+                    $killedEnemy['npcId'],
+                    $killedEnemy['x'],
+                    $killedEnemy['y'],
                     $groupsPulled
                 );
 
                 if ($enemy === null) {
                     $this->log->createPullEnemyNotFound(
-                        $npcId,
-                        $advancedData->getPositionX(),
-                        $advancedData->getPositionY()
+                        $killedEnemy['npcId'],
+                        $killedEnemy['x'],
+                        $killedEnemy['y']
                     );
                 } else {
                     // Schedule for creation later
@@ -216,9 +170,9 @@ class DungeonRouteBuilder
                         $groupsPulled->put($enemy->enemyPack->group, true);
                     }
                     $this->log->createPullEnemyAttachedToKillZone(
-                        $npcId,
-                        $advancedData->getPositionX(),
-                        $advancedData->getPositionY()
+                        $killedEnemy['npcId'],
+                        $killedEnemy['x'],
+                        $killedEnemy['y']
                     );
                 }
             } finally {
@@ -227,7 +181,7 @@ class DungeonRouteBuilder
         }
 
         // Clear the collection - we just created a pull for all enemies
-        $this->enemiesKilledInCurrentPull = collect();
+        $this->currentPullEnemiesKilled = collect();
 
         if ($killZoneEnemiesAttributes->isNotEmpty()) {
             KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
@@ -236,13 +190,29 @@ class DungeonRouteBuilder
             $killZone->delete();
         }
 
+        // Assign spells to the pull
+        $killZoneSpellsAttributes = collect();
+        foreach ($this->currentPullSpellsCast as $spellId) {
+            $killZoneSpellsAttributes->push([
+                'kill_zone_id' => $killZone->id,
+                'spell_id'     => $spellId,
+            ]);
+        }
+        $this->currentPullSpellsCast = collect();
+
+        if ($killZoneSpellsAttributes->isNotEmpty()) {
+            KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
+            $spellCount = $killZoneSpellsAttributes->count();
+            $this->log->createPullSpellsAttachedToKillZone($spellCount);
+        }
+
         return $killZone;
     }
 
     /**
-     * @param int $npcId
-     * @param float $ingameX
-     * @param float $ingameY
+     * @param int        $npcId
+     * @param float      $ingameX
+     * @param float      $ingameY
      * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      *
      * @return Enemy|null
@@ -341,11 +311,11 @@ class DungeonRouteBuilder
 
     /**
      * @param Collection $enemies
-     * @param float $ingameX
-     * @param float $ingameY
-     * @param float $closestEnemyDistance
+     * @param float      $ingameX
+     * @param float      $ingameY
+     * @param float      $closestEnemyDistance
      * @param Enemy|null $closestEnemy
-     * @param bool $considerPatrols
+     * @param bool       $considerPatrols
      * @return bool
      */
     private function findClosestEnemyAndDistanceFromList(
@@ -412,12 +382,12 @@ class DungeonRouteBuilder
     }
 
     /**
-     * @param Enemy $availableEnemy
-     * @param float $enemyLat
-     * @param float $enemyLng
-     * @param float $ingameX
-     * @param float $ingameY
-     * @param float $closestEnemyDistance
+     * @param Enemy      $availableEnemy
+     * @param float      $enemyLat
+     * @param float      $enemyLng
+     * @param float      $ingameX
+     * @param float      $ingameY
+     * @param float      $closestEnemyDistance
      * @param Enemy|null $closestEnemy
      *
      * @return bool True if an enemy close enough was found
@@ -437,7 +407,7 @@ class DungeonRouteBuilder
         // Always use the floor that the enemy itself is on, not $this->currentFloor
         $enemyXY = $availableEnemy->floor->calculateIngameLocationForMapLocation($enemyLat, $enemyLng);
 
-        $distance = App\Logic\Utils\MathUtils::distanceBetweenPoints(
+        $distance = MathUtils::distanceBetweenPoints(
             $enemyXY['x'],
             $ingameX,
             $enemyXY['y'],

@@ -1,34 +1,42 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\KillZone;
 
+use App\Models\Affix;
+use App\Models\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\Floor;
+use App\Models\Spell;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $floor_id
- * @property string $color
- * @property string $description
- * @property int $index
- * @property double $lat
- * @property double $lng
+ * @property int                        $id
+ * @property int                        $dungeon_route_id
+ * @property int                        $floor_id
+ * @property string                     $color
+ * @property string                     $description
+ * @property int                        $index
+ * @property double                     $lat
+ * @property double                     $lng
  *
- * @property DungeonRoute $dungeonRoute
- * @property Floor $floor
+ * @property DungeonRoute               $dungeonRoute
+ * @property Floor                      $floor
  *
- * @property Collection|int[] $enemies
+ * @property Collection|int[]           $enemies
  * @property Collection|KillZoneEnemy[] $killZoneEnemies
+ * @property Collection|KillZoneSpell[] $killZoneSpells
+ * @property Collection|Spell[]         $spells
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon                     $updated_at
+ * @property Carbon                     $created_at
  *
  * @mixin Eloquent
  */
@@ -43,9 +51,11 @@ class KillZone extends Model
         'lng',
         'index',
         'enemies',
+        'spells',
     ];
 
     protected $appends = ['enemies'];
+    protected $with = ['spells:id'];
 
     protected $fillable = [
         'id',
@@ -67,12 +77,23 @@ class KillZone extends Model
         'lng'      => 'float',
     ];
 
+    private Collection $enemiesCache;
+
+    /**
+     * @param Collection $enemyIds
+     * @return void
+     */
+    public function setEnemiesCache(Collection $enemyIds): void
+    {
+        $this->enemiesCache = $enemyIds;
+    }
+
     /**
      * @return Collection
      */
     public function getEnemiesAttribute(): Collection
     {
-        return Enemy::select('enemies.id')
+        return $this->enemiesCache ?? Enemy::select('enemies.id')
             ->join('kill_zone_enemies', function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
@@ -105,6 +126,22 @@ class KillZone extends Model
     public function killZoneEnemies(): HasMany
     {
         return $this->hasMany(KillZoneEnemy::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function killZoneSpells(): HasMany
+    {
+        return $this->hasMany(KillZoneSpell::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function spells(): BelongsToMany
+    {
+        return $this->belongsToMany(Spell::class, 'kill_zone_spells');
     }
 
     /**
@@ -182,6 +219,71 @@ class KillZone extends Model
 
             return ['lat' => $totalLat / $enemies->count(), 'lng' => $totalLng / $enemies->count()];
         }
+    }
+
+    /**
+     * @return array|null The coordinates of a rectangle that perfectly fits all enemies inside this pull.
+     */
+    public function getEnemiesBoundingBox(int $margin = 0): ?array
+    {
+        $enemies = $this->getEnemies();
+
+        if ($enemies->isEmpty()) {
+            return null;
+        }
+
+        $result = [
+            'latMin' => 999999,
+            'latMax' => -999999,
+            'lngMin' => 999999,
+            'lngMax' => -999999,
+        ];
+
+        foreach ($enemies as $enemy) {
+            if ($result['latMin'] > $enemy->lat) {
+                $result['latMin'] = $enemy->lat;
+            }
+            if ($result['latMax'] < $enemy->lat) {
+                $result['latMax'] = $enemy->lat;
+            }
+
+            if ($result['lngMin'] > $enemy->lng) {
+                $result['lngMin'] = $enemy->lng;
+            }
+            if ($result['lngMax'] < $enemy->lng) {
+                $result['lngMax'] = $enemy->lng;
+            }
+        }
+
+        if ($margin > 0) {
+            $result['latMin'] -= $margin;
+            $result['latMax'] += $margin;
+            $result['lngMin'] -= $margin;
+            $result['lngMax'] += $margin;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calculate the bounding box of all enemies that this pull kills, take the north edge of that bounding box
+     * and return the middle of that edge as a lat/lng.
+     *
+     * @param int $boundingBoxMargin
+     * @return array|null
+     */
+    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?array
+    {
+        $boundingBox = $this->getEnemiesBoundingBox($boundingBoxMargin);
+        if ($boundingBox === null) {
+            return null;
+        }
+
+        return [
+            // Max lat is at the top
+            'lat' => $boundingBox['latMax'],
+            'lng' => $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
+        ];
     }
 
     /**
