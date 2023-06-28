@@ -70,6 +70,7 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
+        // @TODO sorting here causes inconsistent results when the timestamp is the same
         return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
             return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs();
         });

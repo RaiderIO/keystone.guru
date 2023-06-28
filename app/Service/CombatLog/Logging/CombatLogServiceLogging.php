@@ -16,6 +16,24 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+    
+    /**
+     * @param string $combatLogFilePath
+     *
+     * @return void
+     */
+    public function getResultEventsStart(string $combatLogFilePath): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function getResultEventsEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
 
     /**
      * @return void

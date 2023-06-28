@@ -4,8 +4,9 @@ namespace App\Service\CombatLog\Logging;
 
 interface CombatLogServiceLoggingInterface
 {
-
     public function parseCombatLogToEventsUnableToParseRawEvent(string $rawEvent): void;
+    public function getResultEventsStart(string $combatLogFilePath): void;
+    public function getResultEventsEnd(): void;
     public function extractCombatLogExtractingArchiveStart(): void;
     public function extractCombatLogInvalidZipFile(): void;
     public function extractCombatLogExtractedArchive(string $extractedFilePath): void;

@@ -3,8 +3,8 @@
 namespace Tests\Unit\Fixtures;
 
 use App\Models\Season;
-use App\Service\CombatLog\CombatLogDungeonRouteService;
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\ResultEventDungeonRouteService;
+use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
@@ -46,9 +46,10 @@ class ServiceFixtures
      * @param CombatLogService $combatLogService
      * @param CombatLogDungeonRouteServiceLoggingInterface $log
      * @param array $methodsNotToMock
-     * @return MockObject|CombatLogDungeonRouteServiceInterface
+     *
+     * @return MockObject|ResultEventDungeonRouteServiceInterface
      */
-    public static function getCombatLogDungeonRouteServiceMock(
+    public static function getResultEventDungeonRouteServiceMock(
         PublicTestCase                               $testCase,
         CombatLogService                             $combatLogService,
         CombatLogDungeonRouteServiceLoggingInterface $log,
@@ -56,7 +57,7 @@ class ServiceFixtures
     ): MockObject
     {
         return $testCase
-            ->getMockBuilder(CombatLogDungeonRouteService::class)
+            ->getMockBuilder(ResultEventDungeonRouteService::class)
             ->setConstructorArgs([
                 $combatLogService,
                 $log,

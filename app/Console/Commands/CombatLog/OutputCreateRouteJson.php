@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Service\CombatLog\CombatLogDungeonRouteService;
-use App\Service\CombatLog\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 
 class OutputCreateRouteJson extends BaseCombatLogCommand
 {
@@ -24,35 +23,36 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
     /**
      * Execute the console command.
      *
-     * @param CombatLogDungeonRouteService $combatLogDungeonRouteService
+     * @param CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
      *
      * @return int
      * @throws \Exception
      */
-    public function handle(CombatLogDungeonRouteService $combatLogDungeonRouteService): int
+    public function handle(CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService): int
     {
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogDungeonRouteService) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($createRouteBodyDungeonRouteService) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('- Skipping file %s', $filePath));
+
                 return 0;
             }
 
-            return $this->outputCreateRouteJson($combatLogDungeonRouteService, $filePath);
+            return $this->outputCreateRouteJson($createRouteBodyDungeonRouteService, $filePath);
         });
     }
 
     /**
-     * @param CombatLogDungeonRouteService $combatLogDungeonRouteService
-     * @param string $filePath
+     * @param CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
+     * @param string                                  $filePath
      *
      * @return int
      * @throws \Exception
      */
-    private function outputCreateRouteJson(CombatLogDungeonRouteService $combatLogDungeonRouteService, string $filePath): int
+    private function outputCreateRouteJson(CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -60,7 +60,7 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
 
         $result = file_put_contents(
             base_path($resultingFile),
-            json_encode($combatLogDungeonRouteService->getCreateRouteBody($filePath), JSON_PRETTY_PRINT)
+            json_encode($createRouteBodyDungeonRouteService->getCreateRouteBody($filePath), JSON_PRETTY_PRINT)
         );
 
         if ($result) {
