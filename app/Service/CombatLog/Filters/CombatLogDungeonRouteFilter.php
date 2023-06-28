@@ -3,6 +3,8 @@
 namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\Guid\Creature;
 use App\Models\DungeonRoute;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -70,9 +72,19 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
-        // @TODO sorting here causes inconsistent results when the timestamp is the same
         return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
-            return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs();
+            // Add some CONSISTENT (not necessarily accurate) numbers so that events with 
+            $addition  = 0;
+            $baseEvent = $baseResultEvent->getBaseEvent();
+            if ($baseEvent instanceof AdvancedCombatLogEvent) {
+                $guid = $baseEvent->getAdvancedData()->getInfoGuid();
+                if ($guid instanceof Creature) {
+                    // Ensure that the addition doesn't go higher than 1
+                    $addition = min(0.99999, ($guid->getId() + hexdec($guid->getSpawnUID())) / 10000000000000);
+                }
+            }
+
+            return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs() + $addition;
         });
     }
 }
