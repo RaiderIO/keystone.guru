@@ -11,24 +11,6 @@ class CombatLogDungeonRouteServiceLogging extends StructuredLogging implements C
      * @param string $combatLogFilePath
      * @return void
      */
-    public function getResultEventsStart(string $combatLogFilePath): void
-    {
-        $this->start(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @return void
-     */
-    public function getResultEventsEnd(): void
-    {
-        $this->end(__METHOD__);
-    }
-
-
-    /**
-     * @param string $combatLogFilePath
-     * @return void
-     */
     public function convertCombatLogToDungeonRoutesStart(string $combatLogFilePath): void
     {
         $this->start(__METHOD__, get_defined_vars());
@@ -45,7 +27,7 @@ class CombatLogDungeonRouteServiceLogging extends StructuredLogging implements C
     /**
      * @return void
      */
-    public function saveEnemyPositionsStart(): void
+    public function saveEnemyPositionFromResultEventsStart(): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -53,7 +35,7 @@ class CombatLogDungeonRouteServiceLogging extends StructuredLogging implements C
     /**
      * @return void
      */
-    public function saveEnemyPositionsEnd(): void
+    public function saveEnemyPositionFromResultEventsEnd(): void
     {
         $this->end(__METHOD__);
     }
