@@ -26,7 +26,7 @@
     </thead>
 
     <tbody>
-    @foreach ($npc->npcEnemyForces as $npcEnemyForce)
+    @foreach ($npc->npcEnemyForces()->with(['mappingVersion'])->get() as $npcEnemyForce)
         <tr>
             <td>{{ $npcEnemyForce->id }}</td>
             <td>{{ $npcEnemyForce->mappingVersion->getPrettyName() }}</td>

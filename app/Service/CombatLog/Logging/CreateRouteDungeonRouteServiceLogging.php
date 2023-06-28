@@ -14,7 +14,25 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     {
         $this->start(__METHOD__, get_defined_vars());
     }
-    
+
+    /**
+     * @param int $npcId
+     * @return void
+     */
+    public function getCreateRouteBodyEnemyEngagedInvalidNpcId(int $npcId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int $npcId
+     * @return void
+     */
+    public function getCreateRouteBodyEnemyKilledInvalidNpcId(int $npcId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     /**
      * @inheritDoc
      */

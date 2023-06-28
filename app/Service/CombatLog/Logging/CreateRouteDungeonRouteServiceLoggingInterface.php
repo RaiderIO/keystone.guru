@@ -12,6 +12,18 @@ interface CreateRouteDungeonRouteServiceLoggingInterface
     public function getCreateRouteBodyStart(string $combatLogFilePath): void;
 
     /**
+     * @param int $npcId
+     * @return void
+     */
+    public function getCreateRouteBodyEnemyEngagedInvalidNpcId(int $npcId): void;
+
+    /**
+     * @param int $npcId
+     * @return void
+     */
+    public function getCreateRouteBodyEnemyKilledInvalidNpcId(int $npcId): void;
+
+    /**
      * @return void
      */
     public function getCreateRouteBodyEnd(): void;

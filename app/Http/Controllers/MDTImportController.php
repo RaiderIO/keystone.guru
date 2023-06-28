@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MDT\ImportStringFormRequest;
-use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\MDTImport;
 use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -22,11 +21,12 @@ class MDTImportController extends Controller
 {
     /**
      * Returns some details about the passed string.
-     * @param ImportStringFormRequest $request
+     * @param ImportStringFormRequest         $request
      * @param MDTImportStringServiceInterface $mdtImportStringService
-     * @param SeasonServiceInterface $seasonService
-     * @return array|void
-     * @throws Throwable
+     * @param SeasonServiceInterface          $seasonService
+     *
+     * @return ImportStringDetails|never-returns
+     * @throws \Throwable
      */
     public function details(
         ImportStringFormRequest         $request,
@@ -37,55 +37,36 @@ class MDTImportController extends Controller
         $validated = $request->validated();
         $string    = $validated['import_string'];
 
-//        try {
+        try {
             $warnings     = new Collection();
-            $mdtImportDetails = $mdtImportStringService
+            return $mdtImportStringService
                 ->setEncodedString($string)
                 ->getDetails($warnings);
+        } catch (InvalidMDTString $ex) {
+            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+        } catch (Exception $ex) {
+            // Different message based on our deployment settings
+            if (config('app.debug')) {
+                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
+            } else {
+                $message = __('controller.admintools.error.invalid_mdt_string');
+            }
 
-//            $result = [
-//                'dungeon'                    => $dungeonRoute->dungeon !== null ? __($dungeonRoute->dungeon->name) : __('controller.mdtimport.unknown_dungeon'),
-//                'affixes'                    => $affixes,
-//                'pulls'                      => $dungeonRoute->killZones->count(),
-//                'paths'                      => $dungeonRoute->paths->count(),
-//                'lines'                      => $dungeonRoute->brushlines->count(),
-//                'notes'                      => $dungeonRoute->mapicons->count(),
-//                'enemy_forces'               => $dungeonRoute->enemy_forces ?? 0,
-//                'enemy_forces_max'           => $dungeonRoute->teeming ? $dungeonRoute->mappingVersion->enemy_forces_required_teeming : $dungeonRoute->mappingVersion->enemy_forces_required,
-//                'warnings'                   => $warningResult,
-//            ];
+            // We're not interested if the string was 100% not an MDT string - it will never work then
+            if (isValidBase64($string)) {
+                report($ex);
+            }
 
-//            // Siege of Boralus faction but hide it otherwise
-//            if ($dungeonRoute->dungeon->isFactionSelectionRequired()) {
-//                $result['faction'] = __($dungeonRoute->faction->name);
-//            }
+            Log::error($ex->getMessage());
+            return abort(400, $message);
+        } catch (Throwable $error) {
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
+            }
+            Log::error($error->getMessage());
 
-            return $mdtImportDetails;
-//        } catch (InvalidMDTString $ex) {
-//            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
-//        } catch (Exception $ex) {
-//            // Different message based on our deployment settings
-//            if (config('app.debug')) {
-//                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
-//            } else {
-//                $message = __('controller.admintools.error.invalid_mdt_string');
-//            }
-//
-//            // We're not interested if the string was 100% not an MDT string - it will never work then
-//            if (isValidBase64($string)) {
-//                report($ex);
-//            }
-//
-//            Log::error($ex->getMessage());
-//            return abort(400, $message);
-//        } catch (Throwable $error) {
-//            if ($error->getMessage() === "Class 'Lua' not found") {
-//                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
-//            }
-//            Log::error($error->getMessage());
-//
-//            throw $error;
-//        }
+            throw $error;
+        }
     }
 
     /**
