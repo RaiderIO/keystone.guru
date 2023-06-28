@@ -4,13 +4,15 @@ namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\KillZone;
-use App\Models\KillZoneEnemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
+use App\Models\KillZone\KillZoneSpell;
 
 class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 {
     /**
      * @param string $modelClassName
+     *
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool
@@ -20,6 +22,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 
     /**
      * @param string $modelClassName
+     *
      * @return bool
      */
     public function canParseModel(string $modelClassName): bool
@@ -29,7 +32,8 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 
     /**
      * @param string $name
-     * @param array $value
+     * @param array  $value
+     *
      * @return bool
      */
     public function canParseRelation(string $name, array $value): bool
@@ -39,9 +43,10 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 
     /**
      * @param string $modelClassName
-     * @param array $modelData
+     * @param array  $modelData
      * @param string $name
-     * @param array $value
+     * @param array  $value
+     *
      * @return array
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
@@ -56,9 +61,13 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
             $enemies = $killZoneData['enemies'];
             unset($killZoneData['enemies']);
 
+            $spells = $killZoneData['spells'];
+            unset($killZoneData['spells']);
+
+            // Gotta save the KillZone in order to get an ID
+            $killZone = KillZone::create($killZoneData);
+
             if (count($enemies) > 0) {
-                // Gotta save the KillZone in order to get an ID
-                $killZone                = KillZone::create($killZoneData);
                 $killZoneEnemyAttributes = [];
 
                 $savedEnemyIds = collect();
@@ -71,7 +80,6 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 
                     $enemy = Enemy::findOrFail($enemyId);
                     // Make sure the enemy's relation with the kill zone is restored.
-                    // Do not use $enemy since that would create a new copy and we'd lose our changes
                     $killZoneEnemyAttributes[] = [
                         'kill_zone_id' => $killZone->id,
                         'npc_id'       => $enemy->npc_id,
@@ -81,8 +89,28 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
                     $savedEnemyIds->push($enemyId);
                 }
 
-                // Insert vertices
                 KillZoneEnemy::insert($killZoneEnemyAttributes);
+            }
+
+            if (count($spells) > 0) {
+                $killZoneSpellAttributes = [];
+
+                $savedSpells = collect();
+
+                foreach ($spells as $key => $spellId) {
+                    // Do not doubly save spells if the file somehow contained doubles (#1473)
+                    if ($savedSpells->contains($spellId)) {
+                        continue;
+                    }
+
+                    // Make sure the spell's relation with the kill zone is restored.
+                    $killZoneSpellAttributes[] = [
+                        'kill_zone_id' => $killZone->id,
+                        'spell_id'     => $spellId,
+                    ];
+                }
+
+                KillZoneSpell::insert($killZoneSpellAttributes);
             }
         }
 

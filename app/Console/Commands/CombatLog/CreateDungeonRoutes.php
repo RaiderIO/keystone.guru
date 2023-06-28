@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use Illuminate\Console\Command;
 
 class CreateDungeonRoutes extends Command
@@ -24,11 +24,11 @@ class CreateDungeonRoutes extends Command
     /**
      * Execute the console command.
      *
-     * @param CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService
+     * @param ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService
      *
      * @return int
      */
-    public function handle(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): int
+    public function handle(ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService): int
     {
         $filePath = $this->argument('filePath');
         // Assume error
@@ -48,12 +48,12 @@ class CreateDungeonRoutes extends Command
     }
 
     /**
-     * @param CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService
-     * @param string $filePath
+     * @param ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService
+     * @param string                                  $filePath
      *
      * @return void
      */
-    private function createDungeonRouteFromCombatLog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService, string $filePath): void
+    private function createDungeonRouteFromCombatLog(ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService, string $filePath): void
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -71,7 +71,7 @@ class CreateDungeonRoutes extends Command
 
         $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes($filePath);
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $this->comment(sprintf('- Created dungeon route %s (%s)', $dungeonRoute->public_key, __($dungeonRoute->dungeon->name)));
+            $this->info(sprintf('- Created dungeon route %s (%s)', $dungeonRoute->public_key, __($dungeonRoute->dungeon->name)));
         }
     }
 }

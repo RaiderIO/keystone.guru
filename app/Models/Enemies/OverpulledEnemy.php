@@ -3,7 +3,7 @@
 namespace App\Models\Enemies;
 
 use App\Models\Enemy;
-use App\Models\KillZone;
+use App\Models\KillZone\KillZone;
 use App\Models\LiveSession;
 use App\Models\Npc;
 use Eloquent;

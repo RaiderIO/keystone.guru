@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Service\CombatLog\CombatLogDungeonRouteService;
+use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 
 class OutputResultEvents extends BaseCombatLogCommand
@@ -24,39 +24,40 @@ class OutputResultEvents extends BaseCombatLogCommand
     /**
      * Execute the console command.
      *
-     * @param CombatLogDungeonRouteService $combatLogDungeonRouteService
+     * @param CombatLogServiceInterface $combatLogService
      *
      * @return int
      * @throws \Exception
      */
-    public function handle(CombatLogDungeonRouteService $combatLogDungeonRouteService): int
+    public function handle(CombatLogServiceInterface $combatLogService): int
     {
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogDungeonRouteService) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('- Skipping file %s', $filePath));
+
                 return 0;
             }
 
-            return $this->outputResultEvents($combatLogDungeonRouteService, $filePath);
+            return $this->outputResultEvents($combatLogService, $filePath);
         });
     }
 
     /**
-     * @param CombatLogDungeonRouteService $combatLogDungeonRouteService
-     * @param string $filePath
+     * @param CombatLogServiceInterface $combatLogService
+     * @param string                    $filePath
      *
      * @return int
      * @throws \Exception
      */
-    private function outputResultEvents(CombatLogDungeonRouteService $combatLogDungeonRouteService, string $filePath): int
+    private function outputResultEvents(CombatLogServiceInterface $combatLogService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultEvents = $combatLogDungeonRouteService->getResultEvents($filePath);
+        $resultEvents = $combatLogService->getResultEvents($filePath);
 
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 

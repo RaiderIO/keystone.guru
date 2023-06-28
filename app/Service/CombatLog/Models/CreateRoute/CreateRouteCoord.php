@@ -2,7 +2,7 @@
 
 namespace App\Service\CombatLog\Models\CreateRoute;
 
-class CreateRouteNpcCoord
+class CreateRouteCoord
 {
     public float $x;
 
@@ -24,11 +24,11 @@ class CreateRouteNpcCoord
 
     /**
      * @param array $body
-     * @return CreateRouteNpcCoord
+     * @return CreateRouteCoord
      */
-    public static function createFromArray(array $body): CreateRouteNpcCoord
+    public static function createFromArray(array $body): CreateRouteCoord
     {
-        return new CreateRouteNpcCoord(
+        return new CreateRouteCoord(
             $body['x'],
             $body['y'],
             $body['uiMapId']

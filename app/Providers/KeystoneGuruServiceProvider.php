@@ -16,12 +16,14 @@ use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
-use App\Service\CombatLog\CombatLogDungeonRouteService;
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitService;
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
+use App\Service\CombatLog\CreateRouteDungeonRouteService;
+use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\ResultEventDungeonRouteService;
+use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\DungeonRoute\CoverageService;
@@ -102,9 +104,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
-        $this->app->bind(CombatLogDungeonRouteServiceInterface::class, CombatLogDungeonRouteService::class);
+        $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
+        $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
-
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -114,6 +116,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $this->app->bind(CacheServiceInterface::class, CacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         }
+
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
 
@@ -146,19 +149,19 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      *
-     * @param ViewServiceInterface $viewService
-     * @param ExpansionServiceInterface $expansionService
+     * @param ViewServiceInterface               $viewService
+     * @param ExpansionServiceInterface          $expansionService
      * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
-     * @param MappingServiceInterface $mappingService
+     * @param MappingServiceInterface            $mappingService
+     *
      * @return void
      */
     public function boot(
-        ViewServiceInterface               $viewService,
-        ExpansionServiceInterface          $expansionService,
+        ViewServiceInterface $viewService,
+        ExpansionServiceInterface $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
-        MappingServiceInterface            $mappingService
-    )
-    {
+        MappingServiceInterface $mappingService
+    ) {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
             return;
@@ -171,7 +174,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $globalViewVariables = $viewService->getCache();
 
         $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
-
 
         // All views
         view()->share('isMobile', (new Agent())->isMobile());
@@ -212,15 +214,17 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Main view
-        view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'], function (View $view) use ($globalViewVariables) {
-            $view->with('version', $globalViewVariables['appVersion']);
-            $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
-            $view->with('latestRelease', $globalViewVariables['latestRelease']);
-            $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
-        });
+        view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'],
+            function (View $view) use ($globalViewVariables) {
+                $view->with('version', $globalViewVariables['appVersion']);
+                $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
+                $view->with('latestRelease', $globalViewVariables['latestRelease']);
+                $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
+            });
 
         view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables) {
-            $view->with('hasNewChangelog', isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
+            $view->with('hasNewChangelog',
+                isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
         });
 
         view()->composer('common.layout.navuser', function (View $view) use ($isUserAdmin) {
@@ -328,7 +332,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             ])));
         });
 
-
         // Dungeon selector
         view()->composer('common.dungeon.select', function (View $view) use ($globalViewVariables) {
             $view->with('allExpansions', $globalViewVariables['allExpansions']);
@@ -383,6 +386,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Maps
         view()->composer('common.maps.controls.pulls', function (View $view) use ($globalViewVariables) {
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+        });
+
+        view()->composer('common.maps.controls.pullsworkbench', function (View $view) use ($globalViewVariables) {
+            $view->with('spellsSelect', $globalViewVariables['selectableSpellsByCategory']);
         });
 
         // Admin

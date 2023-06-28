@@ -3,6 +3,8 @@
 namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\Guid\Creature;
 use App\Models\DungeonRoute;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -13,15 +15,27 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
 
+    /** @var Collection|CombatLogParserInterface[] */
+    private Collection $filters;
+
     private SpecialEventsFilter $specialEventsFilter;
 
     private CombatFilter $combatFilter;
+
+    private SpellFilter $spellFilter;
 
     public function __construct()
     {
         $this->resultEvents        = collect();
         $this->specialEventsFilter = new SpecialEventsFilter($this->resultEvents);
         $this->combatFilter        = new CombatFilter($this->resultEvents);
+        $this->spellFilter         = new SpellFilter($this->resultEvents);
+
+        $this->filters = collect([
+            $this->specialEventsFilter,
+            $this->combatFilter,
+            $this->spellFilter,
+        ]);
     }
 
     /**
@@ -44,11 +58,13 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        $specialEventsFilterResult = $this->specialEventsFilter->parse($combatLogEvent, $lineNr);
+        $result = false;
 
-        $combatFilterResult = $this->combatFilter->parse($combatLogEvent, $lineNr);
+        foreach ($this->filters as $filter) {
+            $result = $filter->parse($combatLogEvent, $lineNr) || $result;
+        }
 
-        return $specialEventsFilterResult || $combatFilterResult;
+        return $result;
     }
 
     /**
@@ -56,9 +72,19 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
-        return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent)
-        {
-            return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs();
+        return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
+            // Add some CONSISTENT (not necessarily accurate) numbers so that events with 
+            $addition  = 0;
+            $baseEvent = $baseResultEvent->getBaseEvent();
+            if ($baseEvent instanceof AdvancedCombatLogEvent) {
+                $guid = $baseEvent->getAdvancedData()->getInfoGuid();
+                if ($guid instanceof Creature) {
+                    // Ensure that the addition doesn't go higher than 1
+                    $addition = min(0.99999, ($guid->getId() + hexdec($guid->getSpawnUID())) / 10000000000000);
+                }
+            }
+
+            return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs() + $addition;
         });
     }
 }

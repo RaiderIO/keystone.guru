@@ -1,34 +1,42 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\KillZone;
 
+use App\Models\Affix;
+use App\Models\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\Floor;
+use App\Models\Spell;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $floor_id
- * @property string $color
- * @property string $description
- * @property int $index
- * @property double $lat
- * @property double $lng
+ * @property int                        $id
+ * @property int                        $dungeon_route_id
+ * @property int                        $floor_id
+ * @property string                     $color
+ * @property string                     $description
+ * @property int                        $index
+ * @property double                     $lat
+ * @property double                     $lng
  *
- * @property DungeonRoute $dungeonRoute
- * @property Floor $floor
+ * @property DungeonRoute               $dungeonRoute
+ * @property Floor                      $floor
  *
- * @property Collection|int[] $enemies
+ * @property Collection|int[]           $enemies
  * @property Collection|KillZoneEnemy[] $killZoneEnemies
+ * @property Collection|KillZoneSpell[] $killZoneSpells
+ * @property Collection|Spell[]         $spells
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon                     $updated_at
+ * @property Carbon                     $created_at
  *
  * @mixin Eloquent
  */
@@ -43,9 +51,11 @@ class KillZone extends Model
         'lng',
         'index',
         'enemies',
+        'spells',
     ];
 
     protected $appends = ['enemies'];
+    protected $with = ['spells:id'];
 
     protected $fillable = [
         'id',
@@ -67,12 +77,23 @@ class KillZone extends Model
         'lng'      => 'float',
     ];
 
+    private Collection $enemiesCache;
+
+    /**
+     * @param Collection $enemyIds
+     * @return void
+     */
+    public function setEnemiesCache(Collection $enemyIds): void
+    {
+        $this->enemiesCache = $enemyIds;
+    }
+
     /**
      * @return Collection
      */
     public function getEnemiesAttribute(): Collection
     {
-        return Enemy::select('enemies.id')
+        return $this->enemiesCache ?? Enemy::select('enemies.id')
             ->join('kill_zone_enemies', function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
@@ -105,6 +126,22 @@ class KillZone extends Model
     public function killZoneEnemies(): HasMany
     {
         return $this->hasMany(KillZoneEnemy::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function killZoneSpells(): HasMany
+    {
+        return $this->hasMany(KillZoneSpell::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function spells(): BelongsToMany
+    {
+        return $this->belongsToMany(Spell::class, 'kill_zone_spells');
     }
 
     /**

@@ -39,7 +39,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 // Attempt a default value if there's only one affix set
     $tierAffixGroup        = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
-    $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->dungeon->enemy_forces_required || $enemyForcesPercentage >= 105;
+    $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
     $owlClass = $dungeonroute->has_thumbnail && $dungeonroute->dungeon->floors->count() > 1 ? 'multiple' : 'single';
 
@@ -139,7 +139,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     {{ sprintf(
                         '%s/%s (%s%%)',
                         $dungeonroute->enemy_forces,
-                        $dungeonroute->dungeon->enemy_forces_required,
+                        $dungeonroute->mappingVersion->enemy_forces_required,
                         $enemyForcesPercentage
                         ) }}
                 </div>

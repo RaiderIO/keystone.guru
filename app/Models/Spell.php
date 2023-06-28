@@ -2,23 +2,26 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelInterface;
 use Eloquent;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
- * @property int $id
- * @property string $icon_name
- * @property string $name
- * @property string $dispel_type
- * @property int $schools_mask
+ * @property int     $id
+ * @property string  $category
+ * @property string  $icon_name
+ * @property string  $name
+ * @property string  $dispel_type
+ * @property int     $schools_mask
  * @property boolean $aura
+ * @property boolean $selectable
  *
- * @property string $icon_url
+ * @property string  $icon_url
  *
  * @mixin Eloquent
  */
-class Spell extends CacheModel
+class Spell extends CacheModel implements MappingModelInterface
 {
     const SCHOOL_PHYSICAL = 1;
     const SCHOOL_HOLY     = 2;
@@ -50,10 +53,32 @@ class Spell extends CacheModel
         self::DISPEL_TYPE_CURSE,
     ];
 
-    public $incrementing = false;
-    public $timestamps = false;
+    const CATEGORY_GENERAL      = 'general';
+    const CATEGORY_WARRIOR      = 'warrior';
+    const CATEGORY_HUNTER       = 'hunter';
+    const CATEGORY_DEATH_KNIGHT = 'death_knight';
+    const CATEGORY_MAGE         = 'mage';
+    const CATEGORY_PRIEST       = 'priest';
+    const CATEGORY_MONK         = 'monk';
+    const CATEGORY_ROGUE        = 'rogue';
+    const CATEGORY_WARLOCK      = 'warlock';
+    const CATEGORY_SHAMAN       = 'shaman';
+    const CATEGORY_PALADIN      = 'paladin';
+    const CATEGORY_DRUID        = 'druid';
+    const CATEGORY_DEMON_HUNTER = 'demon_hunter';
+    const CATEGORY_EVOKER       = 'evoker';
 
-    public $hidden = ['pivot'];
+    // Some hard coded spells that we have exceptions for in the code
+    const SPELL_BLOODLUST           = 2825;
+    const SPELL_HEROISM             = 32182;
+    const SPELL_TIME_WARP           = 80353;
+    const SPELL_FURY_OF_THE_ASPECTS = 390386;
+    const SPELL_ANCIENT_HYSTERIA    = 90355;
+
+    public $incrementing = false;
+    public $timestamps   = false;
+
+    public    $hidden  = ['pivot'];
     protected $appends = ['icon_url'];
 
     /**
@@ -76,5 +101,14 @@ class Spell extends CacheModel
     public function getIconUrlAttribute()
     {
         return url(sprintf('/images/spells/%s.png', $this->icon_name));
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDungeonId(): ?int
+    {
+        // Spells aren't tied to a specific dungeon, but they're part of the mapping
+        return 0;
     }
 }

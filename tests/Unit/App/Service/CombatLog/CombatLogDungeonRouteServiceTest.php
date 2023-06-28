@@ -27,7 +27,7 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
         $combatLogService    = ServiceFixtures::getCombatLogServiceMock($this, $combatLogServiceLog);
 
         $combatLogDungeonRouteServiceLog = LoggingFixtures::createCombatLogDungeonRouteServiceLogging($this);
-        $combatLogDungeonRouteService    = ServiceFixtures::getCombatLogDungeonRouteServiceMock(
+        $combatLogDungeonRouteService    = ServiceFixtures::getResultEventDungeonRouteServiceMock(
             $this,
             $combatLogService,
             $combatLogDungeonRouteServiceLog

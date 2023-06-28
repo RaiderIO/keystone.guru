@@ -10,9 +10,11 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function createPullEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void;
 
+    public function createPullEnemyAttachedToKillZone(int $npcId, float $ingameX, float $ingameY): void;
+
     public function createPullFindEnemyForGuidEnd(): void;
 
-    public function createPullEnemyAttachedToKillZone(int $npcId, float $ingameX, float $ingameY): void;
+    public function createPullSpellsAttachedToKillZone(int $spellCount): void;
 
     public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
 

@@ -18,6 +18,8 @@ interface ResultEventDungeonRouteBuilderLoggingInterface
 
     public function buildCreateNewPull(array $keys): void;
 
+    public function buildSpellCast(string $getGuid, int $getSpellId): void;
+
     public function buildCreateNewFinalPull(array $keys): void;
 
     public function buildEnd(): void;

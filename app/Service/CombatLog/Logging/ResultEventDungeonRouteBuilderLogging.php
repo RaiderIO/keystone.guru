@@ -75,6 +75,17 @@ class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements
     }
 
     /**
+     * @param string $getGuid
+     * @param int    $getSpellId
+     * @return void
+     */
+    public function buildSpellCast(string $getGuid, int $getSpellId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
+    /**
      * @param array $keys
      *
      * @return void

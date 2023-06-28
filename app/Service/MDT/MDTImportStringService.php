@@ -16,8 +16,9 @@ use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemy;
 use App\Models\Floor;
-use App\Models\KillZone;
-use App\Models\KillZoneEnemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
+use App\Models\KillZone\KillZoneSpell;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Npc\NpcEnemyForces;
@@ -25,6 +26,7 @@ use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
+use App\Models\Spell;
 use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
@@ -46,7 +48,7 @@ use InvalidArgumentException;
 class MDTImportStringService extends MDTBaseService implements MDTImportStringServiceInterface
 {
     /** @var int */
-    private const IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE = 5;
+    private const IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
 
     /** @var string $encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
@@ -203,8 +205,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseValuePulls(
         ImportStringPulls $importStringPulls
-    ): ImportStringPulls
-    {
+    ): ImportStringPulls {
         $floors = $importStringPulls->getDungeon()->floors;
         /** @var Collection|Enemy[] $enemies */
         $enemies = $importStringPulls->getMappingVersion()->enemies->each(function (Enemy $enemy) {
@@ -235,6 +236,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $killZoneAttributes = [
                 'index'           => $newPullIndex,
                 'killZoneEnemies' => [],
+                'spells'          => [],
             ];
 
             // The amount of enemies selected in MDT pull
@@ -309,18 +311,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseMdtNpcClonesInPull(
         ImportStringPulls $importStringPulls,
-        Collection        $mdtEnemiesByMdtNpcIndex,
-        Collection        $enemiesByNpcId,
-        Collection        $enemyForcesByNpcIds,
-        int               &$totalEnemiesSelected,
-        int               &$totalEnemiesMatched,
-        bool              &$seasonalIndexSkip,
-        array             &$killZoneAttributes,
-        int               $newPullIndex,
-        string            $mdtNpcIndex,
-                          $mdtNpcClones
-    ): bool
-    {
+        Collection $mdtEnemiesByMdtNpcIndex,
+        Collection $enemiesByNpcId,
+        Collection $enemyForcesByNpcIds,
+        int &$totalEnemiesSelected,
+        int &$totalEnemiesMatched,
+        bool &$seasonalIndexSkip,
+        array &$killZoneAttributes,
+        int $newPullIndex,
+        string $mdtNpcIndex,
+        $mdtNpcClones
+    ): bool {
         if ($mdtNpcIndex === 'color') {
             // Make sure there is a pound sign in front of the value at all times, but never double up should
             // MDT decide to suddenly place it here
@@ -328,7 +329,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             return false;
         } // Numeric means it's an index of the dungeon's NPCs, if it isn't numeric skip to the next pull
-        else if (!is_numeric($mdtNpcIndex)) {
+        elseif (!is_numeric($mdtNpcIndex)) {
             return false;
         }
 
@@ -347,11 +348,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 if ($npcIndex === 35) {
                     $cloneIndex += 15;
                 }
-            } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
+            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
                 if ($npcIndex === 11) {
                     $cloneIndex += 2;
                 }
-            } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
+            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
                 if ($npcIndex === 23) {
                     $cloneIndex += 5;
                 }
@@ -447,7 +448,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Keep track of our enemy forces
             if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded);
-            } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+            } elseif ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
             } else {
                 /** @var NpcEnemyForces $npcEnemyForces */
@@ -627,7 +628,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 }
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
-                else if (isset($object['n']) && $object['n']) {
+                elseif (isset($object['n']) && $object['n']) {
                     $this->parseObjectComment($importStringObjects, $floor, $details);
                 }
                 // Triangles (t = triangle)
@@ -694,28 +695,52 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     {
         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
 
-        $mapIconType  = MapIconType::MAP_ICON_TYPE_COMMENT;
-        $commentLower = strtolower(trim($details[4]));
-        if ($commentLower === 'heroism') {
-            $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_HEROISM;
-        } else if ($commentLower === 'bloodlust') {
-            $mapIconType = MapIconType::MAP_ICON_TYPE_SPELL_BLOODLUST;
-        } else {
-            foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
-                foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
-                    if (MathUtils::distanceBetweenPoints(
-                            $killZoneEnemy['enemy']->lat, $latLng['lat'],
-                            $killZoneEnemy['enemy']->lng, $latLng['lng']
-                        ) < self::IMPORT_NOTE_AS_KILL_ZONE_DESCRIPTION_DISTANCE) {
-                        // Set description directly on the object
-                        $importStringObjects->getKillZoneAttributes()->put(
-                            $killZoneIndex,
-                            array_merge($killZoneAttribute, ['description' => $details[4]])
-                        );
+        $ingameXY = $floor->calculateIngameLocationForMapLocation($latLng['lat'], $latLng['lng']);
 
-                        // Map icon was assigned to killzone instead - return, we're done
-                        return;
+        // Try to see if we can import this comment and apply it to our pulls directly instead
+        foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
+            foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
+                $enemyIngameXY = $floor->calculateIngameLocationForMapLocation($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng);
+                if (MathUtils::distanceBetweenPoints(
+                        $enemyIngameXY['x'], $ingameXY['x'],
+                        $enemyIngameXY['y'], $ingameXY['y']
+                    ) < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS) {
+
+                    $bloodLustNames = ['bloodlust', 'heroism', 'fury of the ancients', 'time warp', 'timewarp', 'ancient hysteria'];
+
+                    // If the user wants to put heroism/bloodlust on this pull, directly assign it instead
+                    $commentLower = strtolower(trim($details[4]));
+                    if (in_array($commentLower, $bloodLustNames)) {
+                        $spellId = 0;
+
+                        if ($commentLower === 'bloodlust') {
+                            $spellId = Spell::SPELL_BLOODLUST;
+                        } elseif ($commentLower === 'heroism') {
+                            $spellId = Spell::SPELL_HEROISM;
+                        } elseif ($commentLower === 'fury of the ancients') {
+                            $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
+                        } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
+                            $spellId = Spell::SPELL_TIME_WARP;
+                        } elseif ($commentLower === 'ancient hysteria') {
+                            $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
+                        }
+
+                        $newAttributes = $killZoneAttribute['spells'][] = [
+                            'spell_id' => $spellId,
+                        ];
+                    } else {
+                        // Add it as a comment instead
+                        $newAttributes = ['description' => $details[4]];
                     }
+
+                    // Set description directly on the object
+                    $importStringObjects->getKillZoneAttributes()->put(
+                        $killZoneIndex,
+                        array_merge($killZoneAttribute, $newAttributes)
+                    );
+
+                    // Map icon was assigned to killzone instead - return, we're done
+                    return;
                 }
             }
         }
@@ -723,7 +748,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $importStringObjects->getMapIcons()->push([
             'mapping_version_id' => null,
             'floor_id'           => $floor->id,
-            'map_icon_type_id'   => MapIconType::ALL[$mapIconType],
+            'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
             'comment'            => $details[4],
             'lat'                => $latLng['lat'],
             'lng'                => $latLng['lng'],
@@ -827,7 +852,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         // Create a dungeon route
         $dungeonRoute = DungeonRoute::create([
-            'author_id'          => $sandbox ? -1 : Auth::id(),
+            'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
 
@@ -905,6 +930,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         $killZones       = [];
         $killZoneEnemies = [];
+        $killZoneSpells  = [];
         foreach ($importStringPulls->getKillZoneAttributes() as $killZoneAttributes) {
             $killZones[]                                   = [
                 'dungeon_route_id' => $dungeonRoute->id,
@@ -913,6 +939,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 'index'            => $killZoneAttributes['index'],
             ];
             $killZoneEnemies[$killZoneAttributes['index']] = $killZoneAttributes['killZoneEnemies'];
+            $killZoneSpells[$killZoneAttributes['index']]  = $killZoneAttributes['spells'];
         }
 
         KillZone::insert($killZones);
@@ -921,7 +948,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         // For each of the saved killzones, assign the enemies
         $flatKillZoneEnemies = [];
         foreach ($dungeonRoute->killZones as $killZone) {
-            foreach ($killZoneEnemies[$killZone->index] as &$killZoneEnemy) {
+            foreach ($killZoneEnemies[$killZone->index] as $killZoneEnemy) {
                 $killZoneEnemy['kill_zone_id'] = $killZone->id;
                 unset($killZoneEnemy['enemy']);
                 $flatKillZoneEnemies[] = $killZoneEnemy;
@@ -929,6 +956,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         }
 
         KillZoneEnemy::insert($flatKillZoneEnemies);
+
+        // For each of the saved spells, assign the enemies
+        $flatKillZoneSpells = [];
+        foreach ($dungeonRoute->killZones as $killZone) {
+            foreach ($killZoneSpells[$killZone->index] as $killZoneSpell) {
+                $killZoneSpell['kill_zone_id'] = $killZone->id;
+                $flatKillZoneSpells[]          = $killZoneSpell;
+            }
+        }
+
+        KillZoneSpell::insert($flatKillZoneSpells);
     }
 
     /**

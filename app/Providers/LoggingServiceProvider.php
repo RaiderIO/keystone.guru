@@ -10,6 +10,8 @@ use App\Service\CombatLog\Logging\CombatLogSplitServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLogging;
+use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CurrentPullLogging;
 use App\Service\CombatLog\Logging\CurrentPullLoggingInterface;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLogging;
@@ -40,6 +42,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogDungeonRouteServiceLoggingInterface::class, CombatLogDungeonRouteServiceLogging::class);
         $this->app->bind(DungeonRouteBuilderLoggingInterface::class, DungeonRouteBuilderLogging::class);
         $this->app->bind(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class, CreateRouteBodyDungeonRouteBuilderLogging::class);
+        $this->app->bind(CreateRouteDungeonRouteServiceLoggingInterface::class, CreateRouteDungeonRouteServiceLogging::class);
         $this->app->bind(ResultEventDungeonRouteBuilderLoggingInterface::class, ResultEventDungeonRouteBuilderLogging::class);
         $this->app->bind(CombatLogSplitServiceLoggingInterface::class, CombatLogSplitServiceLogging::class);
         $this->app->bind(CurrentPullLoggingInterface::class, CurrentPullLogging::class);

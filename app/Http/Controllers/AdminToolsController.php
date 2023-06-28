@@ -16,9 +16,8 @@ use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Models\NpcType;
-use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
+use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -35,8 +34,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
+use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 use Throwable;
 
@@ -54,11 +53,12 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService
+     * @param ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService
+     *
      * @return View
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function combatlog(CombatLogDungeonRouteServiceInterface $combatLogDungeonRouteService): View
+    public function combatlog(ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService): View
     {
         try {
             $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(

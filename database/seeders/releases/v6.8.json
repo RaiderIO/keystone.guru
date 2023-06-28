@@ -1,0 +1,28 @@
+{
+    "id": 183,
+    "release_changelog_id": 190,
+    "version": "v6.8",
+    "title": "Added ability to couple spells (Bloodlust) to pulls",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-06-28T19:17:38+00:00",
+    "updated_at": "2023-06-28T19:17:38+00:00",
+    "changelog": {
+        "id": 190,
+        "release_id": 183,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 190,
+                "release_changelog_category_id": 2,
+                "ticket_id": 1789,
+                "change": "You can now couple spells to pulls, allowing you to better plan your cooldowns. For now just Bloodlust-type spells, more to come soon!",
+                "category": {
+                    "id": 2,
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
+                }
+            }
+        ]
+    }
+}

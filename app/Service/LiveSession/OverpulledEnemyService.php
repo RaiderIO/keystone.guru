@@ -3,7 +3,7 @@
 
 namespace App\Service\LiveSession;
 
-use App\Models\KillZone;
+use App\Models\KillZone\KillZone;
 use App\Models\LiveSession;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

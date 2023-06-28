@@ -15,20 +15,20 @@ class CreateRouteNpc
 
     public string $diedAt;
 
-    public CreateRouteNpcCoord $coord;
+    public CreateRouteCoord $coord;
 
     private Carbon $engagedAtCarbon;
 
     private Carbon $diedAtCarbon;
 
     /**
-     * @param int $npcId
-     * @param string $spawnUid
-     * @param string $engagedAt
-     * @param string $diedAt
-     * @param CreateRouteNpcCoord $coord
+     * @param int              $npcId
+     * @param string           $spawnUid
+     * @param string           $engagedAt
+     * @param string           $diedAt
+     * @param CreateRouteCoord $coord
      */
-    public function __construct(int $npcId, string $spawnUid, string $engagedAt, string $diedAt, CreateRouteNpcCoord $coord)
+    public function __construct(int $npcId, string $spawnUid, string $engagedAt, string $diedAt, CreateRouteCoord $coord)
     {
         $this->npcId     = $npcId;
         $this->spawnUid  = $spawnUid;
@@ -43,7 +43,7 @@ class CreateRouteNpc
     public function getEngagedAt(): Carbon
     {
         return $this->engagedAtCarbon ??
-            $this->engagedAtCarbon = Carbon::createFromFormat(DateTime::ATOM, $this->engagedAt);
+            $this->engagedAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->engagedAt);
     }
 
     /**
@@ -52,7 +52,7 @@ class CreateRouteNpc
     public function getDiedAt(): Carbon
     {
         return $this->diedAtCarbon ??
-            $this->diedAtCarbon = Carbon::createFromFormat(DateTime::ATOM, $this->diedAt);
+            $this->diedAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->diedAt);
     }
 
     /**
@@ -74,7 +74,7 @@ class CreateRouteNpc
             $body['spawnUid'],
             $body['engagedAt'],
             $body['diedAt'],
-            CreateRouteNpcCoord::createFromArray($body['coord'])
+            CreateRouteCoord::createFromArray($body['coord'])
         );
     }
 }

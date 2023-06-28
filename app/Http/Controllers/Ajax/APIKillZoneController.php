@@ -8,10 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
+use App\Jobs\RefreshEnemyForces;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\KillZone;
-use App\Models\KillZoneEnemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
+use App\Models\KillZone\KillZoneSpell;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -26,8 +28,8 @@ class APIKillZoneController extends Controller
 {
     /**
      * @param DungeonRoute $dungeonroute
-     * @param array $data
-     * @param bool $recalculateEnemyForces
+     * @param array        $data
+     * @param bool         $recalculateEnemyForces
      * @return KillZone
      * @throws \Exception
      */
@@ -36,6 +38,8 @@ class APIKillZoneController extends Controller
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
         $data['dungeon_route_id'] = $dungeonroute->id;
+
+        $spellIds = $data['spells'] ?? null;
 
         /** @var KillZone $killZone */
         $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id']);
@@ -81,14 +85,28 @@ class APIKillZoneController extends Controller
 
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
-                $killZone->enemies = collect($validEnemyIds);
+
+                $killZone->setEnemiesCache(collect($validEnemyIds));
+            }
+
+            // May be null for mass request
+            if ($spellIds !== null) {
+                $killZone->killZoneSpells()->delete();
+
+                $spellsAttributes = [];
+                foreach ($spellIds as $spellId) {
+                    $spellsAttributes[] = [
+                        'kill_zone_id' => $killZone->id,
+                        'spell_id'     => $spellId,
+                    ];
+                }
+
+                KillZoneSpell::insert($spellsAttributes);
+                $killZone->load(['spells:id']);
             }
 
             if ($recalculateEnemyForces) {
-                // Update the enemy forces
-                $dungeonroute->update(['enemy_forces' => $dungeonroute->getEnemyForces()]);
-                // Touch the route so that the thumbnail gets updated
-                $dungeonroute->touch();
+                RefreshEnemyForces::dispatch($dungeonroute->id);
             }
 
             if (Auth::check()) {
@@ -105,10 +123,11 @@ class APIKillZoneController extends Controller
 
     /**
      * @param APIKillZoneFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param KillZone|null $killZone
+     * @param DungeonRoute           $dungeonRoute
+     * @param KillZone|null          $killZone
      * @return KillZone
      * @throws AuthorizationException
+     * @throws \Exception
      */
     function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, KillZone $killZone = null): KillZone
     {
@@ -121,13 +140,12 @@ class APIKillZoneController extends Controller
             if (!isset($data['enemies'])) {
                 $data['enemies'] = [];
             }
+            if (!isset($data['spells'])) {
+                $data['spells'] = [];
+            }
             $data['id'] = optional($killZone)->id ?? null;
-            $killZone   = $this->saveKillZone($dungeonRoute, $data);
 
-            // Touch the route so that the thumbnail gets updated
-            $dungeonRoute->touch();
-
-            $result = $killZone;
+            $result = $this->saveKillZone($dungeonRoute, $data);
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
@@ -137,7 +155,7 @@ class APIKillZoneController extends Controller
 
     /**
      * @param APIKillZoneMassFormRequest $request
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute               $dungeonRoute
      * @return array|ResponseFactory|Response|null
      * @throws AuthorizationException
      */
@@ -199,7 +217,6 @@ class APIKillZoneController extends Controller
             KillZoneEnemy::insert($killZoneEnemies);
         }
 
-
         // Update the enemy forces
         $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
         // Touch the route so that the thumbnail gets updated
@@ -209,9 +226,9 @@ class APIKillZoneController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
-     * @param KillZone $killZone
+     * @param KillZone     $killZone
      * @return array|ResponseFactory|Response
      * @throws \Exception
      */
@@ -250,7 +267,7 @@ class APIKillZoneController extends Controller
 
     /**
      * @param APIDeleteAllFormRequest $request
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute            $dungeonRoute
      * @return array|Application|ResponseFactory|Response
      * @throws AuthorizationException
      */

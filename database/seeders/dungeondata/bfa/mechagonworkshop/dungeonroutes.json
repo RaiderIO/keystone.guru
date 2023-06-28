@@ -61,7 +61,8 @@
                     4251,
                     4252,
                     8479
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -73,7 +74,8 @@
                 "enemies": [
                     4253,
                     4254
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -85,7 +87,8 @@
                 "enemies": [
                     4255,
                     8480
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -97,7 +100,8 @@
                 "enemies": [
                     4275,
                     8481
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -113,7 +117,8 @@
                     4272,
                     4273,
                     4274
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -124,7 +129,8 @@
                 "index": 6,
                 "enemies": [
                     4276
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -144,7 +150,8 @@
                     4472,
                     8482,
                     8517
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -160,7 +167,8 @@
                     4479,
                     4480,
                     8483
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -171,7 +179,8 @@
                 "index": 9,
                 "enemies": [
                     4277
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -183,7 +192,8 @@
                 "enemies": [
                     4482,
                     4484
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -198,7 +208,8 @@
                     4489,
                     4490,
                     4491
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -214,7 +225,8 @@
                     4495,
                     4496,
                     4497
-                ]
+                ],
+                "spells": []
             },
             {
                 "floor_id": null,
@@ -226,7 +238,8 @@
                 "enemies": [
                     4278,
                     4498
-                ]
+                ],
+                "spells": []
             }
         ],
         "enemyraidmarkers": [],

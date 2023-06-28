@@ -4,8 +4,6 @@ namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
-use App\Models\Dungeon;
-use App\Models\DungeonRoute;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
@@ -14,7 +12,6 @@ use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\CombatLog\CombatLogDungeonRouteServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\App;
@@ -64,8 +61,7 @@ abstract class MapContext
         $cacheService = App::make(CacheServiceInterface::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function ()
-        {
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function () {
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
             return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
                 'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
@@ -73,8 +69,7 @@ abstract class MapContext
                 'npcs'                      => $this->floor->dungeon->npcs()->with([
                     'spells',
                     // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                    'enemyForces' => function (HasOne $query)
-                    {
+                    'enemyForces' => function (HasOne $query) {
                         return $query->where('mapping_version_id', $this->mappingVersion->id);
                     },
                 ])->get(),
@@ -87,9 +82,9 @@ abstract class MapContext
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $cacheService->remember('static_data', function ()
-        {
+        $static = $cacheService->remember('static_data', function () {
             return [
+                'spells'                            => Spell::all(),
                 'mapIconTypes'                      => MapIconType::all(),
                 'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
                 'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),

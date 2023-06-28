@@ -1,8 +1,7 @@
 class MapIconType {
     constructor(remoteObject) {
-        console.assert(remoteObject instanceof Object, 'Passed map is not an Object!', map);
+        console.assert(remoteObject instanceof Object, 'Passed remoteObject is not an Object!', remoteObject);
 
-        this.map = map;
         this.id = remoteObject.id;
         this.key = remoteObject.key;
         this.name = remoteObject.name;
