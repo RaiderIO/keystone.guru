@@ -37,9 +37,9 @@ class ExpansionsSeeder extends Seeder
                 'shortname'   => Expansion::EXPANSION_SHADOWLANDS,
                 'color'       => '#5832a8',
                 'released_at' => Carbon::make('2020-11-24 00:00:00'),
-            ]), 'expansions.vanilla.name'            => new Expansion([
-                'active'      => 0,
-                'shortname'   => Expansion::EXPANSION_VANILLA,
+            ]), 'expansions.classic.name'            => new Expansion([
+                'active'      => 1,
+                'shortname'   => Expansion::EXPANSION_CLASSIC,
                 'color'       => '#ebbd34',
                 'released_at' => Carbon::make('2004-11-23 00:00:00'),
             ]), 'expansions.tbc.name'                => new Expansion([

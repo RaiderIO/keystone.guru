@@ -15,21 +15,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $icon_file_id
- * @property int $active
- * @property string $name
- * @property string $shortname
- * @property string $color
+ * @property int                   $id
+ * @property int                   $icon_file_id
+ * @property int                   $active
+ * @property string                $name
+ * @property string                $shortname
+ * @property string                $color
  *
- * @property Carbon $released_at
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property Carbon                $released_at
+ * @property Carbon                $created_at
+ * @property Carbon                $updated_at
  *
- * @property Collection|Dungeon[] $dungeons
+ * @property Collection|Dungeon[]  $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
- * @property Season|null $currentSeason
- * @property Season|null $nextSeason
+ * @property Season|null           $currentSeason
+ * @property Season|null           $nextSeason
  *
  * @mixin Eloquent
  */
@@ -39,8 +39,8 @@ class Expansion extends CacheModel
     use UserCurrentTime;
 
     public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
-    public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
-    public $with = ['timewalkingevent'];
+    public $hidden   = ['id', 'icon_file_id', 'created_at', 'updated_at'];
+    public $with     = ['timewalkingevent'];
 
     protected $dates = [
         // 'released_at',
@@ -48,7 +48,7 @@ class Expansion extends CacheModel
         'updated_at',
     ];
 
-    const EXPANSION_VANILLA      = 'vanilla';
+    const EXPANSION_CLASSIC      = 'classic';
     const EXPANSION_TBC          = 'tbc';
     const EXPANSION_WOTLK        = 'wotlk';
     const EXPANSION_CATACLYSM    = 'cata';
@@ -60,7 +60,7 @@ class Expansion extends CacheModel
     const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
     const ALL = [
-        self::EXPANSION_VANILLA      => 'Classic',
+        self::EXPANSION_CLASSIC      => 'Classic',
         self::EXPANSION_TBC          => 'The Burning Crusade',
         self::EXPANSION_WOTLK        => 'Wrath of the Lich King',
         self::EXPANSION_CATACLYSM    => 'Cataclysm',
@@ -140,6 +140,7 @@ class Expansion extends CacheModel
      * Scope a query to only include active dungeons.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeActive(Builder $query): Builder
@@ -151,6 +152,7 @@ class Expansion extends CacheModel
      * Scope a query to only include inactive dungeons.
      *
      * @param Builder $query
+     *
      * @return Builder
      */
     public function scopeInactive(Builder $query): Builder
@@ -170,7 +172,8 @@ class Expansion extends CacheModel
      * Saves an expansion with the data from a Request.
      *
      * @param Request $request
-     * @param string $fileUploadDirectory
+     * @param string  $fileUploadDirectory
+     *
      * @return bool
      * @throws Exception
      */

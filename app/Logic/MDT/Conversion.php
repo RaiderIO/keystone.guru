@@ -17,7 +17,7 @@ use Exception;
 class Conversion
 {
     const EXPANSION_NAME_MAPPING = [
-        Expansion::EXPANSION_VANILLA      => null,
+        Expansion::EXPANSION_CLASSIC      => null,
         Expansion::EXPANSION_TBC          => null,
         Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
         Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',

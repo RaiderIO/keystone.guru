@@ -84,11 +84,11 @@ $floor = $floor ?? null;
 
     <div class="form-group">
         @include('admin.floor.connectedfloors', ['floor' => $floor])
+
+        {!! Form::submit(__('views/admin.floor.edit.submit'), ['class' => 'btn btn-info']) !!}
+    
+        {!! Form::close() !!}
     </div>
-
-    {!! Form::submit(__('views/admin.floor.edit.submit'), ['class' => 'btn btn-info']) !!}
-
-    {!! Form::close() !!}
 
     @isset($floor)
         <div class="form-group">

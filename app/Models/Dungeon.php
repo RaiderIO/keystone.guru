@@ -81,26 +81,28 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public $timestamps = false;
 
     // Classic
-    const DUNGEON_BLACKFANTHOM_DEEPS        = 'blackfanthom_deeps';
-    const DUNGEON_BLACKROCK_DEPTHS          = 'blackrock_depths';
-    const DUNGEON_DEADMINES                 = 'deadmines';
-    const DUNGEON_DIRE_MAUL                 = 'dire_maul';
-    const DUNGEON_GNOMEREGAN                = 'gnomeregan';
-    const DUNGEON_LOWER_BLACKROCK_SPIRE     = 'lower_blackrock_spire';
-    const DUNGEON_MARAUDON                  = 'maraudon';
-    const DUNGEON_RAGEFIRE_CHASM            = 'ragefire_chasm';
-    const DUNGEON_RAZORFEN_DOWNS            = 'razorfen_downs';
-    const DUNGEON_RAZORFEN_KRAUL            = 'razorfen_kraul';
-    const DUNGEON_SCARLET_HALLS             = 'scarlet_halls';
-    const DUNGEON_SCARLET_MONASTERY         = 'scarlet_monastery';
-    const DUNGEON_SCHOLOMANCE               = 'scholomance';
-    const DUNGEON_SHADOWFANG_KEEP           = 'shadowfang_keep';
-    const DUNGEON_STRATHOLME                = 'stratholme';
-    const DUNGEON_THE_STOCKADE              = 'the_stockade';
-    const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR = 'the_temple_of_atal_hakkar';
-    const DUNGEON_ULDAMAN                   = 'uldaman';
-    const DUNGEON_WAILING_CAVERNS           = 'wailing_caverns';
-    const DUNGEON_ZUL_FARRAK                = 'zul_farrak';
+    const DUNGEON_BLACKFANTHOM_DEEPS          = 'blackfanthom_deeps'; //blackfanthomdeeps
+    const DUNGEON_BLACKROCK_DEPTHS            = 'blackrock_depths'; //blackrockdepths
+    const DUNGEON_DEADMINES                   = 'deadmines'; //thedeadmines
+    const DUNGEON_DIRE_MAUL                   = 'dire_maul'; //diremaul
+    const DUNGEON_GNOMEREGAN                  = 'gnomeregan'; //gnomeregan
+    const DUNGEON_LOWER_BLACKROCK_SPIRE       = 'lower_blackrock_spire'; //blackrockspire
+    const DUNGEON_MARAUDON                    = 'maraudon';
+    const DUNGEON_RAGEFIRE_CHASM              = 'ragefire_chasm'; //ragefire
+    const DUNGEON_RAZORFEN_DOWNS              = 'razorfen_downs'; //razorfendowns
+    const DUNGEON_RAZORFEN_KRAUL              = 'razorfen_kraul'; //razorfenkraul
+    const DUNGEON_SCARLET_HALLS               = 'scarlet_halls'; //scarlethalls
+    const DUNGEON_SCARLET_MONASTERY           = 'scarlet_monastery'; //scarletmonastery
+    const DUNGEON_SCARLET_MONASTERY_ARMORY    = 'scarlet_monastery_armory'; //scarletmonastery
+    const DUNGEON_SCARLET_MONASTERY_GRAVEYARD = 'scarlet_monastery_graveyard'; //scarletmonastery
+    const DUNGEON_SCHOLOMANCE                 = 'scholomance';
+    const DUNGEON_SHADOWFANG_KEEP             = 'shadowfang_keep'; //shadowfangkeep
+    const DUNGEON_STRATHOLME                  = 'stratholme';
+    const DUNGEON_THE_STOCKADE                = 'the_stockade'; //thestockade
+    const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
+    const DUNGEON_ULDAMAN                     = 'uldaman';
+    const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns'; //wailingcaverns
+    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak'; //zulfarrak
 
     // The Burning Crusade
     const DUNGEON_ACHENAI_CRYPTS          = 'auchenai_crypts';
@@ -238,7 +240,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
     const ALL = [
-        Expansion::EXPANSION_VANILLA      => [
+        Expansion::EXPANSION_CLASSIC => [
             self::DUNGEON_BLACKFANTHOM_DEEPS,
             self::DUNGEON_BLACKROCK_DEPTHS,
             self::DUNGEON_DEADMINES,
@@ -251,6 +253,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_RAZORFEN_KRAUL,
             self::DUNGEON_SCARLET_HALLS,
             self::DUNGEON_SCARLET_MONASTERY,
+            self::DUNGEON_SCARLET_MONASTERY_ARMORY,
+            self::DUNGEON_SCARLET_MONASTERY_GRAVEYARD,
             self::DUNGEON_SCHOLOMANCE,
             self::DUNGEON_SHADOWFANG_KEEP,
             self::DUNGEON_STRATHOLME,
@@ -491,8 +495,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany(Npc::class)
-            ->when($includeGlobalNpcs, function (Builder $builder)
-            {
+            ->when($includeGlobalNpcs, function (Builder $builder) {
                 $builder->orWhere('dungeon_id', -1);
             });
     }
@@ -527,8 +530,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
-            ->where(function (Builder $builder)
-            {
+            ->where(function (Builder $builder) {
                 return $builder
                     ->whereNull('dungeon_route_id');
             });
@@ -670,8 +672,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->npcs(false)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('aggressiveness', '<>', 'friendly')
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion)
-            {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
                 // @TODO This should exclude all raids
                 return $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
@@ -694,8 +695,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('aggressiveness', '<>', 'friendly')
             // Exclude Beguiling enemies - their health values are wrong at the moment
             ->whereNotIn('npcs.id', [155432, 155433, 155434])
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion)
-            {
+            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
                 // @TODO This should exclude all raids
                 return $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
@@ -712,14 +712,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
     {
         return Npc::select('npcs.id')
             ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
-            ->where(function (Builder $builder)
-            {
+            ->where(function (Builder $builder) {
                 return $builder->where('npcs.dungeon_id', $this->id)
                     ->orWhere('npcs.dungeon_id', -1);
             })
             ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
-            ->where(function (Builder $builder)
-            {
+            ->where(function (Builder $builder) {
                 $builder->where('npc_enemy_forces.enemy_forces', '>', 0)
                     ->orWhereIn('npcs.classification_id', [
                         NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
@@ -742,7 +740,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                         // Wither Slashers give 0 enemy forces but are in the mapping regardless
                         194469,
                         // Gutstabbers give 0 enemy forces but are in the mapping regardless
-                        197857
+                        197857,
                     ]);
             })
             ->get()
@@ -864,8 +862,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }
