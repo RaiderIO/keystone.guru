@@ -2,8 +2,8 @@
 
 
 return [
-    'vanilla'             => [
-        'name' => 'Vanilla',
+    'classic'             => [
+        'name' => 'Classic',
     ],
     'tbc'             => [
         'name' => 'The Burning Crusade',
