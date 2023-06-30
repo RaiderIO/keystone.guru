@@ -16,6 +16,7 @@ use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteChallengeMode;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteCoord;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteSettings;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteSpell;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
@@ -40,11 +41,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
      * @param CreateRouteDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
-        CombatLogService                               $combatLogService,
-        SeasonServiceInterface                         $seasonService,
+        CombatLogService $combatLogService,
+        SeasonServiceInterface $seasonService,
         CreateRouteDungeonRouteServiceLoggingInterface $log
-    )
-    {
+    ) {
         $this->combatLogService = $combatLogService;
         $this->seasonService    = $seasonService;
         $this->log              = $log;
@@ -59,11 +59,13 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     {
         $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $createRouteBody))->build();
 
-        $this->generateMapIcons(
-            $dungeonRoute->mappingVersion,
-            $createRouteBody,
-            $dungeonRoute
-        );
+        if ($createRouteBody->settings->debugIcons) {
+            $this->generateMapIcons(
+                $dungeonRoute->mappingVersion,
+                $createRouteBody,
+                $dungeonRoute
+            );
+        }
 
         return $dungeonRoute;
     }
@@ -121,7 +123,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     }
 
                     $npcEngagedEvents->put($guid->getGuid(), $resultEvent);
-                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
+                } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
@@ -147,7 +149,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                         )
                     );
 
-                } else if ($resultEvent instanceof SpellCast) {
+                } elseif ($resultEvent instanceof SpellCast) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -171,6 +173,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             }
 
             return new CreateRouteBody(
+                new CreateRouteSettings(true, true),
                 $challengeMode,
                 $npcs,
                 $spells
@@ -189,11 +192,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
      * @return void
      */
     private function generateMapIcons(
-        MappingVersion  $mappingVersion,
+        MappingVersion $mappingVersion,
         CreateRouteBody $createRouteBody,
-        ?DungeonRoute   $dungeonRoute = null
-    ): void
-    {
+        ?DungeonRoute $dungeonRoute = null
+    ): void {
         $currentFloor      = null;
         $mapIconAttributes = collect();
         foreach ($createRouteBody->npcs as $npc) {
