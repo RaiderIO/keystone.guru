@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApiAuthorization;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\EncryptCookies;
@@ -64,6 +65,7 @@ class Kernel extends HttpKernel
             'bindings',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,
+            'authorization'             => ApiAuthorization::class,
         ],
     ];
 

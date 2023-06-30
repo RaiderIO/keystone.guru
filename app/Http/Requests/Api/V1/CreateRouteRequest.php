@@ -28,7 +28,10 @@ class CreateRouteRequest extends FormRequest
     public function rules(): array
     {
         $dateFormat = sprintf('date_format:"%s"', CreateRouteBody::DATE_TIME_FORMAT);
+
         return [
+            'settings.temporary'       => ['nullable', 'bool'],
+            'settings.debugIcons'      => ['nullable', 'bool'],
             'challengeMode.start'      => ['required', $dateFormat],
             'challengeMode.end'        => ['required', $dateFormat],
             'challengeMode.durationMs' => ['required', 'int'],

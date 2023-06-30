@@ -10,6 +10,7 @@ use JsonSerializable;
 
 /**
  * Class DungeonRouteResource
+ *
  * @package App\Http\Resources
  * @author Wouter
  * @since 12/06/2023
@@ -32,6 +33,7 @@ class DungeonRouteResource extends JsonResource
             'pulls'                 => $this->killZones()->count(),
             'enemy_forces'          => $this->enemy_forces,
             'enemy_forces_required' => $this->dungeon->getCurrentMappingVersion()->enemy_forces_required,
+            'expires_at'            => $this->expires_at,
         ];
     }
 }
