@@ -5,7 +5,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Teapot\StatusCode;
 
-class ApiAuthorization
+class ApiAuthentication
 {
     private UserServiceInterface $userService;
 
