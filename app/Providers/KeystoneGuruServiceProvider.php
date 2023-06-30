@@ -72,6 +72,8 @@ use App\Service\Subcreation\SubcreationApiService;
 use App\Service\Subcreation\SubcreationApiServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use App\Service\User\UserService;
+use App\Service\User\UserServiceInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
 use App\Service\WowTools\WowToolsService;
@@ -107,6 +109,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
+        $this->app->bind(UserServiceInterface::class, UserService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {

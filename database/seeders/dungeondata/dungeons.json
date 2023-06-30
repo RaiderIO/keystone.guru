@@ -1271,7 +1271,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Atal'Dazar",
+                "name": "dungeons.bfa.atal_dazar.floors.atal_dazar",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1282,7 +1282,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 5,
+                        "id": 543,
                         "floor1_id": 41,
                         "floor2_id": 42,
                         "direction": "down"
@@ -1296,7 +1296,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Sacrificial Pits",
+                "name": "dungeons.bfa.atal_dazar.floors.sacrificial_pits",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1307,7 +1307,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 6,
+                        "id": 544,
                         "floor1_id": 42,
                         "floor2_id": 41,
                         "direction": "up"
@@ -1335,7 +1335,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 936,
-                "name": "Freehold",
+                "name": "dungeons.bfa.freehold.floors.freehold",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1367,7 +1367,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Kings' Rest",
+                "name": "dungeons.bfa.kings_rest.floors.kings_rest",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1399,7 +1399,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Shrine of the Storm",
+                "name": "dungeons.bfa.shrine_of_the_storm.floors.shrine_of_the_storm",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1410,7 +1410,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 7,
+                        "id": 550,
                         "floor1_id": 45,
                         "floor2_id": 46,
                         "direction": "right"
@@ -1424,7 +1424,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Storm's End",
+                "name": "dungeons.bfa.shrine_of_the_storm.floors.storms_end",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1435,7 +1435,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 8,
+                        "id": 551,
                         "floor1_id": 46,
                         "floor2_id": 45,
                         "direction": "left"
@@ -1463,7 +1463,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Siege of Boralus",
+                "name": "dungeons.bfa.siege_of_boralus.floors.siege_of_boralus",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1495,7 +1495,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Temple of Sethraliss",
+                "name": "dungeons.bfa.temple_of_sethraliss.floors.temple_of_sethraliss",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1506,7 +1506,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 9,
+                        "id": 552,
                         "floor1_id": 48,
                         "floor2_id": 49,
                         "direction": "left"
@@ -1520,7 +1520,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Atrium of the Wardens",
+                "name": "dungeons.bfa.temple_of_sethraliss.floors.atrium_of_the_wardens",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1531,7 +1531,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 10,
+                        "id": 553,
                         "floor1_id": 49,
                         "floor2_id": 48,
                         "direction": "right"
@@ -1559,7 +1559,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Motherlode",
+                "name": "dungeons.bfa.the_motherlode.floors.the_motherlode",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1591,7 +1591,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 1041,
-                "name": "The Underrot",
+                "name": "dungeons.bfa.the_underrot.floors.the_underrot",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1602,7 +1602,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 539,
+                        "id": 554,
                         "floor1_id": 51,
                         "floor2_id": 52,
                         "direction": "left"
@@ -1616,7 +1616,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": 1042,
-                "name": "Ruin's Descent",
+                "name": "dungeons.bfa.the_underrot.floors.ruins_descent",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1627,7 +1627,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 540,
+                        "id": 555,
                         "floor1_id": 52,
                         "floor2_id": 51,
                         "direction": "up"
@@ -1655,7 +1655,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Tol Dagor",
+                "name": "dungeons.bfa.tol_dagor.floors.tol_dagor",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1666,7 +1666,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 13,
+                        "id": 556,
                         "floor1_id": 53,
                         "floor2_id": 54,
                         "direction": "left"
@@ -1680,7 +1680,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Drain",
+                "name": "dungeons.bfa.tol_dagor.floors.the_drain",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1691,13 +1691,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 14,
+                        "id": 557,
                         "floor1_id": 54,
                         "floor2_id": 53,
                         "direction": "right"
                     },
                     {
-                        "id": 15,
+                        "id": 558,
                         "floor1_id": 54,
                         "floor2_id": 55,
                         "direction": "up"
@@ -1711,7 +1711,7 @@
                 "index": 3,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Brig",
+                "name": "dungeons.bfa.tol_dagor.floors.the_brig",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1722,13 +1722,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 16,
+                        "id": 559,
                         "floor1_id": 55,
                         "floor2_id": 54,
                         "direction": "down"
                     },
                     {
-                        "id": 17,
+                        "id": 560,
                         "floor1_id": 55,
                         "floor2_id": 56,
                         "direction": "up"
@@ -1742,7 +1742,7 @@
                 "index": 4,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Detention Block",
+                "name": "dungeons.bfa.tol_dagor.floors.detention_block",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1753,13 +1753,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 18,
+                        "id": 561,
                         "floor1_id": 56,
                         "floor2_id": 55,
                         "direction": "down"
                     },
                     {
-                        "id": 19,
+                        "id": 562,
                         "floor1_id": 56,
                         "floor2_id": 57,
                         "direction": "up"
@@ -1773,7 +1773,7 @@
                 "index": 5,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Officer Quarters",
+                "name": "dungeons.bfa.tol_dagor.floors.officer_quarters",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1784,13 +1784,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 20,
+                        "id": 563,
                         "floor1_id": 57,
                         "floor2_id": 56,
                         "direction": "down"
                     },
                     {
-                        "id": 21,
+                        "id": 564,
                         "floor1_id": 57,
                         "floor2_id": 58,
                         "direction": "up"
@@ -1804,7 +1804,7 @@
                 "index": 6,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Overseer's Redoubt",
+                "name": "dungeons.bfa.tol_dagor.floors.overseers_redoubt",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1815,13 +1815,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 22,
+                        "id": 565,
                         "floor1_id": 58,
                         "floor2_id": 57,
                         "direction": "down"
                     },
                     {
-                        "id": 23,
+                        "id": 566,
                         "floor1_id": 58,
                         "floor2_id": 59,
                         "direction": "up"
@@ -1835,7 +1835,7 @@
                 "index": 7,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Overseer's Summit",
+                "name": "dungeons.bfa.tol_dagor.floors.overseers_summit",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1846,7 +1846,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 24,
+                        "id": 567,
                         "floor1_id": 59,
                         "floor2_id": 58,
                         "direction": "down"
@@ -1874,7 +1874,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Grand Foyer",
+                "name": "dungeons.bfa.waycrest_manor.floors.the_grand_foyer",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1885,13 +1885,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 25,
+                        "id": 568,
                         "floor1_id": 60,
                         "floor2_id": 61,
                         "direction": "up"
                     },
                     {
-                        "id": 27,
+                        "id": 569,
                         "floor1_id": 60,
                         "floor2_id": 62,
                         "direction": "down"
@@ -1905,7 +1905,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Upstairs",
+                "name": "dungeons.bfa.waycrest_manor.floors.upstairs",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1916,7 +1916,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 26,
+                        "id": 570,
                         "floor1_id": 61,
                         "floor2_id": 60,
                         "direction": "down"
@@ -1930,7 +1930,7 @@
                 "index": 3,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Cellar",
+                "name": "dungeons.bfa.waycrest_manor.floors.the_cellar",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1941,13 +1941,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 28,
+                        "id": 571,
                         "floor1_id": 62,
                         "floor2_id": 60,
                         "direction": "up"
                     },
                     {
-                        "id": 29,
+                        "id": 572,
                         "floor1_id": 62,
                         "floor2_id": 63,
                         "direction": "down"
@@ -1961,7 +1961,7 @@
                 "index": 4,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Catacombs",
+                "name": "dungeons.bfa.waycrest_manor.floors.catacombs",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -1972,13 +1972,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 30,
+                        "id": 573,
                         "floor1_id": 63,
                         "floor2_id": 62,
                         "direction": "up"
                     },
                     {
-                        "id": 31,
+                        "id": 574,
                         "floor1_id": 63,
                         "floor2_id": 64,
                         "direction": "down"
@@ -1992,7 +1992,7 @@
                 "index": 5,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Rupture",
+                "name": "dungeons.bfa.waycrest_manor.floors.the_rupture",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -2003,7 +2003,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 32,
+                        "id": 575,
                         "floor1_id": 64,
                         "floor2_id": 63,
                         "direction": "up"
@@ -2031,7 +2031,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Mechagon Island",
+                "name": "dungeons.bfa.mechagon_junkyard.floors.mechagon_island",
                 "default": 1,
                 "min_enemy_size": 9,
                 "max_enemy_size": 20,
@@ -2042,7 +2042,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 349,
+                        "id": 545,
                         "floor1_id": 65,
                         "floor2_id": 66,
                         "direction": "down"
@@ -2095,7 +2095,7 @@
                 "index": 1,
                 "mdt_sub_level": 1,
                 "ui_map_id": null,
-                "name": "The Robodrome",
+                "name": "dungeons.bfa.mechagon_workshop.floors.the_robodrome",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -2106,7 +2106,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 373,
+                        "id": 546,
                         "floor1_id": 67,
                         "floor2_id": 68,
                         "direction": "down"
@@ -2120,7 +2120,7 @@
                 "index": 3,
                 "mdt_sub_level": 2,
                 "ui_map_id": null,
-                "name": "The Under Junk",
+                "name": "dungeons.bfa.mechagon_workshop.floors.the_under_junk",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -2131,13 +2131,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 374,
+                        "id": 547,
                         "floor1_id": 68,
                         "floor2_id": 67,
                         "direction": "up"
                     },
                     {
-                        "id": 375,
+                        "id": 548,
                         "floor1_id": 68,
                         "floor2_id": 69,
                         "direction": "left"
@@ -2151,7 +2151,7 @@
                 "index": 4,
                 "mdt_sub_level": 3,
                 "ui_map_id": null,
-                "name": "Mechagon City",
+                "name": "dungeons.bfa.mechagon_workshop.floors.mechagon_city",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -2162,7 +2162,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 376,
+                        "id": 549,
                         "floor1_id": 69,
                         "floor2_id": 68,
                         "direction": "right"
@@ -2190,7 +2190,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Orgrimmar",
+                "name": "dungeons.bfa.orgrimmar_horrific_vision.floors.orgrimmar_horrific_vision",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -2201,7 +2201,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 39,
+                        "id": 576,
                         "floor1_id": 70,
                         "floor2_id": 71,
                         "direction": "down"
@@ -2215,7 +2215,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "The Drag",
+                "name": "dungeons.bfa.orgrimmar_horrific_vision.floors.the_drag",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -2226,7 +2226,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 40,
+                        "id": 577,
                         "floor1_id": 71,
                         "floor2_id": 70,
                         "direction": "up"
@@ -2254,7 +2254,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "Stormwind City",
+                "name": "dungeons.bfa.stormwind_horrific_vision.floors.stormwind_horrific_vision",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,

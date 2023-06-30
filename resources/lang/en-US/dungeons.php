@@ -5,6 +5,140 @@ return [
         '1' => '10-man',
         '2' => '25-man',
     ],
+    'classic'      => [
+        'blackfanthom_deeps'          => [
+            'name'   => 'Blackfanthom Deeps',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'blackrock_depths'            => [
+            'name'   => 'Blackrock Depths',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'deadmines'                   => [
+            'name'   => 'The Deadmines',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'dire_maul'                   => [
+            'name'   => 'Dire Maul',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'gnomeregan'                  => [
+            'name'   => 'Gnomeregan',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'lower_blackrock_spire'       => [
+            'name'   => 'Lower Blackrock Spire',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'maraudon'                    => [
+            'name'   => 'Maraudon',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'ragefire_chasm'              => [
+            'name'   => 'Ragefire Chasm',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'razorfen_downs'              => [
+            'name'   => 'Razorfen Downs',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'razorfen_kraul'              => [
+            'name'   => 'Razorfen Kraul',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'scarlet_halls'               => [
+            'name'   => 'Scarlet Halls',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'scarlet_monastery'           => [
+            'name'   => 'Scarlet Monastery',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'scarlet_monastery_armory'    => [
+            'name'   => 'Scarlet Monastery Armory',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'scarlet_monastery_graveyard' => [
+            'name'   => 'Scarlet Monastery Graveyard',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'scholomance'                 => [
+            'name'   => 'Scholomance',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'shadowfang_keep'             => [
+            'name'   => 'Shadowfang Keep',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'stratholme'                  => [
+            'name'   => 'Stratholme',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'the_stockade'                => [
+            'name'   => 'The Stockade',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'the_temple_of_atal_hakkar'   => [
+            'name'   => 'The Temple of Atal\'Hakkar',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'uldaman'                     => [
+            'name'   => 'Uldaman',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'wailing_caverns'             => [
+            'name'   => 'Wailing Caverns',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'zul_farrak'                  => [
+            'name'   => 'Zul\'Farrak',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+    ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom' => [
             'name'   => 'Ahn\'kahet: The Old Kingdom',
@@ -389,8 +523,8 @@ return [
         'temple_of_sethraliss'      => [
             'name'   => 'Temple of Sethraliss',
             'floors' => [
-                'temple_of_sethraliss' => 'Temple of Sethraliss',
-                'atrium_of_sethraliss' => 'Atrium of Sethraliss',
+                'temple_of_sethraliss'  => 'Temple of Sethraliss',
+                'atrium_of_the_wardens' => 'Atrium of the Wardens',
             ],
         ],
         'the_motherlode'            => [
@@ -413,7 +547,7 @@ return [
                 'the_drain'         => 'The Drain',
                 'the_brig'          => 'The Brig',
                 'detention_block'   => 'Detention Block',
-                'officer_ouarters'  => 'Officer Quarters',
+                'officer_quarters'  => 'Officer Quarters',
                 'overseers_redoubt' => 'Overseer\'s Redoubt',
                 'overseers_summit'  => 'Overseer\'s Summit',
             ],
@@ -432,6 +566,7 @@ return [
             'name'   => 'Operation Mechagon: Junkyard',
             'floors' => [
                 'mechagon_island' => 'Mechagon Island',
+                'tunnels'         => 'Tunnels',
             ],
         ],
         'mechagon_workshop'         => [
@@ -447,6 +582,7 @@ return [
             'name'   => 'Orgrimmar (Horrific Vision)',
             'floors' => [
                 'orgrimmar_horrific_vision' => 'Orgrimmar (Horrific Vision)',
+                'the_drag'                  => 'The Drag',
             ],
         ],
         'stormwind_horrific_vision' => [

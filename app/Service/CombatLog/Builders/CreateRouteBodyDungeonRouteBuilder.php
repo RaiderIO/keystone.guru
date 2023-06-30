@@ -14,6 +14,7 @@ use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInter
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Season\SeasonServiceInterface;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -74,7 +75,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
         $dungeonRoute = DungeonRoute::create([
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
-            'author_id'          => 1,
+            'author_id'          => Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $currentMappingVersion->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
@@ -82,9 +83,9 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             'title'              => __($dungeon->name),
             'level_min'          => $this->createRouteBody->challengeMode->level,
             'level_max'          => $this->createRouteBody->challengeMode->level,
-            'expires_at'         => Carbon::now()->addHours(
+            'expires_at'         => $this->createRouteBody->settings->temporary ? Carbon::now()->addHours(
                 config('keystoneguru.sandbox_dungeon_route_expires_hours')
-            )->toDateTimeString(),
+            )->toDateTimeString() : null,
         ]);
 
         $dungeonRoute->setRelation('dungeon', $dungeon);
