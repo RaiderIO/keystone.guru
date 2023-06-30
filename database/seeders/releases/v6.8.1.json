@@ -1,0 +1,39 @@
+{
+    "id": 184,
+    "release_changelog_id": 191,
+    "version": "v6.8.1",
+    "title": "API changes",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2023-06-30T12:00:03+00:00",
+    "updated_at": "2023-06-30T12:00:03+00:00",
+    "changelog": {
+        "id": 191,
+        "release_id": 184,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 191,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1818,
+                "change": "Invalid NPC IDs are automatically filtered out now.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 191,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1821,
+                "change": "Added authentication for API.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            }
+        ]
+    }
+}
