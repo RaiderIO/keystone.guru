@@ -9,67 +9,86 @@ return [
         'blackfanthom_deeps'          => [
             'name'   => 'Blackfanthom Deeps',
             'floors' => [
-                '' => '',
+                'the_pool_of_ask_ar' => 'The Pool of Ask\'Ar',
+                'moonshrine_sanctum' => 'Moonshrine Sanctum',
+                'the_forgotten_pool' => 'The Forgotten Pool',
             ],
         ],
         'blackrock_depths'            => [
             'name'   => 'Blackrock Depths',
             'floors' => [
-                '' => '',
+                'detention_block'  => 'Detention Block',
+                'shadowforge_city' => 'Shadowforge City',
             ],
         ],
         'deadmines'                   => [
             'name'   => 'The Deadmines',
             'floors' => [
-                '' => '',
+                'the_deadmines' => 'The Deadmines',
+                'ironclad_cove' => 'Ironclad Cove',
             ],
         ],
         'dire_maul'                   => [
             'name'   => 'Dire Maul',
             'floors' => [
-                '' => '',
+                'gordok_commons'           => 'Gordok Commons',
+                'capital_gardens'          => 'Capital Gardens',
+                'court_of_the_highborne'   => 'Court of the Highborne',
+                'prison_of_immol_thar'     => 'Prison of Immol\'Thar',
+                'warpwood_quarter'         => 'Warpwood Quarter',
+                'the_shrine_of_eldretharr' => 'The Shrine of Eldretharr',
             ],
         ],
         'gnomeregan'                  => [
             'name'   => 'Gnomeregan',
             'floors' => [
-                '' => '',
+                'the_hall_of_gears' => 'The Hall of Gears',
+                'the_dormitory'     => 'The Dormitory',
+                'launch_bay'        => 'Launch Bay',
+                'tinkers_court'     => 'Tinkers\' Court',
             ],
         ],
         'lower_blackrock_spire'       => [
             'name'   => 'Lower Blackrock Spire',
             'floors' => [
-                '' => '',
+                'tazz_alor'          => 'Tazz\'Alor',
+                'skitterweb_tunnels' => 'Skitterweb Tunnels',
+                'hordemar_city'      => 'Hordemar City',
+                'hall_of_blackhand'  => 'Hall of Blackhand',
+                'halycons_lair'      => 'Halycon\'s Lair',
+                'chamber_of_battle'  => 'Chamber of Battle',
             ],
         ],
         'maraudon'                    => [
             'name'   => 'Maraudon',
             'floors' => [
-                '' => '',
+                'caverns_of_maraudon' => 'Caverns of Maraudon',
+                'zaetars_grave'       => 'Zaetar\'s Grave',
             ],
         ],
         'ragefire_chasm'              => [
             'name'   => 'Ragefire Chasm',
             'floors' => [
-                '' => '',
+                'ragefire_chasm' => 'Ragefire Chasm',
             ],
         ],
         'razorfen_downs'              => [
             'name'   => 'Razorfen Downs',
             'floors' => [
-                '' => '',
+                'razorfen_downs' => 'Razorfen Downs',
             ],
         ],
         'razorfen_kraul'              => [
             'name'   => 'Razorfen Kraul',
             'floors' => [
-                '' => '',
+                'razorfen_kraul' => 'Razorfen Kraul',
             ],
         ],
         'scarlet_halls'               => [
             'name'   => 'Scarlet Halls',
             'floors' => [
-                '' => '',
+                'training_grounds' => 'Training Grounds',
+                'athenaeum'        => 'Athenaeum',
             ],
         ],
         'scarlet_monastery'           => [
@@ -93,49 +112,60 @@ return [
         'scholomance'                 => [
             'name'   => 'Scholomance',
             'floors' => [
-                '' => '',
+                'the_reliquary'        => 'The Reliquary',
+                'chamber_of_summoning' => 'Chamber of Summoning',
+                'the_upper_study'      => 'The Upper Study',
+                'headmasters_story'    => 'Headmaster\'s Study',
             ],
         ],
         'shadowfang_keep'             => [
             'name'   => 'Shadowfang Keep',
             'floors' => [
-                '' => '',
+                'the_courtyard'         => 'The Courtyard',
+                'dining_hall'           => 'Dining Hall',
+                'the_vacant_den'        => 'The Vacant Den',
+                'lower_observatory'     => 'Lower Observatory',
+                'upper_observatory'     => 'Upper Observatory',
+                'lord_godfreys_chamber' => 'Lord Godfrey\'s Chamber',
+                'the_wall_walk'         => 'The Wall Walk',
             ],
         ],
         'stratholme'                  => [
             'name'   => 'Stratholme',
             'floors' => [
-                '' => '',
+                'crusaders_square' => 'Crusader\'s Square',
+                'the_gauntlet'     => 'The Gauntlet',
             ],
         ],
         'the_stockade'                => [
             'name'   => 'The Stockade',
             'floors' => [
-                '' => '',
+                'the_stockade' => 'The Stockade',
             ],
         ],
         'the_temple_of_atal_hakkar'   => [
             'name'   => 'The Temple of Atal\'Hakkar',
             'floors' => [
-                '' => '',
+                'the_temple_of_atal_hakkar' => 'The Temple of Atal\'Hakkar',
             ],
         ],
         'uldaman'                     => [
             'name'   => 'Uldaman',
             'floors' => [
-                '' => '',
+                'hall_of_the_keepers' => 'Hall of the Keepers',
+                'khaz_goroths_seat'   => 'Khaz\'Goroth\'s Seat',
             ],
         ],
         'wailing_caverns'             => [
             'name'   => 'Wailing Caverns',
             'floors' => [
-                '' => '',
+                'wailing_caverns' => 'Wailing Caverns',
             ],
         ],
         'zul_farrak'                  => [
             'name'   => 'Zul\'Farrak',
             'floors' => [
-                '' => '',
+                'zul_farrak' => 'Zul\'Farrak',
             ],
         ],
     ],
