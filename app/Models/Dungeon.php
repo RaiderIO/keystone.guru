@@ -81,7 +81,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public $timestamps = false;
 
     // Classic
-    const DUNGEON_BLACKFANTHOM_DEEPS          = 'blackfanthom_deeps'; //blackfanthomdeeps
+    const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps'; //blackfanthomdeeps
     const DUNGEON_BLACKROCK_DEPTHS            = 'blackrock_depths'; //blackrockdepths
     const DUNGEON_DEADMINES                   = 'deadmines'; //thedeadmines
     const DUNGEON_DIRE_MAUL                   = 'dire_maul'; //diremaul
@@ -91,9 +91,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_RAGEFIRE_CHASM              = 'ragefire_chasm'; //ragefire
     const DUNGEON_RAZORFEN_DOWNS              = 'razorfen_downs'; //razorfendowns
     const DUNGEON_RAZORFEN_KRAUL              = 'razorfen_kraul'; //razorfenkraul
-    const DUNGEON_SCARLET_HALLS               = 'scarlet_halls'; //scarlethalls
-    const DUNGEON_SCARLET_MONASTERY           = 'scarlet_monastery'; //scarletmonastery
     const DUNGEON_SCARLET_MONASTERY_ARMORY    = 'scarlet_monastery_armory'; //scarletmonastery
+    const DUNGEON_SCARLET_MONASTERY_CATHEDRAL = 'scarlet_monastery_cathedral'; //scarletmonastery
+    const DUNGEON_SCARLET_MONASTERY_LIBRARY   = 'scarlet_monastery_library'; //scarletmonastery
     const DUNGEON_SCARLET_MONASTERY_GRAVEYARD = 'scarlet_monastery_graveyard'; //scarletmonastery
     const DUNGEON_SCHOLOMANCE                 = 'scholomance';
     const DUNGEON_SHADOWFANG_KEEP             = 'shadowfang_keep'; //shadowfangkeep
@@ -240,8 +240,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
     const ALL = [
-        Expansion::EXPANSION_CLASSIC => [
-            self::DUNGEON_BLACKFANTHOM_DEEPS,
+        Expansion::EXPANSION_CLASSIC      => [
+            self::DUNGEON_BLACKFATHOM_DEEPS,
             self::DUNGEON_BLACKROCK_DEPTHS,
             self::DUNGEON_DEADMINES,
             self::DUNGEON_DIRE_MAUL,
@@ -251,10 +251,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_RAGEFIRE_CHASM,
             self::DUNGEON_RAZORFEN_DOWNS,
             self::DUNGEON_RAZORFEN_KRAUL,
-            self::DUNGEON_SCARLET_HALLS,
-            self::DUNGEON_SCARLET_MONASTERY,
             self::DUNGEON_SCARLET_MONASTERY_ARMORY,
+            self::DUNGEON_SCARLET_MONASTERY_CATHEDRAL,
             self::DUNGEON_SCARLET_MONASTERY_GRAVEYARD,
+            self::DUNGEON_SCARLET_MONASTERY_LIBRARY,
             self::DUNGEON_SCHOLOMANCE,
             self::DUNGEON_SHADOWFANG_KEEP,
             self::DUNGEON_STRATHOLME,

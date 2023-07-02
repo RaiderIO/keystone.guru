@@ -6,8 +6,8 @@ return [
         '2' => '25-man',
     ],
     'classic'      => [
-        'blackfanthom_deeps'          => [
-            'name'   => 'Blackfanthom Deeps',
+        'blackfathom_deeps'          => [
+            'name'   => 'Blackfathom Deeps',
             'floors' => [
                 'the_pool_of_ask_ar' => 'The Pool of Ask\'Ar',
                 'moonshrine_sanctum' => 'Moonshrine Sanctum',
@@ -84,27 +84,26 @@ return [
                 'razorfen_kraul' => 'Razorfen Kraul',
             ],
         ],
-        'scarlet_halls'               => [
-            'name'   => 'Scarlet Halls',
-            'floors' => [
-                'training_grounds' => 'Training Grounds',
-                'athenaeum'        => 'Athenaeum',
-            ],
-        ],
-        'scarlet_monastery'           => [
-            'name'   => 'Scarlet Monastery',
-            'floors' => [
-                '' => '',
-            ],
-        ],
         'scarlet_monastery_armory'    => [
             'name'   => 'Scarlet Monastery Armory',
             'floors' => [
                 '' => '',
             ],
         ],
+        'scarlet_monastery_cathedral'           => [
+            'name'   => 'Scarlet Monastery Cathedral',
+            'floors' => [
+                '' => '',
+            ],
+        ],
         'scarlet_monastery_graveyard' => [
             'name'   => 'Scarlet Monastery Graveyard',
+            'floors' => [
+                '' => '',
+            ],
+        ],
+        'scarlet_monastery_library'           => [
+            'name'   => 'Scarlet Monastery Library',
             'floors' => [
                 '' => '',
             ],

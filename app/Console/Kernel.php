@@ -11,6 +11,7 @@ use App\Console\Commands\CombatLog\OutputResultEvents;
 use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
+use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Github\CreateGithubRelease;
@@ -81,6 +82,9 @@ class Kernel extends ConsoleKernel
         // Discover
         DiscoverCache::class,
 
+        // Dungeon
+        CreateMissing::class,
+
         // Environment
         EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
@@ -140,6 +144,7 @@ class Kernel extends ConsoleKernel
      * Define the application's command schedule.
      *
      * @param Schedule $schedule
+     *
      * @return void
      */
     protected function schedule(Schedule $schedule)
