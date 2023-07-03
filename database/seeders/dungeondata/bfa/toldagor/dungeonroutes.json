@@ -1,1 +1,454 @@
-[]
+[
+    {
+        "public_key": "seg3zht",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 22,
+        "mapping_version_id": 22,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 1,
+        "title": "4.12 TD by Dratnos",
+        "description": "",
+        "level_min": 2,
+        "level_max": 28,
+        "difficulty": "Casual",
+        "seasonal_index": 1,
+        "enemy_forces": 411,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2020-07-04T09:54:41+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
+        "playerspecializations": [],
+        "playerraces": [],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 47
+            }
+        ],
+        "brushlines": [],
+        "paths": [
+            {
+                "floor_id": 55,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":\"-91.875\",\"lng\":\"169.375\"},{\"lat\":\"-209.25\",\"lng\":\"139\"}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 57,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":\"-134.875\",\"lng\":\"216.875\"},{\"lat\":\"-33.5\",\"lng\":\"207.75\"}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            }
+        ],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    1538,
+                    1539,
+                    1540,
+                    1541,
+                    1542,
+                    1543,
+                    1544
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    1531,
+                    1532,
+                    1533,
+                    1534,
+                    1535,
+                    1536,
+                    1537
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    1747,
+                    1748,
+                    1749,
+                    1750,
+                    1751,
+                    1752,
+                    1753,
+                    1754,
+                    1755,
+                    1756
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    148
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    4237
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    1555,
+                    1556
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    1567,
+                    1568,
+                    1569,
+                    1570,
+                    1571
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    4193
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    1592,
+                    1594,
+                    1596,
+                    1598,
+                    1600,
+                    1602,
+                    1604
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    1610,
+                    1612,
+                    1616,
+                    1617,
+                    1618,
+                    1619,
+                    1620
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    1625,
+                    1626,
+                    1627,
+                    1628,
+                    1629,
+                    1630,
+                    1772,
+                    1774
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    149
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    1632,
+                    1633,
+                    1634,
+                    1635,
+                    1636
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "enemies": [
+                    1637,
+                    1638
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "enemies": [
+                    4194
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "enemies": [
+                    1653,
+                    1655,
+                    3720,
+                    3721
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "enemies": [
+                    1661,
+                    1662,
+                    1664
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "enemies": [
+                    4238
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "enemies": [
+                    1667,
+                    1669,
+                    1671,
+                    1673,
+                    1675,
+                    1677
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "enemies": [
+                    150
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "enemies": [
+                    1679,
+                    1681,
+                    1683,
+                    2833,
+                    2834
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 22,
+                "enemies": [
+                    151
+                ],
+                "spells": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "prideful_enemies": [],
+        "mapicons": [
+            {
+                "floor_id": 53,
+                "map_icon_type_id": 2,
+                "lat": -111.57,
+                "lng": 205.55,
+                "comment": "Bring this up to the Brig.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 55,
+                "map_icon_type_id": 2,
+                "lat": -142.93,
+                "lng": 175.41,
+                "comment": "Kill these and grab buffs before taking spire to the next floor.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 55,
+                "map_icon_type_id": 11,
+                "lat": -209.25,
+                "lng": 139,
+                "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 57,
+                "map_icon_type_id": 11,
+                "lat": -33.5,
+                "lng": 207.75,
+                "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            }
+        ]
+    }
+]
