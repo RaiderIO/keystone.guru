@@ -32,7 +32,7 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterf
      */
     public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'enemyraidmarkers';
+        return $name === 'enemy_raid_markers' || $name === 'enemy_raid_markers';
     }
 
     /**

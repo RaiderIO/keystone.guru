@@ -50,6 +50,10 @@ class MapContextDungeonRoute extends MapContext
 
     public function getProperties(): array
     {
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context));
+        return array_merge(parent::getProperties(), [
+            'dungeonRoutes' => [
+                $this->context->public_key => $this->getDungeonRouteProperties($this->context),
+            ],
+        ]);
     }
 }

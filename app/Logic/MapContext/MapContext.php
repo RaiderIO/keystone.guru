@@ -22,11 +22,10 @@ abstract class MapContext
 {
     use ListsEnemies;
 
-    /** @var Model */
     protected Model $context;
-    /** @var Floor */
+
     protected Floor $floor;
-    /** @var MappingVersion */
+
     protected MappingVersion $mappingVersion;
 
     function __construct(Model $context, Floor $floor, MappingVersion $mappingVersion)

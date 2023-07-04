@@ -109,7 +109,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|PridefulEnemy[]               $pridefulEnemies
  * @property Collection|OverpulledEnemy[]             $overpulledenemies
  *
- * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyraidmarkers
+ * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyRaidMarkers
  * @property Collection|MapIcon[]                     $mapicons
  * @property Collection|PageView[]                    $pageviews
  *
@@ -372,7 +372,7 @@ class DungeonRoute extends Model
     /**
      * @return HasMany
      */
-    public function enemyraidmarkers(): HasMany
+    public function enemyRaidMarkers(): HasMany
     {
         return $this->hasMany(DungeonRouteEnemyRaidMarker::class);
     }
@@ -929,7 +929,7 @@ class DungeonRoute extends Model
                             $templateRoute->paths,
                             $templateRoute->brushlines,
                             $templateRoute->killZones,
-                            $templateRoute->enemyraidmarkers,
+                            $templateRoute->enemyRaidMarkers,
                             $templateRoute->mapicons,
                         ]);
                     }
@@ -981,7 +981,7 @@ class DungeonRoute extends Model
             $this->brushlines,
             $this->killZones,
             $this->pridefulEnemies,
-            $this->enemyraidmarkers,
+            $this->enemyRaidMarkers,
             $this->mapicons,
             $this->routeattributesraw,
         ]);
@@ -1451,7 +1451,7 @@ class DungeonRoute extends Model
             $dungeonRoute->tags()->delete();
 
             // Mapping related items
-            $dungeonRoute->enemyraidmarkers()->delete();
+            $dungeonRoute->enemyRaidMarkers()->delete();
             foreach ($dungeonRoute->brushlines as $brushline) {
                 $brushline->delete();
             }

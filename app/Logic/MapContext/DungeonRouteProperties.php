@@ -6,7 +6,7 @@ namespace App\Logic\MapContext;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
-use App\Models\RaidMarker;
+use Illuminate\Support\Collection;
 
 /**
  * Trait DungeonRouteTrait
@@ -14,22 +14,35 @@ use App\Models\RaidMarker;
  *
  * @mixin MapContext
  */
-trait DungeonRouteTrait
+trait DungeonRouteProperties
 {
+    /**
+     * @param Collection $dungeonRoutes
+     * @return Collection
+     */
+    private function getDungeonRoutesProperties(Collection $dungeonRoutes): Collection
+    {
+        $result = collect();
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $result->put($dungeonRoute->public_key, $this->getDungeonRouteProperties($dungeonRoute));
+        }
+
+        return $result;
+    }
+
     /**
      * @param DungeonRoute $dungeonRoute
      * @return array
      */
     private function getDungeonRouteProperties(DungeonRoute $dungeonRoute): array
     {
-        $raidMarkers = RaidMarker::all();
-
         return [
             'publicKey'               => $dungeonRoute->public_key,
             'teamId'                  => $dungeonRoute->team_id,
             'pullGradient'            => $dungeonRoute->pull_gradient,
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
-            'faction'                 => strtolower($dungeonRoute->faction->key),
+            'faction'                 => $dungeonRoute->faction->key,
             'enemyForces'             => $dungeonRoute->enemy_forces,
             'levelMin'                => $dungeonRoute->level_min,
             'levelMax'                => $dungeonRoute->level_max,
@@ -47,10 +60,10 @@ trait DungeonRouteTrait
             'paths'                    => $dungeonRoute->paths,
             'brushlines'               => $dungeonRoute->brushlines,
             'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
-            'enemyRaidMarkers'         => $dungeonRoute->enemyraidmarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) use ($raidMarkers) {
+            'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) {
                 return [
                     'enemy_id'         => $drEnemyRaidMarker->enemy_id,
-                    'raid_marker_name' => $raidMarkers->where('id', $drEnemyRaidMarker->raid_marker_id)->first()->name,
+                    'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
                 ];
             }),
             // A list of affixes that this route has (not to be confused with AffixGroups)

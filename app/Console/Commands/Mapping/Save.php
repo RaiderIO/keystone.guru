@@ -227,7 +227,7 @@ class Save extends Command
                                    'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
                                    'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyraidmarkers',
+                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
                               'pridefulEnemies', 'mapicons']);
 
             // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
@@ -265,7 +265,7 @@ class Save extends Command
                 $item->makeVisible(['floor_id']);
                 $toHide->add($item);
             }
-            foreach ($demoRoute->enemyraidmarkers as $item) {
+            foreach ($demoRoute->enemyRaidMarkers as $item) {
                 $toHide->add($item);
             }
             foreach ($demoRoute->pridefulEnemies as $item) {

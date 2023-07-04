@@ -5,6 +5,8 @@ class StateManager extends Signalable {
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
 
+        this._mapContextState = null;
+
         // Echo handler
         this.echoEnabled = false;
         this._echo = null;
@@ -59,6 +61,8 @@ class StateManager extends Signalable {
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }
+
+        this._mapContextState = new MapContextState(this._mapContext);
     }
 
     /**
@@ -341,6 +345,15 @@ class StateManager extends Signalable {
     getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this._mapContext;
+    }
+
+    /**
+     * Returns the state of the map context - ie. what the currently active dungeon route could be
+     * @returns {MapContextState}
+     */
+    getMapContextState() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._mapContextState;
     }
 
     /**

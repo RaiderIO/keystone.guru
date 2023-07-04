@@ -227,7 +227,7 @@ class AdminToolsController extends Controller
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
             'brushlines', 'paths', 'author', 'killZones', 'pridefulEnemies', 'publishedstate',
-            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
+            'ratings', 'favorites', 'enemyRaidMarkers', 'mapicons', 'mdtImport', 'team',
         ])->where('public_key', $request->get('public_key'))->firstOrFail();
 
         return view('admin.tools.dungeonroute.viewcontents', [
