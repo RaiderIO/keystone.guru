@@ -11,6 +11,7 @@ use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteDataFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
@@ -23,6 +24,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\EnemyForcesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
+use App\Logic\MapContext\DungeonRouteProperties;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
@@ -50,12 +52,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Teapot\StatusCode\Http;
 use Throwable;
 
 class APIDungeonRouteController extends Controller
 {
+    use DungeonRouteProperties;
     use PublicKeyDungeonRoute;
     use ListsEnemies;
     use ListsEnemyPacks;
@@ -210,7 +212,7 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteSearchFormRequest $request
-     * @param ExpansionServiceInterface $expansionService
+     * @param ExpansionServiceInterface        $expansionService
      * @return Response|string
      * @throws Exception
      */
@@ -232,7 +234,7 @@ class APIDungeonRouteController extends Controller
         }
 
         $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon', 'mappingVersion'])
-            ->join('dungeons', 'dungeon_routes.dungeon_id',  'dungeons.id')
+            ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
             ->when($expansion !== null, function (Builder $builder) use ($expansion) {
                 return $builder->where('dungeons.expansion_id', $expansion->id);
@@ -348,9 +350,9 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param string $category
-     * @param DiscoverServiceInterface $discoverService
+     * @param Request                   $request
+     * @param string                    $category
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
      * @return Response|string
      */
@@ -432,10 +434,10 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteFormRequest $request
-     * @param SeasonService $seasonService
-     * @param ExpansionServiceInterface $expansionService
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute|null $dungeonRoute
+     * @param SeasonService              $seasonService
+     * @param ExpansionServiceInterface  $expansionService
+     * @param ThumbnailServiceInterface  $thumbnailService
+     * @param DungeonRoute|null          $dungeonRoute
      * @return DungeonRoute
      * @throws AuthorizationException
      */
@@ -462,9 +464,9 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request       $request
      * @param SeasonService $seasonService
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute  $dungeonRoute
      *
      * @return Response
      * @throws AuthorizationException
@@ -485,7 +487,7 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
@@ -503,7 +505,7 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param PublishFormRequest $request
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute       $dungeonRoute
      *
      * @return Response
      * @throws Exception
@@ -528,10 +530,10 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                   $request
      * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute $dungeonRoute
-     * @param Team $team
+     * @param DungeonRoute              $dungeonRoute
+     * @param Team                      $team
      * @return Response
      * @throws AuthorizationException
      */
@@ -553,9 +555,9 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param ExpansionServiceInterface $expansionService
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param string $seasonalType
+     * @param Request                   $request
+     * @param DungeonRoute              $dungeonRoute
+     * @param string                    $seasonalType
      * @return Application|ResponseFactory|Response
      * @throws AuthorizationException
      */
@@ -564,7 +566,8 @@ class APIDungeonRouteController extends Controller
         Request                   $request,
         DungeonRoute              $dungeonRoute,
         string                    $seasonalType
-    ) {
+    )
+    {
         $this->authorize('migrate', $dungeonRoute);
 
         $dungeonRoute->migrateToSeasonalType($expansionService, $seasonalType);
@@ -573,7 +576,7 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws Exception
@@ -597,7 +600,7 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws Exception
@@ -620,7 +623,7 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
@@ -639,7 +642,7 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
@@ -661,7 +664,7 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @param Request $request
-     * @param string $publickey
+     * @param string  $publickey
      * @return array
      * @throws Exception
      */
@@ -720,32 +723,32 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                         $request
      * @param MDTExportStringServiceInterface $mdtExportStringService
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute                    $dungeonRoute
      * @return array|void
      * @throws AuthorizationException
      * @throws Throwable
      */
     public function mdtExport(Request                         $request,
-                       MDTExportStringServiceInterface $mdtExportStringService,
-                       DungeonRoute                    $dungeonRoute)
+                              MDTExportStringServiceInterface $mdtExportStringService,
+                              DungeonRoute                    $dungeonRoute)
     {
         $this->authorize('view', $dungeonRoute);
 
 //        try {
-            $warnings     = new Collection();
-            $dungeonRoute = $mdtExportStringService
-                ->setDungeonRoute($dungeonRoute)
-                ->getEncodedString($warnings);
+        $warnings     = new Collection();
+        $dungeonRoute = $mdtExportStringService
+            ->setDungeonRoute($dungeonRoute)
+            ->getEncodedString($warnings);
 
-            $warningResult = [];
-            foreach ($warnings as $warning) {
-                /** @var $warning ImportWarning */
-                $warningResult[] = $warning->toArray();
-            }
+        $warningResult = [];
+        foreach ($warnings as $warning) {
+            /** @var $warning ImportWarning */
+            $warningResult[] = $warning->toArray();
+        }
 
-            return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
+        return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
 //        } catch (Exception $ex) {
 //            Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
 //            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
@@ -763,9 +766,9 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param APISimulateFormRequest $request
+     * @param APISimulateFormRequest     $request
      * @param RaidEventsServiceInterface $raidEventsService
-     * @param DungeonRoute $dungeonRoute
+     * @param DungeonRoute               $dungeonRoute
      * @return array
      * @throws AuthorizationException
      */
@@ -783,9 +786,9 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                   $request
      * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute              $dungeonroute
      * @return Response
      */
     public function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
@@ -793,5 +796,16 @@ class APIDungeonRouteController extends Controller
         $thumbnailService->queueThumbnailRefresh($dungeonroute);
 
         return response()->noContent();
+    }
+
+    /**
+     * @param APIDungeonRouteDataFormRequest $request
+     * @return Collection
+     */
+    public function getDungeonRoutesData(APIDungeonRouteDataFormRequest $request): Collection
+    {
+        $publicKeys = $request->validated()['public_keys'];
+
+        return $this->getDungeonRoutesProperties($publicKeys);
     }
 }

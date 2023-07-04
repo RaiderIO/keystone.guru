@@ -16,7 +16,7 @@ use App\Models\Floor;
  */
 class MapContextDungeonRoute extends MapContext
 {
-    use DungeonRouteTrait;
+    use DungeonRouteProperties;
 
     public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
     {
