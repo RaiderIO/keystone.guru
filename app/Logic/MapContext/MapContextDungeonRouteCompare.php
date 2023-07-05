@@ -65,7 +65,7 @@ class MapContextDungeonRouteCompare extends MapContext
 
         $routeCorrection = $overpulledEnemyService->getRouteCorrection($this->context);
 
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonroute), [
+        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonRoute), [
             'liveSessionPublicKey' => $this->context->public_key,
             'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
             'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),

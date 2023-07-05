@@ -46,7 +46,7 @@ class InviteEvent extends ContextEvent
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
+            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->dungeonRoute->getRouteKey())),
         ];
     }
 
@@ -56,9 +56,9 @@ class InviteEvent extends ContextEvent
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
             'invitees' => $this->invitees,
             'url'      => route('dungeonroute.livesession.view', [
-                'dungeon'      => $this->_context->dungeonroute->dungeon,
-                'title'        => Str::slug($this->_context->dungeonroute->title),
-                'dungeonroute' => $this->_context->dungeonroute,
+                'dungeon'      => $this->_context->dungeonRoute->dungeon,
+                'title'        => Str::slug($this->_context->dungeonRoute->title),
+                'dungeonroute' => $this->_context->dungeonRoute,
                 'livesession'  => $this->_context,
             ]),
         ]);

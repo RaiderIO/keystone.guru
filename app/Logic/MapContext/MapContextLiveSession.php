@@ -18,11 +18,11 @@ use Illuminate\Support\Facades\App;
  */
 class MapContextLiveSession extends MapContext
 {
-    use DungeonRouteTrait;
+    use DungeonRouteProperties;
 
     public function __construct(LiveSession $liveSession, Floor $floor)
     {
-        parent::__construct($liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
+        parent::__construct($liveSession, $floor, $liveSession->dungeonRoute->mappingVersion);
     }
 
     public function getType(): string
@@ -32,12 +32,7 @@ class MapContextLiveSession extends MapContext
 
     public function isTeeming(): bool
     {
-        return $this->context->dungeonroute->teeming;
-    }
-
-    public function getSeasonalIndex(): int
-    {
-        return $this->context->dungeonroute->seasonal_index;
+        return $this->context->dungeonRoute->teeming;
     }
 
     public function getEnemies(): array
@@ -57,13 +52,16 @@ class MapContextLiveSession extends MapContext
 
         $routeCorrection = $overpulledEnemyService->getRouteCorrection($this->context);
 
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonroute), [
-            'liveSessionPublicKey' => $this->context->public_key,
-            'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),
-            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
-            'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
-        ]);
+        return array_merge(parent::getProperties(),
+            $this->getDungeonRoutesProperties(
+                collect([$this->context->dungeonRoute])
+            )->toArray(), [
+                'liveSessionPublicKey' => $this->context->public_key,
+                'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
+                'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),
+                'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
+                'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
+            ]);
     }
 
 }

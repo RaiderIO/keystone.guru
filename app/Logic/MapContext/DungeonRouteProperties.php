@@ -25,10 +25,12 @@ trait DungeonRouteProperties
         $result = collect();
 
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $result->put($dungeonRoute->public_key, $this->getDungeonRouteProperties($dungeonRoute));
+            $result->push($this->getDungeonRouteProperties($dungeonRoute));
         }
 
-        return $result;
+        return collect([
+            'dungeonRoutes' => $result,
+        ]);
     }
 
     /**
@@ -40,6 +42,7 @@ trait DungeonRouteProperties
         return [
             'publicKey'               => $dungeonRoute->public_key,
             'teamId'                  => $dungeonRoute->team_id,
+            'seasonalIndex'           => $dungeonRoute->seasonal_index,
             'pullGradient'            => $dungeonRoute->pull_gradient,
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
             'faction'                 => $dungeonRoute->faction->key,

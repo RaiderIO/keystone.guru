@@ -67,7 +67,7 @@ $dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonrout
 Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), $dungeonRouteChannelCallback);
 Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback) {
     // Validate live sessions the same way as a dungeon route
-    return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
+    return $dungeonRouteChannelCallback($user, $livesession->dungeonRoute);
 });
 
 Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {

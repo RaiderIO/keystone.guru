@@ -3,8 +3,10 @@
 
 namespace App\Logic\MapContext;
 
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class MapContextDungeonRoute
@@ -16,7 +18,7 @@ use App\Models\Floor;
  */
 class MapContextDungeonRoute extends MapContext
 {
-    use DungeonRouteTrait;
+    use DungeonRouteProperties;
 
     public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
     {
@@ -33,14 +35,13 @@ class MapContextDungeonRoute extends MapContext
         return $this->context->teeming;
     }
 
-    public function getSeasonalIndex(): int
-    {
-        return $this->context->seasonal_index;
-    }
-
+    /**
+     * @throws InvalidMDTDungeonException
+     * @throws InvalidArgumentException
+     */
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->mappingVersion, false);
+        return $this->listEnemies($this->mappingVersion);
     }
 
     public function getEchoChannelName(): string
@@ -50,10 +51,10 @@ class MapContextDungeonRoute extends MapContext
 
     public function getProperties(): array
     {
-        return array_merge(parent::getProperties(), [
-            'dungeonRoutes' => [
-                $this->context->public_key => $this->getDungeonRouteProperties($this->context),
-            ],
-        ]);
+        return array_merge(parent::getProperties(),
+            $this->getDungeonRoutesProperties(
+                collect([$this->context])
+            )->toArray()
+        );
     }
 }

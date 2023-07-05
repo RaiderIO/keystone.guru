@@ -270,7 +270,7 @@ return [
     'enemy_forces_not_all_required_enemies_killed_label' => 'Warning: this route does not kill all required enemies',
     'enemy_forces_too_much_label'                        => 'Warning: your route has too much enemy forces',
     'enemy_forces_too_little_label'                      => 'Warning: this route does not have enough enemy forces!',
-    'enemy_forces_overridden_label'                      => 'Your route\'s enemy forces may have been corrected due to overpulled enemies which caused automatic alterations in your route',
+    'enemy_forces_overridden_label'                      => 'Your route\'s enemy forces may have been corrected due to overpulled enemies which caused automatic alterations in your route.',
 
     // Sidebar
     'sidebar_expand'                                     => 'Expand the sidebar',

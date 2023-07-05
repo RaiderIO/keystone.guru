@@ -69,20 +69,20 @@ class APIOverpulledEnemyController extends Controller
 
     /**
      * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
+     * @param OverpulledEnemyFormRequest      $request
+     * @param DungeonRoute                    $dungeonRoute
+     * @param LiveSession                     $liveSession
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
     function delete(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonroute,
-        LiveSession                     $livesession)
+        DungeonRoute                    $dungeonRoute,
+        LiveSession                     $liveSession)
     {
-        $this->authorize('view', $dungeonroute);
-        $this->authorize('view', $livesession);
+        $this->authorize('view', $dungeonRoute);
+        $this->authorize('view', $liveSession);
 
         $result = response()->noContent();
 
@@ -94,17 +94,17 @@ class APIOverpulledEnemyController extends Controller
         try {
             foreach ($enemies as $enemy) {
                 /** @var OverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
                     ->where('npc_id', $enemy->npc_id)
                     ->where('mdt_id', $enemy->mdt_id)
                     ->first();
 
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                    broadcast(new OverpulledEnemyDeletedEvent($liveSession, Auth::getUser(), $overpulledEnemy));
                 }
 
                 // Optionally don't calculate the return value
-                $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
+                $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($liveSession)->toArray();
             }
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);

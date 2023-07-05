@@ -11,6 +11,7 @@ use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
+use App\Http\Requests\DungeonRoute\APIDungeonRouteDataFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
@@ -808,6 +809,7 @@ class APIDungeonRouteController extends Controller
 
         /** @var Collection|DungeonRoute[] $dungeonRoutes */
         $dungeonRoutes = DungeonRoute::with([
+            'affixes',
             'killZones',
             'mapicons',
             'paths',
@@ -820,12 +822,15 @@ class APIDungeonRouteController extends Controller
         $dungeonId        = null;
         $mappingVersionId = null;
         $seasonalIndex    = null;
+        $seasonalAffix    = null;
 
         foreach ($dungeonRoutes as $dungeonRoute) {
             if ($dungeonId === null) {
                 $dungeonId        = $dungeonRoute->dungeon_id;
                 $mappingVersionId = $dungeonRoute->mapping_version_id;
                 $seasonalIndex    = $dungeonRoute->seasonal_index;
+                $seasonalAffix    = $dungeonRoute->getSeasonalAffix();
+                continue;
             }
 
             if ($dungeonId !== $dungeonRoute->dungeon_id) {
@@ -838,6 +843,10 @@ class APIDungeonRouteController extends Controller
 
             if ($seasonalIndex !== $dungeonRoute->seasonal_index) {
                 throw new Exception('Seasonal index do not match between routes');
+            }
+
+            if ($seasonalAffix !== $dungeonRoute->getSeasonalAffix()) {
+                throw new Exception('Seasonal affixes do not match between routes');
             }
         }
 

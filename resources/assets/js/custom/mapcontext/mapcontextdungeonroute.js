@@ -1,7 +1,36 @@
 class MapContextDungeonRoute extends MapContext {
     constructor(options) {
         super(options);
+
+        // The active route is always the first since we only have one in DungeonRoute map context
+        this._activeDungeonRoute = this._getDungeonRoutes()[0];
     }
+
+    /**
+     *
+     * @returns {*}
+     * @private
+     */
+    _getDungeonRoutes() {
+        return this._options.dungeonRoutes;
+    }
+
+    // /**
+    //  * Get the data of the currently active dungeon route
+    //  *
+    //  * @returns DungeonRoute
+    //  */
+    // _activeDungeonRoute {
+    //     return this._activeDungeonRoute;
+    // }
+
+    // /**
+    //  *
+    //  * @param publicKey {String}
+    //  */
+    // setActiveDungeonRoute(publicKey) {
+    //     this._activeDungeonRoute = publicKey;
+    // }
 
     /**
      *
@@ -9,7 +38,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Boolean}
      */
     hasAffix(affix) {
-        return this._options.uniqueAffixes.includes(affix);
+        return this._activeDungeonRoute.uniqueAffixes.includes(affix);
     }
 
     /**
@@ -17,7 +46,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Number}|null
      */
     getDungeonDifficulty(){
-        return this._options.dungeonDifficulty;
+        return this._activeDungeonRoute.dungeonDifficulty;
     }
 
     /**
@@ -25,7 +54,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {String}
      */
     getPublicKey() {
-        return this._options.publicKey;
+        return this._activeDungeonRoute.publicKey;
     }
 
     /**
@@ -33,7 +62,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Number}
      */
     getTeamId() {
-        return this._options.teamId;
+        return this._activeDungeonRoute.teamId;
     }
 
     /**
@@ -41,7 +70,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Number}
      */
     getSeasonalIndex() {
-        return this._options.seasonalIndex;
+        return this._activeDungeonRoute.seasonalIndex;
     }
 
     /**
@@ -49,7 +78,7 @@ class MapContextDungeonRoute extends MapContext {
      * @param seasonalIndex {Number}
      */
     setSeasonalIndex(seasonalIndex) {
-        this._options.seasonalIndex = seasonalIndex;
+        this._activeDungeonRoute.seasonalIndex = seasonalIndex;
 
         // Let everyone know it's changed
         this.signal('seasonalindex:changed', {seasonalIndex: this._options.seasonalIndex});
@@ -60,7 +89,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {string}
      */
     getPullGradient() {
-        return this._options.pullGradient;
+        return this._activeDungeonRoute.pullGradient;
     }
 
     /**
@@ -68,7 +97,7 @@ class MapContextDungeonRoute extends MapContext {
      * @param pullGradient {string}
      */
     setPullGradient(pullGradient) {
-        this._options.pullGradient = pullGradient;
+        this._activeDungeonRoute.pullGradient = pullGradient;
 
         // Let everyone know it's changed
         this.signal('pullgradient:changed', {pullgradient: this._options.pullGradient});
@@ -79,7 +108,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Boolean}
      */
     getPullGradientApplyAlways() {
-        return this._options.pullGradientApplyAlways;
+        return this._activeDungeonRoute.pullGradientApplyAlways;
     }
 
     /**
@@ -87,10 +116,12 @@ class MapContextDungeonRoute extends MapContext {
      * @param pullGradientApplyAlways {Boolean}
      */
     setPullGradientApplyAlways(pullGradientApplyAlways) {
-        this._options.pullGradientApplyAlways = pullGradientApplyAlways;
+        this._activeDungeonRoute.pullGradientApplyAlways = pullGradientApplyAlways;
 
         // Let everyone know it's changed
-        this.signal('pullgradientapplyalways:changed', {pullgradientapplyalways: this._options.pullGradientApplyAlways});
+        this.signal('pullgradientapplyalways:changed', {
+            pullgradientapplyalways: this._activeDungeonRoute.pullGradientApplyAlways
+        });
     }
 
     /**
@@ -98,7 +129,7 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Number}
      */
     getEnemyForces() {
-        return this._options.enemyForces;
+        return this._activeDungeonRoute.enemyForces;
     }
 
     /**
@@ -106,14 +137,14 @@ class MapContextDungeonRoute extends MapContext {
      * @param enemyForces {Number}
      */
     setEnemyForces(enemyForces) {
-        this._options.enemyForces = enemyForces;
+        this._activeDungeonRoute.enemyForces = enemyForces;
     }
 
     /**
      * @returns {[]}
      */
     getKillZones() {
-        return this._options.killZones;
+        return this._activeDungeonRoute.killZones;
     }
 
     /**
@@ -121,28 +152,28 @@ class MapContextDungeonRoute extends MapContext {
      */
     getMapIcons() {
         // https://stackoverflow.com/a/1584377/771270
-        return _.union(this._options.mapIcons, this._options.dungeon.mapIcons);
+        return _.union(this._activeDungeonRoute.mapIcons, this._options.dungeon.mapIcons);
     }
 
     /**
      * @returns {[]}
      */
     getPaths() {
-        return this._options.paths;
+        return this._activeDungeonRoute.paths;
     }
 
     /**
      * @returns {[]}
      */
     getBrushlines() {
-        return this._options.brushlines;
+        return this._activeDungeonRoute.brushlines;
     }
 
     /**
      * @returns {[]}
      */
     getPridefulEnemies() {
-        return this._options.pridefulEnemies;
+        return this._activeDungeonRoute.pridefulEnemies;
     }
 
     /**
@@ -150,21 +181,21 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {[]}
      */
     getEnemyRaidMarkers() {
-        return this._options.enemyRaidMarkers;
+        return this._activeDungeonRoute.enemyRaidMarkers;
     }
 
     /**
      * @returns {Number}
      */
     getLevelMin() {
-        return this._options.levelMin;
+        return this._activeDungeonRoute.levelMin;
     }
 
     /**
      * @param levelMin {Number}
      */
     setLevelMin(levelMin) {
-        this._options.levelMin = levelMin;
+        this._activeDungeonRoute.levelMin = levelMin;
     }
 
     /**
@@ -172,13 +203,13 @@ class MapContextDungeonRoute extends MapContext {
      * @returns {Number}
      */
     getLevelMax() {
-        return this._options.levelMax;
+        return this._activeDungeonRoute.levelMax;
     }
 
     /**
      * @param levelMax {Number}
      */
     setLevelMax(levelMax) {
-        this._options.levelMax = levelMax;
+        this._activeDungeonRoute.levelMax = levelMax;
     }
 }

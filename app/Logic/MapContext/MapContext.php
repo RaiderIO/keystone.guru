@@ -41,9 +41,6 @@ abstract class MapContext
     /** @return bool */
     public abstract function isTeeming(): bool;
 
-    /** @return int */
-    public abstract function getSeasonalIndex(): int;
-
     /** @return array */
     public abstract function getEnemies(): array;
 
@@ -107,7 +104,6 @@ abstract class MapContext
             'mappingVersion'      => $this->mappingVersion,
             'floorId'             => $this->floor->id,
             'teeming'             => $this->isTeeming(),
-            'seasonalIndex'       => $this->getSeasonalIndex(),
             'dungeon'             => $dungeonData,
             'static'              => $static,
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),

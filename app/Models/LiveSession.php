@@ -15,16 +15,16 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $user_id
- * @property string $public_key
+ * @property int                          $id
+ * @property int                          $dungeon_route_id
+ * @property int                          $user_id
+ * @property string                       $public_key
  *
- * @property User $user
- * @property DungeonRoute $dungeonroute
- * @property Collection|OverpulledEnemy[] $overpulledenemies
+ * @property User                         $user
+ * @property DungeonRoute                 $dungeonRoute
+ * @property Collection|OverpulledEnemy[] $overpulledEnemies
  *
- * @property Carbon $expires_at
+ * @property Carbon                       $expires_at
  *
  * @mixin Eloquent
  */
@@ -40,7 +40,7 @@ class LiveSession extends Model
 
     protected $with = [
         'user',
-        'dungeonroute',
+        'dungeonRoute',
     ];
 
     use GeneratesPublicKey;
@@ -67,15 +67,15 @@ class LiveSession extends Model
      *
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
-        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
      * @return HasMany
      */
-    public function overpulledenemies(): HasMany
+    public function overpulledEnemies(): HasMany
     {
         return $this->hasMany(OverpulledEnemy::class);
     }
@@ -129,7 +129,7 @@ class LiveSession extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(function (LiveSession $item) {
-            $item->overpulledenemies()->delete();
+            $item->overpulledEnemies()->delete();
         });
     }
 }

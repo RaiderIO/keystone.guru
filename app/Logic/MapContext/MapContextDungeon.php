@@ -46,11 +46,6 @@ class MapContextDungeon extends MapContext
         return true;
     }
 
-    public function getSeasonalIndex(): int
-    {
-        return -1;
-    }
-
     public function getEnemies(): array
     {
         try {
