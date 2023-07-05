@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $raid_marker_id
- * @property int $enemy_id
+ * @property int          $id
+ * @property int          $dungeon_route_id
+ * @property int          $raid_marker_id
+ * @property int          $enemy_id
  *
- * @property DungeonRoute $dungeonroute
- * @property RaidMarker $raidmarker
- * @property Enemy $enemy
+ * @property DungeonRoute $dungeonRoute
+ * @property RaidMarker   $raidMarker
+ * @property Enemy        $enemy
  *
  * @mixin Eloquent
  */
@@ -27,7 +27,7 @@ class DungeonRouteEnemyRaidMarker extends Model
     /**
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
@@ -35,7 +35,7 @@ class DungeonRouteEnemyRaidMarker extends Model
     /**
      * @return BelongsTo
      */
-    public function raidmarker(): BelongsTo
+    public function raidMarker(): BelongsTo
     {
         return $this->belongsTo(RaidMarker::class);
     }
