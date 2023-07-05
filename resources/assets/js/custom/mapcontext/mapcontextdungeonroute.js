@@ -185,6 +185,13 @@ class MapContextDungeonRoute extends MapContext {
     }
 
     /**
+     * @returns {[]}
+     */
+    getSetup() {
+        return this._activeDungeonRoute.setup;
+    }
+
+    /**
      * @returns {Number}
      */
     getLevelMin() {

@@ -69,12 +69,16 @@ trait DungeonRouteProperties
                     'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
                 ];
             }),
+
             // A list of affixes that this route has (not to be confused with AffixGroups)
             'uniqueAffixes'            => $dungeonRoute->affixes->map(function (AffixGroup $affixGroup) {
                 return $affixGroup->affixes;
             })->collapse()->unique()->pluck(['name'])->map(function (string $name) {
                 return __($name, [], 'en-US');
             }),
+
+            // Appends
+            'setup' => $dungeonRoute->getSetupAttribute(),
         ];
     }
 }

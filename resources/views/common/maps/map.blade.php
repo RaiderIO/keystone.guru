@@ -81,7 +81,6 @@ if ($isAdmin) {
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
-    'dungeonroute' => $dungeonroute ?? null,
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],

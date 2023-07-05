@@ -92,9 +92,12 @@ class CommonMapsMap extends InlineCode {
 
             // Trigger info popover
             $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
-                $('#view_dungeonroute_group_setup').html(
-                    handlebarsGroupSetupParse(self.options.dungeonroute.setup)
-                );
+                let mapContext = getState().getMapContext();
+                if( mapContext instanceof MapContextDungeonRoute ){
+                    $('#view_dungeonroute_group_setup').html(
+                        handlebarsGroupSetupParse(getState().getMapContext().getSetup())
+                    );
+                }
 
                 // refreshTooltips();
             });
