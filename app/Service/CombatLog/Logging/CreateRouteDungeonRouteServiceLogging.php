@@ -40,4 +40,13 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     {
         $this->end(__METHOD__, get_defined_vars());
     }
+
+    /**
+     * @param int $uiMapId
+     * @return void
+     */
+    public function saveChallengeModeRunUnableToFindFloor(int $uiMapId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

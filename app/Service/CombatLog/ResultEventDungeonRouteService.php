@@ -28,10 +28,10 @@ use InvalidArgumentException;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {
-    protected CombatLogService                           $combatLogService;
-    
-    protected SeasonServiceInterface                     $seasonService;
-    
+    protected CombatLogService $combatLogService;
+
+    protected SeasonServiceInterface $seasonService;
+
     private CombatLogDungeonRouteServiceLoggingInterface $log;
 
     /**
@@ -111,7 +111,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // </editor-fold>
 
             // Store found enemy positions in the database for analyzing
-            $this->saveEnemyPositionFromResultEvents($resultEvents);
+            $this->saveEnemyPositionFromResultEvents($resultEvents, $dungeonRoute);
 
             $dungeonRoute = (new ResultEventDungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
 
@@ -133,10 +133,10 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
     /**
      * @param Collection|BaseResultEvent[] $resultEvents
-     *
+     * @param DungeonRoute                 $dungeonRoute
      * @return void
      */
-    private function saveEnemyPositionFromResultEvents(Collection $resultEvents): void
+    private function saveEnemyPositionFromResultEvents(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
         try {
             $this->log->saveEnemyPositionFromResultEventsStart();
@@ -189,11 +189,12 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // Insert a run
             /** @var ChallengeModeRun $challengeModeRun */
             $challengeModeRun = ChallengeModeRun::create([
-                'dungeon_id'    => $challengeModeStart->getDungeon()->id,
-                'level'         => $challengeModeStart->getChallengeModeStartEvent()->getKeystoneLevel(),
-                'success'       => $challengeModeEnd->getChallengeModeEndEvent()->getSuccess(),
-                'total_time_ms' => $challengeModeEnd->getChallengeModeEndEvent()->getTotalTimeMS(),
-                'created_at'    => $now,
+                'dungeon_id'       => $dungeonRoute->dungeon_id,
+                'dungeon_route_id' => $dungeonRoute->id,
+                'level'            => $challengeModeStart->getChallengeModeStartEvent()->getKeystoneLevel(),
+                'success'          => $challengeModeEnd->getChallengeModeEndEvent()->getSuccess(),
+                'total_time_ms'    => $challengeModeEnd->getChallengeModeEndEvent()->getTotalTimeMS(),
+                'created_at'       => $now,
             ]);
 
             // Couple the run to the attributes we generated before
