@@ -27,4 +27,10 @@ interface CreateRouteDungeonRouteServiceLoggingInterface
      * @return void
      */
     public function getCreateRouteBodyEnd(): void;
+
+    /**
+     * @param int $uiMapId
+     * @return void
+     */
+    public function saveChallengeModeRunUnableToFindFloor(int $uiMapId): void;
 }
