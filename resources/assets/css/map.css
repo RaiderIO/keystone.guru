@@ -36,7 +36,7 @@ html, body, #map, #app, .wrapper {
 
 /** Embed map needs space for the top header */
 .wrapper.embed_wrapper {
-    height: calc(100vh - 96px);
+    height: calc(100vh - 150px);
 }
 
 #map.leaflet-container {
