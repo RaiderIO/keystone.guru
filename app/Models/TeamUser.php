@@ -4,14 +4,16 @@ namespace App\Models;
 
 use App\User;
 use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property $id int
- * @property $team_id int
- * @property $user_id int
- * @property $role string
+ * @property int $id
+ * @property int $team_id
+ * @property int $user_id
+ * @property string $role
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -19,36 +21,52 @@ use Illuminate\Database\Eloquent\Model;
  * @property Team $team
  * @property User $user
  *
- * @method static \Illuminate\Database\Eloquent\Builder isModerator(int $userId)
+ * @method static Builder isModerator(int $userId)
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class TeamUser extends Model
 {
+    const ROLE_MEMBER       = 'member';
+    const ROLE_COLLABORATOR = 'collaborator';
+    const ROLE_MODERATOR    = 'moderator';
+    const ROLE_ADMIN        = 'admin';
+
+    const ALL_ROLES = [
+        self::ROLE_MEMBER       => 1,
+        self::ROLE_COLLABORATOR => 2,
+        self::ROLE_MODERATOR    => 3,
+        self::ROLE_ADMIN        => 4,
+    ];
+
+    protected $fillable = ['team_id', 'user_id', 'role'];
+    
+    protected $with = ['user'];
+
     /**
      *
      * @param Builder $query
      * @param int $userId
      * @return Builder
      */
-    function scopeIsModerator(Builder $query, int $userId)
+    public function scopeIsModerator(Builder $query, int $userId): Builder
     {
-        return $query->where('user_id', $userId)->whereIn('role', ['admin', 'moderator']);
+        return $query->where('user_id', $userId)->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MODERATOR]);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function team()
+    public function team(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Team');
+        return $this->belongsTo(Team::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 }

@@ -1,0 +1,579 @@
+[
+    {
+        "public_key": "TnXFb2k",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 33,
+        "mapping_version_id": 33,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 1,
+        "title": "Sanguine-Quaking-Petko",
+        "description": "",
+        "level_min": 2,
+        "level_max": 28,
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "enemy_forces": 289,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2021-01-08T16:12:40+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
+        "playerspecializations": [],
+        "playerraces": [
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            }
+        ],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 51
+            }
+        ],
+        "brushlines": [
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-182.51,\"lng\":162.1},{\"lat\":-181.87,\"lng\":161.6}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-182.28,\"lng\":160.54},{\"lat\":-181.37,\"lng\":161.69},{\"lat\":-181.37,\"lng\":161.69},{\"lat\":-180,\"lng\":162.19},{\"lat\":-180,\"lng\":162.19},{\"lat\":-178.71,\"lng\":162.47},{\"lat\":-178.71,\"lng\":162.47},{\"lat\":-178.35,\"lng\":163.98},{\"lat\":-178.35,\"lng\":163.98},{\"lat\":-178.35,\"lng\":165.62},{\"lat\":-178.35,\"lng\":165.62},{\"lat\":-178.85,\"lng\":167.18},{\"lat\":-178.85,\"lng\":167.18},{\"lat\":-179.08,\"lng\":168.55},{\"lat\":-179.08,\"lng\":168.55},{\"lat\":-179.49,\"lng\":169.97},{\"lat\":-179.49,\"lng\":169.97},{\"lat\":-179.72,\"lng\":171.48},{\"lat\":-179.72,\"lng\":171.48},{\"lat\":-180,\"lng\":173.13},{\"lat\":-180,\"lng\":173.13},{\"lat\":-180,\"lng\":174.41},{\"lat\":-180,\"lng\":174.41},{\"lat\":-178.71,\"lng\":175.42},{\"lat\":-178.71,\"lng\":175.42},{\"lat\":-177.43,\"lng\":176.06},{\"lat\":-177.43,\"lng\":176.06},{\"lat\":-176.15,\"lng\":176.56},{\"lat\":-176.15,\"lng\":176.56},{\"lat\":-174.64,\"lng\":177.48},{\"lat\":-174.64,\"lng\":177.48},{\"lat\":-173.27,\"lng\":177.98},{\"lat\":-173.27,\"lng\":177.98},{\"lat\":-172.12,\"lng\":178.35},{\"lat\":-172.12,\"lng\":178.35},{\"lat\":-170.57,\"lng\":178.85},{\"lat\":-170.57,\"lng\":178.85},{\"lat\":-169.42,\"lng\":179.35},{\"lat\":-169.42,\"lng\":179.35},{\"lat\":-168.14,\"lng\":180.27},{\"lat\":-168.14,\"lng\":180.27},{\"lat\":-166.91,\"lng\":181.55},{\"lat\":-166.91,\"lng\":181.55},{\"lat\":-165.76,\"lng\":182.28},{\"lat\":-165.76,\"lng\":182.28},{\"lat\":-164.48,\"lng\":182.92},{\"lat\":-164.48,\"lng\":182.92},{\"lat\":-163.2,\"lng\":183.43},{\"lat\":-163.2,\"lng\":183.43},{\"lat\":-161.92,\"lng\":183.43},{\"lat\":-161.92,\"lng\":183.43},{\"lat\":-160.68,\"lng\":183.56},{\"lat\":-160.68,\"lng\":183.56},{\"lat\":-159.54,\"lng\":183.56},{\"lat\":-159.54,\"lng\":183.56},{\"lat\":-158.26,\"lng\":183.06},{\"lat\":-158.26,\"lng\":183.06},{\"lat\":-157.34,\"lng\":181.78},{\"lat\":-157.34,\"lng\":181.78},{\"lat\":-156.84,\"lng\":180.41},{\"lat\":-156.84,\"lng\":180.41},{\"lat\":-156.33,\"lng\":178.85},{\"lat\":-156.33,\"lng\":178.85},{\"lat\":-155.69,\"lng\":177.62},{\"lat\":-155.69,\"lng\":177.62},{\"lat\":-154.96,\"lng\":176.2},{\"lat\":-154.96,\"lng\":176.2},{\"lat\":-154.18,\"lng\":175.56}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-153.82,\"lng\":175.19},{\"lat\":-153.04,\"lng\":198.44}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-152.86,\"lng\":197.98},{\"lat\":-152.44,\"lng\":199.81},{\"lat\":-152.44,\"lng\":199.81},{\"lat\":-152.26,\"lng\":201.64},{\"lat\":-152.26,\"lng\":201.64},{\"lat\":-152.67,\"lng\":203.47},{\"lat\":-152.67,\"lng\":203.47},{\"lat\":-153.5,\"lng\":205.53},{\"lat\":-153.5,\"lng\":205.53},{\"lat\":-153.68,\"lng\":207.55},{\"lat\":-153.68,\"lng\":207.55},{\"lat\":-153.68,\"lng\":209.56},{\"lat\":-153.68,\"lng\":209.56},{\"lat\":-153.5,\"lng\":211.62},{\"lat\":-153.5,\"lng\":211.62},{\"lat\":-153.08,\"lng\":213.45},{\"lat\":-153.08,\"lng\":213.45},{\"lat\":-152.26,\"lng\":215.46},{\"lat\":-152.26,\"lng\":215.46},{\"lat\":-150.43,\"lng\":217.11},{\"lat\":-150.43,\"lng\":217.11},{\"lat\":-148.42,\"lng\":217.52},{\"lat\":-148.42,\"lng\":217.52},{\"lat\":-146.36,\"lng\":217.52},{\"lat\":-146.36,\"lng\":217.52},{\"lat\":-144.34,\"lng\":217.71},{\"lat\":-144.34,\"lng\":217.71},{\"lat\":-142.1,\"lng\":218.12},{\"lat\":-142.1,\"lng\":218.12},{\"lat\":-140.04,\"lng\":217.71},{\"lat\":-140.04,\"lng\":217.71},{\"lat\":-140.04,\"lng\":216.7}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-138.44,\"lng\":216.7},{\"lat\":-140.45,\"lng\":216.1},{\"lat\":-140.45,\"lng\":216.1},{\"lat\":-138.62,\"lng\":216.52},{\"lat\":-138.62,\"lng\":216.52},{\"lat\":-139.86,\"lng\":218.53}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-117.02,\"lng\":176.65},{\"lat\":-115.24,\"lng\":176.65},{\"lat\":-115.24,\"lng\":176.65},{\"lat\":-114.32,\"lng\":178.12},{\"lat\":-114.32,\"lng\":178.12},{\"lat\":-114.59,\"lng\":179.77},{\"lat\":-114.59,\"lng\":179.77},{\"lat\":-115.37,\"lng\":181.28},{\"lat\":-115.37,\"lng\":181.28},{\"lat\":-116.1,\"lng\":183.06},{\"lat\":-116.1,\"lng\":183.06},{\"lat\":-116.84,\"lng\":184.85},{\"lat\":-116.84,\"lng\":184.85},{\"lat\":-114.91,\"lng\":183.52},{\"lat\":-114.91,\"lng\":183.52},{\"lat\":-112.81,\"lng\":181.55},{\"lat\":-112.81,\"lng\":181.55},{\"lat\":-110.89,\"lng\":179.77},{\"lat\":-110.89,\"lng\":179.77},{\"lat\":-109.38,\"lng\":179.17},{\"lat\":-109.38,\"lng\":179.17},{\"lat\":-107.73,\"lng\":180.82},{\"lat\":-107.73,\"lng\":180.82},{\"lat\":-107.13,\"lng\":182.6},{\"lat\":-107.13,\"lng\":182.6},{\"lat\":-106.86,\"lng\":183.98},{\"lat\":-106.86,\"lng\":183.98},{\"lat\":-106.86,\"lng\":185.76},{\"lat\":-106.86,\"lng\":185.76},{\"lat\":-106.86,\"lng\":187.55},{\"lat\":-106.86,\"lng\":187.55},{\"lat\":-107.73,\"lng\":189.06},{\"lat\":-107.73,\"lng\":189.06},{\"lat\":-109.1,\"lng\":188.92},{\"lat\":-109.1,\"lng\":188.92},{\"lat\":-109.7,\"lng\":188.46}]"
+                }
+            },
+            {
+                "floor_id": 87,
+                "polyline": {
+                    "color": "#ff0058",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-108.19,\"lng\":186.49},{\"lat\":-109.7,\"lng\":187.09},{\"lat\":-109.7,\"lng\":187.09},{\"lat\":-110.11,\"lng\":188.92},{\"lat\":-110.11,\"lng\":188.92},{\"lat\":-109.1,\"lng\":189.93}]"
+                }
+            }
+        ],
+        "paths": [],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    5266,
+                    5267,
+                    5268,
+                    5270,
+                    5271,
+                    5272
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    5269,
+                    5273,
+                    5274,
+                    5275
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    5276,
+                    5277,
+                    5278,
+                    5279
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    5280
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    5281,
+                    5282
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    5293,
+                    5294,
+                    5295,
+                    5841
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    5290,
+                    5291,
+                    5292
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    5283,
+                    5284,
+                    5285,
+                    5287,
+                    5288,
+                    5289
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    5286
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    5299,
+                    5300,
+                    5301
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    5302,
+                    5303,
+                    5304
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    5306,
+                    5307,
+                    5308,
+                    5309
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    5310,
+                    5311,
+                    5312,
+                    5313
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "enemies": [
+                    5318,
+                    5319,
+                    5320,
+                    5321,
+                    5322
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "enemies": [
+                    5315,
+                    5316,
+                    5317,
+                    5840
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "enemies": [
+                    5323,
+                    5324
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "enemies": [
+                    5325,
+                    5326,
+                    5327,
+                    5328,
+                    5329
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "enemies": [
+                    5330
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "enemies": [
+                    5336
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "enemies": [
+                    5360,
+                    5361,
+                    5362,
+                    5363,
+                    5364,
+                    5365
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "enemies": [
+                    5351,
+                    5352,
+                    5353,
+                    5354,
+                    5355,
+                    5356
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 22,
+                "enemies": [
+                    5348
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 23,
+                "enemies": [
+                    5369
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 24,
+                "enemies": [
+                    5368
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 25,
+                "enemies": [
+                    5367
+                ],
+                "spells": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "prideful_enemies": [],
+        "mapicons": [
+            {
+                "floor_id": 85,
+                "map_icon_type_id": 2,
+                "lat": -83.96,
+                "lng": 250.83,
+                "comment": "Make sure to interrupt Rebelious Fist.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -163.15,
+                "lng": 152.6,
+                "comment": "CC Forsowrn Vanguard 6 and play it after the CC breaks with the Prideful (Focus Prideful).",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -176.62,
+                "lng": 189.18,
+                "comment": "Play Prideful with Kyrian Dark-Praetor (Focus Prideful).",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -136.76,
+                "lng": 260.07,
+                "comment": "While Forsword Sqaud-Leader is active nearby enemies take 30% reduced damage (Inspiring presence aura). Make sure to focus him first or CC the few ads prior engaging him.\n",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -142.1,
+                "lng": 178.49,
+                "comment": "Skip this pack by shroud or out of combat cc on Forsworn Warden 2. if not, tank pulls away and group skips (Death Skip) and the healer will ressurect afterwards",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -136.4,
+                "lng": 221.58,
+                "comment": "Make sure to use Interrupts and AoE Stuns\/Stops to prevent the incoming damage.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -109.83,
+                "lng": 171.82,
+                "comment": "You can LoS behind the pillars (Optional). This way they will be stacked rather than spread and it will be easier to AoE damage them.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 85,
+                "map_icon_type_id": 2,
+                "lat": -125.04,
+                "lng": 215.36,
+                "comment": "Great place to use Bloodlust.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 86,
+                "map_icon_type_id": 2,
+                "lat": -227.76,
+                "lng": 228.87,
+                "comment": "If you do have a Kyrian in your group, you can use the Spear of Destiny!",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 87,
+                "map_icon_type_id": 2,
+                "lat": -195.21,
+                "lng": 161.39,
+                "comment": "If you do have a Kyrian in your group, you can use the Spear of Destiny!",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            }
+        ]
+    }
+]

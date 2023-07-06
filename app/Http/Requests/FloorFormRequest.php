@@ -24,8 +24,8 @@ class FloorFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'index' => ['required']
+            'name'  => ['required'],
+            'index' => ['required'],
         ];
     }
 }

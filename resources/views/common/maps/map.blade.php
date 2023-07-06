@@ -1,36 +1,49 @@
 <?php
-/** @var \App\User $user */
-/** @var \App\Logic\MapContext\MapContext $mapContext */
-$user = Auth::user();
-$isAdmin = isset($admin) && $admin;
-/** @var App\Models\Dungeon $dungeon */
-/** @var App\Models\DungeonRoute $dungeonroute */
-$embed = isset($embed) && $embed;
-$edit = isset($edit) && $edit;
+/**
+ * @var \App\User $user
+ * @var \App\Logic\MapContext\MapContext $mapContext
+ * @var \App\Models\Dungeon $dungeon
+ * @var \App\Models\Mapping\MappingVersion $mappingVersion
+ * @var \App\Models\DungeonRoute|null $dungeonroute
+ * @var \App\Models\LiveSession|null $livesession
+ * @var array $show
+ * @var bool $adFree
+ */
 
-$mapClasses = isset($mapClasses) ? $mapClasses : '';
+$user             = Auth::user();
+$isAdmin          = isset($admin) && $admin;
+$embed            = isset($embed) && $embed;
+$edit             = isset($edit) && $edit;
+$mapClasses       = $mapClasses ?? '';
+$dungeonroute     = $dungeonroute ?? null;
+$livesession      = $livesession ?? null;
+$mappingVersion   = $mappingVersion ?? null;
+$show['controls'] = $show['controls'] ?? [];
 
 // Set the key to 'sandbox' if sandbox mode is enabled
-$sandboxMode = isset($sandboxMode) && $sandboxMode;
-$enemyVisualType = (isset($enemyVisualType) ? $enemyVisualType : isset($_COOKIE['enemy_display_type'])) ? $_COOKIE['enemy_display_type'] : 'enemy_portrait';
-// Allow echo to be overridden
-$echo = isset($echo) ? $echo : Auth::check() && !$sandboxMode;
-$zoomToContents = isset($zoomToContents) ? $zoomToContents : false;
+$sandboxMode                      = isset($sandboxMode) && $sandboxMode;
+$enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
+$unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
+$defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 
-// Easy switch
-$isProduction = config('app.env') === 'production';
+// Allow echo to be overridden
+$echo           = $echo ?? Auth::check() && !$sandboxMode;
+$zoomToContents = $zoomToContents ?? false;
+
 // Show ads or not
-$showAds = isset($showAds) ? $showAds : true;
-// If we should show ads, are logged in, user has paid for no ads, or we're not in production..
-if (($showAds && Auth::check() && $user->hasPaidTier(\App\Models\PaidTier::AD_FREE)) || !$isProduction) {
+$showAds = $showAds ?? true;
+// If this is an embedded route, do not show ads
+if ($embed || optional($dungeonroute)->demo === 1) {
     $showAds = false;
 }
 // No UI on the map
-$noUI = isset($noUI) && $noUI;
+$noUI            = isset($noUI) && $noUI;
+$gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
-$defaultZoom = isset($defaultZoom) ? $defaultZoom : 2;
+$defaultZoom = $defaultZoom ?? 2;
 // By default hidden elements
-$hiddenMapObjectGroups = isset($hiddenMapObjectGroups) ? $hiddenMapObjectGroups : [];
+$hiddenMapObjectGroups = $hiddenMapObjectGroups ?? [];
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
@@ -40,15 +53,15 @@ if ($isAdmin) {
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
-            ['key' => '', 'description' => __('Always visible')],
-            ['key' => 'visible', 'description' => __('Visible when Teeming only')],
-            ['key' => 'hidden', 'description' => __('Hidden when Teeming only')],
+            ['key' => '', 'description' => __('views/common.maps.map.no_teeming')],
+            ['key' => \App\Models\Enemy::TEEMING_VISIBLE, 'description' => __('views/common.maps.map.visible_teeming')],
+            ['key' => \App\Models\Enemy::TEEMING_HIDDEN, 'description' => __('views/common.maps.map.hidden_teeming')],
         ],
         // Display options for changing Faction status for map objects
-        'factions' => [
-            ['key' => 'any', 'description' => __('Any')],
-            ['key' => 'alliance', 'description' => __('Alliance')],
-            ['key' => 'horde', 'description' => __('Horde')],
+        'factions'       => [
+            ['key' => 'any', 'description' => __('views/common.maps.map.any')],
+            ['key' => \App\Models\Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
+            ['key' => \App\Models\Faction::FACTION_HORDE, 'description' => __('factions.horde')],
         ],
     ];
 }
@@ -56,13 +69,19 @@ if ($isAdmin) {
 @include('common.general.inline', ['path' => 'common/maps/map', 'options' => array_merge([
     'embed' => $embed,
     'edit' => $edit,
+    'readonly' => false, // May be set to true in the code though - but set a default here
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
+    'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
+    'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
+    'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
     'noUI' => $noUI,
+    'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
+    'dungeonroute' => $dungeonroute ?? null,
     // @TODO Temp fix
     'npcsMinHealth' => $mapContext['npcsMinHealth'],
     'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
@@ -72,11 +91,11 @@ if ($isAdmin) {
     {{-- Make sure we don't override the scripts of the page this thing is included in --}}
     @parent
 
+    @include('common.handlebars.groupsetup')
+
     @include('common.general.statemanager', [
-        // Required by echo to join the correct channels
-        'appType' => env('APP_TYPE'),
         'echo' => $echo,
-        'paidTiers' => Auth::check() ? $user->getPaidTiers() : collect(),
+        'patreonBenefits' => Auth::check() ? $user->getPatreonBenefits() : collect(),
         'userData' => $user,
         'mapContext' => $mapContext,
     ])
@@ -91,98 +110,148 @@ if ($isAdmin) {
         });
     </script>
 
-    <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
+    @if($dungeon->isFactionSelectionRequired())
+        <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
         <div id="map_faction_display_controls" class="leaflet-draw-section">
             <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                @php($i = 0)
-        @foreach(\App\Models\Faction::where('name', '<>', 'Unspecified')->get() as $faction)
-            <a class="map_faction_display_control map_controls_custom" href="#"
-               data-faction="{{ strtolower($faction->name) }}"
-                       title="{{ $faction->name }}">
-                        <i class="{{ $i === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
+            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->key) }}"
+                       title="{{ __($faction->name) }}">
+                        <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                            style="width: 15px"></i>
                         <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                             data-toggle="tooltip" title="{{ $faction->name }}"/>
-                        @php($i++)
-            </a>
-@endforeach
+                             data-toggle="tooltip" title="{{ __($faction->name) }}"/>
+                </a>
+
+            @endforeach
+            </div>
+            <ul class="leaflet-draw-actions"></ul>
         </div>
-        <ul class="leaflet-draw-actions"></ul>
-    </div>
 
-
-
-
-
-
-
-
-
-    </script>
+        </script>
+    @endif
 @endsection
+
+@if(!$noUI)
+    @if(isset($show['header']) && $show['header'])
+        @include('common.maps.controls.header', [
+            'title' => optional($dungeonroute)->title,
+            'echo' => $echo,
+            'edit' => $edit,
+            'dungeonroute' => $dungeonroute,
+            'livesession' => $livesession,
+            'mappingVersion' => $mappingVersion,
+        ])
+    @endif
+
+    @if(isset($show['controls']['draw']) && $show['controls']['draw'])
+        @include('common.maps.controls.draw', [
+            'isAdmin' => $isAdmin,
+            'floors' => $dungeon->floors,
+            'selectedFloorId' => $floorId,
+        ])
+    @elseif(isset($show['controls']['view']) && $show['controls']['view'])
+        @include('common.maps.controls.view', [
+            'isAdmin' => $isAdmin,
+            'floors' => $dungeon->floors,
+            'selectedFloorId' => $floorId,
+            'dungeonroute' => $dungeonroute,
+        ])
+    @endif
+
+    @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
+        @include('common.maps.controls.pulls', [
+            'edit' => $edit,
+            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
+            'embed' => $embed,
+            'dungeonroute' => $dungeonroute,
+        ])
+    @endif
+
+    @if(isset($show['controls']['enemyinfo']) && $show['controls']['enemyinfo'])
+        @include('common.maps.controls.enemyinfo')
+    @endif
+@endif
+
 
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 
 </div>
-@if(!$edit)
-    <header class="fixed-top route_echo_top_header">
-        <div class="container">
-            <!-- Echo controls injected here through echocontrols.js -->
-            <span id="route_echo_container" class="text-center">
+@if(!$noUI)
 
-        </span>
+    @if(!$adFree && $showAds)
+        @if($isMobile)
+            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
+        @endif
+    @endif
+    <footer class="fixed-bottom container p-0" style="width: 728px">
+        <div id="snackbar_container">
+
         </div>
-    </header>
-@endif
-
-@component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
-    @include('common.userreport.dungeonroute')
-@endcomponent
-
-@component('common.general.modal', ['id' => 'userreport_enemy_modal'])
-    @include('common.userreport.enemy')
-@endcomponent
-
-@if($edit && !$noUI)
-    <footer class="fixed-bottom route_manipulation_tools">
-        <div class="container">
-            <!-- Draw actions are injected here through drawcontrols.js -->
-            <div class="row m-auto text-center">
-                <div id="edit_route_draw_actions_container" class="col">
-
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <!-- Draw controls are injected here through drawcontrols.js -->
-                    <div id="edit_route_draw_container" class="row">
-
-
-                    </div>
-                </div>
-                @if($echo)
-                    <div class="col route_echo mt-2 mb-2">
-                        <!-- Echo controls injected here through echocontrols.js -->
-                        <span id="route_echo_container" class="text-center">
-
-                    </span>
-                    </div>
-                @endif
-            </div>
-        </div>
+        @if(!$adFree && $showAds)
+            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
+        @endif
     </footer>
-@endif
 
-@if($showAds)
-    @php($isMobile = (new \Jenssegers\Agent\Agent())->isMobile())
-    @if($isMobile)
-        <div id="map_ad_horizontal">
-            @include('common.thirdparty.adunit', ['type' => 'mapsmall_horizontal'])
-        </div>
-    @else
-        <div id="map_ad_vertical">
-            @include('common.thirdparty.adunit', ['type' => 'mapsmall'])
-        </div>
+    <?php
+        /*
+        So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
+        have to fight for height in the sidebar. This will only make it worse, so don't render this ad
+        */?>
+    @if(!$adFree && $showAds && !$dungeon->speedrun_enabled)
+        <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">
+            @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
+        </footer>
+    @endif
+
+
+
+    @isset($dungeonroute)
+        @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+            @include('common.modal.userreport.dungeonroute', ['dungeonroute' => $dungeonroute])
+        @endcomponent
+
+        @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
+            @include('common.modal.userreport.enemy')
+        @endcomponent
+    @endisset
+
+
+
+
+
+    @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
+        @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       id="map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
+                       aria-controls="map_settings" aria-selected="false">
+                        {{ __('views/common.maps.map.map_settings') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pull_settings_tab" data-toggle="tab" href="#pull-settings"
+                       role="tab"
+                       aria-controls="pull_settings" aria-selected="false">
+                        {{ __('views/common.maps.map.pull_settings') }}
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="map-settings" class="tab-pane fade show active mt-3"
+                     role="tabpanel" aria-labelledby="map_settings_tab">
+                    @include('common.forms.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
+                </div>
+                <div id="pull-settings" class="tab-pane fade mt-3" role="tabpanel"
+                     aria-labelledby="pull_settings_tab">
+                    @include('common.forms.pullsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
+                </div>
+            </div>
+
+        @endcomponent
     @endif
 @endif

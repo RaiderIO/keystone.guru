@@ -1,0 +1,1010 @@
+[
+    {
+        "id": 79852,
+        "dungeon_id": 40,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 55352,
+        "name": "Oshir",
+        "base_health": 1491350,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2267,
+                "mapping_version_id": 40,
+                "npc_id": 79852,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 80805,
+        "dungeon_id": 40,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56017,
+        "name": "Makogg Emberblade",
+        "base_health": 766980,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2268,
+                "mapping_version_id": 40,
+                "npc_id": 80805,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 80808,
+        "dungeon_id": 40,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56029,
+        "name": "Neesa Nox",
+        "base_health": 596540,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2269,
+                "mapping_version_id": 40,
+                "npc_id": 80808,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 80816,
+        "dungeon_id": 40,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56033,
+        "name": "Ahri'ok Dugru",
+        "base_health": 681760,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2270,
+                "mapping_version_id": 40,
+                "npc_id": 80816,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 80875,
+        "dungeon_id": 40,
+        "classification_id": 1,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 56085,
+        "name": "Bombsquad",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2271,
+                "mapping_version_id": 40,
+                "npc_id": 80875,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 81279,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56332,
+        "name": "Grom'kar Flameslinger",
+        "base_health": 170689,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2272,
+                "mapping_version_id": 40,
+                "npc_id": 81279,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 81283,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57845,
+        "name": "Grom'kar Footsoldier",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2273,
+                "mapping_version_id": 40,
+                "npc_id": 81283,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 81297,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 56363,
+        "name": "Dreadfang",
+        "base_health": 681760,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2274,
+                "mapping_version_id": 40,
+                "npc_id": 81297,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 81305,
+        "dungeon_id": 40,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56351,
+        "name": "Fleshrender Nok'gar",
+        "base_health": 852200,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2275,
+                "mapping_version_id": 40,
+                "npc_id": 81305,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 81432,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56403,
+        "name": "Grom'kar Technician",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2276,
+                "mapping_version_id": 40,
+                "npc_id": 81432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 81603,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56461,
+        "name": "Champion Druna",
+        "base_health": 341378,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2277,
+                "mapping_version_id": 40,
+                "npc_id": 81603,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83025,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57476,
+        "name": "Grom'kar Battlemaster",
+        "base_health": 341378,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2278,
+                "mapping_version_id": 40,
+                "npc_id": 83025,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83026,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57477,
+        "name": "Siegemaster Olugar",
+        "base_health": 341378,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2279,
+                "mapping_version_id": 40,
+                "npc_id": 83026,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83028,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 61340,
+        "name": "Grom'kar Deadeye",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2280,
+                "mapping_version_id": 40,
+                "npc_id": 83028,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83389,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 58013,
+        "name": "Ironwing Flamespitter",
+        "base_health": 277369,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2281,
+                "mapping_version_id": 40,
+                "npc_id": 83389,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83390,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 10,
+        "display_id": 59769,
+        "name": "Thunderlord Wrangler",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2282,
+                "mapping_version_id": 40,
+                "npc_id": 83390,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83392,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 52377,
+        "name": "Rampaging Clefthoof",
+        "base_health": 405386,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2283,
+                "mapping_version_id": 40,
+                "npc_id": 83392,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83578,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 57815,
+        "name": "Ogron Laborer",
+        "base_health": 640083,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2284,
+                "mapping_version_id": 40,
+                "npc_id": 83578,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83612,
+        "dungeon_id": 40,
+        "classification_id": 3,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 57836,
+        "name": "Skulloc",
+        "base_health": 1363520,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2285,
+                "mapping_version_id": 40,
+                "npc_id": 83612,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83613,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57837,
+        "name": "Koramar",
+        "base_health": 511320,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2286,
+                "mapping_version_id": 40,
+                "npc_id": 83613,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83616,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57840,
+        "name": "Zoggosh",
+        "base_health": 340880,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2287,
+                "mapping_version_id": 40,
+                "npc_id": 83616,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83697,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57894,
+        "name": "Grom'kar Deckhand",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2288,
+                "mapping_version_id": 40,
+                "npc_id": 83697,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83761,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 57815,
+        "name": "Ogron Laborer",
+        "base_health": 640083,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2289,
+                "mapping_version_id": 40,
+                "npc_id": 83761,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83762,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57894,
+        "name": "Grom'kar Deckhand",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2290,
+                "mapping_version_id": 40,
+                "npc_id": 83762,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83763,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 60630,
+        "name": "Grom'kar Technician",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2291,
+                "mapping_version_id": 40,
+                "npc_id": 83763,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83764,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 57978,
+        "name": "Grom'kar Deadeye",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2292,
+                "mapping_version_id": 40,
+                "npc_id": 83764,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 83765,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57845,
+        "name": "Grom'kar Footsoldier",
+        "base_health": 256033,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2293,
+                "mapping_version_id": 40,
+                "npc_id": 83765,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 84028,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 57477,
+        "name": "Siegemaster Rokra",
+        "base_health": 341378,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2294,
+                "mapping_version_id": 40,
+                "npc_id": 84028,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 84520,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 58394,
+        "name": "Pitwarden Gwarnok",
+        "base_health": 341378,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2295,
+                "mapping_version_id": 40,
+                "npc_id": 84520,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 86231,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 56017,
+        "name": "Makogg Emberblade",
+        "base_health": 59300,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2296,
+                "mapping_version_id": 40,
+                "npc_id": 86231,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 86526,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 59661,
+        "name": "Grom'kar Chainmaster",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2297,
+                "mapping_version_id": 40,
+                "npc_id": 86526,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 86809,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 61281,
+        "name": "Grom'kar Incinerator",
+        "base_health": 213361,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2298,
+                "mapping_version_id": 40,
+                "npc_id": 86809,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 87241,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 56480,
+        "name": "Dreadfang",
+        "base_health": 42200,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2299,
+                "mapping_version_id": 40,
+                "npc_id": 87241,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 87252,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 57815,
+        "name": "Unruly Ogron",
+        "base_health": 639150,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2300,
+                "mapping_version_id": 40,
+                "npc_id": 87252,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 89011,
+        "dungeon_id": 40,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 61552,
+        "name": "Rylak Skyterror",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2301,
+                "mapping_version_id": 40,
+                "npc_id": 89011,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 89012,
+        "dungeon_id": 40,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 61557,
+        "name": "Ravenous Wolf",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2302,
+                "mapping_version_id": 40,
+                "npc_id": 89012,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

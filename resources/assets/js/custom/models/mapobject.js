@@ -1,8 +1,8 @@
 /**
- * @property id int
- * @property faction string
- * @property teeming string
- * @property local bool
+ * @property {Number} id
+ * @property {String} faction
+ * @property {String} teeming
+ * @property {Boolean} local
  */
 class MapObject extends Signalable {
 
@@ -34,9 +34,9 @@ class MapObject extends Signalable {
         /** @type {Array} */
         this._cachedAttributes = null;
         this.synced = false;
-        /** @type DungeonMap */
+        /** @type {DungeonMap} */
         this.map = map;
-        /** @type L.layer|null */
+        /** @type {L.layer|null} */
         this.layer = layer;
 
         this.options = options;
@@ -75,6 +75,7 @@ class MapObject extends Signalable {
     _getAttributes(force = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        let self = this;
         let selectFactions = [];
         let factions = this.map.options.factions;
 
@@ -112,14 +113,18 @@ class MapObject extends Signalable {
                 type: 'select',
                 values: selectFactions,
                 admin: true,
-                show_default: false
+                show_default: false,
+                setter: function (value) {
+                    self.faction = value === '' || value === null ? 'any' : value;
+                }
             }),
             new Attribute({
                 name: 'teeming',
                 type: 'select',
                 values: selectTeemingOptions,
                 admin: true,
-                show_default: false
+                show_default: false,
+                category: 'legacy',
             })
         ];
     }
@@ -258,13 +263,6 @@ class MapObject extends Signalable {
                 // This also cannot be a private function since that'll apparently give different signatures as well
                 // (and thus trigger the submit function multiple times when clicked once)
                 let popupOpenFn = function (event) {
-                    // Prevent multiple binds to click
-                    let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
-                    $submitBtn.unbind('click');
-                    $submitBtn.bind('click', function () {
-                        self._popupSubmitClicked();
-                    });
-
                     self._initPopup();
                 };
 
@@ -284,6 +282,12 @@ class MapObject extends Signalable {
 
         let self = this;
 
+        // Prevent multiple binds to click
+        let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
+        $submitBtn.unbind('click').bind('click', function () {
+            self._popupSubmitClicked();
+        });
+
         refreshSelectPickers();
 
         let mapObjectName = this.options.name;
@@ -299,31 +303,43 @@ class MapObject extends Signalable {
                 if (attribute.type === 'object' && attribute !== parentAttribute) {
                     // Recursively init the popup
                     this._initPopup(attribute);
-                } else if (attribute.isEditable() && attribute.type === 'color') {
-                    // Clean up the previous instance if any
-                    if (typeof attribute._pickr !== 'undefined') {
-                        // Unset it after to be sure to clear it for the next time
-                        attributes[index]._tempPickrColor = null;
-                        attributes[index]._pickr.destroyAndRemove();
-                    }
-                    //
-                    attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                        el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
-                        default: this._getValue(name, parentAttribute)
-                    })).on('save', (color, instance) => {
-                        // Apply the new color
-                        let newColor = '#' + color.toHEXA().join('');
-                        // Only save when the color is valid
-                        if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
-                            $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
+                } else if (attribute.isEditable()) {
+                    if (attribute.type === 'color') {
+                        // Clean up the previous instance if any
+                        if (typeof attribute._pickr !== 'undefined') {
+                            // Unset it after to be sure to clear it for the next time
+                            attributes[index]._tempPickrColor = null;
+                            attributes[index]._pickr.destroyAndRemove();
                         }
+                        attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
+                            el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
+                            default: this._getValue(name, parentAttribute)
+                        })).on('save', (color, instance) => {
+                            // Apply the new color
+                            let newColor = '#' + color.toHEXA().join('');
+                            // Only save when the color is valid
+                            if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
+                                $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
+                            }
 
-                        // Reset ourselves
-                        instance.hide();
-                    });
+                            // Reset ourselves
+                            instance.hide();
+                        });
+                    } else if (attribute.type === 'button') {
+                        $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`).on('click', attribute.clicked);
+                    }
                 }
             }
         }
+
+        $(`#map_${mapObjectName}_edit_popup_accordion_${this.id}`)
+            .off('hide.bs.collapse').on('hide.bs.collapse', function (e) {
+            let category = $(e.target).data('category');
+            Cookies.set(`map_object_category_visibility_${category}`, 0);
+        }).off('show.bs.collapse').on('show.bs.collapse', function (e) {
+            let category = $(e.target).data('category');
+            Cookies.set(`map_object_category_visibility_${category}`, 1);
+        });
     }
 
     /**
@@ -374,6 +390,10 @@ class MapObject extends Signalable {
                             break;
                     }
 
+                    if (typeof val === 'number' && isNaN(val)) {
+                        val = null;
+                    }
+
                     this._setValue(name, val, parentAttribute);
                     // Let anyone else know it's changed so they may act upon it
                     this.signal('property:changed', {name: name, value: val});
@@ -390,12 +410,12 @@ class MapObject extends Signalable {
     /**
      * Get the html for the popup as defined by the attributes of this map object
      * @param parentAttribute {Attribute|null}
-     * @returns {string}
+     * @returns {string|array}
      * @private
      */
     _getPopupHtml(parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
-        let result = '';
+        let attributeHtmlByCategory = [];
 
         let mapObjectName = this.options.name;
         let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
@@ -407,39 +427,48 @@ class MapObject extends Signalable {
                 let name = attribute.name;
 
                 if (attribute.isEditable()) {
-                    let handlebarsString = '';
+                    let handlebarsTemplate = '';
+                    let category = attribute.getCategory();
+                    if (!attributeHtmlByCategory.hasOwnProperty(category)) {
+                        attributeHtmlByCategory[category] = [];
+                    }
 
                     switch (attribute.type) {
                         // Nested objects should recursively handled
                         case 'object':
-                            result += this._getPopupHtml(attribute);
+                            attributeHtmlByCategory = _.merge(attributeHtmlByCategory, this._getPopupHtml(attribute));
                             continue;
                         case 'select':
-                            handlebarsString = 'map_popup_type_select_template';
+                            handlebarsTemplate = 'map_popup_type_select_template';
                             console.assert(attribute.hasOwnProperty('values'), `Attribute must have 'values' property if you choose 'select'!`, attribute);
                             break;
                         case 'textarea':
-                            handlebarsString = 'map_popup_type_textarea_template';
+                            handlebarsTemplate = 'map_popup_type_textarea_template';
                             break;
                         case 'bool':
-                            handlebarsString = 'map_popup_type_bool_template';
+                            handlebarsTemplate = 'map_popup_type_bool_template';
                             break;
                         case 'color':
-                            handlebarsString = 'map_popup_type_color_template';
+                            handlebarsTemplate = 'map_popup_type_color_template';
                             break;
-                        case 'string':
-                        case 'text':
+                        case 'button':
+                            handlebarsTemplate = 'map_popup_type_button_template';
+                            break;
                         case 'int':
                         case 'float':
                         case 'double':
+                            handlebarsTemplate = 'map_popup_type_number_template';
+                            break;
+                        case 'string':
+                        case 'text':
                         default:
-                            handlebarsString = 'map_popup_type_text_template';
+                            handlebarsTemplate = 'map_popup_type_text_template';
                             break;
                     }
 
-                    let typeTemplate = Handlebars.templates[handlebarsString];
+                    let typeTemplate = Handlebars.templates[handlebarsTemplate];
 
-                    result += typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
+                    attributeHtmlByCategory[category].push(typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
                         property: name,
                         map_object_name: mapObjectName,
@@ -451,8 +480,10 @@ class MapObject extends Signalable {
                         select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false,
-                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false
-                    }));
+                        multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
+                        buttonType: attribute.hasOwnProperty('buttonType') ? attribute.buttonType : 'info',
+                        buttonText: attribute.buttonText ?? 'Do action'
+                    })));
                 }
             }
         }
@@ -460,13 +491,41 @@ class MapObject extends Signalable {
         let popupTemplate = Handlebars.templates['map_popup_template'];
 
         if (parentAttribute === null) {
+            let translatedMapObjectName = lang.get(`messages.${mapObjectName}`);
+            let mapObjectNamePretty = getState().isMapAdmin() ? `${translatedMapObjectName} ${this.id}` : translatedMapObjectName;
+
+            let resultHtml = '';
+            let categoryTemplate = Handlebars.templates['map_popup_type_category_template'];
+            for (let category in attributeHtmlByCategory) {
+                // Don't introduce a category if we didn't want one
+                if (category === 'general') {
+                    resultHtml += attributeHtmlByCategory[category].join('');
+                } else {
+                    let visible = Cookies.get(`map_object_category_visibility_${category}`);
+                    visible = typeof visible === 'undefined' ? 1 : visible;
+
+                    resultHtml += categoryTemplate($.extend({}, getHandlebarsDefaultVariables(), {
+                        id: this.id,
+                        html: attributeHtmlByCategory[category].join(''),
+                        label: lang.get(`messages.map_object_category_${category}_label`),
+                        category: category,
+                        map_object_name: mapObjectName,
+                        map_object_name_pretty: mapObjectNamePretty,
+                        readonly: this.map.options.readonly,
+                        show: visible === 1
+                    }));
+                }
+            }
+
             return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                 id: this.id,
-                html: result,
-                map_object_name: mapObjectName
+                html: resultHtml,
+                map_object_name: mapObjectName,
+                map_object_name_pretty: mapObjectNamePretty,
+                readonly: this.map.options.readonly
             }));
         } else {
-            return result;
+            return attributeHtmlByCategory;
         }
     }
 
@@ -529,6 +588,11 @@ class MapObject extends Signalable {
     loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
+        if (remoteMapObject === null) {
+            console.warn('Unable to parse empty remoteMapObject');
+            return;
+        }
+
         // If we're parsing recursively, get the attributes of the parent instead of the root
         let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
             ? parentAttribute.attributes : this._getAttributes();
@@ -580,11 +644,13 @@ class MapObject extends Signalable {
 
     /**
      * Deletes this object locally; removing it from the screen and everywhere else.
+     *
+     * @param massDelete boolean
      */
-    localDelete() {
+    localDelete(massDelete = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
-        this.signal('object:deleted');
+        this.signal('object:deleted', {mass_delete: massDelete});
     }
 
     /**
@@ -685,10 +751,13 @@ class MapObject extends Signalable {
                 }
             }
 
-            if (this.hasOwnProperty('seasonal_index')) {
+            if (this.hasOwnProperty('seasonal_index') && this.seasonal_index !== null) {
                 // Ignore seasonal type if not set, but if it's set it must be awakened to hide the enemies based on seasonal_index
-                if ((!this.hasOwnProperty('seasonal_type') || this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) &&
-                    this.seasonal_index !== null && mapContext.getSeasonalIndex() !== this.seasonal_index) {
+                if ((!this.hasOwnProperty('seasonal_type') ||
+                        this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED ||
+                        this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED
+                    ) &&
+                    mapContext.getSeasonalIndex() !== this.seasonal_index) {
                     // console.warn(`Hiding enemy due to seasonal_index ${this.id}`);
                     return false;
                 }
@@ -738,7 +807,7 @@ class MapObject extends Signalable {
      */
     isVisibleOnScreen() {
         let result = false;
-        if (this.isVisible() && this.layer !== null) {
+        if (this.layer !== null && this.isVisible()) {
             result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
         }
         return result;
@@ -760,11 +829,22 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Unbinds and binds the tooltip again.
+     */
+    rebindTooltip() {
+        if (this.layer !== null) {
+            this.unbindTooltip();
+        }
+        this.bindTooltip();
+    }
+
+    /**
      * Sets the synced state of the map object. Will adjust the colors of the layer if colors are set.
-     * @param value bool True to set the status to synced, false to unsynced.
+     * @param value {Boolean} True to set the status to synced, false to unsynced.
+     * @param massSave {Boolean} True if the source of this change was a mass save action.
      * @todo Somehow this does not work when trying to set edited colors. Very strange, couldn't get it to work
      */
-    setSynced(value) {
+    setSynced(value, massSave = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         // If we're synced, trigger the synced event
@@ -773,7 +853,7 @@ class MapObject extends Signalable {
             this.bindTooltip();
             this._assignPopup();
 
-            this.signal('object:changed');
+            this.signal('object:changed', {mass_save: massSave});
         }
 
         this.synced = value;
@@ -795,8 +875,9 @@ class MapObject extends Signalable {
     /**
      * Called when this map object was saved successfully.
      * @param json {object} The JSON response (if any).
+     * @param massSave {Boolean} True if the source of saving came from a mass-save action
      */
-    onSaveSuccess(json) {
+    onSaveSuccess(json, massSave = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
     }
@@ -804,8 +885,9 @@ class MapObject extends Signalable {
     /**
      * Called when this map object was deleted successfully.
      * @param json {object} The JSON response (if any).
+     * @param massDelete {Boolean} True if the source of deletion came from a mass-delete action
      */
-    onDeleteSuccess(json) {
+    onDeleteSuccess(json, massDelete = false) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         this.cleanup();
@@ -852,6 +934,8 @@ class MapObject extends Signalable {
                         }
 
                         data[name] = obj;
+                    } else if (attribute.type === 'bool') {
+                        data[name] = this._getValue(name) ? 1 : 0;
                     } else {
                         // Multiple select means send as an array
                         if (attribute.hasOwnProperty('multiple') && attribute.multiple) {
@@ -879,16 +963,19 @@ class MapObject extends Signalable {
         let self = this;
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
+        self.signal('save:beforesend');
+
+        let hasRouteModelBinding = this.options.hasOwnProperty('hasRouteModelBinding') ? this.options.hasRouteModelBinding : false;
 
         $.ajax({
-            type: 'POST',
-            url: this.options.hasOwnProperty('save_url') ? this.options.save_url :
-                `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`,
+            type: self.id > 0 && hasRouteModelBinding ? 'PUT' : 'POST',
+            url: (this.options.hasOwnProperty('save_url') ? this.options.save_url :
+                    `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`) +
+                (self.id > 0 && hasRouteModelBinding ? `/${self.id}` : ''),
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {
                 $(`#map_${mapObjectName}_edit_popup_submit_${self.id}`).attr('disabled', 'disabled');
-                self.signal('save:beforesend');
             },
             success: function (json) {
                 // Apply all saved properties back our object

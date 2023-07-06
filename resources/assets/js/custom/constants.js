@@ -1,27 +1,72 @@
-if (typeof Cookies.get('polyline_default_weight') === 'undefined') {
-    Cookies.set('polyline_default_weight', 3);
-}
-if (typeof Cookies.get('hidden_map_object_groups') === 'undefined') {
-    Cookies.set('hidden_map_object_groups', []);
-}
-if (typeof Cookies.get('kill_zones_number_style') === 'undefined') {
-    Cookies.set('kill_zones_number_style', 'percentage');
+// noinspection JSUnusedGlobalSymbols
+
+let cookieDefaultAttributes = {path: '/', sameSite: 'None', secure: true};
+Cookies.withAttributes(cookieDefaultAttributes);
+
+// @TODO: temporary solution for ensuring default values for certain cookies are set
+let cookieDefaults = {
+    polyline_default_weight: 3,
+    polyline_default_color: null,
+    hidden_map_object_groups: '["mountablearea"]',
+    hidden_map_object_groups_added_mountablearea: 0,
+    map_number_style: 'enemy_forces',
+    kill_zones_number_style: 'percentage',
+    pulls_sidebar_floor_switch_visibility: 1,
+    dungeon_speedrun_required_npcs_show_all: 0,
+    map_unkilled_enemy_opacity: '50',
+    map_unkilled_important_enemy_opacity: '80',
+    map_enemy_aggressiveness_border: 0,
+    map_enemy_dangerous_border: 0,
+    enemy_display_type: 'enemy_portrait',
+    echo_cursors_enabled: 1,
+    map_controls_show_hide_labels: 1
+};
+
+for (let name in cookieDefaults) {
+    if (cookieDefaults.hasOwnProperty(name)) {
+        let value = Cookies.get(name);
+        // If not set at all, or set to empty, re-fill it to fix a bug
+        if (typeof value === 'undefined' || (name === 'hidden_map_object_groups' && value === '')) {
+            Cookies.set(name, cookieDefaults[name], cookieDefaultAttributes);
+        } else {
+            // Re-set the cookie with the default attributes so that they're always up-to-date
+            Cookies.set(name, value, cookieDefaultAttributes);
+        }
+    }
 }
 
+// If we need to initially hide the mountable areas, we don't want it to be visible by default
+if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
+    try {
+        let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+        hiddenMapObjectGroups.push('mountablearea');
+        Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+        Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+
 // Map object groups
+const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
+const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
-const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
-const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
+const MAP_OBJECT_GROUP_KILLZONE_PATH = 'killzonepath';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
 const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
+const MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
+const MAP_OBJECT_GROUP_PATH = 'path';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
-    MAP_OBJECT_GROUP_ENEMY,
+    MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
+    // Depends on MAP_OBJECT_GROUP_ENEMY_PATROL
+    MAP_OBJECT_GROUP_ENEMY,
     // Depends on MAP_OBJECT_GROUP_ENEMY
     MAP_OBJECT_GROUP_ENEMY_PACK,
     MAP_OBJECT_GROUP_PATH,
@@ -30,22 +75,138 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_MAPICON,
     // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
-    MAP_OBJECT_GROUP_KILLZONE
+    MAP_OBJECT_GROUP_KILLZONE,
+    MAP_OBJECT_GROUP_KILLZONE_PATH,
+    MAP_OBJECT_GROUP_MOUNTABLE_AREA
 ];
 
 // Kill zones
-const KILL_ZONES_NUMBER_STYLE_PERCENTAGE = 'percentage';
-const KILL_ZONES_NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
+const NUMBER_STYLE_PERCENTAGE = 'percentage';
+const NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
 
+// Affixes
+const AFFIX_BOLSTERING = 'Bolstering';
+const AFFIX_BURSTING = 'Bursting';
+const AFFIX_EXPLOSIVE = 'Explosive';
+const AFFIX_FORTIFIED = 'Fortified';
+const AFFIX_GRIEVOUS = 'Grievous';
+const AFFIX_INFESTED = 'Infested';
+const AFFIX_NECROTIC = 'Necrotic';
+const AFFIX_QUAKING = 'Quaking';
+const AFFIX_RAGING = 'Raging';
+const AFFIX_RELENTLESS = 'Relentless';
+const AFFIX_SANGUINE = 'Sanguine';
+const AFFIX_SKITTISH = 'Skittish';
+const AFFIX_TEEMING = 'Teeming';
+const AFFIX_TYRANNICAL = 'Tyrannical';
+const AFFIX_VOLCANIC = 'Volcanic';
+const AFFIX_REAPING = 'Reaping';
+const AFFIX_BEGUILING = 'Beguiling';
+const AFFIX_AWAKENED = 'Awakened';
+const AFFIX_INSPIRING = 'Inspiring';
+const AFFIX_SPITEFUL = 'Spiteful';
+const AFFIX_STORMING = 'Storming';
+const AFFIX_PRIDEFUL = 'Prideful';
+const AFFIX_TORMENTED = 'Tormented';
+const AFFIX_UNKNOWN = 'Unknown';
+const AFFIX_INFERNAL = 'Infernal';
+const AFFIX_ENCRYPTED = 'Encrypted';
+const AFFIX_SHROUDED = 'Shrouded';
+const AFFIX_AFFLICTED = 'Afflicted';
+const AFFIX_ENTANGLING = 'Entangling';
+const AFFIX_INCORPOREAL = 'Incorporeal';
+
+// Dungeon Speedrun Required Npcs
+const DUNGEON_DIFFICULTY_10_MAN = 1;
+const DUNGEON_DIFFICULTY_25_MAN = 2;
+
+// NPC Classifications
+const NPC_CLASSIFICATION_ID_NORMAL = 1;
+const NPC_CLASSIFICATION_ID_ELITE = 2;
+const NPC_CLASSIFICATION_ID_BOSS = 3;
+const NPC_CLASSIFICATION_ID_FINAL_BOSS = 4;
+
+// NPC Types
+const NPC_TYPE_ABERRATION = 1;
+const NPC_TYPE_BEAST = 2;
+const NPC_TYPE_CRITTER = 3;
+const NPC_TYPE_DEMON = 4;
+const NPC_TYPE_DRAGONKIN = 5;
+const NPC_TYPE_ELEMENTAL = 6;
+const NPC_TYPE_GIANT = 7;
+const NPC_TYPE_HUMANOID = 8;
+const NPC_TYPE_MECHANICAL = 9;
+const NPC_TYPE_UNDEAD = 10;
+const NPC_TYPE_UNCATEGORIZED = 11;
+
+// Expansions
+const EXPANSION_LEGION = 'legion';
+const EXPANSION_BFA = 'bfa';
+const EXPANSION_SHADOWLANDS = 'shadowlands';
+
+// Map icons
+const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
+const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
+
+// Spells
+const SPELL_BLOODLUST = 2825;
+const SPELL_HEROISM = 32182;
+const SPELL_TIME_WARP = 80353;
+const SPELL_FURY_OF_THE_ASPECTS = 390386;
+
+// Metrics
+const METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
+
+const METRIC_TAG_MDT_COPY_VIEW = 'view';
+const METRIC_TAG_MDT_COPY_EMBED = 'embed';
+
+// Teeming states
+const TEEMING_VISIBLE = 'visible';
+const TEEMING_HIDDEN = 'hidden';
+
+// Leaflet constants
+const LEAFLET_PANE_MAP = 'mapPane';
+const LEAFLET_PANE_TILE = 'tilePane';
+const LEAFLET_PANE_OVERLAY = 'overlayPane';
+const LEAFLET_PANE_SHADOW = 'shadowPane';
+const LEAFLET_PANE_MARKER = 'markerPane';
+const LEAFLET_PANE_TOOLTIP = 'tooltipPane';
+const LEAFLET_PANE_POPUP = 'popupPane';
+
+/**
+ * Returns a function which returns the polyline_default_color cookie value or a random color if none was set.
+ * @returns {(function(): *)|(function(): string)|*}
+ */
+function polylineDefaultColor() {
+    let defaultColor = Cookies.get('polyline_default_color');
+    if (defaultColor === null || defaultColor === 'null') {
+        // Return the random color function
+        return randomColor();
+    } else {
+        return defaultColor;
+    }
+}
 
 let c = {
-    paidtiers: {
+    patreonbenefits: {
         ad_free: 'ad-free',
         unlimited_dungeonroutes: 'unlimited-dungeonroutes',
         unlimited_routes: 'unlimited-routes',
         animated_polylines: 'animated-polylines'
     },
+    gameData: {
+        scalingFactor: 1.08,
+        scalingFactorPast10: 1.10,
+        fortifiedScalingFactor: 1.2,
+        tyrannicalScalingFactor: 1.3,
+    },
     map: {
+        settings: {
+            minZoom: 1,
+            maxZoom: 5,
+            zoomSnap: 0.2
+        },
         admin: {
             mapobject: {
                 colors: {
@@ -61,6 +222,11 @@ let c = {
                 return [28, 29, 30, 31, 32, 33, 34, 35].includes(getState().getMapContext().getDungeon().id);
             }
         },
+        mapicon: {
+            calculateSize: function (value) {
+                return Math.floor(value * Math.max(1, (getState().getMapZoomLevel() / 2.5)));
+            }
+        },
         enemy: {
             /**
              * At whatever zoom various modifiers are displayed on the map
@@ -69,8 +235,10 @@ let c = {
             truesight_display_zoom: 3,
             teeming_display_zoom: 3,
             awakened_display_zoom: 3,
-            prideful_display_zoom: 3,
+            encrypted_display_zoom: 3,
             inspiring_display_zoom: 3,
+            prideful_display_zoom: 3,
+            tormented_display_zoom: 3,
             active_aura_display_zoom: 3,
             colors: [
                 /*'#C000F0',
@@ -78,6 +246,8 @@ let c = {
                 '#5DE27F'*/
                 'green', 'yellow', 'orange', 'red', 'purple'
             ],
+            mdt_size_factor: 0.5,
+            boss_size_factor: 1.2,
             minSize: function () {
                 let result = getState().getMapContext().getMinEnemySizeDefault();
 
@@ -115,13 +285,33 @@ let c = {
                 maxHealth -= minHealth;
 
                 // Scale factor
-                let scale = getState().getMapZoomLevel() / 2.0;
+                let scale = Math.max(1, getState().getMapZoomLevel() / 2.0);
 
                 let result = (c.map.enemy.minSize() + ((health / maxHealth) * (c.map.enemy.maxSize() - c.map.enemy.minSize()))) * scale;
-                // console.log(typeof result, result, typeof Math.floor(result), Math.floor(result));
 
                 // Return the correct size
-                return Math.floor(result);
+                return Math.ceil(result);
+            },
+            getKeyScalingFactor(keyLevel, fortified, tyrannical) {
+                let keyLevelFactor = 1;
+                // 2 because we start counting up at key level 3 (+2 = 0)
+                for (let i = 2; i < keyLevel; i++) {
+                    keyLevelFactor *= (i < 10 ? c.gameData.scalingFactor : c.gameData.scalingFactorPast10);
+                }
+
+                if (fortified) {
+                    keyLevelFactor *= c.gameData.fortifiedScalingFactor;
+                } else if (tyrannical) {
+                    keyLevelFactor *= c.gameData.tyrannicalScalingFactor;
+                }
+
+                return Math.round(keyLevelFactor * 100) / 100;
+            },
+            calculateBaseHealthForKey(scaledHealth, keyLevel, fortified = false, tyrannical = false) {
+                return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));
+            },
+            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false) {
+                return Math.round(baseHealth * c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));
             }
         },
         adminenemy: {
@@ -134,30 +324,72 @@ let c = {
                 weight: 1
             }
         },
+        adminenemypatrol: {
+            polylineOptions: {
+                color: '#730099',
+                weight: 2,
+                opacity: 1,
+            },
+        },
         enemypack: {
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function () {
+                return '#5993D2';
+            },
             margin: 2,
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             },
             polygonOptions: {
-                color: '#5993D2',
                 weight: 1,
                 fillOpacity: 0.3,
                 opacity: 1
+            },
+            polylineOptionsAnimated: {
+                opacity: 1,
+                delay: 400,
+                dashArray: [10, 20],
+                // pulseColorLight: '#FFF',
+                // pulseColorDark: '#000',
+                hardwareAcceleration: true,
+                use: L.polyline
             },
         },
         enemypatrol: {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
-                return '#E25D5D';
-            }
+                return '#003280';
+            }, // #003280
+            defaultWeight: 2,
+
+            polylineOptions: {
+                color: '#090',
+                weight: 2,
+                opacity: 0,
+            },
+
+            polylineOptionsHighlighted: {
+                opacity: 1,
+                weight: 4,
+            },
+
+            polylineDecoratorOptions: {
+                fillOpacity: 0.5,
+                opacity: 0.5,
+                weight: 2,
+            },
+
+            polylineDecoratorOptionsHighlighted: {
+                fillOpacity: 1,
+                opacity: 1,
+                weight: 4,
+            },
         },
-        /* These colors may be overriden by drawcontrols.js */
         path: {
-            defaultColor: randomColor,
+            defaultColor: polylineDefaultColor,
         },
         polyline: {
-            defaultColor: randomColor,
+            defaultColor: polylineDefaultColor,
             defaultColorAnimated: '#F00',
             defaultWeight: Cookies.get('polyline_default_weight'),
             minWeight: 1,
@@ -174,6 +406,11 @@ let c = {
             awakenedObeliskGatewayPolylineColor: '#80FF1A',
             awakenedObeliskGatewayPolylineColorAnimated: '#244812',
             awakenedObeliskGatewayPolylineWeight: 3,
+            killzonepath: {
+                color: 'red',
+                colorAnimated: 'red',
+                weight: 5,
+            },
         },
         brushline: {
             /**
@@ -184,7 +421,14 @@ let c = {
             minDrawDistanceSquared: 3
         },
         killzone: {
-            percentage_display_zoom: 3,
+            // Function so that you could do custom stuff with it if you want
+            defaultColor: function () {
+                return '#5993D2';
+            },
+            percentage_display_zoom_default: 3,
+            getCurrentFloorPercentageDisplayZoom: function () {
+                return getState().getCurrentFloor().percentage_display_zoom ?? c.map.killzone.percentage_display_zoom_default;
+            },
             colors: {
                 unsavedBorder: '#E25D5D',
 
@@ -199,7 +443,17 @@ let c = {
                 weight: 1
             },
             polygonOptions: {
-                color: randomColor, //Cookies.get('polyline_default_color'),
+                color: function (previousPullColor = null) {
+                    let isPreviousColorDark = typeof previousPullColor === 'undefined' || previousPullColor === null ? false : isColorDark(previousPullColor);
+                    let color = null;
+
+                    // Generate colors until a color
+                    do {
+                        color = randomColor();
+                    } while (isColorDark(color) === isPreviousColorDark);
+
+                    return color;
+                }, //Cookies.get('polyline_default_color'),
                 weight: 2,
                 fillOpacity: 0.3,
                 opacity: 1,
@@ -217,6 +471,9 @@ let c = {
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             }
+        },
+        mountablearea: {
+            color: '#eb4934'
         },
         placeholderColors: {},
         editsidebar: {
@@ -252,7 +509,10 @@ let c = {
         },
         echo: {
             tooltipFadeOutTimeout: 3000,
-            mouseSendFrequency: 1000
+            // The amount of time that must pass before another mouse location is saved to be synced to others, in milliseconds
+            mousePollFrequencyMs: 100,
+            // How often to send the mouse frequency, in milliseconds
+            mouseSendFrequencyMs: 500,
         }
     }
 };

@@ -11,7 +11,7 @@ class CommonGeneralMenuitemsanchor extends InlineCode {
         }
 
         // When you click a nav, update the hash
-        $('ul.nav li a').bind('click', function () {
+        $('ul.nav li a').unbind('click').bind('click', function () {
             window.location.hash = $(this).attr('href').replace('#', '');
         });
     }

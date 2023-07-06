@@ -50,13 +50,14 @@ window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
+window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
 window.Handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
-window.owlCarousel = require('owl.carousel');
+window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
 window.jqueryMousewheel = require('jquery-mousewheel');
@@ -66,7 +67,7 @@ window.Offset = require('polygon-offset'); // Offsetting polygons to get a smoot
 window.Lang = require('lang.js'); // Javascript translations
 window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
 window.Pather = require('leaflet-pather');
-window.circleMenu = require('zikes-circlemenu');
+// window.circleMenu = require('zikes-circlemenu');
 window.Noty = require('noty');
 window.Pickr = require('@simonwep/pickr');
 window.AntPath = require('leaflet-ant-path');
@@ -76,6 +77,10 @@ window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 window.autocomplete = require('bootstrap-4-autocomplete');
 window.toggle = require('bootstrap4-toggle');
+window.jarallax = require('jarallax/dist/jarallax.min');
+window.swipe = require('jquery-touchswipe');
+window.lazysizes = require('lazysizes');
+window.ionRangeSlider = require('ion-rangeslider');
 
 require('@fortawesome/fontawesome-free');
 

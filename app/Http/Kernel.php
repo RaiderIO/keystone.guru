@@ -2,7 +2,30 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApiAuthentication;
+use App\Http\Middleware\DebugBarMessageLogger;
+use App\Http\Middleware\DebugInfoContextLogger;
+use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\LegalAgreed;
+use App\Http\Middleware\OnlyAjax;
+use App\Http\Middleware\ReadOnlyMode;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\TrimStrings;
+use App\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\ViewCacheBuster;
+use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class Kernel extends HttpKernel
 {
@@ -14,10 +37,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        ServerTimingMiddleware::class,
+        CheckForMaintenanceMode::class,
+        ValidatePostSize::class,
+        TrimStrings::class,
+        ConvertEmptyStringsToNull::class,
     ];
 
     /**
@@ -27,19 +51,21 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \PragmaRX\Tracker\Vendor\Laravel\Middlewares\Tracker::class,
+            ShareErrorsFromSession::class,
+            VerifyCsrfToken::class,
+            SubstituteBindings::class,
         ],
 
         'api' => [
             'throttle:60,1',
             'bindings',
+            'debug_info_context_logger' => DebugInfoContextLogger::class,
+            'read_only_mode'            => ReadOnlyMode::class,
+            'authentication'            => ApiAuthentication::class,
         ],
     ];
 
@@ -51,15 +77,17 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'ajax' => \App\Http\Middleware\OnlyAjax::class,
-        'viewcachebuster' => \App\Http\Middleware\ViewCacheBuster::class,
-        'admindebugbar' => \App\Http\Middleware\AdminDebugBar::class,
-        'legal_agreed' => \App\Http\Middleware\LegalAgreed::class
+        'auth'                      => Authenticate::class,
+        'auth.basic'                => AuthenticateWithBasicAuth::class,
+        'bindings'                  => SubstituteBindings::class,
+        'can'                       => Authorize::class,
+        'guest'                     => RedirectIfAuthenticated::class,
+        'throttle'                  => ThrottleRequests::class,
+        'ajax'                      => OnlyAjax::class,
+        'viewcachebuster'           => ViewCacheBuster::class,
+        'legal_agreed'              => LegalAgreed::class,
+        'debugbarmessagelogger'     => DebugBarMessageLogger::class,
+        'debug_info_context_logger' => DebugInfoContextLogger::class,
+        'read_only_mode'            => ReadOnlyMode::class,
     ];
 }

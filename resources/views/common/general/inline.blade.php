@@ -1,15 +1,16 @@
 <?php
-$options = isset($options) ? $options : [];
-$section = isset($section) ? $section : true;
-$modal = isset($modal) ? $modal : false;
+$options = $options ?? [];
+$section = $section ?? true;
+$modal = $modal ?? false;
 
 // Wrap in section tags of the inline code, otherwise just spit it out right now
 if( $section ) { ?>
 @section('scripts')
     @parent
+
     <script>
         document.addEventListener('DOMContentLoaded', function (event) {
-            let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!} );
+            let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
             if (!code.isActivated()) {
                 <?php
@@ -30,7 +31,7 @@ if( $section ) { ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function (event) {
-        let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!} );
+        let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
         if (!code.isActivated()) {
             <?php

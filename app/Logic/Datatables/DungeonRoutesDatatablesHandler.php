@@ -8,8 +8,6 @@
 
 namespace App\Logic\Datatables;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DungeonRoutesDatatablesHandler extends DatatablesHandler
@@ -17,7 +15,7 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
     protected function calculateRecordsTotal(): int
     {
         // Clear them
-        $countQuery = $this->_builder->getQuery()
+        $countQuery = $this->builder->getQuery()
             ->cloneWithout(['having', 'groups'])
             // ->cloneWithoutBindings(['select'])
             ->selectRaw('count(distinct dungeon_routes.id) as aggregate');
@@ -38,14 +36,14 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         // I tried with SQL_CALC_FOUND_ROWS but that doesn't really work with Laravel pumping out more queries,
         // then FOUND_ROWS() would return the result from the wrong function, rather annoying that is.
         // Bit of a hack, but for now the only way to reliably get the pre-limit count.
-        $query = $this->_builder->getQuery()
+        $query = $this->builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'));
         // Temp store; it messes with the count
-        $havings = $query->havings;
+        $havings        = $query->havings;
         $query->havings = null;
-        $query->orders = null;
-        $countResults = $query->get();
+        $query->orders  = null;
+        $countResults   = $query->get();
         // Restore
         $query->havings = $havings;
 

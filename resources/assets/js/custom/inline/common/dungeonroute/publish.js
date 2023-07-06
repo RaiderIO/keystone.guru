@@ -37,7 +37,7 @@ class CommonDungeonroutePublish extends InlineCode {
 
                 let data = {
                     title: lang.get(`messages.publish_state_title_${publishState}`),
-                    subtext: this.addNewlines(lang.get(`messages.publish_state_subtext_${publishState}`), 35),
+                    subtext: this.addNewlines(lang.get(`messages.publish_state_subtext_${publishState}`), 60),
                     fa_class: icons[publishState]
                 };
 

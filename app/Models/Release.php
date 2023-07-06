@@ -15,7 +15,9 @@ use Throwable;
  * @property int $id
  * @property int $release_changelog_id
  * @property string $version
+ * @property string $title
  * @property boolean $silent
+ * @property boolean $spotlight
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
@@ -27,8 +29,13 @@ use Throwable;
  *
  * @mixin Eloquent
  */
-class Release extends Model
+class Release extends CacheModel
 {
+    /**
+     * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
+     */
+    private const DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
+
     use SerializesDates;
 
     protected $with = ['changelog'];
@@ -50,9 +57,9 @@ class Release extends Model
     /**
      * @return HasOne
      */
-    function changelog()
+    public function changelog(): HasOne
     {
-        return $this->hasOne('App\Models\ReleaseChangelog');
+        return $this->hasOne(ReleaseChangelog::class);
     }
 
     /**
@@ -70,30 +77,57 @@ class Release extends Model
      */
     public function getDiscordBodyAttribute()
     {
-        return trim(view('app.release.discord', [
-            'model'        => $this,
-            'mention'      => $this->isMajorUpgrade(),
+        $body       = trim(view('app.release.discord', [
+            'model'   => $this,
+            'mention' => $this->isMajorUpgrade(),
+        ])->render());
+        $bodyLength = strlen($body);
+
+        $footer       = trim(view('app.release.discord_footer', [
             'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
             'affixesUrl'   => route('misc.affixes'),
-            'sandboxUrl'   => route('dungeonroute.sandbox'),
+            'newRouteUrl'  => route('dungeonroute.new'),
             'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
+        $footerLength = strlen($footer);
+
+        // Subtract additional characters to account for the strings added below, to make sure the footer doesn't get cut into
+        $truncatedBody       = substr($body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT - 50 - $footerLength);
+        $truncatedBodyLength = strlen($truncatedBody);
+
+        if ($bodyLength !== $truncatedBodyLength) {
+            $result = sprintf('%s (%d more) \n\n %s', $truncatedBody, $bodyLength - $truncatedBodyLength, $footer);
+        } else {
+            $result = sprintf('%s\n\n%s', $truncatedBody, $footer);
+        }
+
+        return $result;
     }
 
     /**
      * @return string
      * @throws Throwable
      */
-    public function getRedditBodyAttribute()
+    public function getRedditBodyAttribute(): string
     {
         return trim(view('app.release.reddit', ['model' => $this])->render());
     }
 
     /**
+     * Get the title formatted with the current date etc.
+     */
+    public function getFormattedTitle(): string
+    {
+        return sprintf('Release %s (%s)%s',
+            $this->version, now()->format('Y/m/d'),
+            empty($this->title) ? '' : sprintf(' - %s', $this->title));
+    }
+
+    /**
      * @return array
      */
-    public function getDiscordEmbeds()
+    public function getDiscordEmbeds(): array
     {
 //        $result = [];
 //
@@ -133,20 +167,20 @@ class Release extends Model
         return [
             [
                 'color'       => 14641434, // '#DF691A'
-                'title'       => sprintf('Release %s (%s)', $this->version, $this->created_at->format('Y/m/d')),
-                'description' => $this->discord_body,
-                'url'         => sprintf('%s/release/%s', env('APP_URL'), $this->version),
+                'title'       => $this->getFormattedTitle(),
+                'description' => substr($this->discord_body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT),
+                'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
                     'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-                    'text'     => 'Keystone.guru Discord Bot'
+                    'text'     => 'Keystone.guru Discord Bot',
                 ],
-            ]
+            ],
         ];
     }
 
     /**
-     * @return Version|\PHLAK\SemVer\Version
+     * @return \PHLAK\SemVer\Version
      * @throws InvalidVersionException
      */
     public function getSymVer()
@@ -159,9 +193,9 @@ class Release extends Model
      * @return bool
      * @throws InvalidVersionException
      */
-    public function isMajorUpgrade()
+    public function isMajorUpgrade(): bool
     {
-        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
+        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
     }
 
     /**
@@ -169,9 +203,9 @@ class Release extends Model
      * @return bool
      * @throws InvalidVersionException
      */
-    public function isMinorUpgrade()
+    public function isMinorUpgrade(): bool
     {
-        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
+        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
     }
 
     /**
@@ -179,8 +213,8 @@ class Release extends Model
      * @return bool
      * @throws InvalidVersionException
      */
-    public function isBugfixUpgrade()
+    public function isBugfixUpgrade(): bool
     {
-        return $this->id === 1 ? true : $this->_getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
     }
 }

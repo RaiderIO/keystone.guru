@@ -6,6 +6,10 @@ class EnemyPatrolMapObjectGroup extends PolylineMapObjectGroup {
         this.fa_class = 'fa-exchange-alt';
     }
 
+    _getPolylineOptions() {
+        return c.map.enemypatrol.polylineOptions;
+    }
+
     /**
      * @inheritDoc
      **/

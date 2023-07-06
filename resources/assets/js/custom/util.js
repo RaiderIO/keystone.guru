@@ -42,12 +42,12 @@ function convertToSlug(text) {
         .replace(/ +/g, '-');
 }
 
-function getDistanceSquared(xy1, xy2) {
-    return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
+function getDistance(xy1, xy2) {
+    return Math.sqrt(getDistanceSquared(xy1, xy2));
 }
 
-function getDistance(latLng1, latLng2) {
-    return Math.sqrt(getLatLngDistanceSquared(latLng1, latLng2));
+function getDistanceSquared(xy1, xy2) {
+    return Math.pow(xy1[0] - xy2[0], 2) + Math.pow(xy1[1] - xy2[1], 2);
 }
 
 function getLatLngDistanceSquared(latLng1, latLng2) {
@@ -140,6 +140,11 @@ function isColorDark(hex) {
  * @returns {number}
  */
 function getLuminance(hex) {
+    // Catch in case the color is bad
+    if (hex.length === 0) {
+        hex = '#000';
+    }
+
     let rgb = hexToRgb(hex);
     return 1 - (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255
 }
@@ -166,7 +171,7 @@ function hexToRgb(hex) {
 
 function _componentToHex(c) {
     let hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+    return hex.length === 1 ? "0" + hex : hex;
 }
 
 /**
@@ -243,6 +248,10 @@ function pickHexFromHandlers(handlers, weight) {
  * @returns {number}
  */
 function getFormattedPercentage(value, max) {
+    if (max === 0) {
+        return 0;
+    }
+
     let percent = ((value / max) * 100);
     // Round to 1 decimal at best
     return Math.round(percent * 10) / 10;
@@ -251,16 +260,31 @@ function getFormattedPercentage(value, max) {
 /**
  *
  * @param value
+ * @param $input
+ * @param timeoutMS
  */
-function copyToClipboard(value) {
+function copyToClipboard(value, $input = null, timeoutMS = null) {
     // https://codepen.io/shaikmaqsood/pen/XmydxJ
-    let $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val(value).select();
-    document.execCommand("copy");
-    $temp.remove();
+    let $temp = null;
+    if ($input === null) {
+        $temp = $('<input>');
+        $('body').append($temp);
+        $temp.val(value);
+        $temp.select();
+    } else {
+        $input.select();
+    }
+    if (document.execCommand('copy')) {
+        let opts = {};
+        if (timeoutMS !== null) {
+            opts.timeout = timeoutMS;
+        }
+        showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
+    }
+    if ($input === null && $temp !== null) {
+        $temp.remove();
+    }
 
-    showInfoNotification(lang.get('messages.copied_to_clipboard'));
 }
 
 /**
@@ -304,6 +328,10 @@ function getKillZones() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 }
 
+function getKillZonePaths() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+}
+
 function getPaths() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
 }
@@ -314,6 +342,18 @@ function getBrushlines() {
 
 function getMapIcons() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+}
+
+function getDungeonFloorSwitchMarkers() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+}
+
+function getUserMousePositions() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+}
+
+function getMountableAreas() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
 }
 
 /**
@@ -347,9 +387,21 @@ function getMapIcon(id) {
     return getMapIcons().findMapObjectById(id);
 }
 
+function getDungeonFloorSwitchMarker(id) {
+    return getDungeonFloorSwitchMarkers().findMapObjectById(id);
+}
+
+function getUserMousePosition(id) {
+    return getUserMousePositions().findMapObjectById(id);
+}
+
+function getMountableArea(id) {
+    return getMountableAreas().findMapObjectById(id);
+}
+
 $.fn.insertIndex = function (i) {
     // The element we want to swap with
-    var $target = this.parent().children().eq(i);
+    let $target = this.parent().children().eq(i);
 
     // Determine the direction of the appended index so we know what side to place it on
     if (this.index() > i) {
@@ -360,3 +412,35 @@ $.fn.insertIndex = function (i) {
 
     return this;
 };
+
+// https://medium.com/talk-like/detecting-if-an-element-is-in-the-viewport-jquery-a6a4405a3ea2
+$.fn.isInViewport = function () {
+    let elementTop = $(this).offset().top;
+    let elementBottom = elementTop + $(this).outerHeight();
+    let viewportTop = $(window).scrollTop();
+    let viewportBottom = viewportTop + $(window).height();
+    return elementBottom > viewportTop && elementTop < viewportBottom;
+};
+
+/**
+ * @see https://stackoverflow.com/a/1099670/771270
+ * @returns {{}}
+ */
+function getQueryParams() {
+    let qs = document.location.search.split('+').join(' '),
+        params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    let count = 0;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+
+        // Just in case..
+        if (++count > 100) {
+            break;
+        }
+    }
+
+    return params;
+}

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Logic\MDT\IO\ImportString;
-use App\Logic\MDT\IO\ImportWarning;
-use App\Models\AffixGroup;
+use App\Http\Requests\MDT\ImportStringFormRequest;
+use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\MDTImport;
-use App\Service\Season\SeasonService;
+use App\Service\MDT\MDTImportStringServiceInterface;
+use App\Service\MDT\Models\ImportStringDetails;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Teapot\StatusCode;
 use Throwable;
@@ -20,108 +21,118 @@ class MDTImportController extends Controller
 {
     /**
      * Returns some details about the passed string.
-     * @param Request $request
-     * @param SeasonService $seasonService
-     * @return array|void
-     * @throws Exception
-     * @throws Throwable
+     * @param ImportStringFormRequest         $request
+     * @param MDTImportStringServiceInterface $mdtImportStringService
+     * @param SeasonServiceInterface          $seasonService
+     *
+     * @return ImportStringDetails|never-returns
+     * @throws \Throwable
      */
-    public function details(Request $request, SeasonService $seasonService)
+    public function details(
+        ImportStringFormRequest         $request,
+        MDTImportStringServiceInterface $mdtImportStringService,
+        SeasonServiceInterface          $seasonService
+    )
     {
-        $string = $request->get('import_string');
-
-        $importString = new ImportString($seasonService);
+        $validated = $request->validated();
+        $string    = $validated['import_string'];
 
         try {
-            $warnings = new Collection();
-            $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, false, false);
-
-            $affixes = [];
-            foreach ($dungeonRoute->affixes as $affixGroup) {
-                /** @var $affixGroup AffixGroup */
-                $affixes[] = $affixGroup->getTextAttribute();
-            }
-
-            $warningResult = [];
-            foreach ($warnings as $warning) {
-                /** @var $warning ImportWarning */
-                $warningResult[] = $warning->toArray();
-            }
-
-            $result = [
-                'dungeon'          => $dungeonRoute->dungeon !== null ? $dungeonRoute->dungeon->name : __('Unknown dungeon'),
-                'affixes'          => $affixes,
-                'pulls'            => $dungeonRoute->killzones->count(),
-                'lines'            => $dungeonRoute->brushlines->count(),
-                'notes'            => $dungeonRoute->mapicons->count(),
-                'enemy_forces'     => $dungeonRoute->getEnemyForces(),
-                'enemy_forces_max' => $dungeonRoute->teeming ? $dungeonRoute->dungeon->enemy_forces_required_teeming : $dungeonRoute->dungeon->enemy_forces_required,
-                'warnings'         => $warningResult
-            ];
-
-            // Siege of Boralus faction but hide it otherwise
-            if ($dungeonRoute->dungeon->isSiegeOfBoralus()) {
-                $result['faction'] = $dungeonRoute->faction->name;
-            }
-
-            return $result;
+            $warnings     = new Collection();
+            return $mdtImportStringService
+                ->setEncodedString($string)
+                ->getDetails($warnings);
+        } catch (InvalidMDTString $ex) {
+            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
             // Different message based on our deployment settings
             if (config('app.debug')) {
-                $message = sprintf(__('Invalid MDT string: %s'), $ex->getMessage());
+                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
             } else {
-                $message = __('Invalid MDT string');
+                $message = __('controller.admintools.error.invalid_mdt_string');
             }
+
+            // We're not interested if the string was 100% not an MDT string - it will never work then
+            if (isValidBase64($string)) {
+                report($ex);
+            }
+
+            Log::error($ex->getMessage());
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
             }
+            Log::error($error->getMessage());
 
             throw $error;
         }
     }
 
     /**
-     * @param Request $request
-     * @param SeasonService $seasonService
+     * @param ImportStringFormRequest $request
+     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return Factory|View|void
-     * @throws Exception
      * @throws Throwable
      */
-    public function import(Request $request, SeasonService $seasonService)
+    public function import(ImportStringFormRequest $request, MDTImportStringServiceInterface $mdtImportStringService)
     {
         $user = Auth::user();
 
-        $sandbox = (bool)$request->get('sandbox', false);
+        $validated = $request->validated();
+
+        $sandbox = $validated['mdt_import_sandbox'] ?? false;
         // @TODO This should be handled differently imho
         if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
-            $string = $request->get('import_string');
-            $importString = new ImportString($seasonService);
+            $string = $validated['import_string'];
 
             try {
-                // @TODO improve exception handling
-                $warnings = new Collection();
-                $dungeonRoute = $importString->setEncodedString($string)->getDungeonRoute($warnings, $sandbox, true);
+                $dungeonRoute = $mdtImportStringService
+                    ->setEncodedString($string)
+                    ->getDungeonRoute(collect(), $sandbox, true, $validated['import_as_this_week'] ?? false);
+
+                // Ensure team_id is set
+                if (!$sandbox) {
+                    $dungeonRoute->team_id = $validated['team_id'] ?? null;
+                    $dungeonRoute->save();
+                }
 
                 // Keep track of the import
-                $mdtImport = new MDTImport();
-                $mdtImport->dungeon_route_id = $dungeonRoute->id;
-                $mdtImport->import_string = $string;
-                $mdtImport->save();
+                MDTImport::create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'import_string'    => $string,
+                ]);
+            } catch (InvalidMDTString $ex) {
+                return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {
-                return abort(400, sprintf(__('Invalid MDT string: %s'), $ex->getMessage()));
+                // We're not interested if the string was 100% not an MDT string - it will never work then
+                if (isValidBase64($string)) {
+                    report($ex);
+                }
+
+                // Makes it easier to debug
+                if (config('app.debug')) {
+                    throw $ex;
+                } else {
+                    Log::error($ex->getMessage());
+
+                    return abort(400, sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage()));
+                }
             } catch (Throwable $error) {
                 if ($error->getMessage() === "Class 'Lua' not found") {
-                    return abort(500, 'MDT importer is not configured properly. Please contact the admin about this issue.');
+                    return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
                 }
 
                 throw $error;
             }
 
-            $result = redirect()->route('dungeonroute.edit', ['dungeonroute' => $dungeonRoute]);
+            $result = redirect()->route('dungeonroute.edit', [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ]);
         } else if ($user === null) {
-            return abort(StatusCode::UNAUTHORIZED, 'You must be logged in to create a route');
+            return abort(StatusCode::UNAUTHORIZED, __('controller.mdtimport.error.cannot_create_route_must_be_logged_in'));
         } else {
             $result = view('dungeonroute.limitreached');
         }

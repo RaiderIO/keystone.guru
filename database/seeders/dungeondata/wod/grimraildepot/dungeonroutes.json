@@ -1,0 +1,251 @@
+[
+    {
+        "public_key": "81NQAJg",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 41,
+        "mapping_version_id": 41,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 3,
+        "title": "S4 GD by Dratnos",
+        "description": "",
+        "level_min": 10,
+        "level_max": 10,
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "enemy_forces": 304,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2022-08-27T09:52:07+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
+        "playerspecializations": [],
+        "playerraces": [],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 87
+            }
+        ],
+        "brushlines": [],
+        "paths": [],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    7823,
+                    7824,
+                    7825,
+                    7826
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    7830,
+                    7831,
+                    8504,
+                    8505
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    7834,
+                    7835
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    7836,
+                    7837
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    7838,
+                    7839
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    7840,
+                    7841,
+                    7842,
+                    7843
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    7848,
+                    7849,
+                    7850,
+                    7851
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    7852,
+                    7853,
+                    7854,
+                    7855,
+                    7856
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    7857,
+                    7858,
+                    7859,
+                    7860,
+                    7861
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    7862,
+                    7863,
+                    7864,
+                    7865,
+                    7866
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    7867
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    7868,
+                    7869,
+                    7870,
+                    7871,
+                    7872,
+                    7873,
+                    7874,
+                    7875,
+                    7876,
+                    7877,
+                    7878,
+                    7879,
+                    7880,
+                    7881
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    7882
+                ],
+                "spells": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "prideful_enemies": [],
+        "mapicons": [
+            {
+                "floor_id": 106,
+                "map_icon_type_id": 2,
+                "lat": -164,
+                "lng": 180,
+                "comment": "You can pull this for the stat buff, especially if you have a way to skip a pack later, but otherwise you don't need the count, just hug the wall to avoid.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            }
+        ]
+    }
+]

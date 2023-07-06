@@ -3,19 +3,25 @@
 
 namespace App\Service\Season;
 
+use App\Models\Expansion;
+use App\Models\GameServerRegion;
+use App\Models\Season;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+
 interface SeasonServiceInterface
 {
-    function getSeasons();
+    function getSeasons(?Expansion $expansion = null): Collection;
 
-    function getFirstSeason();
+    function getFirstSeason(): Season;
 
-    function getSeasonAt($date);
+    function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null);
 
-    function getCurrentSeason();
+    function getCurrentSeason(?Expansion $expansion = null): ?Season;
 
-    function getIterationsAt($date);
+    function getNextSeasonOfExpansion(?Expansion $expansion = null): ?Season;
 
-    function getAffixGroupIndexAt($date);
+    function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int;
 
-    function getDisplayedAffixGroups($iterationOffset);
+    function getDisplayedAffixGroups(int $iterationOffset): Collection;
 }

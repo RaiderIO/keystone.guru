@@ -1,216 +1,331 @@
-@extends('layouts.app', ['custom' => true, 'showAds' => false])
+<?php
+/** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
+/** @var $demoRouteDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
+/** @var $demoRouteMapping array */
+/** @var $userCount int */
+/** @var $theme string */
 
-@section('header-title', __('Welcome to keystone.guru!'))
+$dungeonSelectId    = 'demo_dungeon_id';
+$demoRoutesIFrameId = 'demo_routes_iframe';
+?>
+@extends('layouts.sitepage', ['custom' => true, 'showAds' => false, 'rootClass' => 'home'])
+
+@include('common.general.inline', ['path' => 'home/home', 'options' => [
+    'dungeon_select_id' => '#' . $dungeonSelectId,
+    'demo_routes_iframe_id' => '#' . $demoRoutesIFrameId,
+    'demo_route_mapping' => $demoRouteMapping
+]])
 
 @section('content')
     @include('common.general.messages', ['center' => true])
 
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
-        <div class="container-fluid alert alert-warning text-center mt-4">
-            <div class="container">
-                {{ __('It appears you\'re browsing Keystone.guru using Internet Explorer. Unfortunately Internet Explorer is
-                 not a supported browser. No really, it really do not work at all. Please try either Google Chrome, Mozilla
-                 Firefox or Microsoft Edge. My apologies.') }}
-            </div>
-        </div>
+        @component('common.general.alert', ['type' => 'warning', 'dismiss' => false])
+            {{ __('views/home.ie_not_supported') }}
+        @endcomponent
     @endif
-    <section class="probootstrap-hero mt-4">
-        <div class="container">
-            <div class="row">
-                <div
-                    class="col-md-8 offset-md-2 col-sm-8 offset-sm-2 text-center probootstrap-hero-text pb0 probootstrap-animate"
-                    data-animate-effect="fadeIn">
-                    <h1>{{ __('Welcome to Keystone.guru!') }}</h1>
-                    <p>{{ __('Plan your World of Warcraft Mythic Plus routes and share them with your group and the world!') }}</p>
-                    <p>
-                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"
-                           data-toggle="modal" data-target="#sandbox_modal">
-                            <i class="fas fa-play"></i> {{ __('Sandbox') }}
-                        </a>
-{{--                        <a href="{{ route('dungeonroute.sandbox') }}" class="btn btn-primary btn-lg mt-1"--}}
-{{--                           data-toggle="modal" data-target="#sandbox_mdt_import_modal">--}}
-{{--                            <i class="fas fa-file-import"></i> {{ __('Sandbox by importing MDT string') }}--}}
-{{--                        </a>--}}
 
-                        @guest
-                            <a href="#" class="btn btn-primary btn-lg mt-1" role="button" data-toggle="modal"
-                               data-target="#register_modal">{{ __('Register and start planning') }}</a>
-                        @endguest
+    <section class="header1 cid-s48MCQYojq mbr-fullscreen mbr-parallax-background" id="header1-f">
+
+
+        <div class="mbr-overlay"></div>
+
+        <div class="align-center container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-9">
+                    <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
+                        <strong>{{ __('views/home.tagline') }}</strong>
+                    </h1>
+
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        {{ __('views/home.tagline_description') }}
                     </p>
+                    <div class="mbr-section-btn mt-3">
+                        <a class="btn btn-primary display-4" href="{{ route('dungeonroutes') }}">
+                            <i class="fas fa-binoculars"></i>&nbsp;{{ __('views/home.discover_routes') }}
+                        </a>
+                        <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
+                           data-target="#create_route_modal">
+                            <i class="fas fa-plus"></i>&nbsp;{{__('views/home.create_route')}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="probootstrap-section probootstrap-bg-white bg-secondary">
+    <!-- Fade into solid -->
+    <section>
+        <div class="gradient-top">&nbsp;</div>
+    </section>
+
+    <section class="image1 cid-soU8PSECoL" id="image1-n">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
-                     data-animate-effect="fadeIn">
-                    <h2>{{ __('Features') }}</h2>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img class="darkly_image" src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}"
+                             alt="{{ __('views/home.discover_new_routes') }}"
+                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ url('images/home/lux_feature_discover_new_routes.jpg') }}"
+                             alt="{{ __('views/home.discover_new_routes') }}"
+                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                        <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <div class="text-wrapper">
+                        <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                            <strong>{{ __('views/home.discover_new_routes') }}</strong>
+                        </h3>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            {!! __('views/home.discover_new_routes_description',
+                                    ['subcreation' => '<a href="https://mplus.subcreation.net/" target="_blank">mplus.subcreation.net</a>',
+                                    'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="row probootstrap-feature-showcase mt-4">
-                <div class="col-md-4 order-md-8 probootstrap-showcase-nav probootstrap-animate bg-dark">
-                    <ul>
-                        <li class="active">
-                            <a href="#">{{ __('Interactive maps') }}</a>
-                            <p>{{ __('Powered by Leaflet, Keystone.guru features interactive maps with 4 zoom levels and visibility controls. All maps have been upscaled to provide high detail when zoomed in.') }}</p>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('All Shadowlands dungeons supported') }}</a>
-                            <p>{{ __('All current Shadowlands dungeons are supported and ready to go. In the future, any new dungeons will also be added.') }}</p>
-                        </li>
-{{--                        <li>--}}
-{{--                            <a href="#">{{ __('Mythic Dungeon Tools import available') }}</a>--}}
-{{--                            <p>{{ __('Seamless importing of your Mythic Dungeon Tools export strings allows for easy testing & migration.') }}</p>--}}
-{{--                        </li>--}}
-                        <li>
-                            <a href="#">{{ __('Prideful affix supported') }}</a>
-                            <p>{{ __('Prideful enemies may be placed freely in your route and included in your pulls.') }}</p>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Define your setup') }}</a>
-                            <p>{{ __('Refine your route and assign races/classes/specializations for each party member and select which affixes the route is for.') }}</p>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Plan your route') }}</a>
-                            <p>{{ __('Plot your route through the dungeon so there can be no confusion on which route you take, or when to split up the group for maximum performance.') }}</p>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Perfect your plan') }}</a>
-                            <p>{{ __('Select which enemies to kill and where, add comments for those tricky parts and refine your route to nail the 100% of enemy forces.') }}</p>
-                        </li>
-                    </ul>
+        </div>
+    </section>
+
+    <section class="image2 cid-soU8QlAKKP" id="image2-o">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img class="darkly_image"
+                             src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
+                             alt="{{ __('views/home.create_your_own_routes') }}"
+                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image"
+                             src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
+                             alt="{{ __('views/home.create_your_own_routes') }}"
+                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                        <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+                        </p>
+                    </div>
                 </div>
-                <div class="col-md-8 order-md-4 probootstrap-animate" style="position: relative;">
-                    <div class="probootstrap-home-showcase-wrap">
-                        <div class="probootstrap-home-showcase-inner">
-                            <div class="probootstrap-image-showcase">
-                                <ul class="probootstrap-images-list">
-                                    <li class="active">
-                                        <img src="images/home/1.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
-                                    <li>
-                                        <img src="images/home/2.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
-{{--                                    <li>--}}
-{{--                                        <img src="images/home/3.jpg" alt="Image" class="img-responsive" loading="lazy">--}}
-{{--                                    </li>--}}
-                                    <li>
-                                        <img src="images/home/4.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
-                                    <li>
-                                        <img src="images/home/5.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
-                                    <li>
-                                        <img src="images/home/6.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
-                                    <li>
-                                        <img src="images/home/7.jpg" alt="Image" class="img-responsive" loading="lazy">
-                                    </li>
-                                </ul>
+                <div class="col-12 col-lg">
+                    <div class="text-wrapper">
+                        <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                            <strong>{{ __('views/home.create_your_own_routes') }}</strong>
+                        </h3>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            {!! __('views/home.create_your_own_routes_description',
+                                    ['createANewRoute' => sprintf('<a href="#" data-toggle="modal" data-target="#create_route_modal">%s</a>', __('create a new route'))]) !!}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="image3 cid-soU8PSECoL" id="image3-n">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img class="darkly_image"
+                             src="{{ url('images/home/darkly_feature_get_organized.jpg') }}"
+                             alt="{{ __('views/home.get_organized') }}"
+                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ url('images/home/lux_feature_get_organized.jpg') }}"
+                             alt="{{ __('views/home.get_organized') }}"
+                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                        <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <div class="text-wrapper">
+                        <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                            <strong>{{ __('views/home.get_organized') }}</strong>
+                        </h3>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            {{ __('views/home.get_organized_description') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="image4 cid-soU8QlAKKP" id="image4-o">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img class="darkly_image"
+                             src="{{ url('images/home/darkly_feature_custom_dungeon_mapping.jpg') }}"
+                             alt="{{ __('views/home.custom_dungeon_mapping') }}"
+                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ url('images/home/lux_feature_custom_dungeon_mapping.jpg') }}"
+                             alt="{{ __('views/home.custom_dungeon_mapping') }}"
+                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                        <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <div class="text-wrapper">
+                        <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                            <strong>{{ __('views/home.custom_dungeon_mapping') }}</strong>
+                        </h3>
+                        <p class="mbr-text mbr-fonts-style display-7">
+                            {{ __('views/home.custom_dungeon_mapping_description') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features1 cid-soU6QnGh9A" id="features1-l">
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-9">
+                    <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                        <strong>{{ __('views/home.features') }}</strong>
+                    </h3>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="card col-12 col-md-6 col-lg-3">
+                    <div class="card-wrapper">
+                        <div class="card-box align-center">
+                            <div class="iconfont-wrapper">
+                                <i class="fas fa-file-export mbr-iconfont"></i>
+                            </div>
+                            <h5 class="card-title mbr-fonts-style display-7">
+                                <strong>{{ __('views/home.feature_mdt_import_export') }}</strong>
+                            </h5>
+                            <p class="card-text mbr-fonts-style display-7">
+                                {{ __('views/home.feature_mdt_import_export_description') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-12 col-md-6 col-lg-3">
+                    <div class="card-wrapper">
+                        <div class="card-box align-center">
+                            <div class="iconfont-wrapper">
+                                <i class="fas fa-route mbr-iconfont"></i>
+                            </div>
+                            <h5 class="card-title mbr-fonts-style display-7">
+                                <strong>{{ __('views/home.feature_fluid_mapping_experience') }}</strong>
+                            </h5>
+                            <p class="card-text mbr-fonts-style display-7">
+                                {{ __('views/home.feature_fluid_mapping_experience_description') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card col-12 col-md-6 col-lg-3">
+                    <div class="card-wrapper">
+                        <div class="card-box align-center">
+                            <div class="iconfont-wrapper">
+                                <i class="fas fa-mobile-alt mbr-iconfont"></i>
+                            </div>
+                            <h5 class="card-title mbr-fonts-style display-7">
+                                <strong>{{ __('views/home.feature_mobile_friendly') }}</strong>
+                            </h5>
+                            <p class="card-text mbr-fonts-style display-7">
+                                {{ __('views/home.feature_mobile_friendly_description') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="map1 cid-soU5dLgjOI" id="map1-k" style="position: relative;">
+
+
+        <div class="mbr-section-head mb-4">
+            <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                <strong>{{ __('views/home.live_demo') }}</strong>
+            </h3>
+        </div>
+
+        <div class="align-center container mb-4">
+            <div class="row justify-content-center no-gutters">
+                <div class="col-xl-4">
+                    @include('common.dungeon.select', [
+                        'id'          => $dungeonSelectId,
+                        'label'       => false,
+                        'dungeons'    => $demoRouteDungeons,
+                        'showAll'     => false,
+                        'showSeasons' => true,
+                        'required'    => false
+                    ])
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-map" style="position: relative;">
+            <div class="demo-loader text-center h-100" style="display: none;">
+                <div class="row h-100 justify-content-center align-items-center no-gutters">
+                    <div class="col">
+                        <h2 style="opacity: 1;">
+                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/home.loading') }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <iframe id="{{ $demoRoutesIFrameId }}"
+                    frameborder="0"
+                    loading="lazy"
+                    class="lazyload"
+                    style="border:0; top: 0; left: 0; position: absolute;"
+                    data-src="{{ route('dungeonroute.view', ['dungeon' => $demoRoutes->first()->dungeon, 'dungeonroute' => $demoRoutes->first(), 'title' => $demoRoutes->first()->title]) }}"
+                    allowfullscreen=""></iframe>
+        </div>
+    </section>
+
+    <!-- Fade into solid -->
+    <section class="gradient-bottom-container">
+        <div class="gradient-bottom">&nbsp;</div>
+    </section>
+
+    <section class="info3 cid-soU9jtw47v mbr-parallax-background" id="info3-p">
+
+        <div class="mbr-overlay"></div>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="card col-12 col-lg-10">
+                    <div class="card-wrapper">
+                        <div class="card-box align-center">
+                            <h4 class="card-title mbr-fonts-style align-center mb-4 display-1">
+                                <strong>{{ __('views/home.start_planning_today') }}</strong>
+                            </h4>
+                            <p class="mbr-text mbr-fonts-style mb-4 display-7">
+                                {{ sprintf(__('views/home.join_other_users'), (int)($userCount / 1000) * 1000) }}
+                            </p>
+                            <div class="mbr-section-btn mt-3">
+                                <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
+                                   data-target="#create_route_modal">
+                                    <i class="fas fa-plus"></i>&nbsp;{{__('views/home.create_route')}}
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <section class="probootstrap-section probootstrap-zindex-above-showcase">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
-                     data-animate-effect="fadeIn">
-                    <h2>{{ __('Demo routes') }}</h2>
-                </div>
-            </div>
-
-            @include('common.dungeon.demoroutesgrid', [
-                'expansionService' => $expansionService
-            ])
-        </div>
-    </section>
-
-    <section class="probootstrap-section probootstrap-bg-white bg-secondary">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3 text-center section-heading probootstrap-animate"
-                     data-animate-effect="fadeIn">
-                    <h2>{{ __('Additional Features') }}</h2>
-                    <p class="lead">{{ __('Aside from an interactive dungeon map, multiple features of a website allows Keystone.guru to be a hub for all things related to planning your routes with much more to come.') }}</p>
-                </div>
-            </div>
-            <!-- END row -->
-            <div class="row probootstrap-gutter60">
-                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
-                    <div class="service text-center">
-                        <div class="icon"><i class="fa fa-mobile-alt"></i></div>
-                        <div class="text">
-                            <h3>{{ __('Responsive Design') }}</h3>
-                            <p>{{ __('Plan your routes on the go on any device. Keystone.guru is designed with mobility in mind.') }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeIn">
-                    <div class="service text-center">
-                        <div class="icon"><i class="fa fa-search"></i></div>
-                        <div class="text">
-                            <h3>{{ __('Route Search') }}</h3>
-                            <p>{{ __('Struggle with a dungeon with specific affixes? Search for an existing route made by others, just like your routes can be found by others*.') }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
-                    <div class="service text-center">
-                        <div class="icon"><i class="fa fa-star"></i></div>
-                        <div class="text">
-                            <h3>{{ __('Rating and Favorites') }}</h3>
-                            <p>{{ __('Saw a route that had some great features or you enjoyed running with your group? Rate it for others to discover and favorite it for easy finding for later on through your Profile page!') }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
-                    <div class="service text-center">
-                        <div class="icon"><i class="fa fa-share"></i></div>
-                        <div class="text">
-                            <h3>{{ __('Easy Sharing') }}</h3>
-                            <p>{{ __('Links to routes on Keystone.guru are short and simple. Share your route with your (pug) party members prior to starting and discuss strategy before you wipe.') }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 probootstrap-animate">
-                    <div class="service text-center">
-                        <div class="icon"><i class="fab fa-reddit"></i></div>
-                        <div class="text">
-                            <h3>{{ __('Community') }}</h3>
-                            <p>{!! sprintf(__('Join the community on %s, %s or %s for getting in-touch with fellow keystone runners and easy collaboration. I will be around to answer any questions you may have.'),
-                                    '<a href="https://reddit.com/r/keystoneguru" target="_blank"><i class="fab fa-reddit"></i> Reddit</a>',
-                                    '<a href="https://discord.gg/2KtWrqw" target="_blank"><i class="fab fa-discord"></i> Discord</a>',
-                                    '<a href="https://www.youtube.com/channel/UCtjlNmuS2kVQhNvPdW5D2Jg" target="_blank"><i class="fab fa-youtube"></i> Youtube</a>') !!}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
-                    <div class="service text-center">
-                        <div class="icon"><i class="fab fa-osi"></i></div>
-                        <div class="text">
-                            <h3>{{ __('Open Source') }}</h3>
-                            <p>{!! sprintf(__('The full source for the entire website can be found on %s. Interested in helping out or have a kick-ass idea for a new feature? Let me know on Github!'),
-                            '<a href="https://github.com/Wotuu/keystone.guru" target="_blank"><i class="fab fa-github"></i> Github</a>') !!} </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 text-center section-heading probootstrap-animate small">
-                    <p>{!! sprintf(__('*Prefer some privacy? Consider becoming a %s for unlimited private routes and more.'),
-                    '<a href="https://www.patreon.com/keystoneguru" target="_blank"><i class="fab fa-patreon"></i> Patron</a>') !!}</p>
-                </div>
-            </div>
-        </div>
+    <!-- Fade into solid -->
+    <section>
+        <div class="gradient-top footer">&nbsp;</div>
     </section>
 @endsection

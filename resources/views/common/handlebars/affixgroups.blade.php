@@ -31,14 +31,18 @@
                         let affix = serverAffixGroup.affixes[j];
                         // Push an affix to the list
                         affixes.push({
-                            title: affix.name,
-                            name: affix.name,
-                            class: affix.name.toLowerCase()
+                            title: lang.get(affix.name),
+                            name: lang.get(affix.name),
+                            class: affix.key.toLowerCase()
                         });
                     }
                 }
 
-                handlebarsData.affixgroups.push({affixes: affixes});
+                handlebarsData.affixgroups.push({
+                    affixes: affixes,
+                    // Make it 1-indexed
+                    seasonal_index: typeof serverAffixGroup.seasonal_index === 'number' ? serverAffixGroup.seasonal_index + 1 : null
+                });
             }
         }
 
@@ -47,7 +51,7 @@
         let $result = $("<div>").append($(result));
 
         // Only for complex affixes
-        if( data.length > 1 ){
+        if (data.length > 1) {
             let $rowContainer = $($result.find('.affix_list_row_container'));
             let $targetTooltip = $($result.find('.target_tooltip'));
 

@@ -1,4 +1,4 @@
-class Polyline extends MapObject {
+class Polyline extends VersionableMapObject {
     constructor(map, layer, options) {
         super(map, layer, options);
         let self = this;
@@ -13,7 +13,7 @@ class Polyline extends MapObject {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
                 mapStateChangedEvent.data.previousMapState instanceof DeleteMapState) {
                 // Show it again when the edit/delete map state was restored
-                self._setAnimatedLayerVisibility(true);
+                self._setAnimatedLayerVisibility(self.shouldBeVisible());
             }
             // Don't do else; we may transition from edit to delete map state
             if (mapStateChangedEvent.data.newMapState instanceof EditMapState ||
@@ -73,13 +73,13 @@ class Polyline extends MapObject {
                     new Attribute({
                         name: 'color_animated',
                         type: 'color',
-                        edit: getState().hasPaidTier(c.paidtiers.animated_polylines),
+                        edit: getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines),
                         setter: this.setPolylineColorAnimated.bind(this),
                         // This default sets enemy patrols to animate by default - do not want?
                         default: function () {
                             let result = null;
 
-                            if (self.id === null && getState().hasPaidTier(c.paidtiers.animated_polylines)) {
+                            if (self.id === null && getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines)) {
                                 result = c.map.polyline.defaultColorAnimated;
                             }
 
@@ -145,13 +145,13 @@ class Polyline extends MapObject {
     /**
      * @inheritDoc
      */
-    localDelete() {
+    localDelete(massDelete = false) {
         console.assert(this instanceof Polyline, 'this was not a Polyline', this);
 
         this._setAnimatedLayerVisibility(false);
         this.layerAnimated = null;
 
-        super.localDelete();
+        super.localDelete(massDelete);
     }
 
     /**
@@ -215,11 +215,13 @@ class Polyline extends MapObject {
         this.layer.setStyle({
             weight: this.polyline.weight
         });
+        this.layer.redraw();
 
         if (typeof this.layerAnimated !== 'undefined' && this.layerAnimated !== null) {
             this.layerAnimated.setStyle({
                 weight: this.polyline.weight
             });
+            this.layerAnimated.redraw();
         }
     }
 

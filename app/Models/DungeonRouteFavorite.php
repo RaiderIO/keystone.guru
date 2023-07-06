@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
  * @property int $dungeon_route_id
  * @property int $user_id
- * @property \App\Models\DungeonRoute $dungeonroute
- * @property \App\User $user
  *
- * @mixin \Eloquent
+ * @property DungeonRoute $dungeonroute
+ * @property User $user
+ *
+ * @mixin Eloquent
  */
 class DungeonRouteFavorite extends Model
 {
@@ -19,18 +23,18 @@ class DungeonRouteFavorite extends Model
     public $timestamps = false;
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function dungeonroute()
+    public function dungeonroute(): BelongsTo
     {
-        return $this->belongsTo('App\Models\DungeonRoute');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }

@@ -12,7 +12,7 @@ class MapObjectMapState extends MapState {
 
     /**
      * Get the map object that initiated this selection.
-     * @returns {*}
+     * @returns {MapObject}
      */
     getMapObject() {
         return this.sourceMapObject;

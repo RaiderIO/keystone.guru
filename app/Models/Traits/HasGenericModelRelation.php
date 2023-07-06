@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * @property string $model_class
  *
+ * @property Model $model
+ *
  * @mixin Model
  */
 trait HasGenericModelRelation
@@ -15,7 +17,7 @@ trait HasGenericModelRelation
     /**
      * @return HasOne
      */
-    function model()
+    public function model(): HasOne
     {
         return $this->hasOne($this->model_class, 'id', 'model_id');
     }

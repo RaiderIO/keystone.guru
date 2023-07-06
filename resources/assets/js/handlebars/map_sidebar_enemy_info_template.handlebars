@@ -1,9 +1,9 @@
 {{#each info}}
     <div class="row">
-        <div class="col-6 font-weight-bold">
+        <div class="col-5 pr-0">
             {{key}}:
         </div>
-        <div class="col-6">
+        <div class="col-5 p-0">
             {{#ifCond value '===' 1}}
                 <span class="text-success"><i class="fas fa-check-circle"></i></span>
             {{else}}
@@ -13,6 +13,14 @@
                     {{{value}}}
                 {{/ifCond}}
             {{/ifCond}}
+        </div>
+        <div class="col-2 text-right" data-toggle="tooltip" title="{{ info }}{{ warning }}">
+            {{#if info}}
+                <i class="fas fa-info-circle text-info"></i>
+            {{/if}}
+            {{#if warning}}
+                <i class="fas fa-exclamation-circle text-warning"></i>
+            {{/if}}
         </div>
     </div>
 {{/each}}

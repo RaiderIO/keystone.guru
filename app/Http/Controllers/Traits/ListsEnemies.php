@@ -9,14 +9,16 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
+use App\Models\Enemy;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcType;
 use Error;
-use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Psr\SimpleCache\InvalidArgumentException;
 
 trait ListsEnemies
 {
@@ -24,43 +26,24 @@ trait ListsEnemies
     /**
      * Lists all enemies for a specific floor.
      *
-     * @param $dungeonId
+     * @param MappingVersion $mappingVersion
      * @param bool $showMdtEnemies
-     * @param string|null $publicKey
      * @return array|bool
+     * @throws InvalidArgumentException
+     * @throws InvalidMDTDungeonException
      */
-    function listEnemies($dungeonId, $showMdtEnemies = false, $publicKey = null)
+    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false)
     {
-        $dungeonRoute = null;
-        // If dungeon route was set, fetch the markers as well
-        if ($publicKey !== null) {
-            try {
-                $dungeonRoute = $this->_getDungeonRouteFromPublicKey($publicKey, false);
-            } catch (Exception $ex) {
-                return false;
-            }
-        }
-
-        // Eloquent wasn't working with me, raw SQL it is
-        /** @var array $result */
-        $result = DB::select($query = '
-                select `enemies`.*, `raid_markers`.`name`                                     as `raid_marker_name`
-                from `enemies`
-                       left join `dungeon_route_enemy_raid_markers`
-                         on `dungeon_route_enemy_raid_markers`.`enemy_id` = `enemies`.`id` and
-                            `dungeon_route_enemy_raid_markers`.`dungeon_route_id` = :routeId
-                       left join `raid_markers` on `dungeon_route_enemy_raid_markers`.`raid_marker_id` = `raid_markers`.`id`
-                       left join `floors` on enemies.floor_id = floors.id
-                where `floors`.dungeon_id = :dungeonId
-                group by `enemies`.`id`;
-                ', $params = [
-            'routeId'   => isset($dungeonRoute) ? $dungeonRoute->id : -1,
-            'dungeonId' => $dungeonId
-        ]);
+        /** @var Collection|Enemy[] $enemies */
+        $enemies = Enemy::selectRaw('enemies.*')
+            ->join('floors', 'enemies.floor_id', '=', 'floors.id')
+            ->where('floors.dungeon_id', $mappingVersion->dungeon_id)
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->get();
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
         /** @var Npc[]|Collection $npcs */
-        $npcs = Npc::whereIn('id', array_unique(array_column($result, 'npc_id')))->get();
+        $npcs = Npc::whereIn('id', $enemies->pluck('npc_id')->unique()->toArray())->get();
 
         /** @var Collection $npcTypes */
         $npcTypes = NpcType::all();
@@ -68,18 +51,15 @@ trait ListsEnemies
         $npcClasses = NpcClass::all();
 
         // Only if we should show MDT enemies
-        $filteredEnemies = [];
+        $mdtEnemies = collect();
         if ($showMdtEnemies) {
             try {
-                $dungeon = Dungeon::findOrFail($dungeonId);
-                $mdtEnemies = (new MDTDungeon($dungeon->name))->getClonesAsEnemies($dungeon->floors);
+                $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
+                $mdtEnemies = (new MDTDungeon($dungeon))->getClonesAsEnemies($dungeon->floors()->with(['dungeon'])->get());
 
-                foreach ($mdtEnemies as $mdtEnemy) {
-                    // Skip Emissaries (Season 3), season is over
-                    if (!in_array($mdtEnemy->npc_id, [155432, 155433, 155434])) {
-                        $filteredEnemies[] = $mdtEnemy;
-                    }
-                }
+                $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy) {
+                    return !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]);
+                });
 
             } // Thrown when Lua hasn't been configured
             catch (Error $ex) {
@@ -88,23 +68,26 @@ trait ListsEnemies
         }
 
         // Post process enemies
-        foreach ($result as $enemy) {
-            $enemy->npc = $npcs->filter(function ($item) use ($enemy)
-            {
+        foreach ($enemies as $enemy) {
+            $enemy->npc = $npcs->first(function ($item) use ($enemy) {
                 return $enemy->npc_id === $item->id;
-            })->first();
+            });
 
             if ($enemy->npc !== null) {
-                $enemy->npc->type = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
+                $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
                 $enemy->npc->class = $npcClasses->get($enemy->npc->npc_class_id - 1);
             }
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
-            foreach ($filteredEnemies as $mdtEnemy) {
+            foreach ($mdtEnemies as $mdtEnemy) {
                 // Match them
-                if ($mdtEnemy->mdt_id === $enemy->mdt_id && $mdtEnemy->npc_id === $enemy->npc_id) {
+                if ($mdtEnemy->floor_id === $enemy->floor_id &&
+                    $mdtEnemy->mdt_id === $enemy->mdt_id &&
+                    $mdtEnemy->npc_id === $enemy->getMdtNpcId()) {
                     // Match found, assign and quit
-                    $mdtEnemy->enemy_id = $enemy->id;
+                    $mdtEnemy->mapping_version_id = $enemy->mapping_version_id;
+                    $mdtEnemy->enemy_id           = $enemy->id;
+
                     break;
                 }
             }
@@ -113,6 +96,6 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => collect($result), 'enemiesMdt' => collect($filteredEnemies)];
+        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $mdtEnemies->values()->toArray()];
     }
 }

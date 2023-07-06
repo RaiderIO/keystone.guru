@@ -75,6 +75,10 @@ return [
             'connection' => 'default',
         ],
 
+        'redis_model_cache' => [
+            'driver'     => 'redis',
+            'connection' => 'model_cache',
+        ],
     ],
 
     /*
@@ -90,7 +94,7 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(
         sprintf('%s-%s-cache',
-            env('APP_NAME', 'laravel'), env('APP_TYPE')),
+            env('APP_NAME', 'laravel'), config('app.type')),
         '-'
         )
     ),

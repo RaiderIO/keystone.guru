@@ -1,0 +1,23 @@
+<div class="form-group">
+    <div class="card-header" id="map_{{map_object_name}}_edit_popup_heading_{{category}}_{{id}}">
+        <h5 class="mb-0">
+            <button class="btn btn-link"
+                    data-toggle="collapse"
+                    data-target="#map_{{map_object_name}}_edit_popup_collapse_{{category}}_{{id}}"
+                    aria-expanded="{{#if show}}true{{else}}false{{/if}}"
+                    aria-controls="map_{{map_object_name}}_edit_popup_collapse_{{category}}_{{id}}">
+                {{label}}
+            </button>
+        </h5>
+    </div>
+    <div id="map_{{map_object_name}}_edit_popup_collapse_{{category}}_{{id}}"
+         class="collapse {{#if show}}show{{/if}}"
+         aria-labelledby="map_{{map_object_name}}_edit_popup_heading_{{category}}_{{id}}"
+         data-parent="#map_{{map_object_name}}_edit_popup_accordion_{{id}}"
+         data-category="{{category}}"
+    >
+      <div class="card-body">
+          {{{html}}}
+      </div>
+    </div>
+</div>

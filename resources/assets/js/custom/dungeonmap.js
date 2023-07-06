@@ -9,21 +9,49 @@ class DungeonMap extends Signalable {
 
         this.options = options;
 
+        let state = getState();
+        let mapContext = state.getMapContext();
+
+        if (!(mapContext instanceof MapContextLiveSession)) {
+            if (state.isMapAdmin()) {
+                if (mapContext.getMappingVersion().merged) {
+                    let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
+
+                    let data = $.extend({}, getHandlebarsDefaultVariables(), {});
+
+                    state.addSnackbar(template(data));
+
+                    this.options.readonly = true;
+                }
+            } else if (this.options.edit && mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
+                let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
+
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                    'upgrade_url': mapContext.getMappingVersionUpgradeUrl()
+                });
+
+                state.addSnackbar(template(data));
+            }
+        }
+
         // Apply the map to our state first thing
-        getState().setDungeonMap(this);
+        state.setDungeonMap(this);
 
         // Listen for floor changes
-        getState().register('floorid:changed', this, function () {
-            self.refreshLeafletMap();
+        state.register('floorid:changed', this, function (floorIdChangedEvent) {
+            self.refreshLeafletMap(false, floorIdChangedEvent.data.center, floorIdChangedEvent.data.zoom);
         });
 
         // How many map objects have returned a success status
-        this.hotkeys = this._getHotkeys();
+        if (!this.options.readonly) {
+            this.hotkeys = this._getHotkeys();
+        }
         this.mapObjectGroupManager = new MapObjectGroupManager(this, this._getMapObjectGroupNames());
         this.mapObjectGroupManager.register('loaded', this, function () {
             self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
+        this.enemyForcesManager = new EnemyForcesManager(this);
 
         // Pather instance
         this.pather = null;
@@ -134,19 +162,20 @@ class DungeonMap extends Signalable {
 
         this.mapTileLayer = null;
 
+        L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling.GestureHandling);
+
         // Create the map object
-        this.leafletMap = L.map(mapid, {
+        this.leafletMap = L.map(mapid, $.extend({
             center: [0, 0],
-            minZoom: 1,
-            maxZoom: 5,
             // We use a custom draw control, so don't use this
             // drawControl: true,
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
             crs: L.CRS.Simple,
             // Context menu when right clicking stuff
             contextmenu: true,
-            zoomControl: false
-        });
+            zoomControl: false,
+            gestureHandling: this.options.gestureHandling
+        }, c.map.settings));
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();
         // Top left is reserved for the sidebar
@@ -156,12 +185,10 @@ class DungeonMap extends Signalable {
         this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
             // Disable pather if we were doing it
             self.togglePather(false);
-            // @TODO Start a new map state
         });
         this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
-            // @TODO Stop the new map state
         });
         // Set all edited layers to no longer be synced.
         this.leafletMap.on(L.Draw.Event.EDITED, function (e) {
@@ -222,14 +249,18 @@ class DungeonMap extends Signalable {
             self.setMapState(new DeleteMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
-            self.setMapState(null);
+            if (self.getMapState() instanceof DeleteMapState) {
+                self.setMapState(null);
+            }
         });
 
         this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
             self.setMapState(new EditMapState(self));
         });
         this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-            self.setMapState(null);
+            if (self.getMapState() instanceof EditMapState) {
+                self.setMapState(null);
+            }
         });
 
         // If we created something
@@ -373,29 +404,46 @@ class DungeonMap extends Signalable {
     _enemyClicked(enemyClickedEvent) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        if (this.options.edit && KillZoneEnemySelection.isEnemySelectable(enemyClickedEvent.context)) {
+        /** @type KillZoneMapObjectGroup */
+        let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+
+        let enemy = enemyClickedEvent.context;
+        let currentMapState = this.getMapState();
+
+        // If we selected an enemy
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+
+        } else if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
+            let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
             // If part of a pack, select the pack instead of creating a new one
-            let existingKillZone = enemyClickedEvent.context.getKillZone();
-            if (existingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
+            let selectedEnemyExistingKillZone = enemy.getKillZone();
+
+            // When ctrl is pressed, we need to add it to a new pull. When you have another pull, enemy:selected is fired
+            // instead of enemy:clicked and the event is handled that way instead
+            if (this.mapState === null && ctrlKeyPressed && this.options.edit) {
+                // Add it to a new pull
+                let newKillZone = killZoneMapObjectGroup.createNewPull([enemy.id]);
+
+                this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
+            } else if (selectedEnemyExistingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
                 // Only when we're not doing anything right now
                 if (this.options.edit) {
-                    this.setMapState(new KillZoneEnemySelection(this, existingKillZone));
+                    this.setMapState(new EditKillZoneEnemySelection(this, selectedEnemyExistingKillZone));
                 } else {
-                    this.setMapState(new ViewKillZoneEnemySelection(this, existingKillZone));
+                    this.setMapState(new ViewKillZoneEnemySelection(this, selectedEnemyExistingKillZone));
                 }
             }
             // Shift click creates a new pack always
-            else if (this.mapState === null || (this.mapState instanceof KillZoneEnemySelection && shiftKeyPressed)) {
+            else if (this.mapState === null || (this.mapState instanceof EditKillZoneEnemySelection && shiftKeyPressed)) {
                 // Create a new pack instead
-                let killZoneMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 // Add ourselves to this new pull
                 let enemyIds = [];
                 // Add all buddies in this pack to the list of ids (if any)
-                let packBuddies = enemyClickedEvent.context.getPackBuddies();
-                packBuddies.push(enemyClickedEvent.context);
+                let packBuddies = enemy.getPackBuddies();
+                packBuddies.push(enemy);
 
                 for (let index in packBuddies) {
                     if (packBuddies.hasOwnProperty(index)) {
@@ -404,9 +452,10 @@ class DungeonMap extends Signalable {
                 }
 
                 // Create a new pull; all UI will update based on the events fired here.
-                let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds);
+                let selectedKillZoneIndex = currentMapState instanceof EditKillZoneEnemySelection ? currentMapState.getMapObject().index : null;
+                let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds, selectedKillZoneIndex);
 
-                this.setMapState(new KillZoneEnemySelection(this, newKillZone, this.getMapState()));
+                this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             }
         }
     }
@@ -470,19 +519,23 @@ class DungeonMap extends Signalable {
         let mapControls = [];
         // No UI = no map controls at all
         if (!this.options.noUI) {
-            if (this.options.edit) {
+            if (this.options.edit && !this.options.readonly) {
                 mapControls.push(new DrawControls(this, editableLayers));
             }
 
             // Only when enemy forces are relevant in their display (not in a view)
             if (!getState().isMapAdmin()) {
-                mapControls.push(new EnemyForcesControls(this));
+                if (getState().getMapContext().isDungeonSpeedrunEnabled()) {
+                    mapControls.push(new DungeonSpeedrunRequiredNpcsControls(this));
+                } else {
+                    mapControls.push(new EnemyForcesControls(this));
+                }
             }
             if (!this.options.embed) {
-                mapControls.push(new EnemyVisualControls(this));
+                // mapControls.push(new EnemyVisualControls(this));
             }
 
-            if (this.isSandboxModeEnabled() && getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
+            if (this.isSandboxModeEnabled() && getState().getMapContext().getDungeon().key === 'siegeofboralus') {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
@@ -578,18 +631,12 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Get the amount of enemy forces that are required to complete this dungeon.
-     * @returns {*}
+     * Refreshes the leaflet map
+     * @param clearMapState {Boolean}
+     * @param center {Array}
+     * @param zoom {Number}
      */
-    getEnemyForcesRequired() {
-        let dungeonData = getState().getMapContext().getDungeon();
-        return getState().getMapContext().getTeeming() ? dungeonData.enemy_forces_required_teeming : dungeonData.enemy_forces_required;
-    }
-
-    /**
-     * Refreshes the leaflet map so
-     */
-    refreshLeafletMap() {
+    refreshLeafletMap(clearMapState = true, center = null, zoom = null) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let self = this;
@@ -599,12 +646,14 @@ class DungeonMap extends Signalable {
         this.signal('map:beforerefresh', {dungeonmap: this});
 
         // If we were doing anything, we're no longer doing it
-        this.setMapState(null);
+        if (clearMapState) {
+            this.setMapState(null);
+        }
 
         if (this.mapTileLayer !== null) {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
-        this.leafletMap.setView([-128, 192], this.options.defaultZoom);
+        this.leafletMap.setView(center ?? [-128, 192], zoom ?? this.options.defaultZoom);
         let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
         let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
 
@@ -686,6 +735,15 @@ class DungeonMap extends Signalable {
 
         refreshTooltips();
 
+        if ($('#finished_loading').length === 0) {
+            $('body').append(
+                jQuery('<div>').attr('id', 'finished_loading')
+            );
+
+            console.log('done loading');
+        }
+
+
         this._refreshingMap = false;
     }
 
@@ -746,13 +804,18 @@ class DungeonMap extends Signalable {
         if (this.pather !== null) {
             //  When enabled, add to the map
             if (enabled) {
-                this.setMapState(new PatherMapState(this));
-                this.signal('map:pathertoggled', {enabled: enabled});
-            }
-            // Only disable it when we're actively in the pather map state
-            else if (this.getMapState() instanceof PatherMapState) {
-                this.setMapState(null);
-                this.signal('map:pathertoggled', {enabled: enabled});
+                this.pather.setMode(L.Pather.MODE.CREATE);
+                if (!(this.getMapState() instanceof PatherMapState)) {
+                    this.setMapState(new PatherMapState(this));
+                    this.signal('map:pathertoggled', {enabled: enabled});
+                }
+            } else {
+                this.pather.setMode(L.Pather.MODE.VIEW);
+                // Only disable it when we're actively in the pather map state
+                if (this.getMapState() instanceof PatherMapState) {
+                    this.setMapState(null);
+                    this.signal('map:pathertoggled', {enabled: enabled});
+                }
             }
         }
     }
@@ -763,11 +826,35 @@ class DungeonMap extends Signalable {
     refreshPather() {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         console.assert(this.pather instanceof L.Pather, 'this.pather is not a L.Pather', this.pather);
+
         this.pather.setOptions({
             strokeWidth: c.map.polyline.defaultWeight,
             smoothFactor: 5,
             pathColour: c.map.polyline.defaultColor()
         });
+    }
+
+    /**
+     * Focuses the map on a killzone
+     * @param killZone {KillZone}
+     */
+    focusOnKillZone(killZone) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+        console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
+
+        // Cache the zoom level
+        let currentZoomLevel = getState().getMapZoomLevel();
+
+        // Switch floors if the floor is not on the current map
+        let floorIds = killZone.getFloorIds();
+        if (floorIds.length > 0 && !floorIds.includes(getState().getCurrentFloor().id)) {
+            getState().setFloorId(floorIds[0]);
+        }
+
+        // Center the map to this killzone
+        if (killZone.enemies.length > 0 && killZone.isVisible()) {
+            this.leafletMap.setView(killZone.getLayerCenteroid(), currentZoomLevel);
+        }
     }
 }
 

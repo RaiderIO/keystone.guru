@@ -8,12 +8,14 @@ use App\Logic\MapContext\MapContextDungeon;
 use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\FloorCoupling;
+use App\Models\Mapping\MappingVersion;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 
 class FloorController extends Controller
@@ -22,29 +24,35 @@ class FloorController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @param Floor|null $floor
      * @return Floor
+     * @throws Exception
      */
-    public function store(Request $request, Floor $floor = null)
+    public function store(Request $request, Dungeon $dungeon, Floor $floor = null)
     {
-        $beforeFloor = clone $floor;
+        $beforeFloor = $floor === null ? null : clone $floor;
 
         if ($floor === null) {
             $floor = new Floor();
             // May not be set when editing
-            $floor->dungeon_id = $request->get('dungeon');
+            $floor->dungeon_id = $dungeon->id;
         }
 
-        $floor->index = $request->get('index');
-        $floor->name = $request->get('name');
-        $floor->default = $request->get('default', false);
-        $defaultMinEnemySize = config('keystoneguru.min_enemy_size_default');
+        $floor->index          = $request->get('index');
+        $floor->mdt_sub_level  = $request->get('mdt_sub_level');
+        $floor->ui_map_id      = $request->get('ui_map_id');
+        $floor->name           = $request->get('name');
+        $floor->default        = $request->get('default', false);
+        $defaultMinEnemySize   = config('keystoneguru.min_enemy_size_default');
         $floor->min_enemy_size = $request->get('min_enemy_size', $defaultMinEnemySize);
         $floor->min_enemy_size = empty($floor->min_enemy_size) ? null : $floor->min_enemy_size;
 
-        $defaultMaxEnemySize = config('keystoneguru.max_enemy_size_default');
+        $defaultMaxEnemySize   = config('keystoneguru.max_enemy_size_default');
         $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
         $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
+
+        $floor->percentage_display_zoom = $request->get('percentage_display_zoom');
 
         // Update or insert it
         if ($floor->save()) {
@@ -61,7 +69,7 @@ class FloorController extends Controller
                     FloorCoupling::insert([
                         'floor1_id' => $floor->id,
                         'floor2_id' => $connectedFloorCandidate->id,
-                        'direction' => $direction
+                        'direction' => $direction,
                     ]);
                 }
             }
@@ -76,16 +84,13 @@ class FloorController extends Controller
 
     /**
      * @param Request $request
+     * @param Dungeon $dungeon
      * @return Factory|View
      */
-    public function new(Request $request)
+    public function new(Request $request, Dungeon $dungeon)
     {
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::findOrFail($request->get('dungeon'));
-
-        return view('admin.floor.new', [
-            'headerTitle' => __('New floor'),
-            'dungeon'     => $dungeon
+        return view('admin.floor.edit', [
+            'dungeon' => $dungeon,
         ]);
     }
 
@@ -101,13 +106,12 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.edit', [
-                'headerTitle'    => sprintf(__('%s - Edit floor'), $dungeon->name),
                 'dungeon'        => $dungeon,
-                'model'          => $floor,
-                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get()
+                'floor'          => $floor,
+                'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get(),
             ]);
         } else {
-            Session::flash('warning', sprintf('Floor %s is not a part of dungeon %s', $floor->name, $dungeon->name));
+            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
     }
@@ -116,17 +120,25 @@ class FloorController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor $floor
-     * @return Factory|View
+     * @return Application|Factory|View|RedirectResponse
+     * @throws InvalidArgumentException
      */
     public function mapping(Request $request, Dungeon $dungeon, Floor $floor)
     {
-        $dungeon = $floor->dungeon->load('floors');
+        $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));
 
-        return view('admin.floor.mapping', [
-            'model'       => $floor,
-            'headerTitle' => __('Edit floor'),
-            'mapContext'  => (new MapContextDungeon($dungeon, $floor))->toArray(),
-        ]);
+        if ($dungeon->id === $mappingVersion->dungeon_id) {
+            $dungeon = $floor->dungeon->load('floors');
+
+            return view('admin.floor.mapping', [
+                'floor'          => $floor,
+                'mapContext'     => (new MapContextDungeon($dungeon, $floor, $mappingVersion))->getProperties(),
+                'mappingVersion' => $mappingVersion,
+            ]);
+        } else {
+            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));
+            return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
+        }
     }
 
     /**
@@ -139,10 +151,10 @@ class FloorController extends Controller
     public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
     {
         // Store it and show the edit page again
-        $floor = $this->store($request, $floor);
+        $floor = $this->store($request, $dungeon, $floor);
 
         // Message to the user
-        Session::flash('status', __('Floor updated'));
+        Session::flash('status', __('views/admin.floor.flash.floor_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon, $floor);
@@ -157,14 +169,14 @@ class FloorController extends Controller
     public function savenew(FloorFormRequest $request, Dungeon $dungeon)
     {
         // Store it and show the edit page
-        $floor = $this->store($request);
+        $floor = $this->store($request, $dungeon);
 
         // Message to the user
-        Session::flash('status', __('Floor created'));
+        Session::flash('status', __('views/admin.floor.flash.floor_created'));
 
-        return redirect()->route('admin.floor.edit.mapping', [
-            'dungeon' => $request->get('dungeon'),
-            'floor'   => $floor
+        return redirect()->route('admin.floor.edit', [
+            'dungeon' => $dungeon,
+            'floor'   => $floor,
         ]);
     }
 }

@@ -2,36 +2,38 @@
 
 namespace App\Models;
 
+use App\Models\Patreon\PatreonBenefit;
 use App\User;
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property $id int
- * @property $name string
+ * @property int $id
+ * @property string $name
+ *
+ * @property Collection|DungeonRoute[] $dungeonroutes
  *
  * @mixin Eloquent
  */
-class PublishedState extends Model
+class PublishedState extends CacheModel
 {
-    public const UNPUBLISHED = 'unpublished';
-    public const TEAM = 'team';
+    public const UNPUBLISHED     = 'unpublished';
+    public const TEAM            = 'team';
     public const WORLD_WITH_LINK = 'world_with_link';
-    public const WORLD = 'world';
+    public const WORLD           = 'world';
 
     public const ALL = [
-        self::UNPUBLISHED,
-        self::TEAM,
-        self::WORLD_WITH_LINK,
-        self::WORLD,
+        self::UNPUBLISHED     => 1,
+        self::TEAM            => 2,
+        self::WORLD_WITH_LINK => 3,
+        self::WORLD           => 4,
     ];
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'id', 'name',
     ];
 
     protected $hidden = ['pivot'];
@@ -39,9 +41,9 @@ class PublishedState extends Model
     /**
      * @return HasMany
      */
-    public function dungeonroutes()
+    public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     /**
@@ -56,7 +58,7 @@ class PublishedState extends Model
         $result->push(PublishedState::TEAM);
 
 
-        if ($user !== null && $user->hasPaidTier(PaidTier::UNLISTED_ROUTES)) {
+        if ($user !== null && $user->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES)) {
             $result->push(PublishedState::WORLD_WITH_LINK);
         }
 
@@ -73,8 +75,7 @@ class PublishedState extends Model
         parent::boot();
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel)
-        {
+        static::deleting(function ($someModel) {
             return false;
         });
     }

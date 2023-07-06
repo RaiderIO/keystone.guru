@@ -25,18 +25,15 @@ class EnemyAttaching {
         this.currentMouseoverLayer = null;
         this.currentMouseoverLayerStyle = null;
         this.lastMouseMoveTime = 0;
-        // Attach the monitor to each existing layer
-        // this.map.leafletMap.on('layeradd', (this.onLayerCreated).bind(this));
-        // this.map.leafletMap.eachLayer((this.monitorLayer).bind(this));
 
         // When an enemy is added to the map, set its enemypack to the current mouse over layer (if that exists).
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        enemyMapObjectGroup.register('save:success', this, function (saveSuccessEvent) {
+        enemyMapObjectGroup.register('save:beforesend', this, function (saveBeforeSendEvent) {
             if (self.currentMouseoverLayer !== null) {
                 let mapObject = self.map.findMapObjectByLayer(self.currentMouseoverLayer);
 
                 console.assert(mapObject instanceof MapObject, 'mapObject is not a MapObject!', mapObject);
-                saveSuccessEvent.data.object.enemy_pack_id = mapObject.id;
+                saveBeforeSendEvent.data.object.enemy_pack_id = mapObject.id;
             }
         });
 
@@ -68,8 +65,6 @@ class EnemyAttaching {
         });
 
         enemyPackMapObjectGroup.register('object:changed', this, function (objectChangedEvent) {
-            console.log(objectChangedEvent);
-
             // Gather some data
             let changedEnemyPack = objectChangedEvent.data.object;
             let enemyPackPolygon = changedEnemyPack.layer;
@@ -86,7 +81,7 @@ class EnemyAttaching {
                         }, enemyPackPolygon.toGeoJSON().geometry) &&
                         enemyMapObjectGroup.isMapObjectVisible(enemy)) {
                         // Remove it from the pack
-                        enemy.enemy_pack_id = -1;
+                        enemy.enemy_pack_id = null;
                         // Save enemy so their pack connection is broken
                         enemy.save();
                     }
@@ -102,7 +97,7 @@ class EnemyAttaching {
             // For each enemy we know of, cannot use rawEnemies for reasons I can't be bothered to figure out rn
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 if (enemy.enemy_pack_id === deletedEnemyPack.id) {
-                    enemy.enemy_pack_id = -1;
+                    enemy.enemy_pack_id = null;
                     enemy.save();
                 }
             });
@@ -118,7 +113,10 @@ class EnemyAttaching {
         // Only update once every 1/20th of a second
         if (currTime - this.lastMouseMoveTime > 200) {
             let isMouseStillInLayer = false;
-            this.map.leafletMap.eachLayer(function (layer) {
+            let enemyPackManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+            for(let index in enemyPackManager.objects ) {
+                let layer = enemyPackManager.objects[index].layer;
+
                 // Only track this when we're 'ghosting' an enemy around to place it somewhere
                 // Only polygons may be a target for enemies
                 if (layer instanceof L.Polygon) {
@@ -145,7 +143,7 @@ class EnemyAttaching {
                         }
                     }
                 }
-            });
+            }
 
             // If we were in a layer but no longer
             if (!isMouseStillInLayer) {
@@ -163,7 +161,6 @@ class EnemyAttaching {
         console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
 
         if (this.currentMouseoverLayer !== null) {
-            console.log(this.currentMouseoverLayerStyle);
             // No longer in this layer, revert changes
             this.currentMouseoverLayer.setStyle({
                 fillColor: this.currentMouseoverLayerStyle.fillColor,
@@ -171,40 +168,5 @@ class EnemyAttaching {
             });
             this.currentMouseoverLayer = null;
         }
-    }
-
-    /**
-     * Wrapper so that 'this' is set properly.
-     * @param event
-     */
-    onLayerCreated(event) {
-        console.log(">> onLayerCreated", event);
-        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
-        // Only listen to created layers of enemy packs
-        if (event.layer instanceof L.Polygon) {
-            this.monitorLayer(event.layer);
-        }
-        console.log("OK onLayerCreated", event);
-    }
-
-    monitorLayer(layer) {
-        console.log(">> monitorLayer", layer);
-        console.assert(this instanceof EnemyAttaching, 'this is not an instance of EnemyAttaching', this);
-        let self = this;
-
-        console.log('attached to layer ' + layer);
-        layer.on('mouseover', function (e) {
-            console.log(">> mouseover", e);
-            // Only track this when we're 'ghosting' an enemy around to place it somewhere
-            if (self.drawingEnemy) {
-                layer.setStyle({
-                    fillColor: c.map.admin.mapobject.colors.mouseoverAddEnemy,
-                    color: c.map.admin.mapobject.colors.mouseoverAddEnemyBorder
-                });
-                self.currentMouseoverLayer = layer;
-            }
-            console.log("OK mouseover", e);
-        });
-        console.log("OK monitorLayer", layer);
     }
 }

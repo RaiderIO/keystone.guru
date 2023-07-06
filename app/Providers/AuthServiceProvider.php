@@ -12,9 +12,15 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-        'App\Models\DungeonRoute' => 'App\Policies\DungeonRoutePolicy',
-        'App\Models\Team' => 'App\Policies\TeamPolicy'
+        'App\Model'                   => 'App\Policies\ModelPolicy',
+        'App\Models\Dungeon'          => 'App\Policies\DungeonRouteDiscoverDungeonPolicy',
+        'App\Models\Expansion'        => 'App\Policies\DungeonRouteDiscoverExpansionPolicy',
+        'App\Models\Season'           => 'App\Policies\DungeonRouteDiscoverSeasonPolicy',
+        'App\Models\DungeonRoute'     => 'App\Policies\DungeonRoutePolicy',
+        'App\Models\LiveSession'      => 'App\Policies\LiveSessionPolicy',
+        'App\Models\Tags\Tag'         => 'App\Policies\TagPolicy',
+        'App\Models\Tags\TagCategory' => 'App\Policies\TagCategoryPolicy',
+        'App\Models\Team'             => 'App\Policies\TeamPolicy',
     ];
 
     /**

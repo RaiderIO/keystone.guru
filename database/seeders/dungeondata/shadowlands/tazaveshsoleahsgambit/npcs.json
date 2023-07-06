@@ -1,0 +1,590 @@
+[
+    {
+        "id": 175546,
+        "dungeon_id": 37,
+        "classification_id": 3,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 100063,
+        "name": "Timecap'n Hooktail",
+        "base_health": 1342215,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2197,
+                "mapping_version_id": 37,
+                "npc_id": 175546,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 175663,
+        "dungeon_id": 37,
+        "classification_id": 3,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 100546,
+        "name": "Hylbrande",
+        "base_health": 1278300,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2198,
+                "mapping_version_id": 37,
+                "npc_id": 175663,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 176302,
+        "dungeon_id": 37,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101459,
+        "name": "Corsair Cannoneer",
+        "base_health": 29084,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2199,
+                "mapping_version_id": 37,
+                "npc_id": 176302,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 177269,
+        "dungeon_id": 37,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 100737,
+        "name": "So'leah",
+        "base_health": 2028237,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2200,
+                "mapping_version_id": 37,
+                "npc_id": 177269,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 177500,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81324,
+        "name": "Corsair Brute",
+        "base_health": 47988,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2201,
+                "mapping_version_id": 37,
+                "npc_id": 177500,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178133,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101787,
+        "name": "Murkbrine Wavejumper",
+        "base_health": 170172,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2202,
+                "mapping_version_id": 37,
+                "npc_id": 178133,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178139,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101785,
+        "name": "Murkbrine Shellcrusher",
+        "base_health": 191443,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2203,
+                "mapping_version_id": 37,
+                "npc_id": 178139,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178141,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 4,
+        "display_id": 101788,
+        "name": "Murkbrine Scalebinder",
+        "base_health": 148900,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2204,
+                "mapping_version_id": 37,
+                "npc_id": 178141,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178142,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101789,
+        "name": "Murkbrine Fishmancer",
+        "base_health": 148900,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2205,
+                "mapping_version_id": 37,
+                "npc_id": 178142,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178163,
+        "dungeon_id": 37,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101786,
+        "name": "Murkbrine Shorerunner",
+        "base_health": 34034,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2206,
+                "mapping_version_id": 37,
+                "npc_id": 178163,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178165,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 101790,
+        "name": "Coastwalker Goliath",
+        "base_health": 425429,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2207,
+                "mapping_version_id": 37,
+                "npc_id": 178165,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178171,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 67358,
+        "name": "Stormforged Guardian",
+        "base_health": 306309,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2208,
+                "mapping_version_id": 37,
+                "npc_id": 178171,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 178435,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81279,
+        "name": "Corsair Brute",
+        "base_health": 21813,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2209,
+                "mapping_version_id": 37,
+                "npc_id": 178435,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 179367,
+        "dungeon_id": 37,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": 100055,
+        "name": "Scavenging Skrat",
+        "base_health": 29084,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2210,
+                "mapping_version_id": 37,
+                "npc_id": 179367,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 179386,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101464,
+        "name": "Corsair Officer",
+        "base_health": 212714,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2211,
+                "mapping_version_id": 37,
+                "npc_id": 179386,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 179388,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 101468,
+        "name": "Hourglass Tidesage",
+        "base_health": 191443,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2212,
+                "mapping_version_id": 37,
+                "npc_id": 179388,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 179399,
+        "dungeon_id": 37,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101469,
+        "name": "Drunk Pirate",
+        "base_health": 42543,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2213,
+                "mapping_version_id": 37,
+                "npc_id": 179399,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 180015,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101457,
+        "name": "Burly Deckhand",
+        "base_health": 255257,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2218,
+                "mapping_version_id": 37,
+                "npc_id": 180015,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 180429,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101668,
+        "name": "Adorned Starseer",
+        "base_health": 319072,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2220,
+                "mapping_version_id": 37,
+                "npc_id": 180429,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 180431,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 101669,
+        "name": "Focused Ritualist",
+        "base_health": 212714,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2221,
+                "mapping_version_id": 37,
+                "npc_id": 180431,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 180432,
+        "dungeon_id": 37,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 101670,
+        "name": "Devoted Accomplice",
+        "base_health": 233986,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 2222,
+                "mapping_version_id": 37,
+                "npc_id": 180432,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

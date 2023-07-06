@@ -1,19 +1,19 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
-$factions = isset($factions) ? $factions : \App\Models\Faction::all();
-$specializations = \App\Models\CharacterClassSpecialization::all();
-$classes = \App\Models\CharacterClass::with('specializations')->get();
-// @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-$racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id'])->get();
+/** @var $specializations \Illuminate\Support\Collection|\App\Models\CharacterClassSpecialization[] */
+/** @var $classes \Illuminate\Support\Collection|\App\Models\CharacterClass[] */
+/** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
+/** @var $allFactions \Illuminate\Support\Collection|\App\Models\Faction[] */
+
+$factions = $factions ?? $allFactions;
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
 'options' => [
-    'factions' => $factions,
-    'specializations' => $specializations,
-    'classDetails' => $classes,
-    'races' =>  $racesClasses,
-
+    'factions'         => $factions,
+    'specializations'  => $specializations,
+    'classDetails'     => $classes,
+    'races'            => $racesClasses,
 ]])
 
 @section('head')
@@ -21,7 +21,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->name) }}                               {
+        .{{ strtolower($faction->key) }}                                  {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -52,9 +52,9 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
                 if( isset($dungeonroute) ){ ?>
 
                 _oldFaction = '{{ $dungeonroute->faction_id }}';
-            _oldSpecializations = {!! $dungeonroute->specializations !!};
-            _oldClasses = {!! $dungeonroute->classes !!};
-            _oldRaces = {!! $dungeonroute->races !!};
+            _oldSpecializations = {!! $dungeonroute->specializations ?? collect() !!};
+            _oldClasses = {!! $dungeonroute->classes ?? collect() !!};
+            _oldRaces = {!! $dungeonroute->races ?? collect() !!};
 
             <?php } else {
                 // convert old values in a format we can read it in
@@ -81,14 +81,14 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 
 
             <?php
-            /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
-            if( isset($modal) ){ ?>
-            $('{{$modal}}').on('shown.bs.modal', function () {
-            <?php } ?>
-            let composition = _inlineManager.getInlineCode('common/group/composition');
-            composition._loadDungeonRouteDefaults();
+            /** If collapseSelector is set, only load this when we're actually opening the collapseSelector to speed up loading. */
+            if( isset($collapseSelector) ){ ?>
+            $('{{$collapseSelector}}').on('shown.bs.collapse', function () {
+                <?php } ?>
+                let composition = _inlineManager.getInlineCode('common/group/composition');
+                composition._loadDungeonRouteDefaults();
 
-            <?php if( isset($modal) ){ ?>
+                <?php if( isset($collapseSelector) ){ ?>
             });
             <?php } ?>
 
@@ -101,18 +101,18 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
 @endsection
 
 <div class="row">
-    <div class="col-xl-2 offset-xl-5">
+    <div class="col-md-4 offset-md-4">
         <div class="form-group">
-            {!! Form::label('faction_id', __('Faction')) !!}
+            {!! Form::label('faction_id', __('views/common.group.composition.faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
             {!! Form::select('faction_id', $factions->pluck('name', 'id'), old('faction_id'), ['class' => 'form-control selectpicker']) !!}
         </div>
     </div>
     @isset($dungeonroute)
-        <div class="offset-lg-4 col-lg-1">
+        <div class="col-md-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
-                    <i class="fas fa-undo"></i> {{ __('Undo') }}
+                    <i class="fas fa-undo"></i> {{ __('views/common.group.composition.undo') }}
                 </button>
             </div>
         </div>
@@ -123,7 +123,7 @@ $racesClasses = \App\Models\CharacterRace::with(['classes:character_classes.id']
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
-            {!! Form::label('specialization[]', __('Party member #' . $i)) !!}
+            {!! Form::label('specialization[]', sprintf(__('views/common.group.composition.party_member_nr'), $i)) !!}
             <select data-live-search="true" name="specialization[]"
                     class="form-control selectpicker specializationselect" data-id="{{$i}}">
 

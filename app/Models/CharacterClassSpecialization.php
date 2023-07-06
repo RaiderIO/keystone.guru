@@ -1,25 +1,36 @@
 <?php
 
 namespace App\Models;
+
+use App\Models\Traits\HasIconFile;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
+
 /**
+ * @property int $id
+ * @property string $key
  * @property string $name
  * @property int $character_class_id
  * @property int $icon_file_id
- * @property \Illuminate\Support\Collection $specializations
+ * @property Collection $specializations
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class CharacterClassSpecialization extends IconFileModel
+class CharacterClassSpecialization extends CacheModel
 {
+    use HasIconFile;
+
     public $timestamps = false;
     public $hidden = ['icon_file_id', 'pivot'];
+    public $fillable = ['key', 'name', 'character_class_id', 'icon_file_id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function class()
+    public function class(): BelongsTo
     {
-        return $this->belongsTo('App\Models\CharacterClass');
+        return $this->belongsTo(CharacterClass::class);
     }
 
     public static function boot()

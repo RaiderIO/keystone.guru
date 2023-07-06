@@ -16,7 +16,7 @@ class AddKillZoneMapState extends MapObjectMapState {
         $('.leaflet-draw-draw-killzone')[0].click();
     }
 
-    stop(){
+    stop() {
         console.assert(this instanceof AddKillZoneMapState, 'this is not a AddKillZoneMapState', this);
         this.sourceMapObject.floor_id = getState().getCurrentFloor().id;
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
+ * @property int $dungeon_id
  * @property int $model_id
  * @property string $model_class
  * @property string $before_model
@@ -23,8 +24,12 @@ class MappingChangeLog extends Model
 {
     use HasGenericModelRelation;
 
-    protected $fillable = ['model_id', 'model_class', 'before_model', 'after_model'];
+    protected $fillable = ['dungeon_id', 'model_id', 'model_class', 'before_model', 'after_model'];
 
+    /**
+     * @param MappingCommitLog $mostRecentMappingCommitLog
+     * @return bool
+     */
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool
     {
         // If there is a more recent mapping change that we should update

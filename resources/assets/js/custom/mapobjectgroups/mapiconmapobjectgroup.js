@@ -27,7 +27,7 @@ class MapIconMapObjectGroup extends MapObjectGroup {
      * @inheritDoc
      */
     _createLayer(remoteMapObject) {
-        let layer = new LeafletMapIconMarker();
+        let layer = new LeafletIconMarker();
         layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         return layer;
     }

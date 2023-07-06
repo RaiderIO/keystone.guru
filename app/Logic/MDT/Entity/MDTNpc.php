@@ -4,97 +4,151 @@
 namespace App\Logic\MDT\Entity;
 
 
-class MDTNpc
+use Illuminate\Contracts\Support\Arrayable;
+
+class MDTNpc implements Arrayable
 {
     /** @var int */
-    private int $_index;
+    private int $index;
 
     /** @var array */
-    private array $_rawMdtNpc;
+    private array $rawMdtNpc;
 
     /** @var array */
-    private array $_clones;
+    private array $clones;
 
     /** @var int */
-    private int $_reaping;
-
-    /** @var int */
-    private int $_id = 0;
+    private int $id = 0;
 
     /** @var array */
-    private array $_spells = [];
+    private array $spells = [];
 
     /** @var float */
-    private float $_scale = 0.0;
+    private float $scale = 0.0;
+
+    /** @var bool */
+    private bool $stealthDetect = false;
 
     /** @var int */
-    private int $_countTeeming = 0;
+    private int $countTeeming = 0;
 
     /** @var int */
-    private int $_count = 0;
+    private int $count = 0;
 
     /** @var string */
-    private string $_name;
+    private string $name;
 
     /** @var int */
-    private int $_displayId = 0;
+    private int $displayId = 0;
 
     /** @var string */
-    private string $_creatureType;
+    private string $creatureType;
 
     /** @var int */
-    private int $_level = 0;
+    private int $level = 0;
 
     /** @var int */
-    private int $_health = 0;
+    private int $health = 0;
+
+    /** @var int|null */
+    private ?int $healthPercentage;
 
     /** @var array */
-    private array $_characteristics = [];
+    private array $characteristics = [];
 
     function __construct(int $index, array $rawMdtNpc)
     {
-        $this->_index = $index;
-        $this->_rawMdtNpc = $rawMdtNpc;
-        $this->_clones = $rawMdtNpc['clones'];
-        $this->_id = (int)$rawMdtNpc['id'];
-        $this->_spells = isset($rawMdtNpc['spells']) ? $rawMdtNpc['spells'] : [];
-        $this->_scale = (float)$rawMdtNpc['scale'];
-        $this->_countTeeming = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
-        $this->_count = (int)$rawMdtNpc['count'];
+        $this->index     = $index;
+        $this->rawMdtNpc = $rawMdtNpc;
+
+        // We need to do this ksort magic because php arrays that we get from Lua are in a random order - this makes it consistent
+        $this->recur_ksort($rawMdtNpc['clones']);
+        $this->clones = $rawMdtNpc['clones'];
+
+        // Correct clones that don't have a sublevel set
+        foreach ($this->clones as $index => $clone) {
+            if (!isset($clone['sublevel'])) {
+                $this->clones[$index]['sublevel'] = 1;
+            }
+        }
+        $this->id = (int)$rawMdtNpc['id'];
+
+        if (isset($rawMdtNpc['spells'])) {
+            // #1760
+//            $this->recur_ksort($rawMdtNpc['spells']);
+//            $this->spells = $rawMdtNpc['spells'];
+            $this->spells = [];
+        } else {
+            $this->spells = [];
+        }
+
+        $this->scale         = (float)$rawMdtNpc['scale'];
+        $this->stealthDetect = isset($rawMdtNpc['stealthDetect']) && $rawMdtNpc['stealthDetect'];
+        $this->countTeeming  = isset($rawMdtNpc['teemingCount']) ? (int)$rawMdtNpc['teemingCount'] : -1;
+        $this->count         = (int)$rawMdtNpc['count'];
         // May not always be set?
         if (isset($rawMdtNpc['name'])) {
-            $this->_name = $rawMdtNpc['name'];
+            $this->name = $rawMdtNpc['name'];
         }
-        $this->_displayId = (int)$rawMdtNpc['displayId'];
+        $this->displayId = (int)$rawMdtNpc['displayId'];
         // May not always be set?
         if (isset($rawMdtNpc['creatureType'])) {
-            $this->_creatureType = $rawMdtNpc['creatureType'];
+            $this->creatureType = $rawMdtNpc['creatureType'];
         }
-        $this->_level = (int)$rawMdtNpc['level'];
-        $this->_health = (int)$rawMdtNpc['health'];
-        $this->_characteristics = isset($rawMdtNpc['characteristics']) ? $rawMdtNpc['characteristics'] : [];
+        $this->level            = (int)$rawMdtNpc['level'];
+        $this->health           = (int)$rawMdtNpc['health'];
+        $this->healthPercentage = $rawMdtNpc['health_percentage'] ?? null;
+
+        if (isset($rawMdtNpc['characteristics'])) {
+            // #1761
+//            $this->recur_ksort($rawMdtNpc['characteristics']);
+//            $this->characteristics = $rawMdtNpc['characteristics'];
+            $this->characteristics = [];
+        } else {
+            $this->characteristics = [];
+        }
     }
 
     /**
+     * @param $array
      * @return bool
      */
-    public function isEmissary()
+    private function recur_ksort(&$array)
     {
-        return in_array($this->_id, [155432, 155433, 155434]);
+        foreach ($array as &$value) {
+            if (is_array($value)) $this->recur_ksort($value);
+        }
+        return ksort($array);
     }
 
     /**
      * @return bool
      */
-    public function isAwakened()
+    public function isEmissary(): bool
     {
-        return in_array($this->_id, [161244, 161243, 161124, 161241]);
+        return in_array($this->id, [155432, 155433, 155434]);
     }
 
     /**
      * @return bool
      */
-    public function isValid()
+    public function isAwakened(): bool
+    {
+        return in_array($this->id, [161244, 161243, 161124, 161241]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEncrypted(): bool
+    {
+        return in_array($this->id, [185680, 185683, 185685]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid(): bool
     {
         // Skip emissaries
         return !$this->isEmissary();
@@ -105,7 +159,7 @@ class MDTNpc
      */
     public function getIndex(): int
     {
-        return $this->_index;
+        return $this->index;
     }
 
     /**
@@ -113,7 +167,7 @@ class MDTNpc
      */
     public function getRawMdtNpc(): array
     {
-        return $this->_rawMdtNpc;
+        return $this->rawMdtNpc;
     }
 
     /**
@@ -121,15 +175,7 @@ class MDTNpc
      */
     public function getClones(): array
     {
-        return $this->_clones;
-    }
-
-    /**
-     * @return int
-     */
-    public function getReaping(): int
-    {
-        return $this->_reaping;
+        return $this->clones;
     }
 
     /**
@@ -137,7 +183,7 @@ class MDTNpc
      */
     public function getId(): int
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -145,7 +191,7 @@ class MDTNpc
      */
     public function getSpells(): array
     {
-        return $this->_spells;
+        return $this->spells;
     }
 
     /**
@@ -153,7 +199,15 @@ class MDTNpc
      */
     public function getScale(): float
     {
-        return $this->_scale;
+        return $this->scale;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getStealthDetect(): bool
+    {
+        return $this->stealthDetect;
     }
 
     /**
@@ -161,7 +215,7 @@ class MDTNpc
      */
     public function getCountTeeming(): int
     {
-        return $this->_countTeeming;
+        return $this->countTeeming;
     }
 
     /**
@@ -169,7 +223,7 @@ class MDTNpc
      */
     public function getCount(): int
     {
-        return $this->_count;
+        return $this->count;
     }
 
     /**
@@ -177,7 +231,7 @@ class MDTNpc
      */
     public function getName(): ?string
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -185,7 +239,7 @@ class MDTNpc
      */
     public function getDisplayId(): int
     {
-        return $this->_displayId;
+        return $this->displayId;
     }
 
     /**
@@ -193,7 +247,7 @@ class MDTNpc
      */
     public function getCreatureType(): ?string
     {
-        return $this->_creatureType;
+        return $this->creatureType;
     }
 
     /**
@@ -201,7 +255,7 @@ class MDTNpc
      */
     public function getLevel(): int
     {
-        return $this->_level;
+        return $this->level;
     }
 
     /**
@@ -209,7 +263,15 @@ class MDTNpc
      */
     public function getHealth(): int
     {
-        return $this->_health;
+        return $this->health;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHealthPercentage(): ?int
+    {
+        return $this->healthPercentage;
     }
 
     /**
@@ -217,6 +279,29 @@ class MDTNpc
      */
     public function getCharacteristics(): array
     {
-        return $this->_characteristics;
+        return $this->characteristics;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'index'           => $this->getIndex(),
+            'clones'          => $this->getClones(),
+            'id'              => $this->getId(),
+            'spells'          => $this->getSpells(),
+            'scale'           => $this->getScale(),
+            'stealthDetect'   => $this->getStealthDetect(),
+            'countTeeming'    => $this->getCountTeeming(),
+            'count'           => $this->getCount(),
+            'name'            => $this->getName(),
+            'displayId'       => $this->getDisplayId(),
+            'creatureType'    => $this->getCreatureType(),
+            'level'           => $this->getLevel(),
+            'health'          => $this->getHealth(),
+            'characteristics' => $this->getCharacteristics(),
+        ];
     }
 }

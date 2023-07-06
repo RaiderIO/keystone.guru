@@ -1,34 +1,45 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->dungeon->name])
-@section('header-title')
-    {{ $headerTitle }}
-@endsection
 <?php
 /**
- * @var $model \App\Models\Floor
+ * @var $floor \App\Models\Floor
  * @var $mapContext \App\Logic\MapContext\MapContextDungeon
+ * @var $mappingVersion \App\Models\Mapping\MappingVersion
  */
 ?>
+
+@extends('layouts.map', [
+    'showAds' => false,
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => sprintf(__('views/admin.floor.mapping.title'), __($floor->dungeon->name))
+])
+@section('header-title')
+    {{ sprintf(__('views/admin.floor.mapping.header'), __($floor->dungeon->name)) }}
+@endsection
 
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
+            'showAds' => false,
+            'dungeon' => $floor->dungeon,
+            'mappingVersion' => $mappingVersion,
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,
+            'floorId' => $floor->id,
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',
-                'killzone'
-            ]
-        ])
-
-        @include('common.maps.admineditsidebar', [
+                'killzone',
+                'killzonepath'
+            ],
             'show' => [
-                'sharing' => true,
-                'draw-settings' => true,
-                'route-settings' => true,
-                'route-publish' => true
-            ]
+                'header' => true,
+                'controls' => [
+                    'draw' => true,
+                    'enemyinfo' => true,
+                ],
+            ],
         ])
     </div>
 

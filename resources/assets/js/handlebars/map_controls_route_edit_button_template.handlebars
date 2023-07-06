@@ -1,10 +1,21 @@
-<div class="row no-gutters text-center h-100">
-    <div class="d-md-block d-none button_hotkey_label">
-        {{hotkey}}
-    </div>
-    <div class="col p-1 ml-1 mr-1" style="display: flex; justify-content: center; align-items: center;">
-        <div class="text-center">
-            <i class="fas {{ fa_class }} "></i> <span class="button-text">{{ text }} </span>
+<div class="row no-gutters" data-toggle="tooltip" data-placement="right"
+     title="{{title}}" data-html="true">
+    <div class="col btn
+        {{#ifCond btnType '!=' '' }}
+        {{ btnType }}
+    {{else}}
+            btn-info
+        {{/ifCond}}
+        ">
+        <div class="row no-gutters">
+            <div class="col-auto">
+                <i class="fas {{ fa_class }}"></i>
+            </div>
+            <div class="col">
+                <span class="map_controls_element_label_toggle" style="display: none;">
+                    {{ text }}
+                </span>
+            </div>
         </div>
     </div>
 </div>

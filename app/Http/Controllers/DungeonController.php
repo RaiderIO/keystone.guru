@@ -23,27 +23,22 @@ class DungeonController extends Controller
      * @return mixed
      * @throws Exception
      */
-    public function store($request, Dungeon $dungeon = null)
+    public function store(DungeonFormRequest $request, Dungeon $dungeon = null)
     {
+        $validated = $request->validated();
+
+        $validated['expansion_id'] = Expansion::where('shortname', Dungeon::findExpansionByKey($validated['key']))->firstOrFail()->id;
+
         if ($dungeon === null) {
-            $dungeon = new Dungeon();
+            $beforeDungeon = new Dungeon();
+            $dungeon       = Dungeon::create($validated);
+            $saveResult    = true;
+        } else {
+            $beforeDungeon = clone $dungeon;
+            $saveResult    = $dungeon->update($validated);
         }
 
-        $beforeDungeon = clone $dungeon;
-
-        /** @var Dungeon $dungeon */
-        // May not be set when editing
-//        $dungeon->expansion_id = $request->get('expansion_id');
-        $dungeon->zone_id = $request->get('zone_id');
-        $dungeon->name = $request->get('name');
-        $dungeon->key = $request->get('key');
-        $dungeon->enemy_forces_required = $request->get('enemy_forces_required');
-        $dungeon->enemy_forces_required_teeming = $request->get('enemy_forces_required_teeming');
-        $dungeon->timer_max_seconds = $request->get('timer_max_seconds');
-        $dungeon->active = $request->get('active', 0);
-
-        // Update or insert it
-        if ($dungeon->save()) {
+        if ($saveResult) {
             $this->mappingChanged($beforeDungeon, $dungeon);
         } else {
             abort(500, 'Unable to save dungeon');
@@ -57,9 +52,24 @@ class DungeonController extends Controller
      */
     public function new()
     {
+        $dungeons            = Dungeon::all()->keyBy('key');
+        $availableKeysSelect = collect();
+        foreach (Dungeon::ALL as $expansion => $dungeonKeys) {
+
+            $availableKeysForExpansion = collect();
+            foreach ($dungeonKeys as $dungeonKey) {
+                if (!isset($dungeons[$dungeonKey])) {
+                    $availableKeysForExpansion->put($dungeonKey, $dungeonKey);
+                }
+            }
+
+            if ($availableKeysForExpansion->isNotEmpty()) {
+                $availableKeysSelect->put(Expansion::ALL[$expansion], $availableKeysForExpansion);
+            }
+        }
+
         return view('admin.dungeon.edit', [
-            'expansions' => Expansion::all()->pluck('name', 'id'),
-            'headerTitle' => __('New dungeon')
+            'availableKeysSelect' => $availableKeysSelect,
         ]);
     }
 
@@ -72,8 +82,7 @@ class DungeonController extends Controller
     {
         return view('admin.dungeon.edit', [
             'expansions' => Expansion::all()->pluck('name', 'id'),
-            'model' => $dungeon,
-            'headerTitle' => __('Edit dungeon')
+            'dungeon'    => $dungeon,
         ]);
     }
 
@@ -89,7 +98,7 @@ class DungeonController extends Controller
         $dungeon = $this->store($request, $dungeon);
 
         // Message to the user
-        Session::flash('status', __('Dungeon updated'));
+        Session::flash('status', __('controller.dungeon.flash.dungeon_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon);
@@ -106,7 +115,7 @@ class DungeonController extends Controller
         $dungeon = $this->store($request);
 
         // Message to the user
-        Session::flash('status', __('Dungeon created'));
+        Session::flash('status', __('controller.dungeon.flash.dungeon_created'));
 
         return redirect()->route('admin.dungeon.edit', ["dungeon" => $dungeon]);
     }
@@ -118,6 +127,12 @@ class DungeonController extends Controller
      */
     public function list()
     {
-        return view('admin.dungeon.list', ['models' => Dungeon::orderByDesc('active')->get()]);
+        return view('admin.dungeon.list', [
+            'models' => Dungeon::select('dungeons.*')
+                ->join('expansions', 'expansions.id', 'dungeons.expansion_id')
+                ->orderByDesc('expansions.released_at')
+                ->orderBy('dungeons.name')
+                ->get(),
+        ]);
     }
 }

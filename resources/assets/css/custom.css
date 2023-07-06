@@ -18,162 +18,21 @@
     background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
 }
 
-/** BOOTSTRAP **/
-.cursor-pointer {
-    cursor: pointer !important;
-}
-
-@media (max-width: 576px) and (orientation: landscape) {
-    .hide-on-landscape {
-        display: none;
-    }
-}
-
-@media (max-width: 576px) and (orientation: portrait) {
-    .hide-on-portrait {
-        display: none;
-    }
-}
-
-@media (min-width: 576px) and (orientation: landscape) {
-    .hide-on-landscape-sm {
-        display: none;
-    }
-}
-
-@media (min-width: 576px) and (orientation: portrait) {
-    .hide-on-portrait-sm {
-        display: none;
-    }
-}
-
-@media (min-width: 768px) and (orientation: landscape) {
-    .hide-on-landscape-md {
-        display: none;
-    }
-}
-
-@media (min-width: 768px) and (orientation: portrait) {
-    .hide-on-portrait-md {
-        display: none;
-    }
-}
-
-@media (min-width: 992px) and (orientation: landscape) {
-    .hide-on-landscape-lg {
-        display: none;
-    }
-}
-
-@media (min-width: 992px) and (orientation: portrait) {
-    .hide-on-portrait-lg {
-        display: none;
-    }
-}
-
-@media (min-width: 1200px) and (orientation: landscape) {
-    .hide-on-landscape-xl {
-        display: none;
-    }
-}
-
-@media (min-width: 1200px) and (orientation: portrait) {
-    .hide-on-portrait-xl {
-        display: none;
-    }
-}
-
-@media (min-width: 1440px) {
-    .container_wide {
-        max-width: 1400px;
-    }
-}
-
-@media (min-width: 1800px) {
-    .container_wide {
-        max-width: 1750px;
-    }
-}
-
-@media (min-width: 1440px) {
-    .menu_sidebar {
-        -ms-flex: 0 0 230px;
-        flex: 0 0 230px;
-    }
-}
-
-@media (max-width: 690px) {
-    .my-sidebar {
-        display: none;
-    }
-}
-
-.left_checkbox {
-    width: 40px;
-}
-
-.navbar-default .navbar-nav > li > .btn-success > a:hover, .navbar-default .navbar-nav > li > .btn-success > a:focus {
-    background-color: #20895e;
-}
-
-.navbar-default .navbar-nav > li > a.btn-success {
-    color: #FFF;
-}
-
-.navbar-default .navbar-nav > li > a.btn-success:hover {
-    background-color: #20895E;
-}
-
-.panel-heading {
-    font-size: 28px;
-}
-
-.panel-heading-wide {
-    text-align: center;
-}
-
-.alert.alert-danger ul {
-    margin-bottom: 0;
-}
-
-/* Override this so that long race names fit in their group selection boxes */
-.dropdown-item {
-    padding: 0.25em 0.9em;
-}
-
-/* Fixed messages always on top */
-.fixed-bottom {
-    z-index: 1000;
-}
-
-/* Floating top header should be top, but not too top */
-.fixed-top {
-    z-index: 800 !important;
-}
-
-.alert_fixed_footer {
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;
 }
 
 .select_icon {
-    width: 24px;
-    border-radius: 12px;
-    max-height: 24px;
+    width: 24px !important;
+    border-radius: 12px !important;
+    height: 24px !important;
 }
 
 .display_icon {
     width: 32px;
     border-radius: 16px;
-    max-height: 32px;
-}
-
-.class_icon {
-    background-color: #2B3E50;
+    height: 32px;
 }
 
 .default_table {
@@ -203,71 +62,136 @@
     cursor: default !important;
 }
 
-/** OWL.CAROUSEL */
-.routes_table .owl-nav {
+ul.light-slider {
+    list-style: none outside none;
+    padding-left: 0;
+    margin-bottom:0;
+}
+.light-slider li {
+    display: block;
+    float: left;
+    margin-right: 6px;
+    cursor:pointer;
+}
+.light-slider img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+/** Light Slider */
+@media (min-width: 1200px) {
+    /* Container is required for the page load to have a proper width */
+    .card_dungeonroute .single,
+    .card_dungeonroute .light-slider-container,
+    .card_dungeonroute .multiple,
+    .card_dungeonroute img.thumbnail,
+    .card_dungeonroute img.dungeon {
+        width: 288px;
+        height: 192px;
+    }
+}
+
+/*.discover img.dungeon {*/
+/*    max-width: 192px;*/
+/*    max-height: 128px;*/
+/*}*/
+
+.discover .select_icon.class_icon.selectable,
+.discover .grid_dungeon.selectable {
+    cursor: pointer;
+}
+
+.discover .select_icon.class_icon.selectable.selected,
+.discover .grid_dungeon.selectable.selected {
+    border: 0.125rem solid red;
+    border-radius: 5px;
+}
+
+.discover .grid_dungeon.selectable.selected {
+    padding: 0.375rem !important;
+}
+
+/** Prevents the title from jumping when it gets selected */
+.discover .grid_dungeon.selectable.selected h5 {
+    padding-right: 0.25rem !important
+}
+
+
+.discover .card-img-caption {
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+.discover .card-img-caption .card-img-top {
+    z-index: 0;
+}
+
+.discover .card-img-caption .card-text {
+    text-align: center;
+    width: 100%;
+    margin: 6% 0;
+    position: absolute;
+    z-index: 1;
+}
+
+.discover .card_dungeonroute .description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.discover .card_dungeonroute.dungeon_image .header,
+.discover .card_dungeonroute.dungeon_image .description,
+.discover .card_dungeonroute.dungeon_image .enemy_forces {
+    text-shadow: #000 1px 1px;
+}
+
+@media (min-width: 1200px) {
+    .discover .card_dungeonroute,
+    .discover .card_dungeonroute .col {
+        max-height: 192px;
+    }
+
+    .discover .card_dungeonroute .header {
+        overflow: hidden;
+    }
+
+    .discover .card_dungeonroute .description,
+    .discover .card_dungeonroute .description .col {
+        max-height: 80px;
+    }
+}
+
+/** Prevent descriptions from taking on a huge height if people enter only */
+@media (max-width: 1200px) {
+    .discover .card_dungeonroute .description {
+        max-height: 250px;
+    }
+}
+
+.discover #route_list_overlay {
+    background: rgba(0, 0, 0, 0.2);
     position: absolute;
     top: 0;
+    bottom: 0;
+    right: 0;
     left: 0;
-    width: 192px;
-    height: 128px;
 }
 
-.routes_table .owl-carousel .owl-nav button {
-    width: 48px;
-    height: 128px;
-    font-size: 2em;
-    opacity: 0;
+.affix_group_row.current {
+    border: red 2px solid;
+    border-radius: 3px;
 }
 
-.routes_table .owl-carousel .owl-nav button:focus {
-    outline: none;
-}
-
-.routes_table .owl-carousel .owl-nav button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    opacity: 1;
-}
-
-.routes_table .owl-carousel .owl-nav button.owl-prev {
-    margin-right: 48px;
-    text-align: left;
-    padding-left: 15px !important;
-}
-
-.routes_table .owl-carousel .owl-nav button.owl-next {
-    margin-left: 48px;
-    text-align: right;
-    padding-right: 15px !important;
-}
-
-.routes_table .owl-carousel {
+.routes_table .light-slider-container {
     width: 192px;
     height: 128px;
 }
 
 @media ( max-width: 600px) {
-    .routes_table .owl-carousel {
+    .routes_table .light-slider-container {
         width: 96px;
         height: 64px;
-    }
-
-    .routes_table .owl-carousel .owl-nav button {
-        width: 48px;
-        height: 64px;
-        font-size: 1em;
-        opacity: 0;
-    }
-
-    .routes_table .owl-carousel .owl-nav button.owl-prev {
-        margin-right: 0;
-        text-align: left;
-        padding-left: 7px !important;
-    }
-
-    .routes_table .owl-carousel .owl-nav button.owl-next {
-        margin-left: 0;
-        text-align: right;
-        padding-right: 7px !important;
     }
 }
 
@@ -287,35 +211,30 @@
     align-items: center;
 }
 
-#affixes_list_custom.affix_list {
+.affix_list {
     border: 1px solid #ccd0d2;
     border-radius: 4px;
 }
 
-#affixes_list_custom .affix_row {
+.affix_list .affix_row {
     padding-right: 10px;
 }
 
-#affixes_list_custom .affix_list_row {
+.affix_list .affix_list_row {
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-#affixes_list_custom .affix_list_row_selected {
-    background-color: #2B3E50;
-}
-
-#affixes_list_custom .affix_list_row_disabled {
+.affix_list .affix_list_row_disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
 
-#affixes_list_custom .affix_list_row:hover {
-    background-color: #2B3E50;
+.affix_list .affix_list_row:hover {
     cursor: pointer;
 }
 
-#affixes_list_custom .affixselect {
+.affix_list .affixselect {
     height: 100px;
 }
 
@@ -323,22 +242,33 @@
     margin-right: 16px;
 }
 
+.affixes_overview_table tr.timewalking.legion {
+    background-image: url('../images/dungeons/legion/wallpaper.jpg');
+    background-position-x: center;
+    background-position-y: -437px;
+}
+
 .affixes_overview_table td {
     padding: 0;
 }
 
-.affixes_overview_table .affix_row {
-    padding: 5px;
+.affixes_overview_table .table_row.even.unconfirmed {
+    background-color: rgba(255, 165, 0, 0.7);
 }
 
-.affixes_overview_table .last_column {
-    border-left: orange 3px solid;
-    border-right: orange 3px solid;
-    background-color: #ffa500bb;
+.affixes_overview_table .table_row.odd.unconfirmed {
+    background-color: rgba(255, 165, 0, 0.6);
+}
+
+.affixes_overview_table .affix_row {
+    padding: 6px;
+}
+
+.affixes_overview_table .last_column:not(.current_week) {
+    padding-left: 8px;
 }
 
 .affixes_overview_table .last_column.first_row {
-    border-top: orange 3px solid;
     border-top-right-radius: 5px;
 }
 
@@ -352,41 +282,48 @@
 }
 
 .affixes_overview_table .last_column.last_row {
-    border-bottom: orange 3px solid;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
-.affixes_overview_table .current_week {
-    border-top: rgb(235, 235, 235) 3px solid !important;
-    border-bottom: rgb(235, 235, 235) 3px solid !important;
-    background-color: #2B3E50;
-}
-
 .affixes_overview_table .current_week.first_column {
-    border-left: rgb(235, 235, 235) 3px solid;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
 }
 
 .affixes_overview_table .current_week.last_column {
-    border-right: rgb(235, 235, 235) 3px solid;
     border-left: none; /* Disable overlapping borders when both rows overlap */
     padding-left: 8px; /* Compensation for the missing border */
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 
-#team_members_table .dropdown.bootstrap-select .btn {
-    background-color: #4E5D6C;
-    color: #FFF;
-    border: 1px solid #2B3E5066;
-}
-
-#team_members_table .dropdown.bootstrap-select {
-    background-color: #4E5D6C;
-}
-
 .tag.edit {
     cursor: pointer;
+}
+
+.dungeon_wallpaper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+}
+
+.discover_panel {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+#dungeonroute_coverage_affixgroup_table .covered {
+    background-color: #7efc7e11;
+}
+
+#dungeonroute_coverage_affixgroup_table .covered_warning {
+    background-color: #fcc57e11;
 }

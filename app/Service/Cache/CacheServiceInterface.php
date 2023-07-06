@@ -5,7 +5,11 @@ namespace App\Service\Cache;
 
 interface CacheServiceInterface
 {
-    public function getOtherwiseSet(string $key, $closure, $ttl = null);
+    public function setCacheEnabled(bool $cacheEnabled): self;
+
+    public function rememberWhen(bool $condition, string $key, $value, $ttl = null);
+
+    public function remember(string $key, $value, $ttl = null);
 
     public function get(string $key);
 

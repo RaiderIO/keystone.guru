@@ -1,0 +1,3066 @@
+[
+    {
+        "id": 126497,
+        "dungeon_id": 15,
+        "classification_id": 0,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": 4959,
+        "name": "Shiprat",
+        "base_health": 5,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8811,
+                "mapping_version_id": 157,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8595,
+                "mapping_version_id": 149,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8246,
+                "mapping_version_id": 141,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7859,
+                "mapping_version_id": 135,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7295,
+                "mapping_version_id": 125,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6969,
+                "mapping_version_id": 120,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6175,
+                "mapping_version_id": 105,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 922,
+                "mapping_version_id": 15,
+                "npc_id": 126497,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126832,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80382,
+        "name": "Skycap'n Kragg",
+        "base_health": 6916035,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8783,
+                "mapping_version_id": 157,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8567,
+                "mapping_version_id": 149,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8247,
+                "mapping_version_id": 141,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7860,
+                "mapping_version_id": 135,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7296,
+                "mapping_version_id": 125,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6970,
+                "mapping_version_id": 120,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6176,
+                "mapping_version_id": 105,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 923,
+                "mapping_version_id": 15,
+                "npc_id": 126832,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126845,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80532,
+        "name": "Captain Jolly",
+        "base_health": 4347222,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8798,
+                "mapping_version_id": 157,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8582,
+                "mapping_version_id": 149,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8248,
+                "mapping_version_id": 141,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7861,
+                "mapping_version_id": 135,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7297,
+                "mapping_version_id": 125,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6971,
+                "mapping_version_id": 120,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6177,
+                "mapping_version_id": 105,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 924,
+                "mapping_version_id": 15,
+                "npc_id": 126845,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126847,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81060,
+        "name": "Captain Raoul",
+        "base_health": 5335227,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8797,
+                "mapping_version_id": 157,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8581,
+                "mapping_version_id": 149,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8249,
+                "mapping_version_id": 141,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7862,
+                "mapping_version_id": 135,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7298,
+                "mapping_version_id": 125,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6972,
+                "mapping_version_id": 120,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6178,
+                "mapping_version_id": 105,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 925,
+                "mapping_version_id": 15,
+                "npc_id": 126847,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126848,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80346,
+        "name": "Captain Eudora",
+        "base_health": 4940025,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8796,
+                "mapping_version_id": 157,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8580,
+                "mapping_version_id": 149,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8250,
+                "mapping_version_id": 141,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7863,
+                "mapping_version_id": 135,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7299,
+                "mapping_version_id": 125,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6973,
+                "mapping_version_id": 120,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6179,
+                "mapping_version_id": 105,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 926,
+                "mapping_version_id": 15,
+                "npc_id": 126848,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126918,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 81254,
+        "name": "Irontide Crackshot",
+        "base_health": 889545,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8779,
+                "mapping_version_id": 157,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8563,
+                "mapping_version_id": 149,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8251,
+                "mapping_version_id": 141,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7864,
+                "mapping_version_id": 135,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7300,
+                "mapping_version_id": 125,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6974,
+                "mapping_version_id": 120,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6180,
+                "mapping_version_id": 105,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 927,
+                "mapping_version_id": 15,
+                "npc_id": 126918,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126919,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 79077,
+        "name": "Irontide Stormcaller",
+        "base_health": 711637,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8803,
+                "mapping_version_id": 157,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8587,
+                "mapping_version_id": 149,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8252,
+                "mapping_version_id": 141,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7865,
+                "mapping_version_id": 135,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7301,
+                "mapping_version_id": 125,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6975,
+                "mapping_version_id": 120,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6181,
+                "mapping_version_id": 105,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 928,
+                "mapping_version_id": 15,
+                "npc_id": 126919,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126928,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81253,
+        "name": "Irontide Corsair",
+        "base_health": 988383,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8780,
+                "mapping_version_id": 157,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8564,
+                "mapping_version_id": 149,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8253,
+                "mapping_version_id": 141,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7866,
+                "mapping_version_id": 135,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7302,
+                "mapping_version_id": 125,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6976,
+                "mapping_version_id": 120,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6182,
+                "mapping_version_id": 105,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 929,
+                "mapping_version_id": 15,
+                "npc_id": 126928,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126969,
+        "dungeon_id": 15,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 55657,
+        "name": "Trothak",
+        "base_health": 6916035,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8802,
+                "mapping_version_id": 157,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8586,
+                "mapping_version_id": 149,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8254,
+                "mapping_version_id": 141,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7867,
+                "mapping_version_id": 135,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7303,
+                "mapping_version_id": 125,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6977,
+                "mapping_version_id": 120,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6183,
+                "mapping_version_id": 105,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 930,
+                "mapping_version_id": 15,
+                "npc_id": 126969,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 126983,
+        "dungeon_id": 15,
+        "classification_id": 4,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80841,
+        "name": "Harlan Sweete",
+        "base_health": 9880050,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8806,
+                "mapping_version_id": 157,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8590,
+                "mapping_version_id": 149,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8255,
+                "mapping_version_id": 141,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7868,
+                "mapping_version_id": 135,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7304,
+                "mapping_version_id": 125,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6978,
+                "mapping_version_id": 120,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6184,
+                "mapping_version_id": 105,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 931,
+                "mapping_version_id": 15,
+                "npc_id": 126983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 127106,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81286,
+        "name": "Irontide Officer",
+        "base_health": 1581412,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8805,
+                "mapping_version_id": 157,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8589,
+                "mapping_version_id": 149,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8256,
+                "mapping_version_id": 141,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7869,
+                "mapping_version_id": 135,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7305,
+                "mapping_version_id": 125,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6979,
+                "mapping_version_id": 120,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6185,
+                "mapping_version_id": 105,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 932,
+                "mapping_version_id": 15,
+                "npc_id": 127106,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 127111,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81279,
+        "name": "Irontide Oarsman",
+        "base_health": 1383736,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8785,
+                "mapping_version_id": 157,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8569,
+                "mapping_version_id": 149,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8257,
+                "mapping_version_id": 141,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7870,
+                "mapping_version_id": 135,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7306,
+                "mapping_version_id": 125,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6980,
+                "mapping_version_id": 120,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6186,
+                "mapping_version_id": 105,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 933,
+                "mapping_version_id": 15,
+                "npc_id": 127111,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 127119,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 78623,
+        "name": "Freehold Deckhand",
+        "base_health": 197676,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8808,
+                "mapping_version_id": 157,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8592,
+                "mapping_version_id": 149,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8258,
+                "mapping_version_id": 141,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7871,
+                "mapping_version_id": 135,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7307,
+                "mapping_version_id": 125,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6981,
+                "mapping_version_id": 120,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6187,
+                "mapping_version_id": 105,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 934,
+                "mapping_version_id": 15,
+                "npc_id": 127119,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 127124,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 79066,
+        "name": "Freehold Barhand",
+        "base_health": 148258,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8810,
+                "mapping_version_id": 157,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8594,
+                "mapping_version_id": 149,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8259,
+                "mapping_version_id": 141,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7872,
+                "mapping_version_id": 135,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7308,
+                "mapping_version_id": 125,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6982,
+                "mapping_version_id": 120,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6188,
+                "mapping_version_id": 105,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 935,
+                "mapping_version_id": 15,
+                "npc_id": 127124,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 128551,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 30221,
+        "name": "Irontide Mastiff",
+        "base_health": 790706,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8778,
+                "mapping_version_id": 157,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8562,
+                "mapping_version_id": 149,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8260,
+                "mapping_version_id": 141,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7873,
+                "mapping_version_id": 135,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7309,
+                "mapping_version_id": 125,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6983,
+                "mapping_version_id": 120,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6189,
+                "mapping_version_id": 105,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 936,
+                "mapping_version_id": 15,
+                "npc_id": 128551,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129526,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80322,
+        "name": "Bilge Rat Swabby",
+        "base_health": 889545,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8807,
+                "mapping_version_id": 157,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8591,
+                "mapping_version_id": 149,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8261,
+                "mapping_version_id": 141,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7874,
+                "mapping_version_id": 135,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7310,
+                "mapping_version_id": 125,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6984,
+                "mapping_version_id": 120,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6190,
+                "mapping_version_id": 105,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 937,
+                "mapping_version_id": 15,
+                "npc_id": 129526,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129527,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81424,
+        "name": "Bilge Rat Buccaneer",
+        "base_health": 988383,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8792,
+                "mapping_version_id": 157,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8576,
+                "mapping_version_id": 149,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8262,
+                "mapping_version_id": 141,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7875,
+                "mapping_version_id": 135,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7311,
+                "mapping_version_id": 125,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6985,
+                "mapping_version_id": 120,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6191,
+                "mapping_version_id": 105,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 938,
+                "mapping_version_id": 15,
+                "npc_id": 129527,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129529,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80380,
+        "name": "Blacktooth Scrapper",
+        "base_health": 1087222,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8790,
+                "mapping_version_id": 157,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8574,
+                "mapping_version_id": 149,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8263,
+                "mapping_version_id": 141,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7876,
+                "mapping_version_id": 135,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7312,
+                "mapping_version_id": 125,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6986,
+                "mapping_version_id": 120,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6192,
+                "mapping_version_id": 105,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 939,
+                "mapping_version_id": 15,
+                "npc_id": 129529,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129547,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81207,
+        "name": "Blacktooth Knuckleduster",
+        "base_health": 1186059,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8794,
+                "mapping_version_id": 157,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8578,
+                "mapping_version_id": 149,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8264,
+                "mapping_version_id": 141,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7877,
+                "mapping_version_id": 135,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7313,
+                "mapping_version_id": 125,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6987,
+                "mapping_version_id": 120,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6193,
+                "mapping_version_id": 105,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 940,
+                "mapping_version_id": 15,
+                "npc_id": 129547,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129548,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80389,
+        "name": "Blacktooth Brute",
+        "base_health": 988383,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8786,
+                "mapping_version_id": 157,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8570,
+                "mapping_version_id": 149,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8265,
+                "mapping_version_id": 141,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7878,
+                "mapping_version_id": 135,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7314,
+                "mapping_version_id": 125,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6988,
+                "mapping_version_id": 120,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6194,
+                "mapping_version_id": 105,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 941,
+                "mapping_version_id": 15,
+                "npc_id": 129548,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129550,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 87973,
+        "name": "Bilge Rat Padfoot",
+        "base_health": 790706,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8789,
+                "mapping_version_id": 157,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8573,
+                "mapping_version_id": 149,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8266,
+                "mapping_version_id": 141,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7879,
+                "mapping_version_id": 135,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7315,
+                "mapping_version_id": 125,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6989,
+                "mapping_version_id": 120,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6195,
+                "mapping_version_id": 105,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 942,
+                "mapping_version_id": 15,
+                "npc_id": 129550,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129559,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80339,
+        "name": "Cutwater Duelist",
+        "base_health": 889545,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8784,
+                "mapping_version_id": 157,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8568,
+                "mapping_version_id": 149,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8267,
+                "mapping_version_id": 141,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7880,
+                "mapping_version_id": 135,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7316,
+                "mapping_version_id": 125,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6990,
+                "mapping_version_id": 120,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6196,
+                "mapping_version_id": 105,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 943,
+                "mapping_version_id": 15,
+                "npc_id": 129559,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129598,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 88571,
+        "name": "Freehold Pack Mule",
+        "base_health": 197676,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8782,
+                "mapping_version_id": 157,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8566,
+                "mapping_version_id": 149,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8268,
+                "mapping_version_id": 141,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7881,
+                "mapping_version_id": 135,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7317,
+                "mapping_version_id": 125,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6991,
+                "mapping_version_id": 120,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6197,
+                "mapping_version_id": 105,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 944,
+                "mapping_version_id": 15,
+                "npc_id": 129598,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129599,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80335,
+        "name": "Cutwater Knife Juggler",
+        "base_health": 790706,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8795,
+                "mapping_version_id": 157,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8579,
+                "mapping_version_id": 149,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8269,
+                "mapping_version_id": 141,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7882,
+                "mapping_version_id": 135,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7318,
+                "mapping_version_id": 125,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6992,
+                "mapping_version_id": 120,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6198,
+                "mapping_version_id": 105,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 945,
+                "mapping_version_id": 15,
+                "npc_id": 129599,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129600,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 80475,
+        "name": "Bilge Rat Brinescale",
+        "base_health": 632566,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8793,
+                "mapping_version_id": 157,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8577,
+                "mapping_version_id": 149,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8270,
+                "mapping_version_id": 141,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7883,
+                "mapping_version_id": 135,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7319,
+                "mapping_version_id": 125,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6993,
+                "mapping_version_id": 120,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6199,
+                "mapping_version_id": 105,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 946,
+                "mapping_version_id": 15,
+                "npc_id": 129600,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129601,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80343,
+        "name": "Cutwater Harpooner",
+        "base_health": 988383,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8799,
+                "mapping_version_id": 157,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8583,
+                "mapping_version_id": 149,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8271,
+                "mapping_version_id": 141,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7884,
+                "mapping_version_id": 135,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7320,
+                "mapping_version_id": 125,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6994,
+                "mapping_version_id": 120,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6200,
+                "mapping_version_id": 105,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 947,
+                "mapping_version_id": 15,
+                "npc_id": 129601,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129602,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81224,
+        "name": "Irontide Enforcer",
+        "base_health": 1581412,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8777,
+                "mapping_version_id": 157,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8561,
+                "mapping_version_id": 149,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8272,
+                "mapping_version_id": 141,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7885,
+                "mapping_version_id": 135,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7321,
+                "mapping_version_id": 125,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6995,
+                "mapping_version_id": 120,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6201,
+                "mapping_version_id": 105,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 948,
+                "mapping_version_id": 15,
+                "npc_id": 129602,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129699,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 80792,
+        "name": "Ludwig Von Tortollan",
+        "base_health": 3261664,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8801,
+                "mapping_version_id": 157,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8585,
+                "mapping_version_id": 149,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8273,
+                "mapping_version_id": 141,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7886,
+                "mapping_version_id": 135,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7322,
+                "mapping_version_id": 125,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6996,
+                "mapping_version_id": 120,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6202,
+                "mapping_version_id": 105,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 949,
+                "mapping_version_id": 15,
+                "npc_id": 129699,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129788,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81255,
+        "name": "Irontide Bonesaw",
+        "base_health": 711637,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8781,
+                "mapping_version_id": 157,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8565,
+                "mapping_version_id": 149,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8274,
+                "mapping_version_id": 141,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7887,
+                "mapping_version_id": 135,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7323,
+                "mapping_version_id": 125,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6997,
+                "mapping_version_id": 120,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6203,
+                "mapping_version_id": 105,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 950,
+                "mapping_version_id": 15,
+                "npc_id": 129788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130011,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 79069,
+        "name": "Irontide Buccaneer",
+        "base_health": 1087222,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8791,
+                "mapping_version_id": 157,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8575,
+                "mapping_version_id": 149,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8275,
+                "mapping_version_id": 141,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7888,
+                "mapping_version_id": 135,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7324,
+                "mapping_version_id": 125,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6998,
+                "mapping_version_id": 120,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6204,
+                "mapping_version_id": 105,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 951,
+                "mapping_version_id": 15,
+                "npc_id": 130011,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130012,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81507,
+        "name": "Irontide Ravager",
+        "base_health": 988383,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8804,
+                "mapping_version_id": 157,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8588,
+                "mapping_version_id": 149,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8276,
+                "mapping_version_id": 141,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7889,
+                "mapping_version_id": 135,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7325,
+                "mapping_version_id": 125,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6999,
+                "mapping_version_id": 120,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6205,
+                "mapping_version_id": 105,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 952,
+                "mapping_version_id": 15,
+                "npc_id": 130012,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130024,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 81400,
+        "name": "Soggy Shiprat",
+        "base_health": 148258,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [
+            {
+                "id": 13,
+                "npc_id": 130024,
+                "whitelist_npc_id": 130024
+            }
+        ],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8788,
+                "mapping_version_id": 157,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8572,
+                "mapping_version_id": 149,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8277,
+                "mapping_version_id": 141,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7890,
+                "mapping_version_id": 135,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7326,
+                "mapping_version_id": 125,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7000,
+                "mapping_version_id": 120,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6206,
+                "mapping_version_id": 105,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 953,
+                "mapping_version_id": 15,
+                "npc_id": 130024,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130400,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 68059,
+        "name": "Irontide Crusher",
+        "base_health": 1976766,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [
+            {
+                "id": 15,
+                "npc_id": 130400,
+                "whitelist_npc_id": 130400
+            }
+        ],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8800,
+                "mapping_version_id": 157,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8584,
+                "mapping_version_id": 149,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8278,
+                "mapping_version_id": 141,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7891,
+                "mapping_version_id": 135,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7327,
+                "mapping_version_id": 125,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7001,
+                "mapping_version_id": 120,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6207,
+                "mapping_version_id": 105,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 954,
+                "mapping_version_id": 15,
+                "npc_id": 130400,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130404,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 87975,
+        "name": "Vermin Trapper",
+        "base_health": 1581412,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8787,
+                "mapping_version_id": 157,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8571,
+                "mapping_version_id": 149,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8279,
+                "mapping_version_id": 141,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7892,
+                "mapping_version_id": 135,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7328,
+                "mapping_version_id": 125,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7002,
+                "mapping_version_id": 120,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6208,
+                "mapping_version_id": 105,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 955,
+                "mapping_version_id": 15,
+                "npc_id": 130404,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130521,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 79064,
+        "name": "Freehold Deckhand",
+        "base_health": 71528,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8280,
+                "mapping_version_id": 141,
+                "npc_id": 130521,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7893,
+                "mapping_version_id": 135,
+                "npc_id": 130521,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7329,
+                "mapping_version_id": 125,
+                "npc_id": 130521,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7003,
+                "mapping_version_id": 120,
+                "npc_id": 130521,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6209,
+                "mapping_version_id": 105,
+                "npc_id": 130521,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 956,
+                "mapping_version_id": 15,
+                "npc_id": 130521,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 130522,
+        "dungeon_id": 15,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80087,
+        "name": "Freehold Shipmate",
+        "base_health": 296515,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8809,
+                "mapping_version_id": 157,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8593,
+                "mapping_version_id": 149,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8281,
+                "mapping_version_id": 141,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7894,
+                "mapping_version_id": 135,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7330,
+                "mapping_version_id": 125,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7004,
+                "mapping_version_id": 120,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6210,
+                "mapping_version_id": 105,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 957,
+                "mapping_version_id": 15,
+                "npc_id": 130522,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 155432,
+        "dungeon_id": 15,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 39391,
+        "name": "Enchanted Emissary",
+        "base_health": 15369884,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8814,
+                "mapping_version_id": 157,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8598,
+                "mapping_version_id": 149,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8282,
+                "mapping_version_id": 141,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7895,
+                "mapping_version_id": 135,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7331,
+                "mapping_version_id": 125,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7005,
+                "mapping_version_id": 120,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6211,
+                "mapping_version_id": 105,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 958,
+                "mapping_version_id": 15,
+                "npc_id": 155432,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 155433,
+        "dungeon_id": 15,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 39391,
+        "name": "Void-Touched Emissary",
+        "base_health": 999042,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8813,
+                "mapping_version_id": 157,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8597,
+                "mapping_version_id": 149,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8283,
+                "mapping_version_id": 141,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7896,
+                "mapping_version_id": 135,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7332,
+                "mapping_version_id": 125,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7006,
+                "mapping_version_id": 120,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6212,
+                "mapping_version_id": 105,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 959,
+                "mapping_version_id": 15,
+                "npc_id": 155433,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 155434,
+        "dungeon_id": 15,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 39391,
+        "name": "Emissary of the Tides",
+        "base_health": 614795,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8812,
+                "mapping_version_id": 157,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8596,
+                "mapping_version_id": 149,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 8284,
+                "mapping_version_id": 141,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7897,
+                "mapping_version_id": 135,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7333,
+                "mapping_version_id": 125,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7007,
+                "mapping_version_id": 120,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6213,
+                "mapping_version_id": 105,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 960,
+                "mapping_version_id": 15,
+                "npc_id": 155434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 129547000,
+        "dungeon_id": 15,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81207,
+        "name": "Blacktooth Knuckleduster",
+        "base_health": 858478,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 8303,
+                "mapping_version_id": 141,
+                "npc_id": 129547000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7916,
+                "mapping_version_id": 135,
+                "npc_id": 129547000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7352,
+                "mapping_version_id": 125,
+                "npc_id": 129547000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 7026,
+                "mapping_version_id": 120,
+                "npc_id": 129547000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 6232,
+                "mapping_version_id": 105,
+                "npc_id": 129547000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 979,
+                "mapping_version_id": 15,
+                "npc_id": 129547000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

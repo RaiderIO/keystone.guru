@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
@@ -8,108 +7,120 @@ use App\Models\CharacterClass;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\MapIconType;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
-use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Psr\SimpleCache\InvalidArgumentException;
 
 abstract class MapContext
 {
     use ListsEnemies;
 
     /** @var Model */
-    protected Model $_context;
+    protected Model $context;
+    /** @var Floor */
+    protected Floor $floor;
+    /** @var MappingVersion */
+    protected MappingVersion $mappingVersion;
 
-    /**
-     * @var Floor
-     */
-    private Floor $_floor;
-
-    function __construct(Model $context, Floor $floor)
+    function __construct(Model $context, Floor $floor, MappingVersion $mappingVersion)
     {
-        $this->_context = $context;
-        $this->_floor = $floor;
+        $this->context        = $context;
+        $this->floor          = $floor;
+        $this->mappingVersion = $mappingVersion;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public abstract function getType(): string;
 
-    /**
-     * @return bool
-     */
+    /** @return bool */
     public abstract function isTeeming(): bool;
 
-    /**
-     * @return int
-     */
+    /** @return int */
     public abstract function getSeasonalIndex(): int;
 
-    /**
-     * @return array
-     */
+    /** @return array */
     public abstract function getEnemies(): array;
 
+    /** @return string */
+    public abstract function getEchoChannelName(): string;
+
     /**
      * @return array
+     * @throws InvalidArgumentException
      */
-    public function toArray(): array
+    public function getProperties(): array
     {
-        /** @var CacheService $cacheService */
-        $cacheService = App::make(CacheService::class);
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
 
         // Get the DungeonData
-        $dungeonData = $cacheService->getOtherwiseSet(sprintf('dungeon_%s', $this->_floor->dungeon->id), function ()
-        {
-            $dungeon = $this->_floor->dungeon->load(['enemies', 'enemypacks', 'enemypatrols', 'mapicons']);
-
+        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function () {
             // Bit of a loss why the [0] is needed - was introduced after including the without() function
-            return array_merge(($this->_floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
-                'enemies'                   => $dungeon->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
-                'npcs'                      => $dungeon->npcs()->with(['spells'])->get(),
+            return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
+                'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
+                'enemies'                   => $this->mappingVersion->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
+                'npcs'                      => $this->floor->dungeon->npcs()->with([
+                    'spells',
+                    // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                    'enemyForces' => function (HasOne $query) {
+                        return $query->where('mapping_version_id', $this->mappingVersion->id);
+                    },
+                ])->get(),
                 'auras'                     => Spell::where('aura', true)->get(),
-                'enemyPacks'                => $dungeon->enemypacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
-                'enemyPatrols'              => $dungeon->enemypatrols,
-                'mapIcons'                  => $dungeon->mapicons,
-                'dungeonFloorSwitchMarkers' => $dungeon->floorswitchmarkers
+                'enemyPacks'                => $this->mappingVersion->enemyPacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
+                'enemyPatrols'              => $this->mappingVersion->enemyPatrols,
+                'mapIcons'                  => $this->mappingVersion->mapIcons,
+                'dungeonFloorSwitchMarkers' => $this->mappingVersion->dungeonFloorSwitchMarkers,
+                'mountableAreas'            => $this->mappingVersion->mountableAreas,
             ]);
-        });
+        }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $cacheService->getOtherwiseSet('static_data', function ()
-        {
+        $static = $cacheService->remember('static_data', function () {
             return [
+                'spells'                            => Spell::all(),
                 'mapIconTypes'                      => MapIconType::all(),
-                'unknownMapIconType'                => MapIconType::find(1),
-                'awakenedObeliskGatewayMapIconType' => MapIconType::find(11),
+                'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
+                'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
                 'classColors'                       => CharacterClass::all()->pluck('color'),
                 'raidMarkers'                       => RaidMarker::all(),
                 'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
                 'publishStates'                     => PublishedState::all(),
             ];
-        });
+        }, config('keystoneguru.cache.static_data.ttl'));
 
-        $npcMinHealth = $this->_floor->dungeon->getNpcsMinHealth();
-        $npcMaxHealth = $this->_floor->dungeon->getNpcsMaxHealth();
+        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth($this->mappingVersion);
+        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth($this->mappingVersion);
 
         // Prevent the values being exactly the same, which causes issues in the front end
-        $npcMaxHealth = $npcMaxHealth + ($npcMinHealth === $npcMaxHealth ? 1 : 0);
+        if ($npcMaxHealth <= $npcMinHealth) {
+            $npcMaxHealth = $npcMinHealth + 1;
+        }
 
         return [
             'type'                => $this->getType(),
-            'floorId'             => $this->_floor->id,
+            'mappingVersion'      => $this->mappingVersion,
+            'floorId'             => $this->floor->id,
             'teeming'             => $this->isTeeming(),
             'seasonalIndex'       => $this->getSeasonalIndex(),
             'dungeon'             => $dungeonData,
             'static'              => $static,
-            'auras'               => Spell::where('aura', true)->get(),
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
-            // @TODO Probably move this? Temp fix
             'npcsMinHealth'       => $npcMinHealth,
             'npcsMaxHealth'       => $npcMaxHealth,
+
+            'keystoneScalingFactor' => config('keystoneguru.keystone.scaling_factor'),
+
+            'echoChannelName' => $this->getEchoChannelName(),
+            // May be null
+            'userPublicKey'   => optional(Auth::user())->public_key,
         ];
     }
 }

@@ -16,27 +16,19 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
 
         let data = super._getTemplateData();
 
-        let enemyForces = this.enemyvisual.enemy.getEnemyForces();
-
-        let size = this.enemyvisual.mainVisual.getSize();
-        let width = size.iconSize[0];
-
-        let margin = c.map.enemy.calculateMargin(width);
-        width -= margin;
-
-        // More characters to display..
-        if (enemyForces >= 10) {
-            width -= 7;
-        }
-        // Dangerous = less space
-        else if( this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous ) {
-            width -= 6;
-        }
-
         // Just append a single class
-        data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-white text-center';
+        data.main_visual_outer_classes += ' enemy_icon_npc_enemy_forces text-center';
         // Slightly hacky fix to get the enemy forces to show up properly (font was changed away from Leaflet default to site default for all others)
-        data.main_visual_html = `<div style="font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif; font-size: ${width}px; line-height: ${width}px;">${enemyForces}</div>`;
+        let template = Handlebars.templates['map_enemy_visual_enemy_forces_template'];
+
+        let displayText = this._getDisplayText();
+        let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
+            id: this.enemyvisual.enemy.id,
+            displayText: displayText,
+            width: this._getTextWidth(displayText.length),
+        });
+
+        data.main_visual_html = template(mainVisualData);
 
         return data;
     }
@@ -49,9 +41,46 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         this.setIcon(this.iconName);
     }
 
-    // getSize() {
-    //     console.assert(this instanceof EnemyVisualMainEnemyForces, 'this is not an EnemyVisualMainEnemyForces!', this);
-    //
-    //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
-    // }
+    /**
+     *
+     * @returns {String}
+     * @private
+     */
+    _getDisplayText() {
+        return getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES ?
+            `${this.enemyvisual.enemy.getEnemyForces()}` :
+            `${getFormattedPercentage(this.enemyvisual.enemy.getEnemyForces(), this.enemyvisual.map.enemyForcesManager.getEnemyForcesRequired())}`;
+    }
+
+    /**
+     *
+     */
+    refreshSize() {
+        super.refreshSize();
+
+        let width = this._getTextWidth();
+        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_forces`)
+            .css('font-size', `${width}px`)
+        ;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    shouldRefreshOnNumberStyleChanged() {
+        return true;
+    }
+
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainEnemyForces';
+    }
+
+    cleanup() {
+        super.cleanup();
+
+    }
 }

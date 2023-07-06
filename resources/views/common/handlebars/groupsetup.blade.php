@@ -8,22 +8,23 @@
         let template = Handlebars.templates['group_setup_template'];
 
         let handlebarsData = {
-            css_class: 'faction_icon_' + data.faction.name.toLowerCase(),
-            faction_title: data.faction.name,
+            css_class: 'faction_icon_' + data.faction.key,
+            faction_title: lang.get(data.faction.name),
             classes: []
         };
 
         // Only show icons when the author has set specializations
         for (let i in data.specializations) {
             if (data.specializations.hasOwnProperty(i)) {
-                let playerRaceName = data.races.hasOwnProperty(i) ? data.races[i].name : '';
-                let playerClassName = data.classes.hasOwnProperty(i) ? data.classes[i].name : '';
-                let playerSpecializationName = data.specializations.hasOwnProperty(i) ? data.specializations[i].name : '';
+                let playerClassKey = data.classes.hasOwnProperty(i) ? data.classes[i].key : '';
+                let playerSpecializationKey = data.specializations.hasOwnProperty(i) ? data.specializations[i].key : '';
+
+                let playerRaceName = data.races.hasOwnProperty(i) ? lang.get(data.races[i].name) : '';
+                let playerClassName = data.classes.hasOwnProperty(i) ? lang.get(data.classes[i].name) : '';
+                let playerSpecializationName = data.specializations.hasOwnProperty(i) ? lang.get(data.specializations[i].name) : '';
 
                 handlebarsData.classes.push({
-                    css_class: 'spec_icon_' +
-                        playerClassName.toLowerCase().replace(/ /g, '') + '-' +
-                        playerSpecializationName.toLowerCase().replace(/ /g, ''),
+                    css_class: `spec_icon_${playerClassKey}-${playerSpecializationKey}`,
                     title: (playerRaceName + ' ' + playerSpecializationName + ' ' + playerClassName).trim()
                 })
             }

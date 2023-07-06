@@ -15,9 +15,18 @@
 ////    return $dungeonroute->team !== null && $dungeonroute->team->isUserCollaborator($user);
 ////});
 
-// https://laravel.com/docs/5.8/broadcasting#presence-channels
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), function (?\App\User $user, \App\Models\DungeonRoute $dungeonroute)
-{
+// https://laravel.com/docs/8.x/broadcasting#presence-channels
+use App\Models\Dungeon;
+use App\Models\DungeonRoute;
+use App\Models\LiveSession;
+use App\User;
+
+$dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonroute) {
+    // Shouldn't happen - but it may if the route was deleted and someone left their browser window open
+    if ($dungeonroute === null) {
+        return false;
+    }
+
     $result = false;
 
     if (Auth::check()) {
@@ -25,30 +34,53 @@ Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', env('APP_TYPE')), fun
             // If we didn't create this route, don't show our name
             $dungeonroute->author_id !== $user->id &&
             // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
-            ($dungeonroute->team === null || ($dungeonroute->team !== null && !$dungeonroute->team->isUserMember($user)))) {
+            ($dungeonroute->team === null || (!$dungeonroute->team->isUserMember($user)))) {
+
+            $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
 
             $result = [
-                'id'    => random_int(158402, 99999999),
-                'name'  => sprintf('Anonymous %s', collect(config('keystoneguru.echo.randomsuffixes'))->random()),
-                'color' => \Faker\Provider\Color::hexColor()
+                'public_key' => $user->public_key,
+                'name'       => sprintf('Anonymous %s', $randomName),
+                'initials'   => initials($randomName),
+                // https://stackoverflow.com/a/9901154/771270
+                'color'      => randomHexColor(),
+                'avatar_url' => null,
+                'anonymous'  => true,
+                'url'        => '#',
             ];
         } else {
             $result = [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'color' => $user->echo_color
+                'public_key' => $user->public_key,
+                'name'       => $user->name,
+                'initials'   => $user->initials,
+                'color'      => $user->echo_color,
+                'avatar_url' => optional($user->iconfile)->getURL(),
+                'anonymous'  => false,
+                'url'        => route('profile.view', $user),
             ];
         }
     }
 
     return $result;
+};
+
+Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), $dungeonRouteChannelCallback);
+Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback) {
+    // Validate live sessions the same way as a dungeon route
+    return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
 });
 
-Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', env('APP_TYPE')), function (\App\User $user, \App\Models\Dungeon $dungeon)
-{
+Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {
     $result = false;
     if ($user->hasRole('admin')) {
-        $result = ['name' => $user->name, 'color' => $user->echo_color];
+        $result = [
+            'public_key' => $user->public_key,
+            'name'       => $user->name,
+            'initials'   => $user->initials,
+            'color'      => $user->echo_color,
+            'avatar_url' => optional($user->iconfile)->getURL(),
+            'anonymous'  => false,
+        ];
     }
     return $result;
 });

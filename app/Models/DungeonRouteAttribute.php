@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,9 +10,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dungeon_route_id
  * @property int $route_attribute_id
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class DungeonRouteAttribute extends Model
 {
     public $timestamps = false;
+    protected $fillable = [
+        'route_attribute_id',
+        'dungeon_route_id',
+    ];
 }

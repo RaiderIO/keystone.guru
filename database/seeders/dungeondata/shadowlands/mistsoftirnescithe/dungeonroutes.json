@@ -1,0 +1,399 @@
+[
+    {
+        "public_key": "xYFGyVq",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 30,
+        "mapping_version_id": 30,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 1,
+        "title": "Sanguine-Quaking-Petko",
+        "description": "",
+        "level_min": 2,
+        "level_max": 28,
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "enemy_forces": 267,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2021-01-08T16:03:52+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
+        "playerspecializations": [],
+        "playerraces": [
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            }
+        ],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 51
+            }
+        ],
+        "brushlines": [],
+        "paths": [],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    4558,
+                    4559,
+                    4560,
+                    4561,
+                    4562
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    4563,
+                    4564,
+                    4565,
+                    4566
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    4576,
+                    4577,
+                    4578,
+                    4579
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    4580,
+                    4581
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    5069,
+                    5070,
+                    5092,
+                    5093,
+                    5094,
+                    5095
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    5163,
+                    5164,
+                    5165,
+                    5166
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    5096,
+                    5097,
+                    5098,
+                    5099
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    5071,
+                    5072,
+                    5073,
+                    5074
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    5167,
+                    5168,
+                    5169,
+                    5170,
+                    5188
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    5818,
+                    5819,
+                    5820,
+                    5821,
+                    5822
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    4544,
+                    5100,
+                    5101,
+                    5102
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    5113,
+                    5114,
+                    5115,
+                    5116,
+                    5117,
+                    5118,
+                    5119,
+                    5120
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    5121,
+                    5122,
+                    5123,
+                    5124,
+                    5125,
+                    5126
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "enemies": [
+                    5127,
+                    5128,
+                    5130,
+                    5131,
+                    5132,
+                    5134,
+                    5797
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "enemies": [
+                    5135,
+                    5136,
+                    5137,
+                    5138
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "enemies": [
+                    5061,
+                    5062,
+                    5063,
+                    5064,
+                    5065,
+                    5066,
+                    5067,
+                    5068
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "enemies": [
+                    4545
+                ],
+                "spells": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "prideful_enemies": [],
+        "mapicons": [
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -58.91,
+                "lng": 346.82,
+                "comment": "If you do have Night Fae, you can pass through the door!",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -69.08,
+                "lng": 333.87,
+                "comment": "Use Purges to reduce the outgoing damage once the mobs jump.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -85.93,
+                "lng": 320.29,
+                "comment": "Skip this pack by CC-ing Drust Harvester 5.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -75.94,
+                "lng": 300.13,
+                "comment": "Before engaging pull 4 you can open the secret gates with Night Fae and gather the 10% damage buff (Green Mushroom).",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -45.28,
+                "lng": 290.44,
+                "comment": "Always prioritize Droman Oulfarran and save CDs for the 10 seconds burst phase (boss takes 100% increased damage when Oulfarran is phased).",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -88,
+                "lng": 213.72,
+                "comment": "This is very randomized path and unlikely to be predicted, do follow the pathing and find out where the maze is going to play out.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 80,
+                "map_icon_type_id": 2,
+                "lat": -180.39,
+                "lng": 110.72,
+                "comment": "The only important thing among those mobs is Spinemaw Staghorn's Stimulate Resistance (AoE shield) make sure to interrupt that. ",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            }
+        ]
+    }
+]

@@ -6,13 +6,20 @@ class DungeonrouteTable extends InlineCode {
         this._dt = null;
 
         this._tableView = null;
+        this._routeData = [];
+        // Handles the displaying of tags inside the table
+        this._tagsHandler = new DungeonRouteTableTagsHandler(this);
+        // Handles the
+        this._teamsHandler = new DungeonRouteTableTeam(this);
+
+        this.carouselHandler = new CarouselHandler();
 
         // Init the code
         this.setViewMode(this.options.viewMode);
         let tableView = this.setTableView(this.options.tableView);
         // Make sure the TeamID is set if we need it
-        if (typeof tableView.setTeamName === 'function') {
-            tableView.setTeamName(this.options.teamName);
+        if (typeof tableView.setTeamPublicKey === 'function') {
+            tableView.setTeamPublicKey(this.options.teamPublicKey);
         }
     }
 
@@ -24,12 +31,9 @@ class DungeonrouteTable extends InlineCode {
 
         let self = this;
 
-        $('#dungeonroute_filter').bind('click', function () {
+        $('#dungeonroute_filter').unbind('click').bind('click', function () {
             // Build the search parameters
             let dungeonId = $('#dungeonroute_search_dungeon_id').val();
-            if (parseInt(dungeonId) < 1) {
-                dungeonId = '';
-            }
             let affixes = $('#affixes').val();
             let attributes = $('#attributes').val();
 
@@ -47,7 +51,7 @@ class DungeonrouteTable extends InlineCode {
             self._dt.draw();
         });
 
-        $('.table_list_view_toggle').bind('click', function () {
+        $('.table_list_view_toggle').unbind('click').bind('click', function () {
             // Display the correct table
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
@@ -67,8 +71,16 @@ class DungeonrouteTable extends InlineCode {
      */
     setTableView(value) {
         switch (value) {
+            case 'favorites': {
+                this._tableView = new FavoritesTableView();
+                break;
+            }
             case 'profile': {
                 this._tableView = new ProfileTableView();
+                break;
+            }
+            case 'userprofile': {
+                this._tableView = new UserProfileTableView();
                 break;
             }
             case 'team': {
@@ -100,7 +112,7 @@ class DungeonrouteTable extends InlineCode {
         let self = this;
 
         // Send cookie
-        Cookies.set('routes_viewmode', self._viewMode, {path: ''});
+        Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
 
         let $element = $('#routes_table');
 
@@ -123,6 +135,7 @@ class DungeonrouteTable extends InlineCode {
                 'url': '/ajax/routes',
                 'data': function (d) {
                     d.requirements = $('#dungeonroute_requirements_select').val();
+                    d.tags = $('#dungeonroute_tags_select').val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
@@ -138,12 +151,15 @@ class DungeonrouteTable extends InlineCode {
                         });
                     });
                 }
+
+                self._routeData = settings.json.data;
             },
             'lengthMenu': [25],
             'bLengthChange': false,
             // Order by affixes by default
             'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
             'columns': self._getColumns(),
+            'searchCols': self._getDefaultSearchColumns(),
             'language': {
                 'emptyTable': lang.get('messages.datatable_no_routes_in_table')
             }
@@ -151,45 +167,34 @@ class DungeonrouteTable extends InlineCode {
 
         self._dt.on('draw.dt', function (e, settings, json, xhr) {
             refreshTooltips();
+
+            self._tagsHandler.activate();
+            self._teamsHandler.activate();
+
             let $publishBtns = $('.dungeonroute-publish');
-            $publishBtns.unbind('click');
-            $publishBtns.bind('click', self._publishDungeonRouteClicked);
+            $publishBtns.unbind('click').bind('click', self._publishDungeonRouteClicked);
 
             let $publishedStateBtns = $('.dungeonroute-publishedstate');
-            $publishedStateBtns.unbind('click');
-            $publishedStateBtns.bind('click', function (clickEvent) {
+            $publishedStateBtns.unbind('click').bind('click', function (clickEvent) {
                 self._changePublishState($(clickEvent.target).data('publickey'), $(clickEvent.target).data('publishedstate'));
             });
 
-            let $deleteBtns = $('.dungeonroute-delete');
-            $deleteBtns.unbind('click');
-            $deleteBtns.bind('click', self._promptDeleteDungeonRouteClicked);
-
             let $cloneBtns = $('.dungeonroute-clone');
-            $cloneBtns.unbind('click');
-            $cloneBtns.bind('click', self._cloneDungeonRouteClicked);
+            $cloneBtns.unbind('click').bind('click', self._cloneDungeonRouteClicked);
 
             let $cloneToTeamBtns = $('.dungeonroute-clone-to-team');
-            $cloneToTeamBtns.unbind('click');
-            $cloneToTeamBtns.bind('click', self._promptCloneToTeamClicked.bind(self));
+            $cloneToTeamBtns.unbind('click').bind('click', self._promptCloneToTeamClicked.bind(self));
 
-            let $addToThisTeam = $('.dungeonroute-add-to-this-team');
-            $addToThisTeam.unbind('click');
-            $addToThisTeam.bind('click', self._addToThisTeam.bind(self));
+            let $migrateToEncryptedBtns = $('.dungeonroute-migrate-to-encrypted');
+            $migrateToEncryptedBtns.unbind('click').bind('click', self._migrateToEncryptedClicked.bind(self));
 
-            let $removeFromThisTeam = $('.dungeonroute-remove-from-this-team');
-            $removeFromThisTeam.unbind('click');
-            $removeFromThisTeam.bind('click', self._removeFromThisTeam.bind(self));
+            let $migrateToShroudedBtns = $('.dungeonroute-migrate-to-shrouded');
+            $migrateToShroudedBtns.unbind('click').bind('click', self._migrateToShroudedClicked.bind(self));
 
-            $('.owl-carousel').owlCarousel({
-                // True to enable overlayed buttons (custom styled, wasted time :( )
-                nav: false,
-                loop: true,
-                dots: false,
-                lazyLoad: true,
-                lazyLoadEager: 1,
-                items: 1
-            });
+            let $deleteBtns = $('.dungeonroute-delete');
+            $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
+
+            self.carouselHandler.refreshCarousel();
         });
 
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {
@@ -205,6 +210,32 @@ class DungeonrouteTable extends InlineCode {
         self._dt.on('mouseleave', 'tbody tr', function () {
             $(this).removeClass('row_selected');
         });
+    }
+
+    /**
+     *
+     * @returns {*[]}
+     * @private
+     */
+    _getDefaultSearchColumns() {
+        // Get a list of strings of what columns we want
+        let viewColumns = this._tableView.getColumns(this._viewMode);
+
+        // Map the string columns to actual DT columns and return the result
+        let result = [];
+        for (let index in viewColumns) {
+            // Satisfy PhpStorm..
+            if (viewColumns.hasOwnProperty(index)) {
+                // Object containing name and width of the column
+                let viewColumn = viewColumns[index];
+
+                result.push(
+                    viewColumn.hasOwnProperty('defaultSearch') ? {'search': viewColumn.defaultSearch} : null
+                );
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -227,7 +258,11 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('messages.title_label'),
                 'data': 'title',
                 'name': 'title',
+                'className': 'test',
                 'render': function (data, type, row, meta) {
+                    let result = '';
+
+
                     let published = '';
                     switch (row.published) {
                         case 'unpublished':
@@ -243,7 +278,39 @@ class DungeonrouteTable extends InlineCode {
                             published = `<i class="fas fa-link text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world_with_link')}"></i>`
                             break;
                     }
-                    return `${published} ${row.title}`;
+
+                    result = `${published} ${row.title}`;
+
+                    if ((row.hasOwnProperty('tagspersonal') && row.tagspersonal.length > 0) ||
+                        (row.hasOwnProperty('tagsteam') && row.tagsteam.length > 0)) {
+                        let template = Handlebars.templates['dungeonroute_table_title_template'];
+
+                        let rowTags = row.hasOwnProperty('tagspersonal') ? row.tagspersonal : row.tagsteam;
+
+                        let tags = [];
+                        for (let index in rowTags) {
+                            if (rowTags.hasOwnProperty(index)) {
+                                let tag = rowTags[index];
+
+                                let template = Handlebars.templates['tag_render_template'];
+
+                                let data = $.extend({}, {
+                                    edit: false,
+                                    dark: tag.color === null ? false : isColorDark(tag.color)
+                                }, tag);
+
+                                tags.push(template(data));
+                            }
+                        }
+
+                        // Build the status bar from the template
+                        result = template({
+                            title: result,
+                            tags: tags.join('')
+                        });
+                    }
+
+                    return result;
                 }
             },
             dungeon: {
@@ -251,7 +318,7 @@ class DungeonrouteTable extends InlineCode {
                 'data': 'dungeon.name',
                 'name': 'dungeon_id',
                 'render': function (data, type, row, meta) {
-                    return data;
+                    return lang.get(data);
                 },
             },
             features: {
@@ -303,7 +370,7 @@ class DungeonrouteTable extends InlineCode {
                 'name': 'enemy_forces',
                 'orderable': false,
                 'render': function (data, type, row, meta) {
-                    let enemyForcesRequired = row.teeming === 1 ? row.dungeon.enemy_forces_required_teeming : row.dungeon.enemy_forces_required;
+                    let enemyForcesRequired = row.teeming === 1 ? row.enemy_forces_required_teeming : row.enemy_forces_required;
                     let template = Handlebars.templates['dungeonroute_table_profile_enemy_forces_template'];
 
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
@@ -314,9 +381,29 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             views: {
-                'title': lang.get('messages.views_label'),
+                'title': lang.get('messages.metrics_label'),
                 'data': 'views',
                 'name': 'views',
+                'render': function (data, type, row, meta) {
+                    let findMetric = function (category, tag) {
+                        for (let i in row.metric_aggregations) {
+                            let metric = row.metric_aggregations[i];
+                            if (metric.category === category && metric.tag === tag) {
+                                return metric.value;
+                            }
+                        }
+
+                        return 0;
+                    }
+
+                    let template = Handlebars.templates['dungeonroute_table_views_metrics'];
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
+                        views: row.views,
+                        views_embed: row.views_embed,
+                        copy_view: findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_VIEW),
+                        copy_embed: findMetric(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED),
+                    }));
+                }
                 // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
             },
             rating: {
@@ -326,7 +413,7 @@ class DungeonrouteTable extends InlineCode {
                     let result = '-';
 
                     if (row.rating_count !== 0) {
-                        result = row.avg_rating;
+                        result = row.rating;
                         if (row.rating_count === 1) {
                             result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
                         } else {
@@ -342,9 +429,36 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
+                    let rowHasAffix = function (row, targetAffix) {
+                        for (let index in row.affixes) {
+                            let affixGroup = row.affixes[index];
+                            for (let affixGroupIndex in affixGroup.affixes) {
+                                let affix = affixGroup.affixes[affixGroupIndex];
+
+                                // If the affix group contains an affix with encrypted, it's not possible to migrate
+                                if (affix.key === targetAffix) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+
+                    // 9 = Shadowlands, 10 = Dragonflight
+                    let seasonId = row.affixes.length === 0 ? false : row.affixes[0].expansion_id;
+                    let isShadowlandsRoute = seasonId === 9;
+                    let isDragonflightRoute = seasonId === 10;
+
+                    let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
+                    let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
+
+                    // @TODO add an additional check to see if the current route's dungeon is part of previous season?
                     return template($.extend({}, getHandlebarsDefaultVariables(), {
                         public_key: row.public_key,
-                        published: row.published
+                        published: row.published,
+                        show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
+                        show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
+                        has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id
                     }));
                 }
             },
@@ -353,10 +467,10 @@ class DungeonrouteTable extends InlineCode {
                 'render': function (data, type, row, meta) {
                     let result = null;
                     if (row.has_team) {
-                        let template = Handlebars.templates['team_dungeonroute_table_remove_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_route_actions_template'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     } else {
-                        let template = Handlebars.templates['team_dungeonroute_table_add_route_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_add_route_actions_template'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
@@ -397,8 +511,6 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _changePublishState(publicKey, value) {
-        console.log(publicKey, value);
-
         $.ajax({
             type: 'POST',
             url: `/ajax/${publicKey}/publishedState`,
@@ -425,7 +537,7 @@ class DungeonrouteTable extends InlineCode {
 
             $.ajax({
                 type: 'DELETE',
-                url: '/ajax/' + publicKey,
+                url: `/ajax/${publicKey}`,
                 dataType: 'json',
                 success: function (json) {
                     showSuccessNotification(lang.get('messages.route_delete_successful'));
@@ -466,23 +578,16 @@ class DungeonrouteTable extends InlineCode {
         let publicKey = $(clickEvent.target).data('publickey');
         let template = Handlebars.templates['dungeonroute_table_profile_clone_to_team_template'];
 
-        // Exclude a team if we need to (cannot clone to this team really)
-        // let excludeTeam = this.getTableView().getTeamName();
-        // let teams = [];
-        // for (let index in this.options.teams) {
-        //     if (this.options.teams.hasOwnProperty(index)) {
-        //         let team = this.options.teams[index];
-        //         if (team.name !== excludeTeam) {
-        //             teams.push(team);
-        //         }
-        //     }
-        // }
-
         showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
             teams: this.options.teams
         })), function () {
-            let targetTeam = $('#clone-to-teams-' + publicKey).val();
+            let targetTeam = $(`input[type='radio'][name='clone-to-team-${publicKey}']:checked`).val();
+
+            if (typeof targetTeam === 'undefined') {
+                showErrorNotification(lang.get('messages.route_clone_select_team'));
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
@@ -500,55 +605,108 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Adds the route to the currently assigned team.
+     *
      * @param clickEvent
+     * @returns {boolean}
      * @private
      */
-    _addToThisTeam(clickEvent) {
-        let teamName = this.getTableView().getTeamName();
-        if (teamName !== '') {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
-
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/team/' + teamName + '/route/' + key,
-                dataType: 'json',
-                success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_add_route_successful'));
-                    // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
-                }
-            });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
-        }
+    _migrateToEncryptedClicked(clickEvent) {
+        this._migrateTo(clickEvent, 'encrypted');
     }
 
     /**
-     * Removes a route from the currently assigned team.
+     *
      * @param clickEvent
+     * @returns {boolean}
      * @private
      */
-    _removeFromThisTeam(clickEvent) {
-        let teamName = this.getTableView().getTeamName();
-        if (teamName !== '') {
-            let key = $(clickEvent.currentTarget).attr('data-publickey');
+    _migrateToShroudedClicked(clickEvent) {
+        this._migrateTo(clickEvent, 'shrouded');
+    }
 
+    /**
+     *
+     * @param clickEvent
+     * @param affixName
+     * @returns {boolean}
+     * @private
+     */
+    _migrateTo(clickEvent, affixName) {
+        let publicKey = $(clickEvent.target).data('publickey');
+
+        showConfirmYesCancel(lang.get(`messages.route_migration_to_${affixName}_confirm_warning`), function () {
             $.ajax({
                 type: 'POST',
-                url: '/ajax/team/' + teamName + '/route/' + key,
-                data: {
-                    _method: 'DELETE'
-                },
+                url: `/ajax/${publicKey}/migrate/${affixName}`,
                 dataType: 'json',
                 success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_remove_route_successful'));
+                    showSuccessNotification(lang.get('messages.route_migration_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }
             });
-        } else {
-            console.error('Unable to add to team, team ID not set!');
+        }, null, {closeWith: ['button']});
+
+        // Prevent clicking clone from opening the route after it returns
+        clickEvent.preventDefault();
+        return false;
+    }
+
+    /**
+     *
+     * @private
+     */
+    _reset() {
+        $('#dungeonroute_search_dungeon_id').val(-1);
+        $('#affixes').val([]);
+        $('#attributes').val([]);
+        $('#dungeonroute_requirements_select').val([]);
+        $('#dungeonroute_tags_select').val([]);
+
+        refreshSelectPickers();
+    }
+
+    /**
+     *
+     * @param dungeonId {Number}
+     * @param affixGroupIds {Array}
+     * @param attributes {Array}
+     * @param requirements {Array}
+     * @param tags {Array}
+     */
+    overrideSelection(dungeonId, affixGroupIds = [], attributes = [], requirements = [], tags = []) {
+        this._reset();
+
+        console.log(dungeonId, affixGroupIds, attributes, requirements, tags);
+
+        $('#dungeonroute_search_dungeon_id').val(dungeonId);
+        $('#affixes').val(affixGroupIds);
+        $('#attributes').val(attributes);
+        $('#dungeonroute_requirements_select').val(requirements);
+        $('#dungeonroute_tags_select').val(tags);
+
+        // Refresh the list of routes
+        $('#dungeonroute_filter').trigger('click');
+    }
+
+    /**
+     *
+     * @param publicKey
+     * @returns {null}
+     */
+    getRouteDataByPublicKey(publicKey) {
+        let result = null;
+
+        for (let index in this._routeData) {
+            if (this._routeData.hasOwnProperty(index)) {
+                let routeData = this._routeData[index];
+                if (routeData.public_key === publicKey) {
+                    result = routeData;
+                    break;
+                }
+            }
         }
+
+        return result;
     }
 }

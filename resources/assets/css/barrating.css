@@ -1,0 +1,61 @@
+
+.br-theme-fontawesome-stars .br-widget {
+    height: 28px;
+    white-space: nowrap;
+}
+
+.br-theme-fontawesome-stars .br-widget a {
+    font: normal normal normal 20px/1 'Font Awesome 5 Free';
+    font-weight: 500;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    text-decoration: none;
+    color: #edb867;
+    margin-right: 2px;
+}
+
+.br-theme-fontawesome-stars .br-widget a:after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 500;
+    content: '\f005';
+    color: #d2d2d2;
+}
+
+.br-theme-fontawesome-stars .br-widget a.br-active:after {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: '\f005';
+    color: #edb867;
+}
+
+.br-theme-fontawesome-stars .br-widget a.br-selected:after {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: '\f005';
+    color: #edb867;
+}
+
+.br-theme-fontawesome-stars .br-widget .br-current-rating {
+    display: none;
+}
+
+.br-theme-fontawesome-stars .br-readonly a {
+    cursor: default;
+}
+
+@media print {
+    .br-theme-fontawesome-stars .br-widget a:after {
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 500;
+        content: '\f005';
+        color: black;
+    }
+
+    .br-theme-fontawesome-stars .br-widget a.br-active:after,
+    .br-theme-fontawesome-stars .br-widget a.br-selected:after {
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        content: '\f005';
+        color: black;
+    }
+}

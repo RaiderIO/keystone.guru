@@ -13,6 +13,7 @@
 /resouces/assets/images/tiles
 # Generated file only used for temp output step for inclusion in compiled file
 /resouces/assets/js/handlebars.js
+/resouces/assets/js/precompile.js
 /storage/*.key
 /vendor
 /version
@@ -25,6 +26,7 @@ yarn-error.log
 .env
 .phpstorm.meta.php
 _ide_helper.php
+.phpunit.result.cache
 
 # Docker compose
 docker-compose/mysql

@@ -1,6 +1,6 @@
 class TeamList extends InlineCode {
 
-    constructor(options){
+    constructor(options) {
         super(options);
 
         this._dt = null;

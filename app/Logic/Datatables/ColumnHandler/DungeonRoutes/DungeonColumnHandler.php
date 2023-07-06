@@ -11,6 +11,7 @@ namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class DungeonColumnHandler extends DatatablesColumnHandler
 {
@@ -20,13 +21,22 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'dungeon_id');
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
             $searchValue = $columnData['search']['value'];
-            if (!empty($searchValue)) {
-                $builder->where('dungeon_routes.dungeon_id', $searchValue);
+            // -1 = all dungeons = no filter
+            if ((int)$searchValue !== -1 && !empty($searchValue)) {
+                $explode = explode('-', $searchValue);
+                if (count($explode) === 2) {
+                    $seasonId = $explode[1];
+                    // Joins need to be added to the main builder
+                    $this->getDtHandler()->getBuilder()->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
+                    $subBuilder->whereColumn('dungeon_routes.dungeon_id', '=', 'season_dungeons.dungeon_id');
+                } else {
+                    $subBuilder->where('dungeon_routes.dungeon_id', $searchValue);
+                }
             }
         }
 
@@ -34,8 +44,10 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         if ($columnData['orderable'] === 'true') {
             // Order on this column?
             if (!is_null($order)) {
-                // Order either asc or desc, nothing else
-                $builder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                // Always order based on expansion - the most recent expansion should always come on top
+                $subBuilder->orderby('dungeons.expansion_id', 'DESC')
+                    // Order either asc or desc, nothing else
+                    ->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }
         }
     }

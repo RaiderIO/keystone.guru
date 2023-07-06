@@ -1,0 +1,39 @@
+{
+    "id": 163,
+    "release_changelog_id": 170,
+    "version": "v6.4.1",
+    "title": "Route overview pages algorithm updates",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-04-14T13:54:58+00:00",
+    "updated_at": "2023-04-14T13:54:58+00:00",
+    "changelog": {
+        "id": 170,
+        "release_id": 163,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 170,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1651,
+                "change": "Discovering new routes now has a better algorithm taking in to account route age and various other factors to keep the list fresher than it has been (thanks \/u\/Sandbucketman!)",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 170,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1652,
+                "change": "Awakened Obelisks and some of their associated enemies no longer show up in Freehold\/Underrot if you don't have an Awakened Route (thanks \/u\/mechiah!)",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

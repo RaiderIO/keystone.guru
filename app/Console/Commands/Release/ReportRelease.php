@@ -44,8 +44,8 @@ class ReportRelease extends Command
      */
     public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
     {
-        $result = false;
-        $version = $this->argument('version');
+        $result   = false;
+        $version  = $this->argument('version');
         $platform = $this->argument('platform');
 
         /** @var Release $release */
@@ -58,29 +58,35 @@ class ReportRelease extends Command
             $release = Release::where('version', $version)->first();
         }
 
-        if (!$release->silent &&
-            (env('APP_TYPE') === 'local' ||
-                ReleaseReportLog::where('release_id', $release->id)->where('platform', $platform)->doesntExist())) {
+        if ($release->silent) {
+            $this->info('Not reporting release; it was marked as silent!');
+            // Not failed if not necessary
+            $result = true;
+        } else if (config('app.type') === 'local' ||
+            ReleaseReportLog::where('release_id', $release->id)
+                ->where('platform', $platform)
+                ->doesntExist()
+        ) {
             switch ($platform) {
                 case 'reddit':
                     $result = $redditApiService->createPost(
                         config('keystoneguru.reddit_subreddit'),
-                        sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d')),
+                        $release->getFormattedTitle(),
                         $release->reddit_body
                     );
                     break;
                 case 'discord':
-                    $result = $discordApiService->sendEmbeds(env('DISCORD_NEW_RELEASE_WEBHOOK'), $release->getDiscordEmbeds());
+                    $result = $discordApiService->sendEmbeds(config('keystoneguru.webhook.discord.new_release.url'), $release->getDiscordEmbeds());
                     break;
                 default:
                     throw new \Exception(sprintf('Unsupported platform %s', $platform));
             }
 
             // Log this release so that we don't mention things multiple times
-            (new ReleaseReportLog([
+            ReleaseReportLog::create([
                 'release_id' => $release->id,
                 'platform'   => $platform,
-            ]))->save();
+            ]);
         } else {
             $this->info('Not reporting release; it was already reported in the platform!');
             // Not failed if we already did it

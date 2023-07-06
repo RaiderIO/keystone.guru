@@ -25,19 +25,31 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
         width -= margin;
 
         // More characters to display..
-        if (text >= 10) {
-            width -= 7;
-        }
+        // if (text >= 10) {
+        //     width -= 7;
+        // }
         // Dangerous = less space
-        else if( this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous ) {
+        if (this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) {
             width -= 6;
         }
 
         if (this.enemyvisual.enemy.enemy_id > 0) {
             data.main_visual_inner_classes += ' coupled';
         }
+
+        if (this.enemyvisual.enemy.mdt_npc_id > 0) {
+            data.main_visual_inner_classes += ' different_npc';
+        }
         data.main_visual_outer_classes += ' enemy_icon_npc_mdt text-black text-center';
-        data.main_visual_html = '<div style="font-size: ' + width + 'px; line-height: ' + width + 'px;">' + text + '</div>';
+
+        let template = Handlebars.templates['map_enemy_visual_enemy_mdt_template'];
+
+        let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
+            width: width,
+            text: text
+        });
+
+        data.main_visual_html = template(mainVisualData);
 
         return data;
     }
@@ -49,9 +61,20 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
         this.setIcon(this.iconName);
     }
 
-    // getSize() {
-    //     console.assert(this instanceof EnemyVisualMainMDT, 'this is not an EnemyVisualMainMDT!', this);
-    //
-    //     return this.iconName === 'boss' ? _bigIcon : _smallIcon;
-    // }
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualMainMDT';
+    }
+
+    /**
+     *
+     */
+    refreshSize() {
+        super.refreshSize();
+
+        let width = this._getTextWidth();
+        $(`#map_enemy_visual_${this.enemyvisual.enemy.id},#map_enemy_visual_${this.enemyvisual.enemy.id} .mdt_inner`).css('font-size', `${width}px`);
+    }
 }

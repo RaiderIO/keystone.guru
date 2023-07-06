@@ -1,52 +1,68 @@
 <?php
-/** @var \App\Models\Team $model */
-$title = sprintf(__('Team %s'), $model->name);
+/** @var \App\Models\Team $team */
+/** @var bool $userIsModerator */
+/** @var bool $userHasAdFreeTeamMembersPatreonBenefit */
+/** @var int $userAdFreeTeamMembersRemaining */
+/** @var int $userAdFreeTeamMembersMax */
+
+$title = sprintf(__('views/team.edit.title'), $team->name);
 /** @var \App\User $user */
-$user = Auth::user();
-$userIsModerator = $model->isUserModerator($user);
+$user      = Auth::user();
 $menuItems = [
-    ['icon' => 'far fa-list-alt', 'text' => __('Overview'), 'target' => '#overview'],
-    ['icon' => 'fa-route', 'text' => __('Routes'), 'target' => '#routes'],
-    ['icon' => 'fa-users', 'text' => __('Members'), 'target' => '#members']
+    ['icon' => 'far fa-list-alt', 'text' => __('views/team.edit.overview'), 'target' => '#overview'],
+    ['icon' => 'fa-route', 'text' => __('views/team.edit.routes'), 'target' => '#routes'],
+    ['icon' => 'fa-users', 'text' => __('views/team.edit.members'), 'target' => '#members'],
 ];
 // May only edit details when member is a moderator
 if ($userIsModerator) {
-    $menuItems[] = ['icon' => 'fa-edit', 'text' => __('Team details'), 'target' => '#details'];
+    $menuItems[] = ['icon' => 'fa-tag', 'text' => __('views/team.edit.team_tags'), 'target' => '#tags'];
+    $menuItems[] = ['icon' => 'fa-edit', 'text' => __('views/team.edit.team_details'), 'target' => '#details'];
 }
 
 $data = [];
-foreach ($model->teamusers as $teamuser) {
+foreach ($team->teamusers as $teamuser) {
     /** @var $teamuser \App\Models\TeamUser */
+    $hasAdFreeGiveaway = $teamuser->user->hasAdFreeGiveaway();
+
     $data[] = [
-        'user_id' => $teamuser->user->id,
-        'name' => $teamuser->user->name,
-        'join_date' => $teamuser->created_at->toDateTimeString(),
-        'role' => $teamuser->role,
+        'user_id'                              => $teamuser->user->id,
+        'name'                                 => $teamuser->user->name,
+        'join_date'                            => $teamuser->created_at->toDateTimeString(),
+        'role'                                 => $teamuser->role,
         // Any and all roles that the user may assign to other users
-        'assignable_roles' => $model->getAssignableRoles($user, $teamuser->user)
+        'assignable_roles'                     => $team->getAssignableRoles($user, $teamuser->user),
+        'has_ad_free'                          => $teamuser->user->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::AD_FREE),
+        'has_ad_free_giveaway'                 => $hasAdFreeGiveaway,
+        'has_ad_free_giveaway_by_current_user' => $hasAdFreeGiveaway && $teamuser->user->getAdFreeGiveawayUser()->id === $user->id,
     ];
 }
 ?>
-@extends('layouts.app', ['title' => $title,
-    'menuTitle' => __('Teams'), 'menuItems' => $menuItems,
+@extends('layouts.sitepage', [
+    'title' => $title,
+    'menuTitle' => __('views/team.edit.menu_title'),
+    'menuItems' => $menuItems,
+    'breadcrumbsParams' => [$team],
     // The models to display as an option in the menu, plus the route to take when selecting them
     'menuModels' => $user->teams,
     'menuModelsRoute' => 'team.edit',
     'menuModelsRouteParameterName' => 'team',
-    'model' => $model])
+    'menuModelEdit' => $team,
+])
 @section('header-title', $title)
 @section('header-addition')
     <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Team list') }}
+        <i class="fas fa-backward"></i> {{ __('views/team.edit.to_team_list') }}
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
     'data' => $data,
-    'teamName' => $model->name,
+    'teamName' => $team->name,
+    'teamPublicKey' => $team->public_key,
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
-    'currentUserRole' => $model->getUserRole($user),
+    'currentUserRole' => $team->getUserRole($user),
+    'adFreeGiveawayLeft' => $userAdFreeTeamMembersRemaining,
 ]])
 
 @section('scripts')
@@ -64,7 +80,7 @@ foreach ($model->teamusers as $teamuser) {
         <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
             <div class="form-group">
                 <h4>
-                    {{ sprintf(__('Team %s'), $model->name) }}
+                    {{ sprintf(__('views/team.edit.team_header'), $team->name) }}
                 </h4>
                 @include('common.general.messages')
 
@@ -72,19 +88,19 @@ foreach ($model->teamusers as $teamuser) {
                     <div class="col-lg mt-2">
                         <div class="card text-center">
                             <div class="card-header">
-                                {{ $model->name }}
+                                {{ $team->name }}
                             </div>
-                            @isset($model->iconfile)
+                            @isset($team->iconfile)
                                 <div class="card-body p-0">
                                     <div class="row">
                                         <div class="col" style="max-width: 128px">
                                             <img class="card-img-top d-block"
-                                                 src="{{ url('storage/' . $model->iconfile->getUrl()) }}"
-                                                 alt="{{ __('No image') }}"
+                                                 src="{{ $team->iconfile->getURL() }}"
+                                                 alt="{{ __('views/team.edit.icon_image_alt') }}"
                                                  style="max-width: 128px; max-height: 128px;">
                                         </div>
                                         <div class="col text-left pl-0">
-                                            {{ $model->description }}
+                                            {{ $team->description }}
                                         </div>
                                         <div class="col">
                                         </div>
@@ -92,8 +108,8 @@ foreach ($model->teamusers as $teamuser) {
                                 </div>
                             @else
                                 <div class="card-body">
-                                    @isset($model->description)
-                                        {{ $model->description }}
+                                    @isset($team->description)
+                                        {{ $team->description }}
                                     @else
                                         <h1>&nbsp;</h1>
                                     @endisset
@@ -105,10 +121,10 @@ foreach ($model->teamusers as $teamuser) {
                     <div class="col-lg mt-2">
                         <div class="card text-center">
                             <div class="card-header">
-                                {{ __('Routes') }}
+                                {{ __('views/team.edit.routes') }}
                             </div>
                             <div class="card-body">
-                                <h1>{{ $model->dungeonroutes->count() }}</h1>
+                                <h1>{{ $team->getVisibleRouteCount() }}</h1>
                             </div>
                         </div>
                     </div>
@@ -116,10 +132,10 @@ foreach ($model->teamusers as $teamuser) {
                     <div class="col-lg mt-2">
                         <div class="card text-center">
                             <div class="card-header">
-                                {{ __('Members') }}
+                                {{ __('views/team.edit.members') }}
                             </div>
                             <div class="card-body">
-                                <h1>{{ $model->members->count() }}</h1>
+                                <h1>{{ $team->members()->count() }}</h1>
                             </div>
                         </div>
                     </div>
@@ -129,70 +145,92 @@ foreach ($model->teamusers as $teamuser) {
         <div class="tab-pane fade" id="routes" role="tabpanel" aria-labelledby="routes-tab">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col">
                         <h4>
-                            {{ __('Route list') }}
+                            {{ __('views/team.edit.route_list') }}
                         </h4>
                     </div>
-                    <div class="col-4">
+                    <div class="col-auto">
                         @if($userIsModerator)
-                            <button id="add_route_btn" class="btn btn-success float-right">
-                                <i class="fas fa-plus"></i> {{ __('Add route') }}
+                            <button id="add_route_btn" class="btn btn-success">
+                                <i class="fas fa-plus"></i> {{ __('views/team.edit.add_route') }}
                             </button>
-                            <button id="view_existing_routes" class="btn btn-warning float-right"
-                                    style="display: none;">
-                                <i class="fas fa-backward"></i> {{ __('Stop adding routes') }}
+                        @else
+                            <button id="add_route_btn" class="btn btn-success" disabled
+                                    data-toggle="tooltip" title="{{ __('views/team.edit.add_route_no_moderator') }}">
+                                <i class="fas fa-plus"></i> {{ __('views/team.edit.add_route') }}
                             </button>
                         @endif
+                        <button id="view_existing_routes" class="btn btn-warning"
+                                style="display: none;">
+                            <i class="fas fa-backward"></i> {{ __('views/team.edit.stop_adding_routes') }}
+                        </button>
                     </div>
                 </div>
 
-                @include('common.dungeonroute.table', ['view' => 'team', 'team' => $model])
+                @include('common.dungeonroute.table', ['view' => 'team', 'team' => $team])
             </div>
         </div>
 
         <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
             <h4>
-                {{ __('Members') }}
+                {{ __('views/team.edit.members') }}
             </h4>
             <div class="form-group">
-                <h5>
-                    {{ __('Invite new members') }}
-                </h5>
+                @component('common.general.alert', ['type' => 'info', 'name' => 'team-invite-info'])
+                    {{ __('views/team.edit.invite_code_share_warning') }}
+                @endcomponent
+
                 <div class="row">
-                    @if(!isAlertDismissed('team-invite-info'))
-                        <div class="col">
-                            <div class="alert alert-info alert-dismissible">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close"
-                                   data-alert-dismiss-id="team-invite-info">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                                <i class="fas fa-info-circle"></i>
-                                {{ __('Be careful who you share the invite link with, everyone with the link can join your team!') }}
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <div class="row">
-                    <div class="col-xl-5">
+                    <div class="col-xl-6">
+                        {!! Form::label('team_members_invite_link', __('views/team.edit.invite_new_members'), [], false) !!}
                         <div class="input-group-append">
-                            {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $model->invite_code]),
+                            {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]),
                                 ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                             <div class="input-group-append">
                                 <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                        data-toggle="tooltip" title="{{ __('Copy to clipboard') }}">
+                                        data-toggle="tooltip"
+                                        title="{{ __('views/team.edit.copy_to_clipboard_title') }}">
                                     <i class="far fa-copy"></i>
                                 </button>
-                                @if($model->isUserModerator(\App\User::findOrFail(Auth::id())))
+                                @if($userIsModerator)
                                     <button id="team_invite_link_refresh" class="btn btn-info"
-                                            data-toggle="tooltip" title="{{ __('Refresh invite link') }}">
+                                            data-toggle="tooltip"
+                                            title="{{ __('views/team.edit.refresh_invite_link_title') }}">
                                         <i class="fa fa-sync"></i>
                                     </button>
                                 @endif
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-6">
+                        {!! Form::label('default_role', __('views/team.edit.default_role'), [], false) !!}
+                        <?php $keys = array_keys(\App\Models\TeamUser::ALL_ROLES); ?>
+                        {!! Form::select('default_role', array_map(function($role){
+                                return __(sprintf('teamroles.%s', $role));
+                            }, array_combine($keys, $keys)), $team->default_role, ['class' => 'form-control selectpicker']) !!}
+                    </div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <span class="">
+                    @php(ob_start())
+                    @include('common.thirdparty.patreon.fancylink')
+                    @php($patreonLink = trim(ob_get_clean()))
+                    @if( $userHasAdFreeTeamMembersPatreonBenefit )
+                        {!! __('views/team.edit.ad_free_giveaway_description_available', [
+                            'patreon' => $patreonLink,
+                            'current' => $userAdFreeTeamMembersRemaining,
+                            'max' => $userAdFreeTeamMembersMax,
+                        ]) !!}
+                    @else
+                        {!!  __('views/team.edit.ad_free_giveaway_description_not_available', [
+                            'patreon' => $patreonLink,
+                            'max' => $userAdFreeTeamMembersMax,
+                        ]) !!}
+                    @endif
+                </span>
             </div>
 
             <div class="form-group">
@@ -204,15 +242,26 @@ foreach ($model->teamusers as $teamuser) {
             </div>
         </div>
 
+        <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="team-tags-tab">
+            <h4>
+                {{ __('views/team.edit.team_tags') }}
+            </h4>
+            <p>
+                {{ __('views/team.edit.team_tags_description') }}
+            </p>
+
+            @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_TEAM])
+        </div>
+
         @if($userIsModerator)
             <div class="tab-pane fade" id="details" role="tabpanel"
                  aria-labelledby="details-tab">
                 <div class="">
                     <h4>
-                        {{ __('Team details') }}
+                        {{ __('views/team.edit.team_details') }}
                     </h4>
 
-                    @include('team.details', ['model' => $model])
+                    @include('common.team.details', ['model' => $team])
                 </div>
             </div>
         @endif

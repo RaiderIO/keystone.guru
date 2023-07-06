@@ -1,0 +1,18 @@
+.nitropay.report-link {
+    z-index: 99999;
+}
+
+.nitropay.report-link a {
+    margin: 0 !important;
+    color: #EBEBEB;
+}
+
+.nitropay-style a {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #EBEBEB;
+    display: inline-block;
+    height: 10px;
+}

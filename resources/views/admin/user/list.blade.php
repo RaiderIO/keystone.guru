@@ -1,16 +1,15 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('User list')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.user.list.title')])
 
 @section('header-title')
-    {{ __('View Users') }}
+    {{ __('views/admin.user.list.header') }}
 @endsection
 
-<?php
-/** @var $models \Illuminate\Support\Collection */
-?>
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         /** @type object */
-        let paidTiers = {!! $paidTiers; !!};
+        let patreonBenefits = {!! $patreonBenefits; !!};
 
         $(function () {
             $('#admin_user_table').DataTable({
@@ -24,18 +23,18 @@
                     refreshSelectPickers();
 
                     // Add a new row when the button is pressed
-                    $('select.patreon_paid_tiers').bind('change', function () {
+                    $('select.patreon_benefits').bind('change', function () {
                         let $this = $(this);
 
                         $.ajax({
                             type: 'PUT',
-                            url: `/ajax/user/${$this.data('userid')}/patreon/paidtier`,
+                            url: `/ajax/user/${$this.data('userid')}/patreon/benefit`,
                             data: {
-                                paidtiers: $this.val()
+                                patreonBenefits: $this.val()
                             },
                             dataType: 'json',
                             success: function () {
-                                showSuccessNotification('Paid tiers updated successfully');
+                                showSuccessNotification(lang.get('messages.updated_patreon_benefits_successfully_label'));
                             }
                         });
                     });
@@ -54,6 +53,11 @@
                         'title': lang.get('messages.name_label'),
                         'data': 'name',
                         'name': 'name'
+                    },
+                    {
+                        'title': lang.get('messages.email_label'),
+                        'data': 'email',
+                        'name': 'email'
                     },
                     {
                         'title': lang.get('messages.route_count_label'),
@@ -102,20 +106,25 @@
                         'searchable': false,
                         'render': function (data, type, row, meta) {
                             let result = '';
-                            if (row.patreondata !== null) {
+                            if (row.patreon_user_link !== null) {
                                 let template = Handlebars.templates['admin_users_table_row_patreon'];
 
-                                let paidTiersCopy = JSON.parse(JSON.stringify(paidTiers));
-                                for (let i = 0; i < row.patreondata.paidtiers.length; i++) {
-                                    let userPaidTier = row.patreondata.paidtiers[i];
-                                    for (let j = 0; j < paidTiersCopy.length; j++) {
-                                        if (paidTiersCopy[j].id === userPaidTier.id) {
-                                            paidTiersCopy[j].selected = true;
+                                console.log(row.patreon_user_link);
+
+                                let patreonBenefitsCopy = JSON.parse(JSON.stringify(patreonBenefits));
+                                for (let i = 0; i < row.patreon_user_link.patreonbenefits.length; i++) {
+                                    let userPaidTier = row.patreon_user_link.patreonbenefits[i];
+                                    for (let j = 0; j < patreonBenefitsCopy.length; j++) {
+                                        // Translate the patreon benefit's name
+                                        patreonBenefitsCopy[j].name = lang.get(patreonBenefitsCopy[j].name);
+
+                                        if (patreonBenefitsCopy[j].id === userPaidTier.id) {
+                                            patreonBenefitsCopy[j].selected = true;
                                         }
                                     }
                                 }
 
-                                result = template($.extend({}, getHandlebarsDefaultVariables(), row, {paidtiers: paidTiersCopy}));
+                                result = template($.extend({}, getHandlebarsDefaultVariables(), row, {paidtiers: patreonBenefitsCopy}));
                             }
 
                             return result;
@@ -134,74 +143,15 @@
     <table id="admin_user_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="5%">{{ __('Id') }}</th>
-            <th width="30%">{{ __('Name') }}</th>
-            <th width="15%">{{ __('# routes') }}</th>
-            <th width="10%">{{ __('Roles') }}</th>
-            <th width="15%">{{ __('Registered') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
-            <th width="10%">{{ __('Patreon') }}</th>
+            <th width="5%">{{ __('views/admin.user.list.table_header_id') }}</th>
+            <th width="15%">{{ __('views/admin.user.list.table_header_name') }}</th>
+            <th width="15%">{{ __('views/admin.user.list.table_header_email') }}</th>
+            <th width="10%">{{ __('views/admin.user.list.table_header_routes') }}</th>
+            <th width="10%">{{ __('views/admin.user.list.table_header_roles') }}</th>
+            <th width="15%">{{ __('views/admin.user.list.table_header_registered') }}</th>
+            <th width="10%">{{ __('views/admin.user.list.table_header_actions') }}</th>
+            <th width="10%">{{ __('views/admin.user.list.table_header_patreons') }}</th>
         </tr>
         </thead>
-
-        {{--        <tbody>--}}
-        {{--        @foreach ($models as $user)--}}
-        {{--            <?php /** @var $user \App\User */?>--}}
-        {{--            <tr>--}}
-        {{--                <td>{{ $user->id }}</td>--}}
-        {{--                <td>{{ $user->name }}</td>--}}
-        {{--                <td>{{ $user->dungeonroutes->count() }}</td>--}}
-        {{--                <td>{{ implode(', ', $user->roles->pluck('display_name')->toArray())}}</td>--}}
-        {{--                <td>{{ $user->created_at->setTimezone('Europe/Amsterdam') }}</td>--}}
-        {{--                <td>--}}
-        {{--                    <?php--}}
-        {{--                    // I really want to be the only one doing this--}}
-        {{--                    if( Auth::user()->name === 'Admin' ){ ?>--}}
-
-        {{--                            <div class="dropdown">--}}
-        {{--                                <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton"--}}
-        {{--                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-        {{--                                    {{ __('Actions') }}--}}
-        {{--                                </button>--}}
-        {{--                                <div class="dropdown-menu" aria-labelledby="userActionsButton">--}}
-        {{--                                    <a class="dropdown-item" href="#">--}}
-        {{--                                        {{ Form::model($user, ['route' => ['admin.user.makeadmin', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}--}}
-        {{--                                        {!! Form::submit(__('Make admin'), ['class' => 'btn btn-info', 'name' => 'submit']) !!}--}}
-        {{--                                        {!! Form::close() !!}--}}
-        {{--                                    </a>--}}
-        {{--                                    <a class="dropdown-item" href="#">--}}
-        {{--                                        {{ Form::model($user, ['route' => ['admin.user.makeuser', $user->id], 'autocomplete' => 'off', 'method' => 'post']) }}--}}
-        {{--                                        {!! Form::submit(__('Make user'), ['class' => 'btn btn-info ml-1', 'name' => 'submit']) !!}--}}
-        {{--                                        {!! Form::close() !!}--}}
-        {{--                                    </a>--}}
-        {{--                                    <a class="dropdown-item" href="#">--}}
-        {{--                                        {{ Form::model($user, ['route' => ['admin.user.delete', $user->id], 'autocomplete' => 'off', 'method' => 'delete']) }}--}}
-        {{--                                        {!! Form::submit(__('Delete user'), ['class' => 'btn btn-danger ml-1', 'name' => 'submit']) !!}--}}
-        {{--                                        {!! Form::close() !!}--}}
-        {{--                                    </a>--}}
-        {{--                                </div>--}}
-        {{--                            </div>--}}
-        {{--                    <?php } else {--}}
-        {{--                        echo __('Please login as "Admin"');--}}
-        {{--                    }--}}
-        {{--                    ?>--}}
-        {{--                </td>--}}
-        {{--                <td>--}}
-        {{--                    @if(!$user->hasRole('admin'))--}}
-        {{--                        {!! Form::select('patreon_paid_tiers', $paidTiers->pluck('name', 'id'),--}}
-        {{--                                isset($user->patreondata) ? $user->patreondata->paidtiers->pluck('id') : null, [--}}
-        {{--                            'class' => 'form-control selectpicker patreon_paid_tiers',--}}
-        {{--                            'multiple' => 'multiple',--}}
-        {{--                            'data-selected-text-format' => 'count > 1',--}}
-        {{--                            'data-count-selected-text' => __('{0} paid tiers'),--}}
-        {{--                            'data-userid' => $user->id--}}
-        {{--                            ])--}}
-        {{--                        !!}--}}
-        {{--                    @endif--}}
-        {{--                </td>--}}
-        {{--            </tr>--}}
-        {{--        @endforeach--}}
-        {{--        </tbody>--}}
-
     </table>
 @endsection

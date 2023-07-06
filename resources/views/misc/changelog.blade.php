@@ -1,15 +1,15 @@
 <?php
 /** @var $releases Illuminate\Pagination\LengthAwarePaginator|\App\Models\Release[] */
 /** @var $categories \Illuminate\Support\Collection|\App\Models\ReleaseChangelogCategory[] */
-$isAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
+/** @var $isUserAdmin boolean */
 ?>
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Changelog')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.changelog.title')])
 
-@section('header-title', __('Changelog'))
+@section('header-title', __('views/misc.changelog.header'))
+<?php // Only add the releases when we're an admin, otherwise empty it ?>
 @include('common.general.inline', ['path' => 'release/view', 'options' => array_merge(
     ['max_release' => $releases->first()->id],
-     // Only add the releases when we're an admin, otherwise empty it
-     $isAdmin ? ['releases' => $releases->all()] : []
+     $isUserAdmin ? ['releases' => $releases->all()] : []
 )])
 
 @section('content')
@@ -17,5 +17,12 @@ $isAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
         @include('common.release.release', ['release' => $release])
     @endforeach
 
-    {{ $releases->links() }}
+    <div class="row mt-2">
+        <div class="col">
+
+        </div>
+        <div class="col-auto">
+            {{ $releases->onEachSide(2)->links() }}
+        </div>
+    </div>
 @endsection

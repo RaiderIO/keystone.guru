@@ -1,38 +1,58 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
 <?php
-/** @var $model \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load(['expansion', 'floors']);
+$dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
+
+$sandbox = $dungeonroute->isSandbox();
 ?>
+
+@extends('layouts.map', ['title' => sprintf(__('views/dungeonroute.edit.title'), $dungeonroute->title)])
+
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',
-    'dependencies' => ['common/maps/map']
+    'dependencies' => ['common/maps/map'],
+    'options' => [
+        'dungeonroute' => $dungeonroute,
+        'levelMin' => config('keystoneguru.keystone.levels.min'),
+        'levelMax' => config('keystoneguru.keystone.levels.max'),
+    ]
 ])
+
+@section('linkpreview')
+    @include('common.general.linkpreview', [
+        'title' => sprintf(__('views/dungeonroute.edit.linkpreview_title'), $dungeonroute->title),
+        'description' => !empty($dungeonroute->description) ?
+            $dungeonroute->description :
+            ($dungeonroute->isSandbox() ?
+            sprintf(__('views/dungeonroute.edit.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name)) :
+            sprintf(__('views/dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name)),
+            'image' => $dungeonroute->dungeon->getImageUrl()
+    ])
+@endsection
 
 @section('content')
     <div class="wrapper">
-        @include('common.maps.editsidebar', [
-            'dungeon' => $dungeon,
-            'floorId' => $floor->id,
-            'show' => [
-                'sharing' => true,
-                'draw-settings' => true,
-                'route-settings' => true,
-                'route-publish' => true,
-                'tags' => false, // Temporarily disabled
-            ]
-        ])
-
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'dungeonroute' => $model,
+            'dungeonroute' => $dungeonroute,
             'edit' => true,
-            'test' => 'test',
-            'floorId' => $floor->id
-        ])
-
-        @include('common.maps.killzonessidebar', [
-            'edit' => true
+            'sandboxMode' => $sandbox,
+            'floorId' => $floor->id,
+            'show' => [
+                'header' => true,
+                'controls' => [
+                    'draw' => true,
+                    'pulls' => true,
+                    'enemyinfo' => true,
+                ],
+                'share' => [
+                    'link' => !$sandbox,
+                    'embed' => !$sandbox,
+                    'mdt-export' => true,
+                    'publish' => !$sandbox,
+                ]
+            ],
+            'hiddenMapObjectGroups' => [],
         ])
     </div>
 @endsection

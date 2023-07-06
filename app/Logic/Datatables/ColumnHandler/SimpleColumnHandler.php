@@ -18,13 +18,13 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, $columnName, $columnData);
     }
 
-    protected function _applyFilter(Builder $builder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
             $searchValue = $columnData['search']['value'] ?? $generalSearch;
             if (!empty($searchValue)) {
-                $builder->orWhere($this->getColumnData(), 'LIKE', sprintf('%%%s%%', $searchValue));
+                $subBuilder->orWhere($this->getColumnData(), 'LIKE', sprintf('%%%s%%', $searchValue));
             }
         }
 
@@ -33,7 +33,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
             // Order on this column?
             if (!is_null($order)) {
                 // Order either asc or desc, nothing else
-                $builder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                $subBuilder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }
         }
     }

@@ -10,12 +10,12 @@ class PatherMapState extends MapState {
     start() {
         super.start();
 
-        this.map.pather.setMode(L.Pather.MODE.CREATE);
+        this.map.togglePather(true);
     }
 
     stop() {
         super.stop();
 
-        this.map.pather.setMode(L.Pather.MODE.VIEW);
+        this.map.togglePather(false);
     }
 }

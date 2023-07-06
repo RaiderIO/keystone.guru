@@ -4,28 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
 use App\Models\Release;
+use App\Models\Season;
+use App\Service\DungeonRoute\CoverageServiceInterface;
+use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class SiteController extends Controller
 {
+    /**
+     * Show the application dashboard.
+     *
+     * @return Application|Factory|View
+     */
+    public function test()
+    {
+        return view('misc.test');
+    }
 
     /**
      * Show the application dashboard.
      *
-     * @param ExpansionService $expansionService
-     *
      * @return Application|Factory|View
      */
-    public function index(ExpansionService $expansionService)
+    public function index(CoverageServiceInterface $coverageService, SeasonService $seasonService)
     {
-        return view('home', ['expansionService' => $expansionService]);
+        if (Auth::check()) {
+            $season = null;
+            if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
+                $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
+            }
+            $season = $season ?? $seasonService->getCurrentSeason();
+
+            return view('profile.overview', [
+                'dungeonRoutes' => $coverageService->getForUser(Auth::user(), $season),
+            ]);
+        } else {
+            return view('home');
+        }
     }
 
     /**
@@ -84,11 +109,25 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return Factory|View
+     * @return Application|Factory|View|RedirectResponse
      */
     public function changelog(Request $request)
     {
-        return view('misc.changelog', ['releases' => Release::orderBy('created_at', 'DESC')->paginate(5)]);
+        $releases = Release::orderBy('created_at', 'DESC')->paginate(5);
+        if ($releases->isEmpty()) {
+            return redirect()->route('misc.changelog');
+        } else {
+            return view('misc.changelog', ['releases' => $releases]);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function health(Request $request)
+    {
+        return view('misc.health');
     }
 
     /**
@@ -111,22 +150,37 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
+     * @param DiscoverServiceInterface $discoverService
      * @param SeasonService $seasonService
-     * @return Factory|View
-     */
-    public function affixes(Request $request, SeasonService $seasonService)
-    {
-        return view('misc.affixes', ['seasonService' => $seasonService, 'offset' => (int)$request->get('offset', 0)]);
-    }
-
-    /**
-     * @param Request $request
      * @param ExpansionService $expansionService
+     * @param TimewalkingEventServiceInterface $timewalkingEventService
      * @return Factory|View
+     * @throws Exception
      */
-    public function demo(Request $request, ExpansionService $expansionService)
+    public function affixes(
+        Request                          $request,
+        DiscoverServiceInterface         $discoverService,
+        SeasonService                    $seasonService,
+        ExpansionService                 $expansionService,
+        TimewalkingEventServiceInterface $timewalkingEventService
+    )
     {
-        return view('misc.demo', ['expansionService' => $expansionService]);
+        $currentExpansion = $expansionService->getCurrentExpansion();
+
+        return view('misc.affixes', [
+            'timewalkingEventService' => $timewalkingEventService,
+            'expansion'               => $currentExpansion,
+            'seasonService'           => $seasonService,
+            'offset'                  => max(min((int)$request->get('offset', 0), 10), -20),
+            'dungeonroutes'           => [
+                'thisweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),
+                'nextweek' => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
+                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getNextAffixGroup()),
+            ],
+        ]);
     }
 
     /**

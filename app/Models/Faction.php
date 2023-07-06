@@ -2,33 +2,57 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasIconFile;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
+
 /**
- * @property string $name
+ * @property int                        $id
+ * @property int                        $icon_file_id
+ * @property string                     $key
+ * @property string                     $name
+ * @property string                     $color
  *
- * @property \Illuminate\Support\Collection $races
- * @property \Illuminate\Support\Collection $dungeonroutes
+ * @property Collection|CharacterRace[] $races
+ * @property Collection|DungeonRoute[]  $dungeonroutes
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class Faction extends IconFileModel
+class Faction extends CacheModel
 {
-    public $timestamps = false;
-    public $hidden = ['icon_file_id', 'pivot'];
+    use HasIconFile;
+
+    const FACTION_ANY         = 'any';
+    const FACTION_UNSPECIFIED = 'unspecified';
+    const FACTION_HORDE       = 'horde';
+    const FACTION_ALLIANCE    = 'alliance';
+
+    public    $timestamps = false;
+    public    $hidden     = ['icon_file_id', 'pivot'];
+    public    $fillable   = ['id', 'icon_file_id', 'key', 'name', 'color'];
+    protected $with       = ['iconfile'];
+
+    const ALL = [
+        self::FACTION_UNSPECIFIED => 1,
+        self::FACTION_HORDE       => 2,
+        self::FACTION_ALLIANCE    => 3,
+    ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function races()
+    public function races(): HasMany
     {
-        return $this->hasMany('App\Models\CharacterRace');
+        return $this->hasMany(CharacterRace::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function dungeonroutes()
+    public function dungeonroutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute');
+        return $this->hasMany(DungeonRoute::class);
     }
 
     public static function boot()

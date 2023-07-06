@@ -1,6 +1,7 @@
-@extends('layouts.app', ['title' => __('Login'), 'showAds' => false])
+@extends('layouts.sitepage', ['title' => __('views/auth.login.title'), 'showAds' => false])
 
-@section('header-title', 'Login')
 @section('content')
-    @include('common.forms.login')
+    <div class="pt-4">
+        @include('common.forms.login')
+    </div>
 @endsection

@@ -16,8 +16,26 @@ class MapContext extends Signalable {
             )
         }
 
+        // Init spells
+        let spells = this._options.static.spells;
+        this.spells = [];
+        for (let i = 0; i < spells.length; i++) {
+            this.spells.push(
+                new Spell(spells[i])
+            )
+        }
+
         this.unknownMapIconType = this.getMapIconType(this._options.static.unknownMapIconType.id);
         this.awakenedObeliskGatewayMapIconType = this.getMapIconType(this._options.static.awakenedObeliskGatewayMapIconType.id);
+    }
+
+    /**
+     * Always return false in a context where affixes are not known
+     * @param affix {String}
+     * @returns {boolean}
+     */
+    hasAffix(affix) {
+        return false;
     }
 
     /**
@@ -45,6 +63,22 @@ class MapContext extends Signalable {
     }
 
     /**
+     * Get the Map Icon Type for an ID in the MAP_ICON_TYPES array.
+     * @param mapIconTypeKey {String}
+     * @returns {MapIconType}
+     */
+    getMapIconTypeByKey(mapIconTypeKey) {
+        let mapIconType = this.getUnknownMapIconType();
+        for (let i = 0; i < this.mapIconTypes.length; i++) {
+            if (this.mapIconTypes[i].key === mapIconTypeKey) {
+                mapIconType = this.mapIconTypes[i];
+                break;
+            }
+        }
+        return mapIconType;
+    }
+
+    /**
      * Gets the default map icon for initializing; when the map icon is unknown.
      * @returns {MapIconType}
      */
@@ -58,6 +92,29 @@ class MapContext extends Signalable {
      */
     getAwakenedObeliskGatewayMapIconType() {
         return this.awakenedObeliskGatewayMapIconType;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getSpells() {
+        return this.spells;
+    }
+
+    /**
+     * @param spellId {Number}
+     * @returns {Spell}
+     */
+    getSpell(spellId) {
+        let spell = null;
+        for (let i = 0; i < this.spells.length; i++) {
+            if (this.spells[i].id === spellId) {
+                spell = this.spells[i];
+                break;
+            }
+        }
+        return spell;
     }
 
     /**
@@ -144,6 +201,46 @@ class MapContext extends Signalable {
     }
 
     /**
+     * Finds a floor by id.
+     * @param index {Number}
+     * @returns {*}|bool
+     */
+    getFloorByIndex(index) {
+        console.assert(this instanceof MapContext, 'this is not a MapContext', this);
+        let result = false;
+
+        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
+            let floor = this._options.dungeon.floors[i];
+            if (floor.index === index) {
+                result = floor;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds a floor by id.
+     * @param floorId {Number}
+     * @returns {*}|bool
+     */
+    getFloorById(floorId) {
+        console.assert(this instanceof MapContext, 'this is not a MapContext', this);
+        let result = false;
+
+        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
+            let floor = this._options.dungeon.floors[i];
+            if (floor.id === floorId) {
+                result = floor;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      *
      * @returns {{}}
      */
@@ -195,6 +292,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getMountableAreas() {
+        return this._options.dungeon.mountableAreas;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getNpcs() {
         return this._options.npcs;
     }
@@ -234,10 +339,18 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @returns {Number}
+     */
+    getKeystoneScalingFactor() {
+        return this._options.keystoneScalingFactor;
+    }
+
+    /**
+     *
      * @returns {[]}
      */
     getAuras() {
-        return this._options.auras;
+        return this._options.dungeon.auras;
     }
 
     /**
@@ -247,13 +360,109 @@ class MapContext extends Signalable {
     findAuraById(auraId) {
         let result = null;
 
-        for (let i = 0; i < this._options.auras.length; i++) {
-            if (this._options.auras[i].id === auraId) {
-                result = this._options.auras[i];
+        for (let i = 0; i < this._options.dungeon.auras.length; i++) {
+            if (this._options.dungeon.auras[i].id === auraId) {
+                result = this._options.dungeon.auras[i];
                 break;
             }
         }
 
         return result;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getEchoChannelName() {
+        return this._options.echoChannelName;
+    }
+
+    /**
+     *
+     * @returns {Number|null}
+     */
+    getUserPublicKey() {
+        return this._options.userPublicKey;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesRequired() {
+        return this._options.mappingVersion.enemy_forces_required;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesRequiredTeeming() {
+        return this._options.mappingVersion.enemy_forces_required_teeming;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesShrouded() {
+        return this._options.mappingVersion.enemy_forces_shrouded;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getEnemyForcesShroudedZulGamux() {
+        return this._options.mappingVersion.enemy_forces_shrouded_zul_gamux;
+    }
+
+    /**
+     *
+     * @returns [{npc_id: Number, count: Number}]
+     */
+    getDungeonSpeedrunRequiredNpcs10Man() {
+        return this._options.dungeon.dungeon_speedrun_required_npcs10_man;
+    }
+
+    /**
+     *
+     * @returns [{npc_id: Number, count: Number}]
+     */
+    getDungeonSpeedrunRequiredNpcs25Man() {
+        return this._options.dungeon.dungeon_speedrun_required_npcs25_man;
+    }
+
+    /**
+     *
+     * @returns {Boolean}
+     */
+    isDungeonSpeedrunEnabled() {
+        return this._options.dungeon.speedrun_enabled;
+    }
+
+    /**
+     *
+     * @returns {id: Number, dungeon_id: Number, version: Number}
+     */
+    getDungeonLatestMappingVersion() {
+        return this._options.dungeon.latestMappingVersion;
+    }
+
+    /**
+     *
+     * @returns {id: Number, dungeon_id: Number, version: Number}
+     */
+    getMappingVersion() {
+        return this._options.mappingVersion;
+    }
+
+    /**
+     *
+     * @returns {String}
+     */
+    getMappingVersionUpgradeUrl() {
+        return this._options.mappingVersionUpgradeUrl;
     }
 }

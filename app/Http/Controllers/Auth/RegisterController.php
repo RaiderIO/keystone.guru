@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
-use Faker\Provider\Color;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Session;
 
 class RegisterController extends Controller
 {
@@ -47,43 +48,44 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|alpha_dash|max:32|unique:users',
-            'email' => 'required|email|max:255|unique:users',
+            'name'                  => 'required|alpha_dash|max:32|unique:users',
+            'email'                 => 'required|email|max:255|unique:users',
             'game_server_region_id' => 'nullable|int',
-            'password' => 'required|min:8|confirmed',
-            'legal_agreed' => 'required|accepted'
+            'password'              => 'required|min:8|confirmed',
+            'legal_agreed'          => 'required|accepted',
         ], [
-            'legal_agreed.required' => __('You have to agree to our legal terms to register.'),
-            'legal_agreed.accepted' => __('You have to agree to our legal terms to register. 2')
+            'legal_agreed.required' => __('controller.register.legal_agreed_required'),
+            'legal_agreed.accepted' => __('controller.register.legal_agreed_accepted'),
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array $data
+     * @param array $data
      * @return User
      */
     protected function create(array $data)
     {
         // Attach User role to any new user
-        $userRole = Role::all()->where('name', 'user')->first();
+        $userRole = Role::where('name', 'user')->first();
 
         /** @var User $user */
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'echo_color' => Color::hexColor(),
+            'public_key'            => User::generateRandomPublicKey(),
+            'name'                  => $data['name'],
+            'email'                 => $data['email'],
+            'echo_color'            => randomHexColor(),
             'game_server_region_id' => $data['region'],
-            'password' => bcrypt($data['password']),
-            'legal_agreed' => $data['legal_agreed'],
-            'legal_agreed_ms' => intval($data['legal_agreed_ms'])
+            'password'              => bcrypt($data['password']),
+            'legal_agreed'          => $data['legal_agreed'],
+            'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);
 
         $user->attachRole($userRole);
@@ -94,8 +96,8 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      * @throws ValidationException
      */
     public function register(Request $request)
@@ -113,7 +115,7 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        \Session::flash('status', __('Registered successfully. Enjoy the website!'));
+        Session::flash('status', __('controller.register.flash.registered_successfully'));
 
         // Set the redirect path if it was set
         $this->redirectTo = $request->get('redirect', '/profile');

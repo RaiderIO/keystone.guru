@@ -2,26 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property string $type
  *
- * @mixin \Eloquent
+ * @property Collection|Npc[] $npcs
+ *
+ * @mixin Eloquent
  */
-class NpcType extends Model
+class NpcType extends CacheModel
 {
-    const ABERRATION = 1;
-    const BEAST = 2;
-    const CRITTER = 3;
-    const DEMON = 4;
-    const DRAGONKIN = 5;
-    const ELEMENTAL = 6;
-    const GIANT = 7;
-    const HUMANOID = 8;
-    const MECHANICAL = 9;
-    const UNDEAD = 10;
+    const ABERRATION    = 1;
+    const BEAST         = 2;
+    const CRITTER       = 3;
+    const DEMON         = 4;
+    const DRAGONKIN     = 5;
+    const ELEMENTAL     = 6;
+    const GIANT         = 7;
+    const HUMANOID      = 8;
+    const MECHANICAL    = 9;
+    const UNDEAD        = 10;
     const UNCATEGORIZED = 11;
 
     const ALL = [
@@ -41,7 +45,10 @@ class NpcType extends Model
     protected $fillable = ['id', 'type'];
     public $timestamps = false;
 
-    public function getTypeKeyAttribute()
+    /**
+     * @return string
+     */
+    public function getTypeKeyAttribute(): string
     {
         return strtolower($this->type);
     }
@@ -49,10 +56,10 @@ class NpcType extends Model
     /**
      * Gets all derived NPCs from this type.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function npcs()
+    public function npcs(): HasMany
     {
-        return $this->hasMany('App\Models\Npc');
+        return $this->hasMany(Npc::class);
     }
 }

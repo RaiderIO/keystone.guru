@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -18,7 +17,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class ReleaseChangelog extends Model
+class ReleaseChangelog extends CacheModel
 {
     protected $fillable = ['id', 'release_id', 'description'];
     protected $with = ['changes'];
@@ -28,16 +27,16 @@ class ReleaseChangelog extends Model
     /**
      * @return HasOne
      */
-    function release()
+    public function release(): HasOne
     {
-        return $this->hasOne('App\Models\Release');
+        return $this->hasOne(Release::class);
     }
 
     /**
      * @return HasMany
      */
-    function changes()
+    public function changes(): HasMany
     {
-        return $this->hasMany('App\Models\ReleaseChangelogChange')->orderBy('release_changelog_category_id');
+        return $this->hasMany(ReleaseChangelogChange::class)->orderBy('release_changelog_category_id');
     }
 }

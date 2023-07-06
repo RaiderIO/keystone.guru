@@ -27,7 +27,7 @@ class EnemyVisualManager extends Signalable {
             if (addedEnemy.id > 0 && !self._enemyVisibilityMap.hasOwnProperty(addedEnemy.id)) {
                 self._enemyVisibilityMap[addedEnemy.id] = {
                     wasVisible: objectAddEvent.data.object.isVisibleOnScreen(),
-                    lastRefreshedZoomLevel: getState().getMapZoomLevel()
+                    lastRefreshedZoomLevel: parseInt(getState().getMapZoomLevel())
                 };
                 self._enemyMouseMoveDistanceData[addedEnemy.id] = {
                     lastCheckTime: 0,
@@ -37,6 +37,14 @@ class EnemyVisualManager extends Signalable {
         });
 
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
+        getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
+        getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));
+        getState().register('enemyaggressivenessborder:changed', this, this._onEnemyAggressivenessBorderChanged.bind(this));
+        getState().register('enemydangerousborder:changed', this, this._onEnemyDangerousBorderChanged.bind(this));
+
+
+        getState().register('enemydisplaytype:changed', this, this._onEnemyDisplayTypeChanged.bind(this));
+
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.on('mousemove', self._onLeafletMapMouseMove.bind(self));
 
@@ -55,28 +63,130 @@ class EnemyVisualManager extends Signalable {
 
     /**
      * Called when the map's zoom level was changed.
-     * @param zoomLevelChangedEvent
+     * @param zoomLevelChangedEvent {Object}
      * @private
      */
     _onZoomLevelChanged(zoomLevelChangedEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let currentZoomLevel = getState().getMapZoomLevel();
+        let isMdtMappingModeEnabled = getState().getMdtMappingModeEnabled();
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-            let enemy = enemyMapObjectGroup.objects[i];
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
 
             // Only refresh what we can see
-            if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
-                // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
-                // reworking to support a full refresh of the visual
-                if (enemy.visual.isHighlighted()) {
-                    window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
-                } else {
-                    window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
+            let isMdt = (isMdtMappingModeEnabled && enemy.is_mdt);
+            if (enemy.id > 0 || isMdt) {
+                let shouldAlwaysRebuild = enemy.visual.shouldAlwaysRebuild();
+                if (shouldAlwaysRebuild || enemy.isVisibleOnScreen()) {
+                    // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
+                    // reworking to support a full refresh of the visual
+                    if (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt) {
+                        window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+                    } else {
+                        window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
+                    }
+                    // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
+                    // But don't do this for mdt enemies - just recalculate then
+                    if (enemy.id > 0) {
+                        this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = parseInt(zoomLevelChangedEvent.data.mapZoomLevel);
+                    }
                 }
-                // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
-                this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
+            }
+        }
+    }
+
+    /**
+     * Called when the number style was changed.
+     * @param numberStyleChangedEvent {Object}
+     * @private
+     */
+    _onNumberStyleChanged(numberStyleChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
+
+            // Only refresh what we can see
+            if (enemy.id > 0 && enemy.isVisible() && enemy.visual.mainVisual.shouldRefreshOnNumberStyleChanged()) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called when the user has changed one of the enemy opacity changed sliders
+     * @param unkilledEnemyOpacityChangedEvent {Object}
+     * @private
+     */
+    _onUnkilledEnemyOpacityChanged(unkilledEnemyOpacityChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let opacity = unkilledEnemyOpacityChangedEvent.data.opacity;
+        let selector = '.map_enemy_visual_fade'
+
+        if (unkilledEnemyOpacityChangedEvent.name === 'unkilledimportantenemyopacity:changed') {
+            selector += '.important';
+        } else {
+            // Otherwise it will also select all important enemies
+            selector += ':not(.important)';
+        }
+
+        $(selector).css('opacity', `${opacity}%`);
+    }
+
+    /**
+     * Called when the user has decided to add/remove aggressiveness borders
+     * @param enemyAggressivenessBorderChangedEvent {Object}
+     * @private
+     */
+    _onEnemyAggressivenessBorderChanged(enemyAggressivenessBorderChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
+
+            if (enemy.id > 0 && enemy.isVisible()) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called when the user has decided to add/remove dangerous borders
+     * @param enemyDangerousBorderChangedEvent {Object}
+     * @private
+     */
+    _onEnemyDangerousBorderChanged(enemyDangerousBorderChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
+
+            if (enemy.id > 0 && enemy.isVisible() && enemy.npc !== null && enemy.npc.dangerous) {
+                window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
+            }
+        }
+    }
+
+    /**
+     * Called whenever the user has decided to change the enemy display type
+     * @param enemyDisplayTypeChangedEvent
+     * @private
+     */
+    _onEnemyDisplayTypeChanged(enemyDisplayTypeChangedEvent) {
+        console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        for (let key in enemyMapObjectGroup.objects) {
+            let enemy = enemyMapObjectGroup.objects[key];
+            console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', this);
+            if (enemy.visual !== null) {
+                enemy.visual.setVisualType(enemyDisplayTypeChangedEvent.data.enemyDisplayType);
             }
         }
     }
@@ -94,10 +204,10 @@ class EnemyVisualManager extends Signalable {
             let currTime = (new Date()).getTime();
 
             // Once every 50 ms, calculation is expensive
-            if (currTime - this._lastMouseMoveDistanceCheckTime > 50) {
+            if (currTime - this._lastMouseMoveDistanceCheckTime > 50 || !organic) {
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                    let enemy = enemyMapObjectGroup.objects[i];
+                for (let key in enemyMapObjectGroup.objects) {
+                    let enemy = enemyMapObjectGroup.objects[key];
 
                     if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
                         let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
@@ -141,14 +251,14 @@ class EnemyVisualManager extends Signalable {
     _onLeafletMapMove(mouseMoveEvent) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let currentZoomLevel = getState().getMapZoomLevel();
+        let currentZoomLevel = parseInt(getState().getMapZoomLevel());
 
         let currTime = (new Date()).getTime();
         // Once every 100 ms, calculation is expensive
         if (currTime - this._lastMapMoveDistanceCheckTime > 50) {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-            for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                let enemy = enemyMapObjectGroup.objects[i];
+            for (let key in enemyMapObjectGroup.objects) {
+                let enemy = enemyMapObjectGroup.objects[key];
 
                 if (enemy.id > 0) {
                     let isVisible = enemy.isVisibleOnScreen();

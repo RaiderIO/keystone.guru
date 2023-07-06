@@ -20,13 +20,38 @@ class EnemyVisualMain extends EnemyVisualIcon {
         // Handle Teeming display
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            mainVisualOuterClasses.push(npc.aggressiveness);
+            let state = getState();
+            if (state.hasEnemyAggressivenessBorder()) {
+                mainVisualOuterClasses.push(npc.aggressiveness);
+            }
 
-            mainVisualInnerClasses.push(npc.dangerous ? 'dangerous' : '');
+            if (state.hasEnemyDangerousBorder() && npc.dangerous) {
+                mainVisualInnerClasses.push('dangerous');
+            } else if (this.enemyvisual.enemy.isAwakenedNpc()) {
+                mainVisualInnerClasses.push('awakened');
+            }
+
+            let mapContext = state.getMapContext();
+            let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
+            if (this.enemyvisual.enemy.isShrouded() && hasShroudedAffix) {
+                mainVisualInnerClasses.push('shrouded');
+            } else if (this.enemyvisual.enemy.isShroudedZulGamux() && hasShroudedAffix) {
+                mainVisualInnerClasses.push('shrouded_zul_gamux');
+            } else if (this.enemyvisual.enemy.isNotShrouded() && state.isMapAdmin()) {
+                mainVisualInnerClasses.push('no_shrouded');
+            } else if (this.enemyvisual.enemy.isInspiring()) {
+                mainVisualInnerClasses.push('inspiring');
+            } else if (this.enemyvisual.enemy.isEncrypted()) {
+                mainVisualInnerClasses.push('encrypted');
+            } else if (this.enemyvisual.enemy.isPridefulNpc()) {
+                mainVisualInnerClasses.push('prideful');
+            } else if (this.enemyvisual.enemy.isTormented()) {
+                mainVisualInnerClasses.push('tormented');
+            }
         }
 
         // Any additional classes to add for when the enemy is selectable
-        let selectionClasses = [];
+        // let selectionClasses = [];
         // if (this.enemyvisual.enemy.isSelectable()) {
         //     selectionClasses.push('selected_enemy_icon');
         // }
@@ -35,7 +60,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
             // Set the main icon
             main_visual_outer_classes: mainVisualOuterClasses.join(' '),
             main_visual_inner_classes: mainVisualInnerClasses.join(' '),
-            selection_classes: selectionClasses.join(' ')
+            selection_classes: [] // selectionClasses.join(' ')
         });
     }
 
@@ -45,6 +70,43 @@ class EnemyVisualMain extends EnemyVisualIcon {
      */
     _refreshNpc() {
 
+    }
+
+    /**
+     * @param textLength {Number}
+     * @returns {*}
+     * @protected
+     */
+    _getTextWidth(textLength = 1) {
+        let size = this.enemyvisual.mainVisual.getSize();
+        let width = size.iconSize[0];
+
+        width -= c.map.enemy.calculateMargin(width);
+
+        // More characters to display..
+        if (textLength >= 4) {
+            width -= 22;
+        } else if (textLength === 3) {
+            width -= 17;
+        } else if (textLength === 2) {
+            width -= 14;
+        } else {
+            width -= 10;
+        }
+        // Dangerous = less space
+        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant()) {
+            width -= 2;
+            // Obsolete enemies require additional subtraction to keep it looking nice
+            if (this.enemyvisual.enemy.isObsolete()) {
+                width -= 3;
+            }
+        }
+
+
+        // Inverse zoom
+        width += (c.map.settings.maxZoom - getState().getMapZoomLevel());
+
+        return width;
     }
 
     getSize() {
@@ -57,7 +119,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
             return this._sizeCache[zoomLevelOffset];
         }
 
-        let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health;
+        let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health * ((this.enemyvisual.enemy.npc.health_percentage ?? 100) / 100);
         if (this.enemyvisual.enemy.npc === null) {
             if (!getState().isMapAdmin()) {
                 console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
@@ -76,7 +138,12 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Smaller MDT icons to make it easier to link them
         if (this.enemyvisual.enemy.is_mdt) {
-            calculatedSize /= 2;
+            calculatedSize *= c.map.enemy.mdt_size_factor;
+        }
+
+        // If boss, grow
+        if (this.enemyvisual.enemy.npc !== null && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.enemyvisual.enemy.npc.classification_id)) {
+            calculatedSize *= c.map.enemy.boss_size_factor;
         }
 
 
@@ -84,6 +151,13 @@ class EnemyVisualMain extends EnemyVisualIcon {
             iconSize: [calculatedSize + zoomLevelOffset, calculatedSize + zoomLevelOffset]
         };
         return this.getSize();
+    }
+
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualName';
     }
 
     cleanup() {

@@ -1,23 +1,25 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Expansion listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.expansion.list.title')])
 
 @section('header-title')
     <div class="row">
         <div class="col-lg">
-            <h4>{{ __('View expansions') }}</h4>
+            <h4>{{ __('views/admin.expansion.list.header') }}</h4>
         </div>
         <div class="ml-auto">
-            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto" role="button">
-                <i class="fas fa-plus"></i> {{ __('Create expansion') }}
+            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto"
+               role="button">
+                <i class="fas fa-plus"></i> {{ __('views/admin.expansion.list.create_expansion') }}
             </a>
         </div>
     </div>
 @endsection
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
-            $('#admin_expansion_table').DataTable({
-            });
+            $('#admin_expansion_table').DataTable({});
         });
     </script>
 @endsection
@@ -26,24 +28,35 @@
     <table id="admin_expansion_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="10%">{{ __('Icon') }}</th>
-            <th width="10%">{{ __('Id') }}</th>
-            <th width="50%">{{ __('Name') }}</th>
-            <th width="20%">{{ __('Color') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="50px">{{ __('views/admin.expansion.list.table_header_active') }}</th>
+            <th width="10%">{{ __('views/admin.expansion.list.table_header_icon') }}</th>
+            <th width="10%">{{ __('views/admin.expansion.list.table_header_id') }}</th>
+            <th width="50%">{{ __('views/admin.expansion.list.table_header_name') }}</th>
+            <th width="20%">{{ __('views/admin.expansion.list.table_header_color') }}</th>
+            <th width="10%">{{ __('views/admin.expansion.list.table_header_actions') }}</th>
         </tr>
         </thead>
 
         <tbody>
-        @foreach ($models->all() as $expansion)
+        @foreach ($expansions->all() as $expansion)
             <tr>
-                <td><img src="{{ Image::url($expansion->iconfile->getUrl(), 32, 32) }}"/></td>
+                @if($expansion->active)
+                    <td data-order="{{ $expansion->id }}">
+                        <i class="fas fa-check-circle text-success"></i>
+                    </td>
+                @else
+                    <td data-order="{{ $expansion->id + 1000 }}">
+                        <i class="fas fa-times-circle text-danger"></i>
+                    </td>
+                @endif
+                <td><img src="{{ url(sprintf('images/expansions/%s.png', $expansion->shortname)) }}" style="width: 50px;"/></td>
                 <td>{{ $expansion->id }}</td>
-                <td>{{ $expansion->name }}</td>
+                <td>{{ __($expansion->name) }}</td>
                 <td>{{ $expansion->color }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.expansion.edit', ['expansion' => $expansion->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
+                    <a class="btn btn-primary"
+                       href="{{ route('admin.expansion.edit', ['expansion' => $expansion]) }}">
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.expansion.list.edit') }}
                     </a>
                 </td>
             </tr>

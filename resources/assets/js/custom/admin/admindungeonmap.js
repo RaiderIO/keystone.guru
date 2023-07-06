@@ -15,12 +15,15 @@ class AdminDungeonMap extends DungeonMap {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = [];
 
-        if (getState().getMapContext().getDungeon().name === 'Siege of Boralus') {
+        // @TODO make constants off of this
+        if (getState().getMapContext().getDungeon().key === 'siegeofboralus' || getState().getMapContext().getDungeon().key === 'thenexus') {
             result.push(new FactionDisplayControls(this));
         }
 
-        result.push(new AdminDrawControls(this, editableLayers));
-        result.push(new EnemyVisualControls(this));
+        if (!this.options.readonly) {
+            result.push(new AdminDrawControls(this, editableLayers));
+        }
+        // result.push(new EnemyVisualControls(this));
         result.push(new AdminPanelControls(this));
 
         if (getState().isEchoEnabled()) {

@@ -7,7 +7,7 @@ function initAwakenedObeliskGatewayIcon() {
             TYPE: MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK
         },
         options: {
-            icon: getMapIconLeafletIcon(getState().getMapContext().getAwakenedObeliskGatewayMapIconType(), false)
+            icon: getLeafletIcon(getState().getMapContext().getAwakenedObeliskGatewayMapIconType(), false)
         },
         initialize: function (map, options) {
             // Save the type so super can fire, need to do this as cannot do this.TYPE :(
@@ -36,5 +36,13 @@ class MapIconAwakenedObelisk extends MapIcon {
                 }
             });
         }
+    }
+
+    shouldBeVisible() {
+        if (!getState().getMapContext().hasAffix(AFFIX_AWAKENED)) {
+            return false;
+        }
+
+        return super.shouldBeVisible();
     }
 }

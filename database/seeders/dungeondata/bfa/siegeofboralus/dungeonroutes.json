@@ -1,0 +1,662 @@
+[
+    {
+        "public_key": "duS5nMi",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 18,
+        "mapping_version_id": 18,
+        "faction_id": 2,
+        "team_id": null,
+        "published_state_id": 1,
+        "title": "4.12 SIEGE by Dratnos",
+        "description": "",
+        "level_min": 2,
+        "level_max": 28,
+        "difficulty": "Casual",
+        "seasonal_index": 1,
+        "enemy_forces": 384,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2020-07-04T09:53:10+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
+        "playerspecializations": [],
+        "playerraces": [],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 47
+            }
+        ],
+        "brushlines": [],
+        "paths": [
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-179.9375,\"lng\":194.5},{\"lat\":-193.73,\"lng\":203.69}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-99.375,\"lng\":225.75},{\"lat\":-120.76,\"lng\":233.9}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 18,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-147.875,\"lng\":244.625},{\"lat\":-146.22,\"lng\":240.89}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "polyline": {
+                    "color": "#80FF1A",
+                    "color_animated": "#244812",
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-52.1875,\"lng\":245.78125},{\"lat\":-66.7,\"lng\":230.98}]"
+                },
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            }
+        ],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    1954,
+                    1955,
+                    1956,
+                    1957,
+                    1958,
+                    3449,
+                    3450,
+                    3451,
+                    3454
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    1959,
+                    1960,
+                    1962,
+                    1963,
+                    3467,
+                    3478,
+                    3479,
+                    3480
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    1964,
+                    1965,
+                    1967,
+                    1970,
+                    3468,
+                    3469,
+                    3470,
+                    3471
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    1971,
+                    1972,
+                    1973,
+                    1974,
+                    1975,
+                    1976,
+                    1979,
+                    1980,
+                    1981,
+                    1982,
+                    1983,
+                    1984,
+                    2014,
+                    2015
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    4229
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    1977,
+                    1978,
+                    1985,
+                    1986,
+                    1987,
+                    1988,
+                    1989,
+                    1991
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    1846,
+                    1847,
+                    1850,
+                    1851,
+                    1852,
+                    1853,
+                    1854,
+                    1855,
+                    1990,
+                    1992,
+                    1993,
+                    1994,
+                    1995,
+                    1996,
+                    1997,
+                    1998
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    1856,
+                    1857,
+                    1858,
+                    1859,
+                    1860,
+                    1861,
+                    1862,
+                    1999,
+                    2000,
+                    2001,
+                    2002,
+                    2003,
+                    2004
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    167,
+                    3475,
+                    3476
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    1863,
+                    1864,
+                    1865,
+                    1866,
+                    2010,
+                    2011
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    1868,
+                    1869,
+                    1870,
+                    1871,
+                    1872,
+                    1873,
+                    1874,
+                    1875
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    4177
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    1876,
+                    1877,
+                    1878,
+                    1879,
+                    1880
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "enemies": [
+                    1881,
+                    1882,
+                    1883,
+                    1884
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "enemies": [
+                    1885,
+                    1886,
+                    2021,
+                    2022,
+                    2023,
+                    2024,
+                    2025,
+                    2026,
+                    2027,
+                    2028,
+                    2029,
+                    2030,
+                    2031,
+                    2032,
+                    2033,
+                    2034,
+                    2035,
+                    2036,
+                    2037,
+                    2038
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "enemies": [
+                    2039,
+                    2040,
+                    2041,
+                    2042,
+                    2178,
+                    2179,
+                    2180,
+                    2181,
+                    2182,
+                    2184
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "enemies": [
+                    1891,
+                    1892,
+                    1893,
+                    1894,
+                    1895,
+                    2045,
+                    2046
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "enemies": [
+                    4178
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "enemies": [
+                    1896,
+                    1897,
+                    1903,
+                    1904,
+                    3424
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "enemies": [
+                    1898,
+                    1899,
+                    1900,
+                    1901,
+                    1902
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "enemies": [
+                    166
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 22,
+                "enemies": [
+                    1905,
+                    1906,
+                    1907,
+                    1908
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 23,
+                "enemies": [
+                    4230
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 24,
+                "enemies": [
+                    1930,
+                    1931,
+                    1932,
+                    1933,
+                    1934
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 25,
+                "enemies": [
+                    1935,
+                    1936,
+                    1937,
+                    1938
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 26,
+                "enemies": [
+                    1939,
+                    1940,
+                    1941,
+                    1942,
+                    1943
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 27,
+                "enemies": [
+                    1944,
+                    1945,
+                    1946
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 28,
+                "enemies": [
+                    165
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#1b2695",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 29,
+                "enemies": [
+                    164
+                ],
+                "spells": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "prideful_enemies": [],
+        "mapicons": [
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -193.73,
+                "lng": 203.69,
+                "comment": "Brutal Spire of Ny'alotha (Urg'roth, Breaker of Heroes)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 17,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -120.76,
+                "lng": 233.9,
+                "comment": "Cursed Spire of Ny'alotha (Voidweaver Mal'thir)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 18,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -146.22,
+                "lng": 240.89,
+                "comment": "Defiled Spire of Ny'alotha (Blood of the Corruptor)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 19,
+                        "target_map_icon_seasonal_index": null
+                    }
+                ]
+            },
+            {
+                "floor_id": 47,
+                "map_icon_type_id": 11,
+                "lat": -66.7,
+                "lng": 230.98,
+                "comment": "Entropic Spire of Ny'alotha (Samh'rek, Beckoner of Chaos)",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": [
+                    {
+                        "target_map_icon_type_id": 20,
+                        "target_map_icon_seasonal_index": 1
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -16,60 +16,55 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
+    /**  @var Request */
+    protected Request $request;
 
-    /**
-     * @var Request
-     */
-    protected $_request;
+    /**  @var Builder */
+    protected Builder $builder;
 
-    /**
-     * @var Builder
-     */
-    protected $_builder;
-
-    /**
-     * @var array
-     */
-    protected $_columnHandlers;
+    /** @var DatatablesColumnHandler[] */
+    protected array $columnHandlers;
 
     public function __construct(Request $request)
     {
-        $this->_request = $request;
-        $this->_columnHandlers = [];
+        $this->request        = $request;
+        $this->columnHandlers = [];
     }
 
     /**
      * @return Request
      */
-    function getRequest()
+    public function getRequest(): Request
     {
-        return $this->_request;
+        return $this->request;
     }
 
     /**
      * @return Builder
      */
-    function getBuilder()
+    public function getBuilder(): Builder
     {
-        return $this->_builder;
+        return $this->builder;
     }
 
     /**
      * @param Builder $builder
+     *
      * @return $this
      */
-    public function setBuilder(Builder $builder)
+    public function setBuilder(Builder $builder): DatatablesHandler
     {
-        $this->_builder = $builder;
+        $this->builder = $builder;
 
         return $this;
     }
 
     /**
      * @param DatatablesColumnHandler|array $dtColumnHandlers
+     *
      * @return $this
      */
-    public function addColumnHandler($dtColumnHandlers = [])
+    public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
     {
         if (!is_array($dtColumnHandlers)) {
             $dtColumnHandlers = [$dtColumnHandlers];
@@ -77,7 +72,7 @@ abstract class DatatablesHandler
 
         foreach ($dtColumnHandlers as $handler) {
             /** @var $handler DatatablesColumnHandler */
-            $this->_columnHandlers[$handler->getColumnName()] = $handler;
+            $this->columnHandlers[$handler->getColumnName()] = $handler;
         }
 
         return $this;
@@ -87,30 +82,33 @@ abstract class DatatablesHandler
      * @return $this
      * @throws \Exception
      */
-    public function applyRequestToBuilder()
+    public function applyRequestToBuilder(): DatatablesHandler
     {
         // Set limits
-        $this->_builder->offset((int)$this->_request->get('start'));
-        $this->_builder->limit((int)$this->_request->get('length'));
+        $this->builder->offset((int)$this->request->get('start'));
+        $this->builder->limit((int)$this->request->get('length'));
 
-        // For any custom column handlers, handle their wishes
-        foreach ($this->_columnHandlers as $columnHandler) {
-            $columnHandler->applyToBuilder();
-        }
+        // For any custom column handlers, handle their wishes inside a single where
+        $this->builder->where(function (Builder $subBuilder)
+        {
+            foreach ($this->columnHandlers as $columnHandler) {
+                $columnHandler->applyToBuilder($subBuilder);
+            }
 
-        // Handle default filtering/sorting
-        $columns = $this->_request->get('columns', []);
-        foreach ($columns as $column) {
-            $columnName = $column['name'];
-            // Only if the column name was set
-            if (!empty($columnName)) {
-                // Only if not handled by a custom column handler
-                if (!isset($this->_columnHandlers[$columnName])) {
-                    // Handle filtering/sorting by this column
-                    (new SimpleColumnHandler($this, $columnName))->applyToBuilder();
+            // Handle default filtering/sorting
+            $columns = $this->request->get('columns', []);
+            foreach ($columns as $column) {
+                $columnName = $column['name'];
+                // Only if the column name was set
+                if (!empty($columnName)) {
+                    // Only if not handled by a custom column handler
+                    if (!isset($this->columnHandlers[$columnName])) {
+                        // Handle filtering/sorting by this column
+                        (new SimpleColumnHandler($this, $columnName))->applyToBuilder($subBuilder);
+                    }
                 }
             }
-        }
+        });
 
         return $this;
     }
@@ -118,7 +116,7 @@ abstract class DatatablesHandler
     /**
      * @return array
      */
-    public function getResult()
+    public function getResult(): array
     {
         $isDev = config('app.env') !== 'production';
         if ($isDev) {
@@ -126,11 +124,11 @@ abstract class DatatablesHandler
         }
 
         // Fetch the data
-        $data = $this->_builder->get();
+        $data = $this->builder->get();
 
         $recordsTotal = $this->calculateRecordsTotal();
-        $result = [
-            'draw'            => (int)$this->_request->get('draw'),
+        $result       = [
+            'draw'            => (int)$this->request->get('draw'),
             // Initial amount of records
             'recordsTotal'    => $recordsTotal,
             // The amount of records after filtering
@@ -138,9 +136,9 @@ abstract class DatatablesHandler
             // The amount of rows there would have been, if it were not for the limits
             'recordsFiltered' => $this->calculateRecordsFiltered() ?? $recordsTotal,
             // Only show this info in dev instance
-            'input'           => $isDev ? $this->_request->toArray() : [],
+            'input'           => $isDev ? $this->request->toArray() : [],
             // Debug sql queries for optimization
-            'queries'         => $isDev ? DB::getQueryLog() : []
+            'queries'         => $isDev ? DB::getQueryLog() : [],
         ];
 
         if ($isDev) {

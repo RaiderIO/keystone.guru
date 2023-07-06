@@ -14,7 +14,7 @@ class ViewKillZoneEnemySelection extends EnemySelection {
      * @returns {boolean}
      * @protected
      */
-    _filter(source, enemyCandidate){
+    _filter(source, enemyCandidate) {
         console.assert(this instanceof ViewKillZoneEnemySelection, 'this is not a ViewKillZoneEnemySelection', this);
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
@@ -25,7 +25,7 @@ class ViewKillZoneEnemySelection extends EnemySelection {
      * The way the icon looks when an enemy may be selected.
      * @protected
      */
-    _getLayerIcon(){
+    _getLayerIcon() {
         console.assert(this instanceof ViewKillZoneEnemySelection, 'this is not a ViewKillZoneEnemySelection', this);
         return LeafletKillZoneIconEditMode;
     }

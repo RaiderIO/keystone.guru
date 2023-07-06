@@ -4,14 +4,18 @@
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
-use App\Models\Floor;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
+use App\Models\Mapping\MappingVersion;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface
 {
-    function shouldSynchronizeMapping(): bool
+    /**
+     * @return bool
+     */
+    public function shouldSynchronizeMapping(): bool
     {
         /** @var MappingChangeLog $mostRecentMappingChangeLog */
         $mostRecentMappingChangeLog = MappingChangeLog::latest()->first();
@@ -24,21 +28,15 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param bool $ignoreMostRecentCommit
      * @return Collection|MappingChangeLog[]
      */
-    function getUnsynchronizedMappingChanges(bool $ignoreMostRecentCommit = false): Collection
+    public function getUnmergedMappingChanges(): Collection
     {
-        /** @var MappingCommitLog $mostRecentMappingCommitLog */
-        if ($ignoreMostRecentCommit) {
-            $allCommits = MappingCommitLog::all();
-            $mostRecentMappingCommitLog = $allCommits->count() > 1 ? $allCommits->get($allCommits->count() - 2) : null;
-        } else {
-            $mostRecentMappingCommitLog = MappingCommitLog::latest()->first();
-        }
+        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
 
-        if ($mostRecentMappingCommitLog !== null) {
-            $result = MappingChangeLog::where('created_at', '>', $mostRecentMappingCommitLog->created_at->toDateTimeString())->get();
+        if ($mostRecentlyMergedMappingCommitLog !== null) {
+            // Get all changes that have been done right after the most recently merged commit
+            $result = MappingChangeLog::where('created_at', '>', $mostRecentlyMergedMappingCommitLog->created_at->toDateTimeString())->get();
         } else {
             $result = MappingChangeLog::all();
         }
@@ -47,45 +45,100 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @param bool $ignoreMostRecentCommit
      * @return Collection|Dungeon[]
      */
-    function getRecentlyChangedDungeons(bool $ignoreMostRecentCommit = false): Collection
+    public function getDungeonsWithUnmergedMappingChanges(): Collection
     {
-        /** @var Collection|Dungeon[] $result */
-        $result = collect();
+        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
 
-        $mostRecentMappingChanges = $this->getUnsynchronizedMappingChanges($ignoreMostRecentCommit);
+        if ($mostRecentlyMergedMappingCommitLog !== null) {
+            $dungeonQueryBuilder = Dungeon::select('dungeons.*')
+                ->join('mapping_change_logs', 'dungeons.id', 'mapping_change_logs.dungeon_id')
+                ->where('mapping_change_logs.created_at', '>', $mostRecentlyMergedMappingCommitLog->created_at->toDateTimeString())
+                ->groupBy('dungeon_id');
+        } else {
+            // Get all of them instead
+            $dungeonQueryBuilder = Dungeon::select('dungeons.*')
+                ->join('mapping_change_logs', 'dungeons.id', 'mapping_change_logs.dungeon_id');
+        }
 
-        foreach ($mostRecentMappingChanges as $mappingChange) {
-            // Decode the latest known value
-            $decoded = json_decode(!empty($mappingChange->after_model) ? $mappingChange->after_model : $mappingChange->before_model, true);
+        return $dungeonQueryBuilder
+            ->whereNotNull('dungeon_id')
+            ->get()
+            ->keyBy(function (Dungeon $dungeon) {
+                return $dungeon->id;
+            });
+    }
 
-            // Only if we actually decoded something; prevents crashes
-            if ($decoded !== false && isset($decoded['floor_id'])) {
-                $changedFloor = Floor::find($decoded['floor_id']);
+    /**
+     * @inheritDoc
+     */
+    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
-                // If we found the floor that was changed, add its dungeon to the list if it wasn't already in there
-                if ($changedFloor !== null) {
-                    $exists = false;
+        return MappingVersion::create([
+            'dungeon_id'       => $dungeon->id,
+            'mdt_mapping_hash' => optional($currentMappingVersion)->mdt_mapping_hash ?? '',
+            'version'          => (++optional($currentMappingVersion)->version) ?? 1,
+            'created_at'       => Carbon::now()->toDateTimeString(),
+            'updated_at'       => Carbon::now()->toDateTimeString(),
+        ]);
+    }
 
-                    foreach ($result as $dungeon) {
-                        if ($dungeon->id === $changedFloor->dungeon_id) {
-                            $exists = true;
-                            break;
-                        }
-                    }
+    /**
+     * @inheritDoc
+     */
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
+        $newMappingVersionVersion = (optional($currentMappingVersion)->version ?? 0) + 1;
 
-                    if (!$exists) {
-                        $result->add($changedFloor->dungeon);
-                    }
-                }
+        // This needs to happen quietly as to not trigger MappingVersion events defined in its class
+        $id = MappingVersion::insertGetId([
+            'dungeon_id'       => $dungeon->id,
+            'mdt_mapping_hash' => $hash,
+            'version'          => $newMappingVersionVersion,
+            'created_at'       => Carbon::now()->toDateTimeString(),
+            'updated_at'       => Carbon::now()->toDateTimeString(),
+        ]);
+
+        $newMappingVersion = MappingVersion::find($id);
+
+        // Copy all map icons over from the previous mapping version - this allows us to keep adding icons regardless of
+        // MDT mapping
+        if ($currentMappingVersion !== null) {
+            foreach ($currentMappingVersion->mapIcons as $mapIcon) {
+                $mapIcon->cloneForNewMappingVersion($newMappingVersion);
             }
+
+            foreach ($currentMappingVersion->mountableAreas as $mountableArea) {
+                $mountableArea->cloneForNewMappingVersion($newMappingVersion);
+            }
+        }
+
+        return $newMappingVersion;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+
+        $wasRecentlyChanged = $this->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id);
+
+        // If we were recently changed, it means a new mapping version was already created (by the request that triggered
+        // the creation of the mapping version). If we are the first mapping change for this dungeon since the last merge,
+        // we create a new mapping version and return that.
+        if ($wasRecentlyChanged) {
+            $result = $currentMappingVersion;
+        } else {
+            $result = $this->createNewMappingVersionFromPreviousMapping($dungeon);
         }
 
         return $result;
     }
-
-
 }

@@ -1,26 +1,43 @@
 // $(function () {
-    L.Draw.EnemyPack = L.Draw.Polygon.extend({
-        statics: {
-            TYPE: 'enemypack'
-        },
-        options: {},
-        initialize: function (map, options) {
-            // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-            this.type = L.Draw.EnemyPack.TYPE;
+L.Draw.EnemyPack = L.Draw.Polygon.extend({
+    statics: {
+        TYPE: 'enemypack'
+    },
+    options: {},
+    initialize: function (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.EnemyPack.TYPE;
 
-            L.Draw.Feature.prototype.initialize.call(this, map, options);
-        }
-    });
+        L.Draw.Feature.prototype.initialize.call(this, map, options);
+    }
+});
+
 // });
-
-class EnemyPack extends MapObject {
+/**
+ * @property {Number} floor_id
+ * @property {Number|null} group
+ * @property {string} color
+ * @property {String} label
+ * @property {Array} vertices
+ */
+class EnemyPack extends VersionableMapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'enemypack'});
+        super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
 
         this.label = 'Enemy pack';
 
-        this.color = null;
         this.rawEnemies = [];
+
+        getState().register('killzonesnumberstyle:changed', this, this.rebindTooltip.bind(this));
+    }
+
+    /**
+     *
+     * @returns {string}
+     * @protected
+     */
+    _getPolylineColorDefault() {
+        return c.map.enemypack.defaultColor();
     }
 
     /**
@@ -43,6 +60,16 @@ class EnemyPack extends MapObject {
                 default: getState().getCurrentFloor().id
             }),
             new Attribute({
+                name: 'group',
+                type: 'int',
+            }),
+            new Attribute({
+                name: 'color',
+                type: 'color',
+                setter: this.setColor.bind(this),
+                default: this._getPolylineColorDefault.bind(this)
+            }),
+            new Attribute({
                 name: 'label',
                 type: 'text',
                 edit: false, // Not directly changeable by user
@@ -54,6 +81,27 @@ class EnemyPack extends MapObject {
                 edit: false,
                 getter: function () {
                     return self.getVertices();
+                }
+            }),
+            new Attribute({
+                name: 'mark_as_skippable',
+                type: 'button',
+                buttonType: 'info',
+                buttonText: lang.get('messages.enemypack_mark_as_skippable_button_text_label'),
+                clicked: function (e) {
+                    self.map.leafletMap.closePopup();
+
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+                    for (let key in enemyMapObjectGroup.objects) {
+                        let enemy = enemyMapObjectGroup.objects[key];
+
+                        // Detach all enemies from this pack if it's deleted
+                        if (enemy.enemy_pack_id === self.id) {
+                            enemy.skippable = !enemy.skippable;
+                            enemy.save();
+                        }
+                    }
                 }
             })
         ]);
@@ -68,6 +116,21 @@ class EnemyPack extends MapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         this._updateHullLayer();
+    }
+
+    /**
+     * Sets the color of the pack.
+     * @param color
+     */
+    setColor(color) {
+        console.assert(this instanceof EnemyPack, 'this was not an EnemyPack', this);
+
+        this.color = color;
+        this.layer.setStyle({
+            fillColor: this.color ?? this._getPolylineColorDefault(),
+            color: this.color ?? this._getPolylineColorDefault()
+        });
+        this.layer.redraw();
     }
 
     /**
@@ -100,7 +163,7 @@ class EnemyPack extends MapObject {
             let rawEnemy = this.rawEnemies[i];
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
-            if( enemy !== null ) {
+            if (enemy !== null) {
                 // We're not unregging this since this will never change when in view/edit mode, only in admin mode when this code isn't triggered
                 enemy.register(['shown', 'hidden'], this, this._onEnemyVisibilityToggled.bind(this));
             } else {
@@ -149,6 +212,7 @@ class EnemyPack extends MapObject {
 
         let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
         enemyPackMapObjectGroup.setLayerToMapObject(result, this);
+        this.rebindTooltip();
     }
 
     /**
@@ -176,6 +240,46 @@ class EnemyPack extends MapObject {
     // this.decorator.addTo(this.map.leafletMap);
     // }
 
+    bindTooltip() {
+        super.bindTooltip();
+
+        if (this.layer !== null) {
+            let displayText = '';
+
+            if (this.group !== null) {
+                displayText += `G${this.group}: `;
+            }
+
+            displayText += `+${this.getEnemyForces()} / +${getFormattedPercentage(this.getEnemyForces(), this.map.enemyForcesManager.getEnemyForcesRequired())}%`;
+
+            this.layer.bindTooltip(displayText.trim(), {
+                sticky: true,
+                direction: 'top'
+            });
+        }
+    }
+
+    /**
+     *
+     * @returns {number}
+     */
+    getEnemyForces() {
+        let result = 0;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let i = 0; i < this.rawEnemies.length; i++) {
+            let rawEnemy = this.rawEnemies[i];
+            let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
+            result += enemy.getEnemyForces();
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getVertices() {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
@@ -197,5 +301,6 @@ class EnemyPack extends MapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         super.cleanup();
+        getState().unregister('killzonesnumberstyle:changed', this);
     }
 }

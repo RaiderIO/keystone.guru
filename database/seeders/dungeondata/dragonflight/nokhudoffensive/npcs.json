@@ -1,0 +1,2186 @@
+[
+    {
+        "id": 186151,
+        "dungeon_id": 71,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 107680,
+        "name": "Balakar Khan",
+        "base_health": 5723357,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5670,
+                "mapping_version_id": 96,
+                "npc_id": 186151,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4882,
+                "mapping_version_id": 88,
+                "npc_id": 186151,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4725,
+                "mapping_version_id": 85,
+                "npc_id": 186151,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4412,
+                "mapping_version_id": 79,
+                "npc_id": 186151,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3908,
+                "mapping_version_id": 69,
+                "npc_id": 186151,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 186338,
+        "dungeon_id": 71,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 105722,
+        "name": "Maruuk",
+        "base_health": 7154196,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5671,
+                "mapping_version_id": 96,
+                "npc_id": 186338,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4883,
+                "mapping_version_id": 88,
+                "npc_id": 186338,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4726,
+                "mapping_version_id": 85,
+                "npc_id": 186338,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4413,
+                "mapping_version_id": 79,
+                "npc_id": 186338,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3909,
+                "mapping_version_id": 69,
+                "npc_id": 186338,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 186339,
+        "dungeon_id": 71,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 105721,
+        "name": "Teera",
+        "base_health": 7154196,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5672,
+                "mapping_version_id": 96,
+                "npc_id": 186339,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4884,
+                "mapping_version_id": 88,
+                "npc_id": 186339,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4727,
+                "mapping_version_id": 85,
+                "npc_id": 186339,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4414,
+                "mapping_version_id": 79,
+                "npc_id": 186339,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3910,
+                "mapping_version_id": 69,
+                "npc_id": 186339,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 186615,
+        "dungeon_id": 71,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 107145,
+        "name": "The Raging Tempest",
+        "base_health": 7154196,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5673,
+                "mapping_version_id": 96,
+                "npc_id": 186615,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4885,
+                "mapping_version_id": 88,
+                "npc_id": 186615,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4728,
+                "mapping_version_id": 85,
+                "npc_id": 186615,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4415,
+                "mapping_version_id": 79,
+                "npc_id": 186615,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3911,
+                "mapping_version_id": 69,
+                "npc_id": 186615,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 186616,
+        "dungeon_id": 71,
+        "classification_id": 3,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 105823,
+        "name": "Granyth",
+        "base_health": 5437189,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5674,
+                "mapping_version_id": 96,
+                "npc_id": 186616,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4886,
+                "mapping_version_id": 88,
+                "npc_id": 186616,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4729,
+                "mapping_version_id": 85,
+                "npc_id": 186616,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4416,
+                "mapping_version_id": 79,
+                "npc_id": 186616,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3912,
+                "mapping_version_id": 69,
+                "npc_id": 186616,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 191847,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108673,
+        "name": "Nokhud Plainstomper",
+        "base_health": 1290613,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5678,
+                "mapping_version_id": 96,
+                "npc_id": 191847,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4890,
+                "mapping_version_id": 88,
+                "npc_id": 191847,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4733,
+                "mapping_version_id": 85,
+                "npc_id": 191847,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4420,
+                "mapping_version_id": 79,
+                "npc_id": 191847,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3916,
+                "mapping_version_id": 69,
+                "npc_id": 191847,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 192789,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108667,
+        "name": "Nokhud Longbow",
+        "base_health": 645307,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5679,
+                "mapping_version_id": 96,
+                "npc_id": 192789,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4891,
+                "mapping_version_id": 88,
+                "npc_id": 192789,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4734,
+                "mapping_version_id": 85,
+                "npc_id": 192789,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4421,
+                "mapping_version_id": 79,
+                "npc_id": 192789,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3917,
+                "mapping_version_id": 69,
+                "npc_id": 192789,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 192791,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108672,
+        "name": "Nokhud Warspear",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5680,
+                "mapping_version_id": 96,
+                "npc_id": 192791,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4892,
+                "mapping_version_id": 88,
+                "npc_id": 192791,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4735,
+                "mapping_version_id": 85,
+                "npc_id": 192791,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4422,
+                "mapping_version_id": 79,
+                "npc_id": 192791,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3918,
+                "mapping_version_id": 69,
+                "npc_id": 192791,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 192794,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108670,
+        "name": "Nokhud Beastmaster",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5681,
+                "mapping_version_id": 96,
+                "npc_id": 192794,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4893,
+                "mapping_version_id": 88,
+                "npc_id": 192794,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4736,
+                "mapping_version_id": 85,
+                "npc_id": 192794,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4423,
+                "mapping_version_id": 79,
+                "npc_id": 192794,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3919,
+                "mapping_version_id": 69,
+                "npc_id": 192794,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 192796,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108597,
+        "name": "Nokhud Hornsounder",
+        "base_health": 573606,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5682,
+                "mapping_version_id": 96,
+                "npc_id": 192796,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4894,
+                "mapping_version_id": 88,
+                "npc_id": 192796,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4737,
+                "mapping_version_id": 85,
+                "npc_id": 192796,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4424,
+                "mapping_version_id": 79,
+                "npc_id": 192796,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3920,
+                "mapping_version_id": 69,
+                "npc_id": 192796,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 192800,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108528,
+        "name": "Nokhud Lancemaster",
+        "base_health": 1290613,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5683,
+                "mapping_version_id": 96,
+                "npc_id": 192800,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4895,
+                "mapping_version_id": 88,
+                "npc_id": 192800,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4738,
+                "mapping_version_id": 85,
+                "npc_id": 192800,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4425,
+                "mapping_version_id": 79,
+                "npc_id": 192800,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3921,
+                "mapping_version_id": 69,
+                "npc_id": 192800,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 192803,
+        "dungeon_id": 71,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 101437,
+        "name": "War Ohuna",
+        "base_health": 286803,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5684,
+                "mapping_version_id": 96,
+                "npc_id": 192803,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4896,
+                "mapping_version_id": 88,
+                "npc_id": 192803,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4739,
+                "mapping_version_id": 85,
+                "npc_id": 192803,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4426,
+                "mapping_version_id": 79,
+                "npc_id": 192803,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3922,
+                "mapping_version_id": 69,
+                "npc_id": 192803,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 193373,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 110840,
+        "name": "Nokhud Thunderfist",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5685,
+                "mapping_version_id": 96,
+                "npc_id": 193373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4897,
+                "mapping_version_id": 88,
+                "npc_id": 193373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4740,
+                "mapping_version_id": 85,
+                "npc_id": 193373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4427,
+                "mapping_version_id": 79,
+                "npc_id": 193373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3923,
+                "mapping_version_id": 69,
+                "npc_id": 193373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 193457,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108222,
+        "name": "Balara",
+        "base_health": 1720817,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5686,
+                "mapping_version_id": 96,
+                "npc_id": 193457,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4898,
+                "mapping_version_id": 88,
+                "npc_id": 193457,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4741,
+                "mapping_version_id": 85,
+                "npc_id": 193457,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4428,
+                "mapping_version_id": 79,
+                "npc_id": 193457,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3924,
+                "mapping_version_id": 69,
+                "npc_id": 193457,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 193462,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108221,
+        "name": "Batak",
+        "base_health": 1720817,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5687,
+                "mapping_version_id": 96,
+                "npc_id": 193462,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4899,
+                "mapping_version_id": 88,
+                "npc_id": 193462,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4742,
+                "mapping_version_id": 85,
+                "npc_id": 193462,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4429,
+                "mapping_version_id": 79,
+                "npc_id": 193462,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3925,
+                "mapping_version_id": 69,
+                "npc_id": 193462,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194315,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108818,
+        "name": "Stormcaller Solongo",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5688,
+                "mapping_version_id": 96,
+                "npc_id": 194315,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4900,
+                "mapping_version_id": 88,
+                "npc_id": 194315,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4743,
+                "mapping_version_id": 85,
+                "npc_id": 194315,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4430,
+                "mapping_version_id": 79,
+                "npc_id": 194315,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3926,
+                "mapping_version_id": 69,
+                "npc_id": 194315,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194316,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108818,
+        "name": "Stormcaller Zarii",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5689,
+                "mapping_version_id": 96,
+                "npc_id": 194316,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4901,
+                "mapping_version_id": 88,
+                "npc_id": 194316,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4744,
+                "mapping_version_id": 85,
+                "npc_id": 194316,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4431,
+                "mapping_version_id": 79,
+                "npc_id": 194316,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3927,
+                "mapping_version_id": 69,
+                "npc_id": 194316,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194317,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108819,
+        "name": "Stormcaller Boroo",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5690,
+                "mapping_version_id": 96,
+                "npc_id": 194317,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4902,
+                "mapping_version_id": 88,
+                "npc_id": 194317,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4745,
+                "mapping_version_id": 85,
+                "npc_id": 194317,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4432,
+                "mapping_version_id": 79,
+                "npc_id": 194317,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3928,
+                "mapping_version_id": 69,
+                "npc_id": 194317,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194894,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108711,
+        "name": "Primalist Stormspeaker",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5691,
+                "mapping_version_id": 96,
+                "npc_id": 194894,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4903,
+                "mapping_version_id": 88,
+                "npc_id": 194894,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4746,
+                "mapping_version_id": 85,
+                "npc_id": 194894,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4433,
+                "mapping_version_id": 79,
+                "npc_id": 194894,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3929,
+                "mapping_version_id": 69,
+                "npc_id": 194894,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194895,
+        "dungeon_id": 71,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 101201,
+        "name": "Unstable Squall",
+        "base_health": 286803,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5692,
+                "mapping_version_id": 96,
+                "npc_id": 194895,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4904,
+                "mapping_version_id": 88,
+                "npc_id": 194895,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4747,
+                "mapping_version_id": 85,
+                "npc_id": 194895,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4434,
+                "mapping_version_id": 79,
+                "npc_id": 194895,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3930,
+                "mapping_version_id": 69,
+                "npc_id": 194895,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194896,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 108335,
+        "name": "Primal Stormshield",
+        "base_health": 932110,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5693,
+                "mapping_version_id": 96,
+                "npc_id": 194896,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4905,
+                "mapping_version_id": 88,
+                "npc_id": 194896,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4748,
+                "mapping_version_id": 85,
+                "npc_id": 194896,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4435,
+                "mapping_version_id": 79,
+                "npc_id": 194896,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3931,
+                "mapping_version_id": 69,
+                "npc_id": 194896,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194897,
+        "dungeon_id": 71,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 107517,
+        "name": "Stormsurge Totem",
+        "base_health": 344163,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5694,
+                "mapping_version_id": 96,
+                "npc_id": 194897,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4906,
+                "mapping_version_id": 88,
+                "npc_id": 194897,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4749,
+                "mapping_version_id": 85,
+                "npc_id": 194897,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4436,
+                "mapping_version_id": 79,
+                "npc_id": 194897,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3932,
+                "mapping_version_id": 69,
+                "npc_id": 194897,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 194898,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109038,
+        "name": "Primalist Arcblade",
+        "base_health": 860408,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5695,
+                "mapping_version_id": 96,
+                "npc_id": 194898,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4907,
+                "mapping_version_id": 88,
+                "npc_id": 194898,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4750,
+                "mapping_version_id": 85,
+                "npc_id": 194898,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4437,
+                "mapping_version_id": 79,
+                "npc_id": 194898,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3933,
+                "mapping_version_id": 69,
+                "npc_id": 194898,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195265,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108819,
+        "name": "Stormcaller Arynga",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5696,
+                "mapping_version_id": 96,
+                "npc_id": 195265,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4908,
+                "mapping_version_id": 88,
+                "npc_id": 195265,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4751,
+                "mapping_version_id": 85,
+                "npc_id": 195265,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4438,
+                "mapping_version_id": 79,
+                "npc_id": 195265,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3934,
+                "mapping_version_id": 69,
+                "npc_id": 195265,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195579,
+        "dungeon_id": 71,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 102511,
+        "name": "Primal Gust",
+        "base_health": 286803,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5697,
+                "mapping_version_id": 96,
+                "npc_id": 195579,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4909,
+                "mapping_version_id": 88,
+                "npc_id": 195579,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4752,
+                "mapping_version_id": 85,
+                "npc_id": 195579,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4439,
+                "mapping_version_id": 79,
+                "npc_id": 195579,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3935,
+                "mapping_version_id": 69,
+                "npc_id": 195579,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195696,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 110545,
+        "name": "Primalist Thunderbeast",
+        "base_health": 1434014,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5698,
+                "mapping_version_id": 96,
+                "npc_id": 195696,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4910,
+                "mapping_version_id": 88,
+                "npc_id": 195696,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4753,
+                "mapping_version_id": 85,
+                "npc_id": 195696,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4440,
+                "mapping_version_id": 79,
+                "npc_id": 195696,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3936,
+                "mapping_version_id": 69,
+                "npc_id": 195696,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195842,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109006,
+        "name": "Ukhel Corruptor",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5699,
+                "mapping_version_id": 96,
+                "npc_id": 195842,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4911,
+                "mapping_version_id": 88,
+                "npc_id": 195842,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4754,
+                "mapping_version_id": 85,
+                "npc_id": 195842,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4441,
+                "mapping_version_id": 79,
+                "npc_id": 195842,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3937,
+                "mapping_version_id": 69,
+                "npc_id": 195842,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195851,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109035,
+        "name": "Ukhel Deathspeaker",
+        "base_health": 860408,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5700,
+                "mapping_version_id": 96,
+                "npc_id": 195851,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4912,
+                "mapping_version_id": 88,
+                "npc_id": 195851,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4755,
+                "mapping_version_id": 85,
+                "npc_id": 195851,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4442,
+                "mapping_version_id": 79,
+                "npc_id": 195851,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3938,
+                "mapping_version_id": 69,
+                "npc_id": 195851,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195855,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 109017,
+        "name": "Risen Warrior",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5701,
+                "mapping_version_id": 96,
+                "npc_id": 195855,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4913,
+                "mapping_version_id": 88,
+                "npc_id": 195855,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4756,
+                "mapping_version_id": 85,
+                "npc_id": 195855,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4443,
+                "mapping_version_id": 79,
+                "npc_id": 195855,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3939,
+                "mapping_version_id": 69,
+                "npc_id": 195855,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195875,
+        "dungeon_id": 71,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 109018,
+        "name": "Desecrated Bakar",
+        "base_health": 286803,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5702,
+                "mapping_version_id": 96,
+                "npc_id": 195875,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4914,
+                "mapping_version_id": 88,
+                "npc_id": 195875,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4757,
+                "mapping_version_id": 85,
+                "npc_id": 195875,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4444,
+                "mapping_version_id": 79,
+                "npc_id": 195875,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3940,
+                "mapping_version_id": 69,
+                "npc_id": 195875,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195876,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 109019,
+        "name": "Desecrated Ohuna",
+        "base_health": 573606,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5703,
+                "mapping_version_id": 96,
+                "npc_id": 195876,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4915,
+                "mapping_version_id": 88,
+                "npc_id": 195876,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4758,
+                "mapping_version_id": 85,
+                "npc_id": 195876,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4445,
+                "mapping_version_id": 79,
+                "npc_id": 195876,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3941,
+                "mapping_version_id": 69,
+                "npc_id": 195876,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195877,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 109020,
+        "name": "Risen Mystic",
+        "base_health": 573606,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5704,
+                "mapping_version_id": 96,
+                "npc_id": 195877,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4916,
+                "mapping_version_id": 88,
+                "npc_id": 195877,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4759,
+                "mapping_version_id": 85,
+                "npc_id": 195877,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4446,
+                "mapping_version_id": 79,
+                "npc_id": 195877,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3942,
+                "mapping_version_id": 69,
+                "npc_id": 195877,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195878,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109021,
+        "name": "Ukhel Beastcaller",
+        "base_health": 1003810,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5705,
+                "mapping_version_id": 96,
+                "npc_id": 195878,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4917,
+                "mapping_version_id": 88,
+                "npc_id": 195878,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4760,
+                "mapping_version_id": 85,
+                "npc_id": 195878,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4447,
+                "mapping_version_id": 79,
+                "npc_id": 195878,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3943,
+                "mapping_version_id": 69,
+                "npc_id": 195878,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195927,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109014,
+        "name": "Soulharvester Galtmaa",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5706,
+                "mapping_version_id": 96,
+                "npc_id": 195927,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4918,
+                "mapping_version_id": 88,
+                "npc_id": 195927,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4761,
+                "mapping_version_id": 85,
+                "npc_id": 195927,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4448,
+                "mapping_version_id": 79,
+                "npc_id": 195927,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3944,
+                "mapping_version_id": 69,
+                "npc_id": 195927,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195928,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109015,
+        "name": "Soulharvester Duuren",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5707,
+                "mapping_version_id": 96,
+                "npc_id": 195928,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4919,
+                "mapping_version_id": 88,
+                "npc_id": 195928,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4762,
+                "mapping_version_id": 85,
+                "npc_id": 195928,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4449,
+                "mapping_version_id": 79,
+                "npc_id": 195928,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3945,
+                "mapping_version_id": 69,
+                "npc_id": 195928,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195929,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109036,
+        "name": "Soulharvester Tumen",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5708,
+                "mapping_version_id": 96,
+                "npc_id": 195929,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4920,
+                "mapping_version_id": 88,
+                "npc_id": 195929,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4763,
+                "mapping_version_id": 85,
+                "npc_id": 195929,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4450,
+                "mapping_version_id": 79,
+                "npc_id": 195929,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3946,
+                "mapping_version_id": 69,
+                "npc_id": 195929,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 195930,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109037,
+        "name": "Soulharvester Mandakh",
+        "base_health": 1147211,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5709,
+                "mapping_version_id": 96,
+                "npc_id": 195930,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4921,
+                "mapping_version_id": 88,
+                "npc_id": 195930,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4764,
+                "mapping_version_id": 85,
+                "npc_id": 195930,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4451,
+                "mapping_version_id": 79,
+                "npc_id": 195930,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3947,
+                "mapping_version_id": 69,
+                "npc_id": 195930,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 196263,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108223,
+        "name": "Nokhud Neophyte",
+        "base_health": 717007,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5710,
+                "mapping_version_id": 96,
+                "npc_id": 196263,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4922,
+                "mapping_version_id": 88,
+                "npc_id": 196263,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4765,
+                "mapping_version_id": 85,
+                "npc_id": 196263,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4452,
+                "mapping_version_id": 79,
+                "npc_id": 196263,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3948,
+                "mapping_version_id": 69,
+                "npc_id": 196263,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 199717,
+        "dungeon_id": 71,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108529,
+        "name": "Nokhud Defender",
+        "base_health": 1326463,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5711,
+                "mapping_version_id": 96,
+                "npc_id": 199717,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4923,
+                "mapping_version_id": 88,
+                "npc_id": 199717,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4766,
+                "mapping_version_id": 85,
+                "npc_id": 199717,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4453,
+                "mapping_version_id": 79,
+                "npc_id": 199717,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 3949,
+                "mapping_version_id": 69,
+                "npc_id": 199717,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

@@ -25,7 +25,7 @@ class EnemyVisualModifierTruesight extends EnemyVisualModifier {
     /**
      * @inheritDoc
      */
-    _getVisibleAtZoomLevel(){
+    _getVisibleAtZoomLevel() {
         return c.map.enemy.truesight_display_zoom;
     }
 

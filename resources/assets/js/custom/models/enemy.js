@@ -24,48 +24,63 @@ L.Draw.Enemy = L.Draw.Marker.extend({
     }
 });
 
+let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
 let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
+let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
+let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
+let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
+let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
+let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
+let ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
 
 /**
- * @property floor_id int
- * @property enemy_pack_id int
- * @property npc_id int
- * @property mdt_id int
- * @property seasonal_type string
- * @property seasonal_index int
- * @property enemy_forces_override int
- * @property enemy_forces_override_teeming int
- * @property raid_marker_name string
- * @property dangerous bool
- * @property unskippable bool
- * @property lat float
- * @property lng float
+ * @property {Number} floor_id
+ * @property {Number} enemy_pack_id
+ * @property {Number} npc_id
+ * @property {Number} mdt_id
+ * @property {Number} mdt_npc_id
+ * @property {String} seasonal_type
+ * @property {Number} seasonal_index
+ * @property {Number} enemy_forces_override
+ * @property {Number} enemy_forces_override_teeming
+ * @property {Number} dungeon_difficulty
+ * @property {String} raid_marker_name
+ * @property {Boolean} required
+ * @property {Boolean} skippable
+ * @property {Number} lat
+ * @property {Number} lng
  *
  * @property L.Layer layer
  */
-class Enemy extends MapObject {
-    constructor(map, layer, options = {name: 'enemy'}) {
+class Enemy extends VersionableMapObject {
+    constructor(map, layer, options = {name: 'enemy', hasRouteModelBinding: true}) {
         super(map, layer, options);
 
         this.label = 'Enemy';
         // Used for keeping track of what kill zone this enemy is attached to
         /** @type KillZone */
         this.kill_zone = null;
-        /** @type Object May be set when loaded from server */
+        /** @type {Object|null} May be set when loaded from server */
         this.npc = null;
-        /** @type Enemy If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
+        /** @type {EnemyPatrol|null} May be set when loaded from server */
+        this.enemyPatrol = null;
+        /** @type {Enemy} If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
         this.linked_awakened_enemy = null;
         this.active_auras = [];
 
         // MDT
-        this.mdt_id = -1;
+        this.mdt_id = null;
+        this.mdt_npc_id = null;
         this.is_mdt = false;
 
         // The visual display of this enemy
         this.visual = null;
         this.isPopupEnabled = false;
+        this.overpulledKillZoneId = null;
+        this.obsolete = false;
+        this.selectNpcs = [];
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
@@ -80,6 +95,14 @@ class Enemy extends MapObject {
 
         // When we're synced, construct the popup.  We don't know the ID before that so we cannot properly bind the popup.
         this.register('object:changed', this, this._onObjectChanged.bind(this));
+        this.register('object:initialized', this, function () {
+            self.bindTooltip();
+        });
+
+        // If we added or removed NPCs, we clear the cache
+        getState().getMapContext().register(['npc:added', 'npc:removed'], this, function (event) {
+            self.selectNpcs = [];
+        });
     }
 
     /**
@@ -93,17 +116,6 @@ class Enemy extends MapObject {
         }
 
         let self = this;
-        let selectNpcs = [];
-        let npcs = getState().getMapContext().getNpcs();
-        for (let index in npcs) {
-            if (npcs.hasOwnProperty(index)) {
-                let npc = npcs[index];
-                selectNpcs.push({
-                    id: npc.id,
-                    name: `${npc.name} (${npc.id})`
-                });
-            }
-        }
 
         let selectAuras = [];
         let auras = getState().getMapContext().getAuras();
@@ -124,7 +136,42 @@ class Enemy extends MapObject {
                 name: 'enemy_pack_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: -1
+                default: null
+            }),
+            new Attribute({
+                name: 'enemy_patrol_id',
+                type: 'int',
+                edit: false, // Not directly changeable by user
+                default: null
+            }),
+            new Attribute({
+                name: 'enemy_forces_override',
+                type: 'int',
+                admin: true,
+                category: 'legacy',
+            }),
+            new Attribute({
+                name: 'enemy_forces_override_teeming',
+                type: 'int',
+                admin: true,
+                category: 'legacy',
+            }),
+            new Attribute({
+                name: 'dungeon_difficulty',
+                type: 'select',
+                admin: true,
+                values: [{
+                    id: DUNGEON_DIFFICULTY_10_MAN,
+                    name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_10_MAN}`)
+                }, {
+                    id: DUNGEON_DIFFICULTY_25_MAN,
+                    name: lang.get(`dungeons.difficulty.${DUNGEON_DIFFICULTY_25_MAN}`)
+                }],
+                default: null,
+                getter: function () {
+                    return self.dungeon_difficulty === null || self.dungeon_difficulty <= 0 ? null : self.dungeon_difficulty;
+                },
+                category: 'advanced',
             }),
             // new Attribute({
             //     name: 'npc',
@@ -138,8 +185,8 @@ class Enemy extends MapObject {
                 name: 'npc_id',
                 type: 'select',
                 admin: true,
-                values: selectNpcs,
-                default: -1,
+                values: this._getSelectNpcs.bind(this),
+                default: null,
                 live_search: true,
                 setter: function (value) {
 
@@ -151,7 +198,7 @@ class Enemy extends MapObject {
                         self.setNpc(npc);
                     }
 
-                    this.npc_id = value;
+                    self.npc_id = value;
                 }
             }),
             new Attribute({
@@ -161,10 +208,41 @@ class Enemy extends MapObject {
                 default: getState().getCurrentFloor().id
             }),
             new Attribute({
-                name: 'mdt_id',
+                name: 'is_mdt',
+                type: 'bool',
+                edit: false, // Not directly changeable by user
+                default: false,
+                setter: function (value) {
+                    // Exception for MDT enemies
+                    self.is_mdt = value;
+                }
+            }),
+            // // Whatever enemy this MDT enemy is linked to
+            new Attribute({
+                name: 'enemy_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
                 default: -1
+            }),
+            new Attribute({
+                name: 'mdt_id',
+                type: 'int',
+                admin: true,
+                // edit: false, // Not directly changeable by user
+            }),
+            new Attribute({
+                name: 'mdt_npc_id',
+                type: 'select',
+                admin: true,
+                values: this._getSelectNpcs.bind(this),
+                default: null,
+                live_search: true,
+                setter: function (value) {
+                    // Values from a select are always strings, cast this
+                    let parsed = parseInt(value);
+                    self.mdt_npc_id = value === null || parsed === -1 ? null : parsed;
+                },
+                category: 'legacy'
             }),
             new Attribute({
                 name: 'seasonal_type',
@@ -172,13 +250,22 @@ class Enemy extends MapObject {
                 admin: true,
                 default: null,
                 values: [
+                    // @TODO Translate this
+                    {id: ENEMY_SEASONAL_TYPE_BEGUILING, name: 'Beguiling'},
                     {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
                     {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
-                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'}
+                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
+                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
+                    {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX, name: 'Shrouded Zul\'gamux'},
+                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'},
+                    {id: ENEMY_SEASONAL_TYPE_NO_SHROUDED, name: 'Shrouded not active'}
                 ],
                 setter: function (value) {
-                    self.seasonal_type = value;
-                }
+                    self.seasonal_type = value <= 0 ? null : value;
+                },
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'seasonal_index',
@@ -198,7 +285,8 @@ class Enemy extends MapObject {
                         value = null;
                     }
                     self.seasonal_index = value;
-                }
+                },
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'active_auras',
@@ -209,25 +297,22 @@ class Enemy extends MapObject {
                 multiple: true,
                 setter: function (value) {
                     self.active_auras = value;
-                }
+                },
+                category: 'legacy'
             }),
             new Attribute({
-                name: 'enemy_forces_override',
-                type: 'int',
-                admin: true,
-                default: -1
-            }),
-            new Attribute({
-                name: 'enemy_forces_override_teeming',
-                type: 'int',
-                admin: true,
-                default: -1
-            }),
-            new Attribute({
-                name: 'unskippable',
+                name: 'required',
                 type: 'bool',
                 admin: true,
-                default: false
+                default: false,
+                category: 'advanced',
+            }),
+            new Attribute({
+                name: 'skippable',
+                type: 'bool',
+                admin: true,
+                default: false,
+                category: 'advanced',
             }),
             new Attribute({
                 name: 'lat',
@@ -261,14 +346,51 @@ class Enemy extends MapObject {
                 edit: false,
                 save: false,
                 default: false
+            }),
+            new Attribute({
+                name: 'kill_priority',
+                type: 'select',
+                admin: true,
+                default: null,
+                values: [
+                    {id: -10, name: 'Low'},
+                    {id: 0, name: 'Normal'},
+                    {id: 10, name: 'High'},
+                ],
+                category: 'advanced',
             })
         ]);
+    }
+
+    /**
+     *
+     * @returns {[]}
+     * @private
+     */
+    _getSelectNpcs() {
+        // Return cache if we have it
+        if (this.selectNpcs.length > 0) {
+            return this.selectNpcs;
+        }
+
+        let npcs = getState().getMapContext().getNpcs();
+        for (let index in npcs) {
+            if (npcs.hasOwnProperty(index)) {
+                let npc = npcs[index];
+                this.selectNpcs.push({
+                    id: npc.id,
+                    name: `${npc.name} (${npc.id})`
+                });
+            }
+        }
+
+        return this.selectNpcs;
     }
 
     _getPercentageString(enemyForces) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         // Do some fuckery to round to two decimal places
-        return '(' + (Math.round((enemyForces / this.map.getEnemyForcesRequired()) * 10000) / 100) + '%)';
+        return '(' + (Math.round((enemyForces / this.map.enemyForcesManager.getEnemyForcesRequired()) * 10000) / 100) + '%)';
     }
 
     _onObjectChanged(syncedEvent) {
@@ -292,6 +414,13 @@ class Enemy extends MapObject {
             this.is_mdt = remoteMapObject.is_mdt;
             // Whatever enemy this MDT enemy is linked to
             this.enemy_id = remoteMapObject.enemy_id;
+
+            // Link the mdt_npc_id on load so that the visual knows to display it differently
+            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let linkedEnemy = enemyMapObjectGroup.findMapObjectById(this.enemy_id);
+            if (linkedEnemy instanceof Enemy) {
+                this.mdt_npc_id = linkedEnemy.mdt_npc_id;
+            }
             // Hide this enemy by default
             this.setDefaultVisible(false);
             this.setIsLocal(remoteMapObject.local);
@@ -301,6 +430,10 @@ class Enemy extends MapObject {
         if (!getState().isMapAdmin()) {
             // Hide this enemy by default
             this.setDefaultVisible(this.shouldBeVisible());
+        }
+
+        if (this.shouldBeIgnored()) {
+            this.setVisible(false);
         }
 
         this.visual = new EnemyVisual(this.map, this, this.layer);
@@ -315,13 +448,44 @@ class Enemy extends MapObject {
         let result = null;
 
         if (this.npc !== null) {
+            let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
+            let hasFortified = false;
+            let hasTyrannical = false;
+
+            let mapContext = getState().getMapContext();
+            let levelLabel = '';
+            if (mapContext instanceof MapContextDungeonRoute) {
+                hasFortified = mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id);
+                hasTyrannical = mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
+
+                scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), hasFortified, hasTyrannical);
+                levelLabel = ` (+${mapContext.getLevelMin()})`;
+            }
+
+            let percentageString = this.npc.health_percentage !== null && this.npc.health_percentage !== 100 ? ` (${this.npc.health_percentage}%)` : ``;
+
             result = {info: [], custom: []};
             // @formatter:off
-            result.info.push({key: lang.get('messages.sidebar_enemy_health_label'), value: this.npc.base_health.toLocaleString()});
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_health_label') + levelLabel,
+                value: scaledHealth.toLocaleString() + percentageString,
+                warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
+                    (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
+            });
             result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
             result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
             result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
-            result.info.push({key: lang.get('messages.sidebar_enemy_skippable_label'), value: this.unskippable ? 0 : 1});
+            // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
+            // result.info.push({
+            //     key: lang.get('messages.sidebar_enemy_skippable_label'),
+            //     value: this.required ? 0 : 1
+            // });
+            // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
+            result.info.push({
+                key: lang.get('messages.sidebar_enemy_skippable_label'),
+                value: this.skippable ? 1 : 0,
+                info: lang.get('messages.sidebar_enemy_skippable_info_label')
+            });
             // @formatter:on
 
             if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {
@@ -382,7 +546,7 @@ class Enemy extends MapObject {
      * @returns {boolean}
      */
     isLastBoss() {
-        return this.npc !== null && this.npc.classification_id === 4;
+        return this.npc !== null && this.npc.classification_id === NPC_CLASSIFICATION_ID_FINAL_BOSS;
     }
 
     /**
@@ -417,12 +581,12 @@ class Enemy extends MapObject {
         let result = [];
 
         // Only if we're part of a pack
-        if (this.enemy_pack_id >= 0) {
+        if (this.enemy_pack_id !== null) {
             // Add all the enemies in said pack to the toggle display
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-            for (let i = 0; i < enemyMapObjectGroup.objects.length; i++) {
-                let enemy = enemyMapObjectGroup.objects[i];
+            for (let key in enemyMapObjectGroup.objects) {
+                let enemy = enemyMapObjectGroup.objects[key];
                 // Visible check for possible hidden Awakened Enemies on the last boss
                 if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.isVisible()) {
                     result.push(enemy);
@@ -435,14 +599,10 @@ class Enemy extends MapObject {
 
     /**
      * Sets the click popup to be enabled or not.
-     * @param enabled True to enable, false to disable.
+     * @param enabled {Boolean} True to enable, false to disable.
      */
     setPopupEnabled(enabled) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        //
-        // if( this.id === 4406 ) {
-        //     console.warn('setPopupEnabled', enabled);
-        // }
 
         if (this.layer !== null) {
             if (enabled && !this.isPopupEnabled) {
@@ -464,16 +624,20 @@ class Enemy extends MapObject {
 
         let result = 0;
         if (this.npc !== null) {
-            result = this.npc.enemy_forces;
+            result = this.npc.enemy_forces.enemy_forces;
 
             // Override first
-            if (getState().getMapContext().getTeeming()) {
-                if (this.enemy_forces_override_teeming >= 0) {
+            if (this.isShrouded()) {
+                result = getState().getMapContext().getEnemyForcesShrouded();
+            } else if (this.isShroudedZulGamux()) {
+                result = getState().getMapContext().getEnemyForcesShroudedZulGamux();
+            } else if (getState().getMapContext().getTeeming()) {
+                if (this.enemy_forces_override_teeming !== null) {
                     result = this.enemy_forces_override_teeming;
-                } else if (this.npc.enemy_forces_teeming >= 0) {
-                    result = this.npc.enemy_forces_teeming;
+                } else if (this.npc.enemy_forces.enemy_forces_teeming !== null) {
+                    result = this.npc.enemy_forces.enemy_forces_teeming;
                 }
-            } else if (this.enemy_forces_override >= 0) {
+            } else if (this.enemy_forces_override !== null) {
                 result = this.enemy_forces_override;
             }
         }
@@ -502,7 +666,7 @@ class Enemy extends MapObject {
 
     /**
      * Sets the NPC for this enemy based on a remote NPC object.
-     * @param npc
+     * @param npc {Object}
      */
     setNpc(npc) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -512,20 +676,39 @@ class Enemy extends MapObject {
         // May be null if not set at all (yet)
         if (npc !== null) {
             this.npc_id = npc.id;
-            this.enemy_forces = npc.enemy_forces;
-            this.enemy_forces_teeming = npc.enemy_forces_teeming;
+            this.enemy_forces = npc.enemy_forces.enemy_forces;
+            this.enemy_forces_teeming = npc.enemy_forces.enemy_forces_teeming;
         } else {
             // Not set :(
-            this.npc_id = -1;
+            this.npc_id = null;
         }
 
-        this.bindTooltip();
         this.signal('enemy:set_npc', {npc: npc});
     }
 
     /**
+     *
+     * @param enemyPatrol {EnemyPatrol}
+     */
+    setEnemyPatrol(enemyPatrol) {
+        if (this.enemyPatrol !== null) {
+            console.log(`Removing from enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
+            this.enemyPatrol.removeEnemy(this);
+        }
+
+        this.enemyPatrol = enemyPatrol;
+        this.enemy_patrol_id = null;
+
+        if (this.enemyPatrol !== null) {
+            console.log(`Setting enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
+            this.enemyPatrol.addEnemy(this);
+            this.enemy_patrol_id = enemyPatrol.id;
+        }
+    }
+
+    /**
      * Sets the name of the raid marker and changes the icon on the map to that of the raid marker (allowing).
-     * @param name
+     * @param name {String}
      */
     setRaidMarkerName(name) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
@@ -545,33 +728,83 @@ class Enemy extends MapObject {
 
     /**
      * Sets the kill zone for this enemy.
-     * @param killZone object
+     * @param killZone {Object}
+     * @param ignorePackBuddies {Boolean}
      */
-    setKillZone(killZone) {
+    setKillZone(killZone, ignorePackBuddies = false) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         let oldKillZone = this.kill_zone;
         this.kill_zone = killZone;
 
         if (this.kill_zone instanceof KillZone) {
-            this.signal('killzone:attached', {previous: oldKillZone});
+            this.signal('killzone:attached', {previous: oldKillZone, ignorePackBuddies: ignorePackBuddies});
         }
 
         // We should notify it that we have detached from it
         if (oldKillZone !== null && (this.kill_zone === null || oldKillZone.id !== this.kill_zone.id)) {
-            this.signal('killzone:detached', {previous: oldKillZone});
+            this.signal('killzone:detached', {previous: oldKillZone, ignorePackBuddies: ignorePackBuddies});
         }
     }
 
-    shouldBeVisible() {
+    /**
+     *
+     * @returns {boolean}
+     */
+    shouldBeIgnored() {
         if (!getState().isMapAdmin()) {
             // If our linked awakened enemy has a killzone, we cannot display ourselves. But don't hide those on the map
             if (this.isAwakenedNpc() && this.isLinkedToLastBoss() && this.getKillZone() === null) {
-                return false;
+                // console.warn(`Hiding awakened enemy linked to last boss since it's already killed in the map ${this.id}`);
+                return true;
+            }
+        }
+
+        let mapContext = getState().getMapContext();
+        if (mapContext instanceof MapContextDungeonRoute) {
+            // If we are tormented, but the route has no tormented enemies..
+            if (this.hasOwnProperty('seasonal_type')) {
+                let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
+                if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_BEGUILING && !mapContext.hasAffix(AFFIX_BEGUILING)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && !hasShroudedAffix) ||
+                    // Special case for enemies marked as non-shrouded which replace the enemies that are marked as shrouded
+                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED && hasShroudedAffix) ||
+                    // MDT placeholders are only to suppress warnings when importing - don't show these on the map
+                    this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
+                    // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
+                    return true;
+                }
+            }
+
+            if (this.hasOwnProperty('dungeon_difficulty') && this.dungeon_difficulty !== null) {
+                // If our dungeon difficulty is null, always show it. Otherwise, only show it when our difficulty matches
+                // console.warn(`Hiding enemy since the dungeon difficulty does not match ${this.id}`);
+                return mapContext.getDungeonDifficulty() !== this.dungeon_difficulty;
+            }
+
+            // Hide critters (Freehold)
+            if (this.npc !== null && this.npc.npc_type_id === NPC_TYPE_CRITTER) {
+                // console.warn(`Hiding enemy since it is a critter ${this.id}`);
+                return true;
             }
         }
 
         // Hide MDT enemies
         if (this.hasOwnProperty('is_mdt') && this.is_mdt && !getState().getMdtMappingModeEnabled()) {
+            // console.warn(`Hiding MDT enemy since MDT mapping mode is disabled ${this.id}`);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    shouldBeVisible() {
+        if (this.shouldBeIgnored()) {
             return false;
         }
 
@@ -596,7 +829,7 @@ class Enemy extends MapObject {
     }
 
     isVisibleOnScreen() {
-        return super.isVisibleOnScreen() && this.visual !== null;
+        return this.visual !== null && super.isVisibleOnScreen();
     }
 
     isDeletable() {
@@ -617,11 +850,71 @@ class Enemy extends MapObject {
 
     /**
      * Set this enemy to be selectable whenever the user wants to select enemies.
-     * @param value boolean True or false
+     * @param value {Boolean} True or false
      */
     setSelectable(value) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.selectable = value;
+    }
+
+    /**
+     * @returns {KillZone|null}
+     */
+    getOverpulledKillZone() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        let result = null;
+
+        if (this.overpulledKillZoneId !== null) {
+            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+            result = killZoneMapObjectGroup.findMapObjectById(this.overpulledKillZoneId);
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if this enemy is marked as overpulled or not.
+     * @returns {Number|null}
+     */
+    getOverpulledKillZoneId() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.overpulledKillZoneId;
+    }
+
+    /**
+     * Set this enemy to be marked as overpulled
+     * @param killZoneId {Number|null} The kill zone ID that this enemy was overpulled in or after
+     */
+    setOverpulledKillZoneId(killZoneId) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this.overpulledKillZoneId !== killZoneId) {
+            this.overpulledKillZoneId = killZoneId;
+
+            this.signal('overpulled:changed');
+        }
+    }
+
+    /**
+     * Checks if this enemy is marked as obsolete or not.
+     * @returns {*}
+     */
+    isObsolete() {
+        return this.obsolete;
+    }
+
+    /**
+     * Set this enemy to be marked as obsolete (was part of a route, but is no longer because we determined we should no
+     * longer pull this enemy after an overpull elsewhere).
+     * @param value {Boolean} True or false
+     */
+    setObsolete(value) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        if (this.obsolete !== value) {
+            this.obsolete = value;
+
+            this.signal('obsolete:changed');
+        }
     }
 
     /**
@@ -639,8 +932,7 @@ class Enemy extends MapObject {
      */
     isAwakenedNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.npc !== null &&
-            (this.npc.id === 161124 || this.npc.id === 161241 || this.npc.id === 161244 || this.npc.id === 161243);
+        return this.npc !== null && [161124, 161241, 161244, 161243].includes(this.npc.id);
     }
 
     /**
@@ -656,9 +948,78 @@ class Enemy extends MapObject {
      *
      * @returns {boolean}
      */
+    isEncryptedNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && [185680, 185683, 185685].includes(this.npc.id);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isInspiring() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING;
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_INSPIRING && getState().getMapContext().hasAffix(AFFIX_INSPIRING);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isTormented() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isEncrypted() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isShrouded() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && getState().getMapContext().hasAffix(AFFIX_SHROUDED);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isShroudedZulGamux() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX && getState().getMapContext().hasAffix(AFFIX_SHROUDED);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isNotShrouded() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isImportant() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.isBossNpc() ||
+            this.isInspiring() ||
+            this.isShrouded() ||
+            this.isShroudedZulGamux() ||
+            this.isTormented() ||
+            this.isPridefulNpc() ||
+            this.isAwakenedNpc();
     }
 
     /**
@@ -687,8 +1048,16 @@ class Enemy extends MapObject {
     }
 
     /**
+     *
+     * @returns {Number}
+     */
+    getMdtNpcId() {
+        return this.mdt_npc_id !== null ? this.mdt_npc_id : this.npc_id;
+    }
+
+    /**
      * Assigns a raid marker to this enemy.
-     * @param raidMarkerName The name of the marker, or empty to unset it
+     * @param raidMarkerName {String} The name of the marker, or empty to unset it
      */
     assignRaidMarker(raidMarkerName) {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
@@ -716,6 +1085,10 @@ class Enemy extends MapObject {
         console.assert(this instanceof Enemy, 'this was not an Enemy', this);
         super.cleanup();
 
+        // If we added or removed NPCs, we clear the cache
+        getState().getMapContext().unregister(['npc:added', 'npc:removed'], this);
+
+        this.unregister('object:initialized', this);
         this.unregister('object:changed', this, this._onObjectChanged.bind(this));
         this.map.unregister('map:mapstatechanged', this);
 

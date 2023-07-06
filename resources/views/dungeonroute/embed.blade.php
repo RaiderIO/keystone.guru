@@ -1,20 +1,29 @@
-@extends('layouts.app', ['showAds' => false, 'custom' => true, 'footer' => false, 'header' => false, 'title' => __('Edit') . ' ' . $model->title])
+@extends('layouts.map', [
+    'showAds' => false,
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => __('views/dungeonroute.embed.title', ['routeTitle' => $dungeonroute->title]),
+    'bodyClass' => 'overflow-hidden',
+    'cookieConsent' => false
+])
 <?php
-/** @var $model \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute */
 /** @var $floor \App\Models\Floor */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id)->load(['expansion', 'floors']);
+/** @var $embedOptions array */
+$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
 
-$affixes = $model->affixes->pluck('text', 'id');
-$selectedAffixes = $model->affixes->pluck('id');
+$affixes = $dungeonroute->affixes->pluck('text', 'id');
+$selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes = [-1 => 'Any'];
+    $affixes         = [-1 => __('views/dungeonroute.embed.any')];
     $selectedAffixes = -1;
 }
 ?>
 @section('scripts')
     @parent
 
-    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $model->affixes])
+    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $dungeonroute->affixes])
 @endsection
 
 @include('common.general.inline', [
@@ -24,47 +33,75 @@ if (count($affixes) == 0) {
 
 @include('common.general.inline', ['path' => 'common/maps/embedtopbar', 'options' => [
     'dependencies' => ['common/maps/map'],
-    'switchDungeonFloorSelect' => '#map_floor_selection',
+    'switchDungeonFloorSelect' => '#map_floor_selection_dropdown',
     'defaultSelectedFloorId' => $floor->id
 ]])
 
 @section('content')
-    <header class="embed"
+    <header class="header_embed"
             style="background-image: url('/images/dungeons/{{$dungeon->expansion->shortname}}/{{$dungeon->key}}.jpg'); background-size: cover;">
-        <div class="row">
-            <div class="col-8">
-                <h4>
-                    <a href="{{ route('dungeonroute.view', ['dungeonroute' => $model]) }}"
-                       target="_blank">{{ $model->title }}</a>
-                </h4>
+        <div class="row no-gutters py-2">
+            <div class="col-8 pt-2">
+                <div class="row no-gutters">
+                    <div class="col header_embed_text_ellipsis">
+                        <a class="text-white" href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                           target="_blank">
+                            <h4 class="mb-0">
+                                {{ $dungeonroute->title }}
+                            </h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col">
+                        {{ __('views/dungeonroute.embed.create_or_view_at') }}
+                        <a class="text-white" href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                           target="_blank">
+                            {{
+                                \Illuminate\Support\Str::limit(
+                                    route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])
+                                )
+                            }}
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-4">
-                <a href="{{ route('home') }}">
-                    <h4 class="text-right">
-                        {{ __('Keystone.guru') }}
-                    </h4>
+            <div class="col-4 text-right">
+                <a href="{{ route('home') }}" target="_blank">
+                    <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
+                         height="44px;" width="200px;">
                 </a>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="row no-gutters">
+            <div class="col-auto">
                 <div class="embed-header-subtitle">
-                    {!! $model->getSubHeaderHtml() !!}
+                    <?php // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php ?>
+                    <div id="edit_route_enemy_forces_container"></div>
                 </div>
             </div>
-            <div class="col">
-                <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-                {!! Form::select('map_floor_selection', [__('Select floor')], 1, ['id' => 'map_floor_selection', 'class' => 'form-control selectpicker']) !!}
+            <div class="col-md-auto d-md-flex d-none pl-2">
+                <?php
+                $mostRelevantAffixGroup = $dungeonroute->getMostRelevantAffixGroup();
+                ?>
+                @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
             </div>
             <div class="col">
-                {!! Form::select('affixes[]', $affixes, $selectedAffixes,
-                    ['id' => 'affixes',
-                    'class' => 'form-control affixselect selectpicker',
-                    'multiple' => 'multiple',
-                    'title' => __('Affixes'),
-                    'readonly' => 'readonly',
-                    'data-selected-text-format' => 'count > 1',
-                    'data-count-selected-text' => __('{0} affixes selected')]) !!}
+            </div>
+            <div class="col-auto pr-2">
+                <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                @if($dungeon->floors()->count() > 1)
+                    {!! Form::select('map_floor_selection_dropdown', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
+                @endif
+            </div>
+            <div class="col-auto">
+                <div id="embed_copy_mdt_string" class="btn btn-primary float-right">
+                    <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                </div>
+                <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" disabled
+                     style="display: none;">
+                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                </div>
             </div>
         </div>
     </header>
@@ -72,7 +109,7 @@ if (count($affixes) == 0) {
     <div class="wrapper embed_wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'dungeonroute' => $model,
+            'dungeonroute' => $dungeonroute,
             'embed' => true,
             'edit' => false,
             'echo' => false,
@@ -80,8 +117,18 @@ if (count($affixes) == 0) {
             'floorId' => $floor->id,
             'showAttribution' => false,
             'hiddenMapObjectGroups' => [
-                'enemypatrol',
-                'enemypack'
+                'enemypack',
+                'mountablearea'
+            ],
+            'show' => [
+                'header' => false,
+                'share' => [],
+                'controls' => [
+                    'pulls' => $embedOptions['pulls'],
+                    'pullsDefaultState' => $embedOptions['pullsDefaultState'],
+                    'pullsHideOnMove' => $embedOptions['pullsHideOnMove'],
+                    'enemyinfo' => $embedOptions['enemyinfo'],
+                ],
             ]
         ])
     </div>

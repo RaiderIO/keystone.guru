@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ModelChangedEvent;
+use App\Events\Model\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
 use App\Models\NpcSpell;
 use App\Models\Spell;
+use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -42,7 +44,7 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
-        $oldId = -1;
+        $oldId = null;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
@@ -52,59 +54,108 @@ class NpcController extends Controller
 
         $npcBefore = clone $npc;
 
-        $npc->id = $request->get('id');
-        $npc->dungeon_id = $request->get('dungeon_id');
-        $npc->classification_id = $request->get('classification_id');
-        $npc->npc_class_id = $request->get('npc_class_id');
-        $npc->name = $request->get('name');
-        // Remove commas or dots in the name; we want the integer value
-        $npc->base_health = str_replace(',', '', $request->get('base_health'));
-        $npc->base_health = str_replace('.', '', $npc->base_health);
-        $npc->enemy_forces = $request->get('enemy_forces');
-        $npc->enemy_forces_teeming = $request->get('enemy_forces_teeming', -1);
-        $npc->aggressiveness = $request->get('aggressiveness');
-        $npc->dangerous = $request->get('dangerous', 0);
-        $npc->truesight = $request->get('truesight', 0);
-        $npc->bursting = $request->get('bursting', 0);
-        $npc->bolstering = $request->get('bolstering', 0);
-        $npc->sanguine = $request->get('sanguine', 0);
+        $validated  = $request->validated();
+        $attributes = [
+            'id'                => $validated['id'],
+            'dungeon_id'        => $validated['dungeon_id'],
+            'classification_id' => $validated['classification_id'],
+            'npc_class_id'      => $validated['npc_class_id'],
+            'name'              => $validated['name'],
+            'display_id'        => null,
+            // Remove commas or dots in the name; we want the integer value
+            'base_health'       => str_replace([',', '.'], '', $validated['base_health']),
+            'health_percentage' => $validated['health_percentage'] ?? 100,
+            'aggressiveness'    => $validated['aggressiveness'],
+            'dangerous'         => $validated['dangerous'] ?? 0,
+            'truesight'         => $validated['truesight'] ?? 0,
+            'bursting'          => $validated['bursting'] ?? 0,
+            'bolstering'        => $validated['bolstering'] ?? 0,
+            'sanguine'          => $validated['sanguine'] ?? 0,
+        ];
 
-        if ($npc->save()) {
+        if ($oldId === null) {
+            $npc->setRawAttributes($attributes);
+            $saveResult = $npc->save();
+        } else {
+            $saveResult = $npc->update($attributes);
+        }
 
+        if ($saveResult) {
             // Bolstering whitelist, if set
-            $bolsteringWhitelistNpcs = $request->get('bolstering_whitelist_npcs', []);
+            $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];
             // Clear current whitelists
             $npc->npcbolsteringwhitelists()->delete();
             foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
                 NpcBolsteringWhitelist::insert([
                     'npc_id'           => $npc->id,
-                    'whitelist_npc_id' => $whitelistNpcId
+                    'whitelist_npc_id' => $whitelistNpcId,
                 ]);
             }
 
             // Spells, if set
-            $spells = $request->get('spells', []);
+            $spells = $validated['spells'] ?? [];
             // Clear current spells
             $npc->npcspells()->delete();
             foreach ($spells as $spellId) {
                 NpcSpell::insert([
                     'npc_id'   => $npc->id,
-                    'spell_id' => $spellId
+                    'spell_id' => $spellId,
                 ]);
             }
 
 
-            if ($oldId > 0) {
+            $existingEnemyForces = 0;
+            if ($oldId !== null) {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+                NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
+
+                $changes = $npc->getChanges();
+                if (isset($changes['dungeon_id'])) {
+                    // Fetch the existing enemy forces for the most recent mapping so we can propagate that to the
+                    // new dungeon
+                    $npc->load(['enemyForces']);
+                    $existingEnemyForces = $npc->enemyForces->enemy_forces;
+                    // Get rid of all existing enemy forces
+                    $npc->npcEnemyForces()->delete();
+                }
             }
+
+            // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
+            $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
+
+            // Broadcast notifications so that any open mapping sessions get these changes immediately
             // If no dungeon is set, user selected 'All Dungeons'
-            if ($npc->dungeon === null) {
+            $npcAllDungeon       = ($npc->dungeon === null);
+            $npcBeforeAllDungeon = ($npcBefore->dungeon === null);
+
+            // Prevent sending multiple messages for the same dungeon
+            $messagesSentToDungeons = collect();
+            if ($npcAllDungeon || $npcBeforeAllDungeon) {
                 // Broadcast the event for all dungeons
                 foreach (Dungeon::all() as $dungeon) {
-                    broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                    if ($npc->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
+                        broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                        $messagesSentToDungeons->push($dungeon->id);
+                    }
+                    if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
+                        broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npcBefore));
+                        $messagesSentToDungeons->push($dungeon->id);
+                    }
                 }
-            } else {
-                broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+            }
+
+            // If we're now for all dungeons we don't have a current dungeon so we can't do these checks
+            // We already sent messages above in this case so we're already good
+            if (!$npcAllDungeon) {
+                // Let previous dungeon know that this NPC is no longer available
+                if ($messagesSentToDungeons->search($npc->dungeon->id) === false) {
+                    broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+                    $messagesSentToDungeons->push($npc->dungeon->id);
+                }
+                if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
+                    broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
+                    $messagesSentToDungeons->push($npc->dungeon->id);
+                }
             }
 
             // Re-load the relations so we're echoing back a fully updated npc
@@ -112,17 +163,9 @@ class NpcController extends Controller
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);
-        } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
+        } // We got to update any existing enemies with the old ID to the new ID, makes it easier to convert ids
         else {
             abort(500, 'Unable to save npc!');
-        }
-
-        $portrait = $request->file('portrait');
-        // Save was successful, now do any file handling that may be necessary
-        if ($portrait !== null) {
-//            $portrait->move(public_path('images/enemyportraits'), $npc->id . '.png');
-            // Move file to the enemyportraits folder
-            dd($portrait->storeAs('images/enemyportraits', $npc->id . '.png', 'public'));
         }
 
         return $npc;
@@ -136,63 +179,55 @@ class NpcController extends Controller
     public function new()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
+                return [$id => __($name)];
+            }),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
                 Npc::orderByRaw('dungeon_id, name')
                     ->get()
                     ->groupBy('dungeon_id')
-                    ->mapWithKeys(function ($value, $key)
-                    {
+                    ->mapWithKeys(function ($value, $key) {
                         // Halls of Valor => [npcs]
-                        $dungeonName = $key === -1 ? __('All dungeons') : Dungeon::find($key)->name;
+                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
                         return [$dungeonName => $value->pluck('name', 'id')
-                            ->map(function ($value, $key)
-                            {
+                            ->map(function ($value, $key) {
                                 // Make sure the value is formatted as 'Hymdal (123456)'
                                 return sprintf('%s (%s)', $value, $key);
-                            })
+                            }),
                         ];
                     })
                     ->toArray(),
-            'headerTitle'     => __('New npc')
         ]);
     }
 
     /**
      * @param Request $request
+     * @param NpcServiceInterface $npcService
      * @param Npc $npc
      * @return Factory|View
      */
-    public function edit(Request $request, Npc $npc)
+    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
     {
         return view('admin.npc.edit', [
-            'model'           => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id'),
+            'npc'             => $npc,
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
+                return [$id => __($name)];
+            }),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  =>
-                [-1 => __('All npcs')] +
-                Npc::where('dungeon_id', $npc->dungeon_id)
-                    ->orWhere('dungeon_id', -1)
-                    ->orderByRaw('dungeon_id, name')
-                    ->pluck('name', 'id')
-                    ->map(function ($value, $key)
-                    {
-                        return sprintf('%s (%s)', $value, $key);
-                    })
-                    ->toArray(),
-            'headerTitle'     => __('Edit npc')
+            'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);
     }
 
     /**
      * Override to give the type hint which is required.
      * @param NpcFormRequest $request
+     * @param NpcServiceInterface $npcService
      * @param Npc $npc
      * @return Factory|RedirectResponse|View
      * @throws Exception
      */
-    public function update(NpcFormRequest $request, Npc $npc)
+    public function update(NpcFormRequest $request, NpcServiceInterface $npcService, Npc $npc)
     {
         if ($this->isSaveAsNew($request)) {
             return $this->savenew($request);
@@ -201,10 +236,10 @@ class NpcController extends Controller
             $npc = $this->store($request, $npc);
 
             // Message to the user
-            Session::flash('status', __('Npc updated'));
+            Session::flash('status', __('views/admin.npc.flash.npc_updated'));
 
             // Display the edit page
-            return $this->edit($request, $npc);
+            return $this->edit($request, $npcService, $npc);
         }
     }
 
@@ -219,7 +254,7 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        Session::flash('status', sprintf(__('Npc %s created'), $npc->name));
+        Session::flash('status', sprintf(__('views/admin.npc.flash.npc_created'), $npc->name));
 
         return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }

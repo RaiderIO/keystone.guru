@@ -1,0 +1,39 @@
+{
+    "id": 166,
+    "release_changelog_id": 173,
+    "version": "v6.4.4",
+    "title": "Fixed Neltharus and Halls of Infusion mapping + enemy assigning",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-04-28T08:45:31+00:00",
+    "updated_at": "2023-04-28T08:45:31+00:00",
+    "changelog": {
+        "id": 173,
+        "release_id": 166,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 173,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Neltharus: enemies placed in previous release are now assignable to routes.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 173,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Halls of Infusion: Enemies placed in previous release are now assignable to routes. Also edited trash after PTR changes after 2nd boss (thanks Tealc!)",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            }
+        ]
+    }
+}

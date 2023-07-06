@@ -3,12 +3,12 @@
 namespace App\Console\Commands\Environment;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use Artisan;
 use Illuminate\Console\Command;
 
 class UpdatePrepare extends Command
 {
     use ExecutesShellCommands;
-
 
     /**
      * The console command description.
@@ -20,7 +20,7 @@ class UpdatePrepare extends Command
     /**
      * @var string
      */
-    protected $signature = 'environment:updateprepare';
+    protected $signature = 'environment:updateprepare {environment}';
 
     /**
      * Execute the console command.
@@ -29,6 +29,8 @@ class UpdatePrepare extends Command
      */
     public function handle()
     {
+        $environment = $this->argument('environment');
+
         $this->shell([
             // Git commands
             'git checkout .',
@@ -39,14 +41,15 @@ class UpdatePrepare extends Command
         $this->shell([
             'npm install',
             'npm audit fix',
+            'node node_modules/puppeteer/install.js'
         ]);
 
         // Install composer here - a next command can then have the updated definitions of the autoloader when called
         // Any code after this will use the old definitions and get class not found errors
         $this->shell([
-            'composer install',
-            // Prevent root warning from blocking the entire thing
-            'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload'
+            // Prevent root warning from blocking the entire thing; only install dev dependencies in local
+            sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', config('app.debug') ? '--no-dev' : ''),
+            'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload',
         ]);
 
         return 0;

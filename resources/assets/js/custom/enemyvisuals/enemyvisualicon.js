@@ -24,6 +24,31 @@ class EnemyVisualIcon extends Signalable {
     }
 
     /**
+     * Return true if the visual should be forced rebuilt always.
+     * @returns {boolean}
+     */
+    shouldAlwaysRebuild() {
+        // If the enemy we're displaying is marked as obsolete, we display text to indicate that it is so
+        // This text needs to scale with zoom level, thus if it's marked as obsolete we should always rebuild the visual
+        return this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null;
+    }
+
+    /**
+     * Checks if this visual should be refreshed if the number style changed.
+     * @returns {boolean}
+     */
+    shouldRefreshOnNumberStyleChanged() {
+        return false;
+    }
+
+    /**
+     * Called whenever the size of this visual should be refreshed
+     */
+    refreshSize() {
+
+    }
+
+    /**
      *
      * @param name
      */
@@ -35,6 +60,13 @@ class EnemyVisualIcon extends Signalable {
         }
         this.iconName = name;
         this.enemyvisual.buildVisual();
+    }
+
+    /**
+     * @returns {string}
+     */
+    getName() {
+        return 'EnemyVisualIcon';
     }
 
     cleanup() {

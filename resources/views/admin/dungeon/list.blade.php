@@ -1,14 +1,14 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Dungeon listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.dungeon.list.title')])
 
 @section('header-title')
-    {{ __('View dungeons') }}
+    {{ __('views/admin.dungeon.list.header') }}
 @endsection
 {{--Disabled since dungeons should only be created through seeders--}}
-{{--@section('header-addition')--}}
-{{--    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">--}}
-{{--        <i class="fas fa-plus"></i> {{ __('Create dungeon') }}--}}
-{{--    </a>--}}
-{{--@endsection--}}
+@section('header-addition')
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">
+        <i class="fas fa-plus"></i> {{ __('Create dungeon') }}
+    </a>
+@endsection
 <?php
 /**
  * @var $models \App\Models\Dungeon
@@ -17,10 +17,12 @@
 ?>
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             var dt = $('#admin_dungeon_table').DataTable({
-                'order': [[1, 'desc']],
+                'aaSorting': [],
                 'lengthMenu': [50],
             });
 
@@ -35,19 +37,22 @@
     <table id="admin_dungeon_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="50px">{{ __('Active') }}</th>
-            <th width="50px">{{ __('Exp.') }}</th>
-            <th width="45%">{{ __('Name') }}</th>
-            <th width="10%">{{ __('Enemy Forces') }}</th>
-            <th width="10%">{{ __('Teeming EF') }}</th>
-            <th width="10%">{{ __('Timer') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="50px">{{ __('views/admin.dungeon.list.table_header_active') }}</th>
+            <th width="50px">{{ __('views/admin.dungeon.list.table_header_expansion') }}</th>
+            <th width="45%">{{ __('views/admin.dungeon.list.table_header_name') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_enemy_forces') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_enemy_forces_teeming') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_timer') }}</th>
+            <th width="10%">{{ __('views/admin.dungeon.list.table_header_actions') }}</th>
         </tr>
         </thead>
 
         <tbody>
         @foreach ($models as $dungeon)
-            <?php /** @var $dungeon \App\Models\Dungeon */?>
+            <?php
+                /** @var $dungeon \App\Models\Dungeon */
+                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                ?>
             <tr>
                 @if($dungeon->active)
                     <td data-order="{{ $dungeon->id }}">
@@ -59,17 +64,18 @@
                     </td>
                 @endif
                 <td data-order="{{ $dungeon->expansion_id }}">
-                    <img src="{{ Image::url($dungeon->expansion->iconfile->getUrl(), 32, 32) }}"
-                         title="{{ $dungeon->expansion->name }}"
-                         data-toggle="tooltip"/>
+                    <img src="{{ url(sprintf('images/expansions/%s.png', $dungeon->expansion->shortname)) }}"
+                         title="{{ __($dungeon->expansion->name) }}"
+                         data-toggle="tooltip"
+                         style="width: 50px;"/>
                 </td>
-                <td>{{ $dungeon->name }}</td>
-                <td>{{ $dungeon->enemy_forces_required }}</td>
-                <td>{{ $dungeon->enemy_forces_required_teeming }}</td>
-                <td data-order="{{$dungeon->timer_max_seconds}}">{{ gmdate('i:s', $dungeon->timer_max_seconds) }}</td>
+                <td>{{ __($dungeon->name) }}</td>
+                <td>{{ optional($mappingVersion)->enemy_forces_required }}</td>
+                <td>{{ optional($mappingVersion)->enemy_forces_required_teeming }}</td>
+                <td data-order="{{optional($mappingVersion)->timer_max_seconds}}">{{ gmdate('i:s', optional($mappingVersion)->timer_max_seconds) }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
+                    <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->slug]) }}">
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.list.edit') }}
                     </a>
                 </td>
             </tr>

@@ -25,7 +25,7 @@ class EnemyVisualModifierTeeming extends EnemyVisualModifier {
     /**
      * @inheritDoc
      */
-    _getVisibleAtZoomLevel(){
+    _getVisibleAtZoomLevel() {
         return c.map.enemy.teeming_display_zoom;
     }
 

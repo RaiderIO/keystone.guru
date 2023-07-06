@@ -1,0 +1,1521 @@
+[
+    {
+        "id": 94960,
+        "dungeon_id": 7,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 67773,
+        "name": "Hymdall",
+        "base_health": 5492531,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5798,
+                "mapping_version_id": 98,
+                "npc_id": 94960,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4531,
+                "mapping_version_id": 82,
+                "npc_id": 94960,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4129,
+                "mapping_version_id": 73,
+                "npc_id": 94960,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 432,
+                "mapping_version_id": 7,
+                "npc_id": 94960,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95674,
+        "dungeon_id": 7,
+        "classification_id": 3,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 64466,
+        "name": "Fenryr",
+        "base_health": 4938339,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5799,
+                "mapping_version_id": 98,
+                "npc_id": 95674,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4532,
+                "mapping_version_id": 82,
+                "npc_id": 95674,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4130,
+                "mapping_version_id": 73,
+                "npc_id": 95674,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 433,
+                "mapping_version_id": 7,
+                "npc_id": 95674,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95675,
+        "dungeon_id": 7,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 65873,
+        "name": "God-King Skovald",
+        "base_health": 4993210,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5800,
+                "mapping_version_id": 98,
+                "npc_id": 95675,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4533,
+                "mapping_version_id": 82,
+                "npc_id": 95675,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4131,
+                "mapping_version_id": 73,
+                "npc_id": 95675,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 434,
+                "mapping_version_id": 7,
+                "npc_id": 95675,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95676,
+        "dungeon_id": 7,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 67230,
+        "name": "Odyn",
+        "base_health": 19204651,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5801,
+                "mapping_version_id": 98,
+                "npc_id": 95676,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4534,
+                "mapping_version_id": 82,
+                "npc_id": 95676,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4132,
+                "mapping_version_id": 73,
+                "npc_id": 95676,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 435,
+                "mapping_version_id": 7,
+                "npc_id": 95676,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95832,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 25801,
+        "name": "Valarjar Shieldmaiden",
+        "base_health": 931837,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5802,
+                "mapping_version_id": 98,
+                "npc_id": 95832,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4535,
+                "mapping_version_id": 82,
+                "npc_id": 95832,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4133,
+                "mapping_version_id": 73,
+                "npc_id": 95832,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 436,
+                "mapping_version_id": 7,
+                "npc_id": 95832,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95833,
+        "dungeon_id": 7,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 72718,
+        "name": "Hyrja",
+        "base_health": 4993210,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5803,
+                "mapping_version_id": 98,
+                "npc_id": 95833,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4536,
+                "mapping_version_id": 82,
+                "npc_id": 95833,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4134,
+                "mapping_version_id": 73,
+                "npc_id": 95833,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 437,
+                "mapping_version_id": 7,
+                "npc_id": 95833,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95834,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 64208,
+        "name": "Valarjar Mystic",
+        "base_health": 645118,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5804,
+                "mapping_version_id": 98,
+                "npc_id": 95834,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4537,
+                "mapping_version_id": 82,
+                "npc_id": 95834,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4135,
+                "mapping_version_id": 73,
+                "npc_id": 95834,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 438,
+                "mapping_version_id": 7,
+                "npc_id": 95834,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95842,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 67277,
+        "name": "Valarjar Thundercaller",
+        "base_health": 716798,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5805,
+                "mapping_version_id": 98,
+                "npc_id": 95842,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4538,
+                "mapping_version_id": 82,
+                "npc_id": 95842,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4136,
+                "mapping_version_id": 73,
+                "npc_id": 95842,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 439,
+                "mapping_version_id": 7,
+                "npc_id": 95842,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 95843,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 28086,
+        "name": "King Haldor",
+        "base_health": 1791994,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5806,
+                "mapping_version_id": 98,
+                "npc_id": 95843,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4539,
+                "mapping_version_id": 82,
+                "npc_id": 95843,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4137,
+                "mapping_version_id": 73,
+                "npc_id": 95843,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 440,
+                "mapping_version_id": 7,
+                "npc_id": 95843,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96574,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 67429,
+        "name": "Stormforged Sentinel",
+        "base_health": 1290235,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5807,
+                "mapping_version_id": 98,
+                "npc_id": 96574,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4540,
+                "mapping_version_id": 82,
+                "npc_id": 96574,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4138,
+                "mapping_version_id": 73,
+                "npc_id": 96574,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 441,
+                "mapping_version_id": 7,
+                "npc_id": 96574,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96608,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 70154,
+        "name": "Ebonclaw Worg",
+        "base_health": 645118,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5808,
+                "mapping_version_id": 98,
+                "npc_id": 96608,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4541,
+                "mapping_version_id": 82,
+                "npc_id": 96608,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4139,
+                "mapping_version_id": 73,
+                "npc_id": 96608,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 442,
+                "mapping_version_id": 7,
+                "npc_id": 96608,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96609,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 45090,
+        "name": "Gildedfur Stag",
+        "base_health": 430079,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5809,
+                "mapping_version_id": 98,
+                "npc_id": 96609,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4542,
+                "mapping_version_id": 82,
+                "npc_id": 96609,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4140,
+                "mapping_version_id": 73,
+                "npc_id": 96609,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 443,
+                "mapping_version_id": 7,
+                "npc_id": 96609,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96611,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 65853,
+        "name": "Angerhoof Bull",
+        "base_health": 788478,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5810,
+                "mapping_version_id": 98,
+                "npc_id": 96611,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4543,
+                "mapping_version_id": 82,
+                "npc_id": 96611,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4141,
+                "mapping_version_id": 73,
+                "npc_id": 96611,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 444,
+                "mapping_version_id": 7,
+                "npc_id": 96611,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96640,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 25811,
+        "name": "Valarjar Marksman",
+        "base_health": 716798,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5811,
+                "mapping_version_id": 98,
+                "npc_id": 96640,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4544,
+                "mapping_version_id": 82,
+                "npc_id": 96640,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4142,
+                "mapping_version_id": 73,
+                "npc_id": 96640,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 445,
+                "mapping_version_id": 7,
+                "npc_id": 96640,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96664,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 64200,
+        "name": "Valarjar Runecarver",
+        "base_health": 752637,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5812,
+                "mapping_version_id": 98,
+                "npc_id": 96664,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4545,
+                "mapping_version_id": 82,
+                "npc_id": 96664,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4143,
+                "mapping_version_id": 73,
+                "npc_id": 96664,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 446,
+                "mapping_version_id": 7,
+                "npc_id": 96664,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96677,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 41014,
+        "name": "Steeljaw Grizzly",
+        "base_health": 858654,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5813,
+                "mapping_version_id": 98,
+                "npc_id": 96677,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4546,
+                "mapping_version_id": 82,
+                "npc_id": 96677,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4144,
+                "mapping_version_id": 73,
+                "npc_id": 96677,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 447,
+                "mapping_version_id": 7,
+                "npc_id": 96677,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 96934,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 67281,
+        "name": "Valarjar Trapper",
+        "base_health": 881661,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5814,
+                "mapping_version_id": 98,
+                "npc_id": 96934,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4547,
+                "mapping_version_id": 82,
+                "npc_id": 96934,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4145,
+                "mapping_version_id": 73,
+                "npc_id": 96934,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 448,
+                "mapping_version_id": 7,
+                "npc_id": 96934,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97068,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 67203,
+        "name": "Storm Drake",
+        "base_health": 1433595,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5815,
+                "mapping_version_id": 98,
+                "npc_id": 97068,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4548,
+                "mapping_version_id": 82,
+                "npc_id": 97068,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4146,
+                "mapping_version_id": 73,
+                "npc_id": 97068,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 449,
+                "mapping_version_id": 7,
+                "npc_id": 97068,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97081,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 28085,
+        "name": "King Bjorn",
+        "base_health": 1863674,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5816,
+                "mapping_version_id": 98,
+                "npc_id": 97081,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4549,
+                "mapping_version_id": 82,
+                "npc_id": 97081,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4147,
+                "mapping_version_id": 73,
+                "npc_id": 97081,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 450,
+                "mapping_version_id": 7,
+                "npc_id": 97081,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97083,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 28087,
+        "name": "King Ranulf",
+        "base_health": 1863674,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5817,
+                "mapping_version_id": 98,
+                "npc_id": 97083,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4550,
+                "mapping_version_id": 82,
+                "npc_id": 97083,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4148,
+                "mapping_version_id": 73,
+                "npc_id": 97083,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 451,
+                "mapping_version_id": 7,
+                "npc_id": 97083,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97084,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 28088,
+        "name": "King Tor",
+        "base_health": 2150393,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5818,
+                "mapping_version_id": 98,
+                "npc_id": 97084,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4551,
+                "mapping_version_id": 82,
+                "npc_id": 97084,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4149,
+                "mapping_version_id": 73,
+                "npc_id": 97084,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 452,
+                "mapping_version_id": 7,
+                "npc_id": 97084,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97087,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 67274,
+        "name": "Valarjar Champion",
+        "base_health": 788478,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5819,
+                "mapping_version_id": 98,
+                "npc_id": 97087,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4552,
+                "mapping_version_id": 82,
+                "npc_id": 97087,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4150,
+                "mapping_version_id": 73,
+                "npc_id": 97087,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 453,
+                "mapping_version_id": 7,
+                "npc_id": 97087,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97197,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 64200,
+        "name": "Valarjar Purifier",
+        "base_health": 1146876,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5820,
+                "mapping_version_id": 98,
+                "npc_id": 97197,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4553,
+                "mapping_version_id": 82,
+                "npc_id": 97197,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4151,
+                "mapping_version_id": 73,
+                "npc_id": 97197,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 454,
+                "mapping_version_id": 7,
+                "npc_id": 97197,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97202,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 64464,
+        "name": "Olmyr the Enlightened",
+        "base_health": 1863674,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5821,
+                "mapping_version_id": 98,
+                "npc_id": 97202,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4554,
+                "mapping_version_id": 82,
+                "npc_id": 97202,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4152,
+                "mapping_version_id": 73,
+                "npc_id": 97202,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 455,
+                "mapping_version_id": 7,
+                "npc_id": 97202,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 97219,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 64575,
+        "name": "Solsten",
+        "base_health": 1863674,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5822,
+                "mapping_version_id": 98,
+                "npc_id": 97219,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4555,
+                "mapping_version_id": 82,
+                "npc_id": 97219,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4153,
+                "mapping_version_id": 73,
+                "npc_id": 97219,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 456,
+                "mapping_version_id": 7,
+                "npc_id": 97219,
+                "enemy_forces": 11,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 99804,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 25811,
+        "name": "Valarjar Falconer",
+        "base_health": 31288,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5823,
+                "mapping_version_id": 98,
+                "npc_id": 99804,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4556,
+                "mapping_version_id": 82,
+                "npc_id": 99804,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4154,
+                "mapping_version_id": 73,
+                "npc_id": 99804,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 457,
+                "mapping_version_id": 7,
+                "npc_id": 99804,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 99828,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 42414,
+        "name": "Trained Hawk",
+        "base_health": 15001,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5824,
+                "mapping_version_id": 98,
+                "npc_id": 99828,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4557,
+                "mapping_version_id": 82,
+                "npc_id": 99828,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4155,
+                "mapping_version_id": 73,
+                "npc_id": 99828,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 458,
+                "mapping_version_id": 7,
+                "npc_id": 99828,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 99868,
+        "dungeon_id": 7,
+        "classification_id": 3,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 64466,
+        "name": "Fenryr",
+        "base_health": 4938339,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 0,
+        "bolstering": 0,
+        "sanguine": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5825,
+                "mapping_version_id": 98,
+                "npc_id": 99868,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4558,
+                "mapping_version_id": 82,
+                "npc_id": 99868,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4156,
+                "mapping_version_id": 73,
+                "npc_id": 99868,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 459,
+                "mapping_version_id": 7,
+                "npc_id": 99868,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 99891,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 67203,
+        "name": "Storm Drake",
+        "base_health": 1218556,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5826,
+                "mapping_version_id": 98,
+                "npc_id": 99891,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4559,
+                "mapping_version_id": 82,
+                "npc_id": 99891,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4157,
+                "mapping_version_id": 73,
+                "npc_id": 99891,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 460,
+                "mapping_version_id": 7,
+                "npc_id": 99891,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 101637,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 70645,
+        "name": "Valarjar Aspirant",
+        "base_health": 1433595,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5827,
+                "mapping_version_id": 98,
+                "npc_id": 101637,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4560,
+                "mapping_version_id": 82,
+                "npc_id": 101637,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4158,
+                "mapping_version_id": 73,
+                "npc_id": 101637,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 461,
+                "mapping_version_id": 7,
+                "npc_id": 101637,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 101639,
+        "dungeon_id": 7,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 25801,
+        "name": "Valarjar Shieldmaiden",
+        "base_health": 931837,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 5828,
+                "mapping_version_id": 98,
+                "npc_id": 101639,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4561,
+                "mapping_version_id": 82,
+                "npc_id": 101639,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 4159,
+                "mapping_version_id": 73,
+                "npc_id": 101639,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 462,
+                "mapping_version_id": 7,
+                "npc_id": 101639,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

@@ -32,7 +32,7 @@ class PathMapObjectGroup extends PolylineMapObjectGroup {
         let path = this._loadMapObject($.extend({}, {
             polyline: {
                 color: c.map.polyline.awakenedObeliskGatewayPolylineColor,
-                color_animated: getState().hasPaidTier(c.paidtiers.animated_polylines) ? c.map.polyline.awakenedObeliskGatewayPolylineColorAnimated : null,
+                color_animated: getState().hasPatreonBenefit(c.patreonbenefits.animated_polylines) ? c.map.polyline.awakenedObeliskGatewayPolylineColorAnimated : null,
                 weight: c.map.polyline.awakenedObeliskGatewayPolylineWeight,
                 vertices_json: JSON.stringify(vertices)
             }

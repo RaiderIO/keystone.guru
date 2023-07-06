@@ -28,6 +28,19 @@ class DungeonRoutePolicy
     }
 
     /**
+     * Determine whether the user can view the dungeon route.
+     *
+     * @param User|null $user
+     * @param DungeonRoute $dungeonroute
+     * @param string $secret
+     * @return mixed
+     */
+    public function preview(?User $user, DungeonRoute $dungeonroute, string $secret)
+    {
+        return config('keystoneguru.thumbnail.preview_secret') === $secret || ($user !== null && $user->is_admin);
+    }
+
+    /**
      * Determine whether the user can view an embedded the dungeon route.
      *
      * @param User|null $user
@@ -39,6 +52,10 @@ class DungeonRoutePolicy
         // Everyone can view dungeon routes (for now)
         if (!$dungeonroute->mayUserView($user)) {
             return $this->deny('This route is not published and cannot be viewed. Please ask the author to publish this route to view it.');
+        }
+
+        if ($dungeonroute->isSandbox()) {
+            return $this->deny('Sandbox routes cannot be embedded.');
         }
 
         return true;
@@ -53,8 +70,8 @@ class DungeonRoutePolicy
      */
     public function publish(User $user, DungeonRoute $dungeonroute)
     {
-        if (!$dungeonroute->hasKilledAllUnskippables()) {
-            return $this->deny('Unable to change sharing settings: not all unskippable enemies have been killed');
+        if (!$dungeonroute->hasKilledAllRequiredEnemies()) {
+            return $this->deny('Unable to change sharing settings: not all required enemies have been killed');
         }
         // Only authors or if the user is an admin
         return ($dungeonroute->isOwnedByUser($user) || $user->hasRole('admin'));
@@ -107,7 +124,19 @@ class DungeonRoutePolicy
      */
     public function clone(User $user, DungeonRoute $dungeonroute)
     {
-        return $dungeonroute->published || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->mayUserView($user) || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+    }
+
+    /**
+     * Determine whether the user can migrate a dungeon route.
+     *
+     * @param User $user
+     * @param DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function migrate(User $user, DungeonRoute $dungeonroute)
+    {
+        return $dungeonroute->mayUserEdit($user);
     }
 
     /**

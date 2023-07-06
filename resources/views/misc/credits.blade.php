@@ -1,15 +1,16 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Credits')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.credits.title')])
 
-@section('header-title', __('Credits'))
+@section('header-title', __('views/misc.credits.header'))
 
 @section('content')
+
     <p>
         This website could not exist without the help of talented developers around the world, offering their hard work
         for free for usage in projects such as these. The following packages/images deserve credit for being integrated
         in this website:
     </p>
 
-    <h2>{{ __('People') }}</h2>
+    <h2>{{ __('views/misc.credits.header_people') }}</h2>
     <p>
     <ul>
         <li>
@@ -23,7 +24,7 @@
         </li>
         <li>
             Various members of
-            <span class="font-weight-bold">{{ link_to('http://darkwolves.eu/', 'Dark Wolves') }}</span> and
+            <span class="font-weight-bold">{{ link_to('https://darkwolves.eu/', 'Dark Wolves') }}</span> and
             <span class="font-weight-bold">Sark</span>
             for helping me with mapping dungeons, from odd requests to "kill that mob" to "hold up for a second you
             guys are going too fast" :).
@@ -32,7 +33,7 @@
     </p>
 
 
-    <h2 class="mt-4">{{ __('Libraries') }}</h2>
+    <h2 class="mt-4">{{ __('views/misc.credits.header_libraries') }}</h2>
     <h4>
         General
     </h4>
@@ -63,7 +64,7 @@
     </ul>
     </p>
 
-    <h2 class="mt-4">{{ __('Images') }}</h2>
+    <h2 class="mt-4">{{ __('views/misc.credits.header_images') }}</h2>
     <h4>
         Alliance & Horde icons
     </h4>
@@ -131,7 +132,7 @@
             <div>Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
                     href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a
                     href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
-                    target="_blank">CC 3.0 BY</a></div>
+                    target="_blank" rel="noopener noreferrer">CC 3.0 BY</a></div>
         </li>
         <li>
             Mechanical: {{ link_to('https://www.iconfinder.com/icons/2376279/android_bot_droid_robot_icon') }}
@@ -171,5 +172,23 @@
         </li>
     </ul>
     </p>
+
+    <h4>
+        Warlords of Draenor artwork by Liang xing (used with permission)
+    </h4>
+    <ul>
+        <li>
+            <a href="https://www.artstation.com/artwork/QzNqL">https://www.artstation.com/artwork/QzNqL</a>
+        </li>
+    </ul>
+
+    <h4>
+        Class icons
+    </h4>
+    <ul>
+        <li>
+            <a href="https://twitter.com/keyboardturn/status/1561631145447473153">@keyboardturn on Twitter</a>
+        </li>
+    </ul>
 
 @endsection

@@ -1,0 +1,50 @@
+{
+    "id": 162,
+    "release_changelog_id": 169,
+    "version": "v6.4",
+    "title": "Dragonflight Season 2 dungeons",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-04-12T11:40:55+00:00",
+    "updated_at": "2023-04-12T11:40:55+00:00",
+    "changelog": {
+        "id": 169,
+        "release_id": 162,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 169,
+                "release_changelog_category_id": 4,
+                "ticket_id": 1618,
+                "change": "Added Dragonflight Season 2 support.",
+                "category": {
+                    "id": 4,
+                    "key": "mapping_changes",
+                    "name": "releasechangelogcategories.mapping_changes"
+                }
+            },
+            {
+                "release_changelog_id": 169,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1634,
+                "change": "Reworked some endpoints to increase security (hotfixed).",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 169,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1636,
+                "change": "Deleting a user no longer sometimes deletes a team you were a member of (hotfixed).",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

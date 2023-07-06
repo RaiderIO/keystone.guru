@@ -17,8 +17,8 @@ class FactionDisplayControls extends MapControl {
                     if (stateFactions.hasOwnProperty(index)) {
                         let faction = stateFactions[index];
                         factionsData.push({
-                            name: faction.name,
-                            name_lc: faction.name.toLowerCase(),
+                            name: lang.get(faction.name),
+                            name_lc: lang.get(faction.name).toLowerCase(),
                             icon_url: faction.iconfile.icon_url,
                             fa_class: parseInt(index) === 0 ? 'fas' : 'far'
                         });
@@ -30,7 +30,7 @@ class FactionDisplayControls extends MapControl {
                 // Build the status bar from the template
                 self.domElement = $(template(data));
 
-                self.domElement.find('.map_faction_display_control').bind('click', function (e) {
+                self.domElement.find('.map_faction_display_control').unbind('click').bind('click', function (e) {
                     let root = $(e.currentTarget);
                     let allRadios = $('#map_faction_display_controls .radiobutton');
                     let checkbox = root.find('.radiobutton');

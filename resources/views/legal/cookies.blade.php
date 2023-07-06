@@ -1,6 +1,6 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Cookies')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/legal.cookies.title')])
 
-@section('header-title', __('Cookies Policy'))
+@section('header-title', __('views/legal.cookies.header'))
 
 @section('content')
     <p>
@@ -119,7 +119,7 @@
         </tr>
         <tr>
             <td>
-                changelog_release_last_viewed
+                changelog_release
             </td>
             <td>
                 Keeps track of the latest release you've viewed so we can show the NEW keyword next to the changelog in
@@ -164,7 +164,7 @@
                 polyline_default_color
             </td>
             <td>
-                Remembers the color you set when changing the color of a polyline in the map editor.
+                Remembers the default color when you create a new polyline in the map editor.
             </td>
         </tr>
         <tr>
@@ -188,7 +188,8 @@
                 pull_gradient_apply_always
             </td>
             <td>
-                Remembers if you want the gradient that you've selected in the map editor to be applied automatically when performing changes to your pull.
+                Remembers if you want the gradient that you've selected in the map editor to be applied automatically
+                when performing changes to your pull.
             </td>
         </tr>
         <tr>
@@ -217,10 +218,92 @@
         </tr>
         <tr>
             <td>
+                hidden_map_object_groups_added_mountablearea
+            </td>
+            <td>
+                Checks once if the mountable area map object group was hidden from view, if it was not, hide it.
+                This check is done once since we don't want this to be visible by default.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 kill_zones_number_style
             </td>
             <td>
                 Remembers if you want to display your pulls in percentages or enemy forces.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                pulls_sidebar_floor_switch_visibility
+            </td>
+            <td>
+                Remembers if you want to display floor breakdowns in your pulls sidebar.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                dungeon_speedrun_required_npcs_show_all
+            </td>
+            <td>
+                Remembers if you want to always show all required enemies when viewing a speedrun
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_number_style
+            </td>
+            <td>
+                Remembers if you want to display enemies on the map in percentages or enemy forces.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_unkilled_enemy_opacity
+            </td>
+            <td>
+                Remembers the opacity of unkilled enemies.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_unkilled_important_enemy_opacity
+            </td>
+            <td>
+                Remembers the opacity of unkilled important enemies.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_enemy_aggressiveness_border
+            </td>
+            <td>
+                Remembers if you want to show an aggressiveness border around enemies on the map view or not.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_enemy_dangerous_border
+            </td>
+            <td>
+                Remembers if you want to show a dangerous border around enemies on the map view or not.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                theme
+            </td>
+            <td>
+                Remembers the theme you wish to have the website in.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                route_coverage_new_route_style
+            </td>
+            <td>
+                Remembers if you want new routes in the route coverage overview to be created yourself or be searched in
+                the search tool.
             </td>
         </tr>
 
@@ -239,7 +322,7 @@
         </li>
         <li>
             <a href="https://policies.google.com/technologies/cookies?hl=en">How Google uses Cookies <i
-                        class="fas fa-external-link-alt"></i></a>
+                    class="fas fa-external-link-alt"></i></a>
         </li>
     </ul>
 

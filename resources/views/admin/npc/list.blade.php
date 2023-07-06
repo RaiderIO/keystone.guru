@@ -1,11 +1,11 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Npc listing')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.npc.list.title')])
 
 @section('header-title')
-    {{ __('View NPCs') }}
+    {{ __('views/admin.npc.list.header') }}
 @endsection
 @section('header-addition')
     <a href="{{ route('admin.npc.new') }}" class="btn btn-success text-white float-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('Create NPC') }}
+        <i class="fas fa-plus"></i> {{ __('views/admin.npc.list.create_npc') }}
     </a>
 @endsection
 
@@ -15,6 +15,8 @@
 ?>
 
 @section('scripts')
+    @parent
+
     <script type="text/javascript">
         $(function () {
             $('#admin_npc_table').DataTable({
@@ -45,20 +47,36 @@
                         'data': 'dungeon.name',
                         'name': 'dungeon_id',
                         'render': function (data, type, row, meta) {
-                            return row.dungeon_id === -1 ? 'Any' : row.dungeon.name;
+                            return row.dungeon_id === -1 ? '{{ __('views/admin.npc.list.all_dungeons') }}' : lang.get(row.dungeon.name);
                         },
                     },
                     {
                         'title': lang.get('messages.enemy_forces_label'),
                         'data': 'enemy_forces',
                         'name': 'enemy_forces',
+                        'searchable': false,
+                        'render': function (data, type, row, meta) {
+                            return lang.get(row.enemy_forces.enemy_forces);
+                        },
+                    },
+                    {
+                        'title': lang.get('messages.enemy_count_label'),
+                        'data': 'enemy_count',
+                        'name': 'enemy_count',
                         'searchable': false
                     },
                     {
                         'title': lang.get('messages.classification_label'),
                         'data': 'classification.name',
                         'name': 'classification.name',
-                        'searchable': false
+                        'searchable': false,
+                        'render': function (data, type, row, meta) {
+                            if( row.classification === null ){
+                                console.log(row);
+                                return 'Unknown';
+                            }
+                            return lang.get(row.classification.name);
+                        },
                     },
                     {
                         'title': lang.get('messages.actions_label'),
@@ -85,12 +103,13 @@
     <table id="admin_npc_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="15%">{{ __('Id') }}</th>
-            <th width="30%">{{ __('Name') }}</th>
-            <th width="15%">{{ __('Dungeon') }}</th>
-            <th width="10%">{{ __('Enemy forces') }}</th>
-            <th width="10%">{{ __('Classification') }}</th>
-            <th width="10%">{{ __('Actions') }}</th>
+            <th width="15%">{{ __('views/admin.npc.list.table_header_id') }}</th>
+            <th width="30%">{{ __('views/admin.npc.list.table_header_name') }}</th>
+            <th width="15%">{{ __('views/admin.npc.list.table_header_dungeon') }}</th>
+            <th width="10%">{{ __('views/admin.npc.list.table_header_enemy_forces') }}</th>
+            <th width="10%">{{ __('views/admin.npc.list.table_header_enemy_count') }}</th>
+            <th width="10%">{{ __('views/admin.npc.list.table_header_classification') }}</th>
+            <th width="10%">{{ __('views/admin.npc.list.table_header_actions') }}</th>
         </tr>
         </thead>
     </table>

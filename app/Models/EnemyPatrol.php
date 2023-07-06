@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Mapping\MappingModelCloneableInterface;
+use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
  * @property int $id
+ * @property int $mapping_version_id
  * @property int $floor_id
  * @property int $polyline_id
  * @property string $teeming
@@ -19,29 +23,66 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends Model
+class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
-    public $visible = ['id', 'floor_id', 'teeming', 'faction', 'polyline'];
+    public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
+    protected $fillable = [
+        'id',
+        'mapping_version_id',
+        'floor_id',
+        'polyline_id',
+        'teeming',
+        'faction',
+    ];
     public $with = ['polyline'];
     public $timestamps = false;
 
     /**
      * @return BelongsTo
      */
-    function floor()
+    public function floor(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Floor');
+        return $this->belongsTo(Floor::class);
     }
 
     /**
      * Get the dungeon route that this brushline is attached to.
      *
-     * @return hasOne
+     * @return HasOne
      */
-    function polyline()
+    public function polyline(): HasOne
     {
-        return $this->hasOne('App\Models\Polyline', 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', get_class($this));
     }
+
+    /**
+     * @return int|null
+     */
+    public function getDungeonId(): ?int
+    {
+        return optional($this->floor)->dungeon_id ?? null;
+    }
+
+    /**
+     * @param MappingVersion $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     * @return Model
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol
+    {
+        /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
+        $clonedEnemyPatrol                     = clone $this;
+        $clonedEnemyPatrol->exists             = false;
+        $clonedEnemyPatrol->id                 = null;
+        $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
+        $clonedEnemyPatrol->save();
+
+        $clonedPolyLine = $this->polyline->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
+        $clonedEnemyPatrol->update(['polyline_id' => $clonedPolyLine->id]);
+
+        return $clonedEnemyPatrol;
+    }
+
 
     public static function boot()
     {

@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('401 Unauthorized'),
+    'title' => __('views/errors.401.title'),
     'code' => 401,
-    'message' => __('Sorry, you are not authorized to access this page.')
+    'message' => __('views/errors.401.message')
     ])

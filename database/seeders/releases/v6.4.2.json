@@ -1,0 +1,28 @@
+{
+    "id": 164,
+    "release_changelog_id": 171,
+    "version": "v6.4.2",
+    "title": "Fixed route thumbnails not being generated properly",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-04-17T09:58:14+00:00",
+    "updated_at": "2023-04-17T09:58:14+00:00",
+    "changelog": {
+        "id": 171,
+        "release_id": 164,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 171,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1625,
+                "change": "Updated Puppeteer to latest version - improved thumbnail generation script.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

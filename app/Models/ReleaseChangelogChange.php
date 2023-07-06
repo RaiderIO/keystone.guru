@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -14,9 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property ReleaseChangelogCategory $category
  * @property ReleaseChangelog $changelog
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class ReleaseChangelogChange extends Model
+class ReleaseChangelogChange extends CacheModel
 {
     protected $visible = ['ticket_id', 'change', 'category', 'release_changelog_category_id', 'release_changelog_id'];
     protected $with = ['category'];
@@ -24,18 +26,18 @@ class ReleaseChangelogChange extends Model
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function category()
+    public function category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\ReleaseChangelogCategory', 'release_changelog_category_id');
+        return $this->belongsTo(ReleaseChangelogCategory::class, 'release_changelog_category_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    function changelog()
+    public function changelog(): HasOne
     {
-        return $this->hasOne('App\Models\ReleaseChangelog');
+        return $this->hasOne(ReleaseChangelog::class);
     }
 }

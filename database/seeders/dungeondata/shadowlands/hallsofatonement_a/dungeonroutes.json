@@ -1,0 +1,447 @@
+[
+    {
+        "public_key": "oAOhtux",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 29,
+        "mapping_version_id": 29,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 1,
+        "title": "Sanguine-Quaking-Petko",
+        "description": "",
+        "level_min": 2,
+        "level_max": 28,
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "enemy_forces": 280,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2021-01-08T15:29:35+00:00",
+        "updated_at": "2022-11-21T22:31:21+00:00",
+        "playerspecializations": [],
+        "playerraces": [
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            }
+        ],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 51
+            }
+        ],
+        "brushlines": [
+            {
+                "floor_id": 78,
+                "polyline": {
+                    "color": "#ffffff",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-151.44,\"lng\":181.37},{\"lat\":-140.18,\"lng\":176.47}]"
+                }
+            },
+            {
+                "floor_id": 78,
+                "polyline": {
+                    "color": "#ffffff",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-96.2,\"lng\":166.95},{\"lat\":-119.08,\"lng\":90.57}]"
+                }
+            },
+            {
+                "floor_id": 79,
+                "polyline": {
+                    "color": "#ffffff",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-124.48,\"lng\":170.06}]"
+                }
+            },
+            {
+                "floor_id": 79,
+                "polyline": {
+                    "color": "#ffffff",
+                    "color_animated": null,
+                    "weight": 3,
+                    "vertices_json": "[{\"lat\":-139.95,\"lng\":196.15}]"
+                }
+            }
+        ],
+        "paths": [],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    4351,
+                    4352,
+                    4364,
+                    4365,
+                    4409,
+                    4410,
+                    4411
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    4367,
+                    4369,
+                    4370,
+                    4371,
+                    4372,
+                    4373,
+                    4453
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    4456,
+                    4457,
+                    4458
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    4375,
+                    4376,
+                    4377,
+                    4378
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    4353,
+                    4354,
+                    4357,
+                    4358,
+                    4359,
+                    4360
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    4355,
+                    4356
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    4434,
+                    4435,
+                    4436,
+                    4437,
+                    4438,
+                    4439,
+                    4440,
+                    4455
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    4441,
+                    4442,
+                    4443,
+                    4444
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    4425,
+                    4426,
+                    4427
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    4403,
+                    4404,
+                    4405,
+                    4406,
+                    4407
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a1ff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    4399
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    4385,
+                    4386,
+                    4428,
+                    4429
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    4459,
+                    4460,
+                    4461,
+                    4462,
+                    4463,
+                    4814,
+                    4815
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "enemies": [
+                    4817
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3e9eff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "enemies": [
+                    4818
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fffb3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "enemies": [
+                    4819,
+                    4820,
+                    4821,
+                    4822,
+                    4823
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3eff3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "enemies": [
+                    4755,
+                    4756,
+                    4757,
+                    4758
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff3e9e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "enemies": [
+                    4761
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#3effff",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "enemies": [
+                    4754,
+                    5432,
+                    5433,
+                    5434,
+                    5435,
+                    5436,
+                    5437,
+                    5438,
+                    5439,
+                    5440,
+                    5441,
+                    5442,
+                    5443,
+                    5444,
+                    5445,
+                    5446,
+                    5447,
+                    5448,
+                    5449,
+                    5450,
+                    5451,
+                    5452,
+                    5453,
+                    5454,
+                    5455
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ff9b3e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "enemies": [
+                    4830
+                ],
+                "spells": []
+            }
+        ],
+        "enemyraidmarkers": [],
+        "prideful_enemies": [],
+        "mapicons": [
+            {
+                "floor_id": 77,
+                "map_icon_type_id": 2,
+                "lat": -91.11,
+                "lng": 285.31,
+                "comment": "If you have a Venthry in your group, make sure to use the covenant-specific extra action button near Loyal Stoneborn.",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 77,
+                "map_icon_type_id": 2,
+                "lat": -126.15,
+                "lng": 235.62,
+                "comment": null,
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            },
+            {
+                "floor_id": 78,
+                "map_icon_type_id": 2,
+                "lat": -149.34,
+                "lng": 185.96,
+                "comment": "If you have a Venthry in your group, make sure to use the covenant-specific extra action button near Loyal Stoneborn. Use one with G47\n",
+                "permanent_tooltip": 0,
+                "seasonal_index": null,
+                "linkedawakenedobelisks": []
+            }
+        ]
+    }
+]

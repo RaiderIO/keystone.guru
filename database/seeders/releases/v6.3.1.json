@@ -1,0 +1,61 @@
+{
+    "id": 161,
+    "release_changelog_id": 168,
+    "version": "v6.3.1",
+    "title": "Hotfix for map icons showing up in routes they don't belong to",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-03-14T22:54:54+00:00",
+    "updated_at": "2023-03-14T22:54:54+00:00",
+    "changelog": {
+        "id": 168,
+        "release_id": 161,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 168,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1532,
+                "change": "Deleting a pull will now once again properly re-arrange the indices of your remaining pulls and not leave you with gaps or unordered pulls.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 168,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1628,
+                "change": "Color selection in your profile no longer has a messed up layout since the addition of the Evoker class (class colors are liinked there).",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 168,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1629,
+                "change": "Newly registered users no longer have an unknown locale selected.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 168,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1631,
+                "change": "Adding new map icons to any route no longer has them showing up in other routes.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
+use App\Models\Npc;
+use App\Models\NpcClass;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -13,9 +16,9 @@ class NpcFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**
@@ -23,24 +26,27 @@ class NpcFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        $npc = $this->route()->parameter('npc');
-
         $rules = [
-            // Can only add one entry per game_id, but exclude if we're editing a row but don't change the game_id
-            'portrait'             => 'image|mimes:png|max:128',
-            'id'                   => ['required'],
-            'name'                 => 'required',
-            'dungeon_id'           => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
-            'classification_id'    => 'required',
-            'aggressiveness'       => Rule::in(config('keystoneguru.aggressiveness')),
-            'base_health'          => [
+            'id'                        => 'required',
+            'name'                      => 'required',
+            'dungeon_id'                => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
+            'npc_class_id'              => Rule::in(array_values(NpcClass::ALL)),
+            'classification_id'         => 'required',
+            'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
+            'base_health'               => [
                 'required',
                 'regex:/^[\d\s,]*$/',
             ],
-            'enemy_forces'         => 'int',
-            'enemy_forces_teeming' => 'int'
+            'health_percentage'         => 'int',
+            'dangerous'                 => 'bool',
+            'truesight'                 => 'bool',
+            'bursting'                  => 'bool',
+            'bolstering'                => 'bool',
+            'sanguine'                  => 'bool',
+            'bolstering_whitelist_npcs' => 'array',
+            'spells'                    => 'array',
         ];
 
         return $rules;

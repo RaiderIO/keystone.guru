@@ -3,7 +3,6 @@
 
 namespace App\Logic\MapContext;
 
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 
@@ -13,15 +12,15 @@ use App\Models\Floor;
  * @author Wouter
  * @since 06/08/2020
  *
- * @property DungeonRoute $_context
+ * @property DungeonRoute $context
  */
 class MapContextDungeonRoute extends MapContext
 {
-    use PublicKeyDungeonRoute;
+    use DungeonRouteTrait;
 
     public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
     {
-        parent::__construct($dungeonRoute, $floor);
+        parent::__construct($dungeonRoute, $floor, $dungeonRoute->mappingVersion);
     }
 
     public function getType(): string
@@ -31,37 +30,26 @@ class MapContextDungeonRoute extends MapContext
 
     public function isTeeming(): bool
     {
-        return $this->_context->teeming;
+        return $this->context->teeming;
     }
 
     public function getSeasonalIndex(): int
     {
-        return $this->_context->seasonal_index;
+        return $this->context->seasonal_index;
     }
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->_context->dungeon->id, false, $this->_context->getRouteKey());
+        return $this->listEnemies($this->mappingVersion, false);
     }
 
-    public function toArray(): array
+    public function getEchoChannelName(): string
     {
-        return array_merge(parent::toArray(), [
-            'publicKey'               => $this->_context->public_key,
-            'teamId'                  => $this->_context->team_id,
-            'pullGradient'            => $this->_context->pull_gradient,
-            'pullGradientApplyAlways' => $this->_context->pull_gradient_apply_always,
-            'faction'                 => strtolower($this->_context->faction->name),
-            'enemyForces'             => $this->_context->getEnemyForces(),
-
-            // Relations
-            'killZones'               => $this->_context->killzones()->orderBy('index')->get(),
-            'mapIcons'                => $this->_context->mapicons,
-            'paths'                   => $this->_context->paths,
-            'brushlines'              => $this->_context->brushlines,
-            'pridefulenemies'         => $this->_context->pridefulenemies,
-        ]);
+        return sprintf('%s-route-edit.%s', config('app.type'), $this->context->getRouteKey());
     }
 
-
+    public function getProperties(): array
+    {
+        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context));
+    }
 }

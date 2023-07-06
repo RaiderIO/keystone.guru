@@ -2,23 +2,25 @@
 
 namespace App\Console\Commands\Mapping;
 
+use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
-use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\EnemyPack;
-use App\Models\EnemyPatrol;
 use App\Models\Floor;
-use App\Models\MapIcon;
+use App\Models\Mapping\MappingCommitLog;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Save extends Command
 {
     use SavesArrayToJsonFile;
+    use ExecutesShellCommands;
 
     /**
      * The name and signature of the console command.
@@ -41,44 +43,118 @@ class Save extends Command
      */
     public function handle()
     {
-        $dungeonDataDir = database_path('/seeds/dungeondata/');
+        // Drop all caches for all models - otherwise it may produce some strange results
+        $this->call('modelCache:clear');
 
-        $this->_saveDungeons($dungeonDataDir);
-        $this->_saveNpcs($dungeonDataDir);
-        $this->_saveSpells($dungeonDataDir);
-        $this->_saveDungeonData($dungeonDataDir);
+        $dungeonDataDir = database_path('seeders/dungeondata/');
+
+        $this->saveMappingVersions($dungeonDataDir);
+        $this->saveMappingCommitLogs($dungeonDataDir);
+        $this->saveDungeons($dungeonDataDir);
+        $this->saveNpcs($dungeonDataDir);
+        $this->saveSpells($dungeonDataDir);
+        $this->saveDungeonData($dungeonDataDir);
+
+        $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
+
+        // If we should copy the result to another folder..
+        if (!empty($mappingBackupDir)) {
+            $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d H:i:s'));
+
+
+            $tmpZippedFilePath = '/tmp';
+            $zippedFileName = 'mapping.gz';
+            $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
+            $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
+
+            $this->info(sprintf('Saving backup of mapping to %s/%s', $targetDir, $zippedFileName));
+            $this->shell([
+                sprintf('mkdir -p "%s"', $targetDir),
+                sprintf('cp -R "%s/%s" "%s"', $tmpZippedFilePath, $zippedFileName, $targetDir),
+                sprintf('rm %s/%s', $tmpZippedFilePath, $zippedFileName),
+            ]);
+        }
 
         return 0;
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param string $dungeonDataDir
      */
-    private function _saveDungeons(string $dungeonDataDir)
+    private function saveMappingVersions(string $dungeonDataDir)
+    {
+        // Save NPC data in the root of folder
+        $this->info('Saving mapping versions');
+
+        // Save all mapping versions
+        $mappingVersions = MappingVersion::all()
+            ->makeVisible(['created_at', 'updated_at']);
+
+        $this->saveDataToJsonFile(
+            $mappingVersions->toArray(),
+            $dungeonDataDir,
+            'mapping_versions.json'
+        );
+    }
+
+    /**
+     * @param string $dungeonDataDir
+     */
+    private function saveMappingCommitLogs(string $dungeonDataDir)
+    {
+        // Save NPC data in the root of folder
+        $this->info('Saving mapping commit logs');
+
+        // Save all mapping versions
+        $mappingVersions = MappingCommitLog::all()
+            ->makeVisible(['created_at', 'updated_at']);
+
+        $this->saveDataToJsonFile(
+            $mappingVersions->toArray(),
+            $dungeonDataDir,
+            'mapping_commit_logs.json'
+        );
+    }
+
+    /**
+     * @param string $dungeonDataDir
+     */
+    private function saveDungeons(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
         $this->info('Saving dungeons');
 
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion'])->with('floors.floorcouplings')->get();
+        $dungeons = Dungeon::without(['expansion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
+            ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
+            ->get();
 
         $this->saveDataToJsonFile(
-            $dungeons->makeHidden(['active', 'floor_count', 'expansion'])
-                ->makeVisible(['expansion_id'])
-                ->toArray(),
-            $dungeonDataDir, 'dungeons.json');
+            $dungeons->makeVisible([
+                'id',
+                'expansion_id',
+                'zone_id',
+                'mdt_id',
+                'key',
+                'name',
+                'slug',
+                'speedrun_enabled',
+            ])->toArray(),
+            $dungeonDataDir,
+            'dungeons.json'
+        );
     }
 
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveNpcs(string $dungeonDataDir)
+    private function saveNpcs(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
         $this->info('Saving global NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
-        $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', -1)->get()->values();
+        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', -1)->get()->values();
         $npcs->makeHidden(['type', 'class']);
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -90,13 +166,13 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveSpells(string $dungeonDataDir)
+    private function saveSpells(string $dungeonDataDir)
     {
         // Save all spells
         $this->info('Saving Spells');
 
         $spells = Spell::all();
-        foreach($spells as $spell){
+        foreach ($spells as $spell) {
             $spell->makeHidden(['icon_url']);
         }
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
@@ -105,141 +181,178 @@ class Save extends Command
     /**
      * @param $dungeonDataDir string
      */
-    private function _saveDungeonData(string $dungeonDataDir)
+    private function saveDungeonData(string $dungeonDataDir)
     {
-
-        foreach (Dungeon::all() as $dungeon) {
-            $this->info(sprintf('- Saving dungeon %s', $dungeon->name));
+        foreach (Dungeon::with(['dungeonRoutes'])->get() as $dungeon) {
             /** @var $dungeon Dungeon */
-            // HoV is our test dungeon so keep there here so I don't have to rewrite this every time I want to debug
-//            if( $dungeon->getKeyAttribute() !== 'hallsofvalor' ){
-//                continue;
-//            }
+            $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
 
-            $rootDirPath = $dungeonDataDir . $dungeon->expansion->shortname . '/' . $dungeon->key;
+            $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
 
-            // Demo routes, load it in a specific way to make it easier to import it back in again
-            $demoRoutes = $dungeon->dungeonroutes->where('demo', true)->values();
-            foreach ($demoRoutes as $demoRoute) {
-                /** @var $demoRoute DungeonRoute */
-                unset($demoRoute->relations);
-                // Do not reload them
-                $demoRoute->setAppends([]);
-                // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
-                // for each and every re-import
-                $demoRoute->setHidden(['id', 'thumbnail_updated_at', 'published', 'unlisted']);
-                $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                                  'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killzones', 'enemyraidmarkers',
-                                  'pridefulenemies', 'mapicons']);
-
-                // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
-                // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
-                // Thus, remove the IDs from both Paths and KillZones as we need to make new IDs when the DungeonRoute
-                // is imported into the production environment
-                $toHide = new \Illuminate\Database\Eloquent\Collection();
-                // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
-                foreach ($demoRoute->playerspecializations as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->playerraces as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->playerclasses as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->routeattributesraw as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->affixgroups as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->brushlines as $item) {
-                    $item->setVisible(['floor_id', 'polyline']);
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->paths as $item) {
-                    $item->load(['linkedawakenedobelisks']);
-                    $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->killzones as $item) {
-                    // Hidden by default to save data
-                    $item->makeVisible(['floor_id']);
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->enemyraidmarkers as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->pridefulenemies as $item) {
-                    $toHide->add($item);
-                }
-                foreach ($demoRoute->mapicons as $item) {
-                    $item->load(['linkedawakenedobelisks']);
-                    $item->setVisible(['floor_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index', 'linkedawakenedobelisks']);
-                    $toHide->add($item);
-                }
-                foreach ($toHide as $item) {
-                    /** @var $item Model */
-                    $item->makeHidden(['id', 'dungeon_route_id']);
-                }
-            }
-
-            if ($demoRoutes->count() > 0) {
-                $this->info(sprintf('-- Saving %s dungeonroutes', $demoRoutes->count()));
-            }
-            $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
-
-            $npcs = Npc::without(['spells'])->with(['npcspells'])->where('dungeon_id', $dungeon->id)->get()->values();
-            $npcs->makeHidden(['type', 'class']);
-            foreach ($npcs as $item) {
-                $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
-            }
-
-            // Save NPC data in the root of the dungeon folder
-            if ($npcs->count() > 0) {
-                $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
-            }
-            $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
+            $this->saveDungeonDungeonRoutes($dungeon, $rootDirPath);
+            $this->saveDungeonNpcs($dungeon, $rootDirPath);
 
             /** @var Dungeon $dungeon */
-            foreach ($dungeon->floors as $floor) {
-                $this->info(sprintf('-- Saving floor %s', $floor->name));
-                /** @var Floor $floor */
-                // Only export NPC->id, no need to store the full npc in the enemy
-                $enemies = Enemy::where('floor_id', $floor->id)->without(['npc', 'type'])->with('npc:id')->get()->values();
-                foreach ($enemies as $enemy) {
-                    /** @var $enemy Enemy */
-                    if ($enemy->npc !== null) {
-                        $enemy->npc->unsetRelation('spells');
-                        $enemy->npc->unsetRelation('npcbolsteringwhitelists');
-                        $enemy->npc->unsetRelation('type');
-                        $enemy->npc->unsetRelation('class');
-                    }
-                }
-                $enemyPacks = EnemyPack::where('floor_id', $floor->id)->get()->values();
-                $enemyPatrols = EnemyPatrol::where('floor_id', $floor->id)->get()->values();
-                $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::where('floor_id', $floor->id)->get()->values();
-                // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
-                $dungeonFloorSwitchMarkers->makeHidden(['direction']);
-                $mapIcons = MapIcon::where('floor_id', $floor->id)->where('dungeon_route_id', -1)->get()->values();
-                // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
-                // at the end of the table instead.
-                $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
+            $floors = $dungeon->floors()->with([
+                'enemyPacksForExport',
+                'enemyPatrolsForExport',
+                'dungeonFloorSwitchMarkersForExport',
+                'mapIconsForExport',
+                'mountableAreasForExport',
+            ])->get();
 
-                $result['enemies'] = $enemies;
-                $result['enemy_packs'] = $enemyPacks;
-                $result['enemy_patrols'] = $enemyPatrols;
-                $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
-                $result['map_icons'] = $mapIcons;
-
-                foreach ($result as $category => $categoryData) {
-                    // Save enemies, packs, patrols, markers on a per-floor basis
-                    if ($categoryData->count() > 0) {
-                        $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
-                    }
-                    $this->saveDataToJsonFile($categoryData, $rootDirPath . '/' . $floor->index, $category . '.json');
-                }
+            foreach ($floors as $floor) {
+                $this->saveFloor($floor, $rootDirPath);
             }
+        }
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @param string $rootDirPath
+     * @return void
+     */
+    private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
+    {
+        // Demo routes, load it in a specific way to make it easier to import it back in again
+        $demoRoutes = $dungeon->dungeonRoutes->where('demo', true)->values();
+        foreach ($demoRoutes as $demoRoute) {
+            /** @var $demoRoute DungeonRoute */
+            unset($demoRoute->relations);
+            // Do not reload them
+            $demoRoute->setAppends([]);
+            // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
+            // for each and every re-import
+            $demoRoute->setHidden(['id', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
+                                   'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
+                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
+            $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
+                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyraidmarkers',
+                              'pridefulEnemies', 'mapicons']);
+
+            // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
+            // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
+            // Thus, remove the IDs from both Paths and KillZones as we need to make new IDs when the DungeonRoute
+            // is imported into the production environment
+            $toHide = new Collection();
+            // No ->merge() :( -> https://medium.com/@tadaspaplauskas/quick-tip-laravel-eloquent-collections-merge-gotcha-moment-e2a56fc95889
+            foreach ($demoRoute->playerspecializations as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->playerraces as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->playerclasses as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->routeattributesraw as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->affixgroups as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->brushlines as $item) {
+                $item->setVisible(['floor_id', 'polyline']);
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->paths as $item) {
+                $item->load(['linkedawakenedobelisks']);
+                $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->killZones as $item) {
+                // Hidden by default to save data
+                $item->makeVisible(['floor_id']);
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->enemyraidmarkers as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->pridefulEnemies as $item) {
+                $toHide->add($item);
+            }
+            foreach ($demoRoute->mapicons as $item) {
+                $item->load(['linkedawakenedobelisks']);
+                $item->setVisible([
+                    'floor_id',
+                    'map_icon_type_id',
+                    'lat',
+                    'lng',
+                    'comment',
+                    'permanent_tooltip',
+                    'seasonal_index',
+                    'linkedawakenedobelisks',
+                ]);
+                $toHide->add($item);
+            }
+            foreach ($toHide as $item) {
+                /** @var $item Model */
+                $item->makeHidden(['id', 'dungeon_route_id']);
+            }
+        }
+
+        if ($demoRoutes->count() > 0) {
+            $this->info(sprintf('-- Saving %s dungeonroutes', $demoRoutes->count()));
+        }
+        $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
+    }
+
+    /**
+     * @param Dungeon $dungeon
+     * @param string $rootDirPath
+     * @return void
+     */
+    private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
+    {
+        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', $dungeon->id)->get()->values();
+        $npcs->makeHidden(['type', 'class']);
+        foreach ($npcs as $item) {
+            $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
+        }
+
+        // Save NPC data in the root of the dungeon folder
+        if ($npcs->count() > 0) {
+            $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
+        }
+        $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
+    }
+
+    /**
+     * @param Floor $floor
+     * @param string $rootDirPath
+     * @return void
+     */
+    private function saveFloor(Floor $floor, string $rootDirPath): void
+    {
+        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
+        // Only export NPC->id, no need to store the full npc in the enemy
+        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemyPacks                = $floor->enemyPacksForExport->values();
+        $enemyPatrols              = $floor->enemyPatrolsForExport->values();
+        $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
+
+        // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
+        $dungeonFloorSwitchMarkers->makeHidden(['direction']);
+        $mapIcons       = $floor->mapIconsForExport->values();
+        $mountableAreas = $floor->mountableAreasForExport->values();
+
+        // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
+        // at the end of the table instead.
+        $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
+
+        $result['enemies']                      = $enemies;
+        $result['enemy_packs']                  = $enemyPacks;
+        $result['enemy_patrols']                = $enemyPatrols;
+        $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
+        $result['map_icons']                    = $mapIcons;
+        $result['mountable_areas']              = $mountableAreas;
+
+        foreach ($result as $category => $categoryData) {
+            // Save enemies, packs, patrols, markers on a per-floor basis
+            if ($categoryData->count() > 0) {
+                $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
+            }
+            $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }
     }
 }

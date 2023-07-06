@@ -46,10 +46,10 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
     }
 });
 
-class DungeonFloorSwitchMarker extends MapObject {
+class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
-        super(map, layer, {name: 'dungeonfloorswitchmarker'});
+        super(map, layer, {name: 'dungeonfloorswitchmarker', hasRouteModelBinding: true});
 
         let self = this;
 
@@ -61,6 +61,13 @@ class DungeonFloorSwitchMarker extends MapObject {
             // Rebuild the popup so that we have proper
             self._assignPopup();
         });
+
+        if (getState().isEchoEnabled()) {
+            getState().getEcho().register('mouseposition:received', this, this._mousePositionReceived.bind(this));
+        }
+
+        // Whenever we have to display which users are on this floor, these users are on here
+        this.usersOnThisFloor = [];
     }
 
     /**
@@ -74,13 +81,18 @@ class DungeonFloorSwitchMarker extends MapObject {
             return this._cachedAttributes;
         }
 
-        return this._cachedAttributes = super._getAttributes(force).concat([
-            new Attribute({
-                name: 'floor_id',
-                type: 'int',
-                edit: false, // Not directly changeable by user
-                default: getState().getCurrentFloor().id
-            }),
+        // Bit of an hack to hide properties that should not be editable by the user - we set them manually based on other fields
+        let superAttributes = super._getAttributes(force);
+        for (let i = 0; i < superAttributes.length; i++) {
+            let attribute = superAttributes[i];
+            if (attribute.options.name === 'comment') {
+                attribute.options.edit = false;
+            } else if (attribute.options.name === 'map_icon_type_id') {
+                attribute.options.edit = false;
+            }
+        }
+
+        return this._cachedAttributes = superAttributes.concat([
             new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
@@ -96,7 +108,7 @@ class DungeonFloorSwitchMarker extends MapObject {
                             if (floor.id !== currentFloorId) {
                                 selectFloors.push({
                                     id: floor.id,
-                                    name: floor.name,
+                                    name: lang.get(floor.name),
                                 });
                             }
                         }
@@ -104,56 +116,71 @@ class DungeonFloorSwitchMarker extends MapObject {
 
                     return selectFloors;
                 },
-                default: -1
+                default: null
             }),
             new Attribute({
-                name: 'lat',
-                type: 'float',
-                edit: false,
-                getter: function () {
-                    return self.layer.getLatLng().lat;
-                }
+                name: 'direction',
+                type: 'select',
+                edit: false, // Not directly changeable by user, should be done in the dungeon edit page
+                values: function () {
+                    return [
+                        {id: 'down', name: 'mapicontypes.door_down'},
+                        {id: 'left', name: 'mapicontypes.door_left'},
+                        {id: 'right', name: 'mapicontypes.door_right'},
+                        {id: 'up', name: 'mapicontypes.door_up'},
+                    ];
+                },
+                setter: function (value) {
+                    let mapping = {
+                        'down': 'door_down',
+                        'left': 'door_left',
+                        'right': 'door_right',
+                        'up': 'door_up',
+                    };
+
+                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByKey(mapping[value]));
+
+                    self.setMapIconType(
+                        getState().getMapContext().getMapIconTypeByKey(mapping[value])
+                    );
+
+                    self.direction = value;
+                },
+                default: 'down'
             }),
-            new Attribute({
-                name: 'lng',
-                type: 'float',
-                edit: false,
-                getter: function () {
-                    return self.layer.getLatLng().lng;
-                }
-            })
         ]);
     }
 
     /**
-     * @inheritDoc
-     **/
-    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
-        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+     *
+     * @param e
+     * @private
+     */
+    _mousePositionReceived(e) {
+        let mousePosition = e.data;
 
-        switch (remoteMapObject.direction) {
-            case 'up':
-                this.layer = new LeafletDungeonFloorSwitchMarkerUp();
-                break;
-            case 'down':
-                this.layer = new LeafletDungeonFloorSwitchMarkerDown();
-                break;
-            case 'left':
-                this.layer = new LeafletDungeonFloorSwitchMarkerLeft();
-                break;
-            case 'right':
-                this.layer = new LeafletDungeonFloorSwitchMarkerRight();
-                break;
-            default:
-                // layer = new LeafletDungeonFloorSwitchMarker();
-                break;
+        let changed = false;
+
+        // If the user is on this floor..
+        if (mousePosition.floor_id === this.target_floor_id) {
+            // Add the user to this floor
+            if (!this.usersOnThisFloor.includes(mousePosition.user.public_key)) {
+                this.usersOnThisFloor.push(mousePosition.user.public_key);
+
+                changed = true;
+            }
+        } else {
+            // Remove it from the list
+            let index = this.usersOnThisFloor.indexOf(mousePosition.user.public_key);
+            if (index !== -1) {
+                this.usersOnThisFloor.splice(index, 1);
+
+                changed = true;
+            }
         }
 
-        if (this.layer !== null) {
-            this.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
-
-            let mapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-            mapObjectGroup.setLayerToMapObject(this.layer, this);
+        if (changed) {
+            this.rebindTooltip();
         }
     }
 
@@ -168,34 +195,62 @@ class DungeonFloorSwitchMarker extends MapObject {
 
         this.layer.on('click', function () {
             // Tol'dagor doors don't have a target (locked doors)
-            if (self.target_floor_id > 0) {
+            if (self.target_floor_id !== null) {
                 getState().setFloorId(self.target_floor_id);
             }
         });
-
-        // Show a permanent tooltip for the pack's name
-        // this.layer.bindTooltip(this.label, {permanent: true, offset: [0, 0]}).openTooltip();
     }
 
-    setSynced(value) {
-        super.setSynced(value);
+    /**
+     *
+     * @returns {{}}
+     */
+    getTooltipOptions() {
+        return {
+            permanent: this.usersOnThisFloor.length > 0
+        };
+    }
+
+    /**
+     * Return the text that is displayed on the label of this Map Icon.
+     * @returns {string}
+     */
+    getDisplayText() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
-        // If we've fully loaded this marker
-        if (value && this.layer !== null) {
-            let targetFloor = this.map.getFloorById(this.target_floor_id);
-
-            if (targetFloor !== false) {
-                this.layer.bindTooltip(`Go to ${targetFloor.name}`, {
-                    direction: 'top'
-                });
+        if (this.usersOnThisFloor.length > 0) {
+            let echo = getState().getEcho();
+            let usernames = [];
+            for (let i = 0; i < this.usersOnThisFloor.length; i++) {
+                let echoUser = echo.getUserByPublicKey(this.usersOnThisFloor[i]);
+                if (echoUser !== null) {
+                    usernames.push(echoUser.getName());
+                }
             }
+
+            return usernames.join(', ');
         }
+
+        let targetFloor = getState().getMapContext().getFloorById(this.target_floor_id);
+
+        if (targetFloor !== false) {
+            return `${lang.get('messages.dungeonfloorswitchmarker_go_to_label')} ${lang.get(targetFloor.name)}`;
+        } else {
+            return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
+        }
+    }
+
+    toString() {
+        return `Floor switcher (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
     }
 
     cleanup() {
         super.cleanup();
 
         getState().unregister('floorid:changed', this);
+
+        if (getState().isEchoEnabled()) {
+            getState().getEcho().unregister('mouseposition:received', this);
+        }
     }
 }

@@ -1,3 +1,6 @@
+<?php
+/** @var $allRegions \Illuminate\Support\Collection|\App\Models\GameServerRegion[] */
+?>
 <div class="form-group">
     <div class="row">
         <div class="col">
@@ -7,11 +10,11 @@
 </div>
 <div class="form-group">
     <div class="row no-gutters">
-        @foreach(\App\Models\GameServerRegion::all() as $region)
+        @foreach($allRegions as $region)
             <div class="col">
                 <a href="{{ route('login.battlenet', ['region' => $region->short]) }}"
                    class="btn btn-bnet mx-auto d-block border-left border-secondary">
-                    {{ $region->name }}
+                    {{ __($region->name) }}
                 </a>
             </div>
         @endforeach
@@ -23,7 +26,8 @@
     <div class="row">
         <div class="col">
             <a href="{{ route('login.discord') }}">
-                <img src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block" style="max-height: 64px;"/>
+                <img src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block"
+                     style="max-height: 64px;"/>
             </a>
         </div>
     </div>

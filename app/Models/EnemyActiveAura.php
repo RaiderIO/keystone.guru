@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class EnemyActiveAura extends Model
+class EnemyActiveAura extends CacheModel
 {
     public $visible = ['id', 'enemy_id', 'spell_id'];
     public $timestamps = false;
@@ -24,16 +23,16 @@ class EnemyActiveAura extends Model
     /**
      * @return BelongsTo
      */
-    function enemy()
+    public function enemy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Enemy');
+        return $this->belongsTo(Enemy::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function spell()
+    public function spell(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Spell');
+        return $this->belongsTo(Spell::class);
     }
 }

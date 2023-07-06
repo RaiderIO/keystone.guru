@@ -1,38 +1,82 @@
 <?php
+/** @var $allDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
+/** @var $allActiveDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
+/** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
+/** @var $siegeOfBoralus \App\Models\Dungeon */
+/** @var $currentSeason \App\Models\Season */
+/** @var $nextSeason \App\Models\Season|null */
 
-$id = isset($id) ? $id : false;
-$name = isset($name) ? $name : 'dungeon_id';
-$label = isset($label) ? $label : __('Dungeon');
-$required = isset($required) ? $required : true;
-$showAll = isset($showAll) ? $showAll : true;
-$activeOnly = isset($activeOnly) ? $activeOnly : true;
-$showSiegeWarning = isset($showSiegeWarning) ? $showSiegeWarning : false;
+$id          = $id ?? 'dungeon_id_select';
+$name        = $name ?? 'dungeon_id';
+$label       = $label ?? __('views/common.dungeon.select.dungeon');
+$required    = $required ?? true;
+$showAll     = !isset($showAll) || $showAll;
+$showSeasons = isset($showSeasons) && $showSeasons;
+// Show all dungeons if we're debugging
+$activeOnly       = $activeOnly ?? !config('app.debug');
+$showSiegeWarning = $showSiegeWarning ?? false;
+$selected         = $selected ?? null;
 
-$dungeonsSelect = [];
-if ($showAll) {
-    $dungeonsSelect = ['All' => [-1 => __('All dungeons')]];
+// If we didn't get any specific dungeons to display, resort to some defaults we may have set
+if (!isset($dungeons)) {
+    if ($selected === null && $showSeasons) {
+        $selected = sprintf('season-%d', ($nextSeason ?? $currentSeason)->id);
+    }
+    // Build a list of seasons that we use to make selections of
+    $seasons = [];
+    if ($nextSeason !== null) {
+        $seasons[] = $nextSeason;
+    }
+    $seasons[] = $currentSeason;
+
+    $dungeonsSelect = [];
+    // Show a selector to only show all dungeons in a specific season
+    if ($showSeasons) {
+        $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [];
+        foreach ($seasons as $season) {
+            $dungeonsSelect[__('views/common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] = $season->name;
+        }
+    }
+
+    if ($showAll) {
+        $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
+    }
+
+    foreach ($seasons as $season) {
+        $dungeonsSelect[__($season->name)] = $season->dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => __($name)];
+        })->toArray();
+    }
+
+    $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
 }
-$dungeonsBuilder = \App\Models\Dungeon::orderByRaw('expansion_id DESC, name');
-if ($activeOnly) {
-    $dungeonsBuilder = $dungeonsBuilder->active();
-}
-$dungeonsByExpansion = $dungeonsBuilder->get()->groupBy('expansion_id');
+$dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
-foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
-    $dungeonsSelect[\App\Models\Expansion::findOrFail($expansionId)->name] = $dungeons->pluck('name', 'id')->toArray();
+
+// Group the dungeons by expansion
+// @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
+foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
+    /** @var \App\Models\Expansion $expansion */
+    $expansion = $allExpansions->where('id', $expansionId)->first();
+
+    if ($expansion->active || !$activeOnly) {
+        $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansion->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
+            return [$id => __($name)];
+        })->toArray();
+    }
 }
 ?>
 
-@if($showSiegeWarning)
+@if($showSiegeWarning && $siegeOfBoralus)
     @section('scripts')
         @parent
 
         <script>
             $(function () {
-                let $dungeonIdSelect = $('#dungeon_id_select');
+                let $dungeonIdSelect = $('#{{ $id }}');
                 $dungeonIdSelect.bind('change', function () {
                     let $factionWarning = $('#siege_of_boralus_faction_warning');
-                    if (parseInt($dungeonIdSelect.val()) === {{ \App\Models\Dungeon::siegeOfBoralus()->get()->first()->id }} ) {
+                    if (parseInt($dungeonIdSelect.val()) === {{ $siegeOfBoralus->id }}) {
                         $factionWarning.show();
                     } else {
                         $factionWarning.hide();
@@ -44,11 +88,13 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeons) {
 @endif
 
 <div class="form-group">
-    {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
-    {!! Form::select($name, $dungeonsSelect, null, array_merge($id ? ['id' => $id] : [], ['class' => 'form-control selectpicker'])) !!}
+    @if($label !== false)
+        {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
+    @endif
+    {!! Form::select($name, $dungeonsSelect, $selected, array_merge(['id' => $id], ['class' => 'form-control selectpicker', 'data-live-search' => 'true'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.') }}
+            <i class="fa fa-exclamation-triangle"></i> {{ __('views/common.dungeon.select.siege_of_boralus_warning') }}
         </div>
     @endif
 

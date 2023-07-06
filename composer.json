@@ -12,7 +12,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/Wotuu/tracker"
+      "url": "https://github.com/Wotuu/laravel-influxdb"
     },
     {
       "type": "vcs",
@@ -22,11 +22,11 @@
       "type": "package",
       "package": {
         "name": "nnoggie/mythicdungeontools",
-        "version": "3.4.6",
+        "version": "4.0.4.8",
         "source": {
-          "url": "https://github.com/nnoggie/MythicDungeonTools.git",
+          "url": "https://github.com/Wotuu/MythicDungeonTools.git",
           "type": "git",
-          "reference": "master"
+          "reference": "9f35d15218a0a580c3008b29d004c5512b07c363"
         }
       }
     }
@@ -35,38 +35,46 @@
     "php": ">=7.4",
     "ext-curl": "*",
     "ext-json": "*",
+    "ext-lua": "*",
+    "ext-zip": "*",
+    "akaunting/laravel-language": "^1.0",
     "barryvdh/laravel-ide-helper": "^2.4",
-    "folklore/image": "0.3.*",
+    "beyondcode/laravel-server-timing": "^1.2",
+    "diglactic/laravel-breadcrumbs": "^7.1",
+    "fzaninotto/faker": "~1.4",
+    "genealabs/laravel-model-caching": "^0.11.1",
     "geoip2/geoip2": "~2.0",
-    "graham-campbell/github": "^9.3",
+    "graham-campbell/github": "^9.8",
+    "intervention/image": "^2.5",
     "jenssegers/agent": "^2.6",
     "laravel-frontend-presets/argon": "^1.0",
-    "laravel/framework": "^7.0",
-    "laravel/horizon": "^4.0",
-    "laravel/socialite": "^4.1",
+    "laravel/framework": "^8.0",
+    "laravel/horizon": "^5.0",
+    "laravel/socialite": "^5.0",
+    "laravel/telescope": "^4.4",
     "laravel/tinker": "^2.0",
-    "laravel/ui": "^2.0",
-    "laravelcollective/html": "6.1.*",
-    "lefuturiste/monolog-discord-handler": "^0.2.0",
-    "nnoggie/mythicdungeontools": "*",
-    "patreon/patreon": "^0.3.1",
-    "phlak/semver": "^3.2",
+    "laravel/ui": "^3.0",
+    "laravelcollective/html": "6.3.*",
+    "marvinlabs/laravel-discord-logger": "^1.1",
+    "nnoggie/mythicdungeontools": "4.0.4.8",
+    "patreon/patreon": "^1.0.0",
+    "phlak/semver": "^4.0",
     "php-http/guzzle6-adapter": "^2.0",
-    "pragmarx/tracker": "dev-wotuu-bugfix#df8d831e3baa7c4fa4e37c623063caf328c08076",
     "predis/predis": "^1.1",
-    "santigarcor/laratrust": "^6.0",
+    "santigarcor/laratrust": "^7.1",
     "shrikeh/teapot": "^2.3",
     "socialiteproviders/battlenet": "^4.1.0",
     "socialiteproviders/discord": "^4.1.0",
+    "spatie/url": "^1.3",
+    "tray-labs/laravel-influxdb": "dev-master#e0dbca679f297ed5e4d791c429de03704ca2422b",
     "tremby/laravel-git-version": "^1.1",
     "yajra/laravel-datatables-oracle": "~9.0"
   },
   "require-dev": {
+    "barryvdh/laravel-debugbar": "^3.5",
     "filp/whoops": "^2.0",
-    "barryvdh/laravel-debugbar": "^3.1",
-    "fzaninotto/faker": "~1.4",
     "mockery/mockery": "^1.0",
-    "phpunit/phpunit": "^7.0"
+    "phpunit/phpunit": "^9.0"
   },
   "autoload": {
     "classmap": [
@@ -93,6 +101,9 @@
   },
   "config": {
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true
+    }
   }
 }

@@ -3,6 +3,12 @@
  */
 class MapObjectGroup extends Signalable {
 
+    /**
+     *
+     * @param {MapObjectGroupManager} manager
+     * @param {Array|String} names
+     * @param {Boolean} editable
+     */
     constructor(manager, names, editable = false) {
         super();
         // Ensure its an array
@@ -22,8 +28,10 @@ class MapObjectGroup extends Signalable {
         // May be set depending on which map object groups are hidden or not
         this._visible = true;
 
-        this.objects = [];
-        this.layerGroup = new L.LayerGroup();
+        this.objects = {};
+        this.layerGroup = new L.LayerGroup([], {
+            pane: this._getMapPane()
+        });
 
         let self = this;
 
@@ -40,8 +48,9 @@ class MapObjectGroup extends Signalable {
             getState().getMapContext().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
 
+        // @TODO Convert this to the new echo message system
         if (getState().isEchoEnabled()) {
-            let presenceChannel = window.Echo.join(getState().getEchoChannelName());
+            let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
 
             for (let index in this.names) {
                 if (this.names.hasOwnProperty(index)) {
@@ -65,6 +74,14 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * @returns {string}
+     * @protected
+     */
+    _getMapPane() {
+        return LEAFLET_PANE_MARKER;
+    }
+
+    /**
      * @returns {[]}
      * @protected
      */
@@ -81,7 +98,7 @@ class MapObjectGroup extends Signalable {
     _shouldHandleEchoEvent(e) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        return e.user.id !== getState().getUser().id;
+        return e.user.public_key !== getState().getUser().public_key;
     }
 
     /**
@@ -120,8 +137,8 @@ class MapObjectGroup extends Signalable {
     _seasonalIndexChanged(seasonalIndexChangedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let mapObject = this.objects[i];
+        for (let key in this.objects) {
+            let mapObject = this.objects[key];
             if (mapObject.hasOwnProperty('seasonal_index') && mapObject.seasonal_index !== null) {
                 // Only hide/show awakened enemies based on their seasonal index
                 if (!mapObject.hasOwnProperty('seasonal_type') || mapObject.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
@@ -139,8 +156,8 @@ class MapObjectGroup extends Signalable {
     _updateVisibility(force = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObject', this);
 
-        for (let i = 0; i < this.objects.length; i++) {
-            let mapObject = this.objects[i];
+        for (let key in this.objects) {
+            let mapObject = this.objects[key];
             // Set this map object to be visible or not
             this.setMapObjectVisibility(mapObject, force === null ? mapObject.shouldBeVisible() : force);
         }
@@ -168,8 +185,8 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
-        for (let i = 0; i < this.objects.length; i++) {
-            let mapObject = this.objects[i];
+        for (let key in this.objects) {
+            let mapObject = this.objects[key];
             // Remove all layers
             if (mapObject.layer !== null) {
                 // Clean it up properly
@@ -220,7 +237,12 @@ class MapObjectGroup extends Signalable {
         console.assert(mapObject instanceof MapObject, 'mapObject is not of type MapObject', mapObject);
         console.assert(typeof options === 'object', 'options is not of type Object', options);
 
-        if (mapObject.layer !== null) {
+        // If the lat/lng is now null, the layer has no right to exist anymore
+        if (remoteMapObject.lat === null || remoteMapObject.lng === null) {
+            this.setLayerToMapObject(null, mapObject);
+        }
+        // Otherwise, if it has a layer, update its position
+        else if (mapObject.layer !== null) {
             mapObject.layer.setLatLng(L.latLng(remoteMapObject.lat, remoteMapObject.lng));
         }
 
@@ -243,7 +265,7 @@ class MapObjectGroup extends Signalable {
         let options = this._getOptions(remoteMapObject);
 
         if (mapObject === null) {
-            mapObject = this._createNewMapObject(layer === null ? this._createLayer(remoteMapObject) : layer, options);
+            mapObject = this._createNewMapObject(remoteMapObject.id ?? -1, layer === null ? this._createLayer(remoteMapObject) : layer, options);
         } else {
             mapObject = this._updateMapObject(remoteMapObject, mapObject, options);
         }
@@ -266,22 +288,43 @@ class MapObjectGroup extends Signalable {
 
     /**
      *
+     * @param id {Number}
+     * @returns {string}
+     * @private
+     */
+    _getMapObjectKey(id) {
+        console.assert(typeof id === 'number' || typeof id === 'string', 'id is not a Number', id);
+
+        return `${this.names[0]}-${id}`;
+    }
+
+    /**
+     * @param id {Number}
      * @param layer {L.layer}
      * @param options {object}
      * @return MapObject
      */
-    _createNewMapObject(layer, options) {
+    _createNewMapObject(id, layer, options) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this._createMapObject(layer, options);
+        mapObject.id = id;
         if (layer !== null) {
             mapObject.onLayerInit();
         }
-        this.objects.push(mapObject);
 
+        let mapObjectKey = this._getMapObjectKey(mapObject.id);
+        if (this.objects.hasOwnProperty(mapObjectKey)) {
+            console.error(`Overriding map object, this is probably not good!`, mapObjectKey);
+        }
+
+        this.objects[mapObjectKey] = mapObject;
+
+        // Make us listen to their changes
         mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
         mapObject.register('object:changed', this, (this._onObjectChanged).bind(this));
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
+        mapObject.register('save:beforesend', this, (this._onObjectSaveBeforeSend).bind(this));
         mapObject.register('save:success', this, (this._onObjectSaveSuccess).bind(this));
 
         return mapObject;
@@ -296,7 +339,7 @@ class MapObjectGroup extends Signalable {
     _showReceivedFromEcho(localMapObject, user = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (getState().isEchoEnabled() && user !== null && getState().getUser().id !== user.id) {
+        if (getState().isEchoEnabled() && user !== null && getState().getUser().public_key !== user.public_key) {
             let fontClass = '';
 
             // Must be a hex color
@@ -305,7 +348,7 @@ class MapObjectGroup extends Signalable {
                 fontClass = isColorDark(user.color) ? 'text-white' : 'text-dark';
             }
 
-            // @TODO Bit hacky?
+            // @TODO This should NOT use this layer but instead a new layer somehow
             let layer = localMapObject.layer;
             if (localMapObject instanceof KillZone) {
                 // First layer should contain the polygon that is displayed
@@ -314,11 +357,10 @@ class MapObjectGroup extends Signalable {
 
             if (layer !== null) {
                 let oldTooltip = layer.getTooltip();
+                let oldTooltipLayerId = layer._leaflet_id;
 
                 let tooltip = layer.bindTooltip(user.name, {
-                    permanent: true,
-                    className: `user_color_${user.id} ${fontClass}`,
-                    direction: 'top'
+                    permanent: true, className: `user_color_${user.public_key} ${fontClass}`, direction: 'top'
                 });
 
                 // Fadeout after some time
@@ -326,11 +368,11 @@ class MapObjectGroup extends Signalable {
                     tooltip.closeTooltip();
 
                     // Do not re-bind a tooltip that shouldn't be there permanently
-                    if (typeof oldTooltip !== 'undefined' &&
-                        oldTooltip.options !== null &&
-                        !oldTooltip.options.className.includes('user_color_')) {
+                    if (typeof oldTooltip !== 'undefined' && oldTooltip.options !== null && !oldTooltip.options.className.includes('user_color_') && // And only if the layer is still the same - don't start adding ghost tooltips
+                        // The layer COULD have been changed at this time (killzones are notorious for this)
+                        (localMapObject.layer !== null && localMapObject.layer._leaflet_id === oldTooltipLayerId)) {
                         // Rebind killzone pull index tooltip
-                        layer.bindTooltip(oldTooltip._content, oldTooltip.options);
+                        localMapObject.layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
                 }, c.map.echo.tooltipFadeOutTimeout);
             } else {
@@ -348,12 +390,10 @@ class MapObjectGroup extends Signalable {
     _showDeletedFromEcho(localMapObject, user) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        if (getState().isEchoEnabled() && getState().getUser().id !== user.id && user.name !== null) {
-            showInfoNotification(
-                lang.get('messages.echo_object_deleted_notification')
-                    .replace('{object}', localMapObject.toString())
-                    .replace('{user}', user.name)
-            );
+        if (getState().isEchoEnabled() && getState().getUser().public_key !== user.public_key && user.name !== null) {
+            showInfoNotification(lang.get('messages.echo_object_deleted_notification')
+                .replace('{object}', localMapObject.toString())
+                .replace('{user}', user.name));
         }
     }
 
@@ -365,13 +405,13 @@ class MapObjectGroup extends Signalable {
     _onObjectInitialized(objectInitializedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        let object = objectInitializedEvent.context;
+        let mapObject = objectInitializedEvent.context;
 
-        this.signal('object:add', {object: object, objectgroup: this});
+        this.signal('object:add', {object: mapObject, objectgroup: this});
 
         // Hide the objects if they're not visible by default
-        if (!object.isDefaultVisible()) {
-            this.setMapObjectVisibility(object, false);
+        if (!mapObject.isDefaultVisible()) {
+            this.setMapObjectVisibility(mapObject, false);
         }
     }
 
@@ -406,10 +446,10 @@ class MapObjectGroup extends Signalable {
 
         // Remove it from our records
         let newObjects = [];
-        for (let i = 0; i < this.objects.length; i++) {
-            let objectCandidate = this.objects[i];
+        for (let key in this.objects) {
+            let objectCandidate = this.objects[key];
             if (objectCandidate.id !== mapObject.id) {
-                newObjects.push(objectCandidate);
+                newObjects[key] = objectCandidate;
             }
         }
         this.objects = newObjects;
@@ -421,16 +461,39 @@ class MapObjectGroup extends Signalable {
         mapObject.unregister('object:initialized', this);
         mapObject.unregister('object:changed', this);
         mapObject.unregister('object:deleted', this);
+        mapObject.unregister('save:beforesend', this);
         mapObject.unregister('save:success', this);
     }
 
     /**
      * Called when an object in our map object group is saved to the server
-     * @param objectSaveSuccess {object}
+     * @param mapObjectBeforeSendEvent {object}
      * @private
      */
-    _onObjectSaveSuccess(objectSaveSuccess) {
-        this.signal('save:success', {object: objectSaveSuccess.context, objectgroup: this});
+    _onObjectSaveBeforeSend(mapObjectBeforeSendEvent) {
+        this.signal('save:beforesend', {object: mapObjectBeforeSendEvent.context, objectgroup: this});
+    }
+
+
+    /**
+     * Called when an object in our map object group is saved to the server
+     * @param mapObjectSaveSuccessEvent {object}
+     * @private
+     */
+    _onObjectSaveSuccess(mapObjectSaveSuccessEvent) {
+        let mapObject = mapObjectSaveSuccessEvent.context;
+
+        // Correct the key if the ID changed - this object was saved with a -1 key before, and now it needs to be set to
+        // -<id> instead so that we can retrieve the object later
+        let existingKey = this._findMapObjectKeyById(mapObject.id);
+        let newKey = this._getMapObjectKey(mapObject.id);
+
+        if (existingKey !== newKey) {
+            delete this.objects[existingKey];
+            this.objects[newKey] = mapObject;
+        }
+
+        this.signal('save:success', {object: mapObject, objectgroup: this});
     }
 
     /**
@@ -458,7 +521,7 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     *
+     * Called whenever the floor is changed and the map object groups need to update their elements to show new ones.
      */
     update() {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
@@ -478,9 +541,12 @@ class MapObjectGroup extends Signalable {
     setMapObjectVisibility(mapObject, visible) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
+        if (!this._visible && visible) {
+            // console.warn(`Unable to make map object visible - the MapObjectGroup is hidden`, mapObject);
+        }
+            // @TODO Move this to mapobject instead? But then mapobject will have a dependency on their map object group which
         // I may or may not want
-        if (mapObject.layer !== null) {
+        else if (mapObject.layer !== null) {
             if (visible) {
                 if (!this.layerGroup.hasLayer(mapObject.layer)) {
                     this.layerGroup.addLayer(mapObject.layer);
@@ -529,17 +595,29 @@ class MapObjectGroup extends Signalable {
      */
     findMapObjectById(id) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-
         let result = null;
 
-        // Do not return an already saving map object which has id -1 of which multiple can exist
-        if( id > 0 ) {
-            for (let i = 0; i < this.objects.length; i++) {
-                let objectCandidate = this.objects[i];
-                if (objectCandidate.id === id) {
-                    result = objectCandidate;
-                    break;
-                }
+        if (id > 0) {
+            result = this.objects[this._getMapObjectKey(id)] ?? null;
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param id {Number}
+     * @returns {String|null}
+     * @private
+     */
+    _findMapObjectKeyById(id) {
+        let result = null;
+
+        for (let key in this.objects) {
+            let objectCandidate = this.objects[key];
+            if (objectCandidate.id === id) {
+                result = key;
+                break;
             }
         }
 
@@ -553,11 +631,13 @@ class MapObjectGroup extends Signalable {
      */
     setLayerToMapObject(layer, mapObject) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
+        console.assert(mapObject.id <= 0 || this.findMapObjectById(mapObject.id) !== null, 'mapObject is not part of this MapObjectGroup', mapObject);
 
         // Unset previous layer
         let oldLayer = mapObject.layer;
         if (mapObject.layer !== null) {
+            // If it had a tooltip make sure to unset it so it doesn't get left over
+            mapObject.layer.unbindTooltip();
             this.layerGroup.removeLayer(mapObject.layer);
             mapObject.layer = null;
             mapObject.setVisible(false);
@@ -573,10 +653,7 @@ class MapObjectGroup extends Signalable {
 
         if (oldLayer !== layer) {
             this.signal('object:layerchanged', {
-                object: mapObject,
-                oldLayer: oldLayer,
-                newLayer: mapObject.layer,
-                objectgroup: this
+                object: mapObject, oldLayer: oldLayer, newLayer: mapObject.layer, objectgroup: this
             });
         }
     }
@@ -627,5 +704,15 @@ class MapObjectGroup extends Signalable {
             // When true, let objects decide for themselves, when false, hide everything
             this._updateVisibility(visible ? null : false);
         }
+    }
+
+    /**
+     * Checks if this map object group is toggleable by the user or not.
+     * @returns {boolean}
+     */
+    isUserToggleable() {
+        console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
+
+        return true;
     }
 }

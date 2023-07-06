@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Traits;
 
 use App\Models\EnemyPack;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 trait ListsEnemyPacks
 {
@@ -17,12 +18,12 @@ trait ListsEnemyPacks
     /**
      * Lists all enemy packs on a floor. If enemies = true, $teeming will return more points based on teeming enemies.
      *
-     * @param $floorId
+     * @param int $floorId
      * @param bool $teeming
      * @param bool $enemies
      * @return EnemyPack[]|Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    function listEnemyPacks($floorId, $enemies = true, $teeming = false)
+    function listEnemyPacks(int $floorId, bool $enemies = true, bool $teeming = false): Collection
     {
         /** @var Builder $result */
         $result = null;
@@ -32,13 +33,13 @@ trait ListsEnemyPacks
                 /** @var $query \Illuminate\Database\Query\Builder */
                 // Only include teeming enemies when requested
                 if (!$teeming) {
-                    $query->where('teeming', null);
+                    $query->whereNull('teeming');
                 }
                 $query->select(['id', 'enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
             }]);
         } else {
             $fields[] = 'vertices_json';
-            $result = EnemyPack::query();
+            $result   = EnemyPack::query();
         }
 
         return $result->where('floor_id', $floorId)->get($fields);

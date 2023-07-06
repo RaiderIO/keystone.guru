@@ -16,18 +16,17 @@ class TeamEdit extends InlineCode {
         let tableView = code.getTableView();
         tableView.setIsUserModerator(this.options.userIsModerator);
 
-        // Copy to clipboard functionality
-        $('#team_invite_link_copy_to_clipboard').bind('click', function () {
+        $('#team_invite_link_copy_to_clipboard').unbind('click').bind('click', function () {
             copyToClipboard($('#team_members_invite_link').val());
         });
 
         // Refresh invite link
-        $('#team_invite_link_refresh').bind('click', function () {
+        $('#team_invite_link_refresh').unbind('click').bind('click', function () {
             self.refreshInviteLink();
         });
 
-        // Add route to team button
-        $('#add_route_btn').bind('click', function () {
+        // Add route to team button - only if enabled (user is Moderator)
+        $('#add_route_btn:enabled').unbind('click').bind('click', function () {
             tableView.setAddMode(true);
 
             code.refreshTable();
@@ -36,7 +35,7 @@ class TeamEdit extends InlineCode {
         });
 
         // Cancel button when done adding routes
-        $('#view_existing_routes').bind('click', function () {
+        $('#view_existing_routes').unbind('click').bind('click', function () {
             tableView.setAddMode(false);
 
             code.refreshTable();
@@ -44,7 +43,7 @@ class TeamEdit extends InlineCode {
             $('#add_route_btn').show();
         });
 
-        $('#delete_team').bind('click', function (clickEvent) {
+        $('#delete_team').unbind('click').bind('click', function (clickEvent) {
             showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function () {
                 // Change the method to DELETE
                 $('#details [name="_method"]').val('DELETE');
@@ -65,8 +64,8 @@ class TeamEdit extends InlineCode {
 
         $('select.role_selection').bind('change', function (e) {
             $.ajax({
-                type: 'POST',
-                url: '/ajax/team/' + self.options.teamName + '/changerole',
+                type: 'PUT',
+                url: `/ajax/team/${self.options.teamPublicKey}/changerole`,
                 dataType: 'json',
                 data: {
                     username: $(this).data('username'),
@@ -74,6 +73,20 @@ class TeamEdit extends InlineCode {
                 },
                 success: function () {
                     showSuccessNotification(lang.get('messages.change_role_success'));
+                }
+            });
+        });
+
+        $('#default_role').bind('change', function (e) {
+            $.ajax({
+                type: 'PUT',
+                url: `/ajax/team/${self.options.teamPublicKey}/changedefaultrole`,
+                dataType: 'json',
+                data: {
+                    default_role: $(this).val()
+                },
+                success: function () {
+                    showSuccessNotification(lang.get('messages.change_default_role_success'));
                 }
             });
         });
@@ -123,12 +136,46 @@ class TeamEdit extends InlineCode {
         return result;
     }
 
+    _grantAdFreeGiveaway(userId, add) {
+        let self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: `/ajax/team/${self.options.teamPublicKey}/member/${userId}/adfree`,
+            data: add ? {} : {
+                _method: 'DELETE'
+            },
+            dataType: 'json',
+            failed: function () {
+                if (add) {
+                    showErrorNotification(lang.get('messages.ad_free_giveaway_add_failed'));
+                } else {
+                    showErrorNotification(lang.get('messages.ad_free_giveaway_remove_failed'));
+                }
+            },
+            success: function () {
+                if (add) {
+                    showSuccessNotification(lang.get('messages.ad_free_giveaway_add_success'));
+                } else {
+                    showSuccessNotification(lang.get('messages.ad_free_giveaway_remove_success'));
+                }
+
+                // Give user a second to read the notification
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000);
+            }
+        });
+    }
+
+    _removeAdFreeGiveaway
+
     _removeUserFromTeam(userId) {
         let self = this;
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/team/${self.options.teamName}/member/${userId}`,
+            url: `/ajax/team/${self.options.teamPublicKey}/member/${userId}`,
             data: {
                 _method: 'DELETE'
             },
@@ -255,14 +302,21 @@ class TeamEdit extends InlineCode {
                 if (row.user_id === self.options.currentUserId) {
                     // Handlebars the entire thing
                     template = Handlebars.templates['team_member_table_actions_self_template'];
-                } else if (self.options.userIsModerator && self.options.currentUserRole !== 'admin') {
+                    // Admins can remove all - but moderators cannot remove admins
+                } else if (self.options.userIsModerator && ((self.options.currentUserRole === 'moderator' && row.role !== 'admin') || self.options.currentUserRole === 'admin')) {
                     // Handlebars the entire thing
                     template = Handlebars.templates['team_member_table_actions_template'];
                 }
 
                 if (template !== null) {
+                    let userData = self.getDataByUserId(row.user_id);
+
                     let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
-                        user_id: row.user_id
+                        user_id: row.user_id,
+                        can_current_user_ad_free_giveaway: self.options.adFreeGiveawayLeft > 0,
+                        has_ad_free: userData.has_ad_free,
+                        has_ad_free_giveaway: userData.has_ad_free_giveaway,
+                        has_ad_free_giveaway_by_current_user: userData.has_ad_free_giveaway_by_current_user,
                     });
 
                     result = template(templateData);
@@ -281,14 +335,22 @@ class TeamEdit extends InlineCode {
             }
         });
 
-        $('.remove_user_btn').bind('click', function (e) {
+        $('.ad_free_giveaway_add').unbind('click').bind('click', function (e) {
+            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), true);
+        });
+
+        $('.ad_free_giveaway_remove').unbind('click').bind('click', function (e) {
+            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), false);
+        });
+
+        $('.remove_user_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
                 self._removeUserFromTeam(userId);
             }, null, {type: 'error'});
         });
 
-        $('.leave_team_btn').bind('click', function (e) {
+        $('.leave_team_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get(self.options.data.length === 1 ?
                 'messages.leave_team_disband_confirm_label' :
@@ -298,13 +360,31 @@ class TeamEdit extends InlineCode {
         });
     }
 
+    /**
+     *
+     * @param {Number} userId
+     * @returns {Array|null}
+     */
+    getDataByUserId(userId) {
+        let result = null;
+
+        for (let index in this.options.data) {
+            let userData = this.options.data[index];
+            if (userData.user_id === userId) {
+                result = userData;
+                break;
+            }
+        }
+
+        return result;
+    }
+
     refreshInviteLink() {
         $.ajax({
             type: 'GET',
-            url: '/ajax/team/' + this.options.teamName + '/refreshlink',
+            url: `/ajax/team/${this.options.teamPublicKey}/refreshlink`,
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 $('#team_members_invite_link').val(response.new_invite_link);
 
                 showInfoNotification(lang.get('messages.invite_link_refreshed'));

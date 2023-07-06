@@ -1,138 +1,160 @@
-@extends('layouts.app', ['showLegalModal' => false, 'title' => __('Affixes')])
+@extends('layouts.sitepage', [
+    'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'disableDefaultRootClasses' => true,
+    'showLegalModal' => false,
+    'title' => __('views/misc.affixes.title')
+])
 <?php
-/** @var \App\Service\Season\SeasonService $seasonService */
-/** @var $offset */
+/**
+ * @var $timewalkingEventService \App\Service\TimewalkingEvent\TimewalkingEventService
+ * @var $seasonService \App\Service\Season\SeasonService
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var $offset int
+ * @var $expansion \App\Models\Expansion
+ */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
-$timezone = null;
-if (Auth::check()) {
-    $timezone = Auth::user()->timezone;
-}
-if ($timezone === null) {
-    $timezone = config('app.timezone');
-}
+$now = \Carbon\Carbon::now();
 ?>
-@section('header-title', sprintf(__('Weekly affixes in %s'), $region->name))
+@include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
-    <div class="container">
-        @if(!isAlertDismissed('shadowlands-affixes-alert'))
-            <div class="alert alert-warning alert-dismissible">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close" data-alert-dismiss-id="shadowlands-affixes-alert">
-                    <i class="fas fa-times"></i>
-                </a>
-                <i class="fas fa-exclamation-triangle"></i>
-                {{ __('The Shadowlands affixes are preliminary and not final. As soon as an affix schedule is known, this page will be updated.') }}
-            </div>
-        @endif
-    </div>
-    <table class="affixes_overview_table table-striped" width="100%">
-        <thead>
-        <tr>
-            <th width="20%">
-                {{ __('Start date') . sprintf(' (%s)', $timezone) }}
-            </th>
-            <th width="20%">
-                {{ __('+2') }}
-            </th>
-            <th width="20%">
-                {{ __('+4') }}
-            </th>
-            <th width="20%">
-                {{ __('+7') }}
-            </th>
-            <th width="20%">
-                {{ __('+10 (Seasonal)') }}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
+    <div class="discover_panel">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">
+                    {{ sprintf(__('views/misc.affixes.header'), __($region->name)) }}
+                </h5>
 
-        // Whatever group we're highlighting
-        $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+                <table class="affixes_overview_table bg-secondary" width="100%">
+                    <thead>
+                    <tr>
+                        <th width="20%">
+                            {{ sprintf(__('views/misc.affixes.start_date'), $seasonService->getUserTimezone()) }}
+                        </th>
+                        <th width="20%">
+                            {{ __('views/misc.affixes.2') }}
+                        </th>
+                        <th width="20%">
+                            {{ __('views/misc.affixes.7') }}
+                        </th>
+                        <th width="20%">
+                            {{ __('views/misc.affixes.14') }}
+                        </th>
+                        <th width="20%">
+                            {{ __('views/misc.affixes.seasonal') }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $affixGroups = $seasonService->getDisplayedAffixGroups($offset);
+                    $affixGroupIndex = 0;
+                    // @formatter:off
+                    foreach($affixGroups as $index => $arr){
+                        /** @var \Illuminate\Support\Carbon $startDate */
+                        $startDate = $arr['date_start'];
+                        /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
+                        $affixGroup = $arr['affixgroup'];
+                        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks($now) <= 1;
+                        $isFirst = $affixGroupIndex === 0;
+                        $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 
-        $affixGroups = $seasonService->getDisplayedAffixGroups($offset);
-        $affixGroupIndex = 0;
-        foreach($affixGroups as $index => $arr){
-        /** @var \Illuminate\Support\Carbon $startDate */
-        $startDate = $arr['date_start'];
-        /** @var \App\Models\AffixGroup $affixGroup */
-        $affixGroup = $arr['affixgroup'];
-        ?>
-        <tr class="table_row">
-            <?php
-            // Current week if we found the current affix group for this region
-            $currentWeekClass = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks(\Carbon\Carbon::now()) <= 1 ? 'current_week ' : '';
-            ?>
-            <td>
-                <div class="affix_row first_column {{ $currentWeekClass }}">
-                    <span>
-                        {{ $startDate->format('Y/M/d') }}
-                    </span>
-                    <span class="d-xl-inline d-none">
-                        {{ $startDate->format(' @ H\h') }}
-                    </span>
-                </div>
-            </td>
-            <?php
-            $affixIndex = 0;
-            foreach($affixGroup->affixes as $affix) {
-                $lastColumn = count($affixGroup->affixes) - 1 === $affixIndex;
-            $class = $currentWeekClass;
-            $class .= $lastColumn ? 'last_column ' : '';
-            $class .= ($affixGroupIndex === 0) ? 'first_row ' : '';
-            $class .= $affixGroups->count() - 1 === $affixGroupIndex ? 'last_row ' : '';
-            ?>
-            <td>
-                <div class="affix_row {{ $class }}">
-                    <div class="row no-gutters">
-                        <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->name) }}"
-                             data-toggle="tooltip"
-                             title="{{ $affix->description }}"
-                             style="height: 24px;">
-                        </div>
-                        <div class="col d-lg-block d-none pl-1">
-                            {{ $affix->name }}
-                            @if($lastColumn)
-                                @if($affixGroup->season->presets > 0 )
-                                    {{ __(sprintf('preset %s', $affixGroup->season->getPresetAt($startDate))) }}
-                                @endif
-                                @isset($affixGroup->seasonal_index)
-                                    {{ __(sprintf('(%s)', $affixGroup->getSeasonalIndexAsLetter())) }}
-                                @endisset
-                            @endif
-                        </div>
+                        $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
+                        ?>
+                        @include('misc.table.affixrowtable', [
+                            'timewalkingEvent' => null,
+                            'affixGroup' => $affixGroup,
+                            'isCurrentWeek' => $isCurrentWeek,
+                            'isFirst' => $isFirst,
+                            'isLast' => $isLast,
+                            'startDate' => $startDate,
+                            'showBottomBorder' => !($timewalkingEvent instanceof \App\Models\Timewalking\TimewalkingEvent),
+                            'isOdd' => $affixGroupIndex % 2 == 0
+                            ])
+                        <?php
+                        if ($timewalkingEvent !== null) {
+                            $timewalkingEventAffixGroup = $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate);
+                            if( $timewalkingEventAffixGroup !== null ) { ?>
+                                @include('misc.table.affixrowtable', [
+                                    'timewalkingEvent' => $timewalkingEvent,
+                                    'affixGroup' => $timewalkingEventAffixGroup,
+                                    'isCurrentWeek' => $isCurrentWeek,
+                                    'isFirst' => $isFirst,
+                                    'isLast' => $isLast,
+                                    'showTopBorder' => false,
+                                    'isOdd' => $affixGroupIndex % 2 == 0
+                                    ])
+                                <?php
+                            }
+                        }
+                        $affixGroupIndex++;
+                    }
+                    // @formatter:on
+
+                                ?>
+                    </tbody>
+                </table>
+                <div class="row mt-2">
+                    <div class="col">
+
+                    </div>
+                    <div class="col-auto">
+                        <ul class="pagination" role="navigation">
+                            <li class="page-item">
+                                <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
+                                    ‹ {{ __('views/misc.affixes.previous') }}
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
+                                    {{ __('views/misc.affixes.next') }} ›
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </td><?php
-            $affixIndex++;
-            }
-            $affixGroupIndex++
-            ?>
-        </tr><?php
-        } ?>
-        </tbody>
-    </table>
 
-    <ul class="pagination" role="navigation">
-        <li class="page-item">
-            <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
-                ‹ {{ __('Previous') }}
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
-                {{ __('Next') }} ›
-            </a>
-        </li>
-    </ul>
+            </div>
+        </div>
 
-    <div class="mt-4 col-12 text-center">
-        <p>
-            {{ __('Last updated at 2020/Dec/04.') }}
-            {{ __('For more information about affixes and M+, please visit') }}
-            <a href="https://mythicpl.us/" target="_blank">https://mythicpl.us/ <i class="fas fa-external-link-alt"></i></a>
-        </p>
+        <div class="mt-4 text-center">
+            <p>
+                {{ sprintf(__('views/misc.affixes.updated_at'), '2023/Apr/11') }}
+                <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
+                    https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
+                </a>
+            </p>
+        </div>
     </div>
+
+    <div class="discover">
+        @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
+            'title' => __('views/misc.affixes.popular_routes_by_current_affixes'),
+            'link' => route('dungeonroutes.thisweek', ['expansion' => $expansion]),
+            'currentAffixGroup' => $currentAffixGroup,
+            'affixgroup' => $currentAffixGroup,
+            'dungeonroutes' => $dungeonroutes['thisweek'],
+            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
+            'showDungeonImage' => true,
+        ])
+
+        <?php /* The next week's affix group is current for that week */ ?>
+        @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
+            'title' => __('views/misc.affixes.popular_routes_by_next_affixes'),
+            'link' => route('dungeonroutes.nextweek', ['expansion' => $expansion]),
+            'currentAffixGroup' => $nextAffixGroup,
+            'affixgroup' => $nextAffixGroup,
+            'dungeonroutes' => $dungeonroutes['nextweek'],
+            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
+            'showDungeonImage' => true,
+        ])
+    </div>
+
+    @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+        @include('common.modal.userreport.dungeonroute')
+    @endcomponent
 @endsection

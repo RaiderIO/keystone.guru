@@ -16,8 +16,8 @@ class DiscordApiService implements DiscordApiServiceInterface
             // Found no way to disable this behaviour from json_encode
             CURLOPT_POSTFIELDS => str_replace('\\\\n', '\\n', json_encode($postBody)),
             CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json'
-            ]
+                'Content-Type: application/json',
+            ],
         ]);
 
         $response = curl_exec($ch);

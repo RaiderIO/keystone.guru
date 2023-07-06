@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('419 Page Expired'),
+    'title' => __('views/errors.419.title'),
     'code' => 419,
-    'message' => __('Sorry, your session has expired. Please refresh and try again.')
+    'message' => __('views/errors.419.message')
     ])

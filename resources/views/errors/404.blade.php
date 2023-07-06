@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('404 Not Found'),
+    'title' => __('views/errors.404.title'),
     'code' => 404,
-    'message' => __('Sorry, the page you are looking for could not be found.')
+    'message' => __('views/errors.404.message')
     ])

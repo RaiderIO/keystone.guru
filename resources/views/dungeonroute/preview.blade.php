@@ -1,20 +1,28 @@
-@extends('layouts.app', ['custom' => true, 'footer' => false, 'header' => false, 'cookieConsent' => false, 'title' => $model->title, 'showAds' => false, 'analytics' => false])
+@extends('layouts.map', [
+    'showAds' => false,
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'cookieConsent' => false,
+    'title' => $dungeonroute->title,
+    'analytics' => false
+])
 <?php
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute $dungeonroute */
 /** @var int $floorId */
 
 /** @var \App\Models\Dungeon $dungeon */
-$dungeon = \App\Models\Dungeon::findOrFail($model->dungeon_id);
+$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 $dungeon->load('floors');
 ?>
 @section('scripts')
     @parent
 
     <script>
-        $(function(){
+        $(function () {
             // We need to fetch the enemies so the killzone polygon knows what to draw, but we don't want to display
             // the enemies themselves so hide those for displaying.
-            dungeonMap.register('map:mapobjectgroupsloaded', null, function(){
+            dungeonMap.register('map:mapobjectgroupsloaded', null, function () {
                 dungeonMap.mapObjectGroupManager.getByName('enemy').setVisibility(false);
             });
         });
@@ -22,19 +30,20 @@ $dungeon->load('floors');
 @endsection
 @section('content')
     @include('common.maps.map', [
-        'dungeonroute' => $model,
+        'dungeonroute' => $dungeonroute,
         'showAds' => false,
         'edit' => false,
+        'echo' => false,
         'noUI' => true,
         'defaultZoom' => 1,
         'floorId' => $floorId,
         'showAttribution' => false,
-        'zoomToContents' => true,
+        'zoomToContents' => false,
         'hiddenMapObjectGroups' => [
             'enemypatrol',
             'enemypack',
-            'dungeonfloorswitchmarker',
-        ]
+            'mountablearea'
+        ],
     ])
 @endsection
 

@@ -27,7 +27,7 @@ class MapObjectToAwakenedObeliskLink extends Model
     /**
      * @return HasOne
      */
-    function sourcemapobject()
+    public function sourcemapobject(): HasOne
     {
         return $this->hasOne($this->source_map_object_class_name, 'id', $this->source_map_object_id);
     }
@@ -35,9 +35,9 @@ class MapObjectToAwakenedObeliskLink extends Model
     /**
      * @return HasOne
      */
-    function targetmapicon()
+    public function targetmapicon(): HasOne
     {
-        return $this->hasOne('App\Models\MapIcon')
+        return $this->hasOne(MapIcon::class)
             ->where('floor_id', $this->sourcemapobject->floor_id)
             ->where('map_icon_type_id', $this->target_map_icon_type_id)
             ->where('seasonal_index', $this->target_map_icon_seasonal_index);

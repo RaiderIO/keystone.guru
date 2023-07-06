@@ -24,7 +24,6 @@ class TableView {
 class RoutesTableView extends TableView {
     constructor() {
         super();
-
         this._columns = {
             list: [
                 {name: 'dungeon', width: '15%'},
@@ -57,21 +56,28 @@ class ProfileTableView extends TableView {
     constructor() {
         super();
 
+        let defaultDungeonId = $('#dungeonroute_search_dungeon_id').val();
+
         this._columns = {
             list: [
-                {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '15%'},
+                {name: 'title', width: '15%', className: 'pt-0 pb-0'},
+                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
                 {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
                 // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},
+                {name: 'rating', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'actions', width: '10%', clickable: false},
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell'},
-                {name: 'features', width: '25%'},
+                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%', className: 'd-none d-lg-table-cell'},
+                {name: 'rating', width: '5%', className: 'd-none d-lg-table-cell'},
                 {name: 'actions', width: '7%', clickable: false},
             ]
         };
@@ -86,11 +92,68 @@ class ProfileTableView extends TableView {
     }
 }
 
+class UserProfileTableView extends TableView {
+    constructor() {
+        super();
+
+        this._user = null;
+        let defaultDungeonId = $('#dungeonroute_search_dungeon_id').val();
+
+        this._columns = {
+            list: [
+                {name: 'title', width: '15%', className: 'pt-0 pb-0'},
+                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
+                {name: 'affixes', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'attributes', width: '15%', className: 'd-none d-lg-table-cell'},
+                // {name: 'setup', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%'},
+                {name: 'rating', width: '5%'},
+            ],
+            biglist: [
+                {name: 'preview', width: '15%', clickable: false},
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+                {name: 'enemy_forces', width: '10%'},
+                {name: 'views', width: '5%'},
+                {name: 'rating', width: '5%'},
+            ]
+        };
+    }
+
+    getAjaxParameters() {
+        return {user_id: this._user.id};
+    }
+
+    getName() {
+        return 'userprofile';
+    }
+
+    /**
+     * Sets the user for which we're viewing the profile
+     * @param user
+     */
+    setUser(user) {
+        this._user = user;
+    }
+}
+
+class FavoritesTableView extends UserProfileTableView {
+    getAjaxParameters() {
+        return {favorites: 1};
+    }
+
+    getName() {
+        return 'favorites';
+    }
+}
+
 class TeamTableView extends TableView {
     constructor() {
         super();
 
-        this._teamName = '';
+        this._teamPublicKey = '';
         this._addMode = false;
         this._isUserModerator = false;
     }
@@ -99,8 +162,8 @@ class TeamTableView extends TableView {
      * Set the team ID (for filtering purposes)
      * @param value
      */
-    setTeamName(value) {
-        this._teamName = value;
+    setTeamPublicKey(value) {
+        this._teamPublicKey = value;
     }
 
     /**
@@ -119,16 +182,16 @@ class TeamTableView extends TableView {
      * Gets the Id of the team that was set for this view.
      * @returns {*}
      */
-    getTeamName() {
-        return this._teamName;
+    getTeamPublicKey() {
+        return this._teamPublicKey;
     }
 
     /**
      * Get the parameters when sending the AJAX request
-     * @returns {{team_name: *}}
+     * @returns {{team_public_key: *}}
      */
     getAjaxParameters() {
-        let params = {team_name: this._teamName};
+        let params = {team_public_key: this._teamPublicKey};
         if (this._addMode) {
             params.available = 1;
         }
@@ -136,10 +199,12 @@ class TeamTableView extends TableView {
     }
 
     getColumns(view) {
+        let defaultDungeonId = $('#dungeonroute_search_dungeon_id').val();
+
         this._columns = {
             list: [
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '15%'},
+                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%'},
                 // {name: 'setup', width: '15%'},
                 {name: 'enemy_forces', width: '10%'},
@@ -148,7 +213,7 @@ class TeamTableView extends TableView {
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
                 {name: 'title', width: '15%'},
-                {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell'},
+                {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%'},
                 {name: 'author', width: '10%', className: 'd-none d-lg-table-cell'},
             ]

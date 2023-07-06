@@ -12,7 +12,7 @@ L.Draw.Brushline = L.Draw.Polyline.extend({
 
 class Brushline extends Polyline {
     constructor(map, layer) {
-        super(map, layer, {name: 'brushline'});
+        super(map, layer, {name: 'brushline', hasRouteModelBinding: true});
 
         this.label = 'Brushline';
         this.type = 'brushline';

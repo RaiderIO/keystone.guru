@@ -5,11 +5,16 @@ namespace App;
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
-use App\Models\PaidTier;
-use App\Models\PatreonData;
+use App\Models\Patreon\PatreonAdFreeGiveaway;
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonUserLink;
+use App\Models\Tags\Tag;
 use App\Models\Team;
+use App\Models\Traits\GeneratesPublicKey;
+use App\Models\Traits\HasIconFile;
 use App\Models\UserReport;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,33 +25,45 @@ use Illuminate\Support\Collection;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
- * @property int $id
- * @property int $game_server_region_id
- * @property string $timezone
- * @property string $name
- * @property string $email
- * @property string $echo_color
- * @property boolean $echo_anonymous
- * @property string $password
- * @property boolean $legal_agreed
- * @property int $legal_agreed_ms
- * @property boolean $analytics_cookie_opt_out
- * @property boolean $adsense_no_personalized_ads
- * @property boolean $changed_username
- * @property PatreonData $patreondata
- * @property GameServerRegion $gameserverregion
+ * @property int                       $id
+ * @property string                    $public_key
+ * @property int                       $game_server_region_id
+ * @property int                       $patreon_user_link_id
+ * @property string                    $timezone
+ * @property string                    $name
+ * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string                    $email
+ * @property string                    $locale
+ * @property string                    $theme
+ * @property string                    $echo_color
+ * @property boolean                   $echo_anonymous
+ * @property string                    $password
+ * @property string                    $raw_patreon_response_data
+ * @property boolean                   $legal_agreed
+ * @property int                       $legal_agreed_ms
+ * @property boolean                   $analytics_cookie_opt_out
+ * @property boolean                   $changed_username
  *
- * @property DungeonRoute[]|Collection $dungeonroutes
- * @property UserReport[]|Collection $reports
- * @property Team[]|Collection $teams
- * @property Role[]|Collection $roles
+ * @property PatreonUserLink           $patreonUserLink
+ * @property GameServerRegion          $gameServerRegion
+ * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
+ *
+ * @property boolean                   $is_admin
+ *
+ * @property DungeonRoute[]|Collection $dungeonRoutes
+ * @property UserReport[]|Collection   $reports
+ * @property Team[]|Collection         $teams
+ * @property Role[]|Collection         $roles
+ * @property Tag[]|Collection          $tags
  *
  * @mixin Eloquent
  */
 class User extends Authenticatable
 {
+    use HasIconFile;
     use LaratrustUserTrait;
     use Notifiable;
+    use GeneratesPublicKey;
 
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
@@ -59,7 +76,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'oauth_id', 'game_server_region_id', 'name', 'email', 'echo_color', 'password', 'legal_agreed', 'legal_agreed_ms'
+        'id',
+        'patreon_user_link_id',
+        'public_key',
+        'oauth_id',
+        'game_server_region_id',
+        'name',
+        'email',
+        'echo_color',
+        'password',
+        'legal_agreed',
+        'legal_agreed_ms',
     ];
 
     /**
@@ -68,11 +95,27 @@ class User extends Authenticatable
      * @var array
      */
     protected $visible = [
-        'id', 'name', 'echo_color'
+        'id', 'public_key', 'name', 'echo_color',
     ];
 
+    protected $appends = [
+        'initials',
+    ];
 
-    public function getIsAdminAttribute()
+    protected $with = ['iconfile', 'patreonUserLink'];
+
+    /**
+     * @return string
+     */
+    public function getInitialsAttribute(): string
+    {
+        return initials($this->name);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAdminAttribute(): bool
     {
         return $this->hasRole('admin');
     }
@@ -80,42 +123,65 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    function dungeonroutes()
+    public function dungeonRoutes(): HasMany
     {
-        return $this->hasMany('App\Models\DungeonRoute', 'author_id');
+        return $this->hasMany(DungeonRoute::class, 'author_id');
     }
 
     /**
      * @return HasMany
      */
-    function reports()
+    public function reports(): HasMany
     {
-        return $this->hasMany('App\Models\UserReport');
+        return $this->hasMany(UserReport::class);
     }
 
     /**
      * @return HasOne
      */
-    function patreondata()
+    public function patreonUserLink(): HasOne
     {
-        return $this->hasOne('App\Models\PatreonData');
+        return $this->hasOne(PatreonUserLink::class);
     }
 
     /**
      * @return BelongsTo
      */
-    function gameserverregion()
+    public function gameServerRegion(): BelongsTo
     {
         // Don't know why it won't work without the foreign key specified..
-        return $this->belongsTo('App\Models\GameServerRegion', 'game_server_region_id');
+        return $this->belongsTo(GameServerRegion::class);
     }
 
     /**
      * @return BelongsToMany
      */
-    function teams()
+    public function teams(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Team', 'team_users');
+        return $this->belongsToMany(Team::class, 'team_users');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function patreonAdFreeGiveaway(): HasOne
+    {
+        return $this->hasOne(PatreonAdFreeGiveaway::class, 'receiver_user_id');
+    }
+
+    /**
+     * @param int|null $categoryId
+     * @return HasMany|Tag
+     */
+    public function tags(?int $categoryId = null): HasMany
+    {
+        $result = $this->hasMany(Tag::class);
+
+        if ($categoryId !== null) {
+            $result->where('tag_category_id', $categoryId);
+        }
+
+        return $result;
     }
 
     /**
@@ -123,7 +189,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isOAuth()
+    public function isOAuth(): bool
     {
         return empty($this->password);
     }
@@ -131,22 +197,17 @@ class User extends Authenticatable
     /**
      * Checks if this user has paid for a certain tier one way or the other.
      *
-     * @param $name
+     * @param string $key
      * @return bool
      */
-    function hasPaidTier($name)
+    public function hasPatreonBenefit(string $key): bool
     {
         // True for all admins
         $result = $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
-        if (!$result && $this->patreondata !== null) {
-            foreach ($this->patreondata->paidtiers as $tier) {
-                if ($tier->name === $name) {
-                    $result = true;
-                    break;
-                }
-            }
+        if (!$result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
+            $result = $this->patreonUserLink->patreonbenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
         }
 
         return $result;
@@ -157,13 +218,13 @@ class User extends Authenticatable
      *
      * @return Collection
      */
-    function getPaidTiers()
+    public function getPatreonBenefits(): Collection
     {
-        // Admins have all paid tiers
+        // Admins have all patreon benefits
         if ($this->hasRole('admin')) {
-            $result = PaidTier::all()->pluck(['name']);
-        } else if (isset($this->patreondata)) {
-            $result = $this->patreondata->paidtiers->pluck(['name']);
+            $result = collect(array_keys(PatreonBenefit::ALL));
+        } else if (isset($this->patreonUserLink)) {
+            $result = $this->patreonUserLink->patreonbenefits->pluck(['key']);
         } else {
             $result = collect();
         }
@@ -172,23 +233,42 @@ class User extends Authenticatable
     }
 
     /**
+     * @return bool
+     */
+    public function hasAdFreeGiveaway(): bool
+    {
+        return PatreonAdFreeGiveaway::where('receiver_user_id', $this->id)->exists();
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getAdFreeGiveawayUser(): ?User
+    {
+        /** @var User|null $user */
+        $user = PatreonAdFreeGiveaway::where('receiver_user_id', $this->id)->first()->giver;
+
+        return $user;
+    }
+
+    /**
      * Checks if this user can create a dungeon route or not (based on free account limits)
      */
-    function canCreateDungeonRoute()
+    public function canCreateDungeonRoute(): bool
     {
         return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
-            $this->hasPaidTier(PaidTier::UNLIMITED_DUNGEONROUTES);
+            $this->hasPatreonBenefit(PatreonBenefit::UNLIMITED_DUNGEONROUTES);
     }
 
     /**
      * Get the amount of routes a user may still create.
      *
      * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     * @return mixed
+     * @return int
      */
-    function getRemainingRouteCount()
+    public function getRemainingRouteCount(): int
     {
-        return max(0,
+        return (int)max(0,
             config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
@@ -207,27 +287,32 @@ class User extends Authenticatable
     /**
      * Gets a list of consequences that will happen when this user tries to delete their account.
      */
-    public function getDeleteConsequences()
+    public function getDeleteConsequences(): array
     {
         $teams = ['teams' => []];
         foreach ($this->teams as $team) {
+            try {
+                $newOwner = $team->getNewAdminUponAdminAccountDeletion($this);
+            } catch (Exception $exception) {
+                $newOwner = null;
+            }
             /** @var $team Team */
             $teams['teams'][$team->name] = [
-                'result'    => $team->members->count() === 1 ? 'deleted' : 'new_owner',
-                'new_owner' => $team->getNewAdminUponAdminAccountDeletion($this)
+                'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
+                'new_owner' => $newOwner,
             ];
         }
 
         return array_merge($teams, [
             'patreon'       => [
-                'unlinked' => $this->patreondata !== null
+                'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
-                'delete_count' => ($this->dungeonroutes->count() - $this->dungeonroutes()->isSandbox()->count())
+                'delete_count' => ($this->dungeonRoutes()->count() - $this->dungeonRoutes()->isSandbox()->count()),
             ],
-            'reports' => [
-                'delete_count' => ($this->reports()->where('status', 0)->count())
-            ]
+            'reports'       => [
+                'delete_count' => ($this->reports()->where('status', 0)->count()),
+            ],
         ]);
     }
 
@@ -236,24 +321,33 @@ class User extends Authenticatable
         parent::boot();
 
         // Delete user properly if it gets deleted
-        static::deleting(function ($item)
-        {
-            /** @var $item User */
-            $item->dungeonroutes()->delete();
-            $item->reports()->delete();
+        static::deleting(function (User $user) {
+            $user->dungeonRoutes()->delete();
+            $user->reports()->delete();
 
-            $item->patreondata()->delete();
+            $user->patreonUserLink()->delete();
 
-            foreach ($item->teams as $team) {
+            foreach ($user->teams as $team) {
+                // Remove ourselves from the team
+                $team->removeMember($user);
+
                 /** @var $team Team */
-                $newAdmin = $team->getNewAdminUponAdminAccountDeletion($item);
-                if ($newAdmin !== null) {
-                    // Appoint someone else admin
-                    $team->changeRole(User::find($newAdmin->id), 'admin');
-                    // Remove ourselves from the team
-                    $team->removeMember($item);
-                } else {
-                    $team->delete();
+                if (!$team->isUserAdmin($user)) {
+                    continue;
+                }
+
+                /** @var $team Team */
+                try {
+                    $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
+                    if ($newAdmin !== null) {
+                        // Appoint someone else admin
+                        $team->changeRole(User::find($newAdmin->id), 'admin');
+                    } else {
+                        // There's no new admin to be appointed - delete the team instead
+                        $team->delete();
+                    }
+                } catch (Exception $exception) {
+                    logger()->error($exception->getMessage());
                 }
             }
             return true;

@@ -1,126 +1,107 @@
-@extends('layouts.app', ['showAds' => false, 'title' => __('Edit dungeon')])
-@section('header-title')
-    {{ $headerTitle }}
-@endsection
-@section('header-addition')
-    <a href="{{ route('admin.dungeons') }}" class="btn btn-info text-white pull-right" role="button">
-        <i class="fas fa-backward"></i> {{ __('Dungeon list') }}
-    </a>
-@endsection
 <?php
 /**
- * @var $model \App\Models\Dungeon
+ * @var $dungeon \App\Models\Dungeon
  * @var $floor \App\Models\Floor
+ * @var $availableKeysSelect \Illuminate\Support\Collection
  */
 ?>
 
-@section('scripts')
-    <script type="text/javascript">
-        $(function () {
-            $('#admin_dungeon_floor_table').DataTable({});
-        });
-    </script>
+@extends('layouts.sitepage', [
+    'breadcrumbsParams' => [$dungeon ?? null],
+    'showAds' => false,
+    'title' => isset($dungeon) ? __('views/admin.dungeon.edit.title_edit') : __('views/admin.dungeon.edit.title_new')
+    ])
+
+@section('header-title')
+    {{ isset($dungeon) ? __('views/admin.dungeon.edit.header_edit') : __('views/admin.dungeon.edit.header_new') }}
 @endsection
 
 @section('content')
     <div class="mb-4">
-        @isset($model)
-            {{ Form::model($model, ['route' => ['admin.dungeon.update', $model->id], 'method' => 'patch']) }}
+        @isset($dungeon)
+            {{ Form::model($dungeon, ['route' => ['admin.dungeon.update', $dungeon->slug], 'method' => 'patch']) }}
         @else
             {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
         @endisset
 
-        <div class="form-group{{ $errors->has('active') ? ' has-error' : '' }}">
-            {!! Form::label('active', __('Active')) !!}
-            {!! Form::checkbox('active', 1, isset($model) ? $model->active : 1, ['class' => 'form-control left_checkbox']) !!}
-            @include('common.forms.form-error', ['key' => 'active'])
+        <div class="row form-group">
+            <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
+                {!! Form::label('active', __('views/admin.dungeon.edit.active')) !!}
+                {!! Form::checkbox('active', 1, isset($dungeon) ? $dungeon->active : 1, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'active'])
+            </div>
+
+            <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
+                {!! Form::label('speedrun_enabled', __('views/admin.dungeon.edit.speedrun_enabled')) !!}
+                {!! Form::checkbox('speedrun_enabled', 1, isset($dungeon) ? $dungeon->speedrun_enabled : 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
+            </div>
         </div>
 
-        {{--<div class="form-group{{ $errors->has('expansion_id') ? ' has-error' : '' }}">--}}
-        {{--    {!! Form::label('expansion_id', __('Expansion')) !!}--}}
-        {{--    {!! Form::select('expansion_id', $expansions, null, ['class' => 'form-control']) !!}--}}
-        {{--    @include('common.forms.form-error', ['key' => 'expansion_id'])--}}
-        {{--</div>--}}
+        <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">
+            {!! Form::label('key', __('views/admin.dungeon.edit.key')) !!}
+            @isset($dungeon)
+                {!! Form::text('key', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                {!! Form::hidden('key', null) !!}
+            @else
+                {!! Form::select('key', $availableKeysSelect, null, ['class' => 'form-control selectpicker']) !!}
+            @endisset
+            @include('common.forms.form-error', ['key' => 'key'])
+        </div>
+
+        @isset($dungeon)
+            <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
+                {!! Form::label('id', __('views/admin.dungeon.edit.id')) !!}
+                {!! Form::number('id', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                @include('common.forms.form-error', ['key' => 'id'])
+            </div>
+        @endisset
 
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
-            {!! Form::label('zone_id', __('Zone ID')) !!}
+            {!! Form::label('zone_id', __('views/admin.dungeon.edit.zone_id')) !!}
             {!! Form::number('zone_id', null, ['class' => 'form-control']) !!}
             @include('common.forms.form-error', ['key' => 'zone_id'])
         </div>
 
+        <div class="form-group{{ $errors->has('map_id') ? ' has-error' : '' }}">
+            {!! Form::label('map_id', __('views/admin.dungeon.edit.map_id')) !!}
+            {!! Form::number('map_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'map_id'])
+        </div>
+
+        <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
+            {!! Form::label('mdt_id', __('views/admin.dungeon.edit.mdt_id')) !!}
+            {!! Form::number('mdt_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'mdt_id'])
+        </div>
+
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            {!! Form::label('name', __('Dungeon name')) !!}
+            {!! Form::label('name', __('views/admin.dungeon.edit.dungeon_name')) !!}
             {!! Form::text('name', null, ['class' => 'form-control']) !!}
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
 
-        <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">
-            {!! Form::label('key', __('Key')) !!}
-            {!! Form::text('key', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'key'])
+        <div class="form-group{{ $errors->has('slug') ? ' has-error' : '' }}">
+            {!! Form::label('slug', __('views/admin.dungeon.edit.slug')) !!}
+            {!! Form::text('slug', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'slug'])
         </div>
 
-        <div class="form-group{{ $errors->has('enemy_forces_required') ? ' has-error' : '' }}">
-            {!! Form::label('enemy_forces_required', __('Enemy forces required')) !!}
-            {!! Form::number('enemy_forces_required', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'enemy_forces_required'])
-        </div>
-
-        <div class="form-group{{ $errors->has('enemy_forces_required_teeming') ? ' has-error' : '' }}">
-            {!! Form::label('enemy_forces_required_teeming', __('Enemy forces required (teeming)')) !!}
-            {!! Form::number('enemy_forces_required_teeming', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'enemy_forces_required_teeming'])
-        </div>
-
-        <div class="form-group{{ $errors->has('timer_max_seconds') ? ' has-error' : '' }}">
-            {!! Form::label('timer_max_seconds', __('Timer (seconds)')) !!}
-            {!! Form::number('timer_max_seconds', null, ['class' => 'form-control']) !!}
-            @include('common.forms.form-error', ['key' => 'timer_max_seconds'])
-        </div>
-
-        {!! Form::submit(__('Submit'), ['class' => 'btn btn-info']) !!}
+        {!! Form::submit(__('views/admin.dungeon.edit.submit'), ['class' => 'btn btn-info']) !!}
 
         {!! Form::close() !!}
-        @isset($model)
-    </div>
-    <h4>{{ __('Floor management') }}</h4>
-    <div class="float-right">
-        <a href="{{ route('admin.floor.new', ['dungeon' => $model->id]) }}"
-           class="btn btn-success text-white pull-right" role="button">
-            <i class="fas fa-plus"></i> {{ __('Add floor') }}
-        </a>
+        @isset($dungeon)
     </div>
 
-    <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
-        <thead>
-        <tr>
-            <th width="10%">{{ __('Id') }}</th>
-            <th width="10%">{{ __('Index') }}</th>
-            <th width="60%">{{ __('Name') }}</th>
-            <th width="20%">{{ __('Actions') }}</th>
-        </tr>
-        </thead>
+    @isset($dungeon)
+        <div class="form-group">
+            @include('admin.dungeon.floormanagement', ['dungeon' => $dungeon])
+        </div>
 
-        <tbody>
-        @foreach ($model->floors as $floor)
-            <tr>
-                <td>{{ $floor->id }}</td>
-                <td>{{ $floor->index }}</td>
-                <td>{{ $floor->name }}</td>
-                <td>
-                    <a class="btn btn-primary"
-                            href="{{ route('admin.floor.edit', ['dungeon' => $model->id, 'floor' => $floor->id]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('Edit') }}
-                    </a>
-                    <a class="btn btn-primary"
-                            href="{{ route('admin.floor.edit.mapping', ['dungeon' => $model->id, 'floor' => $floor->id]) }}">
-                        <i class="fas fa-route"></i>&nbsp;{{ __('Mapping') }}
-                    </a>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
+        <div class="form-group">
+            @include('admin.dungeon.mappingversions', ['dungeon' => $dungeon])
+        </div>
+    @endisset
 
-    </table>
     @endisset
 @endsection

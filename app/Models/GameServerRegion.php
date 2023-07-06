@@ -2,47 +2,73 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use App\Service\Cache\CacheServiceInterface;
+use App\User;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
+ * @property int $id
  * @property string $short
  * @property string $name
+ * @property string $timezone
  * @property int $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string $reset_hours_offset
  *
- * @property \Illuminate\Support\Collection $users
+ * @property Collection $users
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class GameServerRegion extends Model
+class GameServerRegion extends CacheModel
 {
-    protected $fillable = ['short', 'name', 'reset_day_offset', 'reset_hours_offset'];
+    protected $fillable = ['short', 'name', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
     public $timestamps = false;
 
+    const AMERICAS = 'us';
+    const EUROPE   = 'eu';
+    const CHINA    = 'cn';
+    const TAIWAN   = 'tw';
+    const KOREA    = 'kr';
+
+    const DEFAULT_REGION = GameServerRegion::AMERICAS;
+
+    const ALL = [
+        self::AMERICAS,
+        self::EUROPE,
+        self::CHINA,
+        self::TAIWAN,
+        self::KOREA,
+    ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function users()
+    public function users(): HasMany
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany(User::class);
     }
 
     /**
      * @return GameServerRegion Gets the default region.
      */
-    public static function getUserOrDefaultRegion()
+    public static function getUserOrDefaultRegion(): GameServerRegion
     {
-        $region = null;
         if (Auth::check()) {
-            $region = Auth::user()->gameserverregion;
+            $user = Auth::user();
+            if ($user->game_server_region_id > 0 && $user->gameServerRegion !== null) {
+                return $user->gameServerRegion;
+            }
         }
-        if ($region === null) {
-            $region = GameServerRegion::all()->where('short', 'us')->first();
-        }
-        return $region;
+
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
+
+        return $cacheService->remember('default_region', function () {
+            return GameServerRegion::where('short', self::DEFAULT_REGION)->first();
+        });
     }
 
     public static function boot()

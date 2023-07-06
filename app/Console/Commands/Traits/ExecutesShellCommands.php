@@ -15,21 +15,28 @@ trait ExecutesShellCommands
      *
      * @param string|array $cmds
      * @param boolean $echo
+     * @return array
      */
-    protected function shell($cmds, bool $echo = true)
+    protected function shell($cmds, bool $echo = true): array
     {
+        $result = [];
+
         if (is_string($cmds)) {
             $cmds = [$cmds];
         }
 
         foreach ($cmds as $cmd) {
             if (!empty($cmd)) {
-                $result = trim(shell_exec($cmd));
+                $cmdResult = trim(shell_exec($cmd));
 
                 if ($echo) {
-                    $this->info($result);
+                    $this->info($cmdResult);
                 }
+
+                $result[$cmd] = $cmdResult;
             }
         }
+
+        return $result;
     }
 }

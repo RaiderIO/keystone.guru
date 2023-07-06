@@ -3,16 +3,13 @@
 namespace App\Models\Traits;
 
 use App\Models\Tags\Tag;
-use App\Models\Tags\TagModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 
 /**
  * @property string $model_class
  *
- * @property Collection|TagModel[] $tagModels
  * @property Collection|Tag[] $tags
  *
  * @mixin Model
@@ -20,26 +17,27 @@ use Illuminate\Support\Collection;
 trait HasTags
 {
     /**
-     * @return HasManyThrough
+     * @param int|null $tagCategoryId
+     * @return hasMany
      */
-    public function tags()
+    public function tags(?int $tagCategoryId = null): HasMany
     {
-        return $this->hasManyThrough('\App\Models\Tags\Tag', '\App\Models\Tags\TagModel', 'model_id', 'id')->where('model_class', get_class($this));
+        $result = $this->hasMany(Tag::class, 'model_id')->where('model_class', get_class($this));
+
+        if ($tagCategoryId !== null) {
+            $result->where('tag_category_id', $tagCategoryId);
+        }
+
+        return $result;
     }
 
     /**
-     * @return HasMany
+     * @param int $tagCategoryId
+     * @param string $name
+     * @return bool
      */
-    public function tagmodels()
+    public function hasTag(int $tagCategoryId, string $name): bool
     {
-        return $this->hasMany('\App\Models\Tags\TagModel', 'model_id')->where('model_class', get_class($this));
-    }
-
-    public function getAvailableTags()
-    {
-
-
-//        return Tag::select('tag.*')
-//            ->join('')
+        return in_array($name, $this->tags($tagCategoryId)->get()->pluck(['name'])->toArray());
     }
 }
