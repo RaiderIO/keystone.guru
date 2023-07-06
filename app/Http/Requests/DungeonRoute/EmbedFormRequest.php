@@ -24,9 +24,10 @@ class EmbedFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'pulls'             => 'nullable|int:0,1',
-            'pullsDefaultState' => 'nullable|int:0,1',
-            'enemyinfo'         => 'nullable|int:0,1',
+            'pulls'             => 'nullable|bool',
+            'pullsDefaultState' => 'nullable|bool',
+            'pullsHideOnMove'   => 'nullable|bool',
+            'enemyinfo'         => 'nullable|bool',
         ];
     }
 
