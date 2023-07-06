@@ -194,7 +194,7 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|RedirectResponse|Redirector|View
+     * @return Application|Redirector|RedirectResponse
      */
     public function dungeonroutes(Request $request)
     {
@@ -211,11 +211,11 @@ class SiteController extends Controller
 
     /**
      * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @return Application|Factory|RedirectResponse|Redirector|View
+     * @param DungeonRoute $dungeonRoute
+     * @return Application|Factory|View
      */
-    public function embed(Request $request, DungeonRoute $dungeonroute)
+    public function embed(Request $request, DungeonRoute $dungeonRoute)
     {
-        return view('misc.embed', ['model' => $dungeonroute]);
+        return view('misc.embed', ['model' => $dungeonRoute]);
     }
 }

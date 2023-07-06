@@ -92,7 +92,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     Route::get('timetest', [SiteController::class, 'timetest'])->name('misc.timetest');
 
-    Route::get('embed/{dungeonroute}', [SiteController::class, 'embed'])->name('misc.embed');
+    Route::get('embed/{dungeonRoute}', [SiteController::class, 'embed'])->name('misc.embed');
 
     Route::get('status', [SiteController::class, 'status'])->name('misc.status');
 
