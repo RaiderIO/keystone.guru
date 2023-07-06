@@ -22,6 +22,7 @@ class DungeonRouteEnemyRaidMarker extends Model
 {
     protected $fillable = ['dungeon_route_id', 'raid_marker_id', 'enemy_id'];
     public $hidden = ['dungeon_route_id'];
+    public $with = ['raidMarker'];
     public $timestamps = false;
 
     /**
