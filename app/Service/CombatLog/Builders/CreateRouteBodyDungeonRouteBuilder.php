@@ -127,7 +127,9 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         $npcDiedEvents = $this->createRouteBody->npcs->map(function (CreateRouteNpc $npc) {
             return [
                 'type'      => 'died',
-                'timestamp' => $npc->getDiedAt(),
+                // A bit of a hack - but prevent one-shot enemies from having their diedAt event
+                // potentially come _before_ engagedAt event due to sorting
+                'timestamp' => $npc->getDiedAt()->addSecond(),
                 'npc'       => $npc,
             ];
         });
