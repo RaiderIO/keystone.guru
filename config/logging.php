@@ -1,6 +1,5 @@
 <?php
 
-use App\Logging\WithDungeonRouteContext;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 
@@ -91,7 +90,7 @@ return [
             'driver' => 'custom',
             'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
             'via'    => MarvinLabs\DiscordLogger\Logger::class,
-            'level'  => 'warning',
+            'level'  => 'error',
 //            'formatter' => Monolog\Formatter\LineFormatter::class,
 //            'formatter_with' => [
 //                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
