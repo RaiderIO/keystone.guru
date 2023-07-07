@@ -1,0 +1,50 @@
+{
+    "id": 186,
+    "release_changelog_id": 193,
+    "version": "v6.8.2",
+    "title": "Bugfixes & API updates",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2023-07-07T11:44:16+00:00",
+    "updated_at": "2023-07-07T11:44:16+00:00",
+    "changelog": {
+        "id": 193,
+        "release_id": 186,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 193,
+                "release_changelog_category_id": 2,
+                "ticket_id": 1830,
+                "change": "Enhanced validation for API endpoints.",
+                "category": {
+                    "id": 2,
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
+                }
+            },
+            {
+                "release_changelog_id": 193,
+                "release_changelog_category_id": 2,
+                "ticket_id": 1834,
+                "change": "Added additional fields\/debug info to API endpoints.",
+                "category": {
+                    "id": 2,
+                    "key": "route_changes",
+                    "name": "releasechangelogcategories.route_changes"
+                }
+            },
+            {
+                "release_changelog_id": 193,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1833,
+                "change": "Embedded routes' maps are now properly centered in the middle of the available space.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

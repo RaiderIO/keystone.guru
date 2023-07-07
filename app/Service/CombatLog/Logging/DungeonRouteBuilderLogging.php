@@ -26,7 +26,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      */
     public function createPullEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void
     {
-        $this->info(__METHOD__, get_defined_vars());
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     /**
@@ -142,7 +142,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      */
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $closestEnemyDistance, int $maxDistance): void
     {
-        $this->info(__METHOD__, get_defined_vars());
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     /**
