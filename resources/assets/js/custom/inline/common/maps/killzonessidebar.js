@@ -472,7 +472,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
             self._rebuildFloorSwitches();
         });
 
-
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Update the UI based on the new map states
             let previousMapState = mapStateChangedEvent.data.previousMapState;
@@ -556,6 +555,10 @@ class CommonMapsKillzonessidebar extends InlineCode {
             //         console.log(events[index]);
             //     });
             // }
+        }
+
+        if (this.options.defaultState > 1 && $('#map').width() > this.options.defaultState) {
+            this.sidebar.showSidebar();
         }
 
         // Handle selection of pulls with A+D or arrow keys

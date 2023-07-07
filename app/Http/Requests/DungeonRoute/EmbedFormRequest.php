@@ -25,7 +25,7 @@ class EmbedFormRequest extends FormRequest
     {
         return [
             'pulls'             => 'nullable|bool',
-            'pullsDefaultState' => 'nullable|bool',
+            'pullsDefaultState' => 'nullable|integer',
             'pullsHideOnMove'   => 'nullable|bool',
             'enemyinfo'         => 'nullable|bool',
         ];

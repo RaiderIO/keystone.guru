@@ -180,6 +180,9 @@ class DungeonRoute extends Model
         'level_max',
         'expires_at',
         'enemy_forces',
+        'views',
+        'views_embed',
+        'popularity',
     ];
 
     protected $with = ['dungeon', 'faction', 'specializations', 'classes', 'races', 'affixes'];
@@ -699,9 +702,10 @@ class DungeonRoute extends Model
      */
     public function saveTemporaryFromRequest(
         DungeonRouteTemporaryFormRequest $request,
-        SeasonServiceInterface $seasonService,
-        ExpansionServiceInterface $expansionService
-    ): bool {
+        SeasonServiceInterface           $seasonService,
+        ExpansionServiceInterface        $expansionService
+    ): bool
+    {
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
@@ -747,11 +751,12 @@ class DungeonRoute extends Model
      * @throws Exception
      */
     public function saveFromRequest(
-        Request $request,
-        SeasonServiceInterface $seasonService,
+        Request                   $request,
+        SeasonServiceInterface    $seasonService,
         ExpansionServiceInterface $expansionService,
         ThumbnailServiceInterface $thumbnailService
-    ): bool {
+    ): bool
+    {
         $result = false;
 
         // Overwrite the author_id if it's not been set yet
@@ -1160,8 +1165,8 @@ class DungeonRoute extends Model
         $result = false;
         $user   = Auth::user();
         if ($user !== null) {
-            $rating = DungeonRouteRating::where('dungeon_route_id',  $this->id)
-                ->where('user_id',  $user->id)
+            $rating = DungeonRouteRating::where('dungeon_route_id', $this->id)
+                ->where('user_id', $user->id)
                 ->get(['rating'])
                 ->first();
 
@@ -1351,7 +1356,6 @@ class DungeonRoute extends Model
     public function trackPageView(int $source): bool
     {
         // Handle route views counting
-
         if ($result = PageView::trackPageView($this->id, DungeonRoute::class, $source)) {
             // Do not update the updated_at time - triggering a refresh of the thumbnails
             $this->timestamps = false;

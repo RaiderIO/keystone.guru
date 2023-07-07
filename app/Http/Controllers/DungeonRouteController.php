@@ -49,10 +49,10 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request      $request
+     * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string|null $title
+     * @param string|null  $title
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -71,11 +71,11 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request      $request
+     * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string $title
-     * @param string $floorIndex
+     * @param string       $title
+     * @param string       $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -135,11 +135,11 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request      $request
+     * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string $title
-     * @param string $floorIndex
+     * @param string       $title
+     * @param string       $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -172,12 +172,12 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param ExpansionServiceInterface $expansionService
+     * @param ExpansionServiceInterface    $expansionService
      * @param MigrateToSeasonalTypeRequest $request
-     * @param Dungeon $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string $title
-     * @param string $seasonalType
+     * @param Dungeon                      $dungeon
+     * @param DungeonRoute                 $dungeonroute
+     * @param string                       $title
+     * @param string                       $seasonalType
      * @return RedirectResponse
      * @throws AuthorizationException
      */
@@ -197,11 +197,11 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRouteFormRequest $request
-     * @param SeasonServiceInterface $seasonService
+     * @param DungeonRouteFormRequest   $request
+     * @param SeasonServiceInterface    $seasonService
      * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute|null $dungeonroute
+     * @param DungeonRoute|null         $dungeonroute
      * @return DungeonRoute
      * @throws Exception
      */
@@ -221,8 +221,8 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonServiceInterface $seasonService
-     * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface           $seasonService
+     * @param ExpansionServiceInterface        $expansionService
      * @return DungeonRoute
      * @throws Exception
      */
@@ -239,10 +239,10 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string $title
+     * @param Request                   $request
+     * @param Dungeon                   $dungeon
+     * @param DungeonRoute              $dungeonroute
+     * @param string                    $title
      * @param ThumbnailServiceInterface $thumbnailService
      * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
@@ -269,10 +269,10 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request      $request
+     * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string $title
+     * @param string       $title
      * @return RedirectResponse
      */
     public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title)
@@ -288,10 +288,10 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request      $request
+     * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string|null $title
+     * @param string|null  $title
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws InvalidArgumentException
@@ -310,11 +310,11 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request      $request
+     * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
-     * @param string|null $title
-     * @param string|null $floorIndex
+     * @param string|null  $title
+     * @param string|null  $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -364,8 +364,8 @@ class DungeonRouteController extends Controller
 
     /**
      * @param EmbedFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @param string $floorIndex
+     * @param DungeonRoute     $dungeonroute
+     * @param string           $floorIndex
      * @return Application|Factory|View
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -387,7 +387,9 @@ class DungeonRouteController extends Controller
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_EMBED);
 
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->where('index', $floorIndex)
+            ->first();
 
         $pulls             = $request->get('pulls');
         $pullsDefaultState = $request->get('pullsDefaultState');
@@ -403,7 +405,7 @@ class DungeonRouteController extends Controller
             'embedOptions' => [
                 // Null if not set - but cast to an bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
                 'pulls'             => $pulls === null || $pulls, // Default true - available
-                'pullsDefaultState' => (bool)$pullsDefaultState, // Default false - closed
+                'pullsDefaultState' => (int)$pullsDefaultState, // Default false - closed
                 'pullsHideOnMove'   => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
                 'enemyinfo'         => (bool)$enemyinfo, // Default false - not available
             ],
@@ -414,11 +416,11 @@ class DungeonRouteController extends Controller
     /**
      * Override to give the type hint which is required.
      *
-     * @param DungeonRouteFormRequest $request
-     * @param SeasonServiceInterface $seasonService
+     * @param DungeonRouteFormRequest   $request
+     * @param SeasonServiceInterface    $seasonService
      * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute $dungeonroute
+     * @param DungeonRoute              $dungeonroute
      * @return \Illuminate\Http\RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -438,8 +440,8 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRouteFormRequest $request
-     * @param SeasonServiceInterface $seasonService
+     * @param DungeonRouteFormRequest   $request
+     * @param SeasonServiceInterface    $seasonService
      * @param ExpansionServiceInterface $expansionService
      * @param ThumbnailServiceInterface $thumbnailService
      * @return RedirectResponse
@@ -462,8 +464,8 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonServiceInterface $seasonService
-     * @param ExpansionServiceInterface $expansionService
+     * @param SeasonServiceInterface           $seasonService
+     * @param ExpansionServiceInterface        $expansionService
      * @return RedirectResponse
      * @throws Exception
      */
@@ -484,9 +486,9 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
-     * @param Dungeon $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string|null $title
+     * @param Dungeon                 $dungeon
+     * @param DungeonRoute            $dungeonroute
+     * @param string|null             $title
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
