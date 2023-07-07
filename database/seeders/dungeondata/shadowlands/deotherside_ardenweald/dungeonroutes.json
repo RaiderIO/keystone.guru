@@ -456,7 +456,7 @@
                 "spells": []
             }
         ],
-        "enemyraidmarkers": [],
+        "enemy_raid_markers": [],
         "prideful_enemies": [],
         "mapicons": []
     }
