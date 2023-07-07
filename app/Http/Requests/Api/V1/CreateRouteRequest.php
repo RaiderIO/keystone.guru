@@ -37,6 +37,8 @@ class CreateRouteRequest extends FormRequest
             'challengeMode.start'      => ['required', $dateFormat],
             'challengeMode.end'        => ['required', $dateFormat],
             'challengeMode.durationMs' => ['required', 'int'],
+            // @TODO Make non-optional when it's actually being sent
+            'challengeMode.success'    => ['nullable', 'bool'],
             'challengeMode.mapId'      => ['required', Rule::exists('dungeons', 'map_id')],
             'challengeMode.level'      => ['required', 'int'],
             'challengeMode.affixes'    => ['required', 'array'],

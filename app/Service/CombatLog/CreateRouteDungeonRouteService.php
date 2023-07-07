@@ -114,6 +114,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $challengeMode = new CreateRouteChallengeMode(
                 $challengeModeStartEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
+                $challengeModeEndEvent->getSuccess(),
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $challengeModeStartEvent->getInstanceID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
@@ -132,7 +133,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     }
 
                     $npcEngagedEvents->put($guid->getGuid(), $resultEvent);
-                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
+                } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
@@ -157,8 +158,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                             )
                         )
                     );
-
-                } else if ($resultEvent instanceof SpellCast) {
+                } elseif ($resultEvent instanceof SpellCast) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -209,7 +209,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             'dungeon_id'       => $dungeonRoute->dungeon_id,
             'dungeon_route_id' => $dungeonRoute->id,
             'level'            => $createRouteBody->challengeMode->level,
-            'success'          => true,
+            'success'          => $createRouteBody->challengeMode->success,
             'total_time_ms'    => $createRouteBody->challengeMode->durationMs,
             'created_at'       => $now,
         ]);
