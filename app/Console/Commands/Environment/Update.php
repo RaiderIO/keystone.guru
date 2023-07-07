@@ -67,6 +67,12 @@ class Update extends Command
             '--force'    => true,
         ]);
 
+        $this->call('migrate', [
+            '--database' => 'combatlog',
+            '--path'     => 'database/migrations_combatlog',
+            '--force'    => true,
+        ]);
+
         // Drop all caches for all models while we re-seed
         $this->call('modelCache:clear');
 
