@@ -92,7 +92,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     Route::get('timetest', [SiteController::class, 'timetest'])->name('misc.timetest');
 
-    Route::get('embed/{dungeonroute}', [SiteController::class, 'embed'])->name('misc.embed');
+    Route::get('embed/{dungeonRoute}', [SiteController::class, 'embed'])->name('misc.embed');
 
     Route::get('status', [SiteController::class, 'status'])->name('misc.status');
 
@@ -470,8 +470,14 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::put('/user/{user}/patreon/benefits', [UserController::class, 'storePatreonBenefits']);
         });
 
+        Route::group(['prefix' => 'dungeonRoute'], function () {
+            Route::post('/data', [APIDungeonRouteController::class, 'getDungeonRoutesData']);
+        });
+
         // May be performed without being logged in (sandbox functionality)
         Route::group(['prefix' => '{dungeonRoute}'], function () {
+
+
             Route::post('/brushline', [APIBrushlineController::class, 'store']);
             Route::put('/brushline/{brushline}', [APIBrushlineController::class, 'store']);
             Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);

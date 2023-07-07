@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $enemy_id
  *
  * @property DungeonRoute $dungeonroute
- * @property RaidMarker $raidmarker
+ * @property RaidMarker $raidMarker
  * @property Enemy $enemy
  *
  * @mixin Eloquent
@@ -22,6 +22,7 @@ class DungeonRouteEnemyRaidMarker extends Model
 {
     protected $fillable = ['dungeon_route_id', 'raid_marker_id', 'enemy_id'];
     public $hidden = ['dungeon_route_id'];
+    public $with = ['raidMarker'];
     public $timestamps = false;
 
     /**
@@ -35,7 +36,7 @@ class DungeonRouteEnemyRaidMarker extends Model
     /**
      * @return BelongsTo
      */
-    public function raidmarker(): BelongsTo
+    public function raidMarker(): BelongsTo
     {
         return $this->belongsTo(RaidMarker::class);
     }

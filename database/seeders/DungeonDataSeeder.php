@@ -31,20 +31,18 @@ use SplFileInfo;
 
 class DungeonDataSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function run()
+    private const DUNGEON_DATA_DIR = 'seeders/dungeondata/';
+
+    /** @var Collection|array */
+    private Collection $importedModels;
+
+    /** @var Collection|RelationMapping[] */
+    private Collection $relationMapping;
+
+    public function __construct()
     {
-        // Just a base class
-        $this->rollback();
-
-        $this->command->info('Starting import of dungeon data for all dungeons');
-
-        $mappings = [
+        $this->importedModels  = collect();
+        $this->relationMapping = collect([
             // Loose files
             new MappingVersionRelationMapping(),
             new MappingCommitLogRelationMapping(),
@@ -61,9 +59,39 @@ class DungeonDataSeeder extends Seeder
             new DungeonFloorSwitchMarkerRelationMapping(),
             new MapIconRelationMapping(),
             new MountableAreaRelationMapping(),
-        ];
+        ]);
 
-        $rootDir         = database_path('seeders/dungeondata/');
+        $this->resetImportedModels();
+    }
+
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function run()
+    {
+        // Just a base class
+        $this->rollback();
+
+        $this->command->info('Starting import of dungeon data for all dungeons');
+
+        $this->importDungeonMapping();
+        $this->flushModels();
+        $this->importDungeonRoutes();
+        $this->flushModels();
+
+        Stopwatch::dumpAll();
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    private function importDungeonMapping(): void
+    {
+        $rootDir         = database_path(self::DUNGEON_DATA_DIR);
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // Parse the root files first
@@ -73,7 +101,7 @@ class DungeonDataSeeder extends Seeder
                 continue;
             }
 
-            $this->parseRawFile($rootDir, $rootDirChild, $mappings, 1);
+            $this->parseRawFile($rootDir, $rootDirChild, 1);
         }
 
         $rootDirIterator->rewind();
@@ -113,7 +141,7 @@ class DungeonDataSeeder extends Seeder
                     // For each file inside a floor
                     foreach ($importFileIterator as $importFile) {
                         // Floors first - parse dirs and only THEN files
-                        $this->parseRawFile($rootDir, $importFile, $mappings, 3);
+                        $this->parseRawFile($rootDir, $importFile, 3);
                     }
                 }
 
@@ -124,23 +152,99 @@ class DungeonDataSeeder extends Seeder
                         continue;
                     }
 
+                    // Skip this for now - do it later
+                    if (str_contains($floorDirFile, 'dungeonroutes')) {
+                        continue;
+                    }
+
                     // npcs, dungeon_routes
-                    $this->parseRawFile($rootDir, $floorDirFile, $mappings, 2);
+                    $this->parseRawFile($rootDir, $floorDirFile, 2);
                 }
             }
         }
-
-        Stopwatch::dumpAll();
     }
 
     /**
-     * @param string $rootDir
-     * @param string $filePath
-     * @param RelationMapping[] $mappings
-     * @param integer $depth
+     * @return void
+     * @throws \Exception
+     */
+    private function importDungeonRoutes(): void
+    {
+        $rootDir         = database_path(self::DUNGEON_DATA_DIR);
+        $rootDirIterator = new FilesystemIterator($rootDir);
+
+        // For each expansion
+        foreach ($rootDirIterator as $rootDirChild) {
+            /** @var $rootDirChild SplFileInfo */
+            if ($rootDirChild->getType() !== 'dir') {
+                continue;
+            }
+            $expansionDirIterator = new FilesystemIterator($rootDirChild);
+
+            // For each dungeon inside an expansion dir
+            foreach ($expansionDirIterator as $dungeonKeyDir) {
+                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+
+                $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
+                // For each floor inside a dungeon dir
+                foreach ($floorDirIterator as $floorDirFile) {
+                    /** @var $floorDirFile SplFileInfo */
+                    if ($floorDirFile->getType() === 'dir') {
+                        continue;
+                    }
+
+                    if (!str_contains($floorDirFile, 'dungeonroutes')) {
+                        continue;
+                    }
+
+                    // npcs, dungeon_routes
+                    $this->parseRawFile($rootDir, $floorDirFile, 2);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function resetImportedModels(): void
+    {
+        // Init the place where we store all models so we can insert them all at once
+        foreach ($this->relationMapping as $relationMapping) {
+            $this->importedModels->put($relationMapping->getClass(), collect());
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function flushModels(): void
+    {
+        foreach ($this->importedModels as $class => $models) {
+            /** @var $class \Eloquent */
+            /** @var $models Collection */
+            if ($models->isEmpty()) {
+                continue;
+            }
+
+            $this->command->info(sprintf('- Saving %d %s', $models->count(), $class));
+
+            $models->chunk(1000)->each(function (Collection $chunkedModels) use ($class) {
+                $class::insert($chunkedModels->toArray());
+            });
+        }
+
+        $this->resetImportedModels();
+    }
+
+    /**
+     * @param string            $rootDir
+     * @param string            $filePath
+     * @param integer           $depth
+     *
      * @throws Exception
      */
-    private function parseRawFile(string $rootDir, string $filePath, array $mappings, int $depth = 1): void
+    private function parseRawFile(string $rootDir, string $filePath, int $depth = 1): void
     {
         $prefix = str_repeat('-', $depth) . ' ';
 
@@ -149,7 +253,7 @@ class DungeonDataSeeder extends Seeder
         // Import file
         $this->command->info($prefix . 'Importing ' . $fileName);
         $found = false;
-        foreach ($mappings as $mapping) {
+        foreach ($this->relationMapping as $mapping) {
             if ($mapping->getFileName() === $fileName) {
                 $count = $this->loadModelsFromFile($filePath, $mapping);
                 $this->command->info(sprintf(
@@ -171,8 +275,9 @@ class DungeonDataSeeder extends Seeder
     }
 
     /**
-     * @param string $filePath
+     * @param string          $filePath
      * @param RelationMapping $mapping
+     *
      * @return int The amount of models loaded from the file
      * @throws Exception
      */
@@ -256,8 +361,9 @@ class DungeonDataSeeder extends Seeder
                 $updatedModels++;
 
             } // If we should do some post processing, create & save it now so that we can do just that
-            else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
+            elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 $createdModel = $mapping->getClass()::create($modelData);
+                $updatedModels++;
             } // We don't need to do post processing, add it to the list to be saved
             else {
                 $modelsToSave->push($modelData);
@@ -266,24 +372,26 @@ class DungeonDataSeeder extends Seeder
             }
 
             // If we have models to mass-save later, we should not do post-processing since it's incompatible
-            if ($modelsToSave->isEmpty()) {
-                $modelData['id'] = $createdModel->id;
+            if ($modelsToSave->isNotEmpty()) {
+                continue;
+            }
 
-                // Merge the unset relations with the model again so we can parse the model again
-                $modelData = $modelData + $unsetRelations;
+            $modelData['id'] = $createdModel->id;
 
-                foreach ($mapping->getPostSaveRelationParsers() as $attributeParser) {
-                    foreach ($modelData as $key => $value) {
-                        /** @var $attributeParser RelationParserInterface */
-                        // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
-                        if (is_array($value) &&
-                            $attributeParser->canParseModel($mapping->getClass()) &&
-                            $attributeParser->canParseRelation($key, $value)) {
+            // Merge the unset relations with the model again so we can parse the model again
+            $modelData = $modelData + $unsetRelations;
 
-                            // Ignore return value, use preModelSaveAttributeParser if you want the parser to have effect on the
-                            // model that's about to be saved. It's already saved at this point
-                            $attributeParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
-                        }
+            foreach ($mapping->getPostSaveRelationParsers() as $attributeParser) {
+                foreach ($modelData as $key => $value) {
+                    /** @var $attributeParser RelationParserInterface */
+                    // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
+                    if (is_array($value) &&
+                        $attributeParser->canParseModel($mapping->getClass()) &&
+                        $attributeParser->canParseRelation($key, $value)) {
+
+                        // Ignore return value, use preModelSaveAttributeParser if you want the parser to have effect on the
+                        // model that's about to be saved. It's already saved at this point
+                        $attributeParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
                     }
                 }
             }
@@ -291,7 +399,9 @@ class DungeonDataSeeder extends Seeder
 
         // Bulk save the models that did not need any post-attribute parsing
         if ($modelsToSave->isNotEmpty()) {
-            $mapping->getClass()::insert($modelsToSave->toArray());
+            $this->importedModels->put($mapping->getClass(),
+                $this->importedModels->get($mapping->getClass())->merge($modelsToSave)
+            );
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
@@ -317,7 +427,6 @@ class DungeonDataSeeder extends Seeder
                 $this->command->error(sprintf('%s: Exception deleting demo dungeonroute', $ex->getMessage()));
             }
         }
-
 
         DB::table('mapping_versions')->truncate();
         DB::table('mapping_commit_logs')->truncate();

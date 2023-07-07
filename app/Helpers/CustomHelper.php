@@ -1,6 +1,17 @@
 <?php
 
 use App\Logic\Utils\MathUtils;
+use Ramsey\Uuid\Uuid;
+
+$GLOBALS['correlationId'] = Uuid::uuid4()->toString();
+
+/**
+ * @return string The current correlationID of the request.
+ */
+function correlationId(): string
+{
+    return $GLOBALS['correlationId'];
+}
 
 /**
  * Checks if a specific alert is already dismissed and thus should not be rendered anymore.
@@ -58,8 +69,8 @@ function isValidBase64(string $string): bool
 /**
  * @param string $csv_string
  * @param string $delimiter
- * @param bool $skip_empty_lines
- * @param bool $trim_fields
+ * @param bool   $skip_empty_lines
+ * @param bool   $trim_fields
  * @return array|array[][]|false[][]|string[][]|string[][][]
  */
 function str_getcsv_assoc(string $csv_string, string $delimiter = ",", bool $skip_empty_lines = true, bool $trim_fields = true)

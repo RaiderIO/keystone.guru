@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Rules\CreateRouteNpcChronologicalRule;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -30,6 +31,7 @@ class CreateRouteRequest extends FormRequest
         $dateFormat = sprintf('date_format:"%s"', CreateRouteBody::DATE_TIME_FORMAT);
 
         return [
+            'metadata.runId'           => ['required', 'string'],
             'settings.temporary'       => ['nullable', 'bool'],
             'settings.debugIcons'      => ['nullable', 'bool'],
             'challengeMode.start'      => ['required', $dateFormat],
@@ -39,7 +41,7 @@ class CreateRouteRequest extends FormRequest
             'challengeMode.level'      => ['required', 'int'],
             'challengeMode.affixes'    => ['required', 'array'],
             'challengeMode.affixes.*'  => ['required', Rule::exists('affixes', 'affix_id')],
-            'npcs'                     => ['required', 'array'],
+            'npcs'                     => ['required', 'array', new CreateRouteNpcChronologicalRule()],
             'npcs.*.npcId'             => ['required', 'integer'], // #1818 Rule::exists('npcs', 'id')
             'npcs.*.spawnUid'          => ['required', 'string', 'max:10'],
             'npcs.*.engagedAt'         => ['required', $dateFormat],

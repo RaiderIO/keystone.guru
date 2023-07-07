@@ -5,6 +5,9 @@ namespace App\Service\CombatLog;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
+use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
 use App\Models\MapIcon;
@@ -15,6 +18,7 @@ use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteChallengeMode;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteCoord;
+use App\Service\CombatLog\Models\CreateRoute\CreateRouteMetadata;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteSettings;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteSpell;
@@ -25,7 +29,9 @@ use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast;
 use App\Service\Season\SeasonServiceInterface;
+use Carbon\Carbon;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceInterface
 {
@@ -41,10 +47,11 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
      * @param CreateRouteDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
-        CombatLogService $combatLogService,
-        SeasonServiceInterface $seasonService,
+        CombatLogService                               $combatLogService,
+        SeasonServiceInterface                         $seasonService,
         CreateRouteDungeonRouteServiceLoggingInterface $log
-    ) {
+    )
+    {
         $this->combatLogService = $combatLogService;
         $this->seasonService    = $seasonService;
         $this->log              = $log;
@@ -58,6 +65,8 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
         $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $createRouteBody))->build();
+
+        $this->saveChallengeModeRun($createRouteBody, $dungeonRoute);
 
         if ($createRouteBody->settings->debugIcons) {
             $this->generateMapIcons(
@@ -123,7 +132,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     }
 
                     $npcEngagedEvents->put($guid->getGuid(), $resultEvent);
-                } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
+                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
@@ -149,7 +158,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                         )
                     );
 
-                } elseif ($resultEvent instanceof SpellCast) {
+                } else if ($resultEvent instanceof SpellCast) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -173,6 +182,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             }
 
             return new CreateRouteBody(
+                new CreateRouteMetadata(Uuid::uuid4()->toString()),
                 new CreateRouteSettings(true, true),
                 $challengeMode,
                 $npcs,
@@ -185,6 +195,68 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
+     * @param CreateRouteBody $createRouteBody
+     * @param DungeonRoute    $dungeonRoute
+     * @return void
+     */
+    private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
+    {
+        // Insert a run
+        $now = Carbon::now();
+
+        /** @var ChallengeModeRun $challengeModeRun */
+        $challengeModeRun = ChallengeModeRun::create([
+            'dungeon_id'       => $dungeonRoute->dungeon_id,
+            'dungeon_route_id' => $dungeonRoute->id,
+            'level'            => $createRouteBody->challengeMode->level,
+            'success'          => true,
+            'total_time_ms'    => $createRouteBody->challengeMode->durationMs,
+            'created_at'       => $now,
+        ]);
+
+        $floorByUiMapId = Floor::where('dungeon_id', $dungeonRoute->dungeon_id)
+            ->get()
+            ->keyBy('ui_map_id');
+
+        $invalidUiMapIds         = [];
+        $enemyPositionAttributes = [];
+        foreach ($createRouteBody->npcs as $npc) {
+            /** @var Floor $floor */
+            $floor = $floorByUiMapId->get($npc->coord->uiMapId);
+
+            if ($floor === null && !in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
+                $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
+                $invalidUiMapIds[] = $npc->coord->uiMapId;
+                continue;
+            }
+
+            $ingameLatLng = $floor->calculateMapLocationForIngameLocation($npc->coord->x, $npc->coord->y);
+
+            $enemyPositionAttributes[] = [
+                'challenge_mode_run_id' => $challengeModeRun->id,
+                'floor_id'              => $floor->id,
+                'npc_id'                => $npc->npcId,
+                'guid'                  => $npc->getUniqueUid(),
+                'lat'                   => $ingameLatLng['lat'],
+                'lng'                   => $ingameLatLng['lng'],
+                'created_at'            => $now,
+            ];
+        }
+
+        if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
+            // Then we don't want duplicates - get rid of the challenge mode run
+            $challengeModeRun->delete();
+        } else {
+            ChallengeModeRunData::create([
+                'challenge_mode_run_id' => $challengeModeRun->id,
+                'run_id'                => $createRouteBody->metadata->runId,
+                'correlation_id'        => correlationId(),
+                'post_body'             => json_encode($createRouteBody),
+            ]);
+        }
+    }
+
+    /**
      * @param MappingVersion    $mappingVersion
      * @param CreateRouteBody   $createRouteBody
      * @param DungeonRoute|null $dungeonRoute
@@ -192,10 +264,11 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
      * @return void
      */
     private function generateMapIcons(
-        MappingVersion $mappingVersion,
+        MappingVersion  $mappingVersion,
         CreateRouteBody $createRouteBody,
-        ?DungeonRoute $dungeonRoute = null
-    ): void {
+        ?DungeonRoute   $dungeonRoute = null
+    ): void
+    {
         $currentFloor      = null;
         $mapIconAttributes = collect();
         foreach ($createRouteBody->npcs as $npc) {

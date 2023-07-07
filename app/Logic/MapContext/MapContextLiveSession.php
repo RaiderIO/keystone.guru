@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\App;
  */
 class MapContextLiveSession extends MapContext
 {
-    use DungeonRouteTrait;
+    use DungeonRouteProperties;
 
     public function __construct(LiveSession $liveSession, Floor $floor)
     {

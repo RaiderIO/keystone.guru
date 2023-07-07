@@ -18,7 +18,7 @@ class DebugInfoContextLogger
         $context = [
             'url'           => $request->url(),
             'method'        => $request->method(),
-            'correlationId' => Uuid::uuid4()->toString(),
+            'correlationId' => correlationId(),
         ];
 
         if ($dungeonRoute instanceof DungeonRoute) {
@@ -28,14 +28,11 @@ class DebugInfoContextLogger
             ]);
         }
 
-        // @TODO Re-enable this
         Log::withContext($context);
 
         /** @var Response $response */
         $response = $next($request);
         $response->header('X-Correlation-Id', $context['correlationId']);
-
-
 
         return $response;
     }
