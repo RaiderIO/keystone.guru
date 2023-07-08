@@ -50,7 +50,6 @@ return [
     ],
     'embed'          => [
         'title'             => '@todo de: .embed.title',
-        'create_or_view_at' => '@todo de: .embed.create_or_view_at',
         'any'               => '@todo de: .embed.any',
         'select_floor'      => '@todo de: .embed.select_floor',
         'affixes_title'     => '@todo de: .embed.affixes_title',

@@ -43,7 +43,7 @@ $sandbox = $dungeonroute->isSandbox();
                 'controls' => [
                     'draw' => true,
                     'pulls' => true,
-                    'enemyinfo' => true,
+                    'enemyInfo' => true,
                 ],
                 'share' => [
                     'link' => !$sandbox,

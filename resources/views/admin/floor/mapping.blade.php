@@ -37,7 +37,7 @@
                 'header' => true,
                 'controls' => [
                     'draw' => true,
-                    'enemyinfo' => true,
+                    'enemyInfo' => true,
                 ],
             ],
         ])

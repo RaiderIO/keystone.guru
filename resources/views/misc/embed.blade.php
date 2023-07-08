@@ -1,5 +1,7 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
+
+$showStyle = 'regular';
 ?>
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.embed.title')])
 
@@ -8,18 +10,40 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-6">
+            @if($showStyle === 'compact')
             <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
                         'title' => \Illuminate\Support\Str::slug($model->title),
+                        'style' => 'compact',
                         'pulls' => 1,
                         'pullsDefaultState' => 0,
-                        'enemyinfo' => 1
+                        'headerBackgroundColor' => '#0F0',
+                        'mapBackgroundColor' => '#F00',
+                        'showEnemyInfo' => 0,
+                        'showPulls' => 1,
+                        'showEnemyForces' => 0,
+                        'showAffixes' => 0,
                     ]) }}"
                     style="width: 800px; height: 600px; border: none;"></iframe>
-
-{{--            <iframe src="{{url(sprintf('%s/embed', $model->public_key))}}"--}}
-{{--                    style="width: 800px; height: 600px; border: none;"></iframe>--}}
+            @elseif($showStyle === 'regular')
+            <iframe src="{{ route('dungeonroute.embed', [
+                        'dungeon' => $model->dungeon,
+                        'dungeonroute' => $model,
+                        'title' => \Illuminate\Support\Str::slug($model->title),
+                        'style' => 'regular',
+                        'pulls' => 1,
+                        'pullsDefaultState' => 0,
+//                        'headerBackgroundColor' => '#0F0',
+//                        'mapBackgroundColor' => '#F00',
+                        'showEnemyInfo' => 0,
+                        'showPulls' => 1,
+                        'showEnemyForces' => 1,
+                        'showAffixes' => 1,
+                        'showTitle' => 1,
+                    ]) }}"
+                    style="width: 800px; height: 600px; border: none;"></iframe>
+            @endif
         </div>
     </div>
     {{--    <div class="row">--}}

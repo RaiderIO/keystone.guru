@@ -9,7 +9,7 @@
 /** @var bool $showAllEnabled */
 
 // By default, show it if we're not mobile, but allow overrides
-$defaultState           = $defaultState ?? !$isMobile;
+$defaultState           = $defaultState ?? (int)!$isMobile;
 $shouldShowPullsSidebar = $defaultState === 1;
 $hideOnMove             = $hideOnMove ?? $isMobile;
 ?>

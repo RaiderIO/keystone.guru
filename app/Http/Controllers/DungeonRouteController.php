@@ -391,10 +391,17 @@ class DungeonRouteController extends Controller
             ->where('index', $floorIndex)
             ->first();
 
-        $pulls             = $request->get('pulls');
-        $pullsDefaultState = $request->get('pullsDefaultState');
-        $pullsHideOnMove   = $request->get('pullsHideOnMove');
-        $enemyinfo         = $request->get('enemyinfo');
+        $style                 = $request->get('style', 'regular');
+        $pullsDefaultState     = $request->get('pullsDefaultState');
+        $pullsHideOnMove       = $request->get('pullsHideOnMove');
+        $headerBackgroundColor = $request->get('headerBackgroundColor');
+        $mapBackgroundColor    = $request->get('mapBackgroundColor');
+
+        $showEnemyInfo   = $request->get('showEnemyInfo', false);
+        $showPulls       = $request->get('showPulls', true);
+        $showEnemyForces = $request->get('showEnemyForces', true);
+        $showAffixes     = $request->get('showAffixes', true);
+        $showTitle       = $request->get('showTitle', true);
 
         return view('dungeonroute.embed', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -403,11 +410,19 @@ class DungeonRouteController extends Controller
             'floor'        => $floor,
             'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
             'embedOptions' => [
+                'style'                 => $style,
                 // Null if not set - but cast to an bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
-                'pulls'             => $pulls === null || $pulls, // Default true - available
-                'pullsDefaultState' => (int)$pullsDefaultState, // Default false - closed
-                'pullsHideOnMove'   => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
-                'enemyinfo'         => (bool)$enemyinfo, // Default false - not available
+                'pullsDefaultState'     => (int)$pullsDefaultState, // Default false - closed
+                'pullsHideOnMove'       => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
+                'headerBackgroundColor' => $headerBackgroundColor,
+                'mapBackgroundColor'    => $mapBackgroundColor,
+                'show'                  => [
+                    'enemyInfo'   => (bool)$showEnemyInfo, // Default false - not available
+                    'pulls'       => (bool)$showPulls, // Default true - available
+                    'enemyForces' => (bool)$showEnemyForces, // Default true - available
+                    'affixes'     => (bool)$showAffixes, // Default true - available
+                    'title'       => (bool)$showTitle, // Default true - available
+                ],
             ],
         ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class EmbedFormRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class EmbedFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,20 +22,19 @@ class EmbedFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'pulls'             => 'nullable|bool',
-            'pullsDefaultState' => 'nullable|integer',
-            'pullsHideOnMove'   => 'nullable|bool',
-            'enemyinfo'         => 'nullable|bool',
+            'style'                 => ['nullable', Rule::in(['compact', 'regular'])],
+            'pullsDefaultState'     => 'nullable|integer',
+            'pullsHideOnMove'       => 'nullable|bool',
+            'headerBackgroundColor' => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'mapBackgroundColor'    => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'showEnemyInfo'         => 'nullable|bool',
+            'showPulls'             => 'nullable|bool',
+            'showEnemyForces'       => 'nullable|bool',
+            'showAffixes'           => 'nullable|bool',
+            'showTitle'             => 'nullable|bool',
         ];
-    }
-
-    public function messages()
-    {
-        return array_merge(parent::messages(), [
-            'pullsDefaultState.in' => 'sidebarDefaultState must be one of "hidden" or "shown"',
-        ]);
     }
 }
