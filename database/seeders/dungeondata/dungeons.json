@@ -432,6 +432,31 @@
         "floor_count": 3,
         "floors": [
             {
+                "id": 17,
+                "index": 1,
+                "mdt_sub_level": 2,
+                "ui_map_id": null,
+                "name": "dungeons.legion.halls_of_valor.floors.fields_of_the_eternal_hunt",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": -2077.12,
+                "ingame_min_y": 2783.33,
+                "ingame_max_x": -2952.12,
+                "ingame_max_y": 3366.67,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 483,
+                        "floor1_id": 17,
+                        "floor2_id": 16,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
                 "id": 16,
                 "index": 2,
                 "mdt_sub_level": 1,
@@ -457,31 +482,6 @@
                         "floor1_id": 16,
                         "floor2_id": 18,
                         "direction": "down"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
-                "id": 17,
-                "index": 1,
-                "mdt_sub_level": 2,
-                "ui_map_id": null,
-                "name": "dungeons.legion.halls_of_valor.floors.fields_of_the_eternal_hunt",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": -2077.12,
-                "ingame_min_y": 2783.33,
-                "ingame_max_x": -2952.12,
-                "ingame_max_y": 3366.67,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 483,
-                        "floor1_id": 17,
-                        "floor2_id": 16,
-                        "direction": "up"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -3296,8 +3296,27 @@
         "name": "dungeons.wod.auchindoun.name",
         "slug": "auchindoun",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 174,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wod.auchindoun.floors.auchindoun",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 39,
@@ -3309,8 +3328,27 @@
         "name": "dungeons.wod.bloodmaul_slag_mines.name",
         "slug": "bloodmaul-slag-mines",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 175,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wod.bloodmaul_slag_mines.floors.bloodmaul_slag_mines",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 40,
@@ -3515,31 +3553,6 @@
         "floor_count": 3,
         "floors": [
             {
-                "id": 113,
-                "index": 3,
-                "mdt_sub_level": 1,
-                "ui_map_id": null,
-                "name": "dungeons.wotlk.azjol_nerub.floors.the_gilded_gate",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": -462.12,
-                "ingame_min_y": 395,
-                "ingame_max_x": -829.62,
-                "ingame_max_y": 640,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 485,
-                        "floor1_id": 113,
-                        "floor2_id": 112,
-                        "direction": "down"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
                 "id": 111,
                 "index": 1,
                 "mdt_sub_level": 3,
@@ -3590,6 +3603,31 @@
                         "floor1_id": 112,
                         "floor2_id": 113,
                         "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 113,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.azjol_nerub.floors.the_gilded_gate",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": -462.12,
+                "ingame_min_y": 395,
+                "ingame_max_x": -829.62,
+                "ingame_max_y": 640,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 485,
+                        "floor1_id": 113,
+                        "floor2_id": 112,
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -3994,6 +4032,31 @@
         "floor_count": 5,
         "floors": [
             {
+                "id": 126,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.the_oculus.floors.the_oculus",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 414,
+                        "floor1_id": 126,
+                        "floor2_id": 127,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
                 "id": 127,
                 "index": 2,
                 "mdt_sub_level": null,
@@ -4018,31 +4081,6 @@
                         "id": 416,
                         "floor1_id": 127,
                         "floor2_id": 128,
-                        "direction": "up"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
-                "id": 126,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": null,
-                "name": "dungeons.wotlk.the_oculus.floors.the_oculus",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 414,
-                        "floor1_id": 126,
-                        "floor2_id": 127,
                         "direction": "up"
                     }
                 ],
@@ -4310,31 +4348,6 @@
         "floor_count": 2,
         "floors": [
             {
-                "id": 137,
-                "index": 2,
-                "mdt_sub_level": null,
-                "ui_map_id": null,
-                "name": "dungeons.wotlk.utgarde_pinnacle.floors.upper_pinnacle",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 747.56,
-                "ingame_min_y": 157.84,
-                "ingame_max_x": -8.62,
-                "ingame_max_y": 661.96,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 406,
-                        "floor1_id": 137,
-                        "floor2_id": 136,
-                        "direction": "down"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
                 "id": 136,
                 "index": 1,
                 "mdt_sub_level": null,
@@ -4358,6 +4371,31 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 137,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.utgarde_pinnacle.floors.upper_pinnacle",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 747.56,
+                "ingame_min_y": 157.84,
+                "ingame_max_x": -8.62,
+                "ingame_max_y": 661.96,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 406,
+                        "floor1_id": 137,
+                        "floor2_id": 136,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -4371,8 +4409,153 @@
         "name": "dungeons.wotlk.icecrown_citadel.name",
         "slug": "icecrown-citadel",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 8,
+        "floors": [
+            {
+                "id": 176,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.the_lower_citadel",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 177,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.the_rampart_of_skulls",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 178,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.deathbringers_rise",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 179,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.the_frost_queens_lair",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 180,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.the_upper_reach",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 181,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.royal_quarters",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 182,
+                "index": 7,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.the_frozen_throne",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 183,
+                "index": 8,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.icecrown_citadel.floors.frostmourne",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 59,
@@ -4384,8 +4567,27 @@
         "name": "dungeons.wotlk.onyxias_lair.name",
         "slug": "onyxias-lair",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 184,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.onyxias_lair.floors.onyxias_lair",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 60,
@@ -4535,55 +4737,6 @@
                         "count": 10
                     }
                 ]
-            },
-            {
-                "id": 142,
-                "index": 5,
-                "mdt_sub_level": null,
-                "ui_map_id": null,
-                "name": "dungeons.wotlk.naxxramas.floors.the_lower_necropolis",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 4400.09,
-                "ingame_min_y": 2311.34,
-                "ingame_max_x": 2330.28,
-                "ingame_max_y": 3691.22,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 475,
-                        "floor1_id": 142,
-                        "floor2_id": 138,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 476,
-                        "floor1_id": 142,
-                        "floor2_id": 139,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 477,
-                        "floor1_id": 142,
-                        "floor2_id": 140,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 478,
-                        "floor1_id": 142,
-                        "floor2_id": 141,
-                        "direction": "right"
-                    },
-                    {
-                        "id": 479,
-                        "floor1_id": 142,
-                        "floor2_id": 143,
-                        "direction": "up"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
             },
             {
                 "id": 139,
@@ -4942,6 +5095,55 @@
                 ]
             },
             {
+                "id": 142,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.naxxramas.floors.the_lower_necropolis",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 4400.09,
+                "ingame_min_y": 2311.34,
+                "ingame_max_x": 2330.28,
+                "ingame_max_y": 3691.22,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 475,
+                        "floor1_id": 142,
+                        "floor2_id": 138,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 476,
+                        "floor1_id": 142,
+                        "floor2_id": 139,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 477,
+                        "floor1_id": 142,
+                        "floor2_id": 140,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 478,
+                        "floor1_id": 142,
+                        "floor2_id": 141,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 479,
+                        "floor1_id": 142,
+                        "floor2_id": 143,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
                 "id": 143,
                 "index": 6,
                 "mdt_sub_level": null,
@@ -4978,8 +5180,45 @@
         "name": "dungeons.wotlk.crusaders_coliseum_trial_of_the_crusader.name",
         "slug": "crusaders-coliseum-trial-of-the-crusader",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 185,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.crusaders_coliseum_trial_of_the_crusader.floors.the_argent_coliseum",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 186,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.crusaders_coliseum_trial_of_the_crusader.floors.the_icy_depths",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 62,
@@ -4991,8 +5230,27 @@
         "name": "dungeons.wotlk.the_eye_of_eternity.name",
         "slug": "the-eye-of-eternity",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 187,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.the_eye_of_eternity.floors.the_eye_of_eternity",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 63,
@@ -5004,8 +5262,27 @@
         "name": "dungeons.wotlk.the_obsidian_sanctum.name",
         "slug": "the-obsidian-sanctum",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 188,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.the_obsidian_sanctum.floors.the_obsidian_sanctum",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 64,
@@ -5017,8 +5294,27 @@
         "name": "dungeons.wotlk.the_ruby_sanctum.name",
         "slug": "the-ruby-sanctum",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 189,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.the_ruby_sanctum.floors.the_ruby_sanctum",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 65,
@@ -5786,8 +6082,27 @@
         "name": "dungeons.wotlk.vault_of_archavon.name",
         "slug": "vault-of-archavon",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 190,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.wotlk.vault_of_archavon.floors.vault_of_archavon",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 67,
@@ -6562,8 +6877,90 @@
         "name": "dungeons.classic.blackfathom_deeps.name",
         "slug": "blackfathom-deeps",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 3,
+        "floors": [
+            {
+                "id": 191,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.blackfathom_deeps.floors.the_pool_of_ask_ar",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 578,
+                        "floor1_id": 191,
+                        "floor2_id": 192,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 192,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.blackfathom_deeps.floors.moonshrine_sanctum",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 581,
+                        "floor1_id": 192,
+                        "floor2_id": 191,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 582,
+                        "floor1_id": 192,
+                        "floor2_id": 193,
+                        "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 193,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.blackfathom_deeps.floors.the_forgotten_pool",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 580,
+                        "floor1_id": 193,
+                        "floor2_id": 192,
+                        "direction": "left"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 79,
@@ -6575,8 +6972,45 @@
         "name": "dungeons.classic.blackrock_depths.name",
         "slug": "blackrock-depths",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 194,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.blackrock_depths.floors.detention_block",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 195,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.blackrock_depths.floors.shadowforge_city",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 80,
@@ -6588,8 +7022,59 @@
         "name": "dungeons.classic.deadmines.name",
         "slug": "the-deadmines",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 196,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.deadmines.floors.the_deadmines",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 583,
+                        "floor1_id": 196,
+                        "floor2_id": 197,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 197,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.deadmines.floors.ironclad_cove",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 585,
+                        "floor1_id": 197,
+                        "floor2_id": 196,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 81,
@@ -6601,8 +7086,158 @@
         "name": "dungeons.classic.dire_maul.name",
         "slug": "dire-maul",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 6,
+        "floors": [
+            {
+                "id": 198,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul.floors.gordok_commons",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 199,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul.floors.capital_gardens",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 590,
+                        "floor1_id": 199,
+                        "floor2_id": 200,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 591,
+                        "floor1_id": 199,
+                        "floor2_id": 201,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 200,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul.floors.court_of_the_highborne",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 589,
+                        "floor1_id": 200,
+                        "floor2_id": 199,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 201,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul.floors.prison_of_immol_thar",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 592,
+                        "floor1_id": 201,
+                        "floor2_id": 199,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 202,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul.floors.warpwood_quarter",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 586,
+                        "floor1_id": 202,
+                        "floor2_id": 203,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 203,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul.floors.the_shrine_of_eldretharr",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 587,
+                        "floor1_id": 203,
+                        "floor2_id": 202,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 82,
@@ -6614,8 +7249,121 @@
         "name": "dungeons.classic.gnomeregan.name",
         "slug": "gnomeregan",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 4,
+        "floors": [
+            {
+                "id": 204,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.gnomeregan.floors.the_hall_of_gears",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 594,
+                        "floor1_id": 204,
+                        "floor2_id": 205,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 205,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.gnomeregan.floors.the_dormitory",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 595,
+                        "floor1_id": 205,
+                        "floor2_id": 204,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 596,
+                        "floor1_id": 205,
+                        "floor2_id": 206,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 206,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.gnomeregan.floors.launch_bay",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 598,
+                        "floor1_id": 206,
+                        "floor2_id": 205,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 599,
+                        "floor1_id": 206,
+                        "floor2_id": 207,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 207,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.gnomeregan.floors.tinkers_court",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 600,
+                        "floor1_id": 207,
+                        "floor2_id": 206,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 83,
@@ -6627,8 +7375,213 @@
         "name": "dungeons.classic.lower_blackrock_spire.name",
         "slug": "lower-blackrock-spire",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 6,
+        "floors": [
+            {
+                "id": 208,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.lower_blackrock_spire.floors.tazz_alor",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 606,
+                        "floor1_id": 208,
+                        "floor2_id": 209,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 607,
+                        "floor1_id": 208,
+                        "floor2_id": 210,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 209,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.lower_blackrock_spire.floors.skitterweb_tunnels",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 609,
+                        "floor1_id": 209,
+                        "floor2_id": 208,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 610,
+                        "floor1_id": 209,
+                        "floor2_id": 210,
+                        "direction": "left"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 210,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.lower_blackrock_spire.floors.hordemar_city",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 623,
+                        "floor1_id": 210,
+                        "floor2_id": 208,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 624,
+                        "floor1_id": 210,
+                        "floor2_id": 209,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 625,
+                        "floor1_id": 210,
+                        "floor2_id": 211,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 626,
+                        "floor1_id": 210,
+                        "floor2_id": 213,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 211,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.lower_blackrock_spire.floors.hall_of_blackhand",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 614,
+                        "floor1_id": 211,
+                        "floor2_id": 210,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 615,
+                        "floor1_id": 211,
+                        "floor2_id": 212,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 212,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.lower_blackrock_spire.floors.halycons_lair",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 620,
+                        "floor1_id": 212,
+                        "floor2_id": 210,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 621,
+                        "floor1_id": 212,
+                        "floor2_id": 211,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 622,
+                        "floor1_id": 212,
+                        "floor2_id": 213,
+                        "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 213,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.lower_blackrock_spire.floors.chamber_of_battle",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 627,
+                        "floor1_id": 213,
+                        "floor2_id": 210,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 628,
+                        "floor1_id": 213,
+                        "floor2_id": 212,
+                        "direction": "left"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 84,
@@ -6640,8 +7593,45 @@
         "name": "dungeons.classic.maraudon.name",
         "slug": "maraudon",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 214,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.maraudon.floors.caverns_of_maraudon",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 215,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.maraudon.floors.zaetars_grave",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 85,
@@ -6653,8 +7643,27 @@
         "name": "dungeons.classic.ragefire_chasm.name",
         "slug": "ragefire-chasm",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 216,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.ragefire_chasm.floors.ragefire_chasm",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 86,
@@ -6666,8 +7675,27 @@
         "name": "dungeons.classic.razorfen_downs.name",
         "slug": "razorfen-downs",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 217,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.razorfen_downs.floors.razorfen_downs",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 87,
@@ -6679,8 +7707,27 @@
         "name": "dungeons.classic.razorfen_kraul.name",
         "slug": "razorfen-kraul",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 218,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.razorfen_kraul.floors.razorfen_kraul",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 88,
@@ -6692,8 +7739,27 @@
         "name": "dungeons.classic.scarlet_monastery_armory.name",
         "slug": "scarlet-monastery-armory",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 219,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scarlet_monastery_armory.floors.",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 89,
@@ -6705,8 +7771,27 @@
         "name": "dungeons.classic.scarlet_monastery_cathedral.name",
         "slug": "scarlet-monastery-cathedral",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 220,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scarlet_monastery_cathedral.floors.",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 90,
@@ -6718,8 +7803,27 @@
         "name": "dungeons.classic.scarlet_monastery_graveyard.name",
         "slug": "scarlet-monastery-graveyard",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 221,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scarlet_monastery_graveyard.floors.",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 91,
@@ -6731,8 +7835,27 @@
         "name": "dungeons.classic.scarlet_monastery_library.name",
         "slug": "scarlet-monastery-library",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 222,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scarlet_monastery_library.floors.",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 92,
@@ -6744,8 +7867,81 @@
         "name": "dungeons.classic.scholomance.name",
         "slug": "scholomance",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 4,
+        "floors": [
+            {
+                "id": 223,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scholomance.floors.the_reliquary",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 224,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scholomance.floors.chamber_of_summoning",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 225,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scholomance.floors.the_upper_study",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 226,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.scholomance.floors.headmasters_story",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 93,
@@ -6757,8 +7953,135 @@
         "name": "dungeons.classic.shadowfang_keep.name",
         "slug": "shadowfang-keep",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 7,
+        "floors": [
+            {
+                "id": 227,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.the_courtyard",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 228,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.dining_hall",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 229,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.the_vacant_den",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 230,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.lower_observatory",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 231,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.upper_observatory",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 232,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.lord_godfreys_chamber",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 233,
+                "index": 7,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.shadowfang_keep.floors.the_wall_walk",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 94,
@@ -6770,8 +8093,45 @@
         "name": "dungeons.classic.stratholme.name",
         "slug": "stratholme",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 234,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.stratholme.floors.crusaders_square",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 235,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.stratholme.floors.the_gauntlet",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 95,
@@ -6783,8 +8143,27 @@
         "name": "dungeons.classic.the_stockade.name",
         "slug": "the-stockade",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 236,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.the_stockade.floors.the_stockade",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 96,
@@ -6796,8 +8175,27 @@
         "name": "dungeons.classic.the_temple_of_atal_hakkar.name",
         "slug": "the-temple-of-atalhakkar",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 237,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.the_temple_of_atal_hakkar.floors.the_temple_of_atal_hakkar",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 97,
@@ -6809,8 +8207,45 @@
         "name": "dungeons.classic.uldaman.name",
         "slug": "uldaman",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 238,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.uldaman.floors.hall_of_the_keepers",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 239,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.uldaman.floors.khaz_goroths_seat",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 98,
@@ -6822,8 +8257,27 @@
         "name": "dungeons.classic.wailing_caverns.name",
         "slug": "wailing-caverns",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 240,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.wailing_caverns.floors.wailing_caverns",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     },
     {
         "id": 99,
@@ -6835,7 +8289,26 @@
         "name": "dungeons.classic.zul_farrak.name",
         "slug": "zulfarrak",
         "speedrun_enabled": 0,
-        "floor_count": 0,
-        "floors": []
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 241,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.zul_farrak.floors.zul_farrak",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     }
 ]
