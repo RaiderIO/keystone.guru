@@ -7082,37 +7082,19 @@
         "zone_id": 2557,
         "map_id": 429,
         "mdt_id": 123,
-        "key": "dire_maul",
-        "name": "dungeons.classic.dire_maul.name",
-        "slug": "dire-maul",
+        "key": "dire_maul_west",
+        "name": "dungeons.classic.dire_maul_west.name",
+        "slug": "dire-maul-west",
         "speedrun_enabled": 0,
-        "floor_count": 6,
+        "floor_count": 3,
         "floors": [
             {
-                "id": 198,
+                "id": 199,
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "dungeons.classic.dire_maul.floors.gordok_commons",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
-                "id": 199,
-                "index": 2,
-                "mdt_sub_level": null,
-                "ui_map_id": null,
-                "name": "dungeons.classic.dire_maul.floors.capital_gardens",
-                "default": 0,
+                "name": "dungeons.classic.dire_maul_west.floors.capital_gardens",
+                "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "ingame_min_x": 0,
@@ -7122,13 +7104,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 590,
+                        "id": 636,
                         "floor1_id": 199,
                         "floor2_id": 200,
                         "direction": "up"
                     },
                     {
-                        "id": 591,
+                        "id": 637,
                         "floor1_id": 199,
                         "floor2_id": 201,
                         "direction": "down"
@@ -7139,10 +7121,10 @@
             },
             {
                 "id": 200,
-                "index": 3,
+                "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "dungeons.classic.dire_maul.floors.court_of_the_highborne",
+                "name": "dungeons.classic.dire_maul_west.floors.court_of_the_highborne",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -7164,10 +7146,10 @@
             },
             {
                 "id": 201,
-                "index": 4,
+                "index": 3,
                 "mdt_sub_level": null,
                 "ui_map_id": null,
-                "name": "dungeons.classic.dire_maul.floors.prison_of_immol_thar",
+                "name": "dungeons.classic.dire_maul_west.floors.prison_of_immol_thar",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -7181,56 +7163,6 @@
                         "id": 592,
                         "floor1_id": 201,
                         "floor2_id": 199,
-                        "direction": "up"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
-                "id": 202,
-                "index": 5,
-                "mdt_sub_level": null,
-                "ui_map_id": null,
-                "name": "dungeons.classic.dire_maul.floors.warpwood_quarter",
-                "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 586,
-                        "floor1_id": 202,
-                        "floor2_id": 203,
-                        "direction": "down"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
-                "id": 203,
-                "index": 6,
-                "mdt_sub_level": null,
-                "ui_map_id": null,
-                "name": "dungeons.classic.dire_maul.floors.the_shrine_of_eldretharr",
-                "default": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "floorcouplings": [
-                    {
-                        "id": 587,
-                        "floor1_id": 203,
-                        "floor2_id": 202,
                         "direction": "up"
                     }
                 ],
@@ -8348,6 +8280,102 @@
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 100,
+        "expansion_id": 4,
+        "zone_id": 2557,
+        "map_id": 429,
+        "mdt_id": 123,
+        "key": "dire_maul_north",
+        "name": "dungeons.classic.dire_maul_north.name",
+        "slug": "dire-maul-north",
+        "speedrun_enabled": 0,
+        "floor_count": 1,
+        "floors": [
+            {
+                "id": 198,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul_north.floors.gordok_commons",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 101,
+        "expansion_id": 4,
+        "zone_id": 2557,
+        "map_id": 429,
+        "mdt_id": 123,
+        "key": "dire_maul_east",
+        "name": "dungeons.classic.dire_maul_east.name",
+        "slug": "dire-maul-east",
+        "speedrun_enabled": 0,
+        "floor_count": 2,
+        "floors": [
+            {
+                "id": 202,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul_east.floors.warpwood_quarter",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 586,
+                        "floor1_id": 202,
+                        "floor2_id": 203,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 203,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": null,
+                "name": "dungeons.classic.dire_maul_east.floors.the_shrine_of_eldretharr",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "floorcouplings": [
+                    {
+                        "id": 587,
+                        "floor1_id": 203,
+                        "floor2_id": 202,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

@@ -1,0 +1,67 @@
+[
+    {
+        "mapping_version_id": 163,
+        "floor_id": 199,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -131.12667859648,
+        "lng": 359.5373826413,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 163,
+        "floor_id": 199,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -184.44790059837,
+        "lng": 359.10210735965,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 163,
+        "floor_id": 199,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -56.75,
+        "lng": 154,
+        "comment": "Crystal of Immol'Thar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 163,
+        "floor_id": 199,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -216,
+        "lng": 154.5,
+        "comment": "Crystal of Immol'Thar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 163,
+        "floor_id": 199,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -136.40413027615,
+        "lng": 274.9524609073,
+        "comment": "Crystal of Immol'Thar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
