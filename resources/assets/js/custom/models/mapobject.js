@@ -339,6 +339,12 @@ class MapObject extends Signalable {
         }).off('show.bs.collapse').on('show.bs.collapse', function (e) {
             let category = $(e.target).data('category');
             Cookies.set(`map_object_category_visibility_${category}`, 1);
+        }).find('.collapse').each(function(index, element){
+            let $collapse = $(element);
+            let category = $collapse.data('category');
+            
+            // When this popup opens, restore the shown/hidden state of the category 
+            $collapse.collapse(Cookies.get(`map_object_category_visibility_${category}`) === '1' ? 'show' : 'hide');
         });
     }
 
@@ -503,6 +509,8 @@ class MapObject extends Signalable {
                 } else {
                     let visible = Cookies.get(`map_object_category_visibility_${category}`);
                     visible = typeof visible === 'undefined' ? 1 : visible;
+                    
+                    console.log(visible);
 
                     resultHtml += categoryTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
@@ -512,7 +520,7 @@ class MapObject extends Signalable {
                         map_object_name: mapObjectName,
                         map_object_name_pretty: mapObjectNamePretty,
                         readonly: this.map.options.readonly,
-                        show: visible === 1
+                        show: visible === '1'
                     }));
                 }
             }
