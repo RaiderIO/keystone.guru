@@ -3,6 +3,8 @@
 /** @var $dungeonroute \App\Models\DungeonRoute|null */
 /** @var $livesession \App\Models\LiveSession|null */
 /** @var $mappingVersion \App\Models\Mapping\MappingVersion|null */
+/** @var $dungeon \App\Models\Dungeon|null */
+/** @var $floor \App\Models\Floor|null */
 /** @var $edit bool */
 $echo        = $echo ?? false;
 $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;

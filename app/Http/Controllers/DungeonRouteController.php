@@ -8,6 +8,7 @@ use App\Http\Requests\DungeonRoute\EmbedFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeRequest;
 use App\Jobs\RefreshEnemyForces;
 use App\Logic\MapContext\MapContextDungeonRoute;
+use App\Logic\MapContext\MapContextDungeonRouteCompare;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
@@ -529,6 +530,42 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
+        ]);
+    }
+
+    /**
+     * @param Request      $request
+     * @param Dungeon      $dungeon
+     * @param DungeonRoute $dungeonRouteA
+     * @param DungeonRoute $dungeonRouteB
+     * @return Application|Factory|View
+     * @throws InvalidArgumentException
+     */
+    public function compare(Request $request, Dungeon $dungeon, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB)
+    {
+        if ($dungeon->id !== $dungeonRouteA->dungeon_id) {
+            throw new Exception('Route A does not have the same dungeon!');
+        }
+
+        if ($dungeon->id !== $dungeonRouteB->dungeon_id) {
+            throw new Exception('Route B does not have the same dungeon!');
+        }
+
+        if ($dungeonRouteA->mapping_version_id !== $dungeonRouteB->mapping_version_id) {
+            throw new Exception('Route A and route B do not have the same mapping version!');
+        }
+
+        /** @var Floor $defaultFloor */
+        $defaultFloor = $dungeon->floors()->where('default', true)->first();
+
+        $dungeonRoutes = collect([$dungeonRouteA, $dungeonRouteB]);
+
+        return view('dungeonroute.compare', [
+            'dungeon'        => $dungeon,
+            'dungeonRoutes'  => $dungeonRoutes,
+            'floor'          => $defaultFloor,
+            'mappingVersion' => $dungeonRouteA->mappingVersion,
+            'mapContext'     => (new MapContextDungeonRouteCompare($dungeonRoutes, $dungeonRouteA->mappingVersion, $defaultFloor))->getProperties(),
         ]);
     }
 }

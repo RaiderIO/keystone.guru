@@ -9,7 +9,6 @@ if (count($affixes) == 0) {
     $affixes         = [-1 => __('views/dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
-$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 ?>
 @section('scripts')
     @parent
@@ -34,7 +33,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
-            'dungeon' => $dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'edit' => false,
             'floorId' => $floor->id,

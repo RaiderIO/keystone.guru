@@ -56,6 +56,8 @@ class StateManager extends Signalable {
             this._mapContext = new MapContextLiveSession(mapContext);
         } else if (mapContext.type === 'dungeon') {
             this._mapContext = new MapContextDungeon(mapContext);
+        } if (mapContext.type === 'dungeonRouteCompare') {
+            this._mapContext = new MapContextDungeonRouteCompare(mapContext);
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }

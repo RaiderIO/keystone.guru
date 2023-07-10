@@ -42,6 +42,9 @@ return [
             'any' => 'Any',
         ],
     ],
+    'compare'        => [
+        'title' => 'Compare :count routes',
+    ],
     'edit'           => [
         'title'                                   => 'Edit %s',
         'linkpreview_title'                       => '%s | Keystone.guru',

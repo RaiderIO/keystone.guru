@@ -60,18 +60,11 @@ class MapContextDungeonRouteCompare extends MapContext
 
     public function getProperties(): array
     {
-        /** @var OverpulledEnemyServiceInterface $overpulledEnemyService */
-        $overpulledEnemyService = App::make(OverpulledEnemyServiceInterface::class);
-
-        $routeCorrection = $overpulledEnemyService->getRouteCorrection($this->context);
-
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonRoute), [
-            'liveSessionPublicKey' => $this->context->public_key,
-            'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),
-            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
-            'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
-        ]);
+        return array_merge(parent::getProperties(),
+            $this->getDungeonRoutesProperties(
+                $this->dungeonRoutes
+            )->toArray()
+        );
     }
 
     /**

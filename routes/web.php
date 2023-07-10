@@ -558,6 +558,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     // View any dungeon route (catch all)
 
+    Route::group(['prefix' => '/compare/{dungeon}'], function () {
+        Route::get('/{dungeonRouteA}/{dungeonRouteB}', [DungeonRouteController::class, 'compare'])->name('dungeonroute.compare');
+    });
+
     Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
         Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.viewnotitle');
 
