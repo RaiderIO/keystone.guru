@@ -4,13 +4,14 @@
 /** @var \App\Models\Dungeon $dungeon */
 /** @var bool $embed */
 /** @var bool $isMobile */
-/** @var bool $defaultState */
+/** @var integer $defaultState */
 /** @var bool $hideOnMove */
 /** @var bool $showAllEnabled */
 
 // By default, show it if we're not mobile, but allow overrides
-$defaultState = $defaultState ?? !$isMobile;
-$hideOnMove   = $hideOnMove ?? $isMobile;
+$defaultState           = $defaultState ?? (int)!$isMobile;
+$shouldShowPullsSidebar = $defaultState === 1;
+$hideOnMove             = $hideOnMove ?? $isMobile;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'defaultState' => $defaultState,
@@ -34,11 +35,11 @@ $hideOnMove   = $hideOnMove ?? $isMobile;
      class="route_manipulation_tools top right row no-gutters map_fade_out
              {{ $embed ? 'embed' : '' }}
      {{ $isMobile ? 'mobile' : '' }}
-     {{ $defaultState ? 'active' : '' }}
+     {{ $shouldShowPullsSidebar ? 'active' : '' }}
          ">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
         <div id="pulls_sidebar_trigger" class="handle">
-            <i class="fas {{ $defaultState ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
+            <i class="fas {{ $shouldShowPullsSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
         @if($edit)

@@ -1,24 +1,34 @@
 <?php
 /**
- * @var \App\User $user
- * @var \App\Logic\MapContext\MapContext $mapContext
- * @var \App\Models\Dungeon $dungeon
+ * @var \App\User                          $user
+ * @var \App\Logic\MapContext\MapContext   $mapContext
+ * @var \App\Models\Dungeon                $dungeon
  * @var \App\Models\Mapping\MappingVersion $mappingVersion
- * @var \App\Models\DungeonRoute|null $dungeonroute
- * @var \App\Models\LiveSession|null $livesession
- * @var array $show
- * @var bool $adFree
+ * @var \App\Models\DungeonRoute|null      $dungeonroute
+ * @var \App\Models\LiveSession|null       $livesession
+ * @var array                              $show
+ * @var bool                               $adFree
+ * @var string|null                        $mapBackgroundColor
  */
 
-$user             = Auth::user();
-$isAdmin          = isset($admin) && $admin;
-$embed            = isset($embed) && $embed;
-$edit             = isset($edit) && $edit;
-$mapClasses       = $mapClasses ?? '';
-$dungeonroute     = $dungeonroute ?? null;
-$livesession      = $livesession ?? null;
-$mappingVersion   = $mappingVersion ?? null;
-$show['controls'] = $show['controls'] ?? [];
+$user               = Auth::user();
+$isAdmin            = isset($admin) && $admin;
+$embed              = isset($embed) && $embed;
+$edit               = isset($edit) && $edit;
+$mapClasses         = $mapClasses ?? '';
+$dungeonroute       = $dungeonroute ?? null;
+$livesession        = $livesession ?? null;
+$mappingVersion     = $mappingVersion ?? null;
+$mapBackgroundColor = $mapBackgroundColor ?? null;
+
+// Ensure default values for showing/hiding certain elements
+$show['controls']                = $show['controls'] ?? [];
+$show['controls']['enemyInfo']   = $show['controls']['enemyInfo'] ?? true;
+$show['controls']['enemyForces'] = $show['controls']['enemyForces'] ?? true;
+$show['controls']['pulls']       = $show['controls']['pulls'] ?? true;
+$show['controls']['draw']        = $show['controls']['draw'] ?? false;
+$show['controls']['view']        = $show['controls']['view'] ?? false;
+$show['controls']['live']        = $show['controls']['live'] ?? false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -76,6 +86,7 @@ if ($isAdmin) {
     'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
     'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
     'noUI' => $noUI,
+    'showControls' => $show['controls'],
     'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
@@ -123,10 +134,12 @@ if ($isAdmin) {
                              data-toggle="tooltip" title="{{ __($faction->name) }}"/>
                 </a>
 
+
             @endforeach
             </div>
             <ul class="leaflet-draw-actions"></ul>
         </div>
+
 
         </script>
     @endif
@@ -169,13 +182,14 @@ if ($isAdmin) {
         ])
     @endif
 
-    @if(isset($show['controls']['enemyinfo']) && $show['controls']['enemyinfo'])
+    @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
         @include('common.maps.controls.enemyinfo')
     @endif
 @endif
 
 
-<div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
+<div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto"
+     style="background-color: {{ $mapBackgroundColor === null ? 'inherit' : $mapBackgroundColor }}">
 
 </div>
 @if(!$noUI)
@@ -194,11 +208,11 @@ if ($isAdmin) {
         @endif
     </footer>
 
-    <?php
+        <?php
         /*
         So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
         have to fight for height in the sidebar. This will only make it worse, so don't render this ad
-        */?>
+        */ ?>
     @if(!$adFree && $showAds && !$dungeon->speedrun_enabled)
         <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">
             @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])

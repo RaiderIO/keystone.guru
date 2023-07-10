@@ -519,7 +519,7 @@ class DungeonMap extends Signalable {
         let mapControls = [];
         // No UI = no map controls at all
         if (!this.options.noUI) {
-            if (this.options.edit && !this.options.readonly) {
+            if (this.options.edit && !this.options.readonly && this.options.showControls.draw) {
                 mapControls.push(new DrawControls(this, editableLayers));
             }
 
@@ -527,7 +527,7 @@ class DungeonMap extends Signalable {
             if (!getState().isMapAdmin()) {
                 if (getState().getMapContext().isDungeonSpeedrunEnabled()) {
                     mapControls.push(new DungeonSpeedrunRequiredNpcsControls(this));
-                } else {
+                } else if(this.options.showControls.enemyForces) {
                     mapControls.push(new EnemyForcesControls(this));
                 }
             }

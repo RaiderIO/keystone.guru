@@ -46,7 +46,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                 'controls' => [
                     'view' => true,
                     'pulls' => true,
-                    'enemyinfo' => true,
+                    'enemyInfo' => true,
                 ],
                 'share' => [
                     'link' => !$dungeonroute->isSandbox(),

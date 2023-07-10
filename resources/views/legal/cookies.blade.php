@@ -85,7 +85,7 @@
             <td>
                 Uniquely identifies you as a secure user in an insecure environment, for more information visit the
                 <a href="https://support.cloudflare.com/hc/en-us/articles/200170156-What-does-the-Cloudflare-cfduid-cookie-do-">
-                    <i class="fas fa-external-link"></i> Cloudflare Support Article</a>.
+                    <i class="fas fa-external-link-alt"></i> Cloudflare Support Article</a>.
             </td>
         </tr>
         <tr>
@@ -105,7 +105,7 @@
             <td>
                 Prevents
                 <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">
-                    <i class="fas fa-external-link"></i> Cross-site request forgery</a>.
+                    <i class="fas fa-external-link-alt"></i> Cross-site request forgery</a>.
             </td>
         </tr>
         <tr>

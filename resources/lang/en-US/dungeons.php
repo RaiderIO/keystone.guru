@@ -28,13 +28,23 @@ return [
                 'ironclad_cove' => 'Ironclad Cove',
             ],
         ],
-        'dire_maul'                   => [
-            'name'   => 'Dire Maul',
+        'dire_maul_west'                   => [
+            'name'   => 'Dire Maul West',
             'floors' => [
-                'gordok_commons'           => 'Gordok Commons',
                 'capital_gardens'          => 'Capital Gardens',
                 'court_of_the_highborne'   => 'Court of the Highborne',
                 'prison_of_immol_thar'     => 'Prison of Immol\'Thar',
+            ],
+        ],
+        'dire_maul_north'                   => [
+            'name'   => 'Dire Maul North',
+            'floors' => [
+                'gordok_commons'           => 'Gordok Commons',
+            ],
+        ],
+        'dire_maul_east'                   => [
+            'name'   => 'Dire Maul East',
+            'floors' => [
                 'warpwood_quarter'         => 'Warpwood Quarter',
                 'the_shrine_of_eldretharr' => 'The Shrine of Eldretharr',
             ],
