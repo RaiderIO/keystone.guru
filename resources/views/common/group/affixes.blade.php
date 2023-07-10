@@ -33,7 +33,7 @@ $allAffixGroupsWithSeasons = $allAffixGroups
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
-    'dungeonroute'      => $dungeonroute ?? null,
+    'hasDungeonRoute'   => $dungeonroute !== null,
     'selectSelector'    => '#' . $id,
     'dungeonSelector'   => $dungeonSelector,
     'teemingSelector'   => $teemingSelector,

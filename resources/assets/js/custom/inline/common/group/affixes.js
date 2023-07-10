@@ -14,7 +14,7 @@ class CommonGroupAffixes extends InlineCode {
 
         this.currentSelection = null;
         this.currentSelectionExpansionKey = null;
-        this.hasDungeonRoute = typeof this.options.dungeonroute !== 'undefined' && this.options.dungeonroute !== null;
+        this.hasDungeonRoute = this.options.hasDungeonRoute;
 
         this._automaticSeasonalIndexChange = this.hasDungeonRoute;
 
