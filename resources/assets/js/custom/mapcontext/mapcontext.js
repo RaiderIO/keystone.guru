@@ -457,12 +457,4 @@ class MapContext extends Signalable {
     getMappingVersion() {
         return this._options.mappingVersion;
     }
-
-    /**
-     *
-     * @returns {String}
-     */
-    getMappingVersionUpgradeUrl() {
-        return this._options.mappingVersionUpgradeUrl;
-    }
 }

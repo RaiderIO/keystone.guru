@@ -219,4 +219,12 @@ class MapContextDungeonRoute extends MapContext {
     setLevelMax(levelMax) {
         this._activeDungeonRoute.levelMax = levelMax;
     }
+
+    /**
+     *
+     * @returns {String}
+     */
+    getMappingVersionUpgradeUrl() {
+        return this._activeDungeonRoute.mappingVersionUpgradeUrl;
+    }
 }
