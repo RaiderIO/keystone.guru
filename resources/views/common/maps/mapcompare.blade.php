@@ -97,6 +97,10 @@ $showAttribution = isset($showAttribution) && $showAttribution;
     @endif
 @endif
 
+@include('common.maps.controls.compare', [
+    'floors' => $dungeon->floors,
+    'selectedFloorId' => $floor->id,
+])
 
 <div id="map" class="virtual-tour-element {{$mapClasses}}" data-position="auto">
 

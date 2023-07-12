@@ -1,5 +1,6 @@
 <?php
 /** @var \Illuminate\Support\Collection $floors */
+/** @var int $selectedFloorId */
 ?>
 <div class="row no-gutters">
     <div class="col btn-group dropright">

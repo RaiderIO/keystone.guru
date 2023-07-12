@@ -2,6 +2,7 @@
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\DungeonRoute $dungeonroute */
+/** @var int $selectedFloorId */
 ?>
 <nav class="route_manipulation_tools left h-100 row no-gutters map_fade_out">
     <div class="bg-header" style="background-color: unset !important;">
@@ -35,7 +36,7 @@
         </div>
 
         <div id="edit_route_draw_map_actions_container" class="mb-2">
-            @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])
+            @include('common.maps.controls.elements.floorswitch', ['floors' => $floors, 'selectedFloorId' => $selectedFloorId])
 
             @include('common.maps.controls.elements.enemyvisualtype')
 
