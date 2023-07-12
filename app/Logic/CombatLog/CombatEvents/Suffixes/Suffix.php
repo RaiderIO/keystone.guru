@@ -12,10 +12,13 @@ abstract class Suffix implements HasParameters
 {
     use ValidatesParameterCount;
 
+    public const SUFFIX_DAMAGE_LANDED_SUPPORT = 'DAMAGE_LANDED_SUPPORT';
     public const SUFFIX_DAMAGE_LANDED         = 'DAMAGE_LANDED';
+    public const SUFFIX_DAMAGE_SUPPORT        = 'DAMAGE_SUPPORT';
     public const SUFFIX_DAMAGE                = 'DAMAGE';
     public const SUFFIX_MISSED                = 'MISSED';
     public const SUFFIX_HEAL_ABSORBED         = 'HEAL_ABSORBED';
+    public const SUFFIX_HEAL_SUPPORT          = 'HEAL_SUPPORT';
     public const SUFFIX_HEAL                  = 'HEAL';
     public const SUFFIX_ABSORBED              = 'ABSORBED';
     public const SUFFIX_ENERGIZE              = 'ENERGIZE';
@@ -47,10 +50,13 @@ abstract class Suffix implements HasParameters
     public const SUFFIX_EMPOWER_END           = 'EMPOWER_END';
 
     public const SUFFIX_ALL = [
+        self::SUFFIX_DAMAGE_LANDED_SUPPORT,
         self::SUFFIX_DAMAGE_LANDED,
+        self::SUFFIX_DAMAGE_SUPPORT,
         self::SUFFIX_DAMAGE,
         self::SUFFIX_MISSED,
         self::SUFFIX_HEAL_ABSORBED,
+        self::SUFFIX_HEAL_SUPPORT,
         self::SUFFIX_HEAL,
         self::SUFFIX_ABSORBED,
         self::SUFFIX_ENERGIZE,
@@ -83,10 +89,13 @@ abstract class Suffix implements HasParameters
     ];
 
     private const SUFFIX_CLASS_MAPPING = [
+        self::SUFFIX_DAMAGE_LANDED_SUPPORT => DamageLandedSupport::class,
         self::SUFFIX_DAMAGE_LANDED         => DamageLanded::class,
+        self::SUFFIX_DAMAGE_SUPPORT        => DamageSupport::class,
         self::SUFFIX_DAMAGE                => Damage::class,
         self::SUFFIX_MISSED                => Missed::class,
         self::SUFFIX_HEAL_ABSORBED         => HealAbsorbed::class,
+        self::SUFFIX_HEAL_SUPPORT          => HealSupport::class,
         self::SUFFIX_HEAL                  => Heal::class,
         self::SUFFIX_ABSORBED              => Absorbed::class,
         self::SUFFIX_ENERGIZE              => Energize::class,
