@@ -107,7 +107,6 @@ class Damage extends Suffix
         return $this->crushing;
     }
 
-
     /**
      * @param array $parameters
      * @return HasParameters
@@ -120,17 +119,15 @@ class Damage extends Suffix
         $this->rawAmount = $parameters[1];
         $this->overKill  = $parameters[2];
         $this->school    = $parameters[3];
-        $this->resisted  = $parameters[4];
-        $this->blocked   = $parameters[5];
-        $this->absorbed  = $parameters[6];
+        $this->resisted  = $parameters[4] === 'nil' ? 0 : $parameters[4];
+        $this->blocked   = $parameters[5] === 'nil' ? 0 : $parameters[5];
+        $this->absorbed  = $parameters[6] === 'nil' ? 0 : $parameters[6];
         $this->critical  = $parameters[7] !== 'nil';
         $this->glancing  = $parameters[8] !== 'nil';
         $this->crushing  = $parameters[9] !== 'nil';
 
-
         return $this;
     }
-
 
     /**
      * @return int
