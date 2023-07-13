@@ -30,3 +30,4 @@ _ide_helper.php
 
 # Docker compose
 docker-compose/mysql
+docker-compose/mysql-combatlog

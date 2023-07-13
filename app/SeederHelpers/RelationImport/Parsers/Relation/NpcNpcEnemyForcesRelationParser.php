@@ -45,9 +45,7 @@ class NpcNpcEnemyForcesRelationParser implements RelationParserInterface
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
-        foreach ($value as $npcEnemyForces) {
-            NpcEnemyForces::insert($npcEnemyForces);
-        }
+        NpcEnemyForces::insert($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

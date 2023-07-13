@@ -54,6 +54,8 @@ class Update extends Command
     public function handle()
     {
         $environment = $this->argument('environment');
+        
+        $this->info(sprintf('Updating Keystone.guru %s environment', $environment));
 
         // Regenerate IDE helper
         $this->call('clear-compiled');

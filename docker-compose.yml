@@ -8,12 +8,13 @@ services:
     container_name: keystone.guru-app
     depends_on: 
       - db
-      - nginx
+      - db-combatlog
       - redis
-    restart: unless-stopped
+    restart: no
     working_dir: /var/www/
     volumes:
       - ./:/var/www
+      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     networks:
       - keystone.guru
 
@@ -28,8 +29,28 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    command:
+      - '--default-authentication-plugin=mysql_native_password'
     volumes:
       - ./docker-compose/mysql:/var/lib/mysql
+    networks:
+      - keystone.guru
+  
+  db-combatlog:
+    image: mysql:5.7
+    container_name: keystone.guru-db-combatlog
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_COMBATLOG_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+      MYSQL_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+      MYSQL_USER: ${DB_COMBATLOG_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    command:
+      - '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - ./docker-compose/mysql-combatlog:/var/lib/mysql
     networks:
       - keystone.guru
 
@@ -37,8 +58,11 @@ services:
     image: nginx:alpine
     container_name: keystone.guru-nginx
     restart: unless-stopped
+    depends_on:
+      # It complains about php-fpm not being there if this is not running first
+      - app
     ports:
-      - 8000:80
+      - "8000:80"
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
@@ -46,7 +70,7 @@ services:
       - keystone.guru
 
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     container_name: keystone.guru-redis
     ports:
      - "6379:6379"
