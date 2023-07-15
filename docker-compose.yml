@@ -62,7 +62,7 @@ services:
       # It complains about php-fpm not being there if this is not running first
       - app
     ports:
-      - "8000:80"
+      - "8008:80"
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/

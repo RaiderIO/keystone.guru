@@ -15,6 +15,7 @@
 /resouces/assets/js/handlebars.js
 /resouces/assets/js/precompile.js
 /storage/*.key
+/storage/debugbar/*.json
 /vendor
 /version
 /.idea
