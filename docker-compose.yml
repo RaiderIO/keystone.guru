@@ -2,7 +2,7 @@ version: "3.7"
 services:
   app:
     build:
-      context: ./
+      context: docker-compose/app
       dockerfile: Dockerfile
     image: keystone.guru
     container_name: keystone.guru-app
@@ -15,6 +15,22 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - keystone.guru
+
+  laravel-echo-server:
+    build:
+      context: docker-compose/laravel-echo-server
+      dockerfile: Dockerfile
+    image: laravel-echo-server
+    container_name: keystone.guru-laravel-echo-server
+    depends_on:
+      - redis
+    restart: no
+    ports:
+      - "6001:6001"
+    volumes:
+      - ./:/app
     networks:
       - keystone.guru
 
@@ -61,6 +77,7 @@ services:
     depends_on:
       # It complains about php-fpm not being there if this is not running first
       - app
+      - laravel-echo-server
     ports:
       - "8008:80"
     volumes:

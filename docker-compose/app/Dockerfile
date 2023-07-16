@@ -39,7 +39,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy scripts
-COPY docker-compose/docker_init.sh /usr/local/bin/docker_init.sh
+COPY docker_init.sh /usr/local/bin/docker_init.sh
 
 # Make them executable
 RUN chmod +x /usr/local/bin/docker_init.sh
@@ -84,7 +84,7 @@ RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \
 #sudo mkdir -p /usr/lib/lua/5.3/
 #sudo cp storage/lua/* /usr/lib/lua/5.3/
 # Install LUA BitOp
-COPY storage/lua/LuaBitOp-1.0.3.zip /tmp/LuaBitOp-1.0.3.zip
+COPY LuaBitOp-1.0.3.zip /tmp/LuaBitOp-1.0.3.zip
 
 RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     cd /tmp/LuaBitOp-1.0.3 && \
