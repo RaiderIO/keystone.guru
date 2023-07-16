@@ -32,3 +32,6 @@ _ide_helper.php
 # Docker compose
 docker-compose/mysql
 docker-compose/mysql-combatlog
+docker-compose/laravel-echo-server/laravel-echo-server.json
+docker-compose/laravel-echo-server/laravel-echo-server.lock
+docker-compose/redis-data
