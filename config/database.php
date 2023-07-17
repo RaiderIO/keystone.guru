@@ -100,8 +100,8 @@ return [
         /** Special user for running migrations with more permissions */
         'combatlog' => [
             'driver'    => 'mysql',
-            'host'      => env('DB_HOST', '127.0.0.1'),
-            'port'      => env('DB_PORT', '3306'),
+            'host'      => env('DB_COMBATLOG_HOST', '127.0.0.1'),
+            'port'      => env('DB_COMBATLOG_PORT', '3306'),
             'database'  => env('DB_COMBATLOG_DATABASE', 'forge'),
             'username'  => env('DB_COMBATLOG_USERNAME', 'forge'),
             'password'  => env('DB_COMBATLOG_PASSWORD', ''),

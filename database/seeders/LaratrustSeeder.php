@@ -21,6 +21,13 @@ class LaratrustSeeder extends Seeder
     {
         if (config('app.type') !== 'local') {
             $this->command->error('You are not allowed to run this seeder on non-local development environments!');
+
+            return;
+        }
+        
+        if (User::count() > 0) {
+            $this->command->error('You are not allowed to run this seeder when there\'s already users!');
+
             return;
         }
 

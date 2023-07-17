@@ -33,7 +33,7 @@ window.io = require('socket.io-client');
 window.startEcho = function () {
     window.Echo = new Echo({
         broadcaster: 'socket.io',
-        host: window.location.hostname
+        host: window.location.host
     });
 };
 

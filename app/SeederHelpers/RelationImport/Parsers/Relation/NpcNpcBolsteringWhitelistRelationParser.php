@@ -44,9 +44,7 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParserInterface
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
-        foreach ($value as $npcBolsteringWhitelist) {
-            NpcBolsteringWhitelist::insert($npcBolsteringWhitelist);
-        }
+        NpcBolsteringWhitelist::insert($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

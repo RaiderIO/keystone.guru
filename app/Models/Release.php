@@ -18,6 +18,7 @@ use Throwable;
  * @property string $title
  * @property boolean $silent
  * @property boolean $spotlight
+ * 
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
@@ -38,6 +39,7 @@ class Release extends CacheModel
 
     use SerializesDates;
 
+    protected $fillable = ['id', 'release_changelog_id', 'version', 'title', 'silent', 'spotlight', 'created_at', 'updated_at'];
     protected $with = ['changelog'];
     protected $appends = ['github_body', 'discord_body', 'reddit_body'];
 
@@ -49,7 +51,10 @@ class Release extends CacheModel
         return Release::where('id', '<', $this->id)->orderBy('id', 'desc')->first();
     }
 
-    public function getRouteKeyName()
+    /**
+     * @return string
+     */
+    public function getRouteKeyName(): string
     {
         return 'version';
     }
@@ -75,7 +80,7 @@ class Release extends CacheModel
      * @return string
      * @throws Throwable
      */
-    public function getDiscordBodyAttribute()
+    public function getDiscordBodyAttribute(): string
     {
         $body       = trim(view('app.release.discord', [
             'model'   => $this,

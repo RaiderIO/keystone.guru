@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class ReleaseChangelogChange extends CacheModel
 {
+    protected $fillable = ['id', 'release_changelog_id', 'release_changelog_category_id', 'ticket_id', 'change'];
     protected $visible = ['ticket_id', 'change', 'category', 'release_changelog_category_id', 'release_changelog_id'];
     protected $with = ['category'];
     public $timestamps = false;

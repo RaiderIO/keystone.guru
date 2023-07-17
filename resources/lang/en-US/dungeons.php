@@ -6,7 +6,7 @@ return [
         '2' => '25-man',
     ],
     'classic'      => [
-        'blackfathom_deeps'          => [
+        'blackfathom_deeps'           => [
             'name'   => 'Blackfathom Deeps',
             'floors' => [
                 'the_pool_of_ask_ar' => 'The Pool of Ask\'Ar',
@@ -28,21 +28,21 @@ return [
                 'ironclad_cove' => 'Ironclad Cove',
             ],
         ],
-        'dire_maul_west'                   => [
+        'dire_maul_west'              => [
             'name'   => 'Dire Maul West',
             'floors' => [
-                'capital_gardens'          => 'Capital Gardens',
-                'court_of_the_highborne'   => 'Court of the Highborne',
-                'prison_of_immol_thar'     => 'Prison of Immol\'Thar',
+                'capital_gardens'        => 'Capital Gardens',
+                'court_of_the_highborne' => 'Court of the Highborne',
+                'prison_of_immol_thar'   => 'Prison of Immol\'Thar',
             ],
         ],
-        'dire_maul_north'                   => [
+        'dire_maul_north'             => [
             'name'   => 'Dire Maul North',
             'floors' => [
-                'gordok_commons'           => 'Gordok Commons',
+                'gordok_commons' => 'Gordok Commons',
             ],
         ],
-        'dire_maul_east'                   => [
+        'dire_maul_east'              => [
             'name'   => 'Dire Maul East',
             'floors' => [
                 'warpwood_quarter'         => 'Warpwood Quarter',
@@ -97,25 +97,25 @@ return [
         'scarlet_monastery_armory'    => [
             'name'   => 'Scarlet Monastery Armory',
             'floors' => [
-                '' => '',
+                'armory' => 'Armory',
             ],
         ],
-        'scarlet_monastery_cathedral'           => [
+        'scarlet_monastery_cathedral' => [
             'name'   => 'Scarlet Monastery Cathedral',
             'floors' => [
-                '' => '',
+                'cathedral' => 'Cathedral',
             ],
         ],
         'scarlet_monastery_graveyard' => [
             'name'   => 'Scarlet Monastery Graveyard',
             'floors' => [
-                '' => '',
+                'graveyard' => 'Graveyard',
             ],
         ],
-        'scarlet_monastery_library'           => [
+        'scarlet_monastery_library'   => [
             'name'   => 'Scarlet Monastery Library',
             'floors' => [
-                '' => '',
+                'library' => 'Library',
             ],
         ],
         'scholomance'                 => [
