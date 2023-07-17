@@ -21,34 +21,12 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client  \
     wget
 
-# Required for puppeteer to work
-RUN apt-get install -y libxdamage-dev \
-                libnss3-dev \
-                libgdk-pixbuf2.0-dev \
-                libgtk-3-dev \
-                libxss-dev \
-                libasound2
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Copy scripts
-COPY docker_init.sh /usr/local/bin/docker_init.sh
-
-# Make them executable
-RUN chmod +x /usr/local/bin/docker_init.sh
-
 USER root
 
 # Set working directory
 WORKDIR /tmp
 
+# Do this as soon as possible since this takes a LONG time - any changes before this requires 20 min + rebuild
 # Download cmake, required for cargo, which is required for cli-weakauras-parser
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && \
     # Temp fix so that cargo works https://github.com/rust-lang/rustup/issues/686#issuecomment-272023791
@@ -91,6 +69,32 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     make && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
+
+# Required for puppeteer to work
+RUN apt-get install -y libxdamage-dev \
+                libnss3-dev \
+                libgdk-pixbuf2.0-dev \
+                libgtk-3-dev \
+                libxss-dev \
+                libasound2
+
+# Global packages required for Keystone.guru
+RUN npm install -g handlebars cross-env dotenv
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy scripts
+COPY docker_init.sh /usr/local/bin/docker_init.sh
+
+# Make them executable
+RUN chmod +x /usr/local/bin/docker_init.sh
 
 # Set working directory
 WORKDIR /var/www

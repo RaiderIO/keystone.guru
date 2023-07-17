@@ -1,5 +1,11 @@
 version: "3.7"
 services:
+  app-base:
+    build:
+      context: docker-compose/app-base
+      dockerfile: Dockerfile
+    image: keystone.guru-app-base
+
   app:
     build:
       context: docker-compose/app
@@ -15,6 +21,21 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - keystone.guru
+
+  horizon:
+    image: keystone.guru-app-base
+    container_name: keystone.guru-horizon
+    depends_on:
+      - db
+      - db-combatlog
+      - redis
+    restart: no
+    volumes:
+      - ./:/var/www
+    command:
+      - /usr/local/bin/php74 /var/www/artisan horizon
     networks:
       - keystone.guru
 

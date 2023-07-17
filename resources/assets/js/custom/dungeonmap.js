@@ -12,7 +12,24 @@ class DungeonMap extends Signalable {
         let state = getState();
         let mapContext = state.getMapContext();
 
-        if (!(mapContext instanceof MapContextLiveSession)) {
+        if (mapContext instanceof MapContextDungeonRouteCompare) {
+            let template = Handlebars.templates['map_controls_snackbar_dungeonroute_compare'];
+
+            let data = $.extend({}, getHandlebarsDefaultVariables(), {});
+
+            state.addSnackbar(template(data));
+
+            $('#dungeon_route_compare_activate_a_btn').bind('click', function () {
+                mapContext.setActiveDungeonRoute(
+                    mapContext.getDungeonRoutes()[0].publicKey
+                );
+            });
+            $('#dungeon_route_compare_activate_b_btn').bind('click', function () {
+                mapContext.setActiveDungeonRoute(
+                    mapContext.getDungeonRoutes()[1].publicKey
+                );
+            });
+        } else if (!(mapContext instanceof MapContextLiveSession)) {
             if (state.isMapAdmin()) {
                 if (mapContext.getMappingVersion().merged) {
                     let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
@@ -527,7 +544,7 @@ class DungeonMap extends Signalable {
             if (!getState().isMapAdmin()) {
                 if (getState().getMapContext().isDungeonSpeedrunEnabled()) {
                     mapControls.push(new DungeonSpeedrunRequiredNpcsControls(this));
-                } else if(this.options.showControls.enemyForces) {
+                } else if (this.options.showControls.enemyForces) {
                     mapControls.push(new EnemyForcesControls(this));
                 }
             }

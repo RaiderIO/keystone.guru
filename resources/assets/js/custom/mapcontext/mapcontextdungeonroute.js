@@ -3,34 +3,58 @@ class MapContextDungeonRoute extends MapContext {
         super(options);
 
         // The active route is always the first since we only have one in DungeonRoute map context
-        this._activeDungeonRoute = this._getDungeonRoutes()[0];
+        let publicKey = this.getDungeonRoutes()[0].publicKey;
+        this.setActiveDungeonRoute(publicKey);
     }
 
     /**
      *
      * @returns {*}
-     * @private
      */
-    _getDungeonRoutes() {
+    getDungeonRoutes() {
         return this._options.dungeonRoutes;
     }
 
-    // /**
-    //  * Get the data of the currently active dungeon route
-    //  *
-    //  * @returns DungeonRoute
-    //  */
-    // _activeDungeonRoute {
-    //     return this._activeDungeonRoute;
-    // }
+    /**
+     *
+     * @param publicKey {String}
+     * @returns {null}
+     */
+    getDungeonRouteByPublicKey(publicKey) {
+        let result = null;
+        for (let index in this._options.dungeonRoutes) {
+            let dungeonRoute = this._options.dungeonRoutes[index];
+            if (dungeonRoute.publicKey === publicKey) {
+                result = dungeonRoute;
+                break;
+            }
+        }
 
-    // /**
-    //  *
-    //  * @param publicKey {String}
-    //  */
-    // setActiveDungeonRoute(publicKey) {
-    //     this._activeDungeonRoute = publicKey;
-    // }
+        console.assert(result !== null, `Unable to find route for public key ${publicKey}`);
+
+        return result;
+    }
+
+    /**
+     *
+     * @param publicKey {String}
+     */
+    setActiveDungeonRoute(publicKey) {
+        let previousDungeonRoute = this._activeDungeonRoute;
+
+        this._activeDungeonRoute = this.getDungeonRouteByPublicKey(publicKey);
+
+        if (previousDungeonRoute !== this._activeDungeonRoute) {
+            console.log({
+                previous: previousDungeonRoute,
+                current: this._activeDungeonRoute
+            });
+            this.signal('activeDungeonRoute:changed', {
+                previous: previousDungeonRoute,
+                current: this._activeDungeonRoute
+            });
+        }
+    }
 
     /**
      *
@@ -45,7 +69,7 @@ class MapContextDungeonRoute extends MapContext {
      *
      * @returns {Number}|null
      */
-    getDungeonDifficulty(){
+    getDungeonDifficulty() {
         return this._activeDungeonRoute.dungeonDifficulty;
     }
 

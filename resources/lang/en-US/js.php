@@ -513,6 +513,10 @@ return [
     'echo_refollow_user_label'              => 'Refollow',
     'echo_refollow_user_stop_label'         => 'Stop',
 
+    // Compare routes
+    'dungeon_route_compare_activate_a_label' => 'Route A',
+    'dungeon_route_compare_activate_b_label' => 'Route B',
+
     // Overpull
     'overpull_select_enemy_label'           => 'Select one or more enemies that you overpulled',
     'overpull_selection_finished_label'     => 'Finished',
