@@ -56,7 +56,7 @@ class StateManager extends Signalable {
             this._mapContext = new MapContextLiveSession(mapContext);
         } else if (mapContext.type === 'dungeon') {
             this._mapContext = new MapContextDungeon(mapContext);
-        } if (mapContext.type === 'dungeonRouteCompare') {
+        } else if (mapContext.type === 'dungeonRouteCompare') {
             this._mapContext = new MapContextDungeonRouteCompare(mapContext);
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
@@ -241,8 +241,7 @@ class StateManager extends Signalable {
 
             // Let everyone know it's changed
             this.signal('mapzoomlevel:changed', {
-                mapZoomLevel: this._mapZoomLevel,
-                previousMapZoomLevel: previousZoomLevel
+                mapZoomLevel: this._mapZoomLevel, previousMapZoomLevel: previousZoomLevel
             });
         }
     }
@@ -624,13 +623,8 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         $.ajax({
-            type: 'POST',
-            url: `/ajax/metric`,
-            dataType: 'json',
-            data: {
-                category: category,
-                tag: tag,
-                value: value
+            type: 'POST', url: `/ajax/metric`, dataType: 'json', data: {
+                category: category, tag: tag, value: value
             }
         });
     }
@@ -649,9 +643,7 @@ class StateManager extends Signalable {
             url: `/ajax/metric/route/${getState().getMapContext().getPublicKey()}`,
             dataType: 'json',
             data: {
-                category: category,
-                tag: tag,
-                value: value
+                category: category, tag: tag, value: value
             }
         });
     }

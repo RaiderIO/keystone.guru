@@ -48,7 +48,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let toSave = [];
 
-        let sortedObjects = _.sortBy(_.values(this.objects), 'index');
+        let sortedObjects = _.sortBy(_.values(this.getMapObjects()), 'index');
         for (let i = 0; i < sortedObjects.length; i++) {
             /** @type KillZone */
             let obj = sortedObjects[i];
@@ -167,9 +167,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         let result = null;
         let highestIndex = 0;
 
-        // Order of keys in this.objects is not necessarily by index
-        for (let key in this.objects) {
-            let objectCandidate = this.objects[key];
+        // Order of keys in this.getMapObjects() is not necessarily by index
+        for (let key in this.getMapObjects()) {
+            let objectCandidate = this.getMapObjects()[key];
             if (highestIndex < objectCandidate.index) {
                 highestIndex = objectCandidate.index;
                 result = objectCandidate;
@@ -193,8 +193,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         let result = null;
 
-        for (let key in this.objects) {
-            let objectCandidate = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let objectCandidate = this.getMapObjects()[key];
             if (objectCandidate.index === index) {
                 result = objectCandidate;
                 break;
@@ -217,13 +217,13 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         // If we're inserting it last - we don't affect existing killzones
         if (afterIndex !== null) {
             // But we do if it was inserted half way - we need to update all indices of everything that's after this pull
-            toSave = _.values(this.objects).filter(killzone => killzone.index > afterIndex);
+            toSave = _.values(this.getMapObjects()).filter(killzone => killzone.index > afterIndex);
 
             for (let index in toSave) {
                 toSave[index].index++;
             }
         } else {
-            let objectValues = _.values(this.objects);
+            let objectValues = _.values(this.getMapObjects());
             afterIndex = objectValues.length === 0 ? 0 : _.maxBy(objectValues, 'index').index;
         }
 
@@ -266,12 +266,12 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     applyPullGradient(save = false, saveOnComplete = null, saveAdditionalFields = []) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
-        let length = _.size(this.objects);
+        let length = _.size(this.getMapObjects());
         let handlers = getState().getPullGradientHandlers();
         for (let i = 0; i < length; i++) {
-            for (let key in this.objects) {
-                if (this.objects.hasOwnProperty(key)) {
-                    let killZone = this.objects[key];
+            for (let key in this.getMapObjects()) {
+                if (this.getMapObjects().hasOwnProperty(key)) {
+                    let killZone = this.getMapObjects()[key];
                     if (killZone.getIndex() === (i + 1)) {
                         // Prevent division by 0
                         killZone.color = pickHexFromHandlers(handlers, length === 1 ? 50 : (i / length) * 100);
@@ -297,7 +297,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         // All killzones if not supplied
         if (killZones.length === 0) {
-            killZones = this.objects;
+            killZones = this.getMapObjects();
         }
 
         let killZonesData = [];
@@ -339,8 +339,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     isEnemyKilled(enemyId) {
         let result = false;
 
-        for (let key in this.objects) {
-            let killZone = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let killZone = this.getMapObjects()[key];
             if (killZone.enemies.concat(killZone.overpulledEnemies).includes(enemyId)) {
                 result = true;
                 break;
@@ -360,8 +360,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         let enemyMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
         let mapContext = getState().getMapContext();
 
-        for (let key in enemyMapObjectGroup.objects) {
-            let enemy = enemyMapObjectGroup.objects[key];
+        for (let key in enemyMapObjectGroup.getMapObjects()) {
+            let enemy = enemyMapObjectGroup.getMapObjects()[key];
             // If this enemy SHOULD have been killed by the user
             if (enemy.required &&
                 // If not teeming, OR if enemy is teeming AND we're teeming, or inverse that. THEN this enemy counts, otherwise it does not
@@ -395,7 +395,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 confirm: 'yes',
             },
             success: function (json) {
-                let killZoneObjectsReversed = _.values(self.objects).reverse();
+                let killZoneObjectsReversed = _.values(self.getMapObjects()).reverse();
                 for (let i = 0; i < killZoneObjectsReversed.length; i++) {
                     let killZone = killZoneObjectsReversed[i];
                     killZone.localDelete(true);
@@ -403,8 +403,8 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                 }
 
                 let enemyMapObjectGroup = self.manager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                for (let key in enemyMapObjectGroup.objects) {
-                    let enemy = enemyMapObjectGroup.objects[key];
+                for (let key in enemyMapObjectGroup.getMapObjects()) {
+                    let enemy = enemyMapObjectGroup.getMapObjects()[key];
                     if (enemy instanceof PridefulEnemy && enemy.isAssigned()) {
                         // Prideful enemies override the delete method, so we can delete them without deleting the actual enemy
                         enemy.unsetAssignedLocation();
@@ -442,9 +442,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     //         this.signal('loadcomplete');
     //     } else {
     //         // Show any killzones that are on the new floor
-    //         for (let index in this.objects) {
-    //             if (this.objects.hasOwnProperty(index)) {
-    //                 let killZone = this.objects[index];
+    //         for (let index in this.getMapObjects()) {
+    //             if (this.getMapObjects().hasOwnProperty(index)) {
+    //                 let killZone = this.getMapObjects()[index];
     //                 // Re-set the enemy list
     //                 killZone.setEnemies([...killZone.enemies]);
     //

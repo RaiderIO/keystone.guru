@@ -37,6 +37,14 @@ class MapContextDungeonRoute extends MapContext {
 
     /**
      *
+     * @returns {*}
+     */
+    getActiveDungeonRoute() {
+        return this._activeDungeonRoute;
+    }
+
+    /**
+     *
      * @param publicKey {String}
      */
     setActiveDungeonRoute(publicKey) {

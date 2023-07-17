@@ -54,7 +54,7 @@ class UserMousePositionMapObjectGroup extends MapObjectGroup {
             avatar_url: echoUser.getAvatarUrl(), // May be null if not set
             lat: -125,
             lng: 200,
-            index: _.size(this.objects) + 1,
+            index: _.size(this.getMapObjects()) + 1,
             local: true
         });
 

@@ -703,8 +703,8 @@ class CommonMapsMap extends InlineCode {
         let result = [];
         let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-        for (let index in enemyMapObjectGroup.objects) {
-            let enemy = enemyMapObjectGroup.objects[index];
+        for (let index in enemyMapObjectGroup.getMapObjects()) {
+            let enemy = enemyMapObjectGroup.getMapObjects()[index];
             if (!enemy.is_mdt && enemy.mdt_id === null) {
                 result.push(enemy);
             }
@@ -724,8 +724,8 @@ class CommonMapsMap extends InlineCode {
         let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         let closestEnemyDistance = 99999999;
-        for (let key in enemyMapObjectGroup.objects) {
-            let enemyCandidate = enemyMapObjectGroup.objects[key];
+        for (let key in enemyMapObjectGroup.getMapObjects()) {
+            let enemyCandidate = enemyMapObjectGroup.getMapObjects()[key];
             let distance = getDistance([enemyCandidate.lat, enemyCandidate.lng], [targetEnemy.lat, targetEnemy.lng]);
             if (enemyCandidate.is_mdt &&
                 targetEnemy.getMdtNpcId() === enemyCandidate.npc_id &&

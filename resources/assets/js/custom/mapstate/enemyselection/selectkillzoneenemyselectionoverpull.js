@@ -183,8 +183,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
         this.map.enemyForcesManager.setEnemyForcesOverride(json.enemy_forces);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let key in enemyMapObjectGroup.objects) {
-            let enemy = enemyMapObjectGroup.objects[key];
+        for (let key in enemyMapObjectGroup.getMapObjects()) {
+            let enemy = enemyMapObjectGroup.getMapObjects()[key];
 
             // Set all enemies to be obsolete or not
             enemy.setObsolete(json.obsolete_enemy_ids.includes(enemy.id));

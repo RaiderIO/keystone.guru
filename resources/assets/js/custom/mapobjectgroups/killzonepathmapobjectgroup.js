@@ -48,14 +48,14 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      * @private
      */
     _refresh(killZoneChangedEvent) {
-        // Bring all layers we just created to the front
-        for (let key in this.objects) {
-            this.setLayerToMapObject(null, this.objects[key]);
-            this.objects[key].cleanup();
-            this.objects[key].localDelete();
+        // Delete all existing layers
+        for (let key in this.getMapObjects()) {
+            this.setLayerToMapObject(null, this.getMapObjects()[key]);
+            this.getMapObjects()[key].cleanup();
+            this.getMapObjects()[key].localDelete();
         }
 
-        this.objects = [];
+        this._clearMapObjects();
         this.currentId = 1;
 
         let killzoneMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_KILLZONE);
@@ -63,15 +63,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         let floorSwitchMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
         let mapIconMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_MAPICON);
 
-        /** @type KillZone */
-        let previousKillZone = null;
-        /** @type {L.latLng} */
-        let previousKillZoneCenteroid = null;
-        /** @type object */
-        let previousKillZoneFloorIds = null;
-        /** @type boolean */
-        let previousKillZoneOnCurrentFloor = false;
-
+        /** @type MapContextDungeonRoute */
+        let mapContext = getState().getMapContext();
         let currentFloor = getState().getCurrentFloor();
         let currentFloorId = currentFloor.id;
 
@@ -82,8 +75,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         // Only on the default floor!
         if (currentFloor.default === 1) {
-            for (let key in mapIconMapObjectGroup.objects) {
-                let mapIcon = mapIconMapObjectGroup.objects[key];
+            for (let key in mapIconMapObjectGroup.getMapObjects()) {
+                let mapIcon = mapIconMapObjectGroup.getMapObjects()[key];
 
                 // 10 = dungeon start
                 if (mapIcon.floor_id === currentFloorId && mapIcon.map_icon_type_id === MAP_ICON_TYPE_DUNGEON_START_ID) {
@@ -94,139 +87,147 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             }
         }
 
-        let sortedObjects = _.sortBy(_.values(killzoneMapObjectGroup.objects), 'index');
-        for (let i = 0; i < sortedObjects.length; i++) {
+        let dungeonRoutes = mapContext.getDungeonRoutes();
+        for (let index in dungeonRoutes) {
+            let dungeonRoute = dungeonRoutes[index];
+
             /** @type KillZone */
-            let killZone = sortedObjects[i];
+            let previousKillZone = null;
+            /** @type {L.latLng} */
+            let previousKillZoneCenteroid = null;
+            /** @type object */
+            let previousKillZoneFloorIds = null;
+            /** @type boolean */
+            let previousKillZoneOnCurrentFloor = false;
 
-            // @TODO centeroid does not take floors into account
-            let killZoneCenteroid = killZone.getLayerCenteroid();
-            let killZoneFloorIds = killZone.getFloorIds();
-            let killZoneOnCurrentFloor = killZoneFloorIds.includes(currentFloorId);
-            let killZoneHasEnemies = killZone.enemies.length !== 0;
+            let sortedObjects = _.sortBy(_.values(killzoneMapObjectGroup.getMapObjects(dungeonRoute.publicKey)), 'index');
+            for (let i = 0; i < sortedObjects.length; i++) {
+                /** @type KillZone */
+                let killZone = sortedObjects[i];
 
-            // If a pull is empty one way or another (no enemies, or all enemies marked obsolete).
-            // If the killzone is on another floor we can go on - we will draw a line to the next floor instead
-            if (!killZoneHasEnemies || (killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 && killZoneOnCurrentFloor)) {
-                continue;
-            }
+                // @TODO centeroid does not take floors into account
+                let killZoneCenteroid = killZone.getLayerCenteroid();
+                let killZoneFloorIds = killZone.getFloorIds();
+                let killZoneOnCurrentFloor = killZoneFloorIds.includes(currentFloorId);
+                let killZoneHasEnemies = killZone.enemies.length !== 0;
 
-            // Only if the indices are next to each other
-            if (previousKillZone instanceof KillZone) {
-                let polylineColor = pickHexFromHandlers([[0, '#ff0000'], [100, '#00ff00']],
-                    ((i + dungeonStartOffset)) / (sortedObjects.length + dungeonStartOffset) * 100
-                );
+                // If a pull is empty one way or another (no enemies, or all enemies marked obsolete).
+                // If the killzone is on another floor we can go on - we will draw a line to the next floor instead
+                if (!killZoneHasEnemies || (killZoneCenteroid.lat === 0 && killZoneCenteroid.lng === 0 && killZoneOnCurrentFloor)) {
+                    continue;
+                }
 
-                // And only if one of them is on the same floor as us, otherwise ignore them completely
-                if (killZoneOnCurrentFloor || previousKillZoneOnCurrentFloor) {
+                // Only if the indices are next to each other
+                if (previousKillZone instanceof KillZone) {
+                    let polylineColor = pickHexFromHandlers([[0, '#ff0000'], [100, '#00ff00']],
+                        ((i + dungeonStartOffset)) / (sortedObjects.length + dungeonStartOffset) * 100
+                    );
 
-                    let centeroidSource = null;
-                    let centeroidTarget = null
+                    // And only if one of them is on the same floor as us, otherwise ignore them completely
+                    if (killZoneOnCurrentFloor || previousKillZoneOnCurrentFloor) {
 
-                    // If both are on the same floor
-                    if (killZoneOnCurrentFloor && previousKillZoneOnCurrentFloor) {
-                        centeroidSource = previousKillZoneCenteroid;
-                        centeroidTarget = killZoneCenteroid;
-                    } else if (killZoneOnCurrentFloor) {
-                        let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, previousKillZoneFloorIds[0], killZoneCenteroid);
-                        // It can be null if someone skips a floor and there's no direct connection from previous to current floor
-                        if (closestMarker !== null) {
-                            centeroidSource = closestMarker.layer.getLatLng();
-                            centeroidTarget = killZoneCenteroid;
-                        }
-                    } else if (previousKillZoneOnCurrentFloor) {
-                        let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], previousKillZoneCenteroid);
-                        // It can be null if someone skips a floor and there's no direct connection from previous to current floor
-                        if (closestMarker !== null) {
+                        let centeroidSource = null;
+                        let centeroidTarget = null
+
+                        // If both are on the same floor
+                        if (killZoneOnCurrentFloor && previousKillZoneOnCurrentFloor) {
                             centeroidSource = previousKillZoneCenteroid;
-                            centeroidTarget = closestMarker.layer.getLatLng();
+                            centeroidTarget = killZoneCenteroid;
+                        } else if (killZoneOnCurrentFloor) {
+                            let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, previousKillZoneFloorIds[0], killZoneCenteroid);
+                            // It can be null if someone skips a floor and there's no direct connection from previous to current floor
+                            if (closestMarker !== null) {
+                                centeroidSource = closestMarker.layer.getLatLng();
+                                centeroidTarget = killZoneCenteroid;
+                            }
+                        } else if (previousKillZoneOnCurrentFloor) {
+                            let closestMarker = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], previousKillZoneCenteroid);
+                            // It can be null if someone skips a floor and there's no direct connection from previous to current floor
+                            if (closestMarker !== null) {
+                                centeroidSource = previousKillZoneCenteroid;
+                                centeroidTarget = closestMarker.layer.getLatLng();
+                            }
+                        }
+
+                        if (centeroidSource !== null && centeroidTarget !== null) {
+                            // Draw the paths from the
+                            this.createNewPath([{
+                                lat: centeroidSource.lat,
+                                lng: centeroidSource.lng
+                            }, {
+                                lat: centeroidTarget.lat,
+                                lng: centeroidTarget.lng
+                            }], {
+                                polyline: {
+                                    // From red to green, add one to compensate for the dungeon start to
+                                    color: polylineColor
+                                }
+                            });
+                        } else {
+                            // The current killzone does not have any enemies assigned to it - skip this pull and keep the
+                            // previous killzone the same, so we draw a line from say pull 2 to pull 4 if pull 3 is empty
+                            continue;
+                        }
+                    } else {
+                        // Current killzone is not on this floor, previous killzone is also not on this floor.
+                        let closestMarkerToKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], killZoneCenteroid);
+                        let closestMarkerToPreviousKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, previousKillZoneFloorIds[0], previousKillZoneCenteroid);
+
+                        if (closestMarkerToKillZoneFloor !== null && closestMarkerToPreviousKillZoneFloor) {
+                            this.createNewPath([{
+                                lat: closestMarkerToKillZoneFloor.lat,
+                                lng: closestMarkerToKillZoneFloor.lng
+                            }, {
+                                lat: closestMarkerToPreviousKillZoneFloor.lat,
+                                lng: closestMarkerToPreviousKillZoneFloor.lng
+                            }], {
+                                polyline: {
+                                    color: polylineColor
+                                }
+                            });
                         }
                     }
-
-                    if (centeroidSource !== null && centeroidTarget !== null) {
-                        // Draw the paths from the
-                        this.createNewPath([{
-                            lat: centeroidSource.lat,
-                            lng: centeroidSource.lng
-                        }, {
-                            lat: centeroidTarget.lat,
-                            lng: centeroidTarget.lng
-                        }], {
-                            polyline: {
-                                // From red to green, add one to compensate for the dungeon start to
-                                color: polylineColor
-                            }
-                        });
-                    } else {
-                        // The current killzone does not have any enemies assigned to it - skip this pull and keep the
-                        // previous killzone the same, so we draw a line from say pull 2 to pull 4 if pull 3 is empty
-                        continue;
-                    }
-                } else {
-                    // Current killzone is not on this floor, previous killzone is also not on this floor.
-                    let closestMarkerToKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0], killZoneCenteroid);
-                    let closestMarkerToPreviousKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, previousKillZoneFloorIds[0], previousKillZoneCenteroid);
-
-                    if (closestMarkerToKillZoneFloor !== null && closestMarkerToPreviousKillZoneFloor) {
-                        this.createNewPath([{
-                            lat: closestMarkerToKillZoneFloor.lat,
-                            lng: closestMarkerToKillZoneFloor.lng
-                        }, {
-                            lat: closestMarkerToPreviousKillZoneFloor.lat,
-                            lng: closestMarkerToPreviousKillZoneFloor.lng
-                        }], {
-                            polyline: {
-                                color: polylineColor
-                            }
-                        });
-                    }
-                }
-            }
-
-            // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
-            if (previousKillZone === null && dungeonStartLatLng !== null && !dungeonStartLineDrawn) {
-                // If the first pull is not on the first floor
-                if( !killZoneOnCurrentFloor ) {
-                    let closestMarkerToKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0]);
-                    killZoneCenteroid.lat = closestMarkerToKillZoneFloor.lat;
-                    killZoneCenteroid.lng = closestMarkerToKillZoneFloor.lng;
                 }
 
-                this.createNewPath([{
-                    lat: dungeonStartLatLng.lat,
-                    lng: dungeonStartLatLng.lng
-                }, {
-                    lat: killZoneCenteroid.lat,
-                    lng: killZoneCenteroid.lng
-                }], {
-                    polyline: {
-                        // Always red
-                        color: '#ff0000'
+                // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
+                if (previousKillZone === null && dungeonStartLatLng !== null && !dungeonStartLineDrawn) {
+                    // If the first pull is not on the first floor
+                    if (!killZoneOnCurrentFloor) {
+                        let closestMarkerToKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0]);
+                        killZoneCenteroid.lat = closestMarkerToKillZoneFloor.lat;
+                        killZoneCenteroid.lng = closestMarkerToKillZoneFloor.lng;
                     }
-                });
 
-                dungeonStartLineDrawn = true;
+                    this.createNewPath([{
+                        lat: dungeonStartLatLng.lat,
+                        lng: dungeonStartLatLng.lng
+                    }, {
+                        lat: killZoneCenteroid.lat,
+                        lng: killZoneCenteroid.lng
+                    }], {
+                        polyline: {
+                            // Always red
+                            color: '#ff0000'
+                        }
+                    });
+
+                    dungeonStartLineDrawn = true;
+                }
+
+                previousKillZone = killZone;
+                previousKillZoneCenteroid = killZoneCenteroid;
+                previousKillZoneFloorIds = killZoneFloorIds;
+                previousKillZoneOnCurrentFloor = killZoneOnCurrentFloor;
             }
-
-            previousKillZone = killZone;
-            previousKillZoneCenteroid = killZoneCenteroid;
-            previousKillZoneFloorIds = killZoneFloorIds;
-            previousKillZoneOnCurrentFloor = killZoneOnCurrentFloor;
         }
 
         // Bring all layers we just created to the front
-        for (let key in this.objects) {
-            let mapObject = this.objects[key];
-            // if () {
-            //     console.log('bringing to front');
-            //     this.layerGroup.bringToFront();
-            //     mapObject.layer.bringToFront();
-            // } else {
-            //     console.log('bringing to back');
-            //     this.layerGroup.bringToBack();
-            //     mapObject.layer.bringToBack();
-            // }
-            this.setMapObjectVisibility(mapObject, true);
+        for (let publicKey in this._mapObjects) {
+            let mapObjects = this._mapObjects[publicKey];
+            for (let key in mapObjects) {
+                let mapObject = mapObjects[key];
+                this.setMapObjectVisibility(mapObject, true);
+            }
         }
     }
 

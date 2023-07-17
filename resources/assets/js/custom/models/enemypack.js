@@ -93,8 +93,8 @@ class EnemyPack extends VersionableMapObject {
 
                     let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-                    for (let key in enemyMapObjectGroup.objects) {
-                        let enemy = enemyMapObjectGroup.objects[key];
+                    for (let key in enemyMapObjectGroup.getMapObjects()) {
+                        let enemy = enemyMapObjectGroup.getMapObjects()[key];
 
                         // Detach all enemies from this pack if it's deleted
                         if (enemy.enemy_pack_id === self.id) {

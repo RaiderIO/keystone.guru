@@ -110,14 +110,14 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         let enemyPatrolMapObjectGroup = this.manager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
 
         // Couple awakened enemies to each other
-        for (let key in this.objects) {
+        for (let key in this.getMapObjects()) {
             /** @type {Enemy} */
-            let enemy = this.objects[key];
+            let enemy = this.getMapObjects()[key];
 
             // Check only those Awakened mobs that are not part of the final boss pack
             if (isRouteAwakened && enemy.npc !== null && enemy.isAwakenedNpc() && enemy.enemy_pack_id === -1) {
-                for (let nestedKey in this.objects) {
-                    let enemyCandidate = this.objects[nestedKey];
+                for (let nestedKey in this.getMapObjects()) {
+                    let enemyCandidate = this.getMapObjects()[nestedKey];
 
                     // Don't check ourselves, only match those enemies with the same npc id and seasonal_index that are part of the final boss pack
                     if (enemyCandidate.id !== enemy.id && enemyCandidate.npc !== null &&
@@ -196,8 +196,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         if (getState().isMapAdmin()) {
             // After adding all the enemies, redraw the connections to all enemies in the patrols
-            for (let key in enemyPatrolMapObjectGroup.objects) {
-                enemyPatrolMapObjectGroup.objects[key].redrawConnectionsToEnemies();
+            for (let key in enemyPatrolMapObjectGroup.getMapObjects()) {
+                enemyPatrolMapObjectGroup.getMapObjects()[key].redrawConnectionsToEnemies();
             }
         }
     }
@@ -209,8 +209,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
      */
     getFinalBoss() {
         let finalBoss = null;
-        for (let key in this.objects) {
-            let enemy = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let enemy = this.getMapObjects()[key];
             if (enemy.npc !== null && enemy.npc.classification_id === NPC_CLASSIFICATION_ID_FINAL_BOSS) {
                 finalBoss = enemy;
                 break;
@@ -227,8 +227,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     getFreePridefulEnemy() {
         let result = null;
 
-        for (let key in this.objects) {
-            let enemy = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let enemy = this.getMapObjects()[key];
             if (enemy instanceof PridefulEnemy) {
                 if (!enemy.isAssigned()) {
                     result = enemy;
@@ -247,8 +247,8 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     getAssignedPridefulEnemies() {
         let result = 0;
 
-        for (let key in this.objects) {
-            let enemy = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let enemy = this.getMapObjects()[key];
             if (enemy instanceof PridefulEnemy) {
                 if (enemy.isAssigned()) {
                     result++;

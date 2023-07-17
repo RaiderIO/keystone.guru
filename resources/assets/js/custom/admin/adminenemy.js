@@ -132,7 +132,7 @@ class AdminEnemy extends Enemy {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             // We're an enemy, we need to find an MDT enemy instead
             if (!this.is_mdt && this.mdt_id !== null) {
-                $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
+                $.each(enemyMapObjectGroup.getMapObjects(), function (i, mdtEnemy) {
                     // Only MDT enemies, mdtEnemy.mdt_id is actually the clone index for MDT, combined with npc_id this gives us
                     // a unique ID
                     if (mdtEnemy.floor_id === self.floor_id &&
@@ -148,7 +148,7 @@ class AdminEnemy extends Enemy {
             }
             // We're an MDT enemy and we're looking for our enemy
             else if (this.is_mdt && this.enemy_id > 0) {
-                $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+                $.each(enemyMapObjectGroup.getMapObjects(), function (i, enemy) {
                     // Only normal enemies, the MDT enemy has a direct ID link to the enemy
                     if (!enemy.is_mdt && self.enemy_id === enemy.id) {
                         result = enemy;

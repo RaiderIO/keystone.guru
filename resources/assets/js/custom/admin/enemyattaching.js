@@ -46,7 +46,7 @@ class EnemyAttaching {
             let enemyPackPolygon = newEnemyPack.layer;
 
             // For each enemy we know of
-            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+            $.each(enemyMapObjectGroup.getMapObjects(), function (i, enemy) {
                 // Check if it falls in the layer and if something changed; we don't want to make unnecessary requests
                 if (!enemy.is_mdt && enemy.layer !== null && enemy.enemy_pack_id !== newEnemyPack.id) {
                     let latLng = enemy.layer.getLatLng();
@@ -70,7 +70,7 @@ class EnemyAttaching {
             let enemyPackPolygon = changedEnemyPack.layer;
 
             // For each enemy we know of
-            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+            $.each(enemyMapObjectGroup.getMapObjects(), function (i, enemy) {
                 // Check if it falls in the layer and is actually part of the pack
                 if (!enemy.is_mdt && enemy.layer !== null && enemy.enemy_pack_id === changedEnemyPack.id) {
                     let latLng = enemy.layer.getLatLng();
@@ -95,7 +95,7 @@ class EnemyAttaching {
             let deletedEnemyPack = objectDeletedEvent.data.object;
 
             // For each enemy we know of, cannot use rawEnemies for reasons I can't be bothered to figure out rn
-            $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+            $.each(enemyMapObjectGroup.getMapObjects(), function (i, enemy) {
                 if (enemy.enemy_pack_id === deletedEnemyPack.id) {
                     enemy.enemy_pack_id = null;
                     enemy.save();
@@ -114,8 +114,8 @@ class EnemyAttaching {
         if (currTime - this.lastMouseMoveTime > 200) {
             let isMouseStillInLayer = false;
             let enemyPackManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
-            for(let index in enemyPackManager.objects ) {
-                let layer = enemyPackManager.objects[index].layer;
+            for(let index in enemyPackManager.getMapObjects() ) {
+                let layer = enemyPackManager.getMapObjects()[index].layer;
 
                 // Only track this when we're 'ghosting' an enemy around to place it somewhere
                 // Only polygons may be a target for enemies

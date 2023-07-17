@@ -142,8 +142,8 @@ class RowElementKillZone extends RowElement {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         for (let i = 0; i < this.killZone.enemies.length; i++) {
             let enemyId = this.killZone.enemies[i];
-            for (let enemyKey in enemyMapObjectGroup.objects) {
-                let enemy = enemyMapObjectGroup.objects[enemyKey];
+            for (let enemyKey in enemyMapObjectGroup.getMapObjects()) {
+                let enemy = enemyMapObjectGroup.getMapObjects()[enemyKey];
                 if (enemy.id === enemyId) {
                     if (!hasBoss && enemy.isBossNpc()) {
                         hasBoss = true;

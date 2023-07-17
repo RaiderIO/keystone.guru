@@ -70,8 +70,8 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let killZoneKey in killZoneMapObjectGroup.objects) {
-            let killZone = killZoneMapObjectGroup.objects[killZoneKey];
+        for (let killZoneKey in killZoneMapObjectGroup.getMapObjects()) {
+            let killZone = killZoneMapObjectGroup.getMapObjects()[killZoneKey];
             for (let enemyIndex in killZone.enemies) {
                 let enemyId = killZone.enemies[enemyIndex];
                 if (enemyMapObjectGroup.findMapObjectById(enemyId).npc.id === npcId) {

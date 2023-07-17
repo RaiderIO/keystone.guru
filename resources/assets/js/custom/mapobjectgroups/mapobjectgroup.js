@@ -28,7 +28,11 @@ class MapObjectGroup extends Signalable {
         // May be set depending on which map object groups are hidden or not
         this._visible = true;
 
-        this.objects = {};
+        // Init the map objects base structure
+        let mapContext = getState().getMapContext();
+        this._mapObjects = {};
+        this._clearMapObjects();
+
         this.layerGroup = new L.LayerGroup([], {
             pane: this._getMapPane()
         });
@@ -42,15 +46,15 @@ class MapObjectGroup extends Signalable {
             // Rebuild the layer group
             self.layerGroup = new L.LayerGroup();
         }).bind(this));
-        getState().getMapContext().register('teeming:changed', this, this._updateVisibility.bind(this));
+        mapContext.register('teeming:changed', this, this._updateVisibility.bind(this));
 
         if (!(this.manager.map instanceof AdminDungeonMap)) {
-            getState().getMapContext().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
+            mapContext.register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
 
         // @TODO Convert this to the new echo message system
         if (getState().isEchoEnabled()) {
-            let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
+            let presenceChannel = window.Echo.join(mapContext.getEchoChannelName());
 
             for (let index in this.names) {
                 if (this.names.hasOwnProperty(index)) {
@@ -70,6 +74,25 @@ class MapObjectGroup extends Signalable {
                     });
                 }
             }
+        }
+    }
+
+    /**
+     *
+     * @protected
+     */
+    _clearMapObjects() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        let mapContext = getState().getMapContext();
+
+        if (mapContext instanceof MapContextDungeonRoute) {
+            let dungeonRoutes = mapContext.getDungeonRoutes();
+            for (let index in dungeonRoutes) {
+                let dungeonRoute = dungeonRoutes[index];
+                this._mapObjects[dungeonRoute.publicKey] = [];
+            }
+        } else {
+            this._mapObjects[mapContext.getPublicKey()] = [];
         }
     }
 
@@ -137,8 +160,8 @@ class MapObjectGroup extends Signalable {
     _seasonalIndexChanged(seasonalIndexChangedEvent) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
-        for (let key in this.objects) {
-            let mapObject = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let mapObject = this.getMapObjects()[key];
             if (mapObject.hasOwnProperty('seasonal_index') && mapObject.seasonal_index !== null) {
                 // Only hide/show awakened enemies based on their seasonal index
                 if (!mapObject.hasOwnProperty('seasonal_type') || mapObject.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED) {
@@ -156,10 +179,14 @@ class MapObjectGroup extends Signalable {
     _updateVisibility(force = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObject', this);
 
-        for (let key in this.objects) {
-            let mapObject = this.objects[key];
-            // Set this map object to be visible or not
-            this.setMapObjectVisibility(mapObject, force === null ? mapObject.shouldBeVisible() : force);
+        // Update visibility on all routes
+        for (let publicKey in this._mapObjects) {
+            let mapObjects = this._mapObjects[publicKey];
+            for (let key in mapObjects) {
+                let mapObject = mapObjects[key];
+                // Set this map object to be visible or not
+                this.setMapObjectVisibility(mapObject, force === null ? mapObject.shouldBeVisible() : force);
+            }
         }
     }
 
@@ -185,12 +212,15 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         // Remove any layers that were added before
-        for (let key in this.objects) {
-            let mapObject = this.objects[key];
-            // Remove all layers
-            if (mapObject.layer !== null) {
-                // Clean it up properly
-                this.setMapObjectVisibility(mapObject, false);
+        for (let publicKey in this._mapObjects) {
+            let mapObjects = this._mapObjects[publicKey];
+            for (let key in mapObjects) {
+                let mapObject = mapObjects[key];
+                // Remove all layers
+                if (mapObject.layer !== null) {
+                    // Clean it up properly
+                    this.setMapObjectVisibility(mapObject, false);
+                }
             }
         }
     }
@@ -314,11 +344,11 @@ class MapObjectGroup extends Signalable {
         }
 
         let mapObjectKey = this._getMapObjectKey(mapObject.id);
-        if (this.objects.hasOwnProperty(mapObjectKey)) {
+        if (this.getMapObjects().hasOwnProperty(mapObjectKey)) {
             console.error(`Overriding map object, this is probably not good!`, mapObjectKey);
         }
 
-        this.objects[mapObjectKey] = mapObject;
+        this.getMapObjects()[mapObjectKey] = mapObject;
 
         // Make us listen to their changes
         mapObject.register('object:initialized', this, (this._onObjectInitialized).bind(this));
@@ -446,13 +476,14 @@ class MapObjectGroup extends Signalable {
 
         // Remove it from our records
         let newObjects = [];
-        for (let key in this.objects) {
-            let objectCandidate = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let objectCandidate = this.getMapObjects()[key];
             if (objectCandidate.id !== mapObject.id) {
                 newObjects[key] = objectCandidate;
             }
         }
-        this.objects = newObjects;
+
+        this._mapObjects[getState().getMapContext().getPublicKey()] = newObjects;
 
         // Fire the event
         this.signal('object:deleted', {object: mapObject, objectgroup: this});
@@ -489,11 +520,24 @@ class MapObjectGroup extends Signalable {
         let newKey = this._getMapObjectKey(mapObject.id);
 
         if (existingKey !== newKey) {
-            delete this.objects[existingKey];
-            this.objects[newKey] = mapObject;
+            delete this.getMapObjects()[existingKey];
+            this.getMapObjects()[newKey] = mapObject;
         }
 
         this.signal('save:success', {object: mapObject, objectgroup: this});
+    }
+
+    /**
+     * Gets the map objects for a given route.
+     *
+     * @param publicKey {String|null}
+     */
+    getMapObjects(publicKey = null) {
+        // Return empty array if we're not initialized yet
+        publicKey = publicKey === null ? getState().getMapContext().getPublicKey() : publicKey;
+
+        console.assert(this._mapObjects.hasOwnProperty(publicKey), `_mapObjects does not have root key ${publicKey}`, this._mapObjects);
+        return this._mapObjects[publicKey];
     }
 
     /**
@@ -591,14 +635,15 @@ class MapObjectGroup extends Signalable {
     /**
      * Finds an object in this map object group by its ID.
      * @param id {Number}
+     * @param publicKey {String|null}
      * @returns {MapObject}
      */
-    findMapObjectById(id) {
+    findMapObjectById(id, publicKey = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
         let result = null;
 
         if (id > 0) {
-            result = this.objects[this._getMapObjectKey(id)] ?? null;
+            result = this.getMapObjects(publicKey)[this._getMapObjectKey(id)] ?? null;
         }
 
         return result;
@@ -613,8 +658,8 @@ class MapObjectGroup extends Signalable {
     _findMapObjectKeyById(id) {
         let result = null;
 
-        for (let key in this.objects) {
-            let objectCandidate = this.objects[key];
+        for (let key in this.getMapObjects()) {
+            let objectCandidate = this.getMapObjects()[key];
             if (objectCandidate.id === id) {
                 result = key;
                 break;

@@ -585,8 +585,8 @@ class Enemy extends VersionableMapObject {
             // Add all the enemies in said pack to the toggle display
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-            for (let key in enemyMapObjectGroup.objects) {
-                let enemy = enemyMapObjectGroup.objects[key];
+            for (let key in enemyMapObjectGroup.getMapObjects()) {
+                let enemy = enemyMapObjectGroup.getMapObjects()[key];
                 // Visible check for possible hidden Awakened Enemies on the last boss
                 if (enemy.enemy_pack_id === this.enemy_pack_id && enemy.id !== this.id && enemy.isVisible()) {
                     result.push(enemy);

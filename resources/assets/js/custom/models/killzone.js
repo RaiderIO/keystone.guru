@@ -682,13 +682,13 @@ class KillZone extends MapObject {
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
             console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-            if (_.size(floorSwitchMapObjectGroup.objects) > 0) {
+            if (_.size(floorSwitchMapObjectGroup.getMapObjects()) > 0) {
                 $.each(otherFloorsWithEnemies, function (i, floorId) {
                     // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
                     // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
                     // may be really far away
                     let floorSwitchMarkerCandidates = [];
-                    $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
+                    $.each(floorSwitchMapObjectGroup.getMapObjects(), function (j, floorSwitchMapObject) {
                         if (floorSwitchMapObject.target_floor_id === floorId) {
                             floorSwitchMarkerCandidates.push(floorSwitchMapObject);
                         }
@@ -846,8 +846,8 @@ class KillZone extends MapObject {
         let result = 1;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let key in killZoneMapObjectGroup.objects) {
-            let killZone = killZoneMapObjectGroup.objects[key];
+        for (let key in killZoneMapObjectGroup.getMapObjects()) {
+            let killZone = killZoneMapObjectGroup.getMapObjects()[key];
             if (killZone.getIndex() <= this.getIndex()) {
                 result += killZone.getShroudedEnemyStacks();
             }
@@ -864,8 +864,8 @@ class KillZone extends MapObject {
         let result = 0;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        for (let key in killZoneMapObjectGroup.objects) {
-            let killZone = killZoneMapObjectGroup.objects[key];
+        for (let key in killZoneMapObjectGroup.getMapObjects()) {
+            let killZone = killZoneMapObjectGroup.getMapObjects()[key];
             if (killZone.getIndex() <= this.getIndex()) {
                 result += killZone.getEnemyForces();
             }
@@ -1274,7 +1274,7 @@ class KillZone extends MapObject {
         this.map.unregister('map:mapobjectgroupsloaded', this);
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        $.each(enemyMapObjectGroup.objects, function (i, enemy) {
+        $.each(enemyMapObjectGroup.getMapObjects(), function (i, enemy) {
             enemy.setSelectable(false);
             enemy.unregister('enemy:selected', self);
             enemy.unregister('killzone:detached', self);

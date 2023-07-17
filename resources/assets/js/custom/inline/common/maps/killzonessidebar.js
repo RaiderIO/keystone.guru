@@ -182,7 +182,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             let previousKillZone = null;
             let previousKillZoneFloorIds = [];
             let killZoneFloorIds = [];
-            let sortedObjects = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
+            let sortedObjects = _.sortBy(_.values(killZoneMapObjectGroup.getMapObjects()), 'index');
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];
                 if (i === 0) {
@@ -226,7 +226,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         if (cascadeRefresh) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-            $.each(killZoneMapObjectGroup.objects, function (index, futureKillZone) {
+            $.each(killZoneMapObjectGroup.getMapObjects(), function (index, futureKillZone) {
                 // Do not update pull texts for killzones that do not have
                 if (futureKillZone.id > 0 && futureKillZone.getIndex() >= killZone.index) {
                     self._getRowElementKillZone(futureKillZone).refresh();
@@ -248,7 +248,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let self = this;
 
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        $.each(killZoneMapObjectGroup.objects, function (index, killZone) {
+        $.each(killZoneMapObjectGroup.getMapObjects(), function (index, killZone) {
             // Do not update pull texts for killzones that do not have
             if (killZone.id > 0 && killZone.getIndex() >= minIndex) {
                 self._updatePullText(killZone);
@@ -530,12 +530,12 @@ class CommonMapsKillzonessidebar extends InlineCode {
         console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
 
         $('#killzones_loading').hide();
-        if (_.size(killZoneMapObjectGroup.objects) === 0) {
+        if (_.size(killZoneMapObjectGroup.getMapObjects()) === 0) {
             $('#killzones_no_pulls').show();
         } else {
             // Load all existing killzones
-            for (let key in killZoneMapObjectGroup.objects) {
-                self._onKillZoneSaved(killZoneMapObjectGroup.objects[key]);
+            for (let key in killZoneMapObjectGroup.getMapObjects()) {
+                self._onKillZoneSaved(killZoneMapObjectGroup.getMapObjects()[key]);
             }
         }
 
@@ -583,8 +583,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     mapState instanceof ViewKillZoneEnemySelection) {
                     if (selectNext) {
                         // Search from the first to the end
-                        for (let key in killZoneMapObjectGroup.objects) {
-                            let killZone = killZoneMapObjectGroup.objects[key];
+                        for (let key in killZoneMapObjectGroup.getMapObjects()) {
+                            let killZone = killZoneMapObjectGroup.getMapObjects()[key];
                             if (killZone.index > mapState.getMapObject().index) {
                                 newSelectedKillZone = killZone;
                                 break;
@@ -592,7 +592,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                         }
                     } else {
                         // Search from the end to the first
-                        let killZoneObjectsReversed = _.values(killZoneMapObjectGroup.objects).reverse();
+                        let killZoneObjectsReversed = _.values(killZoneMapObjectGroup.getMapObjects()).reverse();
                         for (let i = 0; i < killZoneObjectsReversed.length; i++) {
                             let killZone = killZoneObjectsReversed[i];
                             if (killZone.index < mapState.getMapObject().index) {
@@ -603,7 +603,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
                     }
                 } else if (mapState === null) {
                     // Grab the first
-                    newSelectedKillZone = _.first(killZoneMapObjectGroup.objects);
+                    newSelectedKillZone = _.first(killZoneMapObjectGroup.getMapObjects());
                 }
 
                 // Only if we have one to select
