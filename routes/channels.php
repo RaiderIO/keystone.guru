@@ -21,9 +21,9 @@ use App\Models\DungeonRoute;
 use App\Models\LiveSession;
 use App\User;
 
-$dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonroute) {
+$dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonRoute) {
     // Shouldn't happen - but it may if the route was deleted and someone left their browser window open
-    if ($dungeonroute === null) {
+    if ($dungeonRoute === null) {
         return false;
     }
 
@@ -32,9 +32,9 @@ $dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonrout
     if (Auth::check()) {
         if ($user->echo_anonymous &&
             // If we didn't create this route, don't show our name
-            $dungeonroute->author_id !== $user->id &&
+            $dungeonRoute->author_id !== $user->id &&
             // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
-            ($dungeonroute->team === null || (!$dungeonroute->team->isUserMember($user)))) {
+            ($dungeonRoute->team === null || (!$dungeonRoute->team->isUserMember($user)))) {
 
             $randomName = collect(config('keystoneguru.echo.randomsuffixes'))->random();
 
@@ -64,10 +64,15 @@ $dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonrout
     return $result;
 };
 
-Broadcast::channel(sprintf('%s-route-edit.{dungeonroute}', config('app.type')), $dungeonRouteChannelCallback);
-Broadcast::channel(sprintf('%s-live-session.{livesession}', config('app.type')), function (?User $user, LiveSession $livesession) use ($dungeonRouteChannelCallback) {
+Broadcast::channel(sprintf('%s-route-edit.{dungeonRoute}', config('app.type')), $dungeonRouteChannelCallback);
+Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), function (?User $user, LiveSession $liveSession) use ($dungeonRouteChannelCallback) {
     // Validate live sessions the same way as a dungeon route
-    return $dungeonRouteChannelCallback($user, $livesession->dungeonroute);
+    return $dungeonRouteChannelCallback($user, $liveSession->dungeonroute);
+});
+Broadcast::channel(sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', config('app.type')),
+    function (?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) use ($dungeonRouteChannelCallback) {
+    // Validate to see if both routes may be viewed by the user
+    return $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB);
 });
 
 Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {

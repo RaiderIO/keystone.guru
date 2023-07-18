@@ -49,13 +49,13 @@ return [
         'linkpreview_default_description_sandbox' => 'Edit M+ route for dungeon %s',
     ],
     'embed'          => [
-        'title'             => 'Embed :routeTitle',
-        'create_or_view_at' => 'Create or view at',
-        'any'               => 'Any',
-        'select_floor'      => 'Select floor',
-        'affixes_title'     => 'Affixes',
-        'affixes_selected'  => '{0} affixes selected',
-        'copy_mdt_string'   => 'Copy MDT string',
+        'title'            => 'Embed :routeTitle',
+        'any'              => 'Any',
+        'select_floor'     => 'Select floor',
+        'affixes_title'    => 'Affixes',
+        'affixes_selected' => '{0} affixes selected',
+        'view_route'       => 'View route',
+        'copy_mdt_string'  => 'Copy MDT string',
     ],
     'limitreached'   => [
         'title'                     => 'Limit reached',
@@ -80,9 +80,9 @@ return [
         'unavailable_description' => 'You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.',
     ],
     'view'           => [
-        'any'                                             => 'Any',
-        'linkpreview_title'                               => '%s',
-        'linkpreview_default_description'                 => 'M+ route for dungeon %s by %s.',
+        'any'                                     => 'Any',
+        'linkpreview_title'                       => '%s',
+        'linkpreview_default_description'         => 'M+ route for dungeon %s by %s.',
         'linkpreview_default_description_sandbox' => 'Temporary M+ route for dungeon %s.',
     ],
 ];

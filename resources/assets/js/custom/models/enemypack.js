@@ -203,6 +203,9 @@ class EnemyPack extends VersionableMapObject {
                     hullPoints = (new Offset()).data(hullPoints).arcSegments(c.map.enemypack.arcSegments(hullPoints.length)).margin(c.map.enemypack.margin);
 
                     result = L.polygon(hullPoints, c.map.enemypack.polygonOptions);
+                    result.off('click').on('click', function () {
+                        
+                    });
                 } catch (error) {
                     // Not particularly interesting to spam the console with
                     // console.error('Unable to create offset for pack', remoteMapObject.id, error);

@@ -36,8 +36,9 @@
             'show' => [
                 'header' => true,
                 'controls' => [
+                    'pulls' => false,
                     'draw' => true,
-                    'enemyinfo' => true,
+                    'enemyInfo' => true,
                 ],
             ],
         ])

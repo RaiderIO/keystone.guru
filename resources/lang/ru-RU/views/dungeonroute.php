@@ -50,7 +50,6 @@ return [
     ],
     'embed'          => [
         'title'             => 'Встроить :routeTitle',
-        'create_or_view_at' => 'Создать или просмотреть на',
         'any'               => 'Все',
         'select_floor'      => 'Выбрать уровень',
         'affixes_title'     => 'Аффикс',

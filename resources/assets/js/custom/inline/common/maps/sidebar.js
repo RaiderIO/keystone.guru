@@ -14,7 +14,7 @@ class Sidebar {
         if (this.options.hideOnMove) {
             let dungeonMap = getState().getDungeonMap();
             let fn = function () {
-                self._hideSidebar();
+                self.hideSidebar();
             };
             dungeonMap.leafletMap.off('move', fn);
             dungeonMap.leafletMap.on('move', fn);
@@ -25,26 +25,25 @@ class Sidebar {
         $(this.options.sidebarToggleSelector).on('click', function () {
             // Dismiss
             if ($sidebar.hasClass('active')) {
-                self._hideSidebar();
+                self.hideSidebar();
             }
             // Show
             else {
-                self._showSidebar();
+                self.showSidebar();
             }
 
             refreshTooltips();
         });
 
-        if (this.options.defaultState) {
-            this._showSidebar();
+        if (this.options.defaultState === 1) {
+            this.showSidebar();
         }
     }
 
     /**
      * Hides the sidebar from view.
-     * @private
      */
-    _hideSidebar() {
+    hideSidebar() {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
@@ -63,9 +62,8 @@ class Sidebar {
 
     /**
      * Shows the sidebar.
-     * @private
      */
-    _showSidebar() {
+    showSidebar() {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 

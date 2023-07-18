@@ -84,7 +84,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps'; //blackfanthomdeeps
     const DUNGEON_BLACKROCK_DEPTHS            = 'blackrock_depths'; //blackrockdepths
     const DUNGEON_DEADMINES                   = 'deadmines'; //thedeadmines
-    const DUNGEON_DIRE_MAUL                   = 'dire_maul'; //diremaul
+    const DUNGEON_DIRE_MAUL_WEST              = 'dire_maul_west'; //diremaul
+    const DUNGEON_DIRE_MAUL_NORTH             = 'dire_maul_north'; //diremaul
+    const DUNGEON_DIRE_MAUL_EAST              = 'dire_maul_east'; //diremaul
     const DUNGEON_GNOMEREGAN                  = 'gnomeregan'; //gnomeregan
     const DUNGEON_LOWER_BLACKROCK_SPIRE       = 'lower_blackrock_spire'; //blackrockspire
     const DUNGEON_MARAUDON                    = 'maraudon';
@@ -244,7 +246,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_BLACKFATHOM_DEEPS,
             self::DUNGEON_BLACKROCK_DEPTHS,
             self::DUNGEON_DEADMINES,
-            self::DUNGEON_DIRE_MAUL,
+            self::DUNGEON_DIRE_MAUL_WEST,
+            self::DUNGEON_DIRE_MAUL_NORTH,
+            self::DUNGEON_DIRE_MAUL_EAST,
             self::DUNGEON_GNOMEREGAN,
             self::DUNGEON_LOWER_BLACKROCK_SPIRE,
             self::DUNGEON_MARAUDON,
@@ -476,7 +480,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function floors(): HasMany
     {
-        return $this->hasMany(Floor::class)->orderByDesc('default')->orderBy('index');
+        return $this->hasMany(Floor::class)->orderBy('index');
     }
 
     /**
