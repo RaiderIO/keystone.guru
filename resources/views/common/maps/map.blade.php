@@ -6,6 +6,10 @@
  * @var \App\Models\Mapping\MappingVersion $mappingVersion
  * @var \App\Models\DungeonRoute|null      $dungeonroute
  * @var \App\Models\LiveSession|null       $livesession
+ * @var bool|null                          $admin
+ * @var bool|null                          $embed
+ * @var string|null                        $embedStyle
+ * @var bool|null                          $edit
  * @var array                              $show
  * @var bool                               $adFree
  * @var string|null                        $mapBackgroundColor
@@ -14,6 +18,7 @@
 $user               = Auth::user();
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
+$embedStyle         = isset($embedStyle) ? $embedStyle : '';
 $edit               = isset($edit) && $edit;
 $mapClasses         = $mapClasses ?? '';
 $dungeonroute       = $dungeonroute ?? null;
@@ -179,6 +184,7 @@ if ($isAdmin) {
             'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
             'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
             'embed' => $embed,
+            'embedStyle' => $embedStyle,
             'dungeonroute' => $dungeonroute,
         ])
     @endif

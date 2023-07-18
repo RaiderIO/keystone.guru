@@ -14,7 +14,7 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif">
     <div class="row no-gutters py-2">
-        <div class="col pt-2">
+        <div class="col-8 pt-2">
             @if($embedOptions['show']['title'])
                 <div class="row no-gutters">
                     <div class="col header_embed_text_ellipsis">
@@ -28,6 +28,9 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
                     </div>
                 </div>
             @endif
+        </div>
+        <?php // Spacers ?>
+        <div class="col">
         </div>
         <div class="col-auto text-right">
             <a href="{{ route('home') }}" target="_blank">

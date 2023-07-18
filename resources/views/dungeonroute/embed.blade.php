@@ -51,6 +51,7 @@ if (count($affixes) == 0) {
             'dungeonroute' => $dungeonroute,
             'mapBackgroundColor' => $embedOptions['mapBackgroundColor'],
             'embed' => true,
+            'embedStyle' => $embedOptions['style'],
             'edit' => false,
             'echo' => false,
             'defaultZoom' => 1,

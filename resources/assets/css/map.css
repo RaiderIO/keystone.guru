@@ -382,8 +382,11 @@ html, body, #map, #app, .wrapper {
 }
 
 /** When embedding a route */
-#pulls_sidebar.embed .pulls_container:not(.has_speedrun) {
-    max-height: calc(100vh - 150px);
+#pulls_sidebar.embed.regular .pulls_container:not(.has_speedrun) {
+    max-height: calc(100vh - 109px);
+}
+#pulls_sidebar.embed.compact .pulls_container:not(.has_speedrun) {
+    max-height: calc(100vh - 46px);
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
