@@ -18,13 +18,13 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
             @if($embedOptions['show']['title'])
                 <div class="row no-gutters">
                     <div class="col header_embed_text_ellipsis">
-                        <a class="text-white"
-                           href="{{ $viewRouteUrl }}"
-                           target="_blank">
-                            <h4 class="mb-0">
+                        <h4 class="mb-0">
+                            <a class="text-white"
+                               href="{{ $viewRouteUrl }}"
+                               target="_blank">
                                 {{ $dungeonRoute->title }}
-                            </h4>
-                        </a>
+                            </a>
+                        </h4>
                     </div>
                 </div>
             @endif
