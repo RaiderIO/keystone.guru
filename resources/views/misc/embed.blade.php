@@ -1,5 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute $model */
+/** @var array $parameters */
 
 $showStyle = 'regular';
 ?>
@@ -10,7 +11,15 @@ $showStyle = 'regular';
 @section('content')
     <div class="row justify-content-center">
         <div class="col-6">
-            @if($showStyle === 'compact')
+            @if(!empty($parameters))
+                <iframe src="{{ route('dungeonroute.embed', array_merge([
+                        'dungeon' => $model->dungeon,
+                        'dungeonroute' => $model,
+                        'title' => \Illuminate\Support\Str::slug($model->title)],
+                        $parameters
+                    )) }}"
+                        style="width: 800px; height: 600px; border: none;"></iframe>
+            @elseif($showStyle === 'compact')
             <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,

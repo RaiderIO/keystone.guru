@@ -6,8 +6,7 @@
 $link         = $link ?? false;
 $showAnonIcon = $showAnonIcon ?? true;
 ?>
-
-@if($link && isset($user))
+@if($link && isset($user) && $user instanceof \App\User)
     <a href="{{ route('profile.view', ['user' => $user->id]) }}">
         @endif
 
