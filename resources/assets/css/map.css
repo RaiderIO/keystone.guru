@@ -34,14 +34,6 @@ html, body, #map, #app, .wrapper {
     }
 }
 
-/** Embed map needs space for the top header */
-.wrapper.embed_wrapper.regular {
-    height: calc(100vh - 109px);
-}
-.wrapper.embed_wrapper.compact {
-    height: calc(100vh - 46px);
-}
-
 #map.leaflet-container {
     font: unset;
     font-size: 12px;
@@ -151,18 +143,6 @@ html, body, #map, #app, .wrapper {
 .sidebar .sidebar-header {
     padding: 10px 20px;
     text-shadow: black 2px 2px;
-}
-
-.header_embed_regular {
-    height: 109px;
-    padding: 0 20px 10px 20px;
-    border-bottom: 1px black solid;
-}
-
-.header_embed_compact {
-    height: 46px;
-    padding: 0 20px 0 20px;
-    border-bottom: 1px black solid;
 }
 
 .header_embed_text_ellipsis > a,

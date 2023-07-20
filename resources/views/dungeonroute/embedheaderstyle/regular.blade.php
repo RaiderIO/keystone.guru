@@ -6,14 +6,14 @@
 
 $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]);
 ?>
-<header class="header_embed_regular"
+<header class="header_embed_regular py-2"
         style="
         @if($embedOptions['headerBackgroundColor'] !== null)
             background-color: {{ $embedOptions['headerBackgroundColor'] }};
         @else
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif">
-    <div class="row no-gutters py-2">
+    <div class="row no-gutters pb-2">
         <div class="col-8 pt-2">
             @if($embedOptions['show']['title'])
                 <div class="row no-gutters">

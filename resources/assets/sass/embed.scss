@@ -1,0 +1,23 @@
+$embed-header-regular-height: 6.7rem;
+$embed-header-compact-height: 3.4rem;
+
+/** Embed map needs space for the top header */
+.wrapper.embed_wrapper.regular {
+  height: calc(100vh - $embed-header-regular-height);
+}
+
+.wrapper.embed_wrapper.compact {
+  height: calc(100vh - $embed-header-compact-height);
+}
+
+.header_embed_regular {
+  height: $embed-header-regular-height;
+  padding: 0 20px 10px 20px;
+  border-bottom: 1px black solid;
+}
+
+.header_embed_compact {
+  height: $embed-header-compact-height;
+  padding: 0 20px 0 20px;
+  border-bottom: 1px black solid;
+}
