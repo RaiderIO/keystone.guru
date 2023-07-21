@@ -6533,10 +6533,10 @@
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "ingame_min_x": -820,
-                "ingame_min_y": -5500,
-                "ingame_max_x": -1330,
-                "ingame_max_y": -5160,
+                "ingame_min_x": -640,
+                "ingame_min_y": -5558.33,
+                "ingame_max_x": -1550,
+                "ingame_max_y": -4951.66,
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
