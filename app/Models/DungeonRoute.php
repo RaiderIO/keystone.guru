@@ -131,8 +131,9 @@ class DungeonRoute extends Model
     use HasMetrics;
     use GeneratesPublicKey;
 
-    public const PAGE_VIEW_SOURCE_VIEW_ROUTE = 1;
-    public const PAGE_VIEW_SOURCE_VIEW_EMBED = 2;
+    public const PAGE_VIEW_SOURCE_VIEW_ROUTE    = 1;
+    public const PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
+    public const PAGE_VIEW_SOURCE_PRESENT_ROUTE = 3;
 
     /**
      * The accessors to append to the model's array form.

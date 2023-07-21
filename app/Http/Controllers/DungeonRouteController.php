@@ -138,6 +138,80 @@ class DungeonRouteController extends Controller
      * @param Request      $request
      * @param Dungeon      $dungeon
      * @param DungeonRoute $dungeonroute
+     * @param string|null  $title
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws InvalidArgumentException
+     */
+    public function present(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
+    {
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+
+        return redirect()->route('dungeonroute.present.floor', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $dungeonroute->getTitleSlug(),
+            'floorindex'   => optional($defaultFloor)->index ?? '1',
+        ]);
+    }
+
+    /**
+     * @param Request      $request
+     * @param Dungeon      $dungeon
+     * @param DungeonRoute $dungeonroute
+     * @param string       $title
+     * @param string       $floorIndex
+     * @return Factory|RedirectResponse|View
+     * @throws AuthorizationException
+     * @throws InvalidArgumentException
+     */
+    public function presentFloor(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, string $floorIndex)
+    {
+        $this->authorize('present', $dungeonroute);
+
+        if (!is_numeric($floorIndex)) {
+            $floorIndex = '1';
+        }
+
+        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+            return redirect()->route('dungeonroute.present', [
+                'dungeon'      => $dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+            ]);
+        }
+
+        $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE);
+
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+
+        if ($floor === null) {
+            /** @var Floor $defaultFloor */
+            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+
+            return redirect()->route('dungeonroute.present.floor', [
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+                'floorindex'   => optional($defaultFloor)->index ?? '1',
+            ]);
+        } else {
+            return view('dungeonroute.present', [
+                'dungeon'        => $dungeonroute->dungeon,
+                'dungeonroute'   => $dungeonroute,
+                'title'          => $dungeonroute->getTitleSlug(),
+                'floor'          => $floor,
+                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+            ]);
+        }
+    }
+
+    /**
+     * @param Request      $request
+     * @param Dungeon      $dungeon
+     * @param DungeonRoute $dungeonroute
      * @param string       $title
      * @param string       $floorIndex
      * @return Factory|RedirectResponse|View
@@ -397,11 +471,12 @@ class DungeonRouteController extends Controller
         $headerBackgroundColor = $request->get('headerBackgroundColor');
         $mapBackgroundColor    = $request->get('mapBackgroundColor');
 
-        $showEnemyInfo   = $request->get('showEnemyInfo', false);
-        $showPulls       = $request->get('showPulls', true);
-        $showEnemyForces = $request->get('showEnemyForces', true);
-        $showAffixes     = $request->get('showAffixes', true);
-        $showTitle       = $request->get('showTitle', true);
+        $showEnemyInfo       = $request->get('showEnemyInfo', false);
+        $showPulls           = $request->get('showPulls', true);
+        $showEnemyForces     = $request->get('showEnemyForces', true);
+        $showAffixes         = $request->get('showAffixes', true);
+        $showTitle           = $request->get('showTitle', true);
+        $showPresenterButton = $request->get('showPresenterButton', false);
 
         return view('dungeonroute.embed', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -417,11 +492,12 @@ class DungeonRouteController extends Controller
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo'   => (bool)$showEnemyInfo, // Default false - not available
-                    'pulls'       => (bool)$showPulls, // Default true - available
-                    'enemyForces' => (bool)$showEnemyForces, // Default true - available
-                    'affixes'     => (bool)$showAffixes, // Default true - available
-                    'title'       => (bool)$showTitle, // Default true - available
+                    'enemyInfo'       => (bool)$showEnemyInfo, // Default false - not available
+                    'pulls'           => (bool)$showPulls, // Default true - available
+                    'enemyForces'     => (bool)$showEnemyForces, // Default true - available
+                    'affixes'         => (bool)$showAffixes, // Default true - available
+                    'title'           => (bool)$showTitle, // Default true - available
+                    'presenterButton' => (bool) $showPresenterButton, // Default false, not available
                 ],
             ],
         ]);

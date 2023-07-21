@@ -4,7 +4,9 @@
 /** @var $floor \App\Models\Floor */
 /** @var $embedOptions array */
 
-$viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]);
+$routeParams = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
+$presentRouteUrl = route('dungeonroute.present', $routeParams);
+$viewRouteUrl = route('dungeonroute.view', $routeParams);
 ?>
 <header class="header_embed_regular py-2"
         style="
@@ -60,6 +62,15 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
         </div>
         <div class="col">
         </div>
+        @if($embedOptions['show']['presenterButton'])
+            <div class="col-auto px-1">
+                <a class="btn btn btn-warning float-right h-100 text-white"
+                   href="{{ $presentRouteUrl }}"
+                   target="_blank">
+                    <i class="fas fa-video"></i> {{ __('views/dungeonroute.embed.present_route') }}
+                </a>
+            </div>
+        @endif
         <div class="col-auto px-1">
             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
             @if($dungeon->floors()->count() > 1)
