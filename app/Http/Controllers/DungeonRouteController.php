@@ -8,6 +8,7 @@ use App\Http\Requests\DungeonRoute\EmbedFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeRequest;
 use App\Jobs\RefreshEnemyForces;
 use App\Logic\MapContext\MapContextDungeonRoute;
+use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor;
@@ -170,6 +171,15 @@ class DungeonRouteController extends Controller
     {
         $this->authorize('present', $dungeonroute);
 
+        // @TODO fix this - it has a different connection and that messes with the relation
+        $challengeModeRun = ChallengeModeRun::firstWhere('dungeon_route_id', $dungeonroute->id);
+
+        if ($challengeModeRun === null) {
+            return abort(403, 'Route not generated from API!');
+        }
+
+        $dungeonroute->setRelation('challengeModeRun', $challengeModeRun);
+
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
@@ -295,8 +305,8 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonServiceInterface           $seasonService
-     * @param ExpansionServiceInterface        $expansionService
+     * @param SeasonServiceInterface $seasonService
+     * @param ExpansionServiceInterface $expansionService
      * @return DungeonRoute
      * @throws Exception
      */
@@ -313,10 +323,10 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                   $request
-     * @param Dungeon                   $dungeon
-     * @param DungeonRoute              $dungeonroute
-     * @param string                    $title
+     * @param Request $request
+     * @param Dungeon $dungeon
+     * @param DungeonRoute $dungeonroute
+     * @param string $title
      * @param ThumbnailServiceInterface $thumbnailService
      * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
@@ -497,7 +507,7 @@ class DungeonRouteController extends Controller
                     'enemyForces'     => (bool)$showEnemyForces, // Default true - available
                     'affixes'         => (bool)$showAffixes, // Default true - available
                     'title'           => (bool)$showTitle, // Default true - available
-                    'presenterButton' => (bool) $showPresenterButton, // Default false, not available
+                    'presenterButton' => (bool)$showPresenterButton, // Default false, not available
                 ],
             ],
         ]);

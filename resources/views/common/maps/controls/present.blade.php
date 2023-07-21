@@ -2,66 +2,76 @@
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
-
-$dungeonroute->chall
 ?>
 <nav class="route_sidebar left row no-gutters map_fade_out top presenter">
-    <div class="col">
-        <h1>
-            Key level and affixes
-        </h1>
+    <div class="col pt-4 pl-4">
+        <h2>
+            +{{ $dungeonroute->challengeModeRun->level }}
+
+            @if($dungeonroute->affixes->isNotEmpty())
+                    <?php
+                    /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
+                    $affixGroup = $dungeonroute->affixes->first()
+                    ?>
+
+                @foreach($affixGroup->affixes as $affix)
+                    <img src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($affix->key))) }}" alt="{{ __($affix->name) }}" style="border-radius: 4px;"/>
+                @endforeach
+            @endif
+        </h2>
     </div>
 </nav>
 
-<nav class="route_sidebar left row no-gutters map_fade_out top presenter" style="top: 65px">
-    <div class="col">
-        <h1>
-            Timer info
-        </h1>
+<nav class="route_sidebar left row no-gutters map_fade_out top presenter" style="top: 90px">
+    <div class="col pl-3">
+        <h2>
+            <i class="fas fa-stopwatch"></i>
+            {{ $dungeonroute->challengeModeRun->getFormattedElapsedTime() }}
+        </h2>
     </div>
 </nav>
 
-<nav class="route_sidebar left row no-gutters map_fade_out top presenter" style="top: 130px">
-    <div class="col">
-        <div class="row mb-2">
-            <div class="col">
-                <h4>
-                    Player 1
-                </h4>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
-                <h4>
-                    Player 2
-                </h4>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
-                <h4>
-                    Player 3
-                </h4>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
-                <h4>
-                    Player 4
-                </h4>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col">
-                <h4>
-                    Player 5
-                </h4>
-            </div>
-        </div>
-    </div>
-</nav>
+{{--<nav class="route_sidebar left row no-gutters map_fade_out top presenter" style="top: 140px">--}}
+{{--    <div class="col pt-4 pl-4">--}}
+{{--        <div class="row mb-2">--}}
+{{--            <div class="col">--}}
+{{--                <h4>--}}
+{{--                    Player 1--}}
+{{--                </h4>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="row mb-2">--}}
+{{--            <div class="col">--}}
+{{--                <h4>--}}
+{{--                    Player 2--}}
+{{--                </h4>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="row mb-2">--}}
+{{--            <div class="col">--}}
+{{--                <h4>--}}
+{{--                    Player 3--}}
+{{--                </h4>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="row mb-2">--}}
+{{--            <div class="col">--}}
+{{--                <h4>--}}
+{{--                    Player 4--}}
+{{--                </h4>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="row mb-2">--}}
+{{--            <div class="col">--}}
+{{--                <h4>--}}
+{{--                    Player 5--}}
+{{--                </h4>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</nav>--}}
 
-<nav class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out top presenter" style="top: 350px">
+<nav class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out top presenter" style="top: 370px">
     <div class="col">
         <div id="present_route_actions_container" class="mb-2">
             @auth
