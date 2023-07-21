@@ -303,6 +303,13 @@ class EchoControls extends MapControl {
     addControl() {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
+        let $routeEchoContainer = $('#route_echo_container');
+
+        if ($routeEchoContainer.length === 0) {
+            console.log('Unable to find #route_echo_container - not adding Echo control!');
+            return;
+        }
+
         // Code for the statusbar
         L.Control.Statusbar = L.Control.extend(this.mapControlOptions);
 
@@ -315,8 +322,7 @@ class EchoControls extends MapControl {
         // Add the leaflet draw control to the sidebar
         let container = this._mapControl.getContainer();
         $(container).removeClass('leaflet-control');
-        let $targetContainer = $('#route_echo_container');
-        $targetContainer.append(container);
+        $routeEchoContainer.append(container);
 
         // In case the control was recreated by switching floors
         if (getState().getEcho().getUsers().length > 0) {

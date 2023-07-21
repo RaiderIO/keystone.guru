@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\KillZone\KillZone;
@@ -88,6 +89,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property MDTImport                                $mdtImport
  * @property Team                                     $team
  * @property PublishedState                           $publishedState
+ *
+ * @property ChallengeModeRun|null                    $challengeModeRun Is only set if route is created through API
  *
  * @property Collection                               $specializations
  * @property Collection                               $classes
@@ -346,7 +349,15 @@ class DungeonRoute extends Model
      */
     public function publishedState(): BelongsTo
     {
-        return $this->belongsTo(PublishedState::class, 'published_state_id');
+        return $this->belongsTo(PublishedState::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function challengeModeRun(): BelongsTo
+    {
+        return $this->setConnection('combatlog')->belongsTo(ChallengeModeRun::class);
     }
 
     /**
