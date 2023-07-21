@@ -13,18 +13,11 @@
 $affixes = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes         = [-1 => __('views/dungeonroute.view.any')];
+    $affixes = [-1 => __('views/dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 ?>
-@section('scripts')
-    @parent
-
-    @include('common.handlebars.affixgroupsselect', ['affixgroups' => $dungeonroute->affixes])
-
-@endsection
-
 @section('linkpreview')
     <?php
     $defaultDescription = $dungeonroute->author === null ?
@@ -45,15 +38,16 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
             'dungeonroute' => $dungeonroute,
             'edit' => false,
             'floorId' => $floor->id,
-            'noUI' => (bool)$dungeonroute->demo,
-            'gestureHandling' => (bool)$dungeonroute->demo,
-            'showAttribution' => !(bool)$dungeonroute->demo,
+            'noUI' => false,
+            'gestureHandling' => false,
+            'showAttribution' => false,
             'show' => [
-                'header' => true,
+                'header' => false,
                 'controls' => [
-                    'view' => true,
+                    'present' => true,
                     'pulls' => true,
-                    'enemyInfo' => true,
+                    'enemyInfo' => false,
+                    'raiderioKsgAttribution' => true,
                 ],
                 'share' => [
                     'link' => !$dungeonroute->isSandbox(),

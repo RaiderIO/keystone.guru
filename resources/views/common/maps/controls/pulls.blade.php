@@ -33,7 +33,7 @@ $hideOnMove             = $hideOnMove ?? $isMobile;
 ]])
 
 <nav id="pulls_sidebar"
-     class="route_manipulation_tools top right row no-gutters map_fade_out
+     class="route_sidebar top right row no-gutters map_fade_out
              {{ $embed ? 'embed' : '' }}
              {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}

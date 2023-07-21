@@ -3,7 +3,7 @@
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\DungeonRoute $dungeonroute */
 ?>
-<nav class="route_manipulation_tools left h-100 row no-gutters map_fade_out">
+<nav class="route_sidebar route_manipulation_tools left h-100 row no-gutters map_fade_out">
     <div class="bg-header" style="background-color: unset !important;">
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container" class="mb-2">
@@ -12,7 +12,7 @@
         </div>
 
         @isset($dungeonroute)
-            <div id="view_route_actions_container" class="mb-2">
+            <div id="edit_route_actions_container" class="mb-2">
                 <div class="row no-gutters">
                     <div class="col">
                         <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
@@ -25,11 +25,11 @@
                     </div>
                 </div>
 
-                @include('common.maps.controls.elements.dungeonrouteinfo', ['dungeonroute' => $dungeonroute])
+                @include('common.maps.controls.elements.dungeonroute.info', ['dungeonroute' => $dungeonroute])
             </div>
         @endisset
 
-    <!-- Draw actions are injected here through drawcontrols.js -->
+        <!-- Draw actions are injected here through drawcontrols.js -->
         <div id="edit_route_draw_actions_container" class="mb-2">
 
         </div>

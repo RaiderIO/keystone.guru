@@ -33,6 +33,7 @@ $show['controls']['enemyForces'] = $show['controls']['enemyForces'] ?? true;
 $show['controls']['pulls']       = $show['controls']['pulls'] ?? true;
 $show['controls']['draw']        = $show['controls']['draw'] ?? false;
 $show['controls']['view']        = $show['controls']['view'] ?? false;
+$show['controls']['present']     = $show['controls']['present'] ?? false;
 $show['controls']['live']        = $show['controls']['live'] ?? false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
@@ -176,6 +177,13 @@ if ($isAdmin) {
             'selectedFloorId' => $floorId,
             'dungeonroute' => $dungeonroute,
         ])
+    @elseif(isset($show['controls']['present']) && $show['controls']['present'])
+        @include('common.maps.controls.present', [
+            'isAdmin' => $isAdmin,
+            'floors' => $dungeon->floors,
+            'selectedFloorId' => $floorId,
+            'dungeonroute' => $dungeonroute,
+        ])
     @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
@@ -191,6 +199,10 @@ if ($isAdmin) {
 
     @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
         @include('common.maps.controls.enemyinfo')
+    @endif
+
+    @if(isset($show['controls']['raiderioKsgAttribution']) && $show['controls']['raiderioKsgAttribution'])
+        @include('common.maps.controls.attribution')
     @endif
 @endif
 
