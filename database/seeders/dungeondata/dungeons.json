@@ -6240,7 +6240,7 @@
                 "id": 148,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2106,
                 "name": "dungeons.dragonflight.brackenhide_hollow.floors.den_of_decay",
                 "default": 0,
                 "min_enemy_size": null,
@@ -6252,7 +6252,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 493,
+                        "id": 638,
                         "floor1_id": 148,
                         "floor2_id": 147,
                         "direction": "left"
