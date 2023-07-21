@@ -14,6 +14,10 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function createPullFindEnemyForGuidEnd(): void;
 
+    public function createPullInsertedEnemies(int $enemyCount): void;
+
+    public function createPullNoEnemiesPullDeleted(): void;
+
     public function createPullSpellsAttachedToKillZone(int $spellCount): void;
 
     public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
@@ -35,4 +39,6 @@ interface DungeonRouteBuilderLoggingInterface
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $closestEnemyDistance): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
+
+    public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void;
 }

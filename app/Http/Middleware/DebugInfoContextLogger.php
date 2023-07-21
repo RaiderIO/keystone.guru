@@ -32,7 +32,7 @@ class DebugInfoContextLogger
 
         /** @var Response $response */
         $response = $next($request);
-        $response->header('X-Correlation-Id', $context['correlationId']);
+//        $response->header('X-Correlation-Id', $context['correlationId']);
 
         return $response;
     }
