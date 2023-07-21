@@ -2093,10 +2093,10 @@
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "mdt_mapping_hash": "0e8836f578313f4969abb4f5a5ba67bf",
         "created_at": "2023-06-13T14:17:15.000000Z",
-        "updated_at": "2023-06-13T14:17:15.000000Z",
+        "updated_at": "2023-07-21T09:00:36.000000Z",
         "merged": true
     },
     {
@@ -2107,10 +2107,10 @@
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "mdt_mapping_hash": "8e2eb4414a1fc301b0ebc367aa81af06",
         "created_at": "2023-06-13T14:17:27.000000Z",
-        "updated_at": "2023-06-13T14:17:27.000000Z",
+        "updated_at": "2023-07-21T08:59:53.000000Z",
         "merged": true
     },
     {
@@ -2121,10 +2121,10 @@
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "mdt_mapping_hash": "2b610280e743b533eae1d70790e07b7f",
         "created_at": "2023-06-13T14:17:30.000000Z",
-        "updated_at": "2023-06-13T14:17:30.000000Z",
+        "updated_at": "2023-07-21T09:01:48.000000Z",
         "merged": true
     },
     {
@@ -2135,10 +2135,10 @@
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1980,
         "mdt_mapping_hash": "b5f382ca734c00f44445c533d5d4ee4a",
         "created_at": "2023-06-13T14:17:32.000000Z",
-        "updated_at": "2023-06-13T14:17:32.000000Z",
+        "updated_at": "2023-07-21T09:01:14.000000Z",
         "merged": true
     },
     {
@@ -2149,10 +2149,10 @@
         "enemy_forces_required_teeming": 264,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1980,
         "mdt_mapping_hash": "230d069cb0517a16fb725bb9b198596d",
         "created_at": "2023-06-13T14:17:34.000000Z",
-        "updated_at": "2023-06-13T14:17:34.000000Z",
+        "updated_at": "2023-07-21T09:03:09.000000Z",
         "merged": true
     },
     {
@@ -2163,10 +2163,10 @@
         "enemy_forces_required_teeming": 313,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1800,
         "mdt_mapping_hash": "bcf8f81ec35143d49b47b28a91ccaf20",
         "created_at": "2023-06-13T14:17:35.000000Z",
-        "updated_at": "2023-06-13T14:17:35.000000Z",
+        "updated_at": "2023-07-21T09:03:44.000000Z",
         "merged": true
     },
     {
@@ -2177,10 +2177,10 @@
         "enemy_forces_required_teeming": 286,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1800,
         "mdt_mapping_hash": "72148ccc132e3e47c02330c912a89632",
         "created_at": "2023-06-13T14:17:38.000000Z",
-        "updated_at": "2023-06-13T14:17:38.000000Z",
+        "updated_at": "2023-07-21T09:04:16.000000Z",
         "merged": true
     },
     {
@@ -2191,10 +2191,10 @@
         "enemy_forces_required_teeming": 1000,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1800,
         "mdt_mapping_hash": "380c91957a425f575094a41a18bfb93c",
         "created_at": "2023-06-13T14:17:40.000000Z",
-        "updated_at": "2023-06-13T14:17:40.000000Z",
+        "updated_at": "2023-07-21T09:02:35.000000Z",
         "merged": true
     },
     {
@@ -2209,7 +2209,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:21:59.000000Z",
         "updated_at": "2023-07-09T12:21:59.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 161,
@@ -2223,7 +2223,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:20.000000Z",
         "updated_at": "2023-07-09T12:22:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 162,
@@ -2237,7 +2237,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:23.000000Z",
         "updated_at": "2023-07-09T12:22:23.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 163,
@@ -2251,7 +2251,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:25.000000Z",
         "updated_at": "2023-07-09T12:22:25.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 164,
@@ -2265,7 +2265,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:28.000000Z",
         "updated_at": "2023-07-09T12:22:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 165,
@@ -2279,7 +2279,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:30.000000Z",
         "updated_at": "2023-07-09T12:22:30.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 166,
@@ -2293,7 +2293,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:33.000000Z",
         "updated_at": "2023-07-09T12:22:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 167,
@@ -2307,7 +2307,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:36.000000Z",
         "updated_at": "2023-07-09T12:22:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 168,
@@ -2321,7 +2321,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:37.000000Z",
         "updated_at": "2023-07-09T12:22:37.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 169,
@@ -2335,7 +2335,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:39.000000Z",
         "updated_at": "2023-07-09T12:22:39.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 170,
@@ -2349,7 +2349,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:40.000000Z",
         "updated_at": "2023-07-09T12:22:40.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 171,
@@ -2363,7 +2363,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:41.000000Z",
         "updated_at": "2023-07-09T12:22:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 172,
@@ -2377,7 +2377,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:42.000000Z",
         "updated_at": "2023-07-09T12:22:42.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 173,
@@ -2391,7 +2391,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:44.000000Z",
         "updated_at": "2023-07-09T12:22:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 174,
@@ -2405,7 +2405,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:47.000000Z",
         "updated_at": "2023-07-09T12:22:47.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 175,
@@ -2419,7 +2419,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:49.000000Z",
         "updated_at": "2023-07-09T12:22:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 176,
@@ -2433,7 +2433,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:50.000000Z",
         "updated_at": "2023-07-09T12:22:50.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 177,
@@ -2447,7 +2447,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:51.000000Z",
         "updated_at": "2023-07-09T12:22:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 178,
@@ -2461,7 +2461,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:53.000000Z",
         "updated_at": "2023-07-09T12:22:53.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 179,
@@ -2475,7 +2475,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:54.000000Z",
         "updated_at": "2023-07-09T12:22:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 180,
@@ -2489,7 +2489,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:56.000000Z",
         "updated_at": "2023-07-09T12:22:56.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 181,
@@ -2503,7 +2503,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-09T12:22:57.000000Z",
         "updated_at": "2023-07-09T12:22:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 182,
@@ -2517,7 +2517,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-10T12:18:22.000000Z",
         "updated_at": "2023-07-10T12:18:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 183,
@@ -2531,6 +2531,6 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-07-10T12:30:21.000000Z",
         "updated_at": "2023-07-10T12:30:21.000000Z",
-        "merged": false
+        "merged": true
     }
 ]

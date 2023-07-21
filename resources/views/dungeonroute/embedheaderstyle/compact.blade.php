@@ -4,7 +4,9 @@
 /** @var $floor \App\Models\Floor */
 /** @var $embedOptions array */
 
-$viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]);
+$routeParams = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
+$presentRouteUrl = route('dungeonroute.present', $routeParams);
+$viewRouteUrl = route('dungeonroute.view', $routeParams);
 ?>
 <header class="header_embed_compact"
         style="
@@ -14,7 +16,7 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif
         ">
-    <div class="row no-gutters py-1">
+    <div class="row no-gutters py-2">
         <div class="col-auto text-right pr-1">
             <a href="{{ route('home') }}" target="_blank">
                 <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
@@ -47,6 +49,15 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
                 {!! Form::select('map_floor_selection_dropdown', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
             @endif
         </div>
+        @if($embedOptions['show']['presenterButton'])
+            <div class="col-auto px-1">
+                <a class="btn btn btn-warning float-right h-100 text-white"
+                   href="{{ $presentRouteUrl }}"
+                   target="_blank">
+                    <i class="fas fa-video"></i> {{ __('views/dungeonroute.embed.present_route') }}
+                </a>
+            </div>
+        @endif
         <div class="col-auto px-1">
             <a class="btn btn btn-primary float-right h-100"
                href="{{ $viewRouteUrl }}"

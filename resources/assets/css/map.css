@@ -34,14 +34,6 @@ html, body, #map, #app, .wrapper {
     }
 }
 
-/** Embed map needs space for the top header */
-.wrapper.embed_wrapper.regular {
-    height: calc(100vh - 109px);
-}
-.wrapper.embed_wrapper.compact {
-    height: calc(100vh - 46px);
-}
-
 #map.leaflet-container {
     font: unset;
     font-size: 12px;
@@ -151,18 +143,6 @@ html, body, #map, #app, .wrapper {
 .sidebar .sidebar-header {
     padding: 10px 20px;
     text-shadow: black 2px 2px;
-}
-
-.header_embed_regular {
-    height: 109px;
-    padding: 0 20px 10px 20px;
-    border-bottom: 1px black solid;
-}
-
-.header_embed_compact {
-    height: 46px;
-    padding: 0 20px 0 20px;
-    border-bottom: 1px black solid;
 }
 
 .header_embed_text_ellipsis > a,
@@ -382,8 +362,11 @@ html, body, #map, #app, .wrapper {
 }
 
 /** When embedding a route */
-#pulls_sidebar.embed .pulls_container:not(.has_speedrun) {
-    max-height: calc(100vh - 150px);
+#pulls_sidebar.embed.regular .pulls_container:not(.has_speedrun) {
+    max-height: calc(100vh - 109px);
+}
+#pulls_sidebar.embed.compact .pulls_container:not(.has_speedrun) {
+    max-height: calc(100vh - 46px);
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
@@ -511,55 +494,10 @@ html, body, #map, #app, .wrapper {
     font-size: 1rem;
 }
 
-.route_manipulation_tools {
-    position: fixed;
-    z-index: 99999;
-    align-items: flex-start !important;
-}
-
-.route_manipulation_tools:not(.embed) {
-    top: 70px;
-}
-
-.route_manipulation_tools.right {
-    right: 0;
-}
-
-.route_manipulation_tools .bg-header {
-    margin-left: 0 !important;
-    background-color: unset !important;
-    /*padding: 0 0.5rem 0 0 !important;*/
-}
-
 @media (min-width: 1200px) {
-    .route_manipulation_tools.top {
-        padding-top: 1rem !important;
-    }
-
-    #pulls_sidebar_trigger {
-        margin-top: 1rem !important;
-    }
-
-    .route_manipulation_tools:not(.top) {
-        top: unset;
-        align-items: center !important;
-    }
-
-    .route_manipulation_tools.left .bg-header {
-        margin-left: 0.5rem !important;
-    }
-
-    .route_manipulation_tools.right .bg-header {
-        margin-right: 0.5rem !important;
-    }
-
     #enemy_info_container {
         margin: 0.5rem !important;
     }
-}
-
-.map_controls_element_label_toggle:before {
-    content: "\a0";
 }
 
 #enemy_info_container {
@@ -570,6 +508,16 @@ html, body, #map, #app, .wrapper {
 
 #enemy_info_container .card {
     border-radius: 0 !important;
+}
+
+#attribution_container {
+    width: 300px;
+    margin: 0 !important;
+    z-index: 100000;
+}
+
+.map_controls_element_label_toggle:before {
+    content: "\a0";
 }
 
 #echo_connected_container {
@@ -601,31 +549,6 @@ html, body, #map, #app, .wrapper {
 .echo_member_column {
     -ms-flex: 0 0 100px;
     flex: 0 0 100px;
-}
-
-.route_manipulation_tools .draw_icon {
-    text-align: center;
-    cursor: pointer;
-    -webkit-transition: all 0.2s;
-    -o-transition: all 0.2s;
-    transition: all 0.2s;
-}
-
-.route_manipulation_tools .draw_element {
-    text-align: center;
-    margin-top: 8px;
-}
-
-.route_manipulation_tools .draw_element .bootstrap-select {
-    height: 100%;
-}
-
-.route_manipulation_tools .draw_icon.leaflet-disabled .col,
-.route_manipulation_tools .draw_icon.leaflet-disabled .col:hover {
-    background: gray;
-    color: inherit;
-    text-decoration: unset;
-    cursor: default;
 }
 
 .floating_panel,

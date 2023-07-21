@@ -67,12 +67,12 @@ class DungeonRouteLegacyController extends Controller
      */
     public function embedold(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
     {
-        return redirect()->route('dungeonroute.embed', [
+        return redirect()->route('dungeonroute.embed', array_merge([
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'floorindex'   => $floorIndex,
-        ]);
+        ], $request->all()));
     }
 
     /**

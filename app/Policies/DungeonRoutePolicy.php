@@ -28,6 +28,23 @@ class DungeonRoutePolicy
     }
 
     /**
+     * Determine whether the user can present the dungeon route.
+     *
+     * @param User|null $user
+     * @param DungeonRoute $dungeonroute
+     * @return mixed
+     */
+    public function present(?User $user, DungeonRoute $dungeonroute)
+    {
+        // Everyone can view dungeon routes (for now)
+        if (!$dungeonroute->mayUserView($user)) {
+            return $this->deny('This route is not published and cannot be presented. Please ask the author to publish this route to present it.');
+        }
+
+        return true;
+    }
+
+    /**
      * Determine whether the user can view the dungeon route.
      *
      * @param User|null $user

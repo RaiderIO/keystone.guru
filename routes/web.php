@@ -324,6 +324,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('{user}/makeadmin', [UserController::class, 'makeadmin'])->name('admin.user.makeadmin');
                 Route::post('{user}/makeuser', [UserController::class, 'makeuser'])->name('admin.user.makeuser');
                 Route::delete('{user}/delete', [UserController::class, 'delete'])->name('admin.user.delete');
+                Route::get('{user}/grantAllBenefits', [UserController::class, 'grantAllBenefits'])->name('admin.user.grantallbenefits');
             });
             Route::get('users', [UserController::class, 'list'])->name('admin.users');
 
@@ -563,8 +564,12 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
         Route::group(['prefix' => '{title?}'], function () {
             Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
+            Route::get('present/', [DungeonRouteController::class, 'present'])->name('dungeonroute.present');
+            Route::get('present/{floorindex}', [DungeonRouteController::class, 'presentFloor'])->name('dungeonroute.present.floor');
+
             Route::get('embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
             Route::get('embed/{floorindex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
+
             Route::get('{floorindex}', [DungeonRouteController::class, 'viewfloor'])->name('dungeonroute.view.floor');
             // Preview of a route for image capturing library
             Route::get('preview/{floorindex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');

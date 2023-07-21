@@ -36,6 +36,8 @@ interface PatreonServiceLoggingInterface
 
     public function applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink(): void;
 
+    public function applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits(): void;
+
     public function applyPaidBenefitsForMemberRemovedAllBenefits(): void;
 
     public function applyPaidBenefitsAddedPatreonBenefit(string $benefit, string $email): void;

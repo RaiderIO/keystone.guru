@@ -6,6 +6,10 @@
  * @var \App\Models\Mapping\MappingVersion $mappingVersion
  * @var \App\Models\DungeonRoute|null      $dungeonroute
  * @var \App\Models\LiveSession|null       $livesession
+ * @var bool|null                          $admin
+ * @var bool|null                          $embed
+ * @var string|null                        $embedStyle
+ * @var bool|null                          $edit
  * @var array                              $show
  * @var bool                               $adFree
  * @var string|null                        $mapBackgroundColor
@@ -14,6 +18,7 @@
 $user               = Auth::user();
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
+$embedStyle         = isset($embedStyle) ? $embedStyle : '';
 $edit               = isset($edit) && $edit;
 $mapClasses         = $mapClasses ?? '';
 $dungeonroute       = $dungeonroute ?? null;
@@ -28,6 +33,7 @@ $show['controls']['enemyForces'] = $show['controls']['enemyForces'] ?? true;
 $show['controls']['pulls']       = $show['controls']['pulls'] ?? true;
 $show['controls']['draw']        = $show['controls']['draw'] ?? false;
 $show['controls']['view']        = $show['controls']['view'] ?? false;
+$show['controls']['present']     = $show['controls']['present'] ?? false;
 $show['controls']['live']        = $show['controls']['live'] ?? false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
@@ -171,6 +177,13 @@ if ($isAdmin) {
             'selectedFloorId' => $floorId,
             'dungeonroute' => $dungeonroute,
         ])
+    @elseif(isset($show['controls']['present']) && $show['controls']['present'])
+        @include('common.maps.controls.present', [
+            'isAdmin' => $isAdmin,
+            'floors' => $dungeon->floors,
+            'selectedFloorId' => $floorId,
+            'dungeonroute' => $dungeonroute,
+        ])
     @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
@@ -179,12 +192,17 @@ if ($isAdmin) {
             'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
             'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
             'embed' => $embed,
+            'embedStyle' => $embedStyle,
             'dungeonroute' => $dungeonroute,
         ])
     @endif
 
     @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
         @include('common.maps.controls.enemyinfo')
+    @endif
+
+    @if(isset($show['controls']['raiderioKsgAttribution']) && $show['controls']['raiderioKsgAttribution'])
+        @include('common.maps.controls.attribution')
     @endif
 @endif
 

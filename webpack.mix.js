@@ -264,6 +264,7 @@ mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.versio
     .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
     .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
     .sass('resources/assets/sass/home.scss', 'public/css/home-' + gitRevisionPlugin.version() + '.css')
+    .sass('resources/assets/sass/custom/custom.scss', 'public/css/custom-compiled-' + gitRevisionPlugin.version() + '.css')
     // Lib processing
     // .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
     .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');

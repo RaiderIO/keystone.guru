@@ -4,30 +4,35 @@
 /** @var $floor \App\Models\Floor */
 /** @var $embedOptions array */
 
-$viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]);
+$routeParams = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
+$presentRouteUrl = route('dungeonroute.present', $routeParams);
+$viewRouteUrl = route('dungeonroute.view', $routeParams);
 ?>
-<header class="header_embed_regular"
+<header class="header_embed_regular py-2"
         style="
         @if($embedOptions['headerBackgroundColor'] !== null)
             background-color: {{ $embedOptions['headerBackgroundColor'] }};
         @else
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif">
-    <div class="row no-gutters py-2">
-        <div class="col pt-2">
+    <div class="row no-gutters pb-2">
+        <div class="col-8 pt-2">
             @if($embedOptions['show']['title'])
                 <div class="row no-gutters">
                     <div class="col header_embed_text_ellipsis">
-                        <a class="text-white"
-                           href="{{ $viewRouteUrl }}"
-                           target="_blank">
-                            <h4 class="mb-0">
+                        <h4 class="mb-0">
+                            <a class="text-white"
+                               href="{{ $viewRouteUrl }}"
+                               target="_blank">
                                 {{ $dungeonRoute->title }}
-                            </h4>
-                        </a>
+                            </a>
+                        </h4>
                     </div>
                 </div>
             @endif
+        </div>
+        <?php // Spacers ?>
+        <div class="col">
         </div>
         <div class="col-auto text-right">
             <a href="{{ route('home') }}" target="_blank">
@@ -57,6 +62,15 @@ $viewRouteUrl = route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon,
         </div>
         <div class="col">
         </div>
+        @if($embedOptions['show']['presenterButton'])
+            <div class="col-auto px-1">
+                <a class="btn btn btn-warning float-right h-100 text-white"
+                   href="{{ $presentRouteUrl }}"
+                   target="_blank">
+                    <i class="fas fa-video"></i> {{ __('views/dungeonroute.embed.present_route') }}
+                </a>
+            </div>
+        @endif
         <div class="col-auto px-1">
             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
             @if($dungeon->floors()->count() > 1)

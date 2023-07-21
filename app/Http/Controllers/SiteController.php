@@ -216,6 +216,6 @@ class SiteController extends Controller
      */
     public function embed(Request $request, DungeonRoute $dungeonRoute)
     {
-        return view('misc.embed', ['model' => $dungeonRoute]);
+        return view('misc.embed', ['model' => $dungeonRoute, 'parameters' => $request->all()]);
     }
 }

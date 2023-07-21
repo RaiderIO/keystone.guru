@@ -6240,7 +6240,7 @@
                 "id": 148,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2106,
                 "name": "dungeons.dragonflight.brackenhide_hollow.floors.den_of_decay",
                 "default": 0,
                 "min_enemy_size": null,
@@ -6252,7 +6252,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 493,
+                        "id": 638,
                         "floor1_id": 148,
                         "floor2_id": 147,
                         "direction": "left"
@@ -6503,7 +6503,7 @@
                 "id": 156,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2073,
                 "name": "dungeons.dragonflight.the_azure_vault.floors.the_arcane_conservatory",
                 "default": 1,
                 "min_enemy_size": null,
@@ -6515,7 +6515,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 506,
+                        "id": 639,
                         "floor1_id": 156,
                         "floor2_id": 157,
                         "direction": "down"
@@ -6528,7 +6528,7 @@
                 "id": 157,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2074,
                 "name": "dungeons.dragonflight.the_azure_vault.floors.crystal_chambers",
                 "default": 0,
                 "min_enemy_size": null,
@@ -6540,13 +6540,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 514,
+                        "id": 640,
                         "floor1_id": 157,
                         "floor2_id": 156,
                         "direction": "up"
                     },
                     {
-                        "id": 515,
+                        "id": 641,
                         "floor1_id": 157,
                         "floor2_id": 158,
                         "direction": "down"
@@ -6559,7 +6559,7 @@
                 "id": 158,
                 "index": 3,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2075,
                 "name": "dungeons.dragonflight.the_azure_vault.floors.mausoleum_of_legends",
                 "default": 0,
                 "min_enemy_size": null,
@@ -6571,13 +6571,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 507,
+                        "id": 642,
                         "floor1_id": 158,
                         "floor2_id": 157,
                         "direction": "up"
                     },
                     {
-                        "id": 508,
+                        "id": 643,
                         "floor1_id": 158,
                         "floor2_id": 159,
                         "direction": "down"
@@ -6590,7 +6590,7 @@
                 "id": 159,
                 "index": 4,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2076,
                 "name": "dungeons.dragonflight.the_azure_vault.floors.the_infinity_seal",
                 "default": 0,
                 "min_enemy_size": null,
@@ -6602,13 +6602,13 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 503,
+                        "id": 644,
                         "floor1_id": 159,
                         "floor2_id": 158,
                         "direction": "up"
                     },
                     {
-                        "id": 504,
+                        "id": 645,
                         "floor1_id": 159,
                         "floor2_id": 160,
                         "direction": "down"
@@ -6621,7 +6621,7 @@
                 "id": 160,
                 "index": 5,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2077,
                 "name": "dungeons.dragonflight.the_azure_vault.floors.sindragosas_lament",
                 "default": 0,
                 "min_enemy_size": null,
@@ -6633,7 +6633,7 @@
                 "percentage_display_zoom": null,
                 "floorcouplings": [
                     {
-                        "id": 519,
+                        "id": 646,
                         "floor1_id": 160,
                         "floor2_id": 159,
                         "direction": "up"

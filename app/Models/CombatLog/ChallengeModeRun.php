@@ -78,4 +78,38 @@ class ChallengeModeRun extends Model
     {
         return $this->hasOne(ChallengeModeRunData::class);
     }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getFormattedElapsedTime(): string
+    {
+        $milliseconds = $this->total_time_ms;
+        $hours = floor($milliseconds / 3600000);
+        $milliseconds -= ($hours * 3600000);
+
+        $minutes = floor($milliseconds / 60000);
+        $milliseconds -= ($minutes * 60000);
+
+        $seconds = floor($milliseconds / 1000);
+        $milliseconds -= ($seconds * 1000);
+
+        $interval = \Carbon\CarbonInterval::create(
+            0,
+            0,
+            0,
+            0,
+            $hours,
+            $minutes,
+            $seconds,
+            $milliseconds
+        );
+
+        if ($hours > 0) {
+            return sprintf('%02d:%02d:%02d.%02d', $interval->hours, $interval->minutes, $interval->seconds, $interval->microseconds);
+        } else {
+            return sprintf('%02d:%02d.%02d', $interval->minutes, $interval->seconds, $interval->microseconds);
+        }
+    }
 }

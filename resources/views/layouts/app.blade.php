@@ -64,11 +64,12 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset('css/custom-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
-    {{--    <link href="{{ asset('css/lib-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">--}}
-    <link href="{{ asset('css/theme-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset('css/home-' . $version . '.css') . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/app-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/custom-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
+    {{--    <link href="{{ asset(sprintf('css/lib-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">--}}
+    <link href="{{ asset(sprintf('css/theme-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/home-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/custom-compiled-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="{{ url("/images/icon/favicon.ico") }}">
     @yield('head')
 

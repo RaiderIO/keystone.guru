@@ -28,6 +28,8 @@ use Illuminate\Support\Collection;
  */
 class PatreonUserLink extends Model
 {
+    public const PERMANENT_TOKEN = 'grantedthroughadminpages';
+
     protected $fillable = [
         'user_id',
         'email',
@@ -38,7 +40,16 @@ class PatreonUserLink extends Model
         'expires_at',
     ];
     protected $with = ['patreonbenefits'];
-    protected $visible = ['patreonbenefits'];
+    protected $visible = ['patreonbenefits', 'manually_granted'];
+    protected $appends = ['manually_granted'];
+
+    /**
+     * @return bool
+     */
+    public function getManuallyGrantedAttribute(): bool
+    {
+        return $this->refresh_token === self::PERMANENT_TOKEN;
+    }
 
     /**
      * @return BelongsTo
