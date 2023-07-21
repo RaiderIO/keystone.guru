@@ -37,11 +37,12 @@ return [
         'account_delete_warning'                           => 'Your account will be permanently deleted. There is no turning back.',
         'account_delete_confirm'                           => 'Delete my Keystone.guru account',
 
-        'unlink_from_patreon'         => 'Unlink from Patreon',
-        'link_to_patreon_success'     => 'Your account is linked to :patreon. Thank you! Your active subscriptions are listed below. Anything missing? Let me know as soon as possible on Discord and I will look into it.',
-        'link_to_patreon'             => 'Link to Patreon',
-        'link_to_patreon_description' => 'In order to claim your Patreon rewards, you need to link your Patreon account',
-        'patreon_benefit_table'             => [
+        'unlink_from_patreon'             => 'Unlink from Patreon',
+        'patreon_status_granted_manually' => 'Your account has been granted all :patreon benefits because you\'re special and awesome, and don\'t let anyone tell you otherwise! Your active subscriptions are listed below. Anything missing? Let me know as soon as possible on Discord and I will look into it.',
+        'link_to_patreon_success'         => 'Your account is linked to :patreon. Thank you! Your active subscriptions are listed below. Anything missing? Let me know as soon as possible on Discord and I will look into it.',
+        'link_to_patreon'                 => 'Link to Patreon',
+        'link_to_patreon_description'     => 'In order to claim your Patreon rewards, you need to link your Patreon account',
+        'patreon_benefit_table'           => [
             'header_active'  => 'Active',
             'header_benefit' => 'Benefit',
         ],

@@ -196,6 +196,8 @@ return [
     'make_user_label'                                                => 'Make user',
     'make_admin_label'                                               => 'Make admin',
     'delete_user_label'                                              => 'Delete user',
+    'grant_all_benefits_label'                                       => 'Grant all benefits',
+    'patreon_benefits_manually_granted_label'                        => 'All benefits manually granted',
 
     // Home page
     'import_notes_label'                                             => 'Import notes',
