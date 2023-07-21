@@ -7,7 +7,7 @@ use App\Logging\StructuredLogging;
 class PatreonServiceLogging extends StructuredLogging implements PatreonServiceLoggingInterface
 {
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignBenefitsAdminUserNull(): void
     {
@@ -15,7 +15,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignBenefitsStart(): void
     {
@@ -24,7 +24,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $tiersAndBenefitsResponse
-     * @return mixed
+     * @return void
      */
     public function loadCampaignBenefitsRetrieveTiersErrors(array $tiersAndBenefitsResponse): void
     {
@@ -32,7 +32,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignBenefitsEnd(): void
     {
@@ -40,7 +40,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignTiersAdminUserNull(): void
     {
@@ -48,7 +48,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignTiersStart(): void
     {
@@ -57,7 +57,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $tiersAndBenefitsResponse
-     * @return mixed
+     * @return void
      */
     public function loadCampaignTiersRetrieveTiersAndBenefitsErrors(array $tiersAndBenefitsResponse): void
     {
@@ -65,7 +65,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignTiersEnd(): void
     {
@@ -73,7 +73,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignMembersAdminUserNull(): void
     {
@@ -81,7 +81,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignMembersStart(): void
     {
@@ -90,7 +90,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $membersResponse
-     * @return mixed
+     * @return void
      */
     public function loadCampaignTiersRetrieveMembersErrors(array $membersResponse): void
     {
@@ -98,7 +98,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadCampaignMembersEnd(): void
     {
@@ -106,7 +106,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsForMemberEmptyMemberEmail(): void
     {
@@ -115,7 +115,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param string $memberEmail
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsForMemberStart(string $memberEmail): void
     {
@@ -123,7 +123,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsForMemberCannotFindPatreonData(): void
     {
@@ -131,7 +131,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink(): void
     {
@@ -139,7 +139,15 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
+     */
+    public function applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits(): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
      */
     public function applyPaidBenefitsForMemberRemovedAllBenefits(): void
     {
@@ -149,7 +157,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     /**
      * @param string $benefit
      * @param string $email
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsAddedPatreonBenefit(string $benefit, string $email): void
     {
@@ -159,7 +167,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     /**
      * @param string $removedBenefit
      * @param string $email
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsRevokedPatreonBenefit(string $removedBenefit, string $email): void
     {
@@ -167,7 +175,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function applyPaidBenefitsForMemberEnd(): void
     {
@@ -176,7 +184,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param int $id
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserIsCached(int $id): void
     {
@@ -184,7 +192,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserStart(): void
     {
@@ -192,7 +200,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserAdminUserNotFound(): void
     {
@@ -200,7 +208,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserPatreonUserLinkNotSet(): void
     {
@@ -208,7 +216,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserTokenExpired(): void
     {
@@ -217,7 +225,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $errors
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserTokenRefreshError(array $errors): void
     {
@@ -226,7 +234,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $tokens
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserAccessTokenNotSet(array $tokens): void
     {
@@ -235,7 +243,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $tokens
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserRefreshTokenNotSet(array $tokens): void
     {
@@ -244,7 +252,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param array $tokens
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserExpiresInNotSet(array $tokens): void
     {
@@ -253,7 +261,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
 
     /**
      * @param bool $date
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserUpdatedTokenSuccessfully(bool $date): void
     {
@@ -261,7 +269,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function loadAdminUserEnd(): void
     {

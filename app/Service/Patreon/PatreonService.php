@@ -149,6 +149,12 @@ class PatreonService implements PatreonServiceInterface
                 return false;
             }
 
+            // Exception for users that were granted their membership status
+            if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
+                $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
+                return true;
+            }
+
             // We now know which user this is - update the benefits of this user
             $newBenefits = collect();
             foreach ($member['relationships']['currently_entitled_tiers']['data'] as $currentlyEntitledTier) {

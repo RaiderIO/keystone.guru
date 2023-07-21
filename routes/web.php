@@ -324,6 +324,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('{user}/makeadmin', [UserController::class, 'makeadmin'])->name('admin.user.makeadmin');
                 Route::post('{user}/makeuser', [UserController::class, 'makeuser'])->name('admin.user.makeuser');
                 Route::delete('{user}/delete', [UserController::class, 'delete'])->name('admin.user.delete');
+                Route::get('{user}/grantAllBenefits', [UserController::class, 'grantAllBenefits'])->name('admin.user.grantallbenefits');
             });
             Route::get('users', [UserController::class, 'list'])->name('admin.users');
 

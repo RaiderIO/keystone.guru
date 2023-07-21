@@ -109,8 +109,6 @@
                             if (row.patreon_user_link !== null) {
                                 let template = Handlebars.templates['admin_users_table_row_patreon'];
 
-                                console.log(row.patreon_user_link);
-
                                 let patreonBenefitsCopy = JSON.parse(JSON.stringify(patreonBenefits));
                                 for (let i = 0; i < row.patreon_user_link.patreonbenefits.length; i++) {
                                     let userPaidTier = row.patreon_user_link.patreonbenefits[i];

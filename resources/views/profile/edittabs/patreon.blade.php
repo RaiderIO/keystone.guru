@@ -6,17 +6,25 @@
         {{ __('views/profile.edit.patreon') }}
     </h4>
     @isset($user->patreonUserLink)
-        <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}">
-            {{ __('views/profile.edit.unlink_from_patreon') }}
-        </a>
+        @php(ob_start())
+        @include('common.thirdparty.patreon.fancylink')
+        @php($patreonLink = trim(ob_get_clean()))
 
-        <p class="mt-2">
-            <span class="text-info"><i class="fa fa-check-circle"></i></span>
-            @php(ob_start())
-            @include('common.thirdparty.patreon.fancylink')
-            @php($patreonLink = trim(ob_get_clean()))
-            {!! __('views/profile.edit.link_to_patreon_success', ['patreon' => $patreonLink]) !!}
-        </p>
+        @if($user->patreonUserLink->refresh_token === \App\Models\Patreon\PatreonUserLink::PERMANENT_TOKEN)
+            <p class="mt-2">
+                <span class="text-info"><i class="fa fa-check-circle"></i></span>
+                {!! __('views/profile.edit.patreon_status_granted_manually', ['patreon' => $patreonLink]) !!}
+            </p>
+        @else
+            <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}">
+                {{ __('views/profile.edit.unlink_from_patreon') }}
+            </a>
+
+            <p class="mt-2">
+                <span class="text-info"><i class="fa fa-check-circle"></i></span>
+                {!! __('views/profile.edit.link_to_patreon_success', ['patreon' => $patreonLink]) !!}
+            </p>
+        @endif
 
         <table class="default_table table-striped">
             <tr>
