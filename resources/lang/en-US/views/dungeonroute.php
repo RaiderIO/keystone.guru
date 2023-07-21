@@ -55,6 +55,7 @@ return [
         'affixes_title'    => 'Affixes',
         'affixes_selected' => '{0} affixes selected',
         'view_route'       => 'View route',
+        'present_route'    => 'Present route',
         'copy_mdt_string'  => 'Copy MDT string',
     ],
     'limitreached'   => [
