@@ -1,0 +1,28 @@
+{
+    "id": 189,
+    "release_changelog_id": 196,
+    "version": "v6.9",
+    "title": "",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2023-07-21T14:25:25+00:00",
+    "updated_at": "2023-07-21T14:25:25+00:00",
+    "changelog": {
+        "id": 196,
+        "release_id": 189,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 196,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1858,
+                "change": "Created presenter mode.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            }
+        ]
+    }
+}
