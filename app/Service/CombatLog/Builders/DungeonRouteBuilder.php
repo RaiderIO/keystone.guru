@@ -31,6 +31,15 @@ abstract class DungeonRouteBuilder
         Dungeon::DUNGEON_HALLS_OF_INFUSION,
         // Spawned in enemies right before final boss will not get picked up otherwise
         Dungeon::DUNGEON_NELTHARUS,
+        // There can be an issue where the map change doesn't register properly and you miss the first pull after the 3rd boss
+        // (right after supposedly switching floors). Also - the floors don't overlap on the Z axis so disabling this check
+        // will do no harm at all
+        Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+        // The game switches to the final floor too quickly, causing you to miss the last pack guarding the blocked gate
+        // to the last boss
+        Dungeon::DUNGEON_THE_UNDERROT,
+        // Snapping enemies between floors is a thing
+        Dungeon::DUNGEON_THE_AZURE_VAULT,
     ];
 
     protected const NPC_ID_MAPPING = [
@@ -65,9 +74,9 @@ abstract class DungeonRouteBuilder
     {
         $this->dungeonRoute = $dungeonRoute;
         /** @var DungeonRouteBuilderLoggingInterface $log */
-        $log                    = App::make(DungeonRouteBuilderLoggingInterface::class);
-        $this->log              = $log;
-        $this->currentFloor     = null;
+        $log = App::make(DungeonRouteBuilderLoggingInterface::class);
+        $this->log = $log;
+        $this->currentFloor = null;
         $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
             'floor',
             'floor.dungeon',
@@ -85,8 +94,8 @@ abstract class DungeonRouteBuilder
             ->keyBy('id');
 
         $this->currentPullEnemiesKilled = collect();
-        $this->currentPullSpellsCast    = collect();
-        $this->currentEnemiesInCombat   = collect();
+        $this->currentPullSpellsCast = collect();
+        $this->currentEnemiesInCombat = collect();
     }
 
     /**
@@ -126,7 +135,7 @@ abstract class DungeonRouteBuilder
         ]);
 
         // Keep track of which groups we're in combat with
-        $groupsPulled              = collect();
+        $groupsPulled = collect();
         $killZoneEnemiesAttributes = collect();
         foreach ($killedEnemies as $guid => $killedEnemy) {
             /** @var string $guid */
@@ -186,8 +195,11 @@ abstract class DungeonRouteBuilder
         if ($killZoneEnemiesAttributes->isNotEmpty()) {
             KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
             $this->killZoneIndex++;
+            $enemyCount = $killZoneEnemiesAttributes->count();
+            $this->log->createPullInsertedEnemies($enemyCount);
         } else {
             $killZone->delete();
+            $this->log->createPullNoEnemiesPullDeleted();
         }
 
         // Assign spells to the pull
@@ -210,9 +222,9 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param int        $npcId
-     * @param float      $ingameX
-     * @param float      $ingameY
+     * @param int $npcId
+     * @param float $ingameX
+     * @param float $ingameY
      * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      *
      * @return Enemy|null
@@ -311,11 +323,11 @@ abstract class DungeonRouteBuilder
 
     /**
      * @param Collection $enemies
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param float      $closestEnemyDistance
+     * @param float $ingameX
+     * @param float $ingameY
+     * @param float $closestEnemyDistance
      * @param Enemy|null $closestEnemy
-     * @param bool       $considerPatrols
+     * @param bool $considerPatrols
      * @return bool
      */
     private function findClosestEnemyAndDistanceFromList(
@@ -329,6 +341,8 @@ abstract class DungeonRouteBuilder
     {
         $result = false;
 
+        $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
+
         // Sort descending - higher priorties go first
         foreach ($enemies->groupBy('kill_priority')->sortDesc() as $killPriority => $availableEnemies) {
             // For each group of enemies
@@ -340,7 +354,7 @@ abstract class DungeonRouteBuilder
                     }
 
                     // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
-                    $points   = [];
+                    $points = [];
                     $vertices = json_decode($availableEnemy->enemyPatrol->polyline->vertices_json, true);
                     foreach ($vertices as $vertex) {
                         $points[] = $vertex;
@@ -356,7 +370,7 @@ abstract class DungeonRouteBuilder
                             $closestEnemyDistance,
                             $closestEnemy
                         );
-                        $result               = $result || $foundNewClosestEnemy;
+                        $result = $result || $foundNewClosestEnemy;
                     }
                 } else {
                     $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
@@ -368,7 +382,7 @@ abstract class DungeonRouteBuilder
                         $closestEnemyDistance,
                         $closestEnemy
                     );
-                    $result               = $result || $foundNewClosestEnemy;
+                    $result = $result || $foundNewClosestEnemy;
                 }
             }
 
@@ -382,12 +396,12 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Enemy      $availableEnemy
-     * @param float      $enemyLat
-     * @param float      $enemyLng
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param float      $closestEnemyDistance
+     * @param Enemy $availableEnemy
+     * @param float $enemyLat
+     * @param float $enemyLng
+     * @param float $ingameX
+     * @param float $ingameY
+     * @param float $closestEnemyDistance
      * @param Enemy|null $closestEnemy
      *
      * @return bool True if an enemy close enough was found
@@ -416,8 +430,8 @@ abstract class DungeonRouteBuilder
 
         if ($closestEnemyDistance > $distance) {
             $closestEnemyDistance = $distance;
-            $closestEnemy         = $availableEnemy;
-            $result               = $closestEnemyDistance < self::MAX_DISTANCE_IGNORE;
+            $closestEnemy = $availableEnemy;
+            $result = $closestEnemyDistance < self::MAX_DISTANCE_IGNORE;
         }
 
         return $result;

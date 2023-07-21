@@ -42,8 +42,8 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     protected CreateRouteDungeonRouteServiceLoggingInterface $log;
 
     /**
-     * @param CombatLogService                               $combatLogService
-     * @param SeasonServiceInterface                         $seasonService
+     * @param CombatLogService $combatLogService
+     * @param SeasonServiceInterface $seasonService
      * @param CreateRouteDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
@@ -53,8 +53,8 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     )
     {
         $this->combatLogService = $combatLogService;
-        $this->seasonService    = $seasonService;
-        $this->log              = $log;
+        $this->seasonService = $seasonService;
+        $this->log = $log;
     }
 
     /**
@@ -121,9 +121,9 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 $challengeModeStartEvent->getAffixIDs()
             );
 
-            $npcs             = collect();
+            $npcs = collect();
             $npcEngagedEvents = collect();
-            $spells           = collect();
+            $spells = collect();
             foreach ($resultEvents as $resultEvent) {
                 if ($resultEvent instanceof EnemyEngagedResultEvent) {
                     $guid = $resultEvent->getGuid();
@@ -196,7 +196,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
     /**
      * @param CreateRouteBody $createRouteBody
-     * @param DungeonRoute    $dungeonRoute
+     * @param DungeonRoute $dungeonRoute
      * @return void
      */
     private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
@@ -218,7 +218,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             ->get()
             ->keyBy('ui_map_id');
 
-        $invalidUiMapIds         = [];
+        $invalidUiMapIds = [];
         $enemyPositionAttributes = [];
         foreach ($createRouteBody->npcs as $npc) {
             /** @var Floor $floor */
@@ -257,8 +257,8 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     * @param MappingVersion    $mappingVersion
-     * @param CreateRouteBody   $createRouteBody
+     * @param MappingVersion $mappingVersion
+     * @param CreateRouteBody $createRouteBody
      * @param DungeonRoute|null $dungeonRoute
      *
      * @return void
@@ -269,9 +269,16 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         ?DungeonRoute   $dungeonRoute = null
     ): void
     {
-        $currentFloor      = null;
+        $currentFloor = null;
         $mapIconAttributes = collect();
+
+        $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
         foreach ($createRouteBody->npcs as $npc) {
+            // Ignore NPCs that are not in the whitelist
+            if ($validNpcIds->search($npc->npcId) === false) {
+                continue;
+            }
+
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$npc->coord->uiMapId] ?? $npc->coord->uiMapId;
             if ($currentFloor === null || $realUiMapId !== $currentFloor->ui_map_id) {
                 $currentFloor = Floor::findByUiMapId($npc->coord->uiMapId);

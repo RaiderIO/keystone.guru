@@ -4,7 +4,7 @@
     'header' => false,
     'title' => $dungeonroute->title,
     'cookieConsent' => false,
-    'adFree' => true,
+    'showAds' => false,
 ])
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
