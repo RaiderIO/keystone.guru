@@ -18,12 +18,6 @@ use Illuminate\Support\Collection;
 
 abstract class DungeonRouteBuilder
 {
-    /** @var int How much yards the closest enemy must be away from in order to consider if we maybe aggroed a patrol */
-    private const MAX_AGGRO_DISTANCE_FOR_PATROLS = 50;
-
-    /** @var int The distance in yards that an enemy must be away from before we completely ignore him - it must be an error. */
-    private const MAX_DISTANCE_IGNORE = 100;
-
     /** @var array Dungeons for which the floor check for enemies is disabled due to issues on Blizzard's side */
     private const DUNGEON_ENEMY_FLOOR_CHECK_DISABLED = [
         // With this check for example, the Gulping Goliath in Halls of Infusion will not be killed as the floor switch only happens til
@@ -284,23 +278,21 @@ abstract class DungeonRouteBuilder
             } else {
                 $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
 
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                    optional($closestEnemy)->id, $closestEnemyDistance
-                );
-
                 // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
-                if ($closestEnemyDistance > self::MAX_AGGRO_DISTANCE_FOR_PATROLS) {
-                    $this->log->findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols();
-
+                if ($closestEnemyDistance > $this->currentFloor->enemy_engagement_max_range_patrols) {
                     $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy, true);
                 }
 
-                if ($closestEnemyDistance > self::MAX_DISTANCE_IGNORE) {
-                    if ($closestEnemy !== null && $closestEnemy->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                if( $closestEnemy === null ) {
+                    $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
+                        optional($closestEnemy)->id, $closestEnemyDistance
+                    );
+                } else if ($closestEnemyDistance > $this->currentFloor->enemy_engagement_max_range) {
+                    if ($closestEnemy->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                         $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
                     } else {
                         $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
-                            optional($closestEnemy)->id, $closestEnemyDistance, self::MAX_DISTANCE_IGNORE
+                            $closestEnemy->id, $closestEnemyDistance, $this->currentFloor->enemy_engagement_max_range
                         );
                         $closestEnemy = null;
                     }
@@ -392,6 +384,8 @@ abstract class DungeonRouteBuilder
             }
         }
 
+        $this->log->findClosestEnemyAndDistanceFromListResult(optional($closestEnemy)->id, $closestEnemyDistance);
+
         return $result;
     }
 
@@ -431,7 +425,7 @@ abstract class DungeonRouteBuilder
         if ($closestEnemyDistance > $distance) {
             $closestEnemyDistance = $distance;
             $closestEnemy = $availableEnemy;
-            $result = $closestEnemyDistance < self::MAX_DISTANCE_IGNORE;
+            $result = $closestEnemyDistance < $this->currentFloor->enemy_engagement_max_range;
         }
 
         return $result;

@@ -52,6 +52,9 @@ class FloorController extends Controller
         $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
         $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
 
+        $floor->enemy_engagement_max_range         = $request->get('enemy_engagement_max_range', 150);
+        $floor->enemy_engagement_max_range_patrols = $request->get('enemy_engagement_max_range_patrols', 50);
+
         $floor->percentage_display_zoom = $request->get('percentage_display_zoom');
 
         // Update or insert it
