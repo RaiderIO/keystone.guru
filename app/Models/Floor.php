@@ -15,41 +15,43 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $dungeon_id
- * @property int $index
- * @property int|null $mdt_sub_level
- * @property int|null $ui_map_id
- * @property string $name
- * @property boolean $default
- * @property int $min_enemy_size
- * @property int $max_enemy_size
- * @property int $ingame_min_x
- * @property int $ingame_min_y
- * @property int $ingame_max_x
- * @property int $ingame_max_y
- * @property int|null $percentage_display_zoom
+ * @property int                                     $id
+ * @property int                                     $dungeon_id
+ * @property int                                     $index
+ * @property int|null                                $mdt_sub_level
+ * @property int|null                                $ui_map_id
+ * @property string                                  $name
+ * @property boolean                                 $default
+ * @property int                                     $min_enemy_size
+ * @property int                                     $max_enemy_size
+ * @property int                                     $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int                                     $enemy_engagement_max_range_patrols The max range after which we're considering patrols
+ * @property int                                     $ingame_min_x
+ * @property int                                     $ingame_min_y
+ * @property int                                     $ingame_max_x
+ * @property int                                     $ingame_max_y
+ * @property int|null                                $percentage_display_zoom
  *
- * @property Dungeon $dungeon
+ * @property Dungeon                                 $dungeon
  *
- * @property Collection|Enemy[] $enemies
- * @property Collection|EnemyPack[] $enemypacks
- * @property Collection|EnemyPatrol[] $enemypatrols
- * @property Collection|MapIcon[] $mapicons
- * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
- * @property Collection|MountableArea[] $mountableareas
+ * @property Collection|Enemy[]                      $enemies
+ * @property Collection|EnemyPack[]                  $enemypacks
+ * @property Collection|EnemyPatrol[]                $enemypatrols
+ * @property Collection|MapIcon[]                    $mapicons
+ * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
+ * @property Collection|MountableArea[]              $mountableareas
  *
- * @property Collection|Enemy[] $enemiesForExport
- * @property Collection|EnemyPack[] $enemyPacksForExport
- * @property Collection|EnemyPatrol[] $enemyPatrolsForExport
- * @property Collection|MapIcon[] $mapIconsForExport
- * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkersForExport
- * @property Collection|MountableArea[] $mountableAreasForExport
+ * @property Collection|Enemy[]                      $enemiesForExport
+ * @property Collection|EnemyPack[]                  $enemyPacksForExport
+ * @property Collection|EnemyPatrol[]                $enemyPatrolsForExport
+ * @property Collection|MapIcon[]                    $mapIconsForExport
+ * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
+ * @property Collection|MountableArea[]              $mountableAreasForExport
  *
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
- * @property Collection|Floor[] $connectedFloors
- * @property Collection|Floor[] $directConnectedFloors
- * @property Collection|Floor[] $reverseConnectedFloors
+ * @property Collection|Floor[]                      $connectedFloors
+ * @property Collection|Floor[]                      $directConnectedFloors
+ * @property Collection|Floor[]                      $reverseConnectedFloors
  *
  * @mixin Eloquent
  */
@@ -78,6 +80,8 @@ class Floor extends CacheModel implements MappingModelInterface
         'name',
         'default',
         'ui_map_id',
+        'enemy_engagement_max_range',
+        'enemy_engagement_max_range_patrols',
         'ingame_min_x',
         'ingame_min_y',
         'ingame_max_x',
@@ -257,7 +261,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param float $lat
      * @param float $lng
-     * @param int $targetFloorId
+     * @param int   $targetFloorId
      * @return DungeonFloorSwitchMarker|null
      */
     public function findClosestFloorSwitchMarker(float $lat, float $lng, int $targetFloorId): ?DungeonFloorSwitchMarker
@@ -337,8 +341,8 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public static function findByUiMapId(int $uiMapId): Floor
     {
-           return Floor
-                ::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
-                ->firstOrFail();
+        return Floor
+            ::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
+            ->firstOrFail();
     }
 }

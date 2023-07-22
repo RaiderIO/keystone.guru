@@ -192,8 +192,7 @@ class MappingVersion extends Model
         parent::boot();
 
         // If we create a new mapping version, we must create a complete copy of the previous mapping and re-save that to the database.
-        static::created(function (MappingVersion $newMappingVersion)
-        {
+        static::created(function (MappingVersion $newMappingVersion) {
             /** @var Collection|MappingVersion[] $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
 
@@ -276,8 +275,7 @@ class MappingVersion extends Model
         });
 
         // Deleting a mapping version also causes their relations to be deleted (as does creating a mapping version duplicates them)
-        static::deleting(function (MappingVersion $mappingVersion)
-        {
+        static::deleting(function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
             foreach ($mappingVersion->enemyPacks as $enemyPack) {

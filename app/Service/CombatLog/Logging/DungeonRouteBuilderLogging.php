@@ -50,6 +50,24 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
+     * @param int $enemyCount
+     * @return void
+     */
+    public function createPullInsertedEnemies(int $enemyCount): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function createPullNoEnemiesPullDeleted(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+
+    /**
      * @param int $spellCount
      * @return void
      */
@@ -120,14 +138,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     /**
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationConsideringPatrols(): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @return void
-     */
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck(): void
     {
         $this->info(__METHOD__, get_defined_vars());
@@ -163,4 +173,26 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     {
         $this->end(__METHOD__);
     }
+
+    /**
+     * @param int $enemiesCount
+     * @param bool $considerPatrols
+     * @return void
+     */
+    public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int|null $enemyId
+     * @param float    $closestEnemyDistance
+     * @return void
+     */
+    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $closestEnemyDistance): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
 }

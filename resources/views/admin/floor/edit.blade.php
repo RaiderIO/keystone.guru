@@ -67,6 +67,18 @@ $floor = $floor ?? null;
         @include('common.forms.form-error', ['key' => 'max_enemy_size'])
     </div>
 
+    <div class="form-group{{ $errors->has('enemy_engagement_max_range') ? ' has-error' : '' }}">
+        {!! Form::label('enemy_engagement_max_range', sprintf(__('views/admin.floor.edit.enemy_engagement_max_range_patrols'), config('keystoneguru.enemy_engagement_max_range_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('enemy_engagement_max_range', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range'])
+    </div>
+
+    <div class="form-group{{ $errors->has('enemy_engagement_max_range_patrols') ? ' has-error' : '' }}">
+        {!! Form::label('enemy_engagement_max_range_patrols', sprintf(__('views/admin.floor.edit.enemy_engagement_max_range_patrols'), config('keystoneguru.enemy_engagement_max_range_patrols_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('enemy_engagement_max_range_patrols', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range_patrols'])
+    </div>
+
     <div class="form-group{{ $errors->has('percentage_display_zoom') ? ' has-error' : '' }}">
         {!! Form::label('percentage_display_zoom', __('views/admin.floor.edit.percentage_display_zoom'), ['class' => 'font-weight-bold']) !!}
         {!! Form::number('percentage_display_zoom', null, ['class' => 'form-control']) !!}
