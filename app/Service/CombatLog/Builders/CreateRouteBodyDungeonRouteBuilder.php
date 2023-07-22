@@ -116,7 +116,11 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
      */
     private function buildKillZones(): void
     {
-        $npcEngagedEvents = $this->createRouteBody->npcs->map(function (CreateRouteNpc $npc) {
+        $filteredNpcs = $this->createRouteBody->npcs->filter(function (CreateRouteNpc $npc) {
+            return $this->validNpcIds->search($npc->npcId) !== false;
+        });
+
+        $npcEngagedEvents = $filteredNpcs->map(function (CreateRouteNpc $npc) {
             return [
                 'type'      => 'engaged',
                 'timestamp' => $npc->getEngagedAt(),
@@ -124,7 +128,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             ];
         });
 
-        $npcDiedEvents = $this->createRouteBody->npcs->map(function (CreateRouteNpc $npc) {
+        $npcDiedEvents = $filteredNpcs->map(function (CreateRouteNpc $npc) {
             return [
                 'type'      => 'died',
                 // A bit of a hack - but prevent one-shot enemies from having their diedAt event
@@ -144,7 +148,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
 //        dd($npcEngagedAndDiedEvents->map(function (array $event) {
 //            /** @var Carbon $timestamp */
-//            $timestamp = $event['timestamp'];
+//            $timestamp     = $event['timestamp'];
 //            $event['date'] = $timestamp->toDateTimeString();
 //            $event['guid'] = $event['npc']->spawnUid;
 //

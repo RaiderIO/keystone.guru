@@ -8,6 +8,15 @@ use Exception;
 class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRouteBuilderLoggingInterface
 {
     /**
+     * @param int $killZoneIndex
+     * @return void
+     */
+    public function createPullStart(int $killZoneIndex): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    /**
      * @param string $guid
      *
      * @return void
@@ -18,7 +27,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int $npcId
+     * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
      *
@@ -30,7 +39,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int $npcId
+     * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
      *
@@ -83,15 +92,23 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      *
      * @return void
      */
-    public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void
+    public function createPullMappingToDifferentNpcId(int $npcId, int $targetNpcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function createPullEnd(): void
+    {
+        $this->end(__METHOD__);
     }
 
 
     /**
      * @param Exception $exception
-     * @param int $uitMapId
+     * @param int       $uitMapId
      *
      * @return void
      */
@@ -101,7 +118,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int $npcId
+     * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
      *
@@ -126,7 +143,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param int|null $enemyId
-     * @param float $closestEnemyDistance
+     * @param float    $closestEnemyDistance
      *
      * @return void
      */
@@ -145,8 +162,8 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param int|null $enemyId
-     * @param float $closestEnemyDistance
-     * @param int $maxDistance
+     * @param float    $closestEnemyDistance
+     * @param int      $maxDistance
      *
      * @return void
      */
@@ -175,7 +192,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int $enemiesCount
+     * @param int  $enemiesCount
      * @param bool $considerPatrols
      * @return void
      */

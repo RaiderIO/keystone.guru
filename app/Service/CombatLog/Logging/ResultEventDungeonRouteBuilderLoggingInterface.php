@@ -12,6 +12,8 @@ interface ResultEventDungeonRouteBuilderLoggingInterface
 
     public function buildInCombatWithEnemy(string $guid): void;
 
+    public function buildEnemyNotInValidNpcIds(string $guid): void;
+
     public function buildUnitDiedNoLongerInCombat(string $guid): void;
 
     public function buildUnitDiedNotInCombat(string $guid): void;

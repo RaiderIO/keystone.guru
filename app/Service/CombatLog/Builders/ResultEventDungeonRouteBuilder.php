@@ -62,11 +62,20 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 if ($resultEvent instanceof EnemyEngaged) {
-                    // We are in combat with this enemy now
-                    $this->currentEnemiesInCombat->put($resultEvent->getGuid()->getGuid(), $resultEvent);
+                    if ($this->validNpcIds->search($resultEvent->getGuid()->getId()) !== false) {
+                        // We are in combat with this enemy now
+                        $this->currentEnemiesInCombat->put($resultEvent->getGuid()->getGuid(), $resultEvent);
 
-                    $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
+                        $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
+                    } else {
+                        $this->log->buildEnemyNotInValidNpcIds($resultEvent->getGuid()->getGuid());
+                    }
                 } else if ($resultEvent instanceof EnemyKilled) {
+                    if ($this->validNpcIds->search($resultEvent->getGuid()->getId()) === false) {
+                        // No need to log really
+                        continue;
+                    }
+
                     /** @var $baseEvent UnitDied */
                     // Check if we had this enemy in combat, if so, we just killed it in our current pull
                     // UnitDied only has DestGuid
