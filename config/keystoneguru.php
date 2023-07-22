@@ -113,15 +113,17 @@ return [
         ],
     ],
 
-    /**
-     * The minimum size for enemies for floors if none was set
-     */
+    /** The minimum size for enemies for floors if none was set */
     'min_enemy_size_default'             => 12,
 
-    /**
-     * The maximum size for enemies for floors if none was set
-     */
+    /** The maximum size for enemies for floors if none was set */
     'max_enemy_size_default'             => 26,
+
+    /** When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up */
+    'enemy_engagement_max_range_default' => 150,
+
+    /** The range after which we start considering patrols too */
+    'enemy_engagement_max_range_patrols_default' => 50,
 
     /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
