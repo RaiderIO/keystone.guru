@@ -1,0 +1,39 @@
+{
+    "id": 190,
+    "release_changelog_id": 197,
+    "version": "v6.9.1",
+    "title": "Hotfixes for auto-route generator",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2023-07-22T16:25:44+00:00",
+    "updated_at": "2023-07-22T16:25:44+00:00",
+    "changelog": {
+        "id": 197,
+        "release_id": 190,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 197,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1878,
+                "change": "[Hotfixed] The Azure Vault now properly generates routes.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 197,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1881,
+                "change": "Allowed configuration of enemy max range when generating routes on a per-floor basis.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}
