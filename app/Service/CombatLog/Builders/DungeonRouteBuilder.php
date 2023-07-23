@@ -13,6 +13,7 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -41,6 +42,9 @@ abstract class DungeonRouteBuilder
         194373 => 187238,
     ];
 
+    /** @var int The average HP of the current pull before we consider new enemies as part of a new pull */
+    protected const CHAIN_PULL_DETECTION_HP_PERCENT = 30;
+
     protected DungeonRoute $dungeonRoute;
 
     protected ?Floor $currentFloor;
@@ -48,14 +52,8 @@ abstract class DungeonRouteBuilder
     /** @var Collection|Enemy[] */
     protected Collection $availableEnemies;
 
-    /** @var Collection */
-    protected Collection $currentPullEnemiesKilled;
-
-    /** @var Collection */
-    protected Collection $currentPullSpellsCast;
-
-    /** @var Collection */
-    protected Collection $currentEnemiesInCombat;
+    /** @var Collection|ActivePull[] */
+    protected Collection $activePulls;
 
     /** @var Collection|int */
     protected Collection $validNpcIds;
@@ -91,10 +89,8 @@ abstract class DungeonRouteBuilder
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds              = $dungeonRoute->dungeon->getInUseNpcIds();
-        $this->currentPullEnemiesKilled = collect();
-        $this->currentPullSpellsCast    = collect();
-        $this->currentEnemiesInCombat   = collect();
+        $this->validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
+        $this->activePulls = collect();
     }
 
     /**
@@ -104,9 +100,10 @@ abstract class DungeonRouteBuilder
     public abstract function build(): DungeonRoute;
 
     /**
+     * @param ActivePull $activePull
      * @return Collection|array{array{npcId: int, x: float, y: float}}
      */
-    public abstract function convertEnemiesKilledInCurrentPull(): Collection;
+    public abstract function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection;
 
     /**
      * @return void
@@ -120,15 +117,16 @@ abstract class DungeonRouteBuilder
     }
 
     /**
+     * @param ActivePull $activePull
      * @return KillZone
      */
-    protected function createPull(): KillZone
+    protected function createPull(ActivePull $activePull): KillZone
     {
         try {
             $this->log->createPullStart($this->killZoneIndex);
 
             /** @var Collection|array{array{npcId: int, x: float, y: float}} $killedEnemies */
-            $killedEnemies = $this->convertEnemiesKilledInCurrentPull();
+            $killedEnemies = $this->convertEnemiesKilledInActivePull($activePull);
 
             $killZone = KillZone::create([
                 'dungeon_route_id' => $this->dungeonRoute->id,
@@ -191,9 +189,6 @@ abstract class DungeonRouteBuilder
                 }
             }
 
-            // Clear the collection - we just created a pull for all enemies
-            $this->currentPullEnemiesKilled = collect();
-
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
                 KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
                 $this->killZoneIndex++;
@@ -206,13 +201,12 @@ abstract class DungeonRouteBuilder
 
             // Assign spells to the pull
             $killZoneSpellsAttributes = collect();
-            foreach ($this->currentPullSpellsCast as $spellId) {
+            foreach ($activePull->getSpellsCast() as $spellId) {
                 $killZoneSpellsAttributes->push([
                     'kill_zone_id' => $killZone->id,
                     'spell_id'     => $spellId,
                 ]);
             }
-            $this->currentPullSpellsCast = collect();
 
             if ($killZoneSpellsAttributes->isNotEmpty()) {
                 KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
@@ -348,7 +342,7 @@ abstract class DungeonRouteBuilder
 
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
 
-        // Sort descending - higher priorties go first
+        // Sort descending - higher priorities go first
         foreach ($enemies->groupBy('kill_priority')->sortDesc() as $killPriority => $availableEnemies) {
             // For each group of enemies
             /** @var Collection|Enemy[] $availableEnemies */

@@ -14,7 +14,7 @@
     <p>
     <ul>
         <li>
-            <span class="font-weight-bold">Daenarian</span> for helping map the first part of The Motherlode
+            <span class="font-weight-bold">Daenarian</span> for helping map the first part of The Motherlode!!!
             meticulously.
         </li>
         <li>
@@ -24,10 +24,13 @@
         </li>
         <li>
             Various members of
-            <span class="font-weight-bold">{{ link_to('https://darkwolves.eu/', 'Dark Wolves') }}</span> and
+            <span class="font-weight-bold">{{ link_to('https://www.darkwolves.eu/', 'Dark Wolves') }}</span> and
             <span class="font-weight-bold">Sark</span>
             for helping me with mapping dungeons, from odd requests to "kill that mob" to "hold up for a second you
             guys are going too fast" :).
+        </li>
+        <li>
+            <span class="font-weight-bold">Neky</span> for being mostly useless and annoying. But he did help map that one dungeon, or so he said.
         </li>
     </ul>
     </p>

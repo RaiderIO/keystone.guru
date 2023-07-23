@@ -11,6 +11,8 @@ use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\PublishedState;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Models\ActivePull\ActivePull;
+use App\Service\CombatLog\Models\ActivePull\CreateRouteBodyActivePull;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Season\SeasonServiceInterface;
@@ -19,9 +21,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property Collection|CreateRouteNpc[] $currentPullEnemiesKilled
- * @property Collection|CreateRouteNpc[] $currentEnemiesInCombat
- *
  * @package App\Service\CombatLog\Builders
  * @author Wouter
  * @since 24/06/2023
@@ -45,9 +44,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         $dungeonRoute = $this->initDungeonRoute();
 
         parent::__construct($dungeonRoute);
-
-        $this->currentEnemiesInCombat   = collect();
-        $this->currentPullEnemiesKilled = collect();
 
 
         /** @var CreateRouteBodyDungeonRouteBuilderLoggingInterface $log */
@@ -171,28 +167,61 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($firstEngagedAt === null) {
                     $firstEngagedAt = $event['npc']->getEngagedAt();
                 }
-                $this->currentEnemiesInCombat->put($uniqueUid, $event['npc']);
+
+                if ($this->activePulls->isEmpty()) {
+                    $activePull = new CreateRouteBodyActivePull();
+                    $this->activePulls->push($activePull);
+
+                    $this->log->buildKillZonesCreateNewActivePull();
+                } else {
+                    /** @var ActivePull $activePull */
+                    $activePull = $this->activePulls->last();
+                }
+
+                // Check if we need to account for chain pulling
+                $activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt());
+                if ($activePullAverageHPPercent <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
+                    $activePull = new CreateRouteBodyActivePull();
+                    $this->activePulls->push($activePull);
+
+                    $this->log->buildKillZonesCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
+                }
+
+                $activePull->enemyEngaged($uniqueUid, $event['npc']);
+                $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
             } else if ($event['type'] === 'died') {
-                $this->currentEnemiesInCombat->forget($uniqueUid);
-                $this->currentPullEnemiesKilled->put($uniqueUid, $event['npc']);
+                // Find the pull that this enemy is part of
+                foreach ($this->activePulls as $activePull) {
+                    if ($activePull->isEnemyInCombat($uniqueUid)) {
+                        $activePull->enemyKilled($uniqueUid, $event['npc']);
+                        $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
+                    }
+                }
             }
 
-            if ($this->currentEnemiesInCombat->isEmpty()) {
-                $this->determineSpellsCastBetween($firstEngagedAt, $event['npc']->getDiedAt());
-                $firstEngagedAt = null;
+            // Handle spells and the actual creation of pulls
+            foreach ($this->activePulls as $pullIndex => $activePull) {
+                if ($activePull->getEnemiesInCombat()->isEmpty()) {
+                    $this->determineSpellsCastBetween($activePull, $firstEngagedAt, $event['npc']->getDiedAt());
 
-                $this->createPull();
+                    $this->createPull($activePull);
+
+                    $this->activePulls->forget($pullIndex);
+                }
             }
         }
 
-        // Ensure that we create a final pull if need be
-        if ($this->currentPullEnemiesKilled->isNotEmpty()) {
-            $this->log->buildKillZonesCreateNewFinalPull($this->currentPullEnemiesKilled->keys()->toArray());
+        // Handle spells and the actual creation of pulls for all remaining active pulls
+        foreach ($this->activePulls as $activePull) {
+            if ($activePull->getEnemiesInCombat()->isEmpty()) {
+                $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
 
-            $this->determineSpellsCastBetween($firstEngagedAt);
-
-            $this->createPull();
+                $this->determineSpellsCastBetween($activePull, $firstEngagedAt);
+                $this->createPull($activePull);
+            }
         }
+
+        $this->activePulls = collect();
 
         $this->recalculateEnemyForcesOnDungeonRoute();
     }
@@ -200,9 +229,9 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     /**
      * @return Collection|array{array{npcId: int, x: float, y: float}}
      */
-    public function convertEnemiesKilledInCurrentPull(): Collection
+    public function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection
     {
-        return $this->currentPullEnemiesKilled->map(function (CreateRouteNpc $npc) {
+        return $activePull->getEnemiesKilled()->map(function (CreateRouteNpc $npc) {
             return [
                 'npcId' => $npc->npcId,
                 'x'     => $npc->coord->x,
@@ -212,20 +241,21 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
+     * @param ActivePull  $activePull
      * @param Carbon      $firstEngagedAt
      * @param Carbon|null $diedAt
      * @return void
      */
-    private function determineSpellsCastBetween(Carbon $firstEngagedAt, ?Carbon $diedAt = null)
+    private function determineSpellsCastBetween(ActivePull $activePull, Carbon $firstEngagedAt, ?Carbon $diedAt = null)
     {
         // Determine the spells that were cast during this pull
         foreach ($this->createRouteBody->spells as $spell) {
             if ($diedAt !== null) {
                 if ($spell->getCastAt()->between($firstEngagedAt, $diedAt)) {
-                    $this->currentPullSpellsCast->push($spell->spellId);
+                    $activePull->addSpell($spell->spellId);
                 }
             } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
-                $this->currentPullSpellsCast->push($spell->spellId);
+                $activePull->addSpell($spell->spellId);
             }
         }
     }
