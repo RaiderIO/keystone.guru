@@ -213,6 +213,16 @@ class MappingVersion extends Model
                 'timer_max_seconds'               => $previousMappingVersion->timer_max_seconds,
             ]);
 
+            $previousMappingVersion->load([
+                'dungeonFloorSwitchMarkers',
+                'enemies',
+                'enemyPacks',
+                'enemyPatrols',
+                'mapIcons',
+                'mountableAreas',
+                'npcEnemyForces',
+            ]);
+
             /** @var Collection|MappingModelInterface[] $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
