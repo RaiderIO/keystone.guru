@@ -95,15 +95,6 @@ abstract class ActivePull
      */
     public function isEnemyInCombat(string $uniqueUid): bool
     {
-        $result = false;
-
-        foreach($this->enemiesInCombat as $guid => $npc) {
-            if ($guid === $uniqueUid) {
-                $result = true;
-                break;
-            }
-        }
-
-        return $result;
+        return $this->enemiesInCombat->has($uniqueUid);
     }
 }

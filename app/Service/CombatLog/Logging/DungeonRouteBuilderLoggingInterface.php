@@ -28,7 +28,7 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, array $preferredGroups): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void;
 

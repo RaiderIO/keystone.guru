@@ -35,6 +35,8 @@ abstract class DungeonRouteBuilder
         Dungeon::DUNGEON_THE_UNDERROT,
         // Snapping enemies between floors is a thing
         Dungeon::DUNGEON_THE_AZURE_VAULT,
+        // Enemies in the cave at the last boss are put on the main floor instead so people don't have to switch floors around
+        Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
     ];
 
     protected const NPC_ID_MAPPING = [
@@ -236,7 +238,7 @@ abstract class DungeonRouteBuilder
     ): ?Enemy
     {
         try {
-            $this->log->findUnkilledEnemyForNpcAtIngameLocationStart($npcId, $ingameX, $ingameY);
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationStart($npcId, $ingameX, $ingameY, $preferredGroups->toArray());
 
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemyDistance = 99999999999;
