@@ -70,8 +70,11 @@ class Floor extends CacheModel implements MappingModelInterface
     // bosses) and put them on the main floor without introducing a 2nd floor.
     const UI_MAP_ID_MAPPING = [
         // Court of Stars
-        762 => 761,
-        763 => 761,
+        762  => 761,
+        763  => 761,
+        // Brackenhide Hollow
+        2106 => 2096
+        // @TODO Add Al'gethar Academy
     ];
 
     protected $fillable = [

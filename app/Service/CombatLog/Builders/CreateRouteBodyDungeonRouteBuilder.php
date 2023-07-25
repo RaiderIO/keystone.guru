@@ -231,11 +231,13 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
      */
     public function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection
     {
-        return $activePull->getEnemiesKilled()->map(function (CreateRouteNpc $npc) {
+        return $activePull->getEnemiesKilled()->mapWithKeys(function (CreateRouteNpc $npc, string $guid) {
             return [
-                'npcId' => $npc->npcId,
-                'x'     => $npc->coord->x,
-                'y'     => $npc->coord->y,
+                $guid => [
+                    'npcId' => $npc->npcId,
+                    'x'     => $npc->coord->x,
+                    'y'     => $npc->coord->y,
+                ]
             ];
         });
     }

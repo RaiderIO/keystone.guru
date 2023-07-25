@@ -121,10 +121,10 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      * @param int   $npcId
      * @param float $ingameX
      * @param float $ingameY
-     *
+     * @param array $preferredGroups
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, array $preferredGroups): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
