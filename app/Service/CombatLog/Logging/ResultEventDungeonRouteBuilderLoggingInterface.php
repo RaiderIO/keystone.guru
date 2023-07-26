@@ -14,15 +14,15 @@ interface ResultEventDungeonRouteBuilderLoggingInterface
 
     public function buildEnemyNotInValidNpcIds(string $guid): void;
 
-    public function buildUnitDiedNoLongerInCombat(string $guid): void;
+    public function buildSpellCast(string $guid, int $spellId): void;
 
-    public function buildUnitDiedNotInCombat(string $guid): void;
-
-    public function buildCreateNewPull(array $keys): void;
-
-    public function buildSpellCast(string $getGuid, int $getSpellId): void;
-
-    public function buildCreateNewFinalPull(array $keys): void;
+    public function buildCreateNewFinalPull(array $guids): void;
 
     public function buildEnd(): void;
+
+    public function buildCreateNewActivePull(): void;
+
+    public function buildCreateNewActiveChainPull(float $activePullAverageHPPercent, int $chainPullDetectionHPPercent): void;
+
+    public function buildEnemyKilled(string $guid, string $timestamp): void;
 }

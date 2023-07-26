@@ -56,51 +56,21 @@ class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements
 
     /**
      * @param string $guid
-     *
+     * @param int    $spellId
      * @return void
      */
-    public function buildUnitDiedNoLongerInCombat(string $guid): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @param string $guid
-     *
-     * @return void
-     */
-    public function buildUnitDiedNotInCombat(string $guid): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @param array $keys
-     *
-     * @return void
-     */
-    public function buildCreateNewPull(array $keys): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    /**
-     * @param string $getGuid
-     * @param int    $getSpellId
-     * @return void
-     */
-    public function buildSpellCast(string $getGuid, int $getSpellId): void
+    public function buildSpellCast(string $guid, int $spellId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
 
     /**
-     * @param array $keys
+     * @param array $guids
      *
      * @return void
      */
-    public function buildCreateNewFinalPull(array $keys): void
+    public function buildCreateNewFinalPull(array $guids): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -111,5 +81,33 @@ class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements
     public function buildEnd(): void
     {
         $this->end(__METHOD__);
+    }
+
+    /**
+     * @return void
+     */
+    public function buildCreateNewActivePull(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    /**
+     * @param float $activePullAverageHPPercent
+     * @param int   $chainPullDetectionHPPercent
+     * @return void
+     */
+    public function buildCreateNewActiveChainPull(float $activePullAverageHPPercent, int $chainPullDetectionHPPercent): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param string $guid
+     * @param string $timestamp
+     * @return void
+     */
+    public function buildEnemyKilled(string $guid, string $timestamp): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
     }
 }

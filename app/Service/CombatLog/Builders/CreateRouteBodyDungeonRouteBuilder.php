@@ -213,12 +213,10 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePulls as $activePull) {
-            if ($activePull->getEnemiesInCombat()->isEmpty()) {
-                $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
+            $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
 
-                $this->determineSpellsCastBetween($activePull, $firstEngagedAt);
-                $this->createPull($activePull);
-            }
+            $this->determineSpellsCastBetween($activePull, $firstEngagedAt);
+            $this->createPull($activePull);
         }
 
         $this->activePulls = collect();

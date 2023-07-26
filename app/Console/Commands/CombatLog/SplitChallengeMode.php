@@ -5,7 +5,7 @@ namespace App\Console\Commands\CombatLog;
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
 use Illuminate\Console\Command;
 
-class SplitChallengeMode extends Command
+class SplitChallengeMode extends BaseCombatLogCommand
 {
     /**
      * The name and signature of the console command.
