@@ -898,5 +898,113 @@
         "color_animated": null,
         "label": "Imported from MDT - group 33",
         "vertices_json": "[{\"lat\":-156,\"lng\":162},{\"lat\":-152,\"lng\":162},{\"lat\":-152,\"lng\":166},{\"lat\":-156,\"lng\":166}]"
+    },
+    {
+        "id": 5862,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 27,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 27",
+        "vertices_json": "[{\"lat\":\"-238.21875\",\"lng\":\"142.5\"},{\"lat\":\"-229.46875\",\"lng\":\"144.28125\"},{\"lat\":\"-230.21875\",\"lng\":\"156.25\"},{\"lat\":\"-238.3125\",\"lng\":\"153.375\"}]"
+    },
+    {
+        "id": 5863,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 25,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 25",
+        "vertices_json": "[{\"lat\":-241,\"lng\":168},{\"lat\":-235,\"lng\":168},{\"lat\":-235,\"lng\":172},{\"lat\":-241,\"lng\":172}]"
+    },
+    {
+        "id": 5864,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 28,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 28",
+        "vertices_json": "[{\"lat\":\"-230.875\",\"lng\":\"133.34375\"},{\"lat\":\"-222.28125\",\"lng\":\"133.15625\"},{\"lat\":\"-222.5\",\"lng\":\"142.40625\"},{\"lat\":\"-230.6875\",\"lng\":\"142\"}]"
+    },
+    {
+        "id": 5865,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 30,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 30",
+        "vertices_json": "[{\"lat\":-190,\"lng\":161},{\"lat\":-183,\"lng\":161},{\"lat\":-183,\"lng\":167},{\"lat\":-190,\"lng\":167}]"
+    },
+    {
+        "id": 5866,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 32,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 32",
+        "vertices_json": "[{\"lat\":-165,\"lng\":161},{\"lat\":-159,\"lng\":161},{\"lat\":-159,\"lng\":167},{\"lat\":-165,\"lng\":167}]"
+    },
+    {
+        "id": 5867,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 26,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 26",
+        "vertices_json": "[{\"lat\":-243,\"lng\":155},{\"lat\":-235,\"lng\":155},{\"lat\":-235,\"lng\":163},{\"lat\":-243,\"lng\":163}]"
+    },
+    {
+        "id": 5868,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 29,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 29",
+        "vertices_json": "[{\"lat\":-204,\"lng\":162},{\"lat\":-200,\"lng\":162},{\"lat\":-200,\"lng\":166},{\"lat\":-204,\"lng\":166}]"
+    },
+    {
+        "id": 5869,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 31,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 31",
+        "vertices_json": "[{\"lat\":-171,\"lng\":162},{\"lat\":-169,\"lng\":162},{\"lat\":-169,\"lng\":166},{\"lat\":-171,\"lng\":166}]"
+    },
+    {
+        "id": 5870,
+        "mapping_version_id": 185,
+        "floor_id": 150,
+        "group": 33,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 33",
+        "vertices_json": "[{\"lat\":-156,\"lng\":162},{\"lat\":-152,\"lng\":162},{\"lat\":-152,\"lng\":166},{\"lat\":-156,\"lng\":166}]"
     }
 ]
