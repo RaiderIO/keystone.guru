@@ -412,11 +412,12 @@ return [
             'pull_settings' => 'Pull settings',
         ],
         'routeadminsettings' => [
-            'title'                   => 'Admin settings',
-            'dungeon_route_info'      => 'Route info',
-            'combatlog_info'          => 'Combatlog info',
-            'challenge_mode_run'      => 'Challenge Mode Run',
-            'challenge_mode_run_data' => 'Challenge Mode Run Data'
+            'title'                         => 'Admin settings',
+            'dungeon_route_info'            => 'Route info',
+            'combatlog_info'                => 'Combatlog info',
+            'challenge_mode_run'            => 'Challenge Mode Run',
+            'challenge_mode_run_data'       => 'Challenge Mode Run Data',
+            'route_not_created_through_api' => 'Route was not generated through API but through commandline',
         ],
         'routesettings'      => [
             'title' => 'Route settings',

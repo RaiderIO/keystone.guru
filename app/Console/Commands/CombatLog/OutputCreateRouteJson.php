@@ -59,7 +59,7 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
         $resultingFile = str_replace(['.txt', '.zip'], '.json', $filePath);
 
         $result = file_put_contents(
-            base_path($resultingFile),
+            $resultingFile,
             json_encode($createRouteBodyDungeonRouteService->getCreateRouteBody($filePath), JSON_PRETTY_PRINT)
         );
 
