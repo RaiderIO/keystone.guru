@@ -49,6 +49,10 @@ class ChallengeModeRun extends Model
         'created_at',
     ];
 
+    protected $with = [
+        'challengeModeRunData'
+    ];
+
     /**
      * @return HasOne
      */

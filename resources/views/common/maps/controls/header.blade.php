@@ -78,7 +78,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                     </li>
                 @endisset
                 <li class="nav-item h-100">
-                    <div class="row no-gutters justify-content-center align-self-center">
+                    <div class="row no-gutters">
                         <div id="route_title" class="col">
                             <div class="row no-gutters">
                                 <div class="col-auto">
@@ -96,11 +96,13 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                     @isset($dungeonroute)
                                             <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
                                         <div class="col-auto">
-                                            <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                               style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
-                                            <i id="route_not_favorited" class="far fa-star favorite_star"
-                                               style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
-                                            {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
+                                            <h5 class="mb-0 mr-2">
+                                                <i id="route_favorited" class="fas fa-star favorite_star favorited"
+                                                   style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
+                                                <i id="route_not_favorited" class="far fa-star favorite_star"
+                                                   style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
+                                                {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
+                                            </h5>
                                         </div>
                                         <div class="col">
 
@@ -110,30 +112,31 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             </div>
                         </div>
                     </div>
-                    @if(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
-                        <div class="row">
-                            <div class="col" data-toggle="tooltip"
-                                 title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
+                    <div class="row no-gutters">
+                        <div class="col">
+                            @if($dungeonroute && $dungeonroute->team instanceof \App\Models\Team)
+                                <span class="text-primary">
+                                    @if($dungeonroute->team->isUserMember(Auth::user()))
+                                        <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
+                                            <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
+                                        </a>
+                                    @else
+                                        <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
+                                    @endif
+                                </span>
+                            @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
+                                <span data-toggle="tooltip"
+                                     title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
                                         <span class="text-warning">
                                             <i class="fas fa-exclamation-triangle"></i>
                                         </span>
-                                {{ __('views/common.maps.map.new_mapping_version_header_title') }}
-                            </div>
+                                    {{ __('views/common.maps.map.new_mapping_version_header_title') }}
+                                </span>
+                            @else
+                            &nbsp;
+                            @endif
                         </div>
-                    @endisset
-                    @if($dungeonroute && $dungeonroute->team instanceof \App\Models\Team)
-                        <div class="row no-gutters">
-                            <div class="col text-primary">
-                                @if($dungeonroute->team->isUserMember(Auth::user()))
-                                    <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
-                                        <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                    </a>
-                                @else
-                                    <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                @endif
-                            </div>
-                        </div>
-                    @endif
+                    </div>
                 </li>
             </ul>
             @if($echo)
@@ -162,12 +165,33 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                         </li>
                     @endif
                 @endauth
+
+                @auth
+                    @if(Auth::user()->hasRole('admin'))
+                    <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
+                        @if( $challengeModeRun !== null )
+                            <li class="nav-item mr-2">
+                                <div class="d-flex h-100">
+                                    <div class="row justify-content-center align-self-center">
+                                        <div class="col">
+                                            <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                    data-target="#edit_route_admin_settings_modal">
+                                                <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endisset
+                    @endif
+                @endauth
+
                 @isset($dungeonroute)
                     <li class="nav-item mr-2">
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
-                                    <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    <button id="simulate_route_button" class="btn btn-info btn-sm" data-toggle="modal"
                                             data-target="#simulate_modal">
                                         <i class="fas fa-atom"></i> {{ __('views/common.maps.controls.header.simulate_route') }}
                                     </button>
@@ -180,7 +204,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             <div class="d-flex h-100">
                                 <div class="row justify-content-center align-self-center">
                                     <div class="col">
-                                        <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                        <button id="edit_route_settings_button" class="btn btn-info btn-sm" data-toggle="modal"
                                                 data-target="#edit_route_settings_modal">
                                             <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_route_settings') }}
                                         </button>
@@ -194,7 +218,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
-                                    <button id="edit_route_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    <button id="edit_mapping_version_button" class="btn btn-info btn-sm" data-toggle="modal"
                                             data-target="#edit_mapping_version_modal">
                                         <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_mapping_version') }}
                                     </button>
@@ -228,6 +252,10 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
     @component('common.general.modal', ['id' => 'share_modal'])
         @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
+    @endcomponent
+
+    @component('common.general.modal', ['id' => 'edit_route_admin_settings_modal', 'size' => 'xl'])
+        @include('common.modal.routeadminsettings', ['dungeonRoute' => $dungeonroute])
     @endcomponent
 
     @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
@@ -274,7 +302,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 <select>
                     @for($i = 1; $i <= 10; $i++)
                         <option
-                            value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                                value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
                             {{ $i }}
                         </option>
                     @endfor

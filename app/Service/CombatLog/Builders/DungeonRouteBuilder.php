@@ -230,7 +230,7 @@ abstract class DungeonRouteBuilder
      *
      * @return Enemy|null
      */
-    private function findUnkilledEnemyForNpcAtIngameLocation(
+    protected function findUnkilledEnemyForNpcAtIngameLocation(
         int        $npcId,
         float      $ingameX,
         float      $ingameY,

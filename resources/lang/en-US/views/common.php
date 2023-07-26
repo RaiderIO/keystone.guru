@@ -299,6 +299,7 @@ return [
                 'edit_route'                     => 'Edit route',
                 'view_route'                     => 'View route',
                 'save_to_profile'                => 'Save to profile',
+                'edit_route_admin_settings'      => 'Admin settings',
                 'simulate_route'                 => 'Simulate',
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
@@ -364,13 +365,11 @@ return [
                 This warning indicates the mapping version used by this route is out of date and may not represent the in-game mapping',
             'admin_header_title'                     => '%s (mapping version %d)',
 
-            'route'         => 'Route',
-            'map_settings'  => 'Map settings',
-            'pull_settings' => 'Pull settings',
+            'route' => 'Route',
         ],
     ],
     'modal'        => [
-        'userreport'      => [
+        'userreport'         => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
                 'your_name'              => 'Your name',
@@ -388,19 +387,19 @@ return [
                 'submit'                 => 'Submit',
             ],
         ],
-        'createroute'     => [
+        'createroute'        => [
             'create_route'           => 'Create route',
             'create_temporary_route' => 'Create temporary route',
             'import_from_mdt'        => 'Import from MDT',
         ],
-        'legal'           => [
+        'legal'              => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',
             'terms_of_service'   => 'terms of service',
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
-        'mappingversion'  => [
+        'mappingversion'     => [
             'enemy_forces_required'           => 'Enemy forces required',
             'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
             'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
@@ -408,10 +407,21 @@ return [
             'timer_max_seconds'               => 'Timer (seconds)',
             'save'                            => 'Save',
         ],
-        'routesettings'   => [
+        'mapsettings'        => [
+            'map_settings'  => 'Map settings',
+            'pull_settings' => 'Pull settings',
+        ],
+        'routeadminsettings' => [
+            'title'                   => 'Admin settings',
+            'dungeon_route_info'      => 'Route info',
+            'combatlog_info'          => 'Combatlog info',
+            'challenge_mode_run'      => 'Challenge Mode Run',
+            'challenge_mode_run_data' => 'Challenge Mode Run Data'
+        ],
+        'routesettings'      => [
             'title' => 'Route settings',
         ],
-        'share'           => [
+        'share'              => [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',
@@ -425,7 +435,7 @@ return [
             'loading'                          => 'Loading...',
             'copy_to_clipboard'                => 'Copy to clipboard',
         ],
-        'simulate'        => [
+        'simulate'           => [
             'intro'                                   => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
                 generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, enable SimC Expert Mode and paste the output in the Footer section.',
             'title'                                   => 'Simulate route',
@@ -472,7 +482,7 @@ return [
             'loading'                                 => 'Loading...',
             'copy_to_clipboard'                       => 'Copy to clipboard',
         ],
-        'simulateoptions' => [
+        'simulateoptions'    => [
             'advanced' => [
                 'patreon_link_text' => 'Patreon',
                 'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
