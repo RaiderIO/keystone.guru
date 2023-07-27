@@ -19,7 +19,7 @@ class ReleaseController extends Controller
 {
     /**
      * @param ReleaseFormRequest $request
-     * @param Release|null $release
+     * @param Release|null       $release
      * @return mixed
      */
     public function store(ReleaseFormRequest $request, Release $release = null)
@@ -45,18 +45,21 @@ class ReleaseController extends Controller
         $changelog->changes()->delete();
         // Unset the relation so it's reloaded
         $changelog->unsetRelation('changes');
+
+        $releaseChangelogChangesAttributes = [];
         for ($i = 0; $i < count($tickets); $i++) {
             // Only filled in rows, but tickets may be null
-            if (/*strlen($tickets[$i]) > 0 && */ (int)$categories[$i] !== -1 && strlen($categories[$i]) > 0 && strlen($changes[$i]) > 0) {
-                // Add new changes
-                $changelogChange                                = new ReleaseChangelogChange();
-                $changelogChange->release_changelog_id          = $changelog->id;
-                $changelogChange->release_changelog_category_id = $categories[$i];
-                $changelogChange->ticket_id                     = is_null($tickets[$i]) ? null : intval(str_replace('#', '', $tickets[$i]));
-                $changelogChange->change                        = $changes[$i];
-                $changelogChange->save();
+            if ((int)$categories[$i] !== -1 && strlen($categories[$i]) > 0 && strlen($changes[$i]) > 0) {
+                $releaseChangelogChangesAttributes[] = [
+                    'release_changelog_id'          => $changelog->id,
+                    'release_changelog_category_id' => $categories[$i],
+                    'ticket_id'                     => is_null($tickets[$i]) ? null : intval(str_replace('#', '', $tickets[$i])),
+                    'change'                        => $changes[$i],
+                ];
             }
         }
+        ReleaseChangelogChange::insert($releaseChangelogChangesAttributes);
+
         $changelog->load('changes');
 
 
@@ -72,13 +75,14 @@ class ReleaseController extends Controller
             $changelog->release_id = $release->id;
             $changelog->save();
 
-            if (Artisan::call('release:save') === 0) {
-                try {
-                    Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
-                    Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
-                } catch (Exception $exception) {
-                    Session::flash('status', sprintf(__('controller.release.flash.github_exception'), $exception->getMessage()));
-                }
+            $release->setRelation('changelog', $changelog);
+            $changelog->setRelation('release', $release);
+
+            try {
+                Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
+                Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
+            } catch (Exception $exception) {
+                Session::flash('status', sprintf(__('controller.release.flash.github_exception'), $exception->getMessage()));
             }
         } // Something went wrong with saving
         else {
@@ -115,7 +119,7 @@ class ReleaseController extends Controller
 
     /**
      * @param ReleaseFormRequest $request
-     * @param Release $release
+     * @param Release            $release
      * @return Factory|View
      * @throws Exception
      */

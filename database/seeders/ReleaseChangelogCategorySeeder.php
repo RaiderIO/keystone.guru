@@ -18,13 +18,15 @@ class ReleaseChangelogCategorySeeder extends Seeder
         $this->rollback();
         $this->command->info('Adding known release changelog categories');
 
+        $attributes = [];
         foreach (ReleaseChangelogCategory::ALL as $key => $id) {
-            ReleaseChangelogCategory::create([
+            $attributes[] = [
                 'id'   => $id,
                 'key'  => $key,
                 'name' => sprintf('releasechangelogcategories.%s', $key),
-            ]);
+            ];
         }
+        ReleaseChangelogCategory::insert($attributes);
     }
 
     private function rollback()

@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent;
 
 /**
- * @property int $id
+ * @property int    $id
  * @property string $key
  * @property string $name
  * @property string $category
@@ -24,6 +24,7 @@ class ReleaseChangelogCategory extends CacheModel
     public const MDT_EXPORTER_CHANGES     = 'mdt_exporter_changes';
     public const LIVE_SESSION_CHANGES     = 'live_session_changes';
     public const SIMULATION_CRAFT_CHANGES = 'simulation_craft_changes';
+    public const AUTO_ROUTE_CHANGES       = 'auto_route_changes';
 
     public const ALL = [
         self::GENERAL_CHANGES          => 1,
@@ -36,10 +37,11 @@ class ReleaseChangelogCategory extends CacheModel
         self::MDT_EXPORTER_CHANGES     => 8,
         self::LIVE_SESSION_CHANGES     => 9,
         self::SIMULATION_CRAFT_CHANGES => 10,
+        self::AUTO_ROUTE_CHANGES       => 11,
     ];
 
-    public $table = 'release_changelog_categories';
-    public $timestamps = false;
-    protected $visible = ['id', 'key', 'name'];
-    protected $fillable = ['id', 'key', 'name'];
+    public    $table      = 'release_changelog_categories';
+    public    $timestamps = false;
+    protected $visible    = ['id', 'key', 'name'];
+    protected $fillable   = ['id', 'key', 'name'];
 }
