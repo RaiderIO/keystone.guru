@@ -32,13 +32,17 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
             <h5>
                 {{ __('views/common.modal.routeadminsettings.challenge_mode_run') }}
             </h5>
-            @include('common.general.modeltable', ['model' => $challengeModeRun])
+            @if($challengeModeRun !== null)
+                @include('common.general.modeltable', ['model' => $challengeModeRun])
+            @else
+                {{ __('views/common.modal.routeadminsettings.route_not_created_from_combat_log') }}
+            @endif
         </div>
         <div class="form-group">
             <h5>
                 {{ __('views/common.modal.routeadminsettings.challenge_mode_run_data') }}
             </h5>
-            @if($challengeModeRun->challengeModeRunData !== null)
+            @if(optional($challengeModeRun)->challengeModeRunData !== null)
             @include('common.general.modeltable', ['model' => $challengeModeRun->challengeModeRunData, 'exclude' => ['post_body']])
             {{ Form::textarea('post_body', json_encode(json_decode($challengeModeRun->challengeModeRunData->post_body), JSON_PRETTY_PRINT), ['class' => 'form-control w-100', 'readonly' => 'readonly']) }}
             @else
