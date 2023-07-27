@@ -2,8 +2,9 @@
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\Dungeonroute|null $dungeonroute */
+/** @var bool $isMobile */
 ?>
-<nav class="route_sidebar route_manipulation_tools left h-100 row no-gutters map_fade_out">
+<nav class="route_sidebar route_manipulation_tools left h-100 row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="bg-header">
         <div id="view_route_actions_container" class="mb-2">
             @auth
