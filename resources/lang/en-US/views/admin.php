@@ -105,6 +105,7 @@ return [
             'header_new'                         => 'New Floor - %s',
             'title_edit'                         => 'Edit Floor - %s',
             'header_edit'                        => 'Edit Floor - %s',
+            'active'                             => 'Active',
             'index'                              => 'Index',
             'mdt_sub_level'                      => 'MDT sub level',
             'ui_map_id'                          => 'UI Map ID',
