@@ -23,8 +23,8 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
+     * @param Request    $request
+     * @param Dungeon    $dungeon
      * @param Floor|null $floor
      * @return Floor
      * @throws Exception
@@ -56,12 +56,14 @@ class FloorController extends Controller
         $floor->enemy_engagement_max_range_patrols = $request->get('enemy_engagement_max_range_patrols', 50);
 
         $floor->percentage_display_zoom = $request->get('percentage_display_zoom');
+        $floor->active                  = $request->get('active');
 
         // Update or insert it
         if ($floor->save()) {
             // Delete all directly connected floors
             $floor->floorcouplings()->delete();
 
+            $floorCouplingsAttributes = [];
             foreach ($floor->dungeon->floors as $connectedFloorCandidate) {
                 $isConnected = $request->get(sprintf('floor_%s_connected', $connectedFloorCandidate->id), false);
 
@@ -69,13 +71,15 @@ class FloorController extends Controller
                     $direction = $request->get(sprintf('floor_%s_direction', $connectedFloorCandidate->id));
 
                     // Recreate one by one
-                    FloorCoupling::insert([
+                    $floorCouplingsAttributes[] = [
                         'floor1_id' => $floor->id,
                         'floor2_id' => $connectedFloorCandidate->id,
                         'direction' => $direction,
-                    ]);
+                    ];
                 }
             }
+
+            FloorCoupling::insert($floorCouplingsAttributes);
 
             $this->mappingChanged($beforeFloor, $floor);
         } else {
@@ -100,7 +104,7 @@ class FloorController extends Controller
     /**
      * @param Request $request
      * @param Dungeon $dungeon
-     * @param Floor $floor
+     * @param Floor   $floor
      * @return Application|Factory|RedirectResponse|View
      */
     public function edit(Request $request, Dungeon $dungeon, Floor $floor)
@@ -122,7 +126,7 @@ class FloorController extends Controller
     /**
      * @param Request $request
      * @param Dungeon $dungeon
-     * @param Floor $floor
+     * @param Floor   $floor
      * @return Application|Factory|View|RedirectResponse
      * @throws InvalidArgumentException
      */
@@ -146,8 +150,8 @@ class FloorController extends Controller
 
     /**
      * @param FloorFormRequest $request
-     * @param Dungeon $dungeon
-     * @param Floor $floor
+     * @param Dungeon          $dungeon
+     * @param Floor            $floor
      * @return Factory|View
      * @throws Exception
      */
@@ -165,7 +169,7 @@ class FloorController extends Controller
 
     /**
      * @param FloorFormRequest $request
-     * @param Dungeon $dungeon
+     * @param Dungeon          $dungeon
      * @return RedirectResponse
      * @throws Exception
      */
