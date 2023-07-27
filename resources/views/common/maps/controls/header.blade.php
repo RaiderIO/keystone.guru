@@ -254,9 +254,13 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
         @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
     @endcomponent
 
-    @component('common.general.modal', ['id' => 'edit_route_admin_settings_modal', 'size' => 'xl'])
-        @include('common.modal.routeadminsettings', ['dungeonRoute' => $dungeonroute])
-    @endcomponent
+    @auth
+        @if(Auth::user()->hasRole('admin'))
+            @component('common.general.modal', ['id' => 'edit_route_admin_settings_modal', 'size' => 'xl'])
+                @include('common.modal.routeadminsettings', ['dungeonRoute' => $dungeonroute])
+            @endcomponent
+        @endif
+    @endauth
 
     @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
         @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
