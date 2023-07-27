@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @property int                        $level
  * @property bool                       $success
  * @property int                        $total_time_ms
+ * @property bool                       $duplicate
  *
  * @property Carbon                     $created_at
  *
@@ -44,7 +45,12 @@ class ChallengeModeRun extends Model
         'level',
         'success',
         'total_time_ms',
+        'duplicate',
         'created_at',
+    ];
+
+    protected $with = [
+        'challengeModeRunData'
     ];
 
     /**
@@ -86,13 +92,13 @@ class ChallengeModeRun extends Model
     public function getFormattedElapsedTime(): string
     {
         $milliseconds = $this->total_time_ms;
-        $hours = floor($milliseconds / 3600000);
+        $hours        = floor($milliseconds / 3600000);
         $milliseconds -= ($hours * 3600000);
 
-        $minutes = floor($milliseconds / 60000);
+        $minutes      = floor($milliseconds / 60000);
         $milliseconds -= ($minutes * 60000);
 
-        $seconds = floor($milliseconds / 1000);
+        $seconds      = floor($milliseconds / 1000);
         $milliseconds -= ($seconds * 1000);
 
         $interval = \Carbon\CarbonInterval::create(

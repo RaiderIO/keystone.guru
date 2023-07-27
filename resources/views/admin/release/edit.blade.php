@@ -46,7 +46,7 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
         {!! Form::text('changelog_description', $changelog->description, ['class' => 'form-control']) !!}
     </div>
 
-    <div id="changes_container" class="mb-4">
+    <div id="changes_container" class="form-group mb-4">
         <div class="row">
             <div class="col-2">
                 {{ __('views/admin.release.edit.ticket_nr') }}
@@ -57,15 +57,27 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col">
-            <button id="add_change_button" class="btn btn-success" type="button">
-                <i class="fas fa-plus"></i> {{ __('views/admin.release.edit.add_change') }}
-            </button>
-        </div>
+    <div class="form-group">
+        <button id="add_change_button" class="btn btn-success" type="button">
+            <i class="fas fa-plus"></i> {{ __('views/admin.release.edit.add_change') }}
+        </button>
     </div>
 
-    {!! Form::submit(isset($release) ? __('views/admin.release.edit.edit') : __('views/admin.release.edit.submit'), ['class' => 'btn btn-info']) !!}
+    <div class="form-group">
+        {!! Form::submit(isset($release) ? __('views/admin.release.edit.edit') : __('views/admin.release.edit.submit'), ['class' => 'btn btn-info']) !!}
+    </div>
 
     {!! Form::close() !!}
+
+
+    @isset($release)
+        <div class="form-group">
+            <?php
+                $release->makeHidden(['reddit_body', 'discord_body', 'github_body']);
+                $releaseArr = $release->toArray();
+            ?>
+            {!! Form::label('release_json', __('views/admin.release.edit.release_json')) !!}
+            {!! Form::textarea('release_json', json_encode($releaseArr, JSON_PRETTY_PRINT), ['class' => 'form-control w-100']) !!}
+        </div>
+    @endisset
 @endsection

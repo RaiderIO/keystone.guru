@@ -354,10 +354,13 @@ class DungeonRoute extends Model
 
     /**
      * @return BelongsTo
+     * @throws Exception
      */
     public function challengeModeRun(): BelongsTo
     {
-        return $this->setConnection('combatlog')->belongsTo(ChallengeModeRun::class);
+        throw new Exception('Not implemented');
+        // This doesn't work because it's on a different connection - strange stuff
+//        return $this->setConnection('combatlog')->belongsTo(ChallengeModeRun::class);
     }
 
     /**
@@ -447,6 +450,14 @@ class DungeonRoute extends Model
     public function tagspersonal(): HasMany
     {
         return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
+    }
+
+    /**
+     * @return ChallengeModeRun|null
+     */
+    public function getChallengeModeRun(): ?ChallengeModeRun
+    {
+        return ChallengeModeRun::where('dungeon_route_id', $this->id)->first();
     }
 
     /**

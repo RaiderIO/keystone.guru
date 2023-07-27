@@ -111,7 +111,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // </editor-fold>
 
             // Store found enemy positions in the database for analyzing
-            $this->saveEnemyPositionFromResultEvents($resultEvents, $dungeonRoute);
+            $this->saveChallengeModeRun($resultEvents, $dungeonRoute);
 
             $dungeonRoute = (new ResultEventDungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
 
@@ -136,7 +136,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
      * @param DungeonRoute                 $dungeonRoute
      * @return void
      */
-    private function saveEnemyPositionFromResultEvents(Collection $resultEvents, DungeonRoute $dungeonRoute): void
+    private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
         try {
             $this->log->saveEnemyPositionFromResultEventsStart();
@@ -204,8 +204,10 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
             // If we didn't insert anything there were issues with GUIDs colliding
             if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
-                // Then we don't want duplicates - get rid of the challenge mode run
-                $challengeModeRun->delete();
+                // Mark it as a duplicate if we couldn't insert any new positions
+                $challengeModeRun->update([
+                    'duplicate' => 1
+                ]);
             }
         } finally {
             $this->log->saveEnemyPositionFromResultEventsEnd();

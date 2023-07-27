@@ -11,4 +11,5 @@ return [
     'mdt_exporter_changes'     => 'MDT Exporter changes',
     'live_session_changes'     => 'Live Session changes',
     'simulation_craft_changes' => 'SimulationCraft changes',
+    'auto_route_changes'       => 'Auto route changes',
 ];

@@ -61,7 +61,7 @@ class OutputResultEvents extends BaseCombatLogCommand
 
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
-        $result = file_put_contents(base_path($resultingFile), $resultEvents->map(function (BaseResultEvent $resultEvent) {
+        $result = file_put_contents($resultingFile, $resultEvents->map(function (BaseResultEvent $resultEvent) {
             // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
             return trim($resultEvent->getBaseEvent()->getRawEvent());
         })->implode(PHP_EOL));

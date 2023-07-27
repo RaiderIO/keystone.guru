@@ -68,7 +68,7 @@ $floor = $floor ?? null;
     </div>
 
     <div class="form-group{{ $errors->has('enemy_engagement_max_range') ? ' has-error' : '' }}">
-        {!! Form::label('enemy_engagement_max_range', sprintf(__('views/admin.floor.edit.enemy_engagement_max_range_patrols'), config('keystoneguru.enemy_engagement_max_range_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::label('enemy_engagement_max_range', sprintf(__('views/admin.floor.edit.enemy_engagement_max_range'), config('keystoneguru.enemy_engagement_max_range_default')), ['class' => 'font-weight-bold']) !!}
         {!! Form::number('enemy_engagement_max_range', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range'])
     </div>

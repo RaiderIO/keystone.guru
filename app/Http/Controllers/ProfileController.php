@@ -139,7 +139,7 @@ class ProfileController extends Controller
                             /** @var DungeonRoute $context */
                             $context = DungeonRoute::where('public_key', $routeKey)->first();
                         } else if (strpos($name, 'live-session') !== false) {
-                            $routeKey = str_replace(sprintf('presence-%s-live-session.', env('APP_TYPE')), '', $name);
+                            $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
                             /** @var LiveSession $context */
                             $context = LiveSession::where('public_key', $routeKey)->first();
                         }

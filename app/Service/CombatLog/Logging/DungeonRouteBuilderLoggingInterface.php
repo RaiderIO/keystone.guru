@@ -6,6 +6,8 @@ use Exception;
 
 interface DungeonRouteBuilderLoggingInterface
 {
+    public function createPullStart(int $killZoneIndex): void;
+
     public function createPullFindEnemyForGuidStart(string $guid): void;
 
     public function createPullEnemyNotFound(int $npcId, float $ingameX, float $ingameY): void;
@@ -20,11 +22,13 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function createPullSpellsAttachedToKillZone(int $spellCount): void;
 
-    public function createPullFindEnemyForGuidStartMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
+    public function createPullMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
+
+    public function createPullEnd(): void;
 
     public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, array $preferredGroups): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void;
 
