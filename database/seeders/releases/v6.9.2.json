@@ -1,42 +1,39 @@
 {
-  "id": 191,
-  "release_changelog_id": 198,
-  "version": "v6.9.2",
-  "title": "",
-  "silent": 0,
-  "spotlight": 0,
-  "created_at": "2023-07-27T11:50:05+00:00",
-  "updated_at": "2023-07-27T11:50:05+00:00",
-  "github_body": "Auto route changes:\n  * #1851 Improvements to all dungeons wrt auto route generation.\n  * #1788 Auto route now detects chainpulling and creates separate pulls instead of creating a big pull until you've finally dropped combat.",
-  "discord_body": "**Auto route changes**:\n            [#1851](https:\/\/github.com\/wotuu\/keystone.guru\/issues\/1851) Improvements to all dungeons wrt auto route generation.\n            [#1788](https:\/\/github.com\/wotuu\/keystone.guru\/issues\/1788) Auto route now detects chainpulling and creates separate pulls instead of creating a big pull until you've finally dropped combat.\\n\\n[Home](http:\/\/localhost:8008) - [Changelog](http:\/\/localhost:8008\/changelog) - [Affixes](http:\/\/localhost:8008\/affixes) - [Patreon](https:\/\/www.patreon.com\/keystoneguru) - [Get started](http:\/\/localhost:8008\/new)",
-  "reddit_body": "[https:\/\/keystone.guru\/release\/v6.9.2](https:\/\/keystone.guru\/release\/v6.9.2)\n\n    Auto route changes:\n            * [\\#1851](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/1851) Improvements to all dungeons wrt auto route generation.\n            * [\\#1788](https:\/\/github.com\/Wotuu\/keystone.guru\/issues\/1788) Auto route now detects chainpulling and creates separate pulls instead of creating a big pull until you've finally dropped combat.",
-  "changelog": {
-    "id": 198,
-    "release_id": 191,
-    "description": null,
-    "changes": [
-      {
-        "release_changelog_id": 198,
-        "release_changelog_category_id": 11,
-        "ticket_id": 1851,
-        "change": "Improvements to all dungeons wrt auto route generation.",
-        "category": {
-          "id": 11,
-          "key": "auto_route_changes",
-          "name": "releasechangelogcategories.auto_route_changes"
-        }
-      },
-      {
-        "release_changelog_id": 198,
-        "release_changelog_category_id": 11,
-        "ticket_id": 1788,
-        "change": "Auto route now detects chainpulling and creates separate pulls instead of creating a big pull until you've finally dropped combat.",
-        "category": {
-          "id": 11,
-          "key": "auto_route_changes",
-          "name": "releasechangelogcategories.auto_route_changes"
-        }
-      }
-    ]
-  }
+    "id": 191,
+    "release_changelog_id": 198,
+    "version": "v6.9.2",
+    "title": "",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-07-27T11:50:05+00:00",
+    "updated_at": "2023-07-27T11:50:05+00:00",
+    "changelog": {
+        "id": 198,
+        "release_id": 191,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 198,
+                "release_changelog_category_id": 11,
+                "ticket_id": 1851,
+                "change": "Improvements to all dungeons wrt auto route generation.",
+                "category": {
+                    "id": 11,
+                    "key": "auto_route_changes",
+                    "name": "releasechangelogcategories.auto_route_changes"
+                }
+            },
+            {
+                "release_changelog_id": 198,
+                "release_changelog_category_id": 11,
+                "ticket_id": 1788,
+                "change": "Auto route now detects chainpulling and creates separate pulls instead of creating a big pull until you've finally dropped combat.",
+                "category": {
+                    "id": 11,
+                    "key": "auto_route_changes",
+                    "name": "releasechangelogcategories.auto_route_changes"
+                }
+            }
+        ]
+    }
 }
