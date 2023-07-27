@@ -3,7 +3,7 @@
 /** @var \Illuminate\Support\Collection $floors */
 /** @var \App\Models\DungeonRoute|null $dungeonroute */
 ?>
-<nav class="route_sidebar left row no-gutters map_fade_out top presenter">
+<nav class="route_sidebar left row no-gutters map_fade_out top presenter {{ $isMobile ? 'mobile' : '' }}">
     <div class="col pt-4 pl-4">
         <h2>
             +{{ $dungeonroute->challengeModeRun->level }}

@@ -55,15 +55,19 @@
   }
 }
 
-//.route_manipulation_tools:not(.embed, .presenter), {
-//  align-items: flex-start !important;
-//}
-
 .route_manipulation_tools:not(.embed, .presenter), {
-  top: 70px;
+  top: 0;
 }
 
 #pulls_sidebar.route_sidebar:not(.embed), {
+  top: 86px;
+}
+
+.route_manipulation_tools.mobile:not(.embed, .presenter), {
+  top: 70px;
+}
+
+#pulls_sidebar.route_sidebar.mobile:not(.embed), {
   top: 70px;
 }
 

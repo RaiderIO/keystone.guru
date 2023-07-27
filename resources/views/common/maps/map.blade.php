@@ -169,6 +169,7 @@ if ($isAdmin) {
             'isAdmin' => $isAdmin,
             'floors' => $dungeon->floors()->active()->get(),
             'selectedFloorId' => $floorId,
+            'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
@@ -176,6 +177,7 @@ if ($isAdmin) {
             'floors' => $dungeon->floors()->active()->get(),
             'selectedFloorId' => $floorId,
             'dungeonroute' => $dungeonroute,
+            'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [
@@ -183,6 +185,7 @@ if ($isAdmin) {
             'floors' => $dungeon->floors()->active()->get(),
             'selectedFloorId' => $floorId,
             'dungeonroute' => $dungeonroute,
+            'isMobile' => $isMobile,
         ])
     @endif
 
