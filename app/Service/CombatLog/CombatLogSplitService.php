@@ -69,7 +69,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
             if ($this->combatLogService->getChallengeModes($targetFilePath)->count() <= 0) {
                 $this->log->splitCombatLogOnChallengeModesNoChallengeModesFound();
 
-                return $result->push($targetFilePath);
+                return $result;
             }
 
             $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)

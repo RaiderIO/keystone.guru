@@ -4,7 +4,7 @@ namespace App\Service\CombatLog\Logging;
 
 use App\Logging\StructuredLogging;
 
-class CurrentPullLogging extends StructuredLogging implements CurrentPullLoggingInterface
+class CombatFilterLogging extends StructuredLogging implements CombatFilterLoggingInterface
 {
     /**
      * @param int $lineNr
@@ -99,6 +99,16 @@ class CurrentPullLogging extends StructuredLogging implements CurrentPullLogging
      * @return void
      */
     public function parseUnitInCurrentPullKilled(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     * @return void
+     */
+    public function parseUnitSummonedInWhitelist(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

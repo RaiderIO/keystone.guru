@@ -10,6 +10,7 @@ use App\Models\DungeonRouteAffixGroup;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\PublishedState;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\CreateRouteBodyActivePull;
@@ -18,6 +19,7 @@ use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
 
 /**
@@ -63,10 +65,17 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
     /**
      * @return DungeonRoute
+     * @throws DungeonNotSupportedException
      */
     private function initDungeonRoute(): DungeonRoute
     {
-        $dungeon               = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
+        try {
+            $dungeon = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
+        } catch (Exception $exception) {
+            throw new DungeonNotSupportedException(
+                sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
+            );
+        }
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         $dungeonRoute = DungeonRoute::create([

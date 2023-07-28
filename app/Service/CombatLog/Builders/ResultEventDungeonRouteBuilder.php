@@ -118,10 +118,16 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     }
                 } else if ($resultEvent instanceof SpellCast) {
                     // Add BL to the newest pull
-                    /** @var ActivePull $currentlyActivePull */
-                    $currentlyActivePull = $this->activePulls->last();
+                    if ($this->activePulls->isEmpty()) {
+                        $activePull = new ResultEventActivePull();
+                        $this->activePulls->push($activePull);
 
-                    $currentlyActivePull->addSpell($resultEvent->getSpellId());
+                        $this->log->buildCreateNewActivePull();
+                    } else {
+                        /** @var ActivePull $activePull */
+                        $activePull = $this->activePulls->last();
+                    }
+                    $activePull->addSpell($resultEvent->getSpellId());
 
                     $this->log->buildSpellCast(
                         $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getInfoGuid()->getGuid(),

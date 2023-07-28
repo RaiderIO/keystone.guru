@@ -48,12 +48,19 @@ class CreateDungeonRoutes extends BaseCombatLogCommand
 
         if (!str_contains($filePath, '_events.txt')) {
             $this->comment(sprintf('- Skipping non-events file %s', $filePath));
-            return -1;
+            return 0;
         }
 
         $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes($filePath);
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $this->info(sprintf('- Created dungeon route %s (%s)', $dungeonRoute->public_key, __($dungeonRoute->dungeon->name)));
+            $this->info(
+                sprintf(
+                    '- Created dungeon route %s (%s, %d/%d)',
+                    $dungeonRoute->public_key, __($dungeonRoute->dungeon->name),
+                    $dungeonRoute->enemy_forces,
+                    $dungeonRoute->mappingVersion->enemy_forces_required
+                )
+            );
         }
 
         return 0;

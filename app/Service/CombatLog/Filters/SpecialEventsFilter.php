@@ -6,6 +6,8 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
+use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
@@ -14,8 +16,25 @@ use Illuminate\Support\Collection;
 
 class SpecialEventsFilter implements CombatLogParserInterface
 {
+    private const IGNORE_FLOOR_MAP_UI_IDS = [
+        // Pandaria
+        424,
+        // Draenor
+        572,
+        // Broken Isles
+        619,
+        // Suramar
+        680,
+        // The Waking Shores
+        2022,
+        // Thaldraszus
+        2025,
+        // Valdrakken
+        2112,
+    ];
+
     private Collection $resultEvents;
-    
+
     /**
      * @param Collection $resultEvents
      */
@@ -23,12 +42,13 @@ class SpecialEventsFilter implements CombatLogParserInterface
     {
         $this->resultEvents = $resultEvents;
     }
-    
+
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int                            $lineNr
+     * @param int       $lineNr
      *
      * @return bool
+     * @throws DungeonNotSupportedException
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
@@ -44,11 +64,17 @@ class SpecialEventsFilter implements CombatLogParserInterface
             return true;
         } // Map changes yes please
         elseif ($combatLogEvent instanceof MapChange) {
-            $this->resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
-            
+            try {
+                $this->resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
+            } catch (FloorNotSupportedException $e) {
+                if (!in_array($combatLogEvent->getUiMapID(), self::IGNORE_FLOOR_MAP_UI_IDS)) {
+                    throw $e;
+                }
+            }
+
             return true;
         }
-        
+
         return false;
     }
 

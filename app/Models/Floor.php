@@ -76,8 +76,15 @@ class Floor extends CacheModel implements MappingModelInterface
         762  => 761,
         763  => 761,
         // Brackenhide Hollow
-        2106 => 2096
-        // @TODO Add Al'gethar Academy
+        2106 => 2096,
+        // Temple of the Jade Serpent
+        430  => 429,
+        // Algeth'ar Academy
+        2099 => 2097,
+        // Ruby Life Pools (Dragon Isles zone)
+        1978 => 2095,
+        // Nokhud Offensive
+        2023 => 2093,
     ];
 
     protected $fillable = [
