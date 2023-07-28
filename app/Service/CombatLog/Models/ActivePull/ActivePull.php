@@ -72,7 +72,10 @@ abstract class ActivePull
      */
     public function addSpell(int $spellId): ActivePull
     {
-        $this->spellsCast->push($spellId);
+        // Do not add duplicate spells to the same pull
+        if ($this->spellsCast->search($spellId) === false) {
+            $this->spellsCast->push($spellId);
+        }
 
         return $this;
     }
