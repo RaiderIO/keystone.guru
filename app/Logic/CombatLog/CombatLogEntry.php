@@ -6,6 +6,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -37,11 +38,12 @@ class CombatLogEntry
      * @param array $eventWhiteList Empty to return all events
      *
      * @return BaseEvent|null
+     * @throws Exception
      */
     public function parseEvent(array $eventWhiteList = []): ?BaseEvent
     {
         $matches = [];
-        if (!preg_match('/(.+)\s\s(.+)/', $this->rawEvent, $matches)) {
+        if (!preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
             if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
                 throw new InvalidArgumentException(sprintf('Unable to parse event %s', $this->rawEvent));
             }
@@ -49,7 +51,11 @@ class CombatLogEntry
             return null;
         }
 
-        $this->parsedTimestamp = Carbon::createFromFormat(self::DATE_FORMAT, $matches[1]);
+        try {
+            $this->parsedTimestamp = Carbon::createFromFormat(self::DATE_FORMAT, $matches[1]);
+        } catch (InvalidFormatException $exception) {
+            throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $exception->getCode(), $exception);
+        }
         $eventData             = $matches[2];
         $mayParseEvent         = empty($eventWhiteList);
 

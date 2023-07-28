@@ -37,6 +37,8 @@ abstract class DungeonRouteBuilder
         Dungeon::DUNGEON_THE_AZURE_VAULT,
         // Enemies in the cave at the last boss are put on the main floor instead so people don't have to switch floors around
         Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
+        // Enemies end up on the wrong floor near Vexamus for some reason
+        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
     ];
 
     protected const NPC_ID_MAPPING = [

@@ -12,8 +12,8 @@ use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLogging;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
-use App\Service\CombatLog\Logging\CurrentPullLogging;
-use App\Service\CombatLog\Logging\CurrentPullLoggingInterface;
+use App\Service\CombatLog\Logging\CombatFilterLogging;
+use App\Service\CombatLog\Logging\CombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLogging;
@@ -45,7 +45,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CreateRouteDungeonRouteServiceLoggingInterface::class, CreateRouteDungeonRouteServiceLogging::class);
         $this->app->bind(ResultEventDungeonRouteBuilderLoggingInterface::class, ResultEventDungeonRouteBuilderLogging::class);
         $this->app->bind(CombatLogSplitServiceLoggingInterface::class, CombatLogSplitServiceLogging::class);
-        $this->app->bind(CurrentPullLoggingInterface::class, CurrentPullLogging::class);
+        $this->app->bind(CombatFilterLoggingInterface::class, CombatFilterLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);

@@ -6,19 +6,13 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
-use App\Logic\CombatLog\CombatEvents\Prefixes\SpellBuilding;
-use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
-use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
-use App\Logic\Utils\MathUtils;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
-use App\Service\CombatLog\Logging\CurrentPullLoggingInterface;
+use App\Service\CombatLog\Logging\CombatFilterLoggingInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
@@ -41,6 +35,12 @@ class CombatFilter implements CombatLogParserInterface
         186121 => 0.05,
     ];
 
+    /** @var array Some enemies are summoned that we DO want to track in the route */
+    private const SUMMONED_NPC_ID_WHITELIST = [
+        // Vexamus, Algeth'ar Academy is a boss that gets summoned
+        194181
+    ];
+
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
 
@@ -59,7 +59,7 @@ class CombatFilter implements CombatLogParserInterface
     /** @var bool */
     private bool $challengeModeStarted = false;
 
-    /** @var CurrentPullLoggingInterface */
+    /** @var CombatFilterLoggingInterface */
     protected $log;
 
     public function __construct(Collection $resultEvents)
@@ -70,8 +70,8 @@ class CombatFilter implements CombatLogParserInterface
         $this->summonedEnemies        = collect();
         $this->killedEnemies          = collect();
 
-        /** @var CurrentPullLoggingInterface $log */
-        $log       = App::make(CurrentPullLoggingInterface::class);
+        /** @var CombatFilterLoggingInterface $log */
+        $log       = App::make(CombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -170,11 +170,16 @@ class CombatFilter implements CombatLogParserInterface
         $newEnemyGuid = null;
         if ($combatLogEvent instanceof CombatLogEvent) {
             if ($combatLogEvent->getSuffix() instanceof Summon) {
-                // Specially handle summoned enemies
-                $this->summonedEnemies->push($combatLogEvent->getGenericData()->getDestGuid()->getGuid());
-                $this->log->parseUnitSummoned($lineNr, $combatLogEvent->getGenericData()->getDestGuid()->getGuid());
+                $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+                if ($destGuid instanceof Creature && in_array($destGuid->getId(), self::SUMMONED_NPC_ID_WHITELIST)) {
+                    $this->log->parseUnitSummonedInWhitelist($lineNr, $destGuid->getGuid());
+                } else {
+                    // Specially handle summoned enemies
+                    $this->summonedEnemies->push($destGuid->getGuid());
+                    $this->log->parseUnitSummoned($lineNr, $destGuid->getGuid());
 
-                return false;
+                    return false;
+                }
             }
         }
 

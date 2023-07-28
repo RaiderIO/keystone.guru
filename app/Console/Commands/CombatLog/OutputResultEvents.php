@@ -12,7 +12,7 @@ class OutputResultEvents extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputresultevents {filePath}';
+    protected $signature = 'combatlog:outputresultevents {filePath} {--force=}';
 
     /**
      * The console command description.
@@ -34,42 +34,47 @@ class OutputResultEvents extends BaseCombatLogCommand
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
+        $force = (bool)$this->option('force');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force) {
             if (!str_contains($filePath, '.zip')) {
-                $this->comment(sprintf('- Skipping file %s', $filePath));
+                $this->comment(sprintf('Skipping file %s', $filePath));
 
                 return 0;
             }
 
-            return $this->outputResultEvents($combatLogService, $filePath);
+            return $this->outputResultEvents($combatLogService, $filePath, $force);
         });
     }
 
     /**
      * @param CombatLogServiceInterface $combatLogService
      * @param string                    $filePath
-     *
+     * @param bool                      $force
      * @return int
-     * @throws \Exception
      */
-    private function outputResultEvents(CombatLogServiceInterface $combatLogService, string $filePath): int
+    private function outputResultEvents(CombatLogServiceInterface $combatLogService, string $filePath, bool $force = false): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultEvents = $combatLogService->getResultEvents($filePath);
-
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
-        $result = file_put_contents($resultingFile, $resultEvents->map(function (BaseResultEvent $resultEvent) {
-            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
-            return trim($resultEvent->getBaseEvent()->getRawEvent());
-        })->implode(PHP_EOL));
+        if (!$force && file_exists($resultingFile)) {
+            $this->info(sprintf('Skipping %s - events already generated', $filePath));
 
-        if ($result) {
-            $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));
+            $result = 1;
         } else {
-            $this->warn(sprintf('- Unable to write to file %s', $resultingFile));
+            $resultEvents = $combatLogService->getResultEvents($filePath);
+            $result       = file_put_contents($resultingFile, $resultEvents->map(function (BaseResultEvent $resultEvent) {
+                // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+                return trim($resultEvent->getBaseEvent()->getRawEvent());
+            })->implode(PHP_EOL));
+
+            if ($result) {
+                $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));
+            } else {
+                $this->warn(sprintf('- Unable to write to file %s', $resultingFile));
+            }
         }
 
         return $result > 0 ? 0 : -1;
