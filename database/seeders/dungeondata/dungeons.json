@@ -6692,10 +6692,10 @@
                 "ingame_max_x": 3067.5,
                 "ingame_max_y": 1565,
                 "percentage_display_zoom": null,
-                "active": 1,
+                "active": 0,
                 "floorcouplings": [
                     {
-                        "id": 491,
+                        "id": 647,
                         "floor1_id": 146,
                         "floor2_id": 144,
                         "direction": "left"
@@ -6762,10 +6762,10 @@
                 "ingame_max_x": -3847.5,
                 "ingame_max_y": -3230,
                 "percentage_display_zoom": null,
-                "active": 1,
+                "active": 0,
                 "floorcouplings": [
                     {
-                        "id": 638,
+                        "id": 648,
                         "floor1_id": 148,
                         "floor2_id": 147,
                         "direction": "left"
