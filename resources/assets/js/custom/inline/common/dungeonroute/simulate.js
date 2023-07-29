@@ -85,7 +85,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
             let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
-            let bloodlustKeys = [SPELL_BLOODLUST, SPELL_HEROISM, SPELL_FURY_OF_THE_ASPECTS, SPELL_TIME_WARP];
+            let bloodlustKeys = [SPELL_BLOODLUST, SPELL_HEROISM, SPELL_FURY_OF_THE_ASPECTS, SPELL_TIME_WARP, SPELL_ANCIENT_HYSTERIA];
 
             for (let i = 0; i < sortedKillZones.length; i++) {
                 let killZone = sortedKillZones[i];

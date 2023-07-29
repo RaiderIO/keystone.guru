@@ -166,27 +166,27 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                     @endif
                 @endauth
 
-                @auth
-                    @if(Auth::user()->hasRole('admin'))
-                    <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
-                        @if( $challengeModeRun !== null )
-                            <li class="nav-item mr-2">
-                                <div class="d-flex h-100">
-                                    <div class="row justify-content-center align-self-center">
-                                        <div class="col">
-                                            <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm" data-toggle="modal"
-                                                    data-target="#edit_route_admin_settings_modal">
-                                                <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
-                                            </button>
+                @isset($dungeonroute)
+                    @auth
+                        @if(Auth::user()->hasRole('admin'))
+                        <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
+                            @if( $challengeModeRun !== null )
+                                <li class="nav-item mr-2">
+                                    <div class="d-flex h-100">
+                                        <div class="row justify-content-center align-self-center">
+                                            <div class="col">
+                                                <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                        data-target="#edit_route_admin_settings_modal">
+                                                    <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        @endisset
-                    @endif
-                @endauth
+                                </li>
+                            @endisset
+                        @endif
+                    @endauth
 
-                @isset($dungeonroute)
                     <li class="nav-item mr-2">
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
@@ -254,9 +254,13 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
         @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
     @endcomponent
 
-    @component('common.general.modal', ['id' => 'edit_route_admin_settings_modal', 'size' => 'xl'])
-        @include('common.modal.routeadminsettings', ['dungeonRoute' => $dungeonroute])
-    @endcomponent
+    @auth
+        @if(Auth::user()->hasRole('admin'))
+            @component('common.general.modal', ['id' => 'edit_route_admin_settings_modal', 'size' => 'xl'])
+                @include('common.modal.routeadminsettings', ['dungeonRoute' => $dungeonroute])
+            @endcomponent
+        @endif
+    @endauth
 
     @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
         @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])

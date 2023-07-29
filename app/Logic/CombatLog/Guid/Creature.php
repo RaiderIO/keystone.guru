@@ -34,6 +34,8 @@ class Creature extends Guid
         $this->zoneUID    = $parameters[4];
         $this->id         = $parameters[5];
         $this->spawnUID   = $parameters[6];
+
+        // Creature-0-3778-2526-12117-196045-0003CA41E4
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Service\CombatLog\Logging;
 
-interface CurrentPullLoggingInterface
+interface CombatFilterLoggingInterface
 {
 
     public function parseChallengeModeStarted(int $lineNr): void;
@@ -15,6 +15,7 @@ interface CurrentPullLoggingInterface
     public function parseUnitDiedEnemyWasNotEngaged(int $lineNr, string $guid): void;
     public function parseUnitInCurrentPullKilled(int $lineNr, string $guid): void;
     public function parseUnitFirstSighted(int $lineNr, string $guid): void;
+    public function parseUnitSummonedInWhitelist(int $lineNr, string $guid): void;
     public function parseUnitSummoned(int $lineNr, string $guid): void;
     public function parseUnitEvadedRemovedFromCurrentPull(int $lineNr, string $guid): void;
     public function parseUnitAddedToCurrentPull(int $lineNr, string $newEnemyGuid): void;

@@ -10,6 +10,7 @@ use App\Models\DungeonRouteAffixGroup;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\PublishedState;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\CreateRouteBodyActivePull;
@@ -18,6 +19,7 @@ use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
 
 /**
@@ -63,10 +65,17 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
     /**
      * @return DungeonRoute
+     * @throws DungeonNotSupportedException
      */
     private function initDungeonRoute(): DungeonRoute
     {
-        $dungeon               = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
+        try {
+            $dungeon = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
+        } catch (Exception $exception) {
+            throw new DungeonNotSupportedException(
+                sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
+            );
+        }
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         $dungeonRoute = DungeonRoute::create([
@@ -197,16 +206,16 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
                 }
-            }
 
-            // Handle spells and the actual creation of pulls
-            foreach ($this->activePulls as $pullIndex => $activePull) {
-                if ($activePull->getEnemiesInCombat()->isEmpty()) {
-                    $this->determineSpellsCastBetween($activePull, $firstEngagedAt, $event['npc']->getDiedAt());
+                // Handle spells and the actual creation of pulls
+                foreach ($this->activePulls as $pullIndex => $activePull) {
+                    if ($activePull->getEnemiesInCombat()->isEmpty()) {
+                        $this->determineSpellsCastBetween($activePull, $event['npc']->getDiedAt());
 
-                    $this->createPull($activePull);
+                        $this->createPull($activePull);
 
-                    $this->activePulls->forget($pullIndex);
+                        $this->activePulls->forget($pullIndex);
+                    }
                 }
             }
         }
@@ -215,7 +224,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->activePulls as $activePull) {
             $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
 
-            $this->determineSpellsCastBetween($activePull, $firstEngagedAt);
+            $this->determineSpellsCastBetween($activePull);
             $this->createPull($activePull);
         }
 
@@ -241,17 +250,23 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
-     * @param ActivePull  $activePull
-     * @param Carbon      $firstEngagedAt
-     * @param Carbon|null $diedAt
+     * @param CreateRouteBodyActivePull $activePull
+     * @param Carbon|null               $lastDiedAt
      * @return void
      */
-    private function determineSpellsCastBetween(ActivePull $activePull, Carbon $firstEngagedAt, ?Carbon $diedAt = null)
+    private function determineSpellsCastBetween(CreateRouteBodyActivePull $activePull, ?Carbon $lastDiedAt = null)
     {
+        $firstEngagedAt = null;
+        foreach ($activePull->getEnemiesKilled() as $killedEnemy) {
+            if ($firstEngagedAt === null || $killedEnemy->getEngagedAt()->isBefore($firstEngagedAt)) {
+                $firstEngagedAt = $killedEnemy->getEngagedAt();
+            }
+        }
+
         // Determine the spells that were cast during this pull
         foreach ($this->createRouteBody->spells as $spell) {
-            if ($diedAt !== null) {
-                if ($spell->getCastAt()->between($firstEngagedAt, $diedAt)) {
+            if ($lastDiedAt !== null) {
+                if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
                     $activePull->addSpell($spell->spellId);
                 }
             } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {

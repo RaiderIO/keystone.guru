@@ -4,7 +4,12 @@ namespace App\Service\CombatLog\Models\ActivePull;
 
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
+/**
+ * @method Collection|CreateRouteNpc[] getEnemiesInCombat()
+ * @method Collection|CreateRouteNpc[] getEnemiesKilled()
+ */
 class CreateRouteBodyActivePull extends ActivePull
 {
     /**

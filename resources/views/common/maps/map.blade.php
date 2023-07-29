@@ -167,22 +167,25 @@ if ($isAdmin) {
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors,
+            'floors' => $dungeon->floors()->active()->get(),
             'selectedFloorId' => $floorId,
+            'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors,
+            'floors' => $dungeon->floors()->active()->get(),
             'selectedFloorId' => $floorId,
             'dungeonroute' => $dungeonroute,
+            'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors,
+            'floors' => $dungeon->floors()->active()->get(),
             'selectedFloorId' => $floorId,
             'dungeonroute' => $dungeonroute,
+            'isMobile' => $isMobile,
         ])
     @endif
 

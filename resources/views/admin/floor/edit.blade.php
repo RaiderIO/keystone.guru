@@ -27,6 +27,23 @@ $floor = $floor ?? null;
         {{ Form::open(['route' => ['admin.floor.savenew', 'dungeon' => $dungeon->slug]]) }}
     @endisset
 
+    <div class="row form-group">
+        <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
+            {!! Form::label('active', __('views/admin.floor.edit.active'), ['class' => 'font-weight-bold']) !!}
+            {!! Form::checkbox('active', 1, optional($floor)->active, ['class' => 'form-control left_checkbox']) !!}
+            @include('common.forms.form-error', ['key' => 'active'])
+        </div>
+
+        <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
+            {!! Form::label('default', __('views/admin.floor.edit.default'), ['class' => 'font-weight-bold']) !!}
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                __('views/admin.floor.edit.default_title')
+                 }}"></i>
+            {!! Form::checkbox('default', 1, optional($floor)->default ?? (int)($dungeon->floors()->count() === 0), ['class' => 'form-control left_checkbox']) !!}
+            @include('common.forms.form-error', ['key' => 'default'])
+        </div>
+    </div>
+
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
         {!! Form::label('index', __('views/admin.floor.edit.index'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
@@ -83,15 +100,6 @@ $floor = $floor ?? null;
         {!! Form::label('percentage_display_zoom', __('views/admin.floor.edit.percentage_display_zoom'), ['class' => 'font-weight-bold']) !!}
         {!! Form::number('percentage_display_zoom', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'percentage_display_zoom'])
-    </div>
-
-    <div class="form-group{{ $errors->has('default') ? ' has-error' : '' }}">
-        {!! Form::label('default', __('views/admin.floor.edit.default'), ['class' => 'font-weight-bold']) !!}
-        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('views/admin.floor.edit.default_title')
-                 }}"></i>
-        {!! Form::checkbox('default', 1, optional($floor)->default ?? (int)($dungeon->floors()->count() === 0), ['class' => 'form-control left_checkbox']) !!}
-        @include('common.forms.form-error', ['key' => 'default'])
     </div>
 
     <div class="form-group">

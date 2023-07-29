@@ -4,6 +4,8 @@ namespace App\Service\CombatLog\ResultEvents;
 
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartEvent;
 use App\Models\Dungeon;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
+use Exception;
 
 class ChallengeModeStart extends BaseResultEvent
 {
@@ -13,7 +15,13 @@ class ChallengeModeStart extends BaseResultEvent
     {
         parent::__construct($baseEvent);
 
-        $this->dungeon = Dungeon::where('map_id', $baseEvent->getInstanceID())->firstOrFail();
+        try {
+            $this->dungeon = Dungeon::where('map_id', $baseEvent->getInstanceID())->firstOrFail();
+        } catch (Exception $exception) {
+            throw new DungeonNotSupportedException(
+                sprintf('Dungeon with instance ID %d not found', $baseEvent->getInstanceID())
+            );
+        }
     }
 
     /**

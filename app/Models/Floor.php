@@ -7,7 +7,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Eloquent;
-use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -31,6 +31,7 @@ use Illuminate\Support\Collection;
  * @property int                                     $ingame_max_x
  * @property int                                     $ingame_max_y
  * @property int|null                                $percentage_display_zoom
+ * @property boolean                                 $active
  *
  * @property Dungeon                                 $dungeon
  *
@@ -53,6 +54,8 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[]                      $directConnectedFloors
  * @property Collection|Floor[]                      $reverseConnectedFloors
  *
+ * @method static Builder active()
+ *
  * @mixin Eloquent
  */
 class Floor extends CacheModel implements MappingModelInterface
@@ -73,8 +76,15 @@ class Floor extends CacheModel implements MappingModelInterface
         762  => 761,
         763  => 761,
         // Brackenhide Hollow
-        2106 => 2096
-        // @TODO Add Al'gethar Academy
+        2106 => 2096,
+        // Temple of the Jade Serpent
+        430  => 429,
+        // Algeth'ar Academy
+        2099 => 2097,
+        // Ruby Life Pools (Dragon Isles zone)
+        1978 => 2095,
+        // Nokhud Offensive
+        2023 => 2093,
     ];
 
     protected $fillable = [
@@ -89,6 +99,7 @@ class Floor extends CacheModel implements MappingModelInterface
         'ingame_min_y',
         'ingame_max_x',
         'ingame_max_y',
+        'active',
     ];
 
     public $timestamps = false;
@@ -259,6 +270,18 @@ class Floor extends CacheModel implements MappingModelInterface
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
             ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+    }
+
+    /**
+     * Scope a query to only include active floors.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('floors.active', 1);
     }
 
     /**

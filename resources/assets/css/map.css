@@ -363,10 +363,10 @@ html, body, #map, #app, .wrapper {
 
 /** When embedding a route */
 #pulls_sidebar.embed.regular .pulls_container:not(.has_speedrun) {
-    max-height: calc(100vh - 109px);
+    max-height: calc(100vh - 107px);
 }
 #pulls_sidebar.embed.compact .pulls_container:not(.has_speedrun) {
-    max-height: calc(100vh - 46px);
+    max-height: calc(100vh - 54px);
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
@@ -389,7 +389,7 @@ html, body, #map, #app, .wrapper {
 /** Pulls section of the sidebar, when viewing on mobile/embed, without a speedrun enabled */
 #pulls_sidebar .edit .pulls_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
-    max-height: calc(100vh - (109px + 55px));
+    max-height: calc(100vh - (109px + 63px));
 }
 
 #pulls_sidebar .map_killzonessidebar_killzone_fill_space {
