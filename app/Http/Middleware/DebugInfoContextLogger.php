@@ -13,11 +13,9 @@ class DebugInfoContextLogger
 {
     public function handle(Request $request, Closure $next)
     {
-        $dungeonRoute = $request->route('dungeonroute');
+        $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
 
         $context = [
-            'url'           => $request->url(),
-            'method'        => $request->method(),
             'correlationId' => correlationId(),
         ];
 
@@ -29,6 +27,12 @@ class DebugInfoContextLogger
         }
 
         Log::withContext($context);
+
+        // @TODO use structured logging?
+        logger()->debug('DebugInfoContextLogger::handle', [
+            'url'           => $request->url(),
+            'method'        => $request->method(),
+        ]);
 
         /** @var Response $response */
         $response = $next($request);
