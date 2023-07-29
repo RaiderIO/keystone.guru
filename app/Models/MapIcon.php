@@ -12,22 +12,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int|null $mapping_version_id
- * @property int $floor_id
- * @property int|null $dungeon_route_id
- * @property int $team_id
- * @property int $map_icon_type_id
- * @property float $lat
- * @property float $lng
- * @property string $comment
- * @property boolean $permanent_tooltip
- * @property int $seasonal_index
+ * @property int                 $id
+ * @property int|null            $mapping_version_id
+ * @property int                 $floor_id
+ * @property int|null            $dungeon_route_id
+ * @property int|null            $team_id
+ * @property int                 $map_icon_type_id
+ * @property float               $lat
+ * @property float               $lng
+ * @property string              $comment
+ * @property boolean             $permanent_tooltip
+ * @property int                 $seasonal_index
  *
  * @property MappingVersion|null $mappingVersion
- * @property Floor $floor
- * @property DungeonRoute|null $dungeonRoute
- * @property MapIconType $mapicontype
+ * @property Floor               $floor
+ * @property DungeonRoute|null   $dungeonRoute
+ * @property MapIconType         $mapicontype
  *
  * @mixin Eloquent
  */
@@ -36,9 +36,16 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     use CloneForNewMappingVersionNoRelations;
     use HasLinkedAwakenedObelisk;
 
-    protected $visible = ['id', 'mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
+    protected $visible  = ['id', 'mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
     protected $fillable = ['mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];
-    protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
+    protected $appends  = ['linked_awakened_obelisk_id', 'is_admin'];
+    protected $casts    = [
+        'floor_id'          => 'integer',
+        'map_icon_type_id'  => 'integer',
+        'lat'               => 'float',
+        'lng'               => 'float',
+        'permanent_tooltip' => 'integer'
+    ];
 
     protected $with = ['mapicontype', 'linkedawakenedobelisks'];
 
