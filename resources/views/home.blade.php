@@ -4,6 +4,7 @@
 /** @var $demoRouteMapping array */
 /** @var $userCount int */
 /** @var $theme string */
+/** @var $currentSeason \App\Models\Season */
 
 $dungeonSelectId    = 'demo_dungeon_id';
 $demoRoutesIFrameId = 'demo_routes_iframe';
@@ -41,7 +42,9 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         {{ __('views/home.tagline_description') }}
                     </p>
                     <div class="mbr-section-btn mt-3">
-                        <a class="btn btn-primary display-4" href="{{ route('dungeonroutes') }}">
+                        <a class="btn btn-primary display-4" href="{{ $currentSeason !== null ?
+                                route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index]) :
+                                route('dungeonroutes') }}">
                             <i class="fas fa-binoculars"></i>&nbsp;{{ __('views/home.discover_routes') }}
                         </a>
                         <a class="display-4 btn btn-accent" href="#" data-toggle="modal"

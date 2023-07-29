@@ -214,6 +214,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('userCount', $globalViewVariables['userCount']);
             $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
             $view->with('demoRouteMapping', $globalViewVariables['demoRouteMapping']);
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
         });
 
         // Main view
