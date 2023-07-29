@@ -44,5 +44,9 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void;
 
+    public function findClosestEnemyAndDistanceFromListPriority(int $killPriority, int $enemyCount): void;
+
+    public function findClosestEnemyAndDistanceFromListFoundEnemy(): void;
+
     public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $closestEnemyDistance): void;
 }

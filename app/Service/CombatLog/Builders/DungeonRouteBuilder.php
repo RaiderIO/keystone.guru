@@ -347,9 +347,15 @@ abstract class DungeonRouteBuilder
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
 
         // Sort descending - higher priorities go first
-        foreach ($enemies->groupBy('kill_priority')->sortDesc() as $killPriority => $availableEnemies) {
-            // For each group of enemies
+        $enemiesByKillPriority = $enemies->groupBy(function (Enemy $enemy) {
+            return $enemy->kill_priority ?? 0;
+        })->sortKeysDesc();
+
+        foreach ($enemiesByKillPriority as $killPriority => $availableEnemies) {
             /** @var Collection|Enemy[] $availableEnemies */
+            $this->log->findClosestEnemyAndDistanceFromListPriority($killPriority, $availableEnemies->count());
+
+            // For each group of enemies
             foreach ($availableEnemies as $availableEnemy) {
                 if ($considerPatrols) {
                     if (!($availableEnemy->enemyPatrol instanceof EnemyPatrol)) {
@@ -391,6 +397,7 @@ abstract class DungeonRouteBuilder
 
             // If we found a matching enemy in the above list, stop completely
             if ($result) {
+                $this->log->findClosestEnemyAndDistanceFromListFoundEnemy();
                 break;
             }
         }
