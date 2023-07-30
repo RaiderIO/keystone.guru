@@ -1372,6 +1372,15 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @param Floor $floor
+     * @return string
+     */
+    public function getThumbnailUrl(Floor $floor) : string
+    {
+        return url(sprintf('/images/route_thumbnails/%s_%s.png', $this->public_key, $floor->index));
+    }
+
+    /**
      * @param int $source
      *
      * @return bool

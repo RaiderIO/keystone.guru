@@ -27,13 +27,27 @@ class DungeonRouteResource extends JsonResource
      */
     public function toArray($request)
     {
+        $thumbnailUrls = [];
+        foreach ($this->dungeon->floors as $floor) {
+            $thumbnailUrls[] = $this->getThumbnailUrl($floor);
+        }
+
+        $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];
+
         return [
             'public_key'            => $this->public_key,
-            'dungeon'               => __($this->dungeon->name, [], 'en'),
+            'title'                 => $this->title,
+            'dungeon'               => $this->dungeon->slug,
             'pulls'                 => $this->killZones()->count(),
             'enemy_forces'          => $this->enemy_forces,
             'enemy_forces_required' => $this->dungeon->getCurrentMappingVersion()->enemy_forces_required,
             'expires_at'            => $this->expires_at,
+            'links'                 => [
+                'view'       => route('dungeonroute.view', $dungeonRouteUrlParams),
+                'edit'       => route('dungeonroute.edit', $dungeonRouteUrlParams),
+                'embed'      => route('dungeonroute.embed', $dungeonRouteUrlParams),
+                'thumbnails' => $thumbnailUrls
+            ]
         ];
     }
 }

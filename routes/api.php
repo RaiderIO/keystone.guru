@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\APICombatLogController;
+use App\Http\Controllers\Api\V1\APIDungeonRouteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +16,8 @@ use App\Http\Controllers\Api\V1\APICombatLogController;
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'combatlog'], function () {
         Route::post('route', [APICombatLogController::class, 'createRoute'])->name('api.v1.combatlog.route.create');
+    });
+    Route::group(['prefix' => 'route'], function () {
+        Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.combatlog.route.list');
     });
 });

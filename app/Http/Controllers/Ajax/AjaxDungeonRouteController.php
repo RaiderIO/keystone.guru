@@ -55,7 +55,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIDungeonRouteController extends Controller
+class AjaxDungeonRouteController extends Controller
 {
     use DungeonRouteProperties;
     use PublicKeyDungeonRoute;

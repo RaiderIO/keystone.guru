@@ -53,7 +53,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     @foreach($activeFloors as $floor)
                         <li>
                             <img class="thumbnail"
-                                 src="{{ url(sprintf('/images/route_thumbnails/%s_%s.png', $dungeonroute->public_key, $floor->index)) }}"/>
+                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"/>
                         </li>
                     @endforeach
                 @else
