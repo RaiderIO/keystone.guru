@@ -11,7 +11,15 @@ class CreateRouteBodyDungeonRouteBuilderLogging extends StructuredLogging implem
      */
     public function buildKillZonesCreateNewActivePull(): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__);
+    }
+
+    /**
+     * @return void
+     */
+    public function buildKillZonesCreateNewActivePullChainPullCompleted(): void
+    {
+        $this->debug(__METHOD__);
     }
 
     /**

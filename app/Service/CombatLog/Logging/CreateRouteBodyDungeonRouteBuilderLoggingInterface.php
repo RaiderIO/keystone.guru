@@ -11,6 +11,11 @@ interface CreateRouteBodyDungeonRouteBuilderLoggingInterface
     public function buildKillZonesCreateNewActivePull(): void;
 
     /**
+     * @return void
+     */
+    public function buildKillZonesCreateNewActivePullChainPullCompleted(): void;
+
+    /**
      * @param float $activePullAverageHPPercent
      * @param int   $chainPullDetectionHPPercent
      * @return void
