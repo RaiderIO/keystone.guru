@@ -14,7 +14,7 @@
 use App\Http\Controllers\AdminToolsController;
 use App\Http\Controllers\Ajax\APIBrushlineController;
 use App\Http\Controllers\Ajax\APIDungeonFloorSwitchMarkerController;
-use App\Http\Controllers\Ajax\APIDungeonRouteController;
+use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
 use App\Http\Controllers\Ajax\APIEchoController;
 use App\Http\Controllers\Ajax\APIEnemyController;
 use App\Http\Controllers\Ajax\APIEnemyPackController;
@@ -410,14 +410,14 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::delete('/{tag}/all', [APITagController::class, 'deleteAll'])->name('api.tag.deleteall');
         });
 
-        Route::get('/{publickey}/data', [APIDungeonRouteController::class, 'data']);
+        Route::get('/{publickey}/data', [AjaxDungeonRouteController::class, 'data']);
 
         Route::post('userreport/dungeonroute/{dungeonroute}', [APIUserReportController::class, 'dungeonrouteStore'])->name('userreport.dungeonroute');
         Route::post('userreport/enemy/{enemy}', [APIUserReportController::class, 'enemyStore'])->name('userreport.enemy');
 
-        Route::get('/routes', [APIDungeonRouteController::class, 'list']);
-        Route::get('/search', [APIDungeonRouteController::class, 'htmlsearch']);
-        Route::get('/search/{category}', [APIDungeonRouteController::class, 'htmlsearchcategory']);
+        Route::get('/routes', [AjaxDungeonRouteController::class, 'list']);
+        Route::get('/search', [AjaxDungeonRouteController::class, 'htmlsearch']);
+        Route::get('/search/{category}', [AjaxDungeonRouteController::class, 'htmlsearchcategory']);
 
         Route::post('/mdt/details', [MDTImportController::class, 'details'])->name('mdt.details');
 
@@ -461,7 +461,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::put('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'store']);
                 Route::delete('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'delete']);
 
-                Route::post('/thumbnail/{dungeonroute}/refresh', [APIDungeonRouteController::class, 'refreshThumbnail']);
+                Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
             });
 
             Route::put('/userreport/{userreport}/status', [APIUserReportController::class, 'status']);
@@ -472,7 +472,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
 
         Route::group(['prefix' => 'dungeonRoute'], function () {
-            Route::post('/data', [APIDungeonRouteController::class, 'getDungeonRoutesData']);
+            Route::post('/data', [AjaxDungeonRouteController::class, 'getDungeonRoutesData']);
         });
 
         // May be performed without being logged in (sandbox functionality)
@@ -502,28 +502,28 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::post('/raidmarker/{enemy}', [APIEnemyController::class, 'setRaidMarker']);
 
-            Route::post('/clone/team/{team}', [APIDungeonRouteController::class, 'cloneToTeam']);
+            Route::post('/clone/team/{team}', [AjaxDungeonRouteController::class, 'cloneToTeam']);
 
-            Route::get('/mdtExport', [APIDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
-            Route::post('/simulate', [APIDungeonRouteController::class, 'simulate'])->name('api.dungeonroute.simulate');
+            Route::get('/mdtExport', [AjaxDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
+            Route::post('/simulate', [AjaxDungeonRouteController::class, 'simulate'])->name('api.dungeonroute.simulate');
         });
 
         // Must be logged in to perform these actions
         Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
             Route::group(['prefix' => '{dungeonRoute}'], function () {
-                Route::patch('/', [APIDungeonRouteController::class, 'store'])->name('api.dungeonroute.update');
-                Route::patch('/pullgradient', [APIDungeonRouteController::class, 'storePullGradient'])->name('api.dungeonroute.pullgradient.update');
-                Route::delete('/', [APIDungeonRouteController::class, 'delete'])->name('api.dungeonroute.delete');
+                Route::patch('/', [AjaxDungeonRouteController::class, 'store'])->name('api.dungeonroute.update');
+                Route::patch('/pullgradient', [AjaxDungeonRouteController::class, 'storePullGradient'])->name('api.dungeonroute.pullgradient.update');
+                Route::delete('/', [AjaxDungeonRouteController::class, 'delete'])->name('api.dungeonroute.delete');
 
-                Route::post('/favorite', [APIDungeonRouteController::class, 'favorite'])->name('api.dungeonroute.favorite');
-                Route::delete('/favorite', [APIDungeonRouteController::class, 'favoriteDelete'])->name('api.dungeonroute.favorite.delete');
+                Route::post('/favorite', [AjaxDungeonRouteController::class, 'favorite'])->name('api.dungeonroute.favorite');
+                Route::delete('/favorite', [AjaxDungeonRouteController::class, 'favoriteDelete'])->name('api.dungeonroute.favorite.delete');
 
-                Route::post('/publishedState', [APIDungeonRouteController::class, 'publishedState'])->name('api.dungeonroute.publishedstate');
+                Route::post('/publishedState', [AjaxDungeonRouteController::class, 'publishedState'])->name('api.dungeonroute.publishedstate');
 
-                Route::post('/rate', [APIDungeonRouteController::class, 'rate'])->name('api.dungeonroute.rate');
-                Route::delete('/rate', [APIDungeonRouteController::class, 'rateDelete'])->name('api.dungeonroute.rate.delete');
+                Route::post('/rate', [AjaxDungeonRouteController::class, 'rate'])->name('api.dungeonroute.rate');
+                Route::delete('/rate', [AjaxDungeonRouteController::class, 'rateDelete'])->name('api.dungeonroute.rate.delete');
 
-                Route::post('/migrate/{seasonalType}', [APIDungeonRouteController::class, 'migrateToSeasonalType']);
+                Route::post('/migrate/{seasonalType}', [AjaxDungeonRouteController::class, 'migrateToSeasonalType']);
 
                 Route::group(['prefix' => '/live/{liveSession}'], function () {
                     Route::delete('/', [APILiveSessionController::class, 'delete']);
