@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class CreateRouteRequest extends FormRequest
+class CreateRouteRequest extends APIFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -59,14 +59,5 @@ class CreateRouteRequest extends FormRequest
             'spells.*.coord.y'         => 'numeric',
             'spells.*.coord.uiMapId'   => Rule::exists('floors', 'ui_map_id'),
         ];
-    }
-
-    public function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'success' => false,
-            'message' => 'Validation errors',
-            'data'    => $validator->errors(),
-        ]));
     }
 }
