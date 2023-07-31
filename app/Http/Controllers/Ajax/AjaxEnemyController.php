@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIEnemyController extends APIMappingModelBaseController
+class AjaxEnemyController extends AjaxMappingModelBaseController
 {
     use PublicKeyDungeonRoute;
 

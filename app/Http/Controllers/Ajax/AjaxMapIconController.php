@@ -21,7 +21,7 @@ use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIMapIconController extends APIMappingModelBaseController
+class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use PublicKeyDungeonRoute;
 

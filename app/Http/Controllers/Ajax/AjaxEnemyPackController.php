@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class APIEnemyPackController extends APIMappingModelBaseController
+class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
      * @param EnemyPackFormRequest $request

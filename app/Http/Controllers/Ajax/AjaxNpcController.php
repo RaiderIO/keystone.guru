@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APINpcController extends Controller
+class AjaxNpcController extends Controller
 {
     use ChangesMapping;
 

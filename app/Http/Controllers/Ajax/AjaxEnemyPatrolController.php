@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIEnemyPatrolController extends APIMappingModelBaseController
+class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
 {
     use SavesPolylines;
 

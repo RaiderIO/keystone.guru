@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class APISiteController extends Controller
+class AjaxSiteController extends Controller
 {
     /**
      * @param Request $request

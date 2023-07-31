@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DungeonRoute\DungeonRouteCollectionResource;
 use App\Models\DungeonRoute;
 use Auth;
 use Request;
 
-class APIDungeonRouteController
+class APIDungeonRouteController extends Controller
 {
     /**
      * @param Request $request

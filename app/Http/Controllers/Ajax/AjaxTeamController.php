@@ -19,7 +19,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APITeamController extends Controller
+class AjaxTeamController extends Controller
 {
     function list(Request $request)
     {

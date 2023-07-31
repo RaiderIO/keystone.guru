@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
-class APIKillZoneController extends Controller
+class AjaxKillZoneController extends Controller
 {
     /**
      * @param DungeonRoute $dungeonroute

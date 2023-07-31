@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIMountableAreaController extends APIMappingModelBaseController
+class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     use ChangesMapping;
 

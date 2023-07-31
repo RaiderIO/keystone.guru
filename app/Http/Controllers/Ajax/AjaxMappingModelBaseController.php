@@ -20,7 +20,7 @@ use Throwable;
  * @author Wouter
  * @since 06/11/2022
  */
-abstract class APIMappingModelBaseController extends Controller
+abstract class AjaxMappingModelBaseController extends Controller
 {
     use ChangesMapping;
 

@@ -6,46 +6,46 @@ use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
-use App\Http\Requests\Path\APIPathFormRequest;
+use App\Http\Requests\Brushline\APIBrushlineFormRequest;
+use App\Models\Brushline;
 use App\Models\DungeonRoute;
-use App\Models\Path;
 use App\Models\Polyline;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
-class APIPathController extends Controller
+class AjaxBrushlineController extends Controller
 {
     use SavesPolylines;
 
     /**
-     * @param APIPathFormRequest $request
+     * @param APIBrushlineFormRequest $request
      * @param DungeonRoute $dungeonRoute
-     * @param Path|null $path
-     * @return Path
+     * @param Brushline|null $brushline
+     * @return Brushline
      * @throws AuthorizationException
      */
-    function store(APIPathFormRequest $request, DungeonRoute $dungeonRoute, ?Path $path = null)
+    function store(APIBrushlineFormRequest $request, DungeonRoute $dungeonRoute, ?Brushline $brushline = null)
     {
-        $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 
-        if ($path === null) {
-            $path    = Path::create([
+        if ($brushline === null) {
+            $brushline = Brushline::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $validated['floor_id'],
                 'polyline_id'      => -1,
             ]);
-            $success = $path instanceof Path;
+            $success   = $brushline instanceof Brushline;
         } else {
-            $success = $path->update([
+            $success = $brushline->update([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $validated['floor_id'],
             ]);
@@ -54,55 +54,53 @@ class APIPathController extends Controller
         try {
             if ($success) {
                 // Create a new polyline and save it
-                $polyline = $this->savePolyline(Polyline::findOrNew($path->polyline_id), $path, $validated['polyline']);
+                $polyline = $this->savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $validated['polyline']);
 
                 // Couple the path to the polyline
-                $path->update([
+                $brushline->update([
                     'polyline_id' => $polyline->id,
                 ]);
 
                 // Load the polyline so it can be echoed back to the user
-                $path->load(['polyline']);
-
-                // Set or unset the linked awakened obelisks now that we have an ID
-                $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
+                $brushline->load(['polyline']);
 
                 // Something's updated; broadcast it
                 if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
+                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $brushline));
                 }
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();
             } else {
-                throw new \Exception('Unable to save path!');
+                throw new \Exception('Unable to save brushline!');
             }
 
-            $result = $path;
+            $result = $brushline;
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
+
         return $result;
     }
 
     /**
      * @param Request $request
      * @param DungeonRoute $dungeonRoute
-     * @param Path $path
-     * @return array|ResponseFactory|Response
+     * @param Brushline $brushline
+     * @return Response|ResponseFactory
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
+    function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
-        $dungeonRoute = $path->dungeonRoute;
+        $dungeonRoute = $brushline->dungeonRoute;
 
-        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's path
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's brush line
         $this->authorize('edit', $dungeonRoute);
 
         try {
-            if ($path->delete()) {
+            if ($brushline->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $path));
+                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $brushline));
                 }
 
                 // Touch the route so that the thumbnail gets updated
@@ -110,9 +108,9 @@ class APIPathController extends Controller
 
                 $result = response()->noContent();
             } else {
-                $result = response('Unable to delete Path', Http::INTERNAL_SERVER_ERROR);
+                $result = response('Unable to save Brushline', Http::INTERNAL_SERVER_ERROR);
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
 

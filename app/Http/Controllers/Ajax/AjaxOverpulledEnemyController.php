@@ -19,7 +19,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APIOverpulledEnemyController extends Controller
+class AjaxOverpulledEnemyController extends Controller
 {
     /**
      * @param OverpulledEnemyServiceInterface $overpulledEnemyService

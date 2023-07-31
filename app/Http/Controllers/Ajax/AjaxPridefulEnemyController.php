@@ -16,7 +16,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APIPridefulEnemyController extends Controller
+class AjaxPridefulEnemyController extends Controller
 {
     /**
      * @param Request $request
