@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\DungeonRoute;
 
+use App\Http\Resources\AffixGroup\AffixGroupCollectionResource;
+use App\Http\Resources\UserResource;
 use App\Models\DungeonRoute;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
@@ -38,10 +40,12 @@ class DungeonRouteResource extends JsonResource
             'public_key'            => $this->public_key,
             'title'                 => $this->title,
             'dungeon'               => $this->dungeon->slug,
-            'pulls'                 => $this->killZones()->count(),
+            'pulls'                 => $this->killZones->count(),
             'enemy_forces'          => $this->enemy_forces,
             'enemy_forces_required' => $this->dungeon->getCurrentMappingVersion()->enemy_forces_required,
             'expires_at'            => $this->expires_at,
+            'author'                => new UserResource($this->author),
+            'affix_groups'          => new AffixGroupCollectionResource($this->affixes),
             'links'                 => [
                 'view'       => route('dungeonroute.view', $dungeonRouteUrlParams),
                 'edit'       => route('dungeonroute.edit', $dungeonRouteUrlParams),

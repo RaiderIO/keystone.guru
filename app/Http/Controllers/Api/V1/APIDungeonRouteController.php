@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Resources\DungeonRouteCollectionResource;
-use App\Http\Resources\DungeonRouteResource;
+use App\Http\Resources\DungeonRoute\DungeonRouteCollectionResource;
 use App\Models\DungeonRoute;
 use Auth;
 use Request;
@@ -17,7 +16,7 @@ class APIDungeonRouteController
     public function list(Request $request): DungeonRouteCollectionResource
     {
         return new DungeonRouteCollectionResource(
-            DungeonRoute::withOnly(['dungeon'])
+            DungeonRoute::withOnly(['dungeon', 'author', 'killZones', 'affixes'])
                 ->where('author_id', Auth::id())
                 ->paginate()
         );

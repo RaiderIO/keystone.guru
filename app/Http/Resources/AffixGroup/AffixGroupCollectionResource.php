@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\AffixGroup;
 
+use App\Http\Resources\DungeonRoute\DungeonRouteResource;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;
 
 /**
- * Class DungeonRouteCollectionResource
+ * Class AffixGroupCollectionResource
  *
  * @package App\Http\Resources
  * @author Wouter
  * @since 30/07/2023
- * @mixin DungeonRoute
  */
-class DungeonRouteCollectionResource extends ResourceCollection
+class AffixGroupCollectionResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -28,8 +28,8 @@ class DungeonRouteCollectionResource extends ResourceCollection
      */
     public function toArray($request)
     {
-        return ['data' => $this->collection->map(function(DungeonRoute $dungeonRoute){
-            return new DungeonRouteResource($dungeonRoute);
-        })];
+        return $this->collection->map(function(AffixGroup $affixGroup){
+            return new AffixGroupResource($affixGroup);
+        });
     }
 }
