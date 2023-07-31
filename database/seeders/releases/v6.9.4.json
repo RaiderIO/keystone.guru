@@ -1,0 +1,39 @@
+{
+    "id": 193,
+    "release_changelog_id": 200,
+    "version": "v6.9.4",
+    "title": "API v1 beta",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-07-31T19:39:19+00:00",
+    "updated_at": "2023-07-31T19:39:19+00:00",
+    "changelog": {
+        "id": 200,
+        "release_id": 193,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 200,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1904,
+                "change": "Added v1 public API. More details to follow.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 200,
+                "release_changelog_category_id": 11,
+                "ticket_id": 1903,
+                "change": "Chain pulled pulls are now no longer inserted before the original pull if its enemies were killed before the original pull's enemies were. The pulls are now merged instead.",
+                "category": {
+                    "id": 11,
+                    "key": "auto_route_changes",
+                    "name": "releasechangelogcategories.auto_route_changes"
+                }
+            }
+        ]
+    }
+}
