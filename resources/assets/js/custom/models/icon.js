@@ -207,7 +207,6 @@ class Icon extends VersionableMapObject {
         // Set the icon and refresh the visual
         this.map_icon_type = mapIconType;
 
-        console.log(this.id, this.map_icon_type_id);
         if( refreshVisual ) {
             this._refreshVisual();
         }
