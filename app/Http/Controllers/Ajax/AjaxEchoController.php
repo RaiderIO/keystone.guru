@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute;
 use Illuminate\Http\Request;
 
-class APIEchoController extends Controller
+class AjaxEchoController extends Controller
 {
     public function members(Request $request, DungeonRoute $dungeonRoute)
     {

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MappingVersion\APIMappingVersionFormRequest;
 use App\Models\Mapping\MappingVersion;
 
-class APIMappingVersionController extends Controller
+class AjaxMappingVersionController extends Controller
 {
     /**
      * @param APIMappingVersionFormRequest $request

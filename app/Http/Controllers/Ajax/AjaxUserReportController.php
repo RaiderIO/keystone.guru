@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class APIUserReportController
+class AjaxUserReportController
 {
     /**
      * @param Request $request

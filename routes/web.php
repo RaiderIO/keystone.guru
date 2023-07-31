@@ -12,29 +12,29 @@
 */
 
 use App\Http\Controllers\AdminToolsController;
-use App\Http\Controllers\Ajax\APIBrushlineController;
-use App\Http\Controllers\Ajax\APIDungeonFloorSwitchMarkerController;
+use App\Http\Controllers\Ajax\AjaxBrushlineController;
+use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
-use App\Http\Controllers\Ajax\APIEchoController;
-use App\Http\Controllers\Ajax\APIEnemyController;
-use App\Http\Controllers\Ajax\APIEnemyPackController;
-use App\Http\Controllers\Ajax\APIEnemyPatrolController;
-use App\Http\Controllers\Ajax\APIKillZoneController;
-use App\Http\Controllers\Ajax\APILiveSessionController;
-use App\Http\Controllers\Ajax\APIMapIconController;
-use App\Http\Controllers\Ajax\APIMappingVersionController;
-use App\Http\Controllers\Ajax\APIMetricController;
-use App\Http\Controllers\Ajax\APIMountableAreaController;
-use App\Http\Controllers\Ajax\APINpcController;
-use App\Http\Controllers\Ajax\APIOverpulledEnemyController;
-use App\Http\Controllers\Ajax\APIPathController;
-use App\Http\Controllers\Ajax\APIPridefulEnemyController;
-use App\Http\Controllers\Ajax\APIProfileController;
-use App\Http\Controllers\Ajax\APISiteController;
-use App\Http\Controllers\Ajax\APITagController;
-use App\Http\Controllers\Ajax\APITeamController;
-use App\Http\Controllers\Ajax\APIUserController;
-use App\Http\Controllers\Ajax\APIUserReportController;
+use App\Http\Controllers\Ajax\AjaxEchoController;
+use App\Http\Controllers\Ajax\AjaxEnemyController;
+use App\Http\Controllers\Ajax\AjaxEnemyPackController;
+use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
+use App\Http\Controllers\Ajax\AjaxKillZoneController;
+use App\Http\Controllers\Ajax\AjaxLiveSessionController;
+use App\Http\Controllers\Ajax\AjaxMapIconController;
+use App\Http\Controllers\Ajax\AjaxMappingVersionController;
+use App\Http\Controllers\Ajax\AjaxMetricController;
+use App\Http\Controllers\Ajax\AjaxMountableAreaController;
+use App\Http\Controllers\Ajax\AjaxNpcController;
+use App\Http\Controllers\Ajax\AjaxOverpulledEnemyController;
+use App\Http\Controllers\Ajax\AjaxPathController;
+use App\Http\Controllers\Ajax\AjaxPridefulEnemyController;
+use App\Http\Controllers\Ajax\AjaxProfileController;
+use App\Http\Controllers\Ajax\AjaxSiteController;
+use App\Http\Controllers\Ajax\AjaxTagController;
+use App\Http\Controllers\Ajax\AjaxTeamController;
+use App\Http\Controllers\Ajax\AjaxUserController;
+use App\Http\Controllers\Ajax\AjaxUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -398,22 +398,22 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     });
 
     Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
-        Route::get('refresh-csrf', [APISiteController::class, 'refreshCsrf'])->name('api.refresh_csrf');
+        Route::get('refresh-csrf', [AjaxSiteController::class, 'refreshCsrf'])->name('api.refresh_csrf');
 
         Route::group(['prefix' => 'tag'], function () {
-            Route::get('/', [APITagController::class, 'all'])->name('api.tag.all');
-            Route::get('/{category}', [APITagController::class, 'list'])->name('api.tag.list');
-            Route::post('/', [APITagController::class, 'store'])->name('api.tag.create');
-            Route::delete('/{tag}', [APITagController::class, 'delete'])->name('api.tag.delete');
+            Route::get('/', [AjaxTagController::class, 'all'])->name('api.tag.all');
+            Route::get('/{category}', [AjaxTagController::class, 'list'])->name('api.tag.list');
+            Route::post('/', [AjaxTagController::class, 'store'])->name('api.tag.create');
+            Route::delete('/{tag}', [AjaxTagController::class, 'delete'])->name('api.tag.delete');
             // Profile
-            Route::put('/{tag}/all', [APITagController::class, 'updateAll'])->name('api.tag.updateall');
-            Route::delete('/{tag}/all', [APITagController::class, 'deleteAll'])->name('api.tag.deleteall');
+            Route::put('/{tag}/all', [AjaxTagController::class, 'updateAll'])->name('api.tag.updateall');
+            Route::delete('/{tag}/all', [AjaxTagController::class, 'deleteAll'])->name('api.tag.deleteall');
         });
 
         Route::get('/{publickey}/data', [AjaxDungeonRouteController::class, 'data']);
 
-        Route::post('userreport/dungeonroute/{dungeonroute}', [APIUserReportController::class, 'dungeonrouteStore'])->name('userreport.dungeonroute');
-        Route::post('userreport/enemy/{enemy}', [APIUserReportController::class, 'enemyStore'])->name('userreport.enemy');
+        Route::post('userreport/dungeonroute/{dungeonroute}', [AjaxUserReportController::class, 'dungeonrouteStore'])->name('userreport.dungeonroute');
+        Route::post('userreport/enemy/{enemy}', [AjaxUserReportController::class, 'enemyStore'])->name('userreport.enemy');
 
         Route::get('/routes', [AjaxDungeonRouteController::class, 'list']);
         Route::get('/search', [AjaxDungeonRouteController::class, 'htmlsearch']);
@@ -421,50 +421,50 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
         Route::post('/mdt/details', [MDTImportController::class, 'details'])->name('mdt.details');
 
-        Route::post('/profile/legal', [APIProfileController::class, 'legalAgree']);
+        Route::post('/profile/legal', [AjaxProfileController::class, 'legalAgree']);
 
         // Metrics
         Route::group(['prefix' => 'metric'], function () {
-            Route::post('/', [APIMetricController::class, 'store'])->name('api.metric.store');
-            Route::post('/route/{dungeonRoute}', [APIMetricController::class, 'storeDungeonRoute'])->name('api.metric.store.dungeonroute');
+            Route::post('/', [AjaxMetricController::class, 'store'])->name('api.metric.store');
+            Route::post('/route/{dungeonRoute}', [AjaxMetricController::class, 'storeDungeonRoute'])->name('api.metric.store.dungeonroute');
         });
 
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::group(['prefix' => 'admin'], function () {
-                Route::patch('mappingVersion/{mappingVersion}', [APIMappingVersionController::class, 'store']);
+                Route::patch('mappingVersion/{mappingVersion}', [AjaxMappingVersionController::class, 'store']);
 
-                Route::get('/user', [APIUserController::class, 'list']);
-                Route::get('/npc', [APINpcController::class, 'list']);
+                Route::get('/user', [AjaxUserController::class, 'list']);
+                Route::get('/npc', [AjaxNpcController::class, 'list']);
 
-                Route::post('/enemy', [APIEnemyController::class, 'store']);
-                Route::put('/enemy/{enemy}', [APIEnemyController::class, 'store']);
-                Route::delete('/enemy/{enemy}', [APIEnemyController::class, 'delete']);
+                Route::post('/enemy', [AjaxEnemyController::class, 'store']);
+                Route::put('/enemy/{enemy}', [AjaxEnemyController::class, 'store']);
+                Route::delete('/enemy/{enemy}', [AjaxEnemyController::class, 'delete']);
 
-                Route::post('/enemypack', [APIEnemyPackController::class, 'store']);
-                Route::put('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'store']);
-                Route::delete('/enemypack/{enemyPack}', [APIEnemyPackController::class, 'delete']);
+                Route::post('/enemypack', [AjaxEnemyPackController::class, 'store']);
+                Route::put('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'store']);
+                Route::delete('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'delete']);
 
-                Route::post('/enemypatrol', [APIEnemyPatrolController::class, 'store']);
-                Route::put('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'store']);
-                Route::delete('/enemypatrol/{enemyPatrol}', [APIEnemyPatrolController::class, 'delete']);
+                Route::post('/enemypatrol', [AjaxEnemyPatrolController::class, 'store']);
+                Route::put('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'store']);
+                Route::delete('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'delete']);
 
-                Route::post('/dungeonfloorswitchmarker', [APIDungeonFloorSwitchMarkerController::class, 'store']);
-                Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'store']);
-                Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [APIDungeonFloorSwitchMarkerController::class, 'delete']);
+                Route::post('/dungeonfloorswitchmarker', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
+                Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
+                Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'delete']);
 
-                Route::post('/mapicon', [APIMapIconController::class, 'adminStore']);
-                Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminStore']);
-                Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'adminDelete']);
+                Route::post('/mapicon', [AjaxMapIconController::class, 'adminStore']);
+                Route::put('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminStore']);
+                Route::delete('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminDelete']);
 
-                Route::post('/mountablearea', [APIMountableAreaController::class, 'store']);
-                Route::put('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'store']);
-                Route::delete('/mountablearea/{mountableArea}', [APIMountableAreaController::class, 'delete']);
+                Route::post('/mountablearea', [AjaxMountableAreaController::class, 'store']);
+                Route::put('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'store']);
+                Route::delete('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
             });
 
-            Route::put('/userreport/{userreport}/status', [APIUserReportController::class, 'status']);
+            Route::put('/userreport/{userreport}/status', [AjaxUserReportController::class, 'status']);
 
             Route::post('/tools/mdt/diff/apply', [AdminToolsController::class, 'applychange']);
 
@@ -479,28 +479,28 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::group(['prefix' => '{dungeonRoute}'], function () {
 
 
-            Route::post('/brushline', [APIBrushlineController::class, 'store']);
-            Route::put('/brushline/{brushline}', [APIBrushlineController::class, 'store']);
-            Route::delete('/brushline/{brushline}', [APIBrushlineController::class, 'delete']);
+            Route::post('/brushline', [AjaxBrushlineController::class, 'store']);
+            Route::put('/brushline/{brushline}', [AjaxBrushlineController::class, 'store']);
+            Route::delete('/brushline/{brushline}', [AjaxBrushlineController::class, 'delete']);
 
-            Route::put('/killzone/mass', [APIKillZoneController::class, 'storeAll']);
-            Route::post('/killzone', [APIKillZoneController::class, 'store']);
-            Route::put('/killzone/{killZone}', [APIKillZoneController::class, 'store']);
-            Route::delete('/killzone/{killZone}', [APIKillZoneController::class, 'delete']);
-            Route::delete('/killzone', [APIKillZoneController::class, 'deleteAll']);
+            Route::put('/killzone/mass', [AjaxKillZoneController::class, 'storeAll']);
+            Route::post('/killzone', [AjaxKillZoneController::class, 'store']);
+            Route::put('/killzone/{killZone}', [AjaxKillZoneController::class, 'store']);
+            Route::delete('/killzone/{killZone}', [AjaxKillZoneController::class, 'delete']);
+            Route::delete('/killzone', [AjaxKillZoneController::class, 'deleteAll']);
 
-            Route::post('/mapicon', [APIMapIconController::class, 'store']);
-            Route::put('/mapicon/{mapIcon}', [APIMapIconController::class, 'store']);
-            Route::delete('/mapicon/{mapIcon}', [APIMapIconController::class, 'delete']);
+            Route::post('/mapicon', [AjaxMapIconController::class, 'store']);
+            Route::put('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'store']);
+            Route::delete('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'delete']);
 
-            Route::post('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'store']);
-            Route::delete('/pridefulenemy/{enemy}', [APIPridefulEnemyController::class, 'delete']);
+            Route::post('/pridefulenemy/{enemy}', [AjaxPridefulEnemyController::class, 'store']);
+            Route::delete('/pridefulenemy/{enemy}', [AjaxPridefulEnemyController::class, 'delete']);
 
-            Route::post('/path', [APIPathController::class, 'store']);
-            Route::put('/path/{path}', [APIPathController::class, 'store']);
-            Route::delete('/path/{path}', [APIPathController::class, 'delete']);
+            Route::post('/path', [AjaxPathController::class, 'store']);
+            Route::put('/path/{path}', [AjaxPathController::class, 'store']);
+            Route::delete('/path/{path}', [AjaxPathController::class, 'delete']);
 
-            Route::post('/raidmarker/{enemy}', [APIEnemyController::class, 'setRaidMarker']);
+            Route::post('/raidmarker/{enemy}', [AjaxEnemyController::class, 'setRaidMarker']);
 
             Route::post('/clone/team/{team}', [AjaxDungeonRouteController::class, 'cloneToTeam']);
 
@@ -526,30 +526,30 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/migrate/{seasonalType}', [AjaxDungeonRouteController::class, 'migrateToSeasonalType']);
 
                 Route::group(['prefix' => '/live/{liveSession}'], function () {
-                    Route::delete('/', [APILiveSessionController::class, 'delete']);
+                    Route::delete('/', [AjaxLiveSessionController::class, 'delete']);
 
-                    Route::post('/overpulledenemy', [APIOverpulledEnemyController::class, 'store']);
-                    Route::delete('/overpulledenemy', [APIOverpulledEnemyController::class, 'delete']);
+                    Route::post('/overpulledenemy', [AjaxOverpulledEnemyController::class, 'store']);
+                    Route::delete('/overpulledenemy', [AjaxOverpulledEnemyController::class, 'delete']);
                 });
             });
 
             Route::group(['prefix' => 'echo'], function () {
                 // Echo controller misc
-                Route::get('{dungeonRoute}/members', [APIEchoController::class, 'members']);
+                Route::get('{dungeonRoute}/members', [AjaxEchoController::class, 'members']);
             });
 
             // Teams
             Route::group(['prefix' => 'team/{team}'], function () {
-                Route::put('/changedefaultrole', [APITeamController::class, 'changeDefaultRole']);
-                Route::put('/changerole', [APITeamController::class, 'changeRole']);
-                Route::post('/route/{dungeonroute}', [APITeamController::class, 'addRoute']);
-                Route::delete('/member/{user}', [APITeamController::class, 'removeMember']);
-                Route::delete('/route/{dungeonroute}', [APITeamController::class, 'removeRoute']);
-                Route::get('/refreshlink', [APITeamController::class, 'refreshInviteLink']);
+                Route::put('/changedefaultrole', [AjaxTeamController::class, 'changeDefaultRole']);
+                Route::put('/changerole', [AjaxTeamController::class, 'changeRole']);
+                Route::post('/route/{dungeonroute}', [AjaxTeamController::class, 'addRoute']);
+                Route::delete('/member/{user}', [AjaxTeamController::class, 'removeMember']);
+                Route::delete('/route/{dungeonroute}', [AjaxTeamController::class, 'removeRoute']);
+                Route::get('/refreshlink', [AjaxTeamController::class, 'refreshInviteLink']);
 
                 // Ad-free giveaway
-                Route::post('/member/{user}/adfree', [APITeamController::class, 'addAdFreeGiveaway']);
-                Route::delete('/member/{user}/adfree', [APITeamController::class, 'removeAdFreeGiveaway']);
+                Route::post('/member/{user}/adfree', [AjaxTeamController::class, 'addAdFreeGiveaway']);
+                Route::delete('/member/{user}/adfree', [AjaxTeamController::class, 'removeAdFreeGiveaway']);
             });
         });
     });

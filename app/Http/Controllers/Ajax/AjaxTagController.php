@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 
-class APITagController extends Controller
+class AjaxTagController extends Controller
 {
     /**
      * @param Request $request

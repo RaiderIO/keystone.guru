@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class APIDungeonFloorSwitchMarkerController extends APIMappingModelBaseController
+class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseController
 {
     use ListsDungeonFloorSwitchMarkers;
 

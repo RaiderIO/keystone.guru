@@ -10,7 +10,7 @@ use App\Service\Metric\MetricServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 
-class APIMetricController extends Controller
+class AjaxMetricController extends Controller
 {
     /**
      * @param APIMetricFormRequest $request

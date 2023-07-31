@@ -37,9 +37,9 @@ class DungeonRouteResource extends JsonResource
         $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];
 
         return [
+            'dungeon_id'            => $this->dungeon_id,
             'public_key'            => $this->public_key,
             'title'                 => $this->title,
-            'dungeon'               => $this->dungeon->slug,
             'pulls'                 => $this->killZones->count(),
             'enemy_forces'          => $this->enemy_forces,
             'enemy_forces_required' => $this->dungeon->getCurrentMappingVersion()->enemy_forces_required,

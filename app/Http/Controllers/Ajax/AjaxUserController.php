@@ -7,7 +7,7 @@ use App\Logic\Datatables\UsersDatatablesHandler;
 use App\User;
 use Illuminate\Http\Request;
 
-class APIUserController
+class AjaxUserController
 {
     /**
      * @param Request $request

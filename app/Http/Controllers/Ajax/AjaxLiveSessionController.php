@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 
-class APILiveSessionController extends Controller
+class AjaxLiveSessionController extends Controller
 {
     /**
      * @param Request $request
