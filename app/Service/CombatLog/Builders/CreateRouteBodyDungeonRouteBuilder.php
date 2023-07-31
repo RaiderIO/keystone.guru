@@ -185,6 +185,12 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 } else {
                     /** @var ActivePull $activePull */
                     $activePull = $this->activePulls->last();
+                    if ($activePull->isCompleted()) {
+                        $activePull = new CreateRouteBodyActivePull();
+                        $this->activePulls->push($activePull);
+
+                        $this->log->buildKillZonesCreateNewActivePullChainPullCompleted();
+                    }
                 }
 
                 // Check if we need to account for chain pulling
@@ -208,11 +214,20 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 // Handle spells and the actual creation of pulls
+                /** @var $firstActivePull ActivePull|null */
+                $firstActivePull          = $this->activePulls->first();
+                $firstActivePullCompleted = optional($firstActivePull)->isCompleted() ?? false;
                 foreach ($this->activePulls as $pullIndex => $activePull) {
-                    if ($activePull->getEnemiesInCombat()->isEmpty()) {
-                        $this->determineSpellsCastBetween($activePull, $event['npc']->getDiedAt());
+                    if ($activePull->isCompleted()) {
+                        if (!$firstActivePullCompleted) {
+                            // Chain pulls are NEVER completed before the original pull! If they ARE, then it wasn't a
+                            // chain pull but more like a delayed pull into a big one
+                            $firstActivePull->merge($activePull);
+                        } else {
+                            $this->determineSpellsCastBetween($activePull, $event['npc']->getDiedAt());
 
-                        $this->createPull($activePull);
+                            $this->createPull($activePull);
+                        }
 
                         $this->activePulls->forget($pullIndex);
                     }

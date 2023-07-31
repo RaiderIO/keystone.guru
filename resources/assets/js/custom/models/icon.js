@@ -74,7 +74,7 @@ class Icon extends VersionableMapObject {
 
         let self = this;
 
-        this.map_icon_type = getState().getMapContext().getUnknownMapIconType();
+        this.setMapIconType(getState().getMapContext().getUnknownMapIconType(), false);
         this.label = '';
 
         this.setSynced(false);
@@ -111,9 +111,7 @@ class Icon extends VersionableMapObject {
             // Only editable types!
             if (mapIconTypes.hasOwnProperty(i)) {
                 let mapIconType = mapIconTypes[i];
-                if (mapIconType.isEditable() &&
-                    // Skip unknown map icons, that should be a one time state when placing the icon, not a selectable state
-                    mapIconType.id !== unknownMapIcon.id) {
+                if (mapIconType.isEditable()) {
                     // Generate html if necessary
                     if (typeof mapIconType.html === 'undefined') {
                         let template = Handlebars.templates['map_map_icon_select_option_template'];
@@ -200,14 +198,18 @@ class Icon extends VersionableMapObject {
     /**
      * Sets the map icon type ID and refreshes the layer for it.
      * @param mapIconType {MapIconType}
+     * @param refreshVisual {boolean}
      */
-    setMapIconType(mapIconType) {
+    setMapIconType(mapIconType, refreshVisual = true) {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
         this.map_icon_type_id = mapIconType.id;
 
         // Set the icon and refresh the visual
         this.map_icon_type = mapIconType;
-        this._refreshVisual();
+
+        if( refreshVisual ) {
+            this._refreshVisual();
+        }
     }
 
     /**

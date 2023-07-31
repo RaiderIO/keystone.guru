@@ -202,6 +202,24 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
+     * @param int $killPriority
+     * @param int $enemyCount
+     * @return void
+     */
+    public function findClosestEnemyAndDistanceFromListPriority(int $killPriority, int $enemyCount): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @return void
+     */
+    public function findClosestEnemyAndDistanceFromListFoundEnemy(): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
      * @param int|null $enemyId
      * @param float    $closestEnemyDistance
      * @return void
