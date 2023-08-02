@@ -32,7 +32,12 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        [$username, $password] = explode(':', $usernamePw);
+        $explode = explode(':', $usernamePw);
+        if (count($explode) !== 2) {
+            return false;
+        }
+
+        [$username, $password] = $explode;
 
         return $this->loginAsUser($username, $password);
     }
