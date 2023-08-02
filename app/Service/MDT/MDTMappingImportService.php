@@ -231,7 +231,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $currentEnemy = $currentEnemies->get($enemy->getUniqueKey());
                 if ($currentEnemy instanceof Enemy) {
-                    $fields        = ['teeming', 'faction', 'required', 'skippable'];
+                    $fields        = ['teeming', 'faction', 'required', 'skippable', 'kill_priority'];
                     $updatedFields = [];
                     foreach ($fields as $field) {
                         $enemy->$field         = $currentEnemy->$field;
