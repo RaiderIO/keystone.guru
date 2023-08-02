@@ -399,24 +399,24 @@ class AdminEnemy extends Enemy {
 
         let data = {};
         // Determine what to show for enemy forces based on override or not
-        let enemy_forces = this.npc === null ? -1 : this.npc.enemy_forces.enemy_forces;
+        let enemyForces = this.enemy_forces;
 
         // Admin maps have 0 enemy forces
-        if (this.enemy_forces_override !== null || enemy_forces >= 1) {
+        if (this.enemy_forces_override !== null || enemyForces >= 1) {
             // @TODO This HTML probably needs to go somewhere else
             if (this.enemy_forces_override !== null) {
-                enemy_forces = '<s>' + enemy_forces + '</s> ' +
+                enemyForces = '<s>' + enemyForces + '</s> ' +
                     '<span style="color: orange;">' + this.enemy_forces_override + '</span> ' + this._getPercentageString(this.enemy_forces_override);
-            } else if (enemy_forces >= 1) {
-                enemy_forces += ' ' + this._getPercentageString(enemy_forces);
+            } else if (enemyForces >= 1) {
+                enemyForces += ' ' + this._getPercentageString(enemyForces);
             }
-        } else if (enemy_forces === -1) {
-            enemy_forces = 'unknown';
+        } else if (enemyForces === -1) {
+            enemyForces = 'unknown';
         }
 
         data = $.extend({}, getHandlebarsDefaultVariables(), {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
-            enemy_forces: enemy_forces,
+            enemy_forces: enemyForces,
             base_health: this.npc === null ? '-' : this.npc.base_health,
             health_percentage: this.npc === null ? '-' : this.npc.health_percentage,
             teeming: (this.teeming === TEEMING_VISIBLE ? 'yes' : (this.teeming === TEEMING_HIDDEN ? TEEMING_HIDDEN : 'no')),

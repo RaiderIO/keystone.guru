@@ -509,8 +509,6 @@ class MapObject extends Signalable {
                 } else {
                     let visible = Cookies.get(`map_object_category_visibility_${category}`);
                     visible = typeof visible === 'undefined' ? 1 : visible;
-                    
-                    console.log(visible);
 
                     resultHtml += categoryTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,

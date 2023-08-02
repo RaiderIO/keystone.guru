@@ -739,8 +739,6 @@ class DungeonMap extends Signalable {
             $('body').append(
                 jQuery('<div>').attr('id', 'finished_loading')
             );
-
-            console.log('done loading');
         }
 
 

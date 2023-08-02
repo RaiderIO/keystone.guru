@@ -676,8 +676,14 @@ class Enemy extends VersionableMapObject {
         // May be null if not set at all (yet)
         if (npc !== null) {
             this.npc_id = npc.id;
-            this.enemy_forces = npc.enemy_forces.enemy_forces;
-            this.enemy_forces_teeming = npc.enemy_forces.enemy_forces_teeming;
+            if (npc.enemy_forces === null) {
+                console.error(`Unable to find enemy forces for ${this.npc_id}, assuming 0! Insert manually in the database.`)
+                this.enemy_forces = 0;
+                this.enemy_forces_teeming = null;
+            } else {
+                this.enemy_forces = npc.enemy_forces.enemy_forces;
+                this.enemy_forces_teeming = npc.enemy_forces.enemy_forces_teeming;
+            }
         } else {
             // Not set :(
             this.npc_id = null;
