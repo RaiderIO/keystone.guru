@@ -6,6 +6,7 @@ use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute;
+use App\Models\Enemy;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ResultEventActivePull;
@@ -155,6 +156,24 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         $this->recalculateEnemyForcesOnDungeonRoute();
 
         return $this->dungeonRoute;
+    }
+
+    /**
+     * @param string $guid
+     * @param Enemy  $enemy
+     * @return void
+     */
+    protected function enemyFound(string $guid, Enemy $enemy): void
+    {
+        foreach ($this->resultEvents as $resultEvent) {
+            if (!($resultEvent instanceof EnemyEngaged)) {
+                continue;
+            }
+
+            if ($resultEvent->getGuid()->getGuid() === $guid) {
+                $resultEvent->setResolvedEnemy($enemy);
+            }
+        }
     }
 
     /**
