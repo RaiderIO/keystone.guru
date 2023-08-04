@@ -53215,7 +53215,7 @@
         "dungeon_difficulty": null,
         "lat": -149,
         "lng": 240,
-        "kill_priority": 10
+        "kill_priority": -1
     },
     {
         "id": 27932,
