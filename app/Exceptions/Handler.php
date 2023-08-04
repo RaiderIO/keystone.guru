@@ -36,6 +36,7 @@ class Handler extends ExceptionHandler
      *
      * @param Throwable $exception
      * @return void
+     * @throws Throwable
      */
     public function report(Throwable $exception)
     {
@@ -45,12 +46,17 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
+     * @param Request   $request
      * @param Throwable $exception
-     * @return Response
+     * @return mixed
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
+            return response()->json(['message' => sprintf('%s not found for %s', implode($exception->getIds()), $exception->getModel())], 404);
+        }
+
         return parent::render($request, $exception);
     }
 
@@ -59,7 +65,7 @@ class Handler extends ExceptionHandler
      *
      * @param Request $request
      * @param AuthenticationException $exception
-     * @return Response
+     * @return mixed
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {

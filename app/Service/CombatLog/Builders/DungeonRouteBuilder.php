@@ -139,29 +139,15 @@ abstract class DungeonRouteBuilder
             ]);
 
             // Keep track of which groups we're in combat with
-            $groupsPulled              = collect();
             $killZoneEnemiesAttributes = collect();
             foreach ($killedEnemies as $guid => $killedEnemy) {
                 /** @var string $guid */
-                /** @var array{npcId: int, x: float, y: float} $killedEnemy */
+                /** @var array{npcId: int, x: float, y: float, ?Enemy: resolvedEnemy} $killedEnemy */
 
                 try {
                     $this->log->createPullFindEnemyForGuidStart($guid);
 
-                    // See if we actually need to go look for another NPC
-                    if (isset(self::NPC_ID_MAPPING[$killedEnemy['npcId']])) {
-                        $this->log->createPullMappingToDifferentNpcId(
-                            $killedEnemy['npcId'], self::NPC_ID_MAPPING[$killedEnemy['npcId']]
-                        );
-                        $killedEnemy['npcId'] = self::NPC_ID_MAPPING[$killedEnemy['npcId']];
-                    }
-
-                    $enemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
-                        $killedEnemy['npcId'],
-                        $killedEnemy['x'],
-                        $killedEnemy['y'],
-                        $groupsPulled
-                    );
+                    $enemy = $killedEnemy['resolvedEnemy'];
 
                     if ($enemy === null) {
                         $this->log->createPullEnemyNotFound(
@@ -178,10 +164,9 @@ abstract class DungeonRouteBuilder
                         ]);
 
                         $killZone->killZoneEnemies->push($enemy);
-                        // If this enemy was part of a pack, ensure that we know that this group has been pulled
-                        if ($enemy->enemy_pack_id !== null) {
-                            $groupsPulled->put($enemy->enemyPack->group, true);
-                        }
+
+                        $this->enemyFound($guid, $enemy);
+
                         $this->log->createPullEnemyAttachedToKillZone(
                             $killedEnemy['npcId'],
                             $killedEnemy['x'],
@@ -239,6 +224,14 @@ abstract class DungeonRouteBuilder
         Collection $preferredGroups
     ): ?Enemy
     {
+        // See if we actually need to go look for another NPC
+        if (isset(self::NPC_ID_MAPPING[$npcId])) {
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(
+                $npcId, self::NPC_ID_MAPPING[$npcId]
+            );
+            $npcId = self::NPC_ID_MAPPING[$npcId];
+        }
+
         try {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationStart($npcId, $ingameX, $ingameY, $preferredGroups->toArray());
 
@@ -448,4 +441,11 @@ abstract class DungeonRouteBuilder
 
         return $result;
     }
+
+    /**
+     * @param string $guid
+     * @param Enemy  $enemy
+     * @return void
+     */
+    protected abstract function enemyFound(string $guid, Enemy $enemy): void;
 }

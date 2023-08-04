@@ -231,7 +231,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $currentEnemy = $currentEnemies->get($enemy->getUniqueKey());
                 if ($currentEnemy instanceof Enemy) {
-                    $fields        = ['teeming', 'faction', 'required', 'skippable'];
+                    // We ignore MDT's position - we want to keep agency in the location we place enemies still
+                    // since we value VERY MUCH the enemy location being accurate to where they are in-game
+                    $fields        = ['lat', 'lng', 'teeming', 'faction', 'required', 'skippable', 'kill_priority'];
                     $updatedFields = [];
                     foreach ($fields as $field) {
                         $enemy->$field         = $currentEnemy->$field;

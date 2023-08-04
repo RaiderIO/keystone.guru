@@ -6,6 +6,7 @@ use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute;
+use App\Models\Enemy;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ResultEventActivePull;
@@ -20,6 +21,8 @@ use Illuminate\Support\Collection;
  * @package App\Service\CombatLog\Builders
  * @author Wouter
  * @since 24/06/2023
+ *
+ * @property Collection|ResultEventActivePull[] $activePulls
  */
 class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 {
@@ -84,6 +87,15 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         // We are in combat with this enemy now
                         $activePull->enemyEngaged($resultEvent->getGuid()->getGuid(), $resultEvent);
 
+                        $resultEvent->setResolvedEnemy(
+                            $this->findUnkilledEnemyForNpcAtIngameLocation(
+                                $resultEvent->getGuid()->getId(),
+                                $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
+                                $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
+                                $this->getInCombatGroups()
+                            )
+                        );
+
                         $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
                     } else {
                         $this->log->buildEnemyNotInValidNpcIds($resultEvent->getGuid()->getGuid());
@@ -140,7 +152,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         }
 
 
-
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePulls as $activePull) {
             if ($activePull->getEnemiesInCombat()->isEmpty()) {
@@ -158,6 +169,24 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
+     * @param string $guid
+     * @param Enemy  $enemy
+     * @return void
+     */
+    protected function enemyFound(string $guid, Enemy $enemy): void
+    {
+        foreach ($this->resultEvents as $resultEvent) {
+            if (!($resultEvent instanceof EnemyEngaged)) {
+                continue;
+            }
+
+            if ($resultEvent->getGuid()->getGuid() === $guid) {
+                $resultEvent->setResolvedEnemy($enemy);
+            }
+        }
+    }
+
+    /**
      * @param ActivePull $activePull
      * @return Collection
      */
@@ -166,11 +195,32 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         return $activePull->getEnemiesKilled()->mapWithKeys(function (EnemyEngaged $resultEvent, string $guid) {
             return [
                 $guid => [
-                    'npcId' => $resultEvent->getGuid()->getId(),
-                    'x'     => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
-                    'y'     => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
+                    'resolvedEnemy' => $resultEvent->getResolvedEnemy(),
+                    'npcId'         => $resultEvent->getGuid()->getId(),
+                    'x'             => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
+                    'y'             => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
                 ]
             ];
         });
+    }
+
+    /**
+     * @TODO Move this to an ActivePullManager class?
+     * @return Collection
+     */
+    private function getInCombatGroups(): Collection
+    {
+        $result = collect();
+
+        foreach ($this->activePulls as $activePull) {
+            foreach ($activePull->getEnemiesInCombat() as $enemyInCombat) {
+                $resolvedEnemy = $enemyInCombat->getResolvedEnemy();
+                if ($resolvedEnemy !== null && $resolvedEnemy->enemy_pack_id !== null) {
+                    $result->put($resolvedEnemy->enemyPack->group, true);
+                }
+            }
+        }
+
+        return $result;
     }
 }

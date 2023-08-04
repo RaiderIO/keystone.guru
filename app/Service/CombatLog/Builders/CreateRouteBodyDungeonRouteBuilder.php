@@ -7,6 +7,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
+use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\PublishedState;
@@ -26,6 +27,8 @@ use Illuminate\Support\Collection;
  * @package App\Service\CombatLog\Builders
  * @author Wouter
  * @since 24/06/2023
+ *
+ * @property Collection|CreateRouteBodyActivePull[] $activePulls
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 {
@@ -203,6 +206,16 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 $activePull->enemyEngaged($uniqueUid, $event['npc']);
+
+                $event['npc']->setResolvedEnemy(
+                    $this->findUnkilledEnemyForNpcAtIngameLocation(
+                        $event['npc']->npcId,
+                        $event['npc']->coord->x,
+                        $event['npc']->coord->y,
+                        $this->getInCombatGroups()
+                    )
+                );
+
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
             } else if ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
@@ -256,12 +269,27 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         return $activePull->getEnemiesKilled()->mapWithKeys(function (CreateRouteNpc $npc, string $guid) {
             return [
                 $guid => [
-                    'npcId' => $npc->npcId,
-                    'x'     => $npc->coord->x,
-                    'y'     => $npc->coord->y,
+                    'resolvedEnemy' => $npc->getResolvedEnemy(),
+                    'npcId'         => $npc->npcId,
+                    'x'             => $npc->coord->x,
+                    'y'             => $npc->coord->y,
                 ]
             ];
         });
+    }
+
+    /**
+     * @param string $guid
+     * @param Enemy  $enemy
+     * @return void
+     */
+    protected function enemyFound(string $guid, Enemy $enemy): void
+    {
+        foreach ($this->createRouteBody->npcs as $npc) {
+            if ($npc->getUniqueUid() === $guid) {
+                $npc->setResolvedEnemy($enemy);
+            }
+        }
     }
 
     /**
@@ -288,5 +316,25 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 $activePull->addSpell($spell->spellId);
             }
         }
+    }
+
+    /**
+     * @TODO Move this to an ActivePullManager class?
+     * @return Collection
+     */
+    private function getInCombatGroups(): Collection
+    {
+        $result = collect();
+
+        foreach ($this->activePulls as $activePull) {
+            foreach ($activePull->getEnemiesInCombat() as $enemyInCombat) {
+                $resolvedEnemy = $enemyInCombat->getResolvedEnemy();
+                if ($resolvedEnemy !== null && $resolvedEnemy->enemy_pack_id !== null) {
+                    $result->put($resolvedEnemy->enemyPack->group, true);
+                }
+            }
+        }
+
+        return $result;
     }
 }

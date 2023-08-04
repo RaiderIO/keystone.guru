@@ -2,8 +2,14 @@
 
 namespace App\Service\CombatLog\Models\ActivePull;
 
+use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
+/**
+ * @method Collection|EnemyEngaged[] getEnemiesInCombat()
+ * @method Collection|EnemyEngaged[] getEnemiesKilled()
+ */
 class ResultEventActivePull extends ActivePull
 {
     /**

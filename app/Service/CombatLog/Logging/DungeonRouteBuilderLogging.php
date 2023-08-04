@@ -92,7 +92,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
      *
      * @return void
      */
-    public function createPullMappingToDifferentNpcId(int $npcId, int $targetNpcId): void
+    public function findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(int $npcId, int $targetNpcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

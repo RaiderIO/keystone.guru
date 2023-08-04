@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\Models\CreateRoute;
 
+use App\Models\Enemy;
 use Carbon\Carbon;
 
 class CreateRouteNpc
@@ -19,6 +20,8 @@ class CreateRouteNpc
     private Carbon $engagedAtCarbon;
 
     private Carbon $diedAtCarbon;
+
+    private ?Enemy $resolvedEnemy = null;
 
     /**
      * @param int              $npcId
@@ -76,7 +79,7 @@ class CreateRouteNpc
             return 0;
         }
 
-        $timeAliveMS = $this->getEngagedAt()->diffInMilliseconds($this->getDiedAt());
+        $timeAliveMS  = $this->getEngagedAt()->diffInMilliseconds($this->getDiedAt());
         $snapshotAtMS = $this->getEngagedAt()->diffInMilliseconds($carbon);
 
         // timeAliveMS = 30000
@@ -84,6 +87,25 @@ class CreateRouteNpc
         // (30000 - 15000) / 30000 * 100
 
         return (($timeAliveMS - $snapshotAtMS) / $timeAliveMS) * 100;
+    }
+
+    /**
+     * @return Enemy|null
+     */
+    public function getResolvedEnemy(): ?Enemy
+    {
+        return $this->resolvedEnemy;
+    }
+
+    /**
+     * @param Enemy|null $enemy
+     * @return self
+     */
+    public function setResolvedEnemy(?Enemy $enemy): self
+    {
+        $this->resolvedEnemy = $enemy;
+
+        return $this;
     }
 
     /**
