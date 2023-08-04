@@ -7,6 +7,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
+use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\PublishedState;
@@ -262,6 +263,20 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 ]
             ];
         });
+    }
+
+    /**
+     * @param string $guid
+     * @param Enemy  $enemy
+     * @return void
+     */
+    protected function enemyFound(string $guid, Enemy $enemy): void
+    {
+        foreach ($this->createRouteBody->npcs as $npc) {
+            if ($npc->getUniqueUid() === $guid) {
+                $npc->setResolvedEnemy($enemy);
+            }
+        }
     }
 
     /**

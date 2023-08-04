@@ -182,6 +182,9 @@ abstract class DungeonRouteBuilder
                         if ($enemy->enemy_pack_id !== null) {
                             $groupsPulled->put($enemy->enemyPack->group, true);
                         }
+
+                        $this->enemyFound($guid, $enemy);
+
                         $this->log->createPullEnemyAttachedToKillZone(
                             $killedEnemy['npcId'],
                             $killedEnemy['x'],
@@ -448,4 +451,11 @@ abstract class DungeonRouteBuilder
 
         return $result;
     }
+
+    /**
+     * @param string $guid
+     * @param Enemy  $enemy
+     * @return void
+     */
+    protected abstract function enemyFound(string $guid, Enemy $enemy): void;
 }

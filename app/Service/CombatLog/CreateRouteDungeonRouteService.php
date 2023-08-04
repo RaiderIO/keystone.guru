@@ -5,6 +5,7 @@ namespace App\Service\CombatLog;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
+use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\EnemyPosition;
@@ -13,6 +14,8 @@ use App\Models\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Path;
+use App\Models\Polyline;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
@@ -31,6 +34,7 @@ use App\Service\CombatLog\ResultEvents\SpellCast;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Ramsey\Uuid\Uuid;
 
 class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceInterface
@@ -271,8 +275,11 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         ?DungeonRoute   $dungeonRoute = null
     ): void
     {
-        $currentFloor      = null;
-        $mapIconAttributes = collect();
+        $now                 = now();
+        $currentFloor        = null;
+        $mapIconAttributes   = [];
+        $polylineAttributes  = [];
+        $brushlineAttributes = [];
 
         $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
         foreach ($createRouteBody->npcs as $npc) {
@@ -293,19 +300,68 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             $comment = json_encode($npc);
 
-            $mapIconAttributes->push([
+            $hasResolvedEnemy = $npc->getResolvedEnemy() !== null;
+
+            $mapIconAttributes[] = [
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
                 'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
                 'team_id'            => null,
-                'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
+                'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
                 'lat'                => $latLng['lat'],
                 'lng'                => $latLng['lng'],
                 'comment'            => $comment,
                 'permanent_tooltip'  => 0,
-            ]);
+            ];
+
+            if ($hasResolvedEnemy) {
+                $brushlineAttributes[] = [
+                    'dungeon_route_id' => optional($dungeonRoute)->id ?? null,
+                    'floor_id'         => $currentFloor->id,
+                    'polyline_id'      => -1,
+                    'created_at'       => $now,
+                    'updated_at'       => $now,
+                ];
+
+                $polylineAttributes[] = [
+                    'model_class'   => Brushline::class,
+                    'color'         => '#f202fa',
+                    'weight'        => 2,
+                    'vertices_json' => json_encode([
+                        $latLng,
+                        ['lat' => $npc->getResolvedEnemy()->lat, 'lng' => $npc->getResolvedEnemy()->lng],
+                    ])
+                ];
+            }
         }
 
-        MapIcon::insert($mapIconAttributes->toArray());
+        MapIcon::insert($mapIconAttributes);
+        Brushline::insert($brushlineAttributes);
+
+        // Assign the paths to the polylines
+        $dungeonRoute->load('brushlines');
+
+        $index = 0;
+        foreach ($dungeonRoute->brushlines as $brushline) {
+            $polylineAttributes[$index]['model_id'] = $brushline->id;
+
+            $index++;
+        }
+
+        Polyline::insert($polylineAttributes);
+
+        // Assign the polylines back to the brushlines/paths
+        $polyLines = Polyline::where(function (Builder $builder) use ($dungeonRoute) {
+            $builder->whereIn('model_id', $dungeonRoute->brushlines->pluck('id'))
+                ->where('model_class', Brushline::class);
+        })->orderBy('id')
+            ->get('id');
+
+        $polyLineIndex = 0;
+        foreach ($dungeonRoute->brushlines as $brushline) {
+            $brushline->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
+
+            $polyLineIndex++;
+        }
     }
 }
