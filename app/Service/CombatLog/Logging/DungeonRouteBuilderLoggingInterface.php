@@ -22,7 +22,7 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function createPullSpellsAttachedToKillZone(int $spellCount): void;
 
-    public function createPullMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
 
     public function createPullEnd(): void;
 

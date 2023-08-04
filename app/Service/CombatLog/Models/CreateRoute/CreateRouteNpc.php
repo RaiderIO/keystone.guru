@@ -21,7 +21,7 @@ class CreateRouteNpc
 
     private Carbon $diedAtCarbon;
 
-    private ?Enemy $resolvedEnemy;
+    private ?Enemy $resolvedEnemy = null;
 
     /**
      * @param int              $npcId
@@ -98,10 +98,10 @@ class CreateRouteNpc
     }
 
     /**
-     * @param Enemy $enemy
+     * @param Enemy|null $enemy
      * @return self
      */
-    public function setResolvedEnemy(Enemy $enemy): self
+    public function setResolvedEnemy(?Enemy $enemy): self
     {
         $this->resolvedEnemy = $enemy;
 
