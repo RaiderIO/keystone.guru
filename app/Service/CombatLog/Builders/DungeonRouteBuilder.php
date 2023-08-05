@@ -19,28 +19,6 @@ use Illuminate\Support\Collection;
 
 abstract class DungeonRouteBuilder
 {
-    /** @var array Dungeons for which the floor check for enemies is disabled due to issues on Blizzard's side */
-    private const DUNGEON_ENEMY_FLOOR_CHECK_DISABLED = [
-        // With this check for example, the Gulping Goliath in Halls of Infusion will not be killed as the floor switch only happens til
-        // after the boss and as a result we can't find it.
-        Dungeon::DUNGEON_HALLS_OF_INFUSION,
-        // Spawned in enemies right before final boss will not get picked up otherwise
-        Dungeon::DUNGEON_NELTHARUS,
-        // There can be an issue where the map change doesn't register properly and you miss the first pull after the 3rd boss
-        // (right after supposedly switching floors). Also - the floors don't overlap on the Z axis so disabling this check
-        // will do no harm at all
-        Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
-        // The game switches to the final floor too quickly, causing you to miss the last pack guarding the blocked gate
-        // to the last boss
-        Dungeon::DUNGEON_THE_UNDERROT,
-        // Snapping enemies between floors is a thing
-        Dungeon::DUNGEON_THE_AZURE_VAULT,
-        // Enemies in the cave at the last boss are put on the main floor instead so people don't have to switch floors around
-        Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
-        // Enemies end up on the wrong floor near Vexamus for some reason
-        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
-    ];
-
     protected const NPC_ID_MAPPING = [
         // Brackenhide Gnolls transform into Witherlings after engaging them
         194373 => 187238,
@@ -250,11 +228,14 @@ abstract class DungeonRouteBuilder
                     return false;
                 }
 
-                // I'd like to have the check for floor_ids here but in-game a new floor is not always navigated when you expect it to.
-                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) &&
-                    $availableEnemy->floor_id !== $this->currentFloor->id) {
-                    return false;
-                }
+                // Floor checks are a nice idea but in practice they don't work because Blizzard does not take floors
+                // as seriously as we do. For just about every dungeon there are enemies on the wrong floors after which
+                // I have to exclude them in the below check, but every dungeon has these issues so we simply cannot do this.
+                // Annoying, but that's what it is.
+//                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) &&
+//                    $availableEnemy->floor_id !== $this->currentFloor->id) {
+//                    return false;
+//                }
 
                 return true;
             });
