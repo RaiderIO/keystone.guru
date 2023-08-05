@@ -14,6 +14,7 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
+use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use Exception;
 use Illuminate\Support\Collection;
@@ -35,8 +36,7 @@ abstract class DungeonRouteBuilder
     /** @var Collection|Enemy[] */
     protected Collection $availableEnemies;
 
-    /** @var Collection|ActivePull[] */
-    protected Collection $activePulls;
+    protected ActivePullCollection $activePullCollection;
 
     /** @var Collection|int */
     protected Collection $validNpcIds;
@@ -72,8 +72,8 @@ abstract class DungeonRouteBuilder
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
-        $this->activePulls = collect();
+        $this->validNpcIds          = $dungeonRoute->dungeon->getInUseNpcIds();
+        $this->activePullCollection = new ActivePullCollection();
     }
 
     /**
@@ -180,29 +180,27 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param int        $npcId
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
+     * @param ActivePullEnemy $activePullEnemy
+     * @param Collection      $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      *
      * @return Enemy|null
      */
     protected function findUnkilledEnemyForNpcAtIngameLocation(
-        int        $npcId,
-        float      $ingameX,
-        float      $ingameY,
-        Collection $preferredGroups
+        ActivePullEnemy $activePullEnemy,
+        Collection      $preferredGroups
     ): ?Enemy {
         // See if we actually need to go look for another NPC
-        if (isset(self::NPC_ID_MAPPING[$npcId])) {
+        if (isset(self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()])) {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(
-                $npcId, self::NPC_ID_MAPPING[$npcId]
+                $activePullEnemy->getNpcId(), self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()]
             );
-            $npcId = self::NPC_ID_MAPPING[$npcId];
+            $npcId = self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()];
         }
 
         try {
-            $this->log->findUnkilledEnemyForNpcAtIngameLocationStart($npcId, $ingameX, $ingameY, $preferredGroups->toArray());
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
+                $activePullEnemy->getNpcId(), $activePullEnemy->getX(), $activePullEnemy->getY(), $preferredGroups->toArray()
+            );
 
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemyDistance = 99999999999;
@@ -210,8 +208,8 @@ abstract class DungeonRouteBuilder
             $closestEnemy = null;
 
             /** @var Collection|Enemy[] $filteredEnemies */
-            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId) {
-                if ($availableEnemy->npc_id !== $npcId) {
+            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($activePullEnemy) {
+                if ($availableEnemy->npc_id !== $activePullEnemy->getNpcId()) {
                     return false;
                 }
 
@@ -243,7 +241,7 @@ abstract class DungeonRouteBuilder
             });
 
             if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
-                $this->findClosestEnemyAndDistanceFromList($preferredEnemiesInEngagedGroups, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
+                $this->findClosestEnemyAndDistanceFromList($preferredEnemiesInEngagedGroups, $activePullEnemy, $closestEnemyDistance, $closestEnemy);
             }
 
             // If we found an enemy in one of our preferred packs, we must not continue searching
@@ -252,11 +250,11 @@ abstract class DungeonRouteBuilder
                     $closestEnemy->id, $closestEnemyDistance, $closestEnemy->enemyPack->group
                 );
             } else {
-                $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
+                $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $activePullEnemy, $closestEnemyDistance, $closestEnemy);
 
                 // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
                 if ($closestEnemyDistance > $this->currentFloor->enemy_engagement_max_range_patrols) {
-                    $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy, true);
+                    $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $activePullEnemy, $closestEnemyDistance, $closestEnemy, true);
                 }
 
                 if ($closestEnemy === null) {
@@ -290,21 +288,19 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Collection $enemies
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param float      $closestEnemyDistance
-     * @param Enemy|null $closestEnemy
-     * @param bool       $considerPatrols
+     * @param Collection      $enemies
+     * @param ActivePullEnemy $enemy
+     * @param float           $closestEnemyDistance
+     * @param Enemy|null      $closestEnemy
+     * @param bool            $considerPatrols
      * @return bool
      */
     private function findClosestEnemyAndDistanceFromList(
-        Collection $enemies,
-        float      $ingameX,
-        float      $ingameY,
-        float      &$closestEnemyDistance,
-        ?Enemy     &$closestEnemy,
-        bool       $considerPatrols = false
+        Collection      $enemies,
+        ActivePullEnemy $enemy,
+        float           &$closestEnemyDistance,
+        ?Enemy          &$closestEnemy,
+        bool            $considerPatrols = false
     ): bool {
         $result = false;
 
@@ -338,8 +334,8 @@ abstract class DungeonRouteBuilder
                             $availableEnemy,
                             $pointLatLng['lat'],
                             $pointLatLng['lng'],
-                            $ingameX,
-                            $ingameY,
+                            $enemy->getX(),
+                            $enemy->getY(),
                             $closestEnemyDistance,
                             $closestEnemy
                         );
@@ -350,8 +346,8 @@ abstract class DungeonRouteBuilder
                         $availableEnemy,
                         $availableEnemy->lat,
                         $availableEnemy->lng,
-                        $ingameX,
-                        $ingameY,
+                        $enemy->getX(),
+                        $enemy->getY(),
                         $closestEnemyDistance,
                         $closestEnemy
                     );
