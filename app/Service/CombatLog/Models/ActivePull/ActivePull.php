@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\Models\ActivePull;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-abstract class ActivePull
+class ActivePull
 {
     /** @var Collection|ActivePullEnemy[] */
     protected Collection $enemiesInCombat;
@@ -75,16 +75,19 @@ abstract class ActivePull
     }
 
     /**
-     * @param ActivePullEnemy $activePullEnemy
+     * @param string $uniqueId
      * @return $this
      */
-    protected function activePullEnemyKilled(ActivePullEnemy $activePullEnemy): ActivePull
+    public function enemyKilled(string $uniqueId): ActivePull
     {
-        $this->enemiesInCombat->forget($activePullEnemy->getUniqueId());
-        $this->enemiesKilled->put($activePullEnemy->getUniqueId(), $activePullEnemy);
+        $activePullEnemy = $this->enemiesInCombat->get($uniqueId);
+        if ($activePullEnemy !== null) {
+            $this->enemiesInCombat->forget($uniqueId);
+            $this->enemiesKilled->put($activePullEnemy->getUniqueId(), $activePullEnemy);
 
-        if ($this->enemiesInCombat->isEmpty()) {
-            $this->isCompleted = true;
+            if ($this->enemiesInCombat->isEmpty()) {
+                $this->isCompleted = true;
+            }
         }
 
         return $this;
@@ -108,7 +111,7 @@ abstract class ActivePull
      * @param ActivePullEnemy $activePullEnemy
      * @return $this
      */
-    protected function activePullEnemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
+    public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
     {
         $this->enemiesInCombat->put($activePullEnemy->getUniqueId(), $activePullEnemy);
 
@@ -139,6 +142,6 @@ abstract class ActivePull
     public function merge(ActivePull $activePull): void
     {
         $this->enemiesInCombat = $this->enemiesInCombat->merge($activePull->enemiesInCombat);
-        $this->enemiesKilled = $this->enemiesKilled->merge($activePull->enemiesKilled);
+        $this->enemiesKilled   = $this->enemiesKilled->merge($activePull->enemiesKilled);
     }
 }

@@ -28,9 +28,8 @@ class ActivePullEnemy
      * @param float       $y
      * @param Carbon      $engagedAt
      * @param Carbon|null $diedAt
-     * @param Enemy|null  $resolvedEnemy
      */
-    public function __construct(string $uniqueId, int $npcId, float $x, float $y, Carbon $engagedAt, ?Carbon $diedAt, ?Enemy $resolvedEnemy)
+    public function __construct(string $uniqueId, int $npcId, float $x, float $y, Carbon $engagedAt, ?Carbon $diedAt)
     {
         $this->uniqueId      = $uniqueId;
         $this->npcId         = $npcId;
@@ -38,7 +37,6 @@ class ActivePullEnemy
         $this->y             = $y;
         $this->engagedAt     = $engagedAt;
         $this->diedAt        = $diedAt;
-        $this->resolvedEnemy = $resolvedEnemy;
     }
 
     /**
@@ -95,6 +93,17 @@ class ActivePullEnemy
     public function getResolvedEnemy(): ?Enemy
     {
         return $this->resolvedEnemy;
+    }
+
+    /**
+     * @param Enemy|null $resolvedEnemy
+     * @return ActivePullEnemy
+     */
+    public function setResolvedEnemy(?Enemy $resolvedEnemy): self
+    {
+        $this->resolvedEnemy = $resolvedEnemy;
+
+        return $this;
     }
 
     /**
