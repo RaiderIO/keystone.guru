@@ -60,33 +60,9 @@ class CreateRouteNpc
     /**
      * @return string
      */
-    public function getUniqueUid(): string
+    public function getUniqueId(): string
     {
         return sprintf('%d-%s', $this->npcId, $this->spawnUid);
-    }
-
-    /**
-     * @param Carbon $carbon
-     * @return float
-     */
-    public function getHPPercentAt(Carbon $carbon): float
-    {
-        if ($this->getEngagedAt()->isAfter($carbon)) {
-            return 100;
-        }
-
-        if ($this->getDiedAt()->isBefore($carbon)) {
-            return 0;
-        }
-
-        $timeAliveMS  = $this->getEngagedAt()->diffInMilliseconds($this->getDiedAt());
-        $snapshotAtMS = $this->getEngagedAt()->diffInMilliseconds($carbon);
-
-        // timeAliveMS = 30000
-        // snapShotAtMS = 15000
-        // (30000 - 15000) / 30000 * 100
-
-        return (($timeAliveMS - $snapshotAtMS) / $timeAliveMS) * 100;
     }
 
     /**

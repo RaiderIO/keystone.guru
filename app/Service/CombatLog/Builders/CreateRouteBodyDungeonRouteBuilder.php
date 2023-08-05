@@ -174,7 +174,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId);
             }
 
-            $uniqueUid = $event['npc']->getUniqueUid();
+            $uniqueUid = $event['npc']->getUniqueId();
             if ($event['type'] === 'engaged') {
                 if ($firstEngagedAt === null) {
                     $firstEngagedAt = $event['npc']->getEngagedAt();
@@ -205,8 +205,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                     $this->log->buildKillZonesCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
                 }
 
-                $activePull->enemyEngaged($uniqueUid, $event['npc']);
-
                 $event['npc']->setResolvedEnemy(
                     $this->findUnkilledEnemyForNpcAtIngameLocation(
                         $event['npc']->npcId,
@@ -216,12 +214,14 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                     )
                 );
 
+                $activePull->enemyEngaged($event['npc']);
+
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
             } else if ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
                 foreach ($this->activePulls as $activePull) {
                     if ($activePull->isEnemyInCombat($uniqueUid)) {
-                        $activePull->enemyKilled($uniqueUid, $event['npc']);
+                        $activePull->enemyKilled($event['npc']);
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
                 }
@@ -259,37 +259,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         $this->activePulls = collect();
 
         $this->recalculateEnemyForcesOnDungeonRoute();
-    }
-
-    /**
-     * @return Collection|array{array{npcId: int, x: float, y: float}}
-     */
-    public function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection
-    {
-        return $activePull->getEnemiesKilled()->mapWithKeys(function (CreateRouteNpc $npc, string $guid) {
-            return [
-                $guid => [
-                    'resolvedEnemy' => $npc->getResolvedEnemy(),
-                    'npcId'         => $npc->npcId,
-                    'x'             => $npc->coord->x,
-                    'y'             => $npc->coord->y,
-                ]
-            ];
-        });
-    }
-
-    /**
-     * @param string $guid
-     * @param Enemy  $enemy
-     * @return void
-     */
-    protected function enemyFound(string $guid, Enemy $enemy): void
-    {
-        foreach ($this->createRouteBody->npcs as $npc) {
-            if ($npc->getUniqueUid() === $guid) {
-                $npc->setResolvedEnemy($enemy);
-            }
-        }
     }
 
     /**

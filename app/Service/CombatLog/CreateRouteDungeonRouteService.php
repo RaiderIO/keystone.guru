@@ -240,7 +240,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 'challenge_mode_run_id' => $challengeModeRun->id,
                 'floor_id'              => $floor->id,
                 'npc_id'                => $npc->npcId,
-                'guid'                  => $npc->getUniqueUid(),
+                'guid'                  => $npc->getUniqueId(),
                 'lat'                   => $ingameLatLng['lat'],
                 'lng'                   => $ingameLatLng['lng'],
                 'created_at'            => $now,

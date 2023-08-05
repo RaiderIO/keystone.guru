@@ -103,7 +103,7 @@ class Update extends Command
         if (self::OPTIMIZE[$environment]) {
             $this->call('optimize');
         }
-        
+
         $this->call('queue:restart');
         if ($environment !== 'local') {
             $this->call('supervisor:start');

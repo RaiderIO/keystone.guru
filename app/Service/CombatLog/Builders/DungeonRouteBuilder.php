@@ -14,6 +14,7 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
+use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -82,12 +83,6 @@ abstract class DungeonRouteBuilder
     public abstract function build(): DungeonRoute;
 
     /**
-     * @param ActivePull $activePull
-     * @return Collection|array{array{npcId: int, x: float, y: float}}
-     */
-    public abstract function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection;
-
-    /**
      * @return void
      */
     protected function recalculateEnemyForcesOnDungeonRoute()
@@ -107,8 +102,8 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->createPullStart($this->killZoneIndex);
 
-            /** @var Collection|array{array{npcId: int, x: float, y: float}} $killedEnemies */
-            $killedEnemies = $this->convertEnemiesKilledInActivePull($activePull);
+            /** @var Collection|ActivePullEnemy[] $killedEnemies */
+            $killedEnemies = $activePull->getEnemiesKilled();
 
             $killZone = KillZone::create([
                 'dungeon_route_id' => $this->dungeonRoute->id,
@@ -120,18 +115,17 @@ abstract class DungeonRouteBuilder
             $killZoneEnemiesAttributes = collect();
             foreach ($killedEnemies as $guid => $killedEnemy) {
                 /** @var string $guid */
-                /** @var array{npcId: int, x: float, y: float, ?Enemy: resolvedEnemy} $killedEnemy */
 
                 try {
                     $this->log->createPullFindEnemyForGuidStart($guid);
 
-                    $enemy = $killedEnemy['resolvedEnemy'];
+                    $enemy = $killedEnemy->getResolvedEnemy();
 
                     if ($enemy === null) {
                         $this->log->createPullEnemyNotFound(
-                            $killedEnemy['npcId'],
-                            $killedEnemy['x'],
-                            $killedEnemy['y']
+                            $killedEnemy->getNpcId(),
+                            $killedEnemy->getX(),
+                            $killedEnemy->getY()
                         );
                     } else {
                         // Schedule for creation later
@@ -143,12 +137,10 @@ abstract class DungeonRouteBuilder
 
                         $killZone->killZoneEnemies->push($enemy);
 
-                        $this->enemyFound($guid, $enemy);
-
                         $this->log->createPullEnemyAttachedToKillZone(
-                            $killedEnemy['npcId'],
-                            $killedEnemy['x'],
-                            $killedEnemy['y']
+                            $killedEnemy->getNpcId(),
+                            $killedEnemy->getX(),
+                            $killedEnemy->getY()
                         );
                     }
                 } finally {
@@ -200,8 +192,7 @@ abstract class DungeonRouteBuilder
         float      $ingameX,
         float      $ingameY,
         Collection $preferredGroups
-    ): ?Enemy
-    {
+    ): ?Enemy {
         // See if we actually need to go look for another NPC
         if (isset(self::NPC_ID_MAPPING[$npcId])) {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(
@@ -314,8 +305,7 @@ abstract class DungeonRouteBuilder
         float      &$closestEnemyDistance,
         ?Enemy     &$closestEnemy,
         bool       $considerPatrols = false
-    ): bool
-    {
+    ): bool {
         $result = false;
 
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
@@ -400,8 +390,7 @@ abstract class DungeonRouteBuilder
         float  $ingameY,
         float  &$closestEnemyDistance,
         ?Enemy &$closestEnemy
-    ): bool
-    {
+    ): bool {
         $result = false;
 
         // Always use the floor that the enemy itself is on, not $this->currentFloor
@@ -422,11 +411,4 @@ abstract class DungeonRouteBuilder
 
         return $result;
     }
-
-    /**
-     * @param string $guid
-     * @param Enemy  $enemy
-     * @return void
-     */
-    protected abstract function enemyFound(string $guid, Enemy $enemy): void;
 }
