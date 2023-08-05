@@ -276,7 +276,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     ): void
     {
         $now                 = now();
-        $currentFloor        = null;
         $mapIconAttributes   = [];
         $polylineAttributes  = [];
         $brushlineAttributes = [];
@@ -288,10 +287,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 continue;
             }
 
-            $realUiMapId = Floor::UI_MAP_ID_MAPPING[$npc->coord->uiMapId] ?? $npc->coord->uiMapId;
-            if ($currentFloor === null || $realUiMapId !== $currentFloor->ui_map_id) {
-                $currentFloor = Floor::findByUiMapId($npc->coord->uiMapId);
-            }
+            $currentFloor = $npc->getResolvedEnemy()->floor;
 
             $latLng = $currentFloor->calculateMapLocationForIngameLocation(
                 $npc->coord->x,
