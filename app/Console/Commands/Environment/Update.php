@@ -54,7 +54,7 @@ class Update extends Command
     public function handle()
     {
         $environment = $this->argument('environment');
-        
+
         $this->info(sprintf('Updating Keystone.guru %s environment', $environment));
 
         // Regenerate IDE helper
@@ -103,8 +103,11 @@ class Update extends Command
         if (self::OPTIMIZE[$environment]) {
             $this->call('optimize');
         }
+        
         $this->call('queue:restart');
-        $this->call('supervisor:start');
+        if ($environment !== 'local') {
+            $this->call('supervisor:start');
+        }
 
         // Refresh the subcreation ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
@@ -113,7 +116,8 @@ class Update extends Command
         $this->call('keystoneguru:view', ['operation' => 'cache']);
 
         // Bit of a nasty hack to fix permission issues
-        $this->shell(sprintf('chown www-data:www-data %s/storage/framework/cache/* -R', base_path()));
+        $this->shell(sprintf('chown www-data:www-data -R %s/storage', base_path()));
+        $this->shell(sprintf('chown www-data:www-data -R %s/boostrap/cache', base_path()));
 
         return 0;
     }
