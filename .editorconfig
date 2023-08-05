@@ -110,10 +110,6 @@ ij_scss_space_before_opening_brace = true
 ij_scss_use_double_quotes = true
 ij_scss_value_alignment = 0
 
-[*.toc]
-ij_toc_line_comment_add_space = true
-ij_toc_line_comment_at_first_column = false
-
 [*.twig]
 ij_twig_keep_indents_on_empty_lines = false
 ij_twig_spaces_inside_comments_delimiters = true
@@ -247,6 +243,7 @@ ij_typescript_prefer_explicit_types_function_expression_returns = false
 ij_typescript_prefer_explicit_types_function_returns = false
 ij_typescript_prefer_explicit_types_vars_fields = false
 ij_typescript_prefer_parameters_wrap = false
+ij_typescript_property_prefix = 
 ij_typescript_reformat_c_style_comments = false
 ij_typescript_space_after_colon = true
 ij_typescript_space_after_comma = true
@@ -425,6 +422,7 @@ ij_javascript_prefer_explicit_types_function_expression_returns = false
 ij_javascript_prefer_explicit_types_function_returns = false
 ij_javascript_prefer_explicit_types_vars_fields = false
 ij_javascript_prefer_parameters_wrap = false
+ij_javascript_property_prefix = 
 ij_javascript_reformat_c_style_comments = false
 ij_javascript_space_after_colon = true
 ij_javascript_space_after_comma = true
@@ -512,9 +510,9 @@ ij_javascript_wrap_comments = false
 ij_continuation_indent_size = 4
 ij_php_align_assignments = true
 ij_php_align_class_constants = true
-ij_php_align_enum_cases = false
+ij_php_align_enum_cases = true
 ij_php_align_group_field_declarations = true
-ij_php_align_inline_comments = false
+ij_php_align_inline_comments = true
 ij_php_align_key_value_pairs = true
 ij_php_align_match_arm_bodies = false
 ij_php_align_multiline_array_initializer_expression = true
@@ -530,9 +528,9 @@ ij_php_align_phpdoc_comments = false
 ij_php_align_phpdoc_param_names = true
 ij_php_anonymous_brace_style = end_of_line
 ij_php_api_weight = 28
-ij_php_array_initializer_new_line_after_left_brace = true
-ij_php_array_initializer_right_brace_on_new_line = true
-ij_php_array_initializer_wrap = on_every_item
+ij_php_array_initializer_new_line_after_left_brace = false
+ij_php_array_initializer_right_brace_on_new_line = false
+ij_php_array_initializer_wrap = off
 ij_php_assignment_wrap = off
 ij_php_attributes_wrap = off
 ij_php_author_weight = 28
@@ -730,13 +728,12 @@ ij_php_upper_case_boolean_const = false
 ij_php_upper_case_null_const = false
 ij_php_uses_weight = 28
 ij_php_var_weight = 28
-ij_php_variable_naming_style = camel_case
+ij_php_variable_naming_style = mixed
 ij_php_version_weight = 28
 ij_php_while_brace_force = never
 ij_php_while_on_new_line = false
 
 [{*.har,*.jsb2,*.jsb3,*.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,bowerrc,composer.lock,jest.config}]
-indent_size = 2
 ij_json_array_wrapping = split_into_lines
 ij_json_keep_blank_lines_in_code = 0
 ij_json_keep_indents_on_empty_lines = false
@@ -783,19 +780,10 @@ ij_html_text_wrap = normal
 [{*.http,*.rest}]
 indent_size = 0
 ij_continuation_indent_size = 4
-ij_http request_call_parameters_wrap = normal
-
-[{*.lua,*.lua.txt}]
-ij_lua_align_consecutive_variable_declarations = false
-ij_lua_align_multiline_parameters = true
-ij_lua_align_multiline_parameters_in_calls = false
-ij_lua_call_parameters_wrap = off
-ij_lua_keep_indents_on_empty_lines = false
-ij_lua_keep_simple_blocks_in_one_line = false
-ij_lua_method_parameters_wrap = off
-ij_lua_space_after_comma = true
-ij_lua_space_before_comma = false
-ij_lua_spaces_around_assignment_operators = true
+ij_http-request_call_parameters_wrap = normal
+ij_http-request_method_parameters_wrap = split_into_lines
+ij_http-request_space_before_comma = true
+ij_http-request_spaces_around_assignment_operators = true
 
 [{*.markdown,*.md}]
 ij_markdown_force_one_space_after_blockquote_symbol = true
@@ -814,9 +802,6 @@ ij_markdown_min_lines_around_header = 1
 ij_markdown_min_lines_between_paragraphs = 1
 ij_markdown_wrap_text_if_long = true
 ij_markdown_wrap_text_inside_blockquotes = true
-
-[{*.toml,Cargo.lock,Cargo.toml.orig,Gopkg.lock,Pipfile,poetry.lock}]
-ij_toml_keep_indents_on_empty_lines = false
 
 [{*.yaml,*.yml}]
 indent_size = 2
