@@ -3,30 +3,41 @@
 namespace App\Service\CombatLog\Models\ActivePull;
 
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
-/**
- * @method Collection|CreateRouteNpc[] getEnemiesInCombat()
- * @method Collection|CreateRouteNpc[] getEnemiesKilled()
- */
 class CreateRouteBodyActivePull extends ActivePull
 {
     /**
-     * @param Carbon $timestamp
-     * @return float
+     * @param CreateRouteNpc $npc
+     * @return ActivePull
      */
-    public function getAverageHPPercentAt(Carbon $timestamp): float
+    public function enemyEngaged(CreateRouteNpc $npc): ActivePull
     {
-        $inCombatSum = $this->enemiesInCombat->sum(function (CreateRouteNpc $createRouteNpc) use ($timestamp) {
-            return $createRouteNpc->getHPPercentAt($timestamp);
-        });
+        return parent::activePullEnemyEngaged($this->createActivePullEnemy($npc));
+    }
 
-        $totalEnemiesInPull = ($this->enemiesInCombat->count() + $this->enemiesKilled->count());
-        if ($totalEnemiesInPull === 0) {
-            return 100;
-        } else {
-            return $inCombatSum / $totalEnemiesInPull;
-        }
+    /**
+     * @param CreateRouteNpc $npc
+     * @return ActivePull
+     */
+    public function enemyKilled(CreateRouteNpc $npc): ActivePull
+    {
+        return parent::activePullEnemyKilled($this->createActivePullEnemy($npc));
+    }
+
+    /**
+     * @param CreateRouteNpc $npc
+     * @return ActivePullEnemy
+     */
+    private function createActivePullEnemy(CreateRouteNpc $npc): ActivePullEnemy
+    {
+        return new ActivePullEnemy(
+            $npc->getUniqueId(),
+            $npc->npcId,
+            $npc->coord->x,
+            $npc->coord->y,
+            $npc->getEngagedAt(),
+            $npc->getDiedAt(),
+            $npc->getResolvedEnemy()
+        );
     }
 }
