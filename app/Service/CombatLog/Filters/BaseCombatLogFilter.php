@@ -5,54 +5,37 @@ namespace App\Service\CombatLog\Filters;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Models\DungeonRoute;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use Illuminate\Support\Collection;
 
-class CombatLogDungeonRouteFilter implements CombatLogParserInterface
+abstract class BaseCombatLogFilter implements CombatLogParserInterface
 {
     /** @var Collection|BaseResultEvent[] */
-    private Collection $resultEvents;
+    protected Collection $resultEvents;
 
     /** @var Collection|CombatLogParserInterface[] */
     private Collection $filters;
 
-    private SpecialEventsFilter $specialEventsFilter;
-
-    private CombatFilter $combatFilter;
-
-    private SpellFilter $spellFilter;
-
     public function __construct()
     {
-        $this->resultEvents        = collect();
-        $this->specialEventsFilter = new SpecialEventsFilter($this->resultEvents);
-        $this->combatFilter        = new CombatFilter($this->resultEvents);
-        $this->spellFilter         = new SpellFilter($this->resultEvents);
+        $this->resultEvents = collect();
+        $this->filters = collect();
 
-        $this->filters = collect([
-            $this->specialEventsFilter,
-            $this->combatFilter,
-            $this->spellFilter,
-        ]);
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     *
+     * @param CombatLogParserInterface $combatLogParser
      * @return void
      */
-    public function setDungeonRoute(DungeonRoute $dungeonRoute): self
+    protected function addFilter(CombatLogParserInterface $combatLogParser)
     {
-        $this->combatFilter->setValidNpcIds($dungeonRoute->dungeon->getInUseNpcIds());
-
-        return $this;
+        $this->filters->push($combatLogParser);
     }
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
+     * @param int $lineNr
      *
      * @return bool
      */
@@ -73,8 +56,9 @@ class CombatLogDungeonRouteFilter implements CombatLogParserInterface
     public function getResultEvents(): Collection
     {
         return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
-            // Add some CONSISTENT (not necessarily accurate) numbers so that events with 
-            $addition  = 0;
+            // Add some CONSISTENT (not necessarily accurate) numbers so that events with the same timestamp are sorted
+            // consistently instead of "randomly" causing all kinds of issues
+            $addition = 0;
             $baseEvent = $baseResultEvent->getBaseEvent();
             if ($baseEvent instanceof AdvancedCombatLogEvent) {
                 $guid = $baseEvent->getAdvancedData()->getInfoGuid();

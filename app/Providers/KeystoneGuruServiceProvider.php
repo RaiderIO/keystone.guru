@@ -16,6 +16,8 @@ use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\CombatLog\CombatLogMappingVersionService;
+use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitService;
@@ -106,9 +108,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
+        $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
+        $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
-        $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
 
         // Model helpers
@@ -160,10 +163,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot(
-        ViewServiceInterface $viewService,
-        ExpansionServiceInterface $expansionService,
+        ViewServiceInterface               $viewService,
+        ExpansionServiceInterface          $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
-        MappingServiceInterface $mappingService
+        MappingServiceInterface            $mappingService
     ) {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {

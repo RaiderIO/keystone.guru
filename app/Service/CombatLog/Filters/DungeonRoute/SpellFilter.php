@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Filters;
+namespace App\Service\CombatLog\Filters\DungeonRoute;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
