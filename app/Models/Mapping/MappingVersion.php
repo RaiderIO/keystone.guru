@@ -193,6 +193,10 @@ class MappingVersion extends Model
 
         // If we create a new mapping version, we must create a complete copy of the previous mapping and re-save that to the database.
         static::created(function (MappingVersion $newMappingVersion) {
+            if ($newMappingVersion->dungeon === null) {
+                return;
+            }
+
             /** @var Collection|MappingVersion[] $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
 

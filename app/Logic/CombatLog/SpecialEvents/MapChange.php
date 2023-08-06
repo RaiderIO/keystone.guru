@@ -8,13 +8,13 @@ class MapChange extends SpecialEvent
 
     private string $uiMapName;
 
-    private float $x0;
+    private float $xMax;
 
-    private float $x1;
+    private float $xMin;
 
-    private float $y0;
+    private float $yMax;
 
-    private float $y1;
+    private float $yMin;
 
     /**
      * @return int
@@ -35,33 +35,33 @@ class MapChange extends SpecialEvent
     /**
      * @return float
      */
-    public function getX0(): float
+    public function getXMax(): float
     {
-        return $this->x0;
+        return $this->xMax;
     }
 
     /**
      * @return float
      */
-    public function getX1(): float
+    public function getXMin(): float
     {
-        return $this->x1;
+        return $this->xMin;
     }
 
     /**
      * @return float
      */
-    public function getY0(): float
+    public function getYMax(): float
     {
-        return $this->y0;
+        return $this->yMax;
     }
 
     /**
      * @return float
      */
-    public function getY1(): float
+    public function getYMin(): float
     {
-        return $this->y1;
+        return $this->yMin;
     }
 
     /**
@@ -74,10 +74,10 @@ class MapChange extends SpecialEvent
 
         $this->uiMapID   = $parameters[0];
         $this->uiMapName = $parameters[1];
-        $this->x0        = $parameters[2];
-        $this->x1        = $parameters[3];
-        $this->y0        = $parameters[4];
-        $this->y1        = $parameters[5];
+        $this->xMax      = $parameters[2];
+        $this->xMin      = $parameters[3];
+        $this->yMax      = $parameters[4];
+        $this->yMin      = $parameters[5];
 
         return $this;
     }

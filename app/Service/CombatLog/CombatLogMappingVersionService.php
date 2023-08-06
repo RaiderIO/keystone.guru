@@ -43,6 +43,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     {
         $this->log->createMappingVersionFromChallengeModeStart($filePath);
         try {
+            $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
+
             // We don't need to do anything if there are no runs
             // If there's one run, we may still want to trim the fat of the log and keep just
             // the one challenge mode that's in there
@@ -141,19 +143,22 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 } else {
                     /** @var Dungeon $dungeon */
                     foreach ($dungeon->floors as $floor) {
-                        if ($floor->ingame_min_x === null || $floor->ingame_min_y || $floor->ingame_max_x || $floor->ingame_max_y) {
+                        if ($floor->ingame_min_x === null || $floor->ingame_min_y === null || $floor->ingame_max_x === null || $floor->ingame_max_y === null) {
                             throw new Exception(
                                 sprintf('Floor %s is not configured yet - cannot place enemies on it!', __($floor->name, [], 'en'))
                             );
                         }
                     }
 
-                    if ($dungeon->mappingVersions()->count() !== 0) {
+                    // We expect it to be 1 since we just created a mapping version
+                    if ($dungeon->mappingVersions()->count() > 1) {
+                        $mappingVersion->delete();
+
                         throw new Exception('Unable to create initial mapping version from combat log - there are already mapping versions for this dungeon!');
                     }
 
                     // If the dungeon was found, update the mapping version
-                    $mappingVersion->update(['dungeon_id' => $dungeon]);
+                    $mappingVersion->update(['dungeon_id' => $dungeon->id]);
                     $mappingVersion->setRelation('dungeon', $dungeon);
                 }
 
@@ -163,6 +168,15 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
                 $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
+
+                // @TODO move this somewhere else?
+                // Ensure we have the correct bounds for a floor while we're at it
+                $currentFloor->update([
+                                          'ingame_min_x' => round($parsedEvent->getXMin(), 2),
+                                          'ingame_min_y' => round($parsedEvent->getYMin(), 2),
+                                          'ingame_max_x' => round($parsedEvent->getXMax(), 2),
+                                          'ingame_max_y' => round($parsedEvent->getYMax(), 2),
+                                      ]);
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
