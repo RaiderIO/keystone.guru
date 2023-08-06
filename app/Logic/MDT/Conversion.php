@@ -151,6 +151,7 @@ class Conversion
                 break;
             }
         }
+
         return $result;
     }
 
@@ -200,7 +201,7 @@ class Conversion
         if ($dungeon instanceof Dungeon) {
             return $dungeon;
         } else {
-            throw new Exception('Unsupported dungeon found.');
+            throw new Exception(sprintf('Unsupported dungeon found: %s.', $mdtDungeonId));
         }
     }
 
@@ -226,6 +227,7 @@ class Conversion
         $mdtCoordinate      = self::convertLatLngToMDTCoordinate($latLng);
         $mdtCoordinate['x'] = (string)$mdtCoordinate['x'];
         $mdtCoordinate['y'] = (string)$mdtCoordinate['y'];
+
         return $mdtCoordinate;
     }
 
@@ -242,8 +244,8 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      * @param SeasonService $seasonService
-     * @param Dungeon $dungeon
-     * @param int $mdtWeek
+     * @param Dungeon       $dungeon
+     * @param int           $mdtWeek
      * @return AffixGroup|null
      * @throws Exception
      */
@@ -252,6 +254,7 @@ class Conversion
         $season = $dungeon->getActiveSeason($seasonService);
         if ($season === null) {
             logger()->error(sprintf('Unable to find season for dungeon %s', __($dungeon->name)));
+
             return null;
         }
 
@@ -264,6 +267,7 @@ class Conversion
 
             $affixGroup = $season->getCurrentAffixGroup();
         }
+
         return $affixGroup;
     }
 

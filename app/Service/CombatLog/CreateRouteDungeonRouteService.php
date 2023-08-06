@@ -97,7 +97,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $this->log->getCreateRouteBodyStart($combatLogFilePath);
 
             $dungeonRoute = null;
-            $resultEvents = $this->combatLogService->getResultEvents($combatLogFilePath, $dungeonRoute);
+            $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
             if (!($dungeonRoute instanceof DungeonRoute)) {
                 throw new Exception('Unable to generate dungeon route from combat log!');
             }

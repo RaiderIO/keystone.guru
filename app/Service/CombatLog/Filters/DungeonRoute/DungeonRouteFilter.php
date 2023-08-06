@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Filters;
+namespace App\Service\CombatLog\Filters\DungeonRoute;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
@@ -34,12 +34,13 @@ class DungeonRouteFilter implements CombatLogParserInterface
     /**
      * @param BaseEvent $combatLogEvent
      * @param int $lineNr
+     * @param bool $waitForChallengeModeStart True to wait for a ChallengeModeStart event before parsing, otherwise ZONE_CHANGE will be used
      *
      * @return bool
      * @throws AdvancedLogNotEnabledException
      * @throws DungeonNotSupportedException
      */
-    public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
+    public function parse(BaseEvent $combatLogEvent, int $lineNr, bool $waitForChallengeModeStart = true): bool
     {
         if ($combatLogEvent instanceof CombatLogVersion && !$combatLogEvent->isAdvancedLogEnabled()) {
             throw new AdvancedLogNotEnabledException(

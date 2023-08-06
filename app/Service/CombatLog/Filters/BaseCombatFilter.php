@@ -8,18 +8,16 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
-use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
-use App\Service\CombatLog\Logging\CombatFilterLoggingInterface;
+use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
-class CombatFilter implements CombatLogParserInterface
+abstract class BaseCombatFilter implements CombatLogParserInterface
 {
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
     private const DEFEATED_PERCENTAGE = [
@@ -44,7 +42,7 @@ class CombatFilter implements CombatLogParserInterface
     /** @var Collection|BaseResultEvent[] */
     private Collection $resultEvents;
 
-    /** @var Collection|int[] */
+    /** @var Collection|int[] A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
     /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
@@ -56,22 +54,19 @@ class CombatFilter implements CombatLogParserInterface
     /** @var Collection|string[] List of GUIDs for all enemies that we have killed since the start. */
     private Collection $killedEnemies;
 
-    /** @var bool */
-    private bool $challengeModeStarted = false;
-
-    /** @var CombatFilterLoggingInterface */
-    protected $log;
+    /** @var BaseCombatFilterLoggingInterface */
+    private BaseCombatFilterLoggingInterface $log;
 
     public function __construct(Collection $resultEvents)
     {
-        $this->resultEvents           = $resultEvents;
-        $this->validNpcIds            = collect();
+        $this->resultEvents = $resultEvents;
+        $this->validNpcIds = collect();
         $this->accurateEnemySightings = collect();
-        $this->summonedEnemies        = collect();
-        $this->killedEnemies          = collect();
+        $this->summonedEnemies = collect();
+        $this->killedEnemies = collect();
 
-        /** @var CombatFilterLoggingInterface $log */
-        $log       = App::make(CombatFilterLoggingInterface::class);
+        /** @var BaseCombatFilterLoggingInterface $log */
+        $log = App::make(BaseCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -85,35 +80,12 @@ class CombatFilter implements CombatLogParserInterface
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
+     * @param int $lineNr
      *
      * @return bool
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        // First, we wait for the challenge mode to start
-        if ($combatLogEvent instanceof ChallengeModeStart) {
-            $this->log->parseChallengeModeStarted($lineNr);
-            $this->accurateEnemySightings = collect();
-            $this->challengeModeStarted   = true;
-
-            return false;
-        }
-
-        // If it hasn't started yet, we don't process anything
-        if (!$this->challengeModeStarted) {
-            return false;
-        }
-
-        // If we ended it, stop all processing and drop combat of all enemies
-        if ($combatLogEvent instanceof ChallengeModeEnd) {
-            $this->log->parseChallengeModeEnded($lineNr);
-            $this->accurateEnemySightings = collect();
-            $this->challengeModeStarted   = false;
-
-            return false;
-        }
-
         // If a unit has died/is defeated
         if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
@@ -139,7 +111,7 @@ class CombatFilter implements CombatLogParserInterface
             }
 
             /** @var Creature $destGuid */
-            if ($this->validNpcIds->search($destGuid->getId()) === false) {
+            if ($this->validNpcIds->isNotEmpty() && $this->validNpcIds->search($destGuid->getId()) === false) {
                 $this->log->parseUnitDiedInvalidNpcId($lineNr, $destGuid->getGuid());
 
                 return false;
@@ -167,7 +139,6 @@ class CombatFilter implements CombatLogParserInterface
             return true;
         }
 
-        $newEnemyGuid = null;
         if ($combatLogEvent instanceof CombatLogEvent) {
             if ($combatLogEvent->getSuffix() instanceof Summon) {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
@@ -257,7 +228,7 @@ class CombatFilter implements CombatLogParserInterface
         }
 
         // Invalid NPC ID, ignore it since it can never be part of the route anyways
-        if ($this->validNpcIds->search($guid->getId()) === false) {
+        if ($this->validNpcIds->isNotEmpty() && $this->validNpcIds->search($guid->getId()) === false) {
             return null;
         }
 

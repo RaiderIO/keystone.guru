@@ -4,28 +4,8 @@ namespace App\Service\CombatLog\Logging;
 
 use App\Logging\StructuredLogging;
 
-class CombatFilterLogging extends StructuredLogging implements CombatFilterLoggingInterface
+class BaseCombatFilterLogging extends StructuredLogging implements BaseCombatFilterLoggingInterface
 {
-    /**
-     * @param int $lineNr
-     *
-     * @return void
-     */
-    public function parseChallengeModeStarted(int $lineNr): void
-    {
-        $this->info(__METHOD__);
-    }
-
-    /**
-     * @param int $lineNr
-     *
-     * @return void
-     */
-    public function parseChallengeModeEnded(int $lineNr): void
-    {
-        $this->info(__METHOD__);
-    }
-
     /**
      * @param int    $lineNr
      * @param string $guid
@@ -36,7 +16,7 @@ class CombatFilterLogging extends StructuredLogging implements CombatFilterLoggi
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-    
+
     /**
      * @param int    $lineNr
      * @param string $guid
@@ -47,7 +27,7 @@ class CombatFilterLogging extends StructuredLogging implements CombatFilterLoggi
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-    
+
     /**
      * @param int    $lineNr
      * @param string $guid
@@ -58,7 +38,7 @@ class CombatFilterLogging extends StructuredLogging implements CombatFilterLoggi
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-    
+
     /**
      * @param int    $lineNr
      * @param string $guid
@@ -156,7 +136,7 @@ class CombatFilterLogging extends StructuredLogging implements CombatFilterLoggi
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-    
+
     /**
      * @param string $guid
      *

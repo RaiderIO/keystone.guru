@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Filters;
+namespace App\Service\CombatLog\Filters\MappingVersion;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
@@ -45,25 +45,15 @@ class SpecialEventsFilter implements CombatLogParserInterface
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
+     * @param int $lineNr
      *
      * @return bool
-     * @throws DungeonNotSupportedException
+     * @throws FloorNotSupportedException
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        // Starts
-        if ($combatLogEvent instanceof ChallengeModeStart) {
-            $this->resultEvents->push((new ChallengeModeStartResultEvent($combatLogEvent)));
-
-            return true;
-        } // Ends
-        elseif ($combatLogEvent instanceof ChallengeModeEnd) {
-            $this->resultEvents->push((new ChallengeModeEndResultEvent($combatLogEvent)));
-
-            return true;
-        } // Map changes yes please
-        elseif ($combatLogEvent instanceof MapChange) {
+        // Map changes yes please
+        if ($combatLogEvent instanceof MapChange) {
             try {
                 $this->resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
             } catch (FloorNotSupportedException $e) {
