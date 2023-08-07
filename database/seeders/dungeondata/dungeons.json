@@ -5005,6 +5005,12 @@
                         "floor1_id": 180,
                         "floor2_id": 182,
                         "direction": "up"
+                    },
+                    {
+                        "id": 686,
+                        "floor1_id": 180,
+                        "floor2_id": 177,
+                        "direction": "up"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
