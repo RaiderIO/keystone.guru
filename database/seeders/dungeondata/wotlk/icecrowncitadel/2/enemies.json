@@ -1,1 +1,24 @@
-[]
+[
+    {
+        "id": 28320,
+        "mapping_version_id": 187,
+        "enemy_pack_id": null,
+        "enemy_patrol_id": null,
+        "npc_id": 36950,
+        "floor_id": 177,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": null,
+        "lat": -138.67056541176,
+        "lng": 102.86305529522,
+        "kill_priority": null
+    }
+]
