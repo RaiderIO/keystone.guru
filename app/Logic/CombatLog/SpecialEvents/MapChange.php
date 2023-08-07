@@ -74,10 +74,10 @@ class MapChange extends SpecialEvent
 
         $this->uiMapID   = $parameters[0];
         $this->uiMapName = $parameters[1];
-        $this->xMax      = $parameters[2];
-        $this->xMin      = $parameters[3];
-        $this->yMax      = $parameters[4];
-        $this->yMin      = $parameters[5];
+        $this->xMax      = $parameters[4] * -1;
+        $this->xMin      = $parameters[5] * -1;
+        $this->yMax      = $parameters[2];
+        $this->yMin      = $parameters[3];
 
         return $this;
     }

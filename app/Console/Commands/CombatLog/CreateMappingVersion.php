@@ -3,9 +3,8 @@
 namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
-use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 
-class CreateMappingVersions extends BaseCombatLogCommand
+class CreateMappingVersion extends BaseCombatLogCommand
 {
     /**
      * The name and signature of the console command.
@@ -56,10 +55,11 @@ class CreateMappingVersions extends BaseCombatLogCommand
         $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid($filePath);
         $this->info(
             sprintf(
-                '- Created mapping version %s (%s, %d)',
+                '- Created mapping version %s (%s, %d, %d enemies)',
                 $mappingVersion->version,
                 __($mappingVersion->dungeon->name, [], 'en'),
-                $mappingVersion->id
+                $mappingVersion->id,
+                $mappingVersion->enemies()->count(),
             )
         );
 

@@ -4,7 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
-use App\Console\Commands\CombatLog\CreateMappingVersions;
+use App\Console\Commands\CombatLog\CreateMappingVersion;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
 use App\Console\Commands\CombatLog\OutputCreateRouteJson;
@@ -72,7 +72,7 @@ class Kernel extends ConsoleKernel
 
         // CombatLog
         CreateDungeonRoutes::class,
-        CreateMappingVersions::class,
+        CreateMappingVersion::class,
         EnsureChallengeMode::class,
         ExtractUiMapIds::class,
         OutputResultEvents::class,
