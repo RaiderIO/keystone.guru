@@ -2,18 +2,23 @@
   <PHPCodeStyleSettings>
     <option name="ALIGN_KEY_VALUE_PAIRS" value="true" />
     <option name="ALIGN_PHPDOC_PARAM_NAMES" value="true" />
+    <option name="ALIGN_PHPDOC_COMMENTS" value="true" />
     <option name="ALIGN_ASSIGNMENTS" value="true" />
     <option name="ALIGN_INLINE_COMMENTS" value="true" />
+    <option name="ALIGN_MATCH_ARM_BODIES" value="true" />
+    <option name="PHPDOC_BLANK_LINES_AROUND_PARAMETERS" value="true" />
     <option name="ALIGN_CLASS_CONSTANTS" value="true" />
     <option name="ALIGN_ENUM_CASES" value="true" />
+    <option name="NEW_LINE_AFTER_PHP_OPENING_TAG" value="true" />
   </PHPCodeStyleSettings>
-  <codeStyleSettings language="JSON">
-    <indentOptions>
-      <option name="INDENT_SIZE" value="4" />
-    </indentOptions>
-  </codeStyleSettings>
   <codeStyleSettings language="PHP">
-    <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
+    <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
+    <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+    <option name="ALIGN_MULTILINE_TERNARY_OPERATION" value="false" />
     <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
+    <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+    <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
+    <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
+    <option name="FOR_BRACE_FORCE" value="3" />
   </codeStyleSettings>
 </code_scheme>
