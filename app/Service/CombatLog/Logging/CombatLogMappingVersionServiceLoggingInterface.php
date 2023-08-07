@@ -42,6 +42,14 @@ interface CombatLogMappingVersionServiceLoggingInterface
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void;
 
     /**
+     * @param int $previousFloorId
+     * @param int $currentFloorId
+     *
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void;
+
+    /**
      * @return void
      */
     public function createMappingVersionFromCombatLogSkipEntryNoFloor(): void;

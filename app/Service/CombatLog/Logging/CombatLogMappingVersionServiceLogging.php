@@ -3,7 +3,6 @@
 namespace App\Service\CombatLog\Logging;
 
 use App\Logging\StructuredLogging;
-use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 
 class CombatLogMappingVersionServiceLogging extends StructuredLogging implements CombatLogMappingVersionServiceLoggingInterface
 {
@@ -42,6 +41,7 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
 
     /**
      * @param string $filePath
+     *
      * @return void
      */
     public function createMappingVersionFromDungeonOrRaidStart(string $filePath): void
@@ -75,6 +75,17 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
     }
 
     /**
+     * @param int $previousFloorId
+     * @param int $currentFloorId
+     *
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
      * @return void
      */
     public function createMappingVersionFromCombatLogSkipEntryNoFloor(): void
@@ -85,6 +96,7 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
     /**
      * @param int $floorId
      * @param int $npcId
+     *
      * @return void
      */
     public function createMappingVersionFromCombatLogNewEnemy(int $floorId, int $npcId)
