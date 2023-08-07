@@ -92,7 +92,13 @@ class Update extends Command
             ]);
         }
 
-        //
+        // User permissions are funky for local environments - tell git to ignore them
+        if ($environment === 'local') {
+            $this->shell([
+                'git config --global --add safe.directory /var/www'
+            ]);
+        }
+
         $this->shell([
             // Write current version to file
             'git tag | sort -V | (tail -n 1) > version',
@@ -116,8 +122,8 @@ class Update extends Command
         $this->call('keystoneguru:view', ['operation' => 'cache']);
 
         // Bit of a nasty hack to fix permission issues
-        $this->shell(sprintf('chown www-data:www-data -R %s/storage', base_path()));
-        $this->shell(sprintf('chown www-data:www-data -R %s/boostrap/cache', base_path()));
+        $this->shell(sprintf('chown www-data:www-data -R %s', base_path('storage')));
+        $this->shell(sprintf('chown www-data:www-data -R %s', base_path('bootstrap/cache')));
 
         return 0;
     }
