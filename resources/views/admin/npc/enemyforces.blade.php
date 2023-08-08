@@ -33,7 +33,7 @@
             <td>{{ $npcEnemyForce->enemy_forces }}</td>
             <td>
                 @if($npcEnemyForce->mappingVersion->merged)
-                    {{ __('Mapping version is read-only') }}
+                    {{ __('views/admin.npcenemyforces.mapping_version_read_only') }}
                 @else
                     <a class="btn btn-info"
                        href="{{ route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForce]) }}">
