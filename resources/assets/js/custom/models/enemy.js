@@ -205,6 +205,7 @@ class Enemy extends VersionableMapObject {
                 name: 'floor_id',
                 type: 'select',
                 admin: true,
+                show_default: false,
                 values: function () {
                     return getState().getMapContext().getFloorSelectValues();
                 },
@@ -627,21 +628,26 @@ class Enemy extends VersionableMapObject {
 
         let result = 0;
         if (this.npc !== null) {
-            result = this.npc.enemy_forces.enemy_forces;
 
-            // Override first
-            if (this.isShrouded()) {
-                result = getState().getMapContext().getEnemyForcesShrouded();
-            } else if (this.isShroudedZulGamux()) {
-                result = getState().getMapContext().getEnemyForcesShroudedZulGamux();
-            } else if (getState().getMapContext().getTeeming()) {
-                if (this.enemy_forces_override_teeming !== null) {
-                    result = this.enemy_forces_override_teeming;
-                } else if (this.npc.enemy_forces.enemy_forces_teeming !== null) {
-                    result = this.npc.enemy_forces.enemy_forces_teeming;
+            if (this.npc.enemy_forces !== null) {
+                result = this.npc.enemy_forces.enemy_forces;
+
+                // Override first
+                if (this.isShrouded()) {
+                    result = getState().getMapContext().getEnemyForcesShrouded();
+                } else if (this.isShroudedZulGamux()) {
+                    result = getState().getMapContext().getEnemyForcesShroudedZulGamux();
+                } else if (getState().getMapContext().getTeeming()) {
+                    if (this.enemy_forces_override_teeming !== null) {
+                        result = this.enemy_forces_override_teeming;
+                    } else if (this.npc.enemy_forces.enemy_forces_teeming !== null) {
+                        result = this.npc.enemy_forces.enemy_forces_teeming;
+                    }
+                } else if (this.enemy_forces_override !== null) {
+                    result = this.enemy_forces_override;
                 }
-            } else if (this.enemy_forces_override !== null) {
-                result = this.enemy_forces_override;
+            } else {
+                console.error(`Unable to find enemy forces for npc ${this.npc_id}`);
             }
         }
 
@@ -675,18 +681,20 @@ class Enemy extends VersionableMapObject {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         this.npc = npc;
 
-
         // May be null if not set at all (yet)
         if (npc !== null) {
             this.npc_id = npc.id;
-            if (npc.enemy_forces === null) {
-                console.error(`Unable to find enemy forces for ${this.npc_id}, assuming 0! Insert manually in the database.`)
-                this.enemy_forces = 0;
-                this.enemy_forces_teeming = null;
-            } else {
-                this.enemy_forces = npc.enemy_forces.enemy_forces;
-                this.enemy_forces_teeming = npc.enemy_forces.enemy_forces_teeming;
+            if (npc.enemy_forces === null || typeof npc.enemy_forces === 'undefined') {
+                npc.enemy_forces = {
+                    enemy_forces: 0,
+                    enemy_forces_teeming: null
+                };
+                
+                console.error(`Unable to find enemy forces for ${this.npc_id}, assuming 0! Insert manually in the database.`);
             }
+
+            this.enemy_forces = npc.enemy_forces.enemy_forces;
+            this.enemy_forces_teeming = npc.enemy_forces.enemy_forces_teeming;
         } else {
             // Not set :(
             this.npc_id = null;

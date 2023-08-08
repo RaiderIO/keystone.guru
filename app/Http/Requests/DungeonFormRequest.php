@@ -27,8 +27,8 @@ class DungeonFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'active'           => 'boolean',
-            'speedrun_enabled' => 'boolean',
+            'active'           => 'nullable|boolean',
+            'speedrun_enabled' => 'nullable|boolean',
             'zone_id'          => 'int',
             'map_id'           => 'int',
             'mdt_id'           => 'int',
