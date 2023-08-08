@@ -329,4 +329,8 @@ return [
             'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
         ],
     ],
+
+    'nitro_pay' => [
+        'user_id' => env('NITRO_PAY_USER_ID'),
+    ]
 ];

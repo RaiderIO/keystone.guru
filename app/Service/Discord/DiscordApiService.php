@@ -3,38 +3,33 @@
 
 namespace App\Service\Discord;
 
+use App\Service\Traits\Curl;
+
 class DiscordApiService implements DiscordApiServiceInterface
 {
-    private function curl(string $url, array $postBody): string
+    use Curl;
+
+    /**
+     * @param string      $webhookUrl
+     * @param string      $message
+     * @param string|null $username
+     * @param array       $embeds
+     * @return bool
+     */
+    public function sendMessage(string $webhookUrl, string $message, string $username = null, array $embeds = []): bool
     {
-        // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord
-        $ch = curl_init();
-
-        curl_setopt_array($ch, [
-            CURLOPT_URL        => $url,
-            CURLOPT_POST       => true,
-            // Found no way to disable this behaviour from json_encode
-            CURLOPT_POSTFIELDS => str_replace('\\\\n', '\\n', json_encode($postBody)),
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-            ],
-        ]);
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return $response;
-    }
-
-    function sendMessage(string $webhookUrl, string $message, string $username = null, array $embeds = []): bool
-    {
-        $result = $this->curl($webhookUrl, ['message' => $message, 'username' => $username]);
+        $result = $this->curlPost($webhookUrl, ['message' => $message, 'username' => $username]);
         return true;
     }
 
-    function sendEmbeds(string $webhookUrl, array $embeds): bool
+    /**
+     * @param string $webhookUrl
+     * @param array  $embeds
+     * @return bool
+     */
+    public function sendEmbeds(string $webhookUrl, array $embeds): bool
     {
-        $result = $this->curl($webhookUrl, ['embeds' => $embeds]);
+        $result = $this->curlPost($webhookUrl, ['embeds' => $embeds]);
         return true;
     }
 
