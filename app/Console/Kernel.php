@@ -31,6 +31,7 @@ use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\Metric\Aggregate;
+use App\Console\Commands\NitroPay\SyncAdsTxt;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
@@ -106,14 +107,17 @@ class Kernel extends ConsoleKernel
         MappingRestore::class,
         MappingSync::class,
 
-        // Metric
-        Aggregate::class,
-
         // MDT
         Encode::class,
         Decode::class,
         ExportMapping::class,
         ImportMapping::class,
+
+        // Metric
+        Aggregate::class,
+
+        // NitroPay
+        SyncAdsTxt::class,
 
         // Patreon
         RefreshMembershipStatus::class,
@@ -195,6 +199,9 @@ class Kernel extends ConsoleKernel
 
         // Aggregate all metrics so they're nice and snappy to load
         $schedule->command('metric:aggregate')->everyFiveMinutes();
+
+        // NitroPay
+        $schedule->command('nitropay:syncadstxt')->everyFifteenMinutes();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }
