@@ -98,23 +98,7 @@ class DungeonFloorSwitchMarker extends Icon {
                 type: 'select',
                 values: function () {
                     // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
-                    let currentFloorId = self.floor_id;
-                    let dungeonData = getState().getMapContext().getDungeon();
-                    let selectFloors = [];
-
-                    for (let i in dungeonData.floors) {
-                        if (dungeonData.floors.hasOwnProperty(i)) {
-                            let floor = dungeonData.floors[i];
-                            if (floor.id !== currentFloorId) {
-                                selectFloors.push({
-                                    id: floor.id,
-                                    name: lang.get(floor.name),
-                                });
-                            }
-                        }
-                    }
-
-                    return selectFloors;
+                    return getState().getMapContext().getFloorSelectValues(self.floor_id);
                 },
                 default: null
             }),

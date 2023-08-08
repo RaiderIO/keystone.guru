@@ -27,6 +27,8 @@ class MapContext extends Signalable {
 
         this.unknownMapIconType = this.getMapIconType(this._options.static.unknownMapIconType.id);
         this.awakenedObeliskGatewayMapIconType = this.getMapIconType(this._options.static.awakenedObeliskGatewayMapIconType.id);
+
+        this.floorSelectValues = this.getFloorSelectValues();
     }
 
     /**
@@ -238,6 +240,34 @@ class MapContext extends Signalable {
         }
 
         return result;
+    }
+
+    /**
+     * @param excludeFloorId {Number}
+     * @returns {*[]}
+     */
+    getFloorSelectValues(excludeFloorId = null) {
+        if (excludeFloorId === null && typeof this.floorSelectValues !== 'undefined') {
+            return this.floorSelectValues;
+        }
+
+        // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
+        let dungeonData = this.getDungeon();
+        let selectFloors = [];
+
+        for (let i in dungeonData.floors) {
+            if (dungeonData.floors.hasOwnProperty(i)) {
+                let floor = dungeonData.floors[i];
+                if (floor.id !== excludeFloorId) {
+                    selectFloors.push({
+                        id: floor.id,
+                        name: lang.get(floor.name),
+                    });
+                }
+            }
+        }
+
+        return selectFloors;
     }
 
     /**

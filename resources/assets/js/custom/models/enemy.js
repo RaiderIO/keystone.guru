@@ -203,8 +203,11 @@ class Enemy extends VersionableMapObject {
             }),
             new Attribute({
                 name: 'floor_id',
-                type: 'int',
-                edit: false, // Not directly changeable by user
+                type: 'select',
+                admin: true,
+                values: function () {
+                    return getState().getMapContext().getFloorSelectValues();
+                },
                 default: getState().getCurrentFloor().id
             }),
             new Attribute({
