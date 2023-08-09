@@ -11,12 +11,10 @@ use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
-use App\Models\DungeonRouteAffixGroup;
-use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\Npc;
-use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
-use App\Service\CombatLog\Models\ExtractedData;
+use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
+use App\Service\CombatLog\Models\ExtractedDataResult;
 use App\Service\Season\SeasonServiceInterface;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
@@ -26,26 +24,33 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
     private SeasonServiceInterface $seasonService;
 
+    private CombatLogDataExtractionServiceLoggingInterface $log;
+
     /**
-     * @param CombatLogServiceInterface $combatLogService
-     * @param SeasonServiceInterface    $seasonService
+     * @param CombatLogServiceInterface                      $combatLogService
+     * @param SeasonServiceInterface                         $seasonService
+     * @param CombatLogDataExtractionServiceLoggingInterface $log
      */
     public function __construct(
-        CombatLogServiceInterface $combatLogService,
-        SeasonServiceInterface    $seasonService
+        CombatLogServiceInterface                      $combatLogService,
+        SeasonServiceInterface                         $seasonService,
+        CombatLogDataExtractionServiceLoggingInterface $log
     )
     {
         $this->combatLogService = $combatLogService;
         $this->seasonService    = $seasonService;
+        $this->log              = $log;
     }
 
     /**
      * @inheritDoc
      */
-    public function extractData(string $filePath): ExtractedData
+    public function extractData(string $filePath): ExtractedDataResult
     {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
+        /** @var Dungeon|null $dungeon */
+        $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor    = null;
         $updatedNpcIds   = collect();
@@ -53,15 +58,17 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         /** @var AffixGroup|null $currentKeyAffixGroup */
         $currentKeyAffixGroup = null;
 
+        $result = new ExtractedDataResult();
+
         $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
-        use ($targetFilePath, &$mappingVersion, &$dungeon, &$currentFloor, &$updatedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
+        use ($targetFilePath, &$result, &$dungeon, &$currentFloor, &$updatedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
             $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
             $parsedEvent    = $combatLogEntry->parseEvent();
 
             if ($combatLogEntry->getParsedTimestamp() === null) {
-                $this->log->createMappingVersionFromCombatLogTimestampNotSet();
+                $this->log->extractDataTimestampNotSet();
 
                 return;
             }
@@ -82,8 +89,12 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     /** @var AffixGroup|null $currentKeyAffixGroup */
                     $currentKeyAffixGroup = $affixGroups->first();
                 }
+
+                $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
             } else if ($parsedEvent instanceof ZoneChange) {
                 $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
+
+                $this->log->extractDataSetZone(__($dungeon->name, [], 'en'));
             }
 
             // Ensure we know the floor
@@ -99,13 +110,16 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     'ingame_max_x' => round($parsedEvent->getXMax(), 2),
                     'ingame_max_y' => round($parsedEvent->getYMax(), 2),
                 ]);
+                $result->updatedFloor();
 
                 if ($previousFloor !== null && $previousFloor !== $currentFloor) {
                     $assignedFloor = $previousFloor->ensureConnectionToFloor($currentFloor);
                     $assignedFloor = $currentFloor->ensureConnectionToFloor($previousFloor) || $assignedFloor;
 
                     if ($assignedFloor) {
-                        $this->log->createMappingVersionFromCombatLogAddedNewFloorConnection(
+                        $result->updatedFloorConnection();
+
+                        $this->log->extractDataAddedNewFloorConnection(
                             $previousFloor->id,
                             $currentFloor->id
                         );
@@ -134,14 +148,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
 
                         $updatedNpcIds->push($npc->id);
+                        $result->updatedNpc();
+
+                        $this->log->extractDataUpdatedNpc($npc->base_health);
                     }
                 }
             }
         });
 
-
-        if ($dungeon === null) {
-            $mappingVersion->delete();
-        }
+        return $result;
     }
 }

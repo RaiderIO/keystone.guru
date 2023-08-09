@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
+use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLogging;
+use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLogging;
@@ -55,6 +57,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogMappingVersionServiceLoggingInterface::class, CombatLogMappingVersionServiceLogging::class);
         $this->app->bind(MappingVersionCombatFilterLoggingInterface::class, MappingVersionCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);
+        $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);

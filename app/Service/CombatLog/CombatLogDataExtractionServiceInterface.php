@@ -2,13 +2,14 @@
 
 namespace App\Service\CombatLog;
 
-use App\Service\CombatLog\Models\ExtractedData;
+use App\Service\CombatLog\Models\ExtractedDataResult;
 
 interface CombatLogDataExtractionServiceInterface
 {
     /**
      * @param string $filePath
-     * @return ExtractedData
+     *
+     * @return ExtractedDataResult
      */
-    public function extractData(string $filePath): ExtractedData;
+    public function extractData(string $filePath): ExtractedDataResult;
 }
