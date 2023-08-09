@@ -21,7 +21,7 @@ use Exception;
 class DungeonRouteFilter implements CombatLogParserInterface
 {
     private SeasonServiceInterface $seasonService;
-    private ?DungeonRoute $dungeonRoute = null;
+    private ?DungeonRoute          $dungeonRoute = null;
 
     /**
      * @param SeasonServiceInterface $seasonService
@@ -33,8 +33,8 @@ class DungeonRouteFilter implements CombatLogParserInterface
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int $lineNr
-     * @param bool $waitForChallengeModeStart True to wait for a ChallengeModeStart event before parsing, otherwise ZONE_CHANGE will be used
+     * @param int       $lineNr
+     * @param bool      $waitForChallengeModeStart True to wait for a ChallengeModeStart event before parsing, otherwise ZONE_CHANGE will be used
      *
      * @return bool
      * @throws AdvancedLogNotEnabledException
@@ -78,17 +78,13 @@ class DungeonRouteFilter implements CombatLogParserInterface
             // Find the correct affix groups that match the affix combination the dungeon was started with
             $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
             if ($currentSeasonForDungeon !== null) {
-                $affixIds            = collect($combatLogEvent->getAffixIDs());
-                $eligibleAffixGroups = AffixGroup::where('season_id', $currentSeasonForDungeon->id)->get();
-                foreach ($eligibleAffixGroups as $eligibleAffixGroup) {
-                    // If the affix group's affixes are all in $affixIds
-                    if ($affixIds->diff($eligibleAffixGroup->affixes->pluck('affix_id'))->isEmpty()) {
-                        // Couple the affix group to the newly created dungeon route
-                        DungeonRouteAffixGroup::create([
-                            'dungeon_route_id' => $this->dungeonRoute->id,
-                            'affix_group_id'   => $eligibleAffixGroup->id,
-                        ]);
-                    }
+                $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds($currentSeasonForDungeon, $combatLogEvent->getAffixIDs());
+
+                foreach ($affixGroups as $affixGroup) {
+                    DungeonRouteAffixGroup::create([
+                        'dungeon_route_id' => $this->dungeonRoute->id,
+                        'affix_group_id'   => $affixGroup->id,
+                    ]);
                 }
             }
 

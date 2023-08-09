@@ -115,13 +115,13 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
         $now            = Carbon::now();
         $mappingVersion = MappingVersion::create([
-                                                     'dungeon_id'            => -1,
-                                                     'version'               => 1,
-                                                     'enemy_forces_required' => 0,
-                                                     'timer_max_seconds'     => 0,
-                                                     'updated_at'            => $now,
-                                                     'created_at'            => $now,
-                                                 ]);
+            'dungeon_id'            => -1,
+            'version'               => 1,
+            'enemy_forces_required' => 0,
+            'timer_max_seconds'     => 0,
+            'updated_at'            => $now,
+            'created_at'            => $now,
+        ]);
 
         /** @var Dungeon|null $dungeon */
         $dungeon = null;
@@ -171,30 +171,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
-                $previousFloor = $currentFloor;
-
                 $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
-
-                // @TODO move this somewhere else?
-                // Ensure we have the correct bounds for a floor while we're at it
-                $currentFloor->update([
-                                          'ingame_min_x' => round($parsedEvent->getXMin(), 2),
-                                          'ingame_min_y' => round($parsedEvent->getYMin(), 2),
-                                          'ingame_max_x' => round($parsedEvent->getXMax(), 2),
-                                          'ingame_max_y' => round($parsedEvent->getYMax(), 2),
-                                      ]);
-
-                if ($previousFloor !== null && $previousFloor !== $currentFloor) {
-                    $assignedFloor = $previousFloor->ensureConnectionToFloor($currentFloor);
-                    $assignedFloor = $currentFloor->ensureConnectionToFloor($previousFloor) || $assignedFloor;
-                    if ($assignedFloor) {
-                        $this->log->createMappingVersionFromCombatLogAddedNewFloorConnection(
-                            $previousFloor->id,
-                            $currentFloor->id
-                        );
-                    }
-
-                }
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
@@ -210,16 +187,13 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         $parsedEvent->getAdvancedData()->getPositionY()
                     );
 
-                    // PhpStorm does NOT like me putting this directly in the array_merge
-                    $attributes = [
+                    Enemy::create(array_merge([
                         'floor_id'           => $currentFloor->id,
                         'mapping_version_id' => $mappingVersion->id,
                         'npc_id'             => $guid->getId(),
                         'required'           => 0,
                         'skippable'          => 0,
-                    ];
-
-                    Enemy::create(array_merge($attributes, $latLng));
+                    ], $latLng));
 
                     $this->log->createMappingVersionFromCombatLogNewEnemy($currentFloor->id, $guid->getId());
                 }

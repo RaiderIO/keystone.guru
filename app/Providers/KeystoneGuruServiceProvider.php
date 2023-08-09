@@ -16,6 +16,8 @@ use App\Models\UserReport;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\CombatLog\CombatLogDataExtractionService;
+use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -110,6 +112,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
+        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
@@ -170,7 +173,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ExpansionServiceInterface          $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService
-    ) {
+    )
+    {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
             return;
