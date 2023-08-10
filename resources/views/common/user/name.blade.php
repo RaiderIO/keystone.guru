@@ -6,17 +6,19 @@
 $link         = $link ?? false;
 $showAnonIcon = $showAnonIcon ?? true;
 ?>
-@if($link && isset($user) && $user instanceof \App\User)
-    <a href="{{ route('profile.view', ['user' => $user->id]) }}">
-        @endif
+@isset($user)
+    @if($link)
+        <a href="{{ route('profile.view', ['user' => $user->id]) }}">
+            @endif
 
-        @isset($user->iconfile)
-            <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px"/>
-        @elseif($showAnonIcon)
-            <i class="fas fa-user"></i>
-        @endisset
-        {{ $user->name }}
+            @isset($user->iconfile)
+                <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px"/>
+            @elseif($showAnonIcon)
+                <i class="fas fa-user"></i>
+            @endisset
+            {{ $user->name }}
 
-        @if($link)
-    </a>
-@endif
+            @if($link)
+        </a>
+    @endif
+@endisset

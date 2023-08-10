@@ -103,14 +103,22 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
                 $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
 
+                $newIngameMinX = round($parsedEvent->getXMin(), 2);
+                $newIngameMinY = round($parsedEvent->getYMin(), 2);
+                $newIngameMaxX = round($parsedEvent->getXMax(), 2);
+                $newIngameMaxY = round($parsedEvent->getYMax(), 2);
+
                 // Ensure we have the correct bounds for a floor while we're at it
-                $currentFloor->update([
-                    'ingame_min_x' => round($parsedEvent->getXMin(), 2),
-                    'ingame_min_y' => round($parsedEvent->getYMin(), 2),
-                    'ingame_max_x' => round($parsedEvent->getXMax(), 2),
-                    'ingame_max_y' => round($parsedEvent->getYMax(), 2),
-                ]);
-                $result->updatedFloor();
+                if ($newIngameMinX !== $currentFloor->ingame_min_x || $newIngameMinY !== $currentFloor->ingame_min_y ||
+                    $newIngameMaxX !== $currentFloor->ingame_max_x || $newIngameMaxY !== $currentFloor->ingame_max_y) {
+                    $currentFloor->update([
+                        'ingame_min_x' => $newIngameMinX,
+                        'ingame_min_y' => $newIngameMinY,
+                        'ingame_max_x' => $newIngameMaxX,
+                        'ingame_max_y' => $newIngameMaxY,
+                    ]);
+                    $result->updatedFloor();
+                }
 
                 if ($previousFloor !== null && $previousFloor !== $currentFloor) {
                     $assignedFloor = $previousFloor->ensureConnectionToFloor($currentFloor);
@@ -136,21 +144,27 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     if ($npc === null) {
                         $this->log->extractDataNpcNotFound($guid->getId());
                     } else {
-                        // Update the NPC's max health
-                        $npc->update([
-                            'base_health' => $npc->calculateHealthForKey(
+                        // Calculate the base health based on the current key level + current max hp
+                        $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
                                 $currentKeyLevel,
-                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_FORTIFIED),
-                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_TYRANNICAL),
-                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING),
-                            )
-                        ]);
+                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
+                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
+                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                            ));
+
+                        if ($npc->base_health !== $newBaseHealth) {
+                            dump([$npc->id, $npc->base_health, $newBaseHealth]);
+
+                            $npc->update([
+                                'base_health' => $newBaseHealth
+                            ]);
 
 
-                        $updatedNpcIds->push($npc->id);
-                        $result->updatedNpc();
+                            $updatedNpcIds->push($npc->id);
+                            $result->updatedNpc();
 
-                        $this->log->extractDataUpdatedNpc($npc->base_health);
+                            $this->log->extractDataUpdatedNpc($newBaseHealth);
+                        }
                     }
                 }
             }

@@ -245,12 +245,13 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int $keyLevel
+     * @param int  $keyLevel
      * @param bool $fortified
      * @param bool $tyrannical
+     * @param bool $thundering
      * @return float
      */
-    public function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical): float
+    public function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
         $keyLevelFactor = 1;
         // 2 because we start counting up at key level 3 (+2 = 0)
@@ -262,6 +263,10 @@ class Npc extends CacheModel implements MappingModelInterface
             $keyLevelFactor *= 1.2;
         } else if ($tyrannical && $this->isAffectedByTyrannical()) {
             $keyLevelFactor *= 1.3;
+        }
+
+        if( $thundering ) {
+            $keyLevelFactor *= 1.05;
         }
 
         return round($keyLevelFactor * 100) / 100;
@@ -276,8 +281,8 @@ class Npc extends CacheModel implements MappingModelInterface
      */
     public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
-        $thunderingFactor = $thundering && $keyLevel >= 10 ? 1.05 : 1;
-        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical) * $thunderingFactor);
+        $thundering = $thundering && $keyLevel >= 10;
+        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical, $thundering));
     }
 
     /**
