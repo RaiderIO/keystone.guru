@@ -671,15 +671,19 @@ class Dungeon extends CacheModel implements MappingModelInterface
     private function getNpcsHealthBuilder(MappingVersion $mappingVersion): HasMany
     {
         return $this->npcs(false)
+            // Ensure that there's at least one enemy by having this join
+            ->join('enemies', 'enemies.npc_id', 'npcs.id')
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-            ->where('aggressiveness', '<>', 'friendly')
+            ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
             // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
             ->when(!in_array($this->key, array_merge(...array_values(self::ALL_RAID))), function (Builder $builder) use ($mappingVersion) {
                 return $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
                     ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
                     ->where('npc_enemy_forces.enemy_forces', '>', 0);
-            });
+            })
+            ->groupBy('enemies.npc_id');
     }
 
     /**
