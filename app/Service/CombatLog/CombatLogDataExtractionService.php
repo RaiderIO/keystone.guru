@@ -53,7 +53,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor    = null;
-        $updatedNpcIds   = collect();
+        $checkedNpcIds   = collect();
         $currentKeyLevel = 1;
         /** @var AffixGroup|null $currentKeyAffixGroup */
         $currentKeyAffixGroup = null;
@@ -61,7 +61,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $result = new ExtractedDataResult();
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
-        use ($targetFilePath, &$result, &$dungeon, &$currentFloor, &$updatedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
+        use ($targetFilePath, &$result, &$dungeon, &$currentFloor, &$checkedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
             $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
@@ -138,7 +138,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             if ($parsedEvent instanceof AdvancedCombatLogEvent) {
                 $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
 
-                if ($guid instanceof Creature && $updatedNpcIds->search($guid->getId()) === false) {
+                if ($guid instanceof Creature && $checkedNpcIds->search($guid->getId()) === false) {
                     $npc = Npc::find($guid->getId());
 
                     if ($npc === null) {
@@ -153,18 +153,16 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                             ));
 
                         if ($npc->base_health !== $newBaseHealth) {
-                            dump([$npc->id, $npc->base_health, $newBaseHealth]);
-
                             $npc->update([
                                 'base_health' => $newBaseHealth
                             ]);
 
-
-                            $updatedNpcIds->push($npc->id);
                             $result->updatedNpc();
 
                             $this->log->extractDataUpdatedNpc($newBaseHealth);
                         }
+
+                        $checkedNpcIds->push($npc->id);
                     }
                 }
             }

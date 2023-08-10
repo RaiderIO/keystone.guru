@@ -4851,6 +4851,12 @@
                         "floor1_id": 176,
                         "floor2_id": 177,
                         "direction": "up"
+                    },
+                    {
+                        "id": 687,
+                        "floor1_id": 176,
+                        "floor2_id": 176,
+                        "direction": "up"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
