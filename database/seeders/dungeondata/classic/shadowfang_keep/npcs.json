@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 1141,
         "name": "Black Rat",
-        "base_health": 12345,
+        "base_health": 1,
         "health_percentage": null,
         "aggressiveness": "neutral",
         "dangerous": 0,

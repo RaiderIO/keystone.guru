@@ -695,7 +695,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function getNpcsMinHealth(MappingVersion $mappingVersion): int
     {
-        return $this->getNpcsHealthBuilder($mappingVersion)->min('base_health') ?? 10000;
+        return $this->getNpcsHealthBuilder($mappingVersion)->orderBy('npcs.base_health')->min('base_health') ?? 10000;
     }
 
     /**
@@ -707,7 +707,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function getNpcsMaxHealth(MappingVersion $mappingVersion): int
     {
-        return $this->getNpcsHealthBuilder($mappingVersion)->max('base_health') ?? 10000;
+        return $this->getNpcsHealthBuilder($mappingVersion)->orderByDesc('npcs.base_health')->max('base_health') ?? 10000;
     }
 
     /**
