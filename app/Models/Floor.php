@@ -26,10 +26,10 @@ use Illuminate\Support\Collection;
  * @property int                                     $max_enemy_size
  * @property int                                     $enemy_engagement_max_range         When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
  * @property int                                     $enemy_engagement_max_range_patrols The max range after which we're considering patrols
- * @property int                                     $ingame_min_x
- * @property int                                     $ingame_min_y
- * @property int                                     $ingame_max_x
- * @property int                                     $ingame_max_y
+ * @property float                                   $ingame_min_x
+ * @property float                                   $ingame_min_y
+ * @property float                                   $ingame_max_x
+ * @property float                                   $ingame_max_y
  * @property int|null                                $percentage_display_zoom
  * @property boolean                                 $active
  *
@@ -123,7 +123,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-                    ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -134,7 +134,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-                    ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -145,7 +145,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-                    ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -156,7 +156,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mapicons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-                    ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -167,7 +167,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-                    ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -178,7 +178,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-                    ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -267,7 +267,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-                    ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -276,7 +276,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-                    ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
@@ -400,9 +400,9 @@ class Floor extends CacheModel implements MappingModelInterface
 
         if (!$hasCoupling) {
             FloorCoupling::create([
-                                      'floor1_id' => $this->id,
-                                      'floor2_id' => $targetFloor->id
-                                  ]);
+                'floor1_id' => $this->id,
+                'floor2_id' => $targetFloor->id
+            ]);
         }
 
         return !$hasCoupling;

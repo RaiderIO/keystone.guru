@@ -8,7 +8,7 @@ class ExtractedDataResult
 
     private int $updatedFloors = 0;
 
-    private int $updatedFloorConnection = 0;
+    private int $updatedFloorConnections = 0;
 
     /**
      * @return int
@@ -45,9 +45,9 @@ class ExtractedDataResult
     /**
      * @return int
      */
-    public function getUpdatedFloorConnection(): int
+    public function getUpdatedFloorConnections(): int
     {
-        return $this->updatedFloorConnection;
+        return $this->updatedFloorConnections;
     }
 
     /**
@@ -55,6 +55,14 @@ class ExtractedDataResult
      */
     public function updatedFloorConnection(): void
     {
-        $this->updatedFloorConnection++;
+        $this->updatedFloorConnections++;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasUpdatedData(): bool
+    {
+        return $this->updatedFloors || $this->updatedFloorConnections || $this->updatedNpcs;
     }
 }
