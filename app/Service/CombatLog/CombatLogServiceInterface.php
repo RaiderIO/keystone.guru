@@ -37,13 +37,19 @@ interface CombatLogServiceInterface
      * @return Collection|ChallengeMode[]
      */
     public function getUiMapIds(string $filePath): Collection;
-    
+
     /**
      * @param string $combatLogFilePath
      *
      * @return Collection|BaseResultEvent[]
      */
-    public function getResultEvents(string $combatLogFilePath): Collection;
+    public function getResultEventsForChallengeMode(string $combatLogFilePath): Collection;
+
+    /**
+     * @param string $combatLogFilePath
+     * @return Collection
+     */
+    public function getResultEventsForDungeonOrRaid(string $combatLogFilePath): Collection;
 
     /**
      * @param string $filePath

@@ -5,16 +5,16 @@ namespace App\Service\CombatLog\Models\ActivePull;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-abstract class ActivePull
+class ActivePull
 {
-    /** @var Collection */
+    /** @var Collection|ActivePullEnemy[] */
+    protected Collection $enemiesInCombat;
+
+    /** @var Collection|ActivePullEnemy[] */
     protected Collection $enemiesKilled;
 
     /** @var Collection */
     protected Collection $spellsCast;
-
-    /** @var Collection */
-    protected Collection $enemiesInCombat;
 
     /**
      * @var bool To prevent chain pulls from being killed before the original pull, we defer creating the chain pull
@@ -25,9 +25,9 @@ abstract class ActivePull
 
     public function __construct()
     {
+        $this->enemiesInCombat = collect();
         $this->enemiesKilled   = collect();
         $this->spellsCast      = collect();
-        $this->enemiesInCombat = collect();
 
         $this->isCompleted = false;
     }
@@ -36,10 +36,30 @@ abstract class ActivePull
      * @param Carbon $timestamp
      * @return float
      */
-    abstract function getAverageHPPercentAt(Carbon $timestamp): float;
+    public function getAverageHPPercentAt(Carbon $timestamp): float
+    {
+        $inCombatSum = $this->enemiesInCombat->sum(function (ActivePullEnemy $activePullEnemy) use ($timestamp) {
+            return $activePullEnemy->getHPPercentAt($timestamp);
+        });
+
+        $totalEnemiesInPull = ($this->enemiesInCombat->count() + $this->enemiesKilled->count());
+        if ($totalEnemiesInPull === 0) {
+            return 100;
+        } else {
+            return $inCombatSum / $totalEnemiesInPull;
+        }
+    }
 
     /**
-     * @return Collection
+     * @return Collection|ActivePullEnemy[]
+     */
+    public function getEnemiesInCombat(): Collection
+    {
+        return $this->enemiesInCombat;
+    }
+
+    /**
+     * @return Collection|ActivePullEnemy[]
      */
     public function getEnemiesKilled(): Collection
     {
@@ -55,25 +75,19 @@ abstract class ActivePull
     }
 
     /**
-     * @return Collection
-     */
-    public function getEnemiesInCombat(): Collection
-    {
-        return $this->enemiesInCombat;
-    }
-
-    /**
-     * @param string $guid
-     * @param        $enemy
+     * @param string $uniqueId
      * @return $this
      */
-    public function enemyKilled(string $guid, $enemy): ActivePull
+    public function enemyKilled(string $uniqueId): ActivePull
     {
-        $this->enemiesInCombat->forget($guid);
-        $this->enemiesKilled->put($guid, $enemy);
+        $activePullEnemy = $this->enemiesInCombat->get($uniqueId);
+        if ($activePullEnemy !== null) {
+            $this->enemiesInCombat->forget($uniqueId);
+            $this->enemiesKilled->put($activePullEnemy->getUniqueId(), $activePullEnemy);
 
-        if ($this->enemiesInCombat->isEmpty()) {
-            $this->isCompleted = true;
+            if ($this->enemiesInCombat->isEmpty()) {
+                $this->isCompleted = true;
+            }
         }
 
         return $this;
@@ -94,13 +108,12 @@ abstract class ActivePull
     }
 
     /**
-     * @param string $guid
-     * @param        $enemy
+     * @param ActivePullEnemy $activePullEnemy
      * @return $this
      */
-    public function enemyEngaged(string $guid, $enemy): ActivePull
+    public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
     {
-        $this->enemiesInCombat->put($guid, $enemy);
+        $this->enemiesInCombat->put($activePullEnemy->getUniqueId(), $activePullEnemy);
 
         return $this;
     }
@@ -129,6 +142,6 @@ abstract class ActivePull
     public function merge(ActivePull $activePull): void
     {
         $this->enemiesInCombat = $this->enemiesInCombat->merge($activePull->enemiesInCombat);
-        $this->enemiesKilled = $this->enemiesKilled->merge($activePull->enemiesKilled);
+        $this->enemiesKilled   = $this->enemiesKilled->merge($activePull->enemiesKilled);
     }
 }

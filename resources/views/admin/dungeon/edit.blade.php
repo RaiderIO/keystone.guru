@@ -42,7 +42,7 @@
             {!! Form::label('key', __('views/admin.dungeon.edit.key')) !!}
             @isset($dungeon)
                 {!! Form::text('key', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
-                {!! Form::hidden('key', null) !!}
+                {!! Form::hidden('key', $dungeon->key) !!}
             @else
                 {!! Form::select('key', $availableKeysSelect, null, ['class' => 'form-control selectpicker']) !!}
             @endisset

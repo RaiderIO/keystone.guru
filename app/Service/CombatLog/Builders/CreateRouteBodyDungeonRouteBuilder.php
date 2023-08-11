@@ -7,14 +7,13 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
-use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor;
 use App\Models\PublishedState;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
-use App\Service\CombatLog\Models\ActivePull\CreateRouteBodyActivePull;
+use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Season\SeasonServiceInterface;
@@ -27,8 +26,6 @@ use Illuminate\Support\Collection;
  * @package App\Service\CombatLog\Builders
  * @author Wouter
  * @since 24/06/2023
- *
- * @property Collection|CreateRouteBodyActivePull[] $activePulls
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 {
@@ -41,8 +38,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     public function __construct(
         SeasonServiceInterface $seasonService,
         CreateRouteBody        $createRouteBody
-    )
-    {
+    ) {
         $this->seasonService   = $seasonService;
         $this->createRouteBody = $createRouteBody;
 
@@ -151,6 +147,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             ->sortBy(function (array $event) {
                 /** @var Carbon $timestamp */
                 $timestamp = $event['timestamp'];
+
                 return $timestamp->unix();
             });
 
@@ -174,63 +171,57 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId);
             }
 
-            $uniqueUid = $event['npc']->getUniqueUid();
+            $uniqueUid = $event['npc']->getUniqueId();
             if ($event['type'] === 'engaged') {
                 if ($firstEngagedAt === null) {
                     $firstEngagedAt = $event['npc']->getEngagedAt();
                 }
 
-                if ($this->activePulls->isEmpty()) {
-                    $activePull = new CreateRouteBodyActivePull();
-                    $this->activePulls->push($activePull);
+                /** @var ActivePull|null $activePull */
+                $activePull = $this->activePullCollection->last();
 
+                if ($activePull === null) {
+                    $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePull();
-                } else {
-                    /** @var ActivePull $activePull */
-                    $activePull = $this->activePulls->last();
-                    if ($activePull->isCompleted()) {
-                        $activePull = new CreateRouteBodyActivePull();
-                        $this->activePulls->push($activePull);
-
-                        $this->log->buildKillZonesCreateNewActivePullChainPullCompleted();
-                    }
-                }
-
-                // Check if we need to account for chain pulling
-                $activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt());
-                if ($activePullAverageHPPercent <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
-                    $activePull = new CreateRouteBodyActivePull();
-                    $this->activePulls->push($activePull);
-
+                } else if ($activePull->isCompleted()) {
+                    $activePull = $this->activePullCollection->addNewPull();
+                    $this->log->buildKillZonesCreateNewActivePullChainPullCompleted();
+                } // Check if we need to account for chain pulling
+                else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
+                    <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
+                    $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
                 }
 
-                $activePull->enemyEngaged($uniqueUid, $event['npc']);
-
-                $event['npc']->setResolvedEnemy(
-                    $this->findUnkilledEnemyForNpcAtIngameLocation(
-                        $event['npc']->npcId,
-                        $event['npc']->coord->x,
-                        $event['npc']->coord->y,
-                        $this->getInCombatGroups()
-                    )
+                $activePullEnemy = $this->createActivePullEnemy($event['npc']);
+                $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                    $activePullEnemy,
+                    $this->activePullCollection->getInCombatGroups()
                 );
+
+                // Ensure we know about the enemy being resolved fully
+                $event['npc']->setResolvedEnemy($resolvedEnemy);
+                $activePullEnemy->setResolvedEnemy($resolvedEnemy);
+
+                $activePull->enemyEngaged($activePullEnemy);
 
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
             } else if ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
-                foreach ($this->activePulls as $activePull) {
+                foreach ($this->activePullCollection as $activePull) {
+                    /** @var $activePull ActivePull */
                     if ($activePull->isEnemyInCombat($uniqueUid)) {
-                        $activePull->enemyKilled($uniqueUid, $event['npc']);
+                        $activePull->enemyKilled($event['npc']->getUniqueId());
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
                 }
 
                 // Handle spells and the actual creation of pulls
                 /** @var $firstActivePull ActivePull|null */
-                $firstActivePull          = $this->activePulls->first();
+                $firstActivePull          = $this->activePullCollection->first();
                 $firstActivePullCompleted = optional($firstActivePull)->isCompleted() ?? false;
-                foreach ($this->activePulls as $pullIndex => $activePull) {
+                foreach ($this->activePullCollection as $pullIndex => $activePull) {
+                    /** @var $activePull ActivePull */
                     if ($activePull->isCompleted()) {
                         if (!$firstActivePullCompleted) {
                             // Chain pulls are NEVER completed before the original pull! If they ARE, then it wasn't a
@@ -242,62 +233,29 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                             $this->createPull($activePull);
                         }
 
-                        $this->activePulls->forget($pullIndex);
+                        $this->activePullCollection->forget($pullIndex);
                     }
                 }
             }
         }
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
-        foreach ($this->activePulls as $activePull) {
+        foreach ($this->activePullCollection as $activePull) {
             $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
 
             $this->determineSpellsCastBetween($activePull);
             $this->createPull($activePull);
         }
 
-        $this->activePulls = collect();
-
         $this->recalculateEnemyForcesOnDungeonRoute();
     }
 
     /**
-     * @return Collection|array{array{npcId: int, x: float, y: float}}
-     */
-    public function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection
-    {
-        return $activePull->getEnemiesKilled()->mapWithKeys(function (CreateRouteNpc $npc, string $guid) {
-            return [
-                $guid => [
-                    'resolvedEnemy' => $npc->getResolvedEnemy(),
-                    'npcId'         => $npc->npcId,
-                    'x'             => $npc->coord->x,
-                    'y'             => $npc->coord->y,
-                ]
-            ];
-        });
-    }
-
-    /**
-     * @param string $guid
-     * @param Enemy  $enemy
+     * @param ActivePull  $activePull
+     * @param Carbon|null $lastDiedAt
      * @return void
      */
-    protected function enemyFound(string $guid, Enemy $enemy): void
-    {
-        foreach ($this->createRouteBody->npcs as $npc) {
-            if ($npc->getUniqueUid() === $guid) {
-                $npc->setResolvedEnemy($enemy);
-            }
-        }
-    }
-
-    /**
-     * @param CreateRouteBodyActivePull $activePull
-     * @param Carbon|null               $lastDiedAt
-     * @return void
-     */
-    private function determineSpellsCastBetween(CreateRouteBodyActivePull $activePull, ?Carbon $lastDiedAt = null)
+    private function determineSpellsCastBetween(ActivePull $activePull, ?Carbon $lastDiedAt = null)
     {
         $firstEngagedAt = null;
         foreach ($activePull->getEnemiesKilled() as $killedEnemy) {
@@ -319,22 +277,18 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
-     * @TODO Move this to an ActivePullManager class?
-     * @return Collection
+     * @param CreateRouteNpc $npc
+     * @return ActivePullEnemy
      */
-    private function getInCombatGroups(): Collection
+    private function createActivePullEnemy(CreateRouteNpc $npc): ActivePullEnemy
     {
-        $result = collect();
-
-        foreach ($this->activePulls as $activePull) {
-            foreach ($activePull->getEnemiesInCombat() as $enemyInCombat) {
-                $resolvedEnemy = $enemyInCombat->getResolvedEnemy();
-                if ($resolvedEnemy !== null && $resolvedEnemy->enemy_pack_id !== null) {
-                    $result->put($resolvedEnemy->enemyPack->group, true);
-                }
-            }
-        }
-
-        return $result;
+        return new ActivePullEnemy(
+            $npc->getUniqueId(),
+            $npc->npcId,
+            $npc->coord->x,
+            $npc->coord->y,
+            $npc->getEngagedAt(),
+            $npc->getDiedAt()
+        );
     }
 }

@@ -24,12 +24,12 @@ use Illuminate\Support\Collection;
  * @property boolean                                 $default
  * @property int                                     $min_enemy_size
  * @property int                                     $max_enemy_size
- * @property int                                     $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int                                     $enemy_engagement_max_range         When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
  * @property int                                     $enemy_engagement_max_range_patrols The max range after which we're considering patrols
- * @property int                                     $ingame_min_x
- * @property int                                     $ingame_min_y
- * @property int                                     $ingame_max_x
- * @property int                                     $ingame_max_y
+ * @property float                                   $ingame_min_x
+ * @property float                                   $ingame_min_y
+ * @property float                                   $ingame_max_x
+ * @property float                                   $ingame_max_y
  * @property int|null                                $percentage_display_zoom
  * @property boolean                                 $active
  *
@@ -49,6 +49,7 @@ use Illuminate\Support\Collection;
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
  * @property Collection|MountableArea[]              $mountableAreasForExport
  *
+ * @property Collection|FloorCoupling[]              $floorcouplings
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  * @property Collection|Floor[]                      $connectedFloors
  * @property Collection|Floor[]                      $directConnectedFloors
@@ -116,6 +117,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param MappingVersion|null $mappingVersion
+     *
      * @return HasMany
      */
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
@@ -126,6 +128,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param MappingVersion|null $mappingVersion
+     *
      * @return HasMany
      */
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
@@ -136,6 +139,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param MappingVersion|null $mappingVersion
+     *
      * @return HasMany
      */
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
@@ -146,6 +150,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param MappingVersion|null $mappingVersion
+     *
      * @return HasMany
      */
     public function mapicons(?MappingVersion $mappingVersion = null): HasMany
@@ -156,6 +161,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param MappingVersion|null $mappingVersion
+     *
      * @return HasMany
      */
     public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
@@ -166,6 +172,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param MappingVersion|null $mappingVersion
+     *
      * @return HasMany
      */
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
@@ -288,6 +295,7 @@ class Floor extends CacheModel implements MappingModelInterface
      * @param float $lat
      * @param float $lng
      * @param int   $targetFloorId
+     *
      * @return DungeonFloorSwitchMarker|null
      */
     public function findClosestFloorSwitchMarker(float $lat, float $lng, int $targetFloorId): ?DungeonFloorSwitchMarker
@@ -317,6 +325,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param float $lat
      * @param float $lng
+     *
      * @return array{x: float, y: float}
      */
     public function calculateIngameLocationForMapLocation(float $lat, float $lng): array
@@ -337,6 +346,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param float $x
      * @param float $y
+     *
      * @return array{lat: float, lng: float}
      */
     public function calculateMapLocationForIngameLocation(float $x, float $y): array
@@ -363,6 +373,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param int $uiMapId
+     *
      * @return Floor
      */
     public static function findByUiMapId(int $uiMapId): Floor
@@ -370,5 +381,30 @@ class Floor extends CacheModel implements MappingModelInterface
         return Floor
             ::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->firstOrFail();
+    }
+
+    /**
+     * @param Floor $targetFloor
+     *
+     * @return bool
+     */
+    public function ensureConnectionToFloor(Floor $targetFloor): bool
+    {
+        $hasCoupling = false;
+        foreach ($this->floorcouplings as $floorCoupling) {
+            if ($floorCoupling->floor2_id === $targetFloor->id) {
+                $hasCoupling = true;
+                break;
+            }
+        }
+
+        if (!$hasCoupling) {
+            FloorCoupling::create([
+                'floor1_id' => $this->id,
+                'floor2_id' => $targetFloor->id
+            ]);
+        }
+
+        return !$hasCoupling;
     }
 }

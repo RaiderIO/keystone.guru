@@ -28,7 +28,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
     /**
      * @param APIEnemyFormRequest $request
-     * @param Enemy|null $enemy
+     * @param Enemy|null          $enemy
+     *
      * @return Enemy|Model
      * @throws Exception
      * @throws Throwable
@@ -40,7 +41,9 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request) {
+        $previousFloor = optional($enemy)->floor;
+
+        return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
 
             // Clear current active auras
@@ -58,14 +61,23 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 }
             }
 
-            $enemy->load(['npc']);
+            $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
+
+            // Perform floor change and move enemy to the correct location on the new floor
+            if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
+                $ingameXY  = $previousFloor->calculateIngameLocationForMapLocation($enemy->lat, $enemy->lng);
+                $newLatLng = $enemy->floor->calculateMapLocationForIngameLocation($ingameXY['x'], $ingameXY['y']);
+
+                $enemy->update($newLatLng);
+            }
         });
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
-     * @param Enemy $enemy
+     * @param Enemy        $enemy
+     *
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
@@ -101,7 +113,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
     /**
      * @param Request $request
-     * @param Enemy $enemy
+     * @param Enemy   $enemy
+     *
      * @return Response|ResponseFactory
      * @throws Throwable
      */

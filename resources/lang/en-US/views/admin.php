@@ -201,6 +201,7 @@ return [
     ],
     'npcenemyforces'             => [
         'title'                        => 'Enemy forces',
+        'mapping_version_read_only'    => 'Mapping version is read-only',
         'edit_enemy_forces'            => 'Edit enemy forces',
         'table_header_id'              => 'Id',
         'table_header_mapping_version' => 'Mapping Version',

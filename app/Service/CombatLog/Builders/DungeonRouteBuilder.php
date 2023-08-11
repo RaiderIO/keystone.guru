@@ -14,33 +14,13 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
+use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
+use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use Exception;
 use Illuminate\Support\Collection;
 
 abstract class DungeonRouteBuilder
 {
-    /** @var array Dungeons for which the floor check for enemies is disabled due to issues on Blizzard's side */
-    private const DUNGEON_ENEMY_FLOOR_CHECK_DISABLED = [
-        // With this check for example, the Gulping Goliath in Halls of Infusion will not be killed as the floor switch only happens til
-        // after the boss and as a result we can't find it.
-        Dungeon::DUNGEON_HALLS_OF_INFUSION,
-        // Spawned in enemies right before final boss will not get picked up otherwise
-        Dungeon::DUNGEON_NELTHARUS,
-        // There can be an issue where the map change doesn't register properly and you miss the first pull after the 3rd boss
-        // (right after supposedly switching floors). Also - the floors don't overlap on the Z axis so disabling this check
-        // will do no harm at all
-        Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
-        // The game switches to the final floor too quickly, causing you to miss the last pack guarding the blocked gate
-        // to the last boss
-        Dungeon::DUNGEON_THE_UNDERROT,
-        // Snapping enemies between floors is a thing
-        Dungeon::DUNGEON_THE_AZURE_VAULT,
-        // Enemies in the cave at the last boss are put on the main floor instead so people don't have to switch floors around
-        Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
-        // Enemies end up on the wrong floor near Vexamus for some reason
-        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
-    ];
-
     protected const NPC_ID_MAPPING = [
         // Brackenhide Gnolls transform into Witherlings after engaging them
         194373 => 187238,
@@ -56,8 +36,7 @@ abstract class DungeonRouteBuilder
     /** @var Collection|Enemy[] */
     protected Collection $availableEnemies;
 
-    /** @var Collection|ActivePull[] */
-    protected Collection $activePulls;
+    protected ActivePullCollection $activePullCollection;
 
     /** @var Collection|int */
     protected Collection $validNpcIds;
@@ -93,8 +72,8 @@ abstract class DungeonRouteBuilder
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
-        $this->activePulls = collect();
+        $this->validNpcIds          = $dungeonRoute->dungeon->getInUseNpcIds();
+        $this->activePullCollection = new ActivePullCollection();
     }
 
     /**
@@ -102,12 +81,6 @@ abstract class DungeonRouteBuilder
      * @throws Exception
      */
     public abstract function build(): DungeonRoute;
-
-    /**
-     * @param ActivePull $activePull
-     * @return Collection|array{array{npcId: int, x: float, y: float}}
-     */
-    public abstract function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection;
 
     /**
      * @return void
@@ -129,8 +102,8 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->createPullStart($this->killZoneIndex);
 
-            /** @var Collection|array{array{npcId: int, x: float, y: float}} $killedEnemies */
-            $killedEnemies = $this->convertEnemiesKilledInActivePull($activePull);
+            /** @var Collection|ActivePullEnemy[] $killedEnemies */
+            $killedEnemies = $activePull->getEnemiesKilled();
 
             $killZone = KillZone::create([
                 'dungeon_route_id' => $this->dungeonRoute->id,
@@ -142,18 +115,17 @@ abstract class DungeonRouteBuilder
             $killZoneEnemiesAttributes = collect();
             foreach ($killedEnemies as $guid => $killedEnemy) {
                 /** @var string $guid */
-                /** @var array{npcId: int, x: float, y: float, ?Enemy: resolvedEnemy} $killedEnemy */
 
                 try {
                     $this->log->createPullFindEnemyForGuidStart($guid);
 
-                    $enemy = $killedEnemy['resolvedEnemy'];
+                    $enemy = $killedEnemy->getResolvedEnemy();
 
                     if ($enemy === null) {
                         $this->log->createPullEnemyNotFound(
-                            $killedEnemy['npcId'],
-                            $killedEnemy['x'],
-                            $killedEnemy['y']
+                            $killedEnemy->getNpcId(),
+                            $killedEnemy->getX(),
+                            $killedEnemy->getY()
                         );
                     } else {
                         // Schedule for creation later
@@ -165,12 +137,10 @@ abstract class DungeonRouteBuilder
 
                         $killZone->killZoneEnemies->push($enemy);
 
-                        $this->enemyFound($guid, $enemy);
-
                         $this->log->createPullEnemyAttachedToKillZone(
-                            $killedEnemy['npcId'],
-                            $killedEnemy['x'],
-                            $killedEnemy['y']
+                            $killedEnemy->getNpcId(),
+                            $killedEnemy->getX(),
+                            $killedEnemy->getY()
                         );
                     }
                 } finally {
@@ -210,30 +180,27 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param int        $npcId
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
+     * @param ActivePullEnemy $activePullEnemy
+     * @param Collection      $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      *
      * @return Enemy|null
      */
     protected function findUnkilledEnemyForNpcAtIngameLocation(
-        int        $npcId,
-        float      $ingameX,
-        float      $ingameY,
-        Collection $preferredGroups
-    ): ?Enemy
-    {
+        ActivePullEnemy $activePullEnemy,
+        Collection      $preferredGroups
+    ): ?Enemy {
         // See if we actually need to go look for another NPC
-        if (isset(self::NPC_ID_MAPPING[$npcId])) {
+        if (isset(self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()])) {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(
-                $npcId, self::NPC_ID_MAPPING[$npcId]
+                $activePullEnemy->getNpcId(), self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()]
             );
-            $npcId = self::NPC_ID_MAPPING[$npcId];
+            $npcId = self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()];
         }
 
         try {
-            $this->log->findUnkilledEnemyForNpcAtIngameLocationStart($npcId, $ingameX, $ingameY, $preferredGroups->toArray());
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
+                $activePullEnemy->getNpcId(), $activePullEnemy->getX(), $activePullEnemy->getY(), $preferredGroups->toArray()
+            );
 
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemyDistance = 99999999999;
@@ -241,8 +208,8 @@ abstract class DungeonRouteBuilder
             $closestEnemy = null;
 
             /** @var Collection|Enemy[] $filteredEnemies */
-            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId) {
-                if ($availableEnemy->npc_id !== $npcId) {
+            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($activePullEnemy) {
+                if ($availableEnemy->npc_id !== $activePullEnemy->getNpcId()) {
                     return false;
                 }
 
@@ -250,11 +217,14 @@ abstract class DungeonRouteBuilder
                     return false;
                 }
 
-                // I'd like to have the check for floor_ids here but in-game a new floor is not always navigated when you expect it to.
-                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) &&
-                    $availableEnemy->floor_id !== $this->currentFloor->id) {
-                    return false;
-                }
+                // Floor checks are a nice idea but in practice they don't work because Blizzard does not take floors
+                // as seriously as we do. For just about every dungeon there are enemies on the wrong floors after which
+                // I have to exclude them in the below check, but every dungeon has these issues so we simply cannot do this.
+                // Annoying, but that's what it is.
+//                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) &&
+//                    $availableEnemy->floor_id !== $this->currentFloor->id) {
+//                    return false;
+//                }
 
                 return true;
             });
@@ -271,7 +241,7 @@ abstract class DungeonRouteBuilder
             });
 
             if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
-                $this->findClosestEnemyAndDistanceFromList($preferredEnemiesInEngagedGroups, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
+                $this->findClosestEnemyAndDistanceFromList($preferredEnemiesInEngagedGroups, $activePullEnemy, $closestEnemyDistance, $closestEnemy);
             }
 
             // If we found an enemy in one of our preferred packs, we must not continue searching
@@ -280,11 +250,11 @@ abstract class DungeonRouteBuilder
                     $closestEnemy->id, $closestEnemyDistance, $closestEnemy->enemyPack->group
                 );
             } else {
-                $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy);
+                $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $activePullEnemy, $closestEnemyDistance, $closestEnemy);
 
                 // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
                 if ($closestEnemyDistance > $this->currentFloor->enemy_engagement_max_range_patrols) {
-                    $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $ingameX, $ingameY, $closestEnemyDistance, $closestEnemy, true);
+                    $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $activePullEnemy, $closestEnemyDistance, $closestEnemy, true);
                 }
 
                 if ($closestEnemy === null) {
@@ -318,23 +288,20 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Collection $enemies
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param float      $closestEnemyDistance
-     * @param Enemy|null $closestEnemy
-     * @param bool       $considerPatrols
+     * @param Collection      $enemies
+     * @param ActivePullEnemy $enemy
+     * @param float           $closestEnemyDistance
+     * @param Enemy|null      $closestEnemy
+     * @param bool            $considerPatrols
      * @return bool
      */
     private function findClosestEnemyAndDistanceFromList(
-        Collection $enemies,
-        float      $ingameX,
-        float      $ingameY,
-        float      &$closestEnemyDistance,
-        ?Enemy     &$closestEnemy,
-        bool       $considerPatrols = false
-    ): bool
-    {
+        Collection      $enemies,
+        ActivePullEnemy $enemy,
+        float           &$closestEnemyDistance,
+        ?Enemy          &$closestEnemy,
+        bool            $considerPatrols = false
+    ): bool {
         $result = false;
 
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
@@ -367,8 +334,8 @@ abstract class DungeonRouteBuilder
                             $availableEnemy,
                             $pointLatLng['lat'],
                             $pointLatLng['lng'],
-                            $ingameX,
-                            $ingameY,
+                            $enemy->getX(),
+                            $enemy->getY(),
                             $closestEnemyDistance,
                             $closestEnemy
                         );
@@ -379,8 +346,8 @@ abstract class DungeonRouteBuilder
                         $availableEnemy,
                         $availableEnemy->lat,
                         $availableEnemy->lng,
-                        $ingameX,
-                        $ingameY,
+                        $enemy->getX(),
+                        $enemy->getY(),
                         $closestEnemyDistance,
                         $closestEnemy
                     );
@@ -419,8 +386,7 @@ abstract class DungeonRouteBuilder
         float  $ingameY,
         float  &$closestEnemyDistance,
         ?Enemy &$closestEnemy
-    ): bool
-    {
+    ): bool {
         $result = false;
 
         // Always use the floor that the enemy itself is on, not $this->currentFloor
@@ -441,11 +407,4 @@ abstract class DungeonRouteBuilder
 
         return $result;
     }
-
-    /**
-     * @param string $guid
-     * @param Enemy  $enemy
-     * @return void
-     */
-    protected abstract function enemyFound(string $guid, Enemy $enemy): void;
 }

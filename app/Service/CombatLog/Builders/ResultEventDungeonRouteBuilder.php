@@ -6,10 +6,9 @@ use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute;
-use App\Models\Enemy;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
-use App\Service\CombatLog\Models\ActivePull\ResultEventActivePull;
+use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
@@ -21,8 +20,6 @@ use Illuminate\Support\Collection;
  * @package App\Service\CombatLog\Builders
  * @author Wouter
  * @since 24/06/2023
- *
- * @property Collection|ResultEventActivePull[] $activePulls
  */
 class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 {
@@ -65,36 +62,38 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
                 if ($resultEvent instanceof EnemyEngaged) {
                     if ($this->validNpcIds->search($resultEvent->getGuid()->getId()) !== false) {
-                        if ($this->activePulls->isEmpty()) {
-                            $activePull = new ResultEventActivePull();
-                            $this->activePulls->push($activePull);
+
+                        /** @var ActivePull|null $activePull */
+                        $activePull = $this->activePullCollection->last();
+
+                        if ($activePull === null) {
+                            $activePull = $this->activePullCollection->addNewPull();
 
                             $this->log->buildCreateNewActivePull();
-                        } else {
-                            /** @var ActivePull $activePull */
-                            $activePull = $this->activePulls->last();
-                        }
+                        } else if ($activePull->isCompleted()) {
+                            $activePull = $this->activePullCollection->addNewPull();
 
-                        // Check if we need to account for chain pulling
-                        $activePullAverageHPPercent = $activePull->getAverageHPPercentAt($resultEvent->getEngagedEvent()->getTimestamp());
-                        if ($activePullAverageHPPercent <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
-                            $activePull = new ResultEventActivePull();
-                            $this->activePulls->push($activePull);
+                            $this->log->buildCreateNewActivePullChainPullCompleted();
+                        } // Check if we need to account for chain pulling
+                        else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($resultEvent->getEngagedEvent()->getTimestamp()))
+                            <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
+                            $activePull = $this->activePullCollection->addNewPull();
 
                             $this->log->buildCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
                         }
 
-                        // We are in combat with this enemy now
-                        $activePull->enemyEngaged($resultEvent->getGuid()->getGuid(), $resultEvent);
-
-                        $resultEvent->setResolvedEnemy(
-                            $this->findUnkilledEnemyForNpcAtIngameLocation(
-                                $resultEvent->getGuid()->getId(),
-                                $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
-                                $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
-                                $this->getInCombatGroups()
-                            )
+                        $activePullEnemy = $this->createActivePullEnemy($resultEvent);
+                        $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                            $activePullEnemy,
+                            $this->activePullCollection->getInCombatGroups()
                         );
+
+                        // Ensure we know about the enemy being resolved fully
+                        $resultEvent->setResolvedEnemy($resolvedEnemy);
+                        $activePullEnemy->setResolvedEnemy($resolvedEnemy);
+
+                        // We are in combat with this enemy now
+                        $activePull->enemyEngaged($activePullEnemy);
 
                         $this->log->buildInCombatWithEnemy($resultEvent->getGuid()->getGuid());
                     } else {
@@ -113,31 +112,32 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
 
                     // Find the pull that this enemy is part of
-                    foreach ($this->activePulls as $activePull) {
+                    foreach ($this->activePullCollection as $activePull) {
+                        /** @var $activePull ActivePull */
                         if ($activePull->isEnemyInCombat($guid)) {
-                            $activePull->enemyKilled($guid, $activePull->getEnemiesInCombat()->get($guid));
+                            $activePull->enemyKilled($guid);
                             $this->log->buildEnemyKilled($guid, $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString());
                         }
                     }
 
-                    // Handle spells and the actual creation of pulls
-                    foreach ($this->activePulls as $pullIndex => $activePull) {
+                    // Handle the actual creation of pulls
+                    foreach ($this->activePullCollection as $pullIndex => $activePull) {
+                        /** @var $activePull ActivePull */
                         if ($activePull->getEnemiesInCombat()->isEmpty()) {
                             $this->createPull($activePull);
 
-                            $this->activePulls->forget($pullIndex);
+                            $this->activePullCollection->forget($pullIndex);
                         }
                     }
                 } else if ($resultEvent instanceof SpellCast) {
                     // Add BL to the newest pull
-                    if ($this->activePulls->isEmpty()) {
-                        $activePull = new ResultEventActivePull();
-                        $this->activePulls->push($activePull);
+                    if ($this->activePullCollection->isEmpty()) {
+                        $activePull = $this->activePullCollection->addNewPull();
 
                         $this->log->buildCreateNewActivePull();
                     } else {
                         /** @var ActivePull $activePull */
-                        $activePull = $this->activePulls->last();
+                        $activePull = $this->activePullCollection->last();
                     }
                     $activePull->addSpell($resultEvent->getSpellId());
 
@@ -153,7 +153,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
-        foreach ($this->activePulls as $activePull) {
+        foreach ($this->activePullCollection as $activePull) {
             if ($activePull->getEnemiesInCombat()->isEmpty()) {
                 $this->log->buildCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
 
@@ -161,66 +161,26 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             }
         }
 
-        $this->activePulls = collect();
-
         $this->recalculateEnemyForcesOnDungeonRoute();
 
         return $this->dungeonRoute;
     }
 
     /**
-     * @param string $guid
-     * @param Enemy  $enemy
-     * @return void
+     * @param EnemyEngaged $enemyEngaged
+     * @return ActivePullEnemy
      */
-    protected function enemyFound(string $guid, Enemy $enemy): void
+    private function createActivePullEnemy(EnemyEngaged $enemyEngaged): ActivePullEnemy
     {
-        foreach ($this->resultEvents as $resultEvent) {
-            if (!($resultEvent instanceof EnemyEngaged)) {
-                continue;
-            }
-
-            if ($resultEvent->getGuid()->getGuid() === $guid) {
-                $resultEvent->setResolvedEnemy($enemy);
-            }
-        }
-    }
-
-    /**
-     * @param ActivePull $activePull
-     * @return Collection
-     */
-    public function convertEnemiesKilledInActivePull(ActivePull $activePull): Collection
-    {
-        return $activePull->getEnemiesKilled()->mapWithKeys(function (EnemyEngaged $resultEvent, string $guid) {
-            return [
-                $guid => [
-                    'resolvedEnemy' => $resultEvent->getResolvedEnemy(),
-                    'npcId'         => $resultEvent->getGuid()->getId(),
-                    'x'             => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
-                    'y'             => $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
-                ]
-            ];
-        });
-    }
-
-    /**
-     * @TODO Move this to an ActivePullManager class?
-     * @return Collection
-     */
-    private function getInCombatGroups(): Collection
-    {
-        $result = collect();
-
-        foreach ($this->activePulls as $activePull) {
-            foreach ($activePull->getEnemiesInCombat() as $enemyInCombat) {
-                $resolvedEnemy = $enemyInCombat->getResolvedEnemy();
-                if ($resolvedEnemy !== null && $resolvedEnemy->enemy_pack_id !== null) {
-                    $result->put($resolvedEnemy->enemyPack->group, true);
-                }
-            }
-        }
-
-        return $result;
+        return new ActivePullEnemy(
+            $enemyEngaged->getGuid()->getGuid(),
+            $enemyEngaged->getGuid()->getId(),
+            $enemyEngaged->getEngagedEvent()->getAdvancedData()->getPositionX(),
+            $enemyEngaged->getEngagedEvent()->getAdvancedData()->getPositionY(),
+            $enemyEngaged->getEngagedEvent()->getTimestamp(),
+            // @TODO We don't know this yet!
+            null,
+            $enemyEngaged->getResolvedEnemy()
+        );
     }
 }

@@ -48,7 +48,7 @@ class UpdatePrepare extends Command
         // Any code after this will use the old definitions and get class not found errors
         $this->shell([
             // Prevent root warning from blocking the entire thing; only install dev dependencies in local
-            sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', config('app.debug') ? '--no-dev' : ''),
+            sprintf('export COMPOSER_ALLOW_SUPERUSER=1; composer install %s', config('app.debug') ? '' : '--no-dev --optimize-autoloader'),
             'export COMPOSER_ALLOW_SUPERUSER=1; composer dump-autoload',
         ]);
 

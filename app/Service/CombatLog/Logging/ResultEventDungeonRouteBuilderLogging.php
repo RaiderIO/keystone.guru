@@ -92,6 +92,14 @@ class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements
     }
 
     /**
+     * @return void
+     */
+    public function buildCreateNewActivePullChainPullCompleted(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    /**
      * @param float $activePullAverageHPPercent
      * @param int   $chainPullDetectionHPPercent
      * @return void

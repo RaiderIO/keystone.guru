@@ -13,7 +13,7 @@ class MapControl {
     cleanup() {
         console.assert(this instanceof MapControl, 'this is not MapControl', this);
 
-        if (typeof this._mapControl === 'object') {
+        if (this._mapControl !== null && typeof this._mapControl !== 'undefined') {
             this.map.leafletMap.removeControl(this._mapControl);
         }
     }

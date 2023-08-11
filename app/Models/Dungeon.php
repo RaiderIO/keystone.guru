@@ -81,30 +81,30 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public $timestamps = false;
 
     // Classic
-    const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps'; //blackfanthomdeeps
-    const DUNGEON_BLACKROCK_DEPTHS            = 'blackrock_depths'; //blackrockdepths
-    const DUNGEON_DEADMINES                   = 'deadmines'; //thedeadmines
-    const DUNGEON_DIRE_MAUL_WEST              = 'dire_maul_west'; //diremaul
-    const DUNGEON_DIRE_MAUL_NORTH             = 'dire_maul_north'; //diremaul
-    const DUNGEON_DIRE_MAUL_EAST              = 'dire_maul_east'; //diremaul
-    const DUNGEON_GNOMEREGAN                  = 'gnomeregan'; //gnomeregan
+    const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps';     //blackfanthomdeeps
+    const DUNGEON_BLACKROCK_DEPTHS            = 'blackrock_depths';      //blackrockdepths
+    const DUNGEON_DEADMINES                   = 'deadmines';             //thedeadmines
+    const DUNGEON_DIRE_MAUL_WEST              = 'dire_maul_west';        //diremaul
+    const DUNGEON_DIRE_MAUL_NORTH             = 'dire_maul_north';       //diremaul
+    const DUNGEON_DIRE_MAUL_EAST              = 'dire_maul_east';        //diremaul
+    const DUNGEON_GNOMEREGAN                  = 'gnomeregan';            //gnomeregan
     const DUNGEON_LOWER_BLACKROCK_SPIRE       = 'lower_blackrock_spire'; //blackrockspire
     const DUNGEON_MARAUDON                    = 'maraudon';
-    const DUNGEON_RAGEFIRE_CHASM              = 'ragefire_chasm'; //ragefire
-    const DUNGEON_RAZORFEN_DOWNS              = 'razorfen_downs'; //razorfendowns
-    const DUNGEON_RAZORFEN_KRAUL              = 'razorfen_kraul'; //razorfenkraul
-    const DUNGEON_SCARLET_MONASTERY_ARMORY    = 'scarlet_monastery_armory'; //scarletmonastery
+    const DUNGEON_RAGEFIRE_CHASM              = 'ragefire_chasm';              //ragefire
+    const DUNGEON_RAZORFEN_DOWNS              = 'razorfen_downs';              //razorfendowns
+    const DUNGEON_RAZORFEN_KRAUL              = 'razorfen_kraul';              //razorfenkraul
+    const DUNGEON_SCARLET_MONASTERY_ARMORY    = 'scarlet_monastery_armory';    //scarletmonastery
     const DUNGEON_SCARLET_MONASTERY_CATHEDRAL = 'scarlet_monastery_cathedral'; //scarletmonastery
-    const DUNGEON_SCARLET_MONASTERY_LIBRARY   = 'scarlet_monastery_library'; //scarletmonastery
+    const DUNGEON_SCARLET_MONASTERY_LIBRARY   = 'scarlet_monastery_library';   //scarletmonastery
     const DUNGEON_SCARLET_MONASTERY_GRAVEYARD = 'scarlet_monastery_graveyard'; //scarletmonastery
     const DUNGEON_SCHOLOMANCE                 = 'scholomance';
     const DUNGEON_SHADOWFANG_KEEP             = 'shadowfang_keep'; //shadowfangkeep
     const DUNGEON_STRATHOLME                  = 'stratholme';
-    const DUNGEON_THE_STOCKADE                = 'the_stockade'; //thestockade
+    const DUNGEON_THE_STOCKADE                = 'the_stockade';              //thestockade
     const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
     const DUNGEON_ULDAMAN                     = 'uldaman';
     const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns'; //wailingcaverns
-    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak'; //zulfarrak
+    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';      //zulfarrak
 
     // The Burning Crusade
     const DUNGEON_ACHENAI_CRYPTS          = 'auchenai_crypts';
@@ -136,8 +136,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_CULLING_OF_STRATHOLME = 'thecullingofstratholme'; // cotstratholme
     const DUNGEON_THE_FORGE_OF_SOULS        = 'theforgeofsouls';
     const DUNGEON_THE_NEXUS                 = 'thenexus';
-    const DUNGEON_THE_OCULUS                = 'theoculus'; // nexus80
-    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold'; // violethold
+    const DUNGEON_THE_OCULUS                = 'theoculus';          // nexus80
+    const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold';      // violethold
     const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trialofthechampion'; // theargentcoliseum
     const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
     const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
@@ -665,6 +665,28 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * @param MappingVersion $mappingVersion
+     * @return HasMany
+     */
+    private function getNpcsHealthBuilder(MappingVersion $mappingVersion): HasMany
+    {
+        return $this->npcs(false)
+            // Ensure that there's at least one enemy by having this join
+            ->join('enemies', 'enemies.npc_id', 'npcs.id')
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+            ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
+            // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
+            ->when(!in_array($this->key, array_merge(...array_values(self::ALL_RAID))), function (Builder $builder) use ($mappingVersion) {
+                return $builder
+                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
+                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
+                    ->where('npc_enemy_forces.enemy_forces', '>', 0);
+            })
+            ->groupBy('enemies.npc_id');
+    }
+
+    /**
      * Get the minimum amount of health of all NPCs in this dungeon.
      *
      * @param MappingVersion $mappingVersion
@@ -673,17 +695,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function getNpcsMinHealth(MappingVersion $mappingVersion): int
     {
-        return $this->npcs(false)
-            ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-            ->where('aggressiveness', '<>', 'friendly')
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
-                // @TODO This should exclude all raids
-                return $builder
-                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
-                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
-                    ->where('npc_enemy_forces.enemy_forces', '>', 0);
-            })
-            ->min('base_health') ?? 10000;
+        return $this->getNpcsHealthBuilder($mappingVersion)->orderBy('npcs.base_health')->min('base_health') ?? 10000;
     }
 
     /**
@@ -695,18 +707,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function getNpcsMaxHealth(MappingVersion $mappingVersion): int
     {
-        return $this->npcs(false)->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-            ->where('aggressiveness', '<>', 'friendly')
-            // Exclude Beguiling enemies - their health values are wrong at the moment
-            ->whereNotIn('npcs.id', [155432, 155433, 155434])
-            ->when(!in_array($this->key, [Dungeon::RAID_NAXXRAMAS, Dungeon::RAID_ULDUAR]), function (Builder $builder) use ($mappingVersion) {
-                // @TODO This should exclude all raids
-                return $builder
-                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
-                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
-                    ->where('npc_enemy_forces.enemy_forces', '>', 0);
-            })
-            ->max('base_health') ?? 100000;
+        return $this->getNpcsHealthBuilder($mappingVersion)->orderByDesc('npcs.base_health')->max('base_health') ?? 10000;
     }
 
     /**

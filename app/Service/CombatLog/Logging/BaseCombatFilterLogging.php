@@ -1,0 +1,159 @@
+<?php
+
+namespace App\Service\CombatLog\Logging;
+
+use App\Logging\StructuredLogging;
+
+class BaseCombatFilterLogging extends StructuredLogging implements BaseCombatFilterLoggingInterface
+{
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDied(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasAlreadyKilled(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasSummoned(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedInvalidNpcId(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitDiedEnemyWasNotEngaged(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitInCurrentPullKilled(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     * @return void
+     */
+    public function parseUnitSummonedInWhitelist(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitSummoned(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitFirstSighted(int $lineNr, string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function parseUnitEvadedRemovedFromCurrentPull(int $lineNr, string $guid): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int    $lineNr
+     * @param string $newEnemyGuid
+     *
+     * @return void
+     */
+    public function parseUnitAddedToCurrentPull(int $lineNr, string $newEnemyGuid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function getEnemyEngagedEventUsingFirstSightedEvent(string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param string $guid
+     *
+     * @return void
+     */
+    public function getEnemyEngagedEventUsingEngagedEvent(string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+}

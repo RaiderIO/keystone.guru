@@ -4,7 +4,9 @@ namespace App\Console;
 
 use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
+use App\Console\Commands\CombatLog\CreateMappingVersion;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
+use App\Console\Commands\CombatLog\ExtractData;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
 use App\Console\Commands\CombatLog\OutputCreateRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
@@ -30,6 +32,7 @@ use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\Metric\Aggregate;
+use App\Console\Commands\NitroPay\SyncAdsTxt;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
@@ -70,12 +73,14 @@ class Kernel extends ConsoleKernel
         RedisClearIdleKeys::class,
 
         // CombatLog
-        EnsureChallengeMode::class,
-        SplitChallengeMode::class,
-        ExtractUiMapIds::class,
         CreateDungeonRoutes::class,
+        CreateMappingVersion::class,
+        EnsureChallengeMode::class,
+        ExtractData::class,
+        ExtractUiMapIds::class,
         OutputResultEvents::class,
         OutputCreateRouteJson::class,
+        SplitChallengeMode::class,
 
         // Database
         Backup::class,
@@ -104,14 +109,17 @@ class Kernel extends ConsoleKernel
         MappingRestore::class,
         MappingSync::class,
 
-        // Metric
-        Aggregate::class,
-
         // MDT
         Encode::class,
         Decode::class,
         ExportMapping::class,
         ImportMapping::class,
+
+        // Metric
+        Aggregate::class,
+
+        // NitroPay
+        SyncAdsTxt::class,
 
         // Patreon
         RefreshMembershipStatus::class,
@@ -193,6 +201,9 @@ class Kernel extends ConsoleKernel
 
         // Aggregate all metrics so they're nice and snappy to load
         $schedule->command('metric:aggregate')->everyFiveMinutes();
+
+        // NitroPay
+        $schedule->command('nitropay:syncadstxt')->everyFifteenMinutes();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }

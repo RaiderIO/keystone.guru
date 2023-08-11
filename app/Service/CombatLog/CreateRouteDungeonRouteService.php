@@ -97,7 +97,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $this->log->getCreateRouteBodyStart($combatLogFilePath);
 
             $dungeonRoute = null;
-            $resultEvents = $this->combatLogService->getResultEvents($combatLogFilePath, $dungeonRoute);
+            $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
             if (!($dungeonRoute instanceof DungeonRoute)) {
                 throw new Exception('Unable to generate dungeon route from combat log!');
             }
@@ -240,7 +240,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 'challenge_mode_run_id' => $challengeModeRun->id,
                 'floor_id'              => $floor->id,
                 'npc_id'                => $npc->npcId,
-                'guid'                  => $npc->getUniqueUid(),
+                'guid'                  => $npc->getUniqueId(),
                 'lat'                   => $ingameLatLng['lat'],
                 'lng'                   => $ingameLatLng['lng'],
                 'created_at'            => $now,
@@ -276,7 +276,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     ): void
     {
         $now                 = now();
-        $currentFloor        = null;
         $mapIconAttributes   = [];
         $polylineAttributes  = [];
         $brushlineAttributes = [];
@@ -288,10 +287,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 continue;
             }
 
-            $realUiMapId = Floor::UI_MAP_ID_MAPPING[$npc->coord->uiMapId] ?? $npc->coord->uiMapId;
-            if ($currentFloor === null || $realUiMapId !== $currentFloor->ui_map_id) {
-                $currentFloor = Floor::findByUiMapId($npc->coord->uiMapId);
-            }
+            $currentFloor = $npc->getResolvedEnemy()->floor;
 
             $latLng = $currentFloor->calculateMapLocationForIngameLocation(
                 $npc->coord->x,

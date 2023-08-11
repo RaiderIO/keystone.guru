@@ -12,7 +12,7 @@ class OutputResultEvents extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputresultevents {filePath} {--force=}';
+    protected $signature = 'combatlog:outputresultevents {filePath} {--force=} {--dungeonOrRaid=}';
 
     /**
      * The console command description.
@@ -35,25 +35,32 @@ class OutputResultEvents extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
         $force = (bool)$this->option('force');
+        $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('Skipping file %s', $filePath));
 
                 return 0;
             }
 
-            return $this->outputResultEvents($combatLogService, $filePath, $force);
+            return $this->outputResultEvents($combatLogService, $filePath, $force, $dungeonOrRaid);
         });
     }
 
     /**
      * @param CombatLogServiceInterface $combatLogService
-     * @param string                    $filePath
-     * @param bool                      $force
+     * @param string $filePath
+     * @param bool $force
+     * @param bool $dungeonOrRaid
      * @return int
      */
-    private function outputResultEvents(CombatLogServiceInterface $combatLogService, string $filePath, bool $force = false): int
+    private function outputResultEvents(
+        CombatLogServiceInterface $combatLogService,
+        string                    $filePath,
+        bool                      $force = false,
+        bool                      $dungeonOrRaid = false
+    ): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -64,7 +71,12 @@ class OutputResultEvents extends BaseCombatLogCommand
 
             $result = 1;
         } else {
-            $resultEvents = $combatLogService->getResultEvents($filePath);
+            if( $dungeonOrRaid ) {
+                $resultEvents = $combatLogService->getResultEventsForDungeonOrRaid($filePath);
+            } else {
+                $resultEvents = $combatLogService->getResultEventsForChallengeMode($filePath);
+            }
+
             $result       = file_put_contents($resultingFile, $resultEvents->map(function (BaseResultEvent $resultEvent) {
                 // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
                 return trim($resultEvent->getBaseEvent()->getRawEvent());

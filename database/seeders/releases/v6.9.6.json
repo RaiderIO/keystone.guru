@@ -1,0 +1,61 @@
+{
+    "id": 195,
+    "release_changelog_id": 202,
+    "version": "v6.9.6",
+    "title": "Auto-route improvements, presenter view bugfixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-08-11T08:43:51+00:00",
+    "updated_at": "2023-08-11T08:43:51+00:00",
+    "changelog": {
+        "id": 202,
+        "release_id": 195,
+        "description": "This release also contains many improvements on the admin side of things. A lot of work continues in the background which isn't necessarily user-facing but will allow me to spend less time on creating mappings etc in the future.",
+        "changes": [
+            {
+                "release_changelog_id": 202,
+                "release_changelog_category_id": 5,
+                "ticket_id": 1932,
+                "change": "Fixed an issue where switching floors in the presenter view would cause the enemy forces tracker to disappear in the pulls sidebar.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 202,
+                "release_changelog_category_id": 11,
+                "ticket_id": 1923,
+                "change": "Improved\/restructured auto-route generator.",
+                "category": {
+                    "id": 11,
+                    "key": "auto_route_changes",
+                    "name": "releasechangelogcategories.auto_route_changes"
+                }
+            },
+            {
+                "release_changelog_id": 202,
+                "release_changelog_category_id": 11,
+                "ticket_id": 1924,
+                "change": "Improved\/restructured auto-route generator.",
+                "category": {
+                    "id": 11,
+                    "key": "auto_route_changes",
+                    "name": "releasechangelogcategories.auto_route_changes"
+                }
+            },
+            {
+                "release_changelog_id": 202,
+                "release_changelog_category_id": 11,
+                "ticket_id": 1930,
+                "change": "Improvements to Ruby Life Pools route generator.",
+                "category": {
+                    "id": 11,
+                    "key": "auto_route_changes",
+                    "name": "releasechangelogcategories.auto_route_changes"
+                }
+            }
+        ]
+    }
+}

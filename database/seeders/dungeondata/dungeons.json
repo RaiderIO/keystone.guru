@@ -4832,20 +4832,33 @@
                 "id": 176,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 186,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.the_lower_citadel",
                 "default": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": -1384.33,
+                "ingame_min_y": -764.84,
+                "ingame_max_x": -2739.8,
+                "ingame_max_y": 138.81,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 649,
+                        "floor1_id": 176,
+                        "floor2_id": 177,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 687,
+                        "floor1_id": 176,
+                        "floor2_id": 176,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4853,20 +4866,45 @@
                 "id": 177,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 187,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.the_rampart_of_skulls",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": -1631,
+                "ingame_min_y": -754.67,
+                "ingame_max_x": -2698,
+                "ingame_max_y": -43.33,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 660,
+                        "floor1_id": 177,
+                        "floor2_id": 176,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 661,
+                        "floor1_id": 177,
+                        "floor2_id": 178,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 662,
+                        "floor1_id": 177,
+                        "floor2_id": 180,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 663,
+                        "floor1_id": 177,
+                        "floor2_id": 181,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4874,20 +4912,33 @@
                 "id": 178,
                 "index": 3,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 188,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.deathbringers_rise",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": -580.31,
+                "ingame_min_y": 2116.33,
+                "ingame_max_x": -449.99,
+                "ingame_max_y": 2311.8,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 669,
+                        "floor1_id": 178,
+                        "floor2_id": 177,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 670,
+                        "floor1_id": 178,
+                        "floor2_id": 180,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4895,20 +4946,27 @@
                 "id": 179,
                 "index": 4,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 189,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.the_frost_queens_lair",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": 4012.4,
+                "ingame_min_y": 1993.56,
+                "ingame_max_x": 4528.22,
+                "ingame_max_y": 2767.28,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 685,
+                        "floor1_id": 179,
+                        "floor2_id": 180,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4916,20 +4974,51 @@
                 "id": 180,
                 "index": 5,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 190,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.the_upper_reach",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": -2216.06,
+                "ingame_min_y": 4002.41,
+                "ingame_max_x": -3364.8,
+                "ingame_max_y": 4768.23,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 681,
+                        "floor1_id": 180,
+                        "floor2_id": 178,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 682,
+                        "floor1_id": 180,
+                        "floor2_id": 179,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 683,
+                        "floor1_id": 180,
+                        "floor2_id": 181,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 684,
+                        "floor1_id": 180,
+                        "floor2_id": 182,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 686,
+                        "floor1_id": 180,
+                        "floor2_id": 177,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4937,20 +5026,33 @@
                 "id": 181,
                 "index": 6,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 191,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.royal_quarters",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": -2586.57,
+                "ingame_min_y": 4455.75,
+                "ingame_max_x": -2960.28,
+                "ingame_max_y": 4704.88,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 673,
+                        "floor1_id": 181,
+                        "floor2_id": 177,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 674,
+                        "floor1_id": 181,
+                        "floor2_id": 180,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4958,20 +5060,33 @@
                 "id": 182,
                 "index": 7,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 192,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.the_frozen_throne",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": 410.29,
+                "ingame_min_y": -2271.55,
+                "ingame_max_x": -2271.55,
+                "ingame_max_y": -2271.55,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 678,
+                        "floor1_id": 182,
+                        "floor2_id": 180,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 679,
+                        "floor1_id": 182,
+                        "floor2_id": 183,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -4979,20 +5094,27 @@
                 "id": 183,
                 "index": 8,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 193,
                 "name": "dungeons.wotlk.icecrown_citadel.floors.frostmourne",
                 "default": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": 414.1,
+                "ingame_min_y": -2648.26,
+                "ingame_max_x": 579.39,
+                "ingame_max_y": -2400.33,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 680,
+                        "floor1_id": 183,
+                        "floor2_id": 182,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

@@ -41,6 +41,10 @@ class AdminEnemy extends Enemy {
             if (json.hasOwnProperty('npc') && json.npc !== null) {
                 self.setNpc(json.npc);
             }
+
+            // In case floor ID changed
+            let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            enemyMapObjectGroup.setMapObjectVisibility(self, self.shouldBeVisible());
         });
 
         // Register for changes to the selection event

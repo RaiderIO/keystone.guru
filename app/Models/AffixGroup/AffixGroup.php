@@ -2,7 +2,6 @@
 
 namespace App\Models\AffixGroup;
 
-use App;
 use App\Models\Expansion;
 use App\Models\Season;
 use Eloquent;
@@ -55,5 +54,26 @@ class AffixGroup extends AffixGroupBase
     public function easetiers(): HasMany
     {
         return $this->hasMany(AffixGroupEaseTier::class);
+    }
+
+    /**
+     * @param Season     $season
+     * @param Collection $affixIds
+     * @return void
+     */
+    public static function findMatchingAffixGroupsForAffixIds(Season $season, Collection $affixIds): Collection
+    {
+        $result = collect();
+
+        $eligibleAffixGroups = AffixGroup::where('season_id', $season->id)->get();
+        foreach ($eligibleAffixGroups as $eligibleAffixGroup) {
+            // If the affix group's affixes are all in $affixIds
+            if ($affixIds->diff($eligibleAffixGroup->affixes->pluck('affix_id'))->isEmpty()) {
+                // Couple the affix group to the newly created dungeon route
+                $result->push($eligibleAffixGroup);
+            }
+        }
+
+        return $result;
     }
 }

@@ -1,1 +1,42 @@
-[]
+[
+    {
+        "id": 496,
+        "mapping_version_id": 187,
+        "floor_id": 180,
+        "target_floor_id": 178,
+        "lat": -214.16,
+        "lng": 199.23
+    },
+    {
+        "id": 497,
+        "mapping_version_id": 187,
+        "floor_id": 180,
+        "target_floor_id": 181,
+        "lat": -51.3,
+        "lng": 163.45
+    },
+    {
+        "id": 498,
+        "mapping_version_id": 187,
+        "floor_id": 180,
+        "target_floor_id": 181,
+        "lat": -50.72,
+        "lng": 233.97
+    },
+    {
+        "id": 501,
+        "mapping_version_id": 187,
+        "floor_id": 180,
+        "target_floor_id": 182,
+        "lat": -137,
+        "lng": 198.81
+    },
+    {
+        "id": 502,
+        "mapping_version_id": 187,
+        "floor_id": 180,
+        "target_floor_id": 179,
+        "lat": -239.62,
+        "lng": 294.35
+    }
+]
