@@ -16,16 +16,16 @@ use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
- * @property int                                     $id The ID of this Dungeon.
- * @property int                                     $expansion_id The linked expansion to this dungeon.
- * @property int                                     $zone_id The ID of the location that WoW has given this dungeon.
- * @property int                                     $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int                                     $mdt_id The ID that MDT has given this dungeon.
- * @property string                                  $name The name of the dungeon.
- * @property string                                  $slug The url friendly slug of the dungeon.
- * @property string                                  $key Shorthand key of the dungeon
+ * @property int                                     $id               The ID of this Dungeon.
+ * @property int                                     $expansion_id     The linked expansion to this dungeon.
+ * @property int                                     $zone_id          The ID of the location that WoW has given this dungeon.
+ * @property int                                     $map_id           The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int                                     $mdt_id           The ID that MDT has given this dungeon.
+ * @property string                                  $name             The name of the dungeon.
+ * @property string                                  $slug             The url friendly slug of the dungeon.
+ * @property string                                  $key              Shorthand key of the dungeon
  * @property boolean                                 $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
- * @property boolean                                 $active True if this dungeon is active, false if it is not.
+ * @property boolean                                 $active           True if this dungeon is active, false if it is not.
  *
  * @property Expansion                               $expansion
  *
@@ -63,7 +63,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends  = ['floor_count'];
+    protected $appends = ['floor_count'];
     protected $fillable = [
         'expansion_id',
         'active',
@@ -76,8 +76,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with       = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
-    public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $with = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
     // Classic
@@ -665,7 +665,28 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * @return array
+     */
+    private function getNpcsHealthBuilderEnemyForcesDungeonExclusionList(): array
+    {
+        // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
+        $allRaids = array_merge(...array_values(self::ALL_RAID));
+
+        return array_merge(
+            $allRaids,
+            // These expansions never had M+ so ignore exclusions based on enemy forces since they never had any
+            self::ALL[Expansion::EXPANSION_CLASSIC],
+            self::ALL[Expansion::EXPANSION_TBC],
+            self::ALL[Expansion::EXPANSION_WOTLK],
+            self::ALL[Expansion::EXPANSION_CATACLYSM],
+            self::ALL[Expansion::EXPANSION_MOP],
+            self::ALL[Expansion::EXPANSION_WOD],
+        );
+    }
+
+    /**
      * @param MappingVersion $mappingVersion
+     *
      * @return HasMany
      */
     private function getNpcsHealthBuilder(MappingVersion $mappingVersion): HasMany
@@ -676,13 +697,13 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
-            // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
-            ->when(!in_array($this->key, array_merge(...array_values(self::ALL_RAID))), function (Builder $builder) use ($mappingVersion) {
-                return $builder
-                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
-                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
-                    ->where('npc_enemy_forces.enemy_forces', '>', 0);
-            })
+            ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
+                function (Builder $builder) use ($mappingVersion) {
+                    return $builder
+                        ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
+                        ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
+                        ->where('npc_enemy_forces.enemy_forces', '>', 0);
+                })
             ->groupBy('enemies.npc_id');
     }
 
