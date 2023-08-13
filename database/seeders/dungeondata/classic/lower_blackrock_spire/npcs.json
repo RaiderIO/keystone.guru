@@ -1,1 +1,37 @@
-[]
+[
+    {
+        "id": 2110,
+        "dungeon_id": 83,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": 1141,
+        "name": "Black Rat",
+        "base_health": 1,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11479,
+                "mapping_version_id": 190,
+                "npc_id": 2110,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 9055,
+                "mapping_version_id": 175,
+                "npc_id": 2110,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]
