@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "mapping_version_id": 190,
+        "floor_id": 232,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -127.00263641189106,
+        "lng": 228.76968403025052,
+        "comment": "Unlocks after defeating Wolf Master Nandos.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
