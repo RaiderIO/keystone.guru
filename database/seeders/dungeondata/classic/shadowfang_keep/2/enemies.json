@@ -1,1 +1,46 @@
-[]
+[
+    {
+        "id": 29175,
+        "mapping_version_id": 190,
+        "enemy_pack_id": 5967,
+        "enemy_patrol_id": null,
+        "npc_id": 3875,
+        "floor_id": 228,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": null,
+        "lat": -27.204705103003878,
+        "lng": 227.75779112234846,
+        "kill_priority": -1
+    },
+    {
+        "id": 29176,
+        "mapping_version_id": 190,
+        "enemy_pack_id": 5967,
+        "enemy_patrol_id": null,
+        "npc_id": 3875,
+        "floor_id": 228,
+        "mdt_id": null,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": null,
+        "lat": -36.454304838025195,
+        "lng": 229.4988922489407,
+        "kill_priority": -1
+    }
+]
