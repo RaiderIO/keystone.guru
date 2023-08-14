@@ -14,5 +14,13 @@
         "target_floor_id": 233,
         "lat": -170.3,
         "lng": 137.66
+    },
+    {
+        "id": 519,
+        "mapping_version_id": 190,
+        "floor_id": 227,
+        "target_floor_id": 228,
+        "lat": -221.23,
+        "lng": 56.37
     }
 ]
