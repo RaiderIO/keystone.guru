@@ -107,4 +107,7 @@ return [
     'class_druid'        => 'Druid',
     'class_demon_hunter' => 'Demon Hunter',
     'class_evoker'       => 'Evoker',
+
+    'chest'        => 'Chest',
+    'chest_locked' => 'Locked chest',
 ];

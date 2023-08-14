@@ -6,11 +6,11 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $key
- * @property int $width
- * @property int $height
+ * @property int     $id
+ * @property string  $name
+ * @property string  $key
+ * @property int     $width
+ * @property int     $height
  * @property boolean $admin_only
  *
  * @property MapIcon $mapicons
@@ -127,6 +127,9 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_CLASS_DEMON_HUNTER = 'class_demonhunter';
     public const MAP_ICON_TYPE_CLASS_EVOKER       = 'class_evoker';
 
+    public const MAP_ICON_TYPE_CHEST        = 'chest';
+    public const MAP_ICON_TYPE_CHEST_LOCKED = 'chest_locked';
+
     public const ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
         self::MAP_ICON_TYPE_COMMENT                   => 2,
@@ -236,6 +239,9 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_CLASS_DRUID        => 90,
         self::MAP_ICON_TYPE_CLASS_DEMON_HUNTER => 91,
         self::MAP_ICON_TYPE_CLASS_EVOKER       => 92,
+
+        self::MAP_ICON_TYPE_CHEST        => 93,
+        self::MAP_ICON_TYPE_CHEST_LOCKED => 94,
     ];
 
     public $timestamps = false;
