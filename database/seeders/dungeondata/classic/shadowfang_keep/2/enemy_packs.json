@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": 5967,
+        "mapping_version_id": 190,
+        "floor_id": 228,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-21.763764\",\"lng\":\"219.705198\"},{\"lat\":\"-43.418709\",\"lng\":\"226.669603\"},{\"lat\":\"-39.283594\",\"lng\":\"237.333847\"},{\"lat\":\"-18.825656\",\"lng\":\"231.022356\"}]"
+    }
+]
