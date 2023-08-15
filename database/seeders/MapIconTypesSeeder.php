@@ -125,6 +125,9 @@ class MapIconTypesSeeder extends Seeder
             MapIconType::MAP_ICON_TYPE_CLASS_DRUID        => ['name' => 'mapicontypes.class_druid', 'width' => 32, 'height' => 32],
             MapIconType::MAP_ICON_TYPE_CLASS_DEMON_HUNTER => ['name' => 'mapicontypes.class_demon_hunter', 'width' => 32, 'height' => 32],
             MapIconType::MAP_ICON_TYPE_CLASS_EVOKER       => ['name' => 'mapicontypes.class_evoker', 'width' => 32, 'height' => 32],
+
+            MapIconType::MAP_ICON_TYPE_CHEST        => ['name' => 'mapicontypes.chest', 'width' => 32, 'height' => 32],
+            MapIconType::MAP_ICON_TYPE_CHEST_LOCKED => ['name' => 'mapicontypes.chest_locked', 'width' => 32, 'height' => 32],
         ];
 
         foreach ($mapIconTypes as $key => $mapIconType) {
