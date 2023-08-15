@@ -1,5 +1,89 @@
 [
     {
+        "id": 3976,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2042,
+        "name": "Scarlet Commander Mograine",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12459,
+                "mapping_version_id": 192,
+                "npc_id": 3976,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12453,
+                "mapping_version_id": 192,
+                "npc_id": 3976,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12460,
+                "mapping_version_id": 171,
+                "npc_id": 3976,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12454,
+                "mapping_version_id": 171,
+                "npc_id": 3976,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 3977,
+        "dungeon_id": 89,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2043,
+        "name": "High Inquisitor Whitemane",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12455,
+                "mapping_version_id": 192,
+                "npc_id": 3977,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12456,
+                "mapping_version_id": 171,
+                "npc_id": 3977,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
         "id": 4294,
         "dungeon_id": 89,
         "classification_id": 2,
@@ -29,6 +113,195 @@
                 "id": 12062,
                 "mapping_version_id": 171,
                 "npc_id": 4294,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4300,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2525,
+        "name": "Scarlet Wizard",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12065,
+                "mapping_version_id": 192,
+                "npc_id": 4300,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12066,
+                "mapping_version_id": 171,
+                "npc_id": 4300,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4301,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2499,
+        "name": "Scarlet Centurion",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12063,
+                "mapping_version_id": 192,
+                "npc_id": 4301,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12064,
+                "mapping_version_id": 171,
+                "npc_id": 4301,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4302,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2460,
+        "name": "Scarlet Champion",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12067,
+                "mapping_version_id": 192,
+                "npc_id": 4302,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12068,
+                "mapping_version_id": 171,
+                "npc_id": 4302,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4303,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2492,
+        "name": "Scarlet Abbot",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12259,
+                "mapping_version_id": 192,
+                "npc_id": 4303,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12260,
+                "mapping_version_id": 171,
+                "npc_id": 4303,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4542,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 2605,
+        "name": "High Inquisitor Fairbanks",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12457,
+                "mapping_version_id": 192,
+                "npc_id": 4542,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12451,
+                "mapping_version_id": 192,
+                "npc_id": 4542,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12458,
+                "mapping_version_id": 171,
+                "npc_id": 4542,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12452,
+                "mapping_version_id": 171,
+                "npc_id": 4542,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }

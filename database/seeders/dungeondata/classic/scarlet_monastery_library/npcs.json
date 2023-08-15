@@ -175,41 +175,6 @@
         ]
     },
     {
-        "id": 4299,
-        "dungeon_id": 91,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 2501,
-        "name": "Scarlet Chaplain",
-        "base_health": 12345,
-        "health_percentage": 100,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 11615,
-                "mapping_version_id": 191,
-                "npc_id": 4299,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 11616,
-                "mapping_version_id": 173,
-                "npc_id": 4299,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 4304,
         "dungeon_id": 91,
         "classification_id": 2,
@@ -239,41 +204,6 @@
                 "id": 11610,
                 "mapping_version_id": 173,
                 "npc_id": 4304,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 4540,
-        "dungeon_id": 91,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 2603,
-        "name": "Scarlet Monk",
-        "base_health": 12345,
-        "health_percentage": 100,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 11619,
-                "mapping_version_id": 191,
-                "npc_id": 4540,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 11620,
-                "mapping_version_id": 173,
-                "npc_id": 4540,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }
