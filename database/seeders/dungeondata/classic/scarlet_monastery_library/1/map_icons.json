@@ -1,1 +1,54 @@
-[]
+[
+    {
+        "mapping_version_id": 191,
+        "floor_id": 222,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -64.20310404308916,
+        "lng": 49.94783856911512,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 191,
+        "floor_id": 222,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -99.57778864880545,
+        "lng": 155.93580169084746,
+        "comment": "Large Solid Chest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 191,
+        "floor_id": 222,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -158.37678569521617,
+        "lng": 307.779365492018,
+        "comment": "Large Solid Chest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 191,
+        "floor_id": 222,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -210.4989735532066,
+        "lng": 323.9329361091638,
+        "comment": "Doan's Strongbox",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

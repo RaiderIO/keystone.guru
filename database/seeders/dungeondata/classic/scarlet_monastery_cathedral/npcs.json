@@ -1,1 +1,37 @@
-[]
+[
+    {
+        "id": 4294,
+        "dungeon_id": 89,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2524,
+        "name": "Scarlet Sorcerer",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 12061,
+                "mapping_version_id": 192,
+                "npc_id": 4294,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12062,
+                "mapping_version_id": 171,
+                "npc_id": 4294,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]
