@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": 1607,
+        "mapping_version_id": 196,
+        "floor_id": 196,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-95.629138,\"lng\":95.054789},{\"lat\":-78.039694,\"lng\":93.044567},{\"lat\":-77.75252,\"lng\":95.772725},{\"lat\":-94.982995,\"lng\":97.782947},{\"lat\":-95.65625,\"lng\":95.03125}]"
+        }
+    }
+]
