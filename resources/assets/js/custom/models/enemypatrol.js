@@ -224,4 +224,10 @@ class EnemyPatrol extends Polyline {
     toString() {
         return `Enemy patrol-${this.id}`;
     }
+
+    cleanup() {
+        super.cleanup();
+
+        getState().unregister('focusedenemy:changed', this);
+    }
 }
