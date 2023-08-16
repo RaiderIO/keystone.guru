@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
- * @property int $id
- * @property int $mapping_version_id
- * @property int $floor_id
- * @property int $polyline_id
- * @property string $teeming
- * @property string $faction
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
+ * @property int      $polyline_id
+ * @property string   $teeming
+ * @property string   $faction
  *
- * @property Floor $floor
+ * @property Floor    $floor
  * @property Polyline $polyline
  *
  * @mixin Eloquent
@@ -36,6 +36,12 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
     ];
     public $with = ['polyline'];
     public $timestamps = false;
+
+    protected $casts = [
+        'mapping_version_id' => 'integer',
+        'floor_id'           => 'integer',
+        'polyline_id'        => 'integer',
+    ];
 
     /**
      * @return BelongsTo
@@ -64,8 +70,9 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
     }
 
     /**
-     * @param MappingVersion $mappingVersion
+     * @param MappingVersion             $mappingVersion
      * @param MappingModelInterface|null $newParent
+     *
      * @return Model
      */
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol

@@ -56,7 +56,10 @@ class Polyline extends VersionableMapObject {
                 name: 'floor_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
-                default: getState().getCurrentFloor().id
+                default: getState().getCurrentFloor().id,
+                setter: function(value){
+                    console.warn(`Setting floor ID to`, value, typeof value);
+                }
             }),
             new Attribute({
                 name: 'polyline',

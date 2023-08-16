@@ -339,11 +339,11 @@ class MapObject extends Signalable {
         }).off('show.bs.collapse').on('show.bs.collapse', function (e) {
             let category = $(e.target).data('category');
             Cookies.set(`map_object_category_visibility_${category}`, 1);
-        }).find('.collapse').each(function(index, element){
+        }).find('.collapse').each(function (index, element) {
             let $collapse = $(element);
             let category = $collapse.data('category');
-            
-            // When this popup opens, restore the shown/hidden state of the category 
+
+            // When this popup opens, restore the shown/hidden state of the category
             $collapse.collapse(Cookies.get(`map_object_category_visibility_${category}`) === '1' ? 'show' : 'hide');
         });
     }
@@ -620,6 +620,17 @@ class MapObject extends Signalable {
                         switch (attribute.type) {
                             case 'bool':
                                 value = value >= 1;
+                                break;
+                            case 'int':
+                                if (isNumeric(value)) {
+                                    value = parseInt(value);
+                                }
+                                break;
+                            case 'float':
+                            case 'double':
+                                if (isNumeric(value)) {
+                                    value = parseFloat(value);
+                                }
                                 break;
                         }
                         // Assign the attributes from the object
