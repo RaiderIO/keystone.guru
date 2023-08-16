@@ -1968,9 +1968,9 @@
         "display_id": 30869,
         "name": "Highlord Darion Mograine",
         "base_health": 12345,
-        "health_percentage": null,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -1980,6 +1980,13 @@
         "npc_enemy_forces": [
             {
                 "id": 9126,
+                "mapping_version_id": 187,
+                "npc_id": 37120,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12467,
                 "mapping_version_id": 187,
                 "npc_id": 37120,
                 "enemy_forces": 0,
@@ -5356,9 +5363,9 @@
         "display_id": 31128,
         "name": "Highlord Alexandros Mograine",
         "base_health": 12345,
-        "health_percentage": null,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -5368,6 +5375,13 @@
         "npc_enemy_forces": [
             {
                 "id": 9247,
+                "mapping_version_id": 187,
+                "npc_id": 38610,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12468,
                 "mapping_version_id": 187,
                 "npc_id": 38610,
                 "enemy_forces": 0,
