@@ -803,7 +803,7 @@
         "classification_id": 4,
         "npc_type_id": 10,
         "npc_class_id": 1,
-        "display_id": 37296,
+        "display_id": null,
         "name": "Deathsworn Captain",
         "base_health": 2097,
         "health_percentage": 100,
@@ -831,6 +831,13 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 12592,
+                "mapping_version_id": 190,
+                "npc_id": 3872,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 11403,
                 "mapping_version_id": 175,
                 "npc_id": 3872,
@@ -839,6 +846,13 @@
             },
             {
                 "id": 11436,
+                "mapping_version_id": 175,
+                "npc_id": 3872,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12593,
                 "mapping_version_id": 175,
                 "npc_id": 3872,
                 "enemy_forces": 0,

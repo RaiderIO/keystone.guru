@@ -131,14 +131,14 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11374,
+                "id": 9278,
                 "mapping_version_id": 167,
                 "npc_id": 11320,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 9278,
+                "id": 11374,
                 "mapping_version_id": 167,
                 "npc_id": 11320,
                 "enemy_forces": 0,
@@ -215,14 +215,14 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 9283,
+                "id": 11375,
                 "mapping_version_id": 188,
                 "npc_id": 11322,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11375,
+                "id": 9283,
                 "mapping_version_id": 188,
                 "npc_id": 11322,
                 "enemy_forces": 0,
@@ -264,14 +264,14 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 11377,
+                "id": 9287,
                 "mapping_version_id": 188,
                 "npc_id": 11323,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 9287,
+                "id": 11377,
                 "mapping_version_id": 188,
                 "npc_id": 11323,
                 "enemy_forces": 0,
@@ -313,13 +313,6 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 11371,
-                "mapping_version_id": 188,
-                "npc_id": 11324,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 9285,
                 "mapping_version_id": 188,
                 "npc_id": 11324,
@@ -327,14 +320,21 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11372,
-                "mapping_version_id": 167,
+                "id": 11371,
+                "mapping_version_id": 188,
                 "npc_id": 11324,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
                 "id": 9286,
+                "mapping_version_id": 167,
+                "npc_id": 11324,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11372,
                 "mapping_version_id": 167,
                 "npc_id": 11324,
                 "enemy_forces": 0,
@@ -348,12 +348,12 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 32731,
+        "display_id": null,
         "name": "Oggleflint",
         "base_health": 1424,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -362,14 +362,14 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 11365,
+                "id": 11381,
                 "mapping_version_id": 188,
                 "npc_id": 11517,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11381,
+                "id": 11365,
                 "mapping_version_id": 188,
                 "npc_id": 11517,
                 "enemy_forces": 0,
@@ -383,7 +383,21 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 12584,
+                "mapping_version_id": 188,
+                "npc_id": 11517,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 11382,
+                "mapping_version_id": 167,
+                "npc_id": 11517,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12585,
                 "mapping_version_id": 167,
                 "npc_id": 11517,
                 "enemy_forces": 0,
@@ -411,12 +425,12 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 11429,
+        "display_id": null,
         "name": "Jergosh the Invoker",
         "base_health": 1712,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -441,6 +455,20 @@
             {
                 "id": 9269,
                 "mapping_version_id": 188,
+                "npc_id": 11518,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12586,
+                "mapping_version_id": 188,
+                "npc_id": 11518,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12587,
+                "mapping_version_id": 167,
                 "npc_id": 11518,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -474,12 +502,12 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 2007,
+        "display_id": null,
         "name": "Bazzalan",
         "base_health": 1513,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -487,6 +515,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 11385,
+                "mapping_version_id": 188,
+                "npc_id": 11519,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 11357,
                 "mapping_version_id": 188,
@@ -502,8 +537,15 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11385,
+                "id": 12588,
                 "mapping_version_id": 188,
+                "npc_id": 11519,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12589,
+                "mapping_version_id": 167,
                 "npc_id": 11519,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -537,12 +579,12 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 14152,
+        "display_id": null,
         "name": "Taragaman the Hungerer",
         "base_health": 1869,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -551,7 +593,21 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 11387,
+                "mapping_version_id": 188,
+                "npc_id": 11520,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 11363,
+                "mapping_version_id": 188,
+                "npc_id": 11520,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12590,
                 "mapping_version_id": 188,
                 "npc_id": 11520,
                 "enemy_forces": 0,
@@ -565,8 +621,8 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11387,
-                "mapping_version_id": 188,
+                "id": 12591,
+                "mapping_version_id": 167,
                 "npc_id": 11520,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
