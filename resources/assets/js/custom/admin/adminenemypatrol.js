@@ -136,10 +136,12 @@ class AdminEnemyPatrol extends EnemyPatrol {
 
             // Detach all enemies from this patrol if it's deleted
             if (enemy.enemy_patrol_id === this.id) {
-                enemy.enemy_patrol_id = null;
+                enemy.setEnemyPatrol(null);
                 enemy.save();
             }
         }
+
+        this.removeExistingConnectionsToEnemies();
     }
 
     cleanup() {
