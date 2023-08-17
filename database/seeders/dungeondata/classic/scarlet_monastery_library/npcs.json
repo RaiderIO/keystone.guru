@@ -1,1 +1,247 @@
-[]
+[
+    {
+        "id": 3974,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2040,
+        "name": "Houndmaster Loksey",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11613,
+                "mapping_version_id": 191,
+                "npc_id": 3974,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11614,
+                "mapping_version_id": 173,
+                "npc_id": 3974,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4287,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2463,
+        "name": "Scarlet Gallant",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11606,
+                "mapping_version_id": 191,
+                "npc_id": 4287,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11594,
+                "mapping_version_id": 173,
+                "npc_id": 4287,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4288,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2497,
+        "name": "Scarlet Beastmaster",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11611,
+                "mapping_version_id": 191,
+                "npc_id": 4288,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11612,
+                "mapping_version_id": 173,
+                "npc_id": 4288,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4291,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2507,
+        "name": "Scarlet Diviner",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11617,
+                "mapping_version_id": 191,
+                "npc_id": 4291,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11618,
+                "mapping_version_id": 173,
+                "npc_id": 4291,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4296,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 5726,
+        "name": "Scarlet Adept",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11607,
+                "mapping_version_id": 191,
+                "npc_id": 4296,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11608,
+                "mapping_version_id": 173,
+                "npc_id": 4296,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4304,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 35353,
+        "name": "Scarlet Tracking Hound",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11609,
+                "mapping_version_id": 191,
+                "npc_id": 4304,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11610,
+                "mapping_version_id": 173,
+                "npc_id": 4304,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 6487,
+        "dungeon_id": 91,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 5266,
+        "name": "Arcanist Doan",
+        "base_health": 12345,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 11621,
+                "mapping_version_id": 191,
+                "npc_id": 6487,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11622,
+                "mapping_version_id": 173,
+                "npc_id": 6487,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

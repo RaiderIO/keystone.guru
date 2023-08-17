@@ -40,6 +40,16 @@
         "selectable": 1
     },
     {
+        "id": 264667,
+        "category": null,
+        "dispel_type": "Magic",
+        "icon_name": "spell_shadow_unholyfrenzy",
+        "name": "Primal Rage",
+        "schools_mask": 0,
+        "aura": 0,
+        "selectable": 0
+    },
+    {
         "id": 333293,
         "category": "spells.death_knight",
         "dispel_type": "Magic",
@@ -47,6 +57,16 @@
         "name": "Bone Shield",
         "schools_mask": 0,
         "aura": 1,
+        "selectable": 0
+    },
+    {
+        "id": 381301,
+        "category": null,
+        "dispel_type": "Magic",
+        "icon_name": "inv_10_skinning_consumable_leatherdrums_color1",
+        "name": "Feral Hide Drums",
+        "schools_mask": 0,
+        "aura": 0,
         "selectable": 0
     },
     {
