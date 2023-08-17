@@ -195,11 +195,13 @@ abstract class DungeonRouteBuilder
                 $activePullEnemy->getNpcId(), self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()]
             );
             $npcId = self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()];
+        } else {
+            $npcId = $activePullEnemy->getNpcId();
         }
 
         try {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
-                $activePullEnemy->getNpcId(), $activePullEnemy->getX(), $activePullEnemy->getY(), $preferredGroups->toArray()
+                $npcId, $activePullEnemy->getX(), $activePullEnemy->getY(), $preferredGroups->toArray()
             );
 
             // Find the closest Enemy with the same NPC ID that is not killed yet
@@ -208,8 +210,8 @@ abstract class DungeonRouteBuilder
             $closestEnemy = null;
 
             /** @var Collection|Enemy[] $filteredEnemies */
-            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($activePullEnemy) {
-                if ($availableEnemy->npc_id !== $activePullEnemy->getNpcId()) {
+            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($activePullEnemy, $npcId) {
+                if ($availableEnemy->npc_id !== $npcId) {
                     return false;
                 }
 

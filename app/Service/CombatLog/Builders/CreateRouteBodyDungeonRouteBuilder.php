@@ -203,9 +203,8 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 $event['npc']->setResolvedEnemy($resolvedEnemy);
                 $activePullEnemy->setResolvedEnemy($resolvedEnemy);
 
-                $activePull->enemyEngaged($activePullEnemy);
-
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
+                $activePull->enemyEngaged($activePullEnemy);
             } else if ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
                 foreach ($this->activePullCollection as $activePull) {

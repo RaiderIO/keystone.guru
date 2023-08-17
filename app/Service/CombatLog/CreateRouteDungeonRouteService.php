@@ -201,6 +201,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     /**
      * @param CreateRouteBody $createRouteBody
      * @param DungeonRoute    $dungeonRoute
+     *
      * @return void
      */
     private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
@@ -280,14 +281,20 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
-        $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
+        $validNpcIds   = $dungeonRoute->dungeon->getInUseNpcIds();
+        $previousFloor = null;
         foreach ($createRouteBody->npcs as $npc) {
             // Ignore NPCs that are not in the whitelist
             if ($validNpcIds->search($npc->npcId) === false) {
                 continue;
             }
 
-            $currentFloor = $npc->getResolvedEnemy()->floor;
+            $currentFloor = optional($npc->getResolvedEnemy())->floor ?? $previousFloor;
+
+            if ($currentFloor === null) {
+                $this->log->generateMapIconsUnableToFindFloor($npc->getUniqueId());
+                continue;
+            }
 
             $latLng = $currentFloor->calculateMapLocationForIngameLocation(
                 $npc->coord->x,
@@ -329,6 +336,8 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     ])
                 ];
             }
+
+            $previousFloor = $currentFloor;
         }
 
         MapIcon::insert($mapIconAttributes);
