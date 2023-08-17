@@ -298,5 +298,17 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-73.15625\",\"lng\":\"216.8125\"},{\"lat\":\"-80.6875\",\"lng\":\"217.375\"},{\"lat\":\"-80.375\",\"lng\":\"221.09375\"},{\"lat\":\"-72.6875\",\"lng\":\"220.5\"}]"
+    },
+    {
+        "id": 6067,
+        "mapping_version_id": 192,
+        "floor_id": 220,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-83.5625\",\"lng\":\"197.9375\"},{\"lat\":\"-88.9375\",\"lng\":\"198.375\"},{\"lat\":\"-89.0625\",\"lng\":\"205.125\"},{\"lat\":\"-83.375\",\"lng\":\"204.3125\"}]"
     }
 ]
