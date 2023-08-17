@@ -34,6 +34,7 @@ class ActivePull
 
     /**
      * @param Carbon $timestamp
+     *
      * @return float
      */
     public function getAverageHPPercentAt(Carbon $timestamp): float
@@ -76,6 +77,7 @@ class ActivePull
 
     /**
      * @param string $uniqueId
+     *
      * @return $this
      */
     public function enemyKilled(string $uniqueId): ActivePull
@@ -95,6 +97,7 @@ class ActivePull
 
     /**
      * @param int $spellId
+     *
      * @return $this
      */
     public function addSpell(int $spellId): ActivePull
@@ -109,6 +112,7 @@ class ActivePull
 
     /**
      * @param ActivePullEnemy $activePullEnemy
+     *
      * @return $this
      */
     public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
@@ -120,6 +124,7 @@ class ActivePull
 
     /**
      * @param string $uniqueUid
+     *
      * @return bool
      */
     public function isEnemyInCombat(string $uniqueUid): bool
@@ -137,11 +142,36 @@ class ActivePull
 
     /**
      * @param ActivePull $activePull
+     *
      * @return void
      */
     public function merge(ActivePull $activePull): void
     {
         $this->enemiesInCombat = $this->enemiesInCombat->merge($activePull->enemiesInCombat);
         $this->enemiesKilled   = $this->enemiesKilled->merge($activePull->enemiesKilled);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvgLatLng(): array
+    {
+        $result = ['lat' => 0, 'lng' => 0];
+
+        $count = 0;
+        foreach ($this->enemiesKilled as $killedActivePullEnemy) {
+            if ($killedActivePullEnemy->getResolvedEnemy() === null) {
+                continue;
+            }
+
+            $result['lat'] += $killedActivePullEnemy->getResolvedEnemy()->lat;
+            $result['lng'] += $killedActivePullEnemy->getResolvedEnemy()->lng;
+            $count++;
+        }
+
+        $result['lat'] /= $count;
+        $result['lng'] /= $count;
+
+        return $result;
     }
 }
