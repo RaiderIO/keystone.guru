@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "mapping_version_id": 196,
+        "floor_id": 197,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -181.40625,
+        "lng": 47.71875,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 197,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -184.625,
+        "lng": 51.625,
+        "comment": "Box of Assorted Parts",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 197,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -127.4149238722803,
+        "lng": 116.80490790670751,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

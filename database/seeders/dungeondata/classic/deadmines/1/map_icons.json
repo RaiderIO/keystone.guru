@@ -37,5 +37,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 196,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -205.52169319026922,
+        "lng": 168.14980659724725,
+        "comment": "Heavy Door",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 196,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -229.9375,
+        "lng": 203.625,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 196,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -190.17506295435146,
+        "lng": 234.17820952585643,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
