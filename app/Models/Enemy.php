@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\Structs\LatLng;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -19,18 +20,18 @@ use Illuminate\Support\Collection;
  * @property int|null                     $enemy_patrol_id
  * @property int|null                     $npc_id
  * @property int                          $floor_id
- * @property int|null                     $mdt_id The ID in MDT (clone index) that this enemy is coupled to
- * @property int|null                     $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
- * @property string                       $seasonal_type The type of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
- * @property int                          $seasonal_index Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
- * @property int                          $mdt_npc_index The index of the NPC in MDT (not saved in DB)
- * @property int                          $enemy_id Only used for temp MDT enemies (not saved in DB)
- * @property bool                         $is_mdt Only used for temp MDT enemies (not saved in DB)
+ * @property int|null                     $mdt_id             The ID in MDT (clone index) that this enemy is coupled to
+ * @property int|null                     $mdt_npc_id         The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
+ * @property string                       $seasonal_type      The type of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
+ * @property int                          $seasonal_index     Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
+ * @property int                          $mdt_npc_index      The index of the NPC in MDT (not saved in DB)
+ * @property int                          $enemy_id           Only used for temp MDT enemies (not saved in DB)
+ * @property bool                         $is_mdt             Only used for temp MDT enemies (not saved in DB)
  * @property string                       $teeming
  * @property string                       $faction
  * @property boolean                      $required
  * @property boolean                      $skippable
- * @property int|null                     $kill_priority Used for determining the group in which enemies are scanned for and killed when parsing a combat log. Null = default, negative = lower priority, positive = higher priority
+ * @property int|null                     $kill_priority      Used for determining the group in which enemies are scanned for and killed when parsing a combat log. Null = default, negative = lower priority, positive = higher priority
  * @property int|null                     $enemy_forces_override
  * @property int|null                     $enemy_forces_override_teeming
  * @property int|null                     $dungeon_difficulty Show this enemy only in this difficulty setting (null is show always)
@@ -189,6 +190,14 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     public function enemyActiveAuras(): HasMany
     {
         return $this->hasMany(EnemyActiveAura::class);
+    }
+
+    /**
+     * @return LatLng
+     */
+    public function getLatLng(): LatLng
+    {
+        return new LatLng($this->lat, $this->lng);
     }
 
     /**

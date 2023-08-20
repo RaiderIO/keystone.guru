@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\Models\ActivePull;
 
+use App\Logic\Structs\IngameXY;
 use App\Models\Enemy;
 use Carbon\Carbon;
 
@@ -69,6 +70,14 @@ class ActivePullEnemy
     public function getY(): float
     {
         return $this->y;
+    }
+
+    /**
+     * @return IngameXY
+     */
+    public function getIngameXY(): IngameXY
+    {
+        return new IngameXY($this->x, $this->y);
     }
 
     /**
