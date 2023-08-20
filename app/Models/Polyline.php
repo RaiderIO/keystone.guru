@@ -2,23 +2,25 @@
 
 namespace App\Models;
 
+use App\Logic\Structs\LatLng;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $model_id
- * @property string $model_class
- * @property string $color
+ * @property int         $id
+ * @property int         $model_id
+ * @property string      $model_class
+ * @property string      $color
  * @property string|null $color_animated
- * @property int $weight
- * @property string $vertices_json JSON encoded vertices
+ * @property int         $weight
+ * @property string      $vertices_json JSON encoded vertices
  *
- * @property Model $model
+ * @property Model       $model
  *
  * @mixin Eloquent
  */
@@ -27,12 +29,31 @@ class Polyline extends Model implements MappingModelCloneableInterface
     use HasGenericModelRelation;
 
     public $timestamps = false;
-    public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
-    public $fillable = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+    public $visible    = ['color', 'color_animated', 'weight', 'vertices_json'];
+    public $fillable   = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
 
     /**
-     * @param MappingVersion $mappingVersion
+     * @return Collection|LatLng[]
+     */
+    public function getDecodedLatLngs(): Collection
+    {
+        $result = collect();
+
+        $decoded = json_decode($this->vertices_json, true);
+
+        if (is_array($decoded)) {
+            foreach ($decoded as $latLng) {
+                $result->push(new LatLng($latLng['lat'], $latLng['lng']));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param MappingVersion             $mappingVersion
      * @param MappingModelInterface|null $newParent
+     *
      * @return Polyline
      */
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Polyline

@@ -9,6 +9,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 {
     /**
      * @param int $killZoneIndex
+     *
      * @return void
      */
     public function createPullStart(int $killZoneIndex): void
@@ -60,6 +61,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param int $enemyCount
+     *
      * @return void
      */
     public function createPullInsertedEnemies(int $enemyCount): void
@@ -78,6 +80,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param int $spellCount
+     *
      * @return void
      */
     public function createPullSpellsAttachedToKillZone(int $spellCount): void
@@ -118,36 +121,41 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
-     * @param int   $npcId
-     * @param float $ingameX
-     * @param float $ingameY
-     * @param array $preferredGroups
+     * @param int        $npcId
+     * @param float      $ingameX
+     * @param float      $ingameY
+     * @param float|null $previousPullLat
+     * @param float|null $previousPullLng
+     * @param array      $preferredGroups
+     *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, array $preferredGroups): void
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, ?float $previousPullLat, ?float $previousPullLng, array $preferredGroups): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
     /**
-     * @param int $id
-     * @param int $closestEnemyDistance
-     * @param int $group
+     * @param int   $id
+     * @param float $distanceBetweenEnemies
+     * @param float $distanceBetweenLastPullAndEnemy
+     * @param int   $group
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $group): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
     /**
      * @param int|null $enemyId
-     * @param float    $closestEnemyDistance
+     * @param float    $distanceBetweenEnemies
+     * @param float    $distanceBetweenLastPullAndEnemy
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $closestEnemyDistance): void
+    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -162,23 +170,25 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param int|null $enemyId
-     * @param float    $closestEnemyDistance
+     * @param float    $distanceBetweenEnemies
+     * @param float    $distanceBetweenLastPullAndEnemy
      * @param int      $maxDistance
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $closestEnemyDistance, int $maxDistance): void
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $maxDistance): void
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
 
     /**
      * @param int   $enemyId
-     * @param float $closestEnemyDistance
+     * @param float $distanceBetweenEnemies
+     * @param float $distanceBetweenLastPullAndEnemy
      *
      * @return void
      */
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $closestEnemyDistance): void
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -194,6 +204,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     /**
      * @param int  $enemiesCount
      * @param bool $considerPatrols
+     *
      * @return void
      */
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void
@@ -204,6 +215,7 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     /**
      * @param int $killPriority
      * @param int $enemyCount
+     *
      * @return void
      */
     public function findClosestEnemyAndDistanceFromListPriority(int $killPriority, int $enemyCount): void
@@ -221,10 +233,12 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
 
     /**
      * @param int|null $enemyId
-     * @param float    $closestEnemyDistance
+     * @param float    $distanceBetweenEnemies
+     * @param float    $distanceBetweenLastPullAndEnemy
+     *
      * @return void
      */
-    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $closestEnemyDistance): void
+    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

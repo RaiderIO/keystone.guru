@@ -161,7 +161,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             }
         }
 
-        $this->recalculateEnemyForcesOnDungeonRoute();
+        $this->buildFinished();
 
         return $this->dungeonRoute;
     }

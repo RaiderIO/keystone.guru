@@ -55,7 +55,7 @@ class KillZone extends Model
     ];
 
     protected $appends = ['enemies'];
-    protected $with = ['spells:id'];
+    protected $with    = ['spells:id'];
 
     protected $fillable = [
         'id',
@@ -77,15 +77,25 @@ class KillZone extends Model
         'lng'      => 'float',
     ];
 
-    private Collection $enemiesCache;
+    /** @var Collection|int[]|null */
+    private ?Collection $enemiesAttributeCache = null;
+
+    /** @var Collection|Enemy[]|null */
+    private ?Collection $enemiesCache = null;
+
+    /**
+     * @var Floor|null
+     */
+    private ?Floor $dominantFloorCache = null;
 
     /**
      * @param Collection $enemyIds
+     *
      * @return void
      */
-    public function setEnemiesCache(Collection $enemyIds): void
+    public function setEnemiesAttributeCache(Collection $enemyIds): void
     {
-        $this->enemiesCache = $enemyIds;
+        $this->enemiesAttributeCache = $enemyIds;
     }
 
     /**
@@ -93,7 +103,7 @@ class KillZone extends Model
      */
     public function getEnemiesAttribute(): Collection
     {
-        return $this->enemiesCache ?? Enemy::select('enemies.id')
+        return $this->enemiesAttributeCache ?? Enemy::select('enemies.id')
             ->join('kill_zone_enemies', function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
@@ -155,31 +165,43 @@ class KillZone extends Model
     /**
      * @return Collection|Enemy[]
      */
-    public function getEnemies(): Collection
+    public function getEnemies(bool $useCache = false): Collection
     {
-        return Enemy::select('enemies.*')
-            ->join('kill_zone_enemies', function (JoinClause $clause) {
-                $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
-                    ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
-            })
-            ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
-            ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
-            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('kill_zone_enemies.kill_zone_id', $this->id)
-            ->get();
+        return $useCache && $this->enemiesCache !== null ?
+            $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
+                ->join('kill_zone_enemies', function (JoinClause $clause) {
+                    $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
+                           ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+                })
+                ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
+                ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
+                ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+                ->where('kill_zone_enemies.kill_zone_id', $this->id)
+                ->get();
     }
 
     /**
      * The floor that we have a killzone on, or the floor that contains the most enemies (and thus most dominant floor)
+     *
+     * @param bool $useCache
+     *
      * @return Floor
      */
-    public function getDominantFloor(): ?Floor
+    public function getDominantFloor(bool $useCache = false): ?Floor
     {
+        if ($useCache && $this->dominantFloorCache instanceof Floor) {
+            return $this->dominantFloorCache;
+        }
+
+        $result = null;
+
         if (isset($this->floor_id) && $this->floor_id > 0) {
-            return $this->floor;
-        } else if ($this->killZoneEnemies()->count() > 0) {
+            $result = $this->floor;
+        }
+
+        if ($result === null || $this->killZoneEnemies()->count() > 0) {
             $floorTotals = [];
-            foreach ($this->getEnemies() as $enemy) {
+            foreach ($this->getEnemies($useCache) as $enemy) {
                 if (!isset($floorTotals[$enemy->floor_id])) {
                     $floorTotals[$enemy->floor_id] = 0;
                 }
@@ -189,21 +211,23 @@ class KillZone extends Model
             // Will get a random floor if there's equal counts on multiple floors, that's ok
             $floorId = array_search(max($floorTotals), $floorTotals);
 
-            return Floor::findOrFail($floorId);
-        } else {
-            return null;
+            $result = Floor::findOrFail($floorId);
         }
+
+        return $this->dominantFloorCache = $result;
     }
 
     /**
+     * @param bool $useCache
+     *
      * @return array{lat: float, lng: float}
      */
-    public function getKillLocation(): ?array
+    public function getKillLocation(bool $useCache = false): ?array
     {
         if (isset($this->lat) && isset($this->lng)) {
             return ['lat' => $this->lat, 'lng' => $this->lng];
         } else {
-            $enemies = $this->getEnemies();
+            $enemies = $this->getEnemies($useCache);
 
             if ($enemies->isEmpty()) {
                 return null;
@@ -270,6 +294,7 @@ class KillZone extends Model
      * and return the middle of that edge as a lat/lng.
      *
      * @param int $boundingBoxMargin
+     *
      * @return array|null
      */
     public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?array
@@ -290,6 +315,7 @@ class KillZone extends Model
      * Gets a list of enemy forces that this kill zone kills that may be skipped.
      *
      * @param bool $teeming
+     *
      * @return Collection
      */
     public function getSkippableEnemyForces(bool $teeming): Collection

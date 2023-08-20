@@ -86,7 +86,7 @@ class AjaxKillZoneController extends Controller
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
 
-                $killZone->setEnemiesCache(collect($validEnemyIds));
+                $killZone->setEnemiesAttributeCache(collect($validEnemyIds));
             }
 
             // May be null for mass request

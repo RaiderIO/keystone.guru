@@ -28,17 +28,17 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, array $preferredGroups): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, ?float $previousPullLat, ?float $previousPullLng, array $preferredGroups): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, int $closestEnemyDistance, int $group): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $group): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $closestEnemyDistance): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck(): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $closestEnemyDistance, int $maxDistance): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $maxDistance): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $closestEnemyDistance): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 
@@ -48,5 +48,5 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findClosestEnemyAndDistanceFromListFoundEnemy(): void;
 
-    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $closestEnemyDistance): void;
+    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void;
 }

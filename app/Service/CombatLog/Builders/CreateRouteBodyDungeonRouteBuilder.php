@@ -59,6 +59,8 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     {
         $this->buildKillZones();
 
+        $this->buildFinished();
+
         return $this->dungeonRoute;
     }
 
@@ -245,8 +247,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             $this->determineSpellsCastBetween($activePull);
             $this->createPull($activePull);
         }
-
-        $this->recalculateEnemyForcesOnDungeonRoute();
     }
 
     /**
