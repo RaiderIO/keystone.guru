@@ -54,14 +54,14 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12572,
+                "id": 12600,
                 "mapping_version_id": 196,
                 "npc_id": 622,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 12600,
+                "id": 12572,
                 "mapping_version_id": 196,
                 "npc_id": 622,
                 "enemy_forces": 0,
@@ -427,7 +427,7 @@
         "npc_class_id": 1,
         "display_id": 2026,
         "name": "Mr. Smite",
-        "base_health": 12345,
+        "base_health": 3872,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -438,6 +438,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 12623,
+                "mapping_version_id": 196,
+                "npc_id": 646,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 12536,
                 "mapping_version_id": 196,
@@ -460,6 +467,13 @@
                 "enemy_forces_teeming": null
             },
             {
+                "id": 12624,
+                "mapping_version_id": 162,
+                "npc_id": 646,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12537,
                 "mapping_version_id": 162,
                 "npc_id": 646,
@@ -476,10 +490,10 @@
         "npc_class_id": 1,
         "display_id": 7113,
         "name": "Captain Greenskin",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2904,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -488,8 +502,36 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12627,
+                "mapping_version_id": 196,
+                "npc_id": 647,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12538,
                 "mapping_version_id": 196,
+                "npc_id": 647,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12606,
+                "mapping_version_id": 196,
+                "npc_id": 647,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12607,
+                "mapping_version_id": 162,
+                "npc_id": 647,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12628,
+                "mapping_version_id": 162,
                 "npc_id": 647,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -698,14 +740,14 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12544,
+                "id": 12598,
                 "mapping_version_id": 196,
                 "npc_id": 1763,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 12598,
+                "id": 12544,
                 "mapping_version_id": 196,
                 "npc_id": 1763,
                 "enemy_forces": 0,
@@ -805,8 +847,8 @@
         "npc_class_id": 1,
         "display_id": 556,
         "name": "Miner Johnson",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 1347,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -817,8 +859,22 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12625,
+                "mapping_version_id": 196,
+                "npc_id": 3586,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12542,
                 "mapping_version_id": 196,
+                "npc_id": 3586,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12626,
+                "mapping_version_id": 162,
                 "npc_id": 3586,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
