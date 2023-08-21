@@ -2212,20 +2212,6 @@
         "merged": true
     },
     {
-        "id": 162,
-        "dungeon_id": 80,
-        "version": 1,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
-        "created_at": "2023-07-09T12:22:23.000000Z",
-        "updated_at": "2023-07-09T12:22:23.000000Z",
-        "merged": true
-    },
-    {
         "id": 163,
         "dungeon_id": 81,
         "version": 1,
