@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Dungeon;
 use App\Models\Npc;
 use App\Models\NpcClass;
+use App\Models\NpcClassification;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,12 +29,12 @@ class NpcFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
             'id'                        => 'required',
             'name'                      => 'required',
             'dungeon_id'                => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
             'npc_class_id'              => Rule::in(array_values(NpcClass::ALL)),
-            'classification_id'         => 'required',
+            'classification_id'         => [Rule::in(NpcClassification::ALL), 'required'],
             'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
             'base_health'               => [
                 'required',
@@ -48,7 +49,5 @@ class NpcFormRequest extends FormRequest
             'bolstering_whitelist_npcs' => 'array',
             'spells'                    => 'array',
         ];
-
-        return $rules;
     }
 }
