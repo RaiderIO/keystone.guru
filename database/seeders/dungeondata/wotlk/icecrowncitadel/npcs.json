@@ -1984,13 +1984,6 @@
                 "npc_id": 37120,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
-            },
-            {
-                "id": 12467,
-                "mapping_version_id": 187,
-                "npc_id": 37120,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
             }
         ]
     },
@@ -5375,13 +5368,6 @@
         "npc_enemy_forces": [
             {
                 "id": 9247,
-                "mapping_version_id": 187,
-                "npc_id": 38610,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 12468,
                 "mapping_version_id": 187,
                 "npc_id": 38610,
                 "enemy_forces": 0,
