@@ -105,7 +105,11 @@ class NpcController extends Controller
 
 
             $existingEnemyForces = 0;
-            if ($oldId !== null) {
+
+            // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
+            if( $oldId === null ) {
+                $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
+            } else {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
                 NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
 
@@ -119,9 +123,6 @@ class NpcController extends Controller
                     $npc->npcEnemyForces()->delete();
                 }
             }
-
-            // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
-            $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
 
             // Broadcast notifications so that any open mapping sessions get these changes immediately
             // If no dungeon is set, user selected 'All Dungeons'
