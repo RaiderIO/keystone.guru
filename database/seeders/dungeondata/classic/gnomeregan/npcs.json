@@ -7,8 +7,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Caverndeep Burrower",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2600,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -19,8 +19,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12725,
-                "mapping_version_id": 164,
+                "id": 12758,
+                "mapping_version_id": 198,
                 "npc_id": 6206,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -35,8 +35,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Caverndeep Ambusher",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 675,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -47,8 +47,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12724,
-                "mapping_version_id": 164,
+                "id": 12759,
+                "mapping_version_id": 198,
                 "npc_id": 6207,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -63,8 +63,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Caverndeep Reaver",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2559,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -75,8 +75,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12726,
-                "mapping_version_id": 164,
+                "id": 12760,
+                "mapping_version_id": 198,
                 "npc_id": 6211,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -91,8 +91,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Dark Iron Agent",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 3330,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -103,8 +103,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12713,
-                "mapping_version_id": 164,
+                "id": 12761,
+                "mapping_version_id": 198,
                 "npc_id": 6212,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -119,8 +119,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Chomper",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 955,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -131,8 +131,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12719,
-                "mapping_version_id": 164,
+                "id": 12762,
+                "mapping_version_id": 198,
                 "npc_id": 6215,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -147,8 +147,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Irradiated Slime",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2559,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -159,8 +159,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12734,
-                "mapping_version_id": 164,
+                "id": 12763,
+                "mapping_version_id": 198,
                 "npc_id": 6218,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -175,8 +175,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Corrosive Lurker",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2715,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -187,8 +187,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12730,
-                "mapping_version_id": 164,
+                "id": 12764,
+                "mapping_version_id": 198,
                 "npc_id": 6219,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -203,8 +203,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Irradiated Horror",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2319,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -215,8 +215,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12741,
-                "mapping_version_id": 164,
+                "id": 12765,
+                "mapping_version_id": 198,
                 "npc_id": 6220,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -231,8 +231,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Leprous Technician",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 1003,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -243,8 +243,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12727,
-                "mapping_version_id": 164,
+                "id": 12766,
+                "mapping_version_id": 198,
                 "npc_id": 6222,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -259,8 +259,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Leprous Defender",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2559,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -271,8 +271,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12736,
-                "mapping_version_id": 164,
+                "id": 12767,
+                "mapping_version_id": 198,
                 "npc_id": 6223,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -287,8 +287,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Leprous Machinesmith",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 1003,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -299,8 +299,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12731,
-                "mapping_version_id": 164,
+                "id": 12768,
+                "mapping_version_id": 198,
                 "npc_id": 6224,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -315,8 +315,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Mechano-Tank",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2715,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -327,8 +327,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12720,
-                "mapping_version_id": 164,
+                "id": 12769,
+                "mapping_version_id": 198,
                 "npc_id": 6225,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -343,8 +343,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Mechano-Flamewalker",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2515,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -355,8 +355,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12714,
-                "mapping_version_id": 164,
+                "id": 12770,
+                "mapping_version_id": 198,
                 "npc_id": 6226,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -371,8 +371,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Mechano-Frostwalker",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2664,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -383,8 +383,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12715,
-                "mapping_version_id": 164,
+                "id": 12771,
+                "mapping_version_id": 198,
                 "npc_id": 6227,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -411,8 +411,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12707,
-                "mapping_version_id": 164,
+                "id": 12772,
+                "mapping_version_id": 198,
                 "npc_id": 6228,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -439,8 +439,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12706,
-                "mapping_version_id": 164,
+                "id": 12773,
+                "mapping_version_id": 198,
                 "npc_id": 6229,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -455,8 +455,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Peacekeeper Security Suit",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 3018,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -467,8 +467,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12711,
-                "mapping_version_id": 164,
+                "id": 12774,
+                "mapping_version_id": 198,
                 "npc_id": 6230,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -483,10 +483,10 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Arcane Nullifier X-21",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 5550,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -495,8 +495,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12718,
-                "mapping_version_id": 164,
+                "id": 12775,
+                "mapping_version_id": 198,
                 "npc_id": 6232,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -511,8 +511,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Mechanized Sentry",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 3620,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -523,8 +523,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12717,
-                "mapping_version_id": 164,
+                "id": 12776,
+                "mapping_version_id": 198,
                 "npc_id": 6233,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -539,8 +539,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Mechanized Guardian",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 3018,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -551,8 +551,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12716,
-                "mapping_version_id": 164,
+                "id": 12777,
+                "mapping_version_id": 198,
                 "npc_id": 6234,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -567,8 +567,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Electrocutioner 6000",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 5285,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -579,8 +579,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12708,
-                "mapping_version_id": 164,
+                "id": 12778,
+                "mapping_version_id": 198,
                 "npc_id": 6235,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -595,8 +595,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Irradiated Pillager",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 1953,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -607,8 +607,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12722,
-                "mapping_version_id": 164,
+                "id": 12779,
+                "mapping_version_id": 198,
                 "npc_id": 6329,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -623,8 +623,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Holdout Warrior",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2865,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -635,8 +635,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12740,
-                "mapping_version_id": 164,
+                "id": 12780,
+                "mapping_version_id": 198,
                 "npc_id": 6391,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -651,8 +651,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Holdout Medic",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 3153,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -663,8 +663,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12742,
-                "mapping_version_id": 164,
+                "id": 12781,
+                "mapping_version_id": 198,
                 "npc_id": 6392,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -679,8 +679,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Holdout Technician",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2865,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -691,8 +691,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12733,
-                "mapping_version_id": 164,
+                "id": 12782,
+                "mapping_version_id": 198,
                 "npc_id": 6407,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -707,8 +707,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Viscous Fallout",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 2865,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -719,8 +719,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12710,
-                "mapping_version_id": 164,
+                "id": 12783,
+                "mapping_version_id": 198,
                 "npc_id": 7079,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -735,8 +735,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Ember",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 239,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -747,8 +747,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12738,
-                "mapping_version_id": 164,
+                "id": 12784,
+                "mapping_version_id": 198,
                 "npc_id": 7266,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -763,8 +763,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Grubbis",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 5285,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -775,8 +775,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12712,
-                "mapping_version_id": 164,
+                "id": 12785,
+                "mapping_version_id": 198,
                 "npc_id": 7361,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -791,8 +791,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Leprous Assistant",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 950,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -803,8 +803,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12735,
-                "mapping_version_id": 164,
+                "id": 12786,
+                "mapping_version_id": 198,
                 "npc_id": 7603,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -819,8 +819,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Burning Servant",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 239,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -831,8 +831,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12737,
-                "mapping_version_id": 164,
+                "id": 12787,
+                "mapping_version_id": 198,
                 "npc_id": 7738,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -859,8 +859,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12705,
-                "mapping_version_id": 164,
+                "id": 12788,
+                "mapping_version_id": 198,
                 "npc_id": 7800,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -875,10 +875,10 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Mobile Alert System",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 70,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -887,8 +887,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12728,
-                "mapping_version_id": 164,
+                "id": 12789,
+                "mapping_version_id": 198,
                 "npc_id": 7849,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -903,8 +903,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Kernobee",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 896,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -915,8 +915,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12709,
-                "mapping_version_id": 164,
+                "id": 12790,
+                "mapping_version_id": 198,
                 "npc_id": 7850,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -931,10 +931,10 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Alarm-a-bomb 2600",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 484,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -943,8 +943,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12721,
-                "mapping_version_id": 164,
+                "id": 12791,
+                "mapping_version_id": 198,
                 "npc_id": 7897,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -959,10 +959,10 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Walking Bomb",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 96,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -971,8 +971,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12729,
-                "mapping_version_id": 164,
+                "id": 12792,
+                "mapping_version_id": 198,
                 "npc_id": 7915,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -987,8 +987,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Blastmaster Emi Shortfuse",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 840,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -999,8 +999,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12723,
-                "mapping_version_id": 164,
+                "id": 12793,
+                "mapping_version_id": 198,
                 "npc_id": 7998,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -1015,10 +1015,10 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Dark Iron Land Mine",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 557,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -1027,8 +1027,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12732,
-                "mapping_version_id": 164,
+                "id": 12794,
+                "mapping_version_id": 198,
                 "npc_id": 8035,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -1043,8 +1043,8 @@
         "npc_class_id": 1,
         "display_id": null,
         "name": "Tink Sprocketwhistle",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 664,
+        "health_percentage": 100,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1055,8 +1055,8 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 12739,
-                "mapping_version_id": 164,
+                "id": 12795,
+                "mapping_version_id": 198,
                 "npc_id": 9676,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
