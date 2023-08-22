@@ -63,5 +63,18 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 204,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -69.75286388410194,
+        "lng": 256.92123499276863,
+        "comment": "First punchcard is acquired from enemies outside of the instance. Then, a punch machine is available outside of the instance as well. The remaining punchcards are in the instance.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
