@@ -24,5 +24,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 197,
+        "floor_id": 191,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -108.91096278315635,
+        "lng": 127.50551740467085,
+        "comment": "Pitted Iron Chest [Quest: Knowledge in the Deeps]",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 197,
+        "floor_id": 191,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 94,
+        "lat": -166.46875,
+        "lng": 257.125,
+        "comment": "Large Iron Bound Chest (Locked)",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
