@@ -43,6 +43,12 @@ class NpcClassificationsSeeder extends Seeder
                 'shortname' => NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS,
                 'color'     => 'red',
             ]),
+            new NpcClassification([
+                'id'        => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_RARE),
+                'shortname' => NpcClassification::NPC_CLASSIFICATION_RARE,
+                'color'     => 'red',
+            ]),
         ]);
 
         foreach ($npcClassifications as $npcClassification) {
