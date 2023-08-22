@@ -154,5 +154,65 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-189.8125\",\"lng\":\"187.34375\"},{\"lat\":\"-195.25\",\"lng\":\"187.65625\"},{\"lat\":\"-195.0625\",\"lng\":\"192.78125\"},{\"lat\":\"-189.46875\",\"lng\":\"192.5625\"}]"
+    },
+    {
+        "id": 6100,
+        "mapping_version_id": 197,
+        "floor_id": 192,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-221.96875\",\"lng\":\"183.15625\"},{\"lat\":\"-225.90625\",\"lng\":\"183.375\"},{\"lat\":\"-226.125\",\"lng\":\"192\"},{\"lat\":\"-222.0625\",\"lng\":\"191.5\"}]"
+    },
+    {
+        "id": 6101,
+        "mapping_version_id": 197,
+        "floor_id": 192,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-216.375\",\"lng\":\"213.28125\"},{\"lat\":\"-222.875\",\"lng\":\"213.25\"},{\"lat\":\"-222.90625\",\"lng\":\"217.09375\"},{\"lat\":\"-216.40625\",\"lng\":\"217.03125\"}]"
+    },
+    {
+        "id": 6102,
+        "mapping_version_id": 197,
+        "floor_id": 192,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-171.15625\",\"lng\":\"174.96875\"},{\"lat\":\"-178.40625\",\"lng\":\"175.25\"},{\"lat\":\"-178.03125\",\"lng\":\"178.875\"},{\"lat\":\"-170.78125\",\"lng\":\"178.65625\"}]"
+    },
+    {
+        "id": 6103,
+        "mapping_version_id": 197,
+        "floor_id": 192,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-182.0625\",\"lng\":\"152.28125\"},{\"lat\":\"-186.78125\",\"lng\":\"152.21875\"},{\"lat\":\"-186.40625\",\"lng\":\"160.90625\"},{\"lat\":\"-182.3125\",\"lng\":\"160.9375\"}]"
+    },
+    {
+        "id": 6106,
+        "mapping_version_id": 197,
+        "floor_id": 192,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-139.136088\",\"lng\":\"128.438835\"},{\"lat\":\"-146.387247\",\"lng\":\"119.177454\"},{\"lat\":\"-150.766659\",\"lng\":\"123.41328\"},{\"lat\":\"-143.371913\",\"lng\":\"131.88493\"}]"
     }
 ]
