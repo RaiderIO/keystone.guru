@@ -376,7 +376,7 @@ class AdminEnemy extends Enemy {
                 let packBuddies = self.getPackBuddies();
                 for (let index in packBuddies) {
                     let packBuddyEnemy = packBuddies[index];
-                    packBuddyEnemy.setEnemyPatrol(enemyPatrol.id === packBuddyEnemy.enemy_patrol_id ? null : enemyPatrol);
+                    packBuddyEnemy.setEnemyPatrol(self.enemyPatrol);
                     packBuddyEnemy.save();
                 }
 
