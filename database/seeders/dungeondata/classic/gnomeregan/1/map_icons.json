@@ -1,6 +1,6 @@
 [
     {
-        "mapping_version_id": 164,
+        "mapping_version_id": 198,
         "floor_id": 204,
         "dungeon_route_id": null,
         "team_id": null,
@@ -13,14 +13,66 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 164,
+        "mapping_version_id": 198,
         "floor_id": 204,
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 2,
         "lat": -111.32165328149,
         "lng": 208.17040344819,
-        "comment": "Keystone.guru: Only if you jump down",
+        "comment": "Keystone.guru: Jump down on the cogwheel. At own risk.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 204,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -177.38620442442,
+        "lng": 305.2274235810313,
+        "comment": "Many Caverndeep Ambushers will spawn upon activation of the event.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 204,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -125.20812069467678,
+        "lng": 203.39140248166245,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 204,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -141.81423125412908,
+        "lng": 193.01703151655846,
+        "comment": "Box of Assorted Parts",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 204,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -69.75286388410194,
+        "lng": 256.92123499276863,
+        "comment": "First punchcard is acquired from enemies outside of the instance. Then, a punch machine is available outside of the instance as well. The remaining punchcards are in the instance.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
