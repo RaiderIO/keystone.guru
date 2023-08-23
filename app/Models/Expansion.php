@@ -86,7 +86,7 @@ class Expansion extends CacheModel
      */
     public function dungeons(): HasMany
     {
-        return $this->hasMany(Dungeon::class);
+        return $this->hasMany(Dungeon::class)->orderBy('name');
     }
 
     /**
