@@ -67,6 +67,7 @@ class ViewService implements ViewServiceInterface
 
             $activeDungeonsByExpansionId = $dungeonsSelectQuery
                 ->where('expansions.active', true)
+                ->where('dungeons.active', true)
                 ->get();
 
             $currentExpansion = $this->expansionService->getCurrentExpansion();
