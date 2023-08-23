@@ -935,6 +935,10 @@ html, body, #map, #app, .wrapper {
     border: 3px dashed #ff9900;
 }
 
+.rare {
+    border: 3px dashed #C4E8DA;
+}
+
 .inspiring {
     border: 3px solid #ffd500;
 }
