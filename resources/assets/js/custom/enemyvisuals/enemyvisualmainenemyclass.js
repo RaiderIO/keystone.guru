@@ -47,7 +47,7 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
     _updateIconName() {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
-            if (npc.classification_id >= 3) {
+            if (npc.classification_id >= NPC_CLASSIFICATION_ID_BOSS) {
                 this.iconName = 'boss';
             } else {
                 // Enchanted Emissary
