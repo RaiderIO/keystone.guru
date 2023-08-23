@@ -9156,7 +9156,7 @@
                 "name": "dungeons.classic.wailing_caverns.floors.wailing_caverns",
                 "default": 1,
                 "min_enemy_size": null,
-                "max_enemy_size": null,
+                "max_enemy_size": 22,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": 374.17,
