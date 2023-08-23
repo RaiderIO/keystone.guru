@@ -7579,7 +7579,7 @@
                 "name": "dungeons.classic.blackfathom_deeps.floors.the_pool_of_ask_ar",
                 "default": 1,
                 "min_enemy_size": null,
-                "max_enemy_size": null,
+                "max_enemy_size": 22,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": -677.147,
@@ -7590,7 +7590,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 578,
+                        "id": 713,
                         "floor1_id": 191,
                         "floor2_id": 192,
                         "direction": "down"
@@ -7607,7 +7607,7 @@
                 "name": "dungeons.classic.blackfathom_deeps.floors.moonshrine_sanctum",
                 "default": 0,
                 "min_enemy_size": null,
-                "max_enemy_size": null,
+                "max_enemy_size": 22,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": -927.147,
@@ -7618,13 +7618,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 581,
+                        "id": 714,
                         "floor1_id": 192,
                         "floor2_id": 191,
                         "direction": "up"
                     },
                     {
-                        "id": 582,
+                        "id": 715,
                         "floor1_id": 192,
                         "floor2_id": 193,
                         "direction": "right"
@@ -7738,7 +7738,7 @@
                 "ui_map_id": 291,
                 "name": "dungeons.classic.deadmines.floors.the_deadmines",
                 "default": 1,
-                "min_enemy_size": null,
+                "min_enemy_size": 16,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
@@ -7750,7 +7750,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 583,
+                        "id": 716,
                         "floor1_id": 196,
                         "floor2_id": 197,
                         "direction": "up"
@@ -7766,7 +7766,7 @@
                 "ui_map_id": 292,
                 "name": "dungeons.classic.deadmines.floors.ironclad_cove",
                 "default": 0,
-                "min_enemy_size": null,
+                "min_enemy_size": 16,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
@@ -7778,7 +7778,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 585,
+                        "id": 717,
                         "floor1_id": 197,
                         "floor2_id": 196,
                         "direction": "up"
@@ -8356,7 +8356,7 @@
                 "ui_map_id": 213,
                 "name": "dungeons.classic.ragefire_chasm.floors.ragefire_chasm",
                 "default": 1,
-                "min_enemy_size": null,
+                "min_enemy_size": 16,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
@@ -8462,7 +8462,7 @@
                 "name": "dungeons.classic.scarlet_monastery_armory.floors.armory",
                 "default": 1,
                 "min_enemy_size": null,
-                "max_enemy_size": null,
+                "max_enemy_size": 22,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": 1616.85,
@@ -8497,7 +8497,7 @@
                 "name": "dungeons.classic.scarlet_monastery_cathedral.floors.cathedral",
                 "default": 1,
                 "min_enemy_size": null,
-                "max_enemy_size": null,
+                "max_enemy_size": 20,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": 93.9,
@@ -8566,8 +8566,8 @@
                 "ui_map_id": 305,
                 "name": "dungeons.classic.scarlet_monastery_library.floors.library",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 16,
+                "max_enemy_size": 24,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": 812.42,
@@ -8801,7 +8801,7 @@
                 "ui_map_id": 313,
                 "name": "dungeons.classic.shadowfang_keep.floors.lower_observatory",
                 "default": 0,
-                "min_enemy_size": null,
+                "min_enemy_size": 18,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
@@ -8813,13 +8813,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 707,
+                        "id": 718,
                         "floor1_id": 230,
                         "floor2_id": 229,
                         "direction": "down"
                     },
                     {
-                        "id": 708,
+                        "id": 719,
                         "floor1_id": 230,
                         "floor2_id": 231,
                         "direction": "up"
@@ -8869,7 +8869,7 @@
                 "ui_map_id": 315,
                 "name": "dungeons.classic.shadowfang_keep.floors.lord_godfreys_chamber",
                 "default": 0,
-                "min_enemy_size": null,
+                "min_enemy_size": 18,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
@@ -8881,7 +8881,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 712,
+                        "id": 720,
                         "floor1_id": 232,
                         "floor2_id": 231,
                         "direction": "down"
@@ -9015,8 +9015,8 @@
                 "ui_map_id": 225,
                 "name": "dungeons.classic.the_stockade.floors.the_stockade",
                 "default": 1,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 16,
+                "max_enemy_size": 22,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
                 "ingame_min_x": -31.46,
