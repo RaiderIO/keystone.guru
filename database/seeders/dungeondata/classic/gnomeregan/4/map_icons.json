@@ -1,1 +1,54 @@
-[]
+[
+    {
+        "mapping_version_id": 198,
+        "floor_id": 207,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 48,
+        "lat": -214.00023273418677,
+        "lng": 254.1667217467123,
+        "comment": "Matrix Punchograph 3005-D",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 207,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 48,
+        "lat": -223.5625,
+        "lng": 241.65625,
+        "comment": "Matrix Punchograph 3005-D",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 207,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 48,
+        "lat": -221.3125,
+        "lng": 239.75,
+        "comment": "Matrix Punchograph 3005-D",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 198,
+        "floor_id": 207,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -115.37239103001464,
+        "lng": 111.35194678752502,
+        "comment": "The Final Chamber",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
