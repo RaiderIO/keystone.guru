@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
 
         // Seeders which don't depend on anything else
         $this->call(GameServerRegionsSeeder::class);
+        $this->call(GameVersionsSeeder::class);
         $this->call(ExpansionsSeeder::class);
         $this->call(RouteAttributesSeeder::class);
         $this->call(PatreonBenefitsSeeder::class);

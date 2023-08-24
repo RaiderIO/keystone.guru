@@ -101,6 +101,7 @@ $navs[route('misc.affixes')] = [
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
+                @include('common.layout.navgameversions')
                 @include('vendor.language.flags')
                 @include('common.layout.navuser')
                 @include('common.layout.navthemeswitch')

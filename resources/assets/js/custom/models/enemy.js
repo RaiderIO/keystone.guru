@@ -689,7 +689,7 @@ class Enemy extends VersionableMapObject {
                     enemy_forces: 0,
                     enemy_forces_teeming: null
                 };
-                
+
                 console.error(`Unable to find enemy forces for ${this.npc_id}, assuming 0! Insert manually in the database.`);
             }
 
@@ -709,7 +709,6 @@ class Enemy extends VersionableMapObject {
      */
     setEnemyPatrol(enemyPatrol) {
         if (this.enemyPatrol !== null) {
-            console.log(`Removing from enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
             this.enemyPatrol.removeEnemy(this);
         }
 
@@ -717,7 +716,6 @@ class Enemy extends VersionableMapObject {
         this.enemy_patrol_id = null;
 
         if (this.enemyPatrol !== null) {
-            console.log(`Setting enemy patrol`, this.enemyPatrol.id, this.enemyPatrol);
             this.enemyPatrol.addEnemy(this);
             this.enemy_patrol_id = enemyPatrol.id;
         }
