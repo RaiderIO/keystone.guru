@@ -14,8 +14,15 @@ use Illuminate\Support\Collection;
 
 abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
 {
+    private const IGNORE_MAP_IDS = [
+        // Northern Barrens
+        1,
+    ];
+
     // @TODO should be removed when all floor map UIs have been resolved for all existing dungeons
     private const IGNORE_FLOOR_MAP_UI_IDS = [
+        // Wailing Caverns
+        11,
         // Pandaria
         424,
         // Draenor
@@ -44,7 +51,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int $lineNr
+     * @param int       $lineNr
      *
      * @return bool
      * @throws FloorNotSupportedException
@@ -54,7 +61,13 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     {
         // Zone changes yes please
         if ($combatLogEvent instanceof ZoneChange) {
-            $this->resultEvents->push((new ZoneChangeResultEvent($combatLogEvent)));
+            try {
+                $this->resultEvents->push((new ZoneChangeResultEvent($combatLogEvent)));
+            } catch (DungeonNotSupportedException $e) {
+                if (!in_array($combatLogEvent->getZoneId(), self::IGNORE_MAP_IDS)) {
+                    throw $e;
+                }
+            }
 
             return true;
         }

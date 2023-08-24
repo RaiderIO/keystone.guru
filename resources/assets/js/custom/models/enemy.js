@@ -938,9 +938,18 @@ class Enemy extends VersionableMapObject {
      *
      * @returns {boolean}
      */
+    isRareNpc() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.npc !== null && this.npc.classification_id === NPC_CLASSIFICATION_ID_RARE;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isBossNpc() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.npc !== null && this.npc.classification_id >= 3;
+        return this.npc !== null && this.npc.classification_id >= NPC_CLASSIFICATION_ID_BOSS;
     }
 
     /**

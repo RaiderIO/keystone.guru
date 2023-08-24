@@ -21,8 +21,6 @@ class CommonDungeonrouteSimulate extends InlineCode {
             $(`#simulate_${key}`).on('change', this._saveSettings.bind(this));
         }
         this._loadSettings();
-
-        //
     }
 
     /**
@@ -74,43 +72,51 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @private
+     */
+    _refreshBloodlustPerPullsPullList() {
 
         // If not filled yet, fill the bloodlust per pull selector
         let $bloodlustPerPullSelect = $('#simulate_bloodlust_per_pull');
-        // Either didn't have any options yet, or none selected. Either is a candidate for re-building the select
-        if ($bloodlustPerPullSelect.val() === null || $bloodlustPerPullSelect.val().length === 0) {
-            // Remove existing options
-            $bloodlustPerPullSelect.find('option').remove();
-            let selectedPulls = [];
+        let previouslySelectedPulls = $bloodlustPerPullSelect.val();
 
-            let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-            let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
-            let bloodlustKeys = [SPELL_BLOODLUST, SPELL_HEROISM, SPELL_FURY_OF_THE_ASPECTS, SPELL_TIME_WARP, SPELL_ANCIENT_HYSTERIA];
+        // Remove existing options
+        $bloodlustPerPullSelect.find('option').remove();
+        let selectedPulls = [];
 
-            for (let i = 0; i < sortedKillZones.length; i++) {
-                let killZone = sortedKillZones[i];
+        let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
 
-                let $option = jQuery('<option>', {
-                    value: killZone.id,
-                    text: lang.get(`messages.simulate_pull`, {'index': killZone.index})
-                });
+        for (let i = 0; i < sortedKillZones.length; i++) {
+            let killZone = sortedKillZones[i];
 
-                $bloodlustPerPullSelect.append($option);
+            let $option = jQuery('<option>', {
+                value: killZone.id,
+                text: lang.get(`messages.simulate_pull`, {'index': killZone.index})
+            });
 
-                // Determine if this pull activated Bloodlust~ spells
-                for (let index in killZone.spellIds) {
-                    let spellId = killZone.spellIds[index];
+            $bloodlustPerPullSelect.append($option);
 
-                    if (bloodlustKeys.includes(spellId)) {
-                        selectedPulls.push(killZone.id);
-                        break;
-                    }
+            // Determine if this pull activated Bloodlust~ spells
+            for (let index in killZone.spellIds) {
+                let spellId = killZone.spellIds[index];
+
+                if (BLOODLUST_SPELLS.includes(spellId)) {
+                    selectedPulls.push(killZone.id);
+                    break;
                 }
             }
+        }
 
-
+        if (previouslySelectedPulls.length === 0) {
             $bloodlustPerPullSelect.val(selectedPulls);
         }
+
+        refreshSelectPickers();
     }
 
     /**
@@ -126,6 +132,8 @@ class CommonDungeonrouteSimulate extends InlineCode {
      * @private
      */
     _simulateModalOpened() {
+        this._refreshBloodlustPerPullsPullList();
+
         if (this._initialized) {
             return;
         }

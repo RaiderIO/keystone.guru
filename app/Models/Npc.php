@@ -50,6 +50,7 @@ class Npc extends CacheModel implements MappingModelInterface
     protected $fillable = [
         'id',
         'dungeon_id',
+        'classification_id',
         'npc_type_id',
         'npc_class_id',
         'display_id',

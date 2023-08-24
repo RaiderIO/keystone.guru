@@ -25,8 +25,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
 
-            if (state.hasEnemyDangerousBorder() && npc.dangerous) {
+            if (state.hasEnemyDangerousBorder() && (npc.dangerous || this.enemyvisual.enemy.isImportant())) {
                 mainVisualInnerClasses.push('dangerous');
+                if( this.enemyvisual.enemy.isRareNpc() ) {
+                    mainVisualInnerClasses.push('rare');
+                }
             } else if (this.enemyvisual.enemy.isAwakenedNpc()) {
                 mainVisualInnerClasses.push('awakened');
             }

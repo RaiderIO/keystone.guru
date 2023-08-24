@@ -9,6 +9,8 @@ class AdminEnemy extends Enemy {
         // Init to an empty value
         this.enemy_pack_id = null;
         this.enemy_patrol_id = null;
+        /** @type {AdminEnemyPatrol|null} May be set when loaded from server */
+        this.enemyPatrol = null;
         // Filled when we're currently drawing a patrol line
         this.currentPatrolPolyline = null;
 
@@ -374,7 +376,7 @@ class AdminEnemy extends Enemy {
                 let packBuddies = self.getPackBuddies();
                 for (let index in packBuddies) {
                     let packBuddyEnemy = packBuddies[index];
-                    packBuddyEnemy.setEnemyPatrol(enemyPatrol.id === packBuddyEnemy.enemy_patrol_id ? null : enemyPatrol);
+                    packBuddyEnemy.setEnemyPatrol(self.enemyPatrol);
                     packBuddyEnemy.save();
                 }
 
@@ -451,6 +453,15 @@ class AdminEnemy extends Enemy {
             this.layer.bindTooltip(template(data), {
                 direction: 'top'
             });
+        }
+    }
+
+    localDelete(massDelete = false) {
+        super.localDelete(massDelete);
+
+        if (this.enemyPatrol !== null) {
+            this.enemyPatrol.removeEnemy(this);
+            this.enemyPatrol.redrawConnectionsToEnemies();
         }
     }
 

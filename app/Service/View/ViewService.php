@@ -60,14 +60,15 @@ class ViewService implements ViewServiceInterface
 
             $dungeonsSelectQuery = Dungeon::select('dungeons.*')
                 ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                ->where('expansions.active', true)
                 ->orderByRaw('expansions.released_at DESC, dungeons.name');
 
             $allDungeonsByExpansionId = $dungeonsSelectQuery
                 ->get();
 
-            $activeDungeonsByExpansionId = $allDungeonsByExpansionId
-                ->where('active', true);
+            $activeDungeonsByExpansionId = $dungeonsSelectQuery
+                ->where('expansions.active', true)
+                ->where('dungeons.active', true)
+                ->get();
 
             $currentExpansion = $this->expansionService->getCurrentExpansion();
             $currentSeason    = $currentExpansion->currentSeason;

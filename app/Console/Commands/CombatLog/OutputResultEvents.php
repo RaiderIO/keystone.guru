@@ -39,7 +39,7 @@ class OutputResultEvents extends BaseCombatLogCommand
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
             if (!str_contains($filePath, '.zip')) {
-                $this->comment(sprintf('Skipping file %s', $filePath));
+                $this->comment(sprintf('Skipping file %s (not a .zip file)', $filePath));
 
                 return 0;
             }

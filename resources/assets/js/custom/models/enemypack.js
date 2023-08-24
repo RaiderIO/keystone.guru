@@ -24,6 +24,7 @@ class EnemyPack extends VersionableMapObject {
     constructor(map, layer) {
         super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
 
+        this.group = null;
         this.label = 'Enemy pack';
 
         this.rawEnemies = [];
@@ -62,6 +63,7 @@ class EnemyPack extends VersionableMapObject {
             new Attribute({
                 name: 'group',
                 type: 'int',
+                default: null
             }),
             new Attribute({
                 name: 'color',
@@ -204,7 +206,7 @@ class EnemyPack extends VersionableMapObject {
 
                     result = L.polygon(hullPoints, c.map.enemypack.polygonOptions);
                     result.off('click').on('click', function () {
-                        
+
                     });
                 } catch (error) {
                     // Not particularly interesting to spam the console with
@@ -249,7 +251,7 @@ class EnemyPack extends VersionableMapObject {
         if (this.layer !== null) {
             let displayText = '';
 
-            if (this.group !== null) {
+            if (typeof this.group !== 'undefined' && this.group !== null) {
                 displayText += `G${this.group}: `;
             }
 

@@ -3,8 +3,9 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
+use App\Logic\Structs\IngameXY;
+use App\Logic\Structs\LatLng;
 use App\Logic\Utils\MathUtils;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
@@ -16,6 +17,7 @@ use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
+use App\Service\CombatLog\Models\ClosestEnemy;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -28,6 +30,17 @@ abstract class DungeonRouteBuilder
 
     /** @var int The average HP of the current pull before we consider new enemies as part of a new pull */
     protected const CHAIN_PULL_DETECTION_HP_PERCENT = 30;
+
+    /** @var float Value between 0..1 for how much the distance between enemies matters vrs distance of previous pull */
+    private const ENEMY_DISTANCE_WEIGHT_RATIO = 0.75;
+
+    /**
+     * @var int If the last pull was this many yards away, cap the distance since you've just skipped a lot of enemies.
+     *          Leaving this uncapped may cause more problems, the enemy distance should be more leading. This will just
+     *          be a nudge to help with the correct direction instead of a massively stretchy elastic band pulling you
+     *          wayyyyyy back to the packs you have just skipped.
+     */
+    private const ENEMY_LAST_PULL_DISTANCE_CAP_YARDS = 100;
 
     protected DungeonRoute $dungeonRoute;
 
@@ -85,7 +98,7 @@ abstract class DungeonRouteBuilder
     /**
      * @return void
      */
-    protected function recalculateEnemyForcesOnDungeonRoute()
+    protected function buildFinished()
     {
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
@@ -95,6 +108,7 @@ abstract class DungeonRouteBuilder
 
     /**
      * @param ActivePull $activePull
+     *
      * @return KillZone
      */
     protected function createPull(ActivePull $activePull): KillZone
@@ -153,24 +167,28 @@ abstract class DungeonRouteBuilder
                 $this->killZoneIndex++;
                 $enemyCount = $killZoneEnemiesAttributes->count();
                 $this->log->createPullInsertedEnemies($enemyCount);
+
+                // Assign spells to the pull
+                $killZoneSpellsAttributes = collect();
+                foreach ($activePull->getSpellsCast() as $spellId) {
+                    $killZoneSpellsAttributes->push([
+                        'kill_zone_id' => $killZone->id,
+                        'spell_id'     => $spellId,
+                    ]);
+                }
+
+                if ($killZoneSpellsAttributes->isNotEmpty()) {
+                    KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
+                    $spellCount = $killZoneSpellsAttributes->count();
+                    $this->log->createPullSpellsAttachedToKillZone($spellCount);
+                }
+
+                // Write the killzone back to the dungeon route
+                $this->dungeonRoute->setRelation('killZones', $this->dungeonRoute->killZones->push($killZone));
             } else {
+                // No enemies were inserted for this pull, so it's worthless. Delete it
                 $killZone->delete();
                 $this->log->createPullNoEnemiesPullDeleted();
-            }
-
-            // Assign spells to the pull
-            $killZoneSpellsAttributes = collect();
-            foreach ($activePull->getSpellsCast() as $spellId) {
-                $killZoneSpellsAttributes->push([
-                    'kill_zone_id' => $killZone->id,
-                    'spell_id'     => $spellId,
-                ]);
-            }
-
-            if ($killZoneSpellsAttributes->isNotEmpty()) {
-                KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
-                $spellCount = $killZoneSpellsAttributes->count();
-                $this->log->createPullSpellsAttachedToKillZone($spellCount);
             }
         } finally {
             $this->log->createPullEnd();
@@ -195,21 +213,35 @@ abstract class DungeonRouteBuilder
                 $activePullEnemy->getNpcId(), self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()]
             );
             $npcId = self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()];
+        } else {
+            $npcId = $activePullEnemy->getNpcId();
+        }
+
+        /** @var LatLng|null $previousPullLatLng */
+        $previousPullLatLng = null;
+        /** @var KillZone $previousPull */
+        $previousPull = $this->dungeonRoute->killZones->last();
+        if ($previousPull !== null) {
+            $previousPullLatLng = LatLng::fromArray(
+                $previousPull->getKillLocation(true),
+                $previousPull->getDominantFloor(true)
+            );
         }
 
         try {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
-                $activePullEnemy->getNpcId(), $activePullEnemy->getX(), $activePullEnemy->getY(), $preferredGroups->toArray()
+                $npcId, $activePullEnemy->getX(), $activePullEnemy->getY(),
+                optional($previousPullLatLng)->getLat(),
+                optional($previousPullLatLng)->getLng(),
+                $preferredGroups->toArray()
             );
 
             // Find the closest Enemy with the same NPC ID that is not killed yet
-            $closestEnemyDistance = 99999999999;
-            /** @var Enemy|null $closestEnemy */
-            $closestEnemy = null;
+            $closestEnemy = new ClosestEnemy();
 
             /** @var Collection|Enemy[] $filteredEnemies */
-            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($activePullEnemy) {
-                if ($availableEnemy->npc_id !== $activePullEnemy->getNpcId()) {
+            $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($activePullEnemy, $npcId) {
+                if ($availableEnemy->npc_id !== $npcId) {
                     return false;
                 }
 
@@ -241,67 +273,95 @@ abstract class DungeonRouteBuilder
             });
 
             if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
-                $this->findClosestEnemyAndDistanceFromList($preferredEnemiesInEngagedGroups, $activePullEnemy, $closestEnemyDistance, $closestEnemy);
+                $this->findClosestEnemyAndDistanceFromList(
+                    $preferredEnemiesInEngagedGroups,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy
+                );
             }
 
             // If we found an enemy in one of our preferred packs, we must not continue searching
-            if ($closestEnemy !== null) {
+            if ($closestEnemy->getEnemy() !== null) {
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
-                    $closestEnemy->id, $closestEnemyDistance, $closestEnemy->enemyPack->group
+                    $closestEnemy->getEnemy()->id,
+                    $closestEnemy->getDistanceBetweenEnemies(),
+                    $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
+                    $closestEnemy->getEnemy()->enemyPack->group
                 );
             } else {
-                $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $activePullEnemy, $closestEnemyDistance, $closestEnemy);
+                $this->findClosestEnemyAndDistanceFromList(
+                    $filteredEnemies,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy
+                );
 
                 // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
-                if ($closestEnemyDistance > $this->currentFloor->enemy_engagement_max_range_patrols) {
-                    $this->findClosestEnemyAndDistanceFromList($filteredEnemies, $activePullEnemy, $closestEnemyDistance, $closestEnemy, true);
+                if ($closestEnemy->getDistanceBetweenEnemies() > $this->currentFloor->enemy_engagement_max_range_patrols) {
+                    $this->findClosestEnemyAndDistanceFromList(
+                        $filteredEnemies,
+                        $activePullEnemy,
+                        $previousPullLatLng,
+                        $closestEnemy,
+                        true
+                    );
                 }
 
-                if ($closestEnemy === null) {
+                if ($closestEnemy->getEnemy() === null) {
                     $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                        optional($closestEnemy)->id, $closestEnemyDistance
+                        optional($closestEnemy)->id,
+                        $closestEnemy->getDistanceBetweenEnemies(),
+                        $closestEnemy->getDistanceBetweenLastPullAndEnemy()
                     );
-                } else if ($closestEnemyDistance > $this->currentFloor->enemy_engagement_max_range) {
-                    if ($closestEnemy->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                } else if ($closestEnemy->getDistanceBetweenEnemies() > $this->currentFloor->enemy_engagement_max_range) {
+                    if ($closestEnemy->getEnemy()->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                         $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
                     } else {
                         $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
-                            $closestEnemy->id, $closestEnemyDistance, $this->currentFloor->enemy_engagement_max_range
+                            $closestEnemy->getEnemy()->id,
+                            $closestEnemy->getDistanceBetweenEnemies(),
+                            $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
+                            $this->currentFloor->enemy_engagement_max_range
                         );
                         $closestEnemy = null;
                     }
                 }
             }
 
-            if ($closestEnemy !== null) {
+            if ($closestEnemy->getEnemy() !== null) {
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
-                    $closestEnemy->id, $closestEnemyDistance
+                    $closestEnemy->getEnemy()->id,
+                    $closestEnemy->getDistanceBetweenEnemies(),
+                    $closestEnemy->getDistanceBetweenLastPullAndEnemy()
                 );
 
-                $this->availableEnemies->forget($closestEnemy->id);
+                $this->availableEnemies->forget($closestEnemy->getEnemy()->id);
             }
         } finally {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationEnd();
         }
 
-        return $closestEnemy;
+        return $closestEnemy->getEnemy();
     }
 
     /**
      * @param Collection      $enemies
      * @param ActivePullEnemy $enemy
-     * @param float           $closestEnemyDistance
-     * @param Enemy|null      $closestEnemy
+     * @param LatLng|null     $previousPullLatLng
+     * @param ClosestEnemy    $closestEnemy
      * @param bool            $considerPatrols
+     *
      * @return bool
      */
     private function findClosestEnemyAndDistanceFromList(
         Collection      $enemies,
         ActivePullEnemy $enemy,
-        float           &$closestEnemyDistance,
-        ?Enemy          &$closestEnemy,
+        ?LatLng         $previousPullLatLng,
+        ClosestEnemy    $closestEnemy,
         bool            $considerPatrols = false
-    ): bool {
+    ): bool
+    {
         $result = false;
 
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
@@ -323,20 +383,14 @@ abstract class DungeonRouteBuilder
                     }
 
                     // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
-                    $points   = [];
-                    $vertices = json_decode($availableEnemy->enemyPatrol->polyline->vertices_json, true);
-                    foreach ($vertices as $vertex) {
-                        $points[] = $vertex;
-                    }
+                    $vertices = $availableEnemy->enemyPatrol->polyline->getDecodedLatLngs();
 
-                    foreach ($points as $pointLatLng) {
+                    foreach ($vertices as $latLng) {
                         $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
                             $availableEnemy,
-                            $pointLatLng['lat'],
-                            $pointLatLng['lng'],
-                            $enemy->getX(),
-                            $enemy->getY(),
-                            $closestEnemyDistance,
+                            $latLng,
+                            $previousPullLatLng,
+                            $enemy->getIngameXY(),
                             $closestEnemy
                         );
                         $result               = $result || $foundNewClosestEnemy;
@@ -344,11 +398,9 @@ abstract class DungeonRouteBuilder
                 } else {
                     $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
                         $availableEnemy,
-                        $availableEnemy->lat,
-                        $availableEnemy->lng,
-                        $enemy->getX(),
-                        $enemy->getY(),
-                        $closestEnemyDistance,
+                        $availableEnemy->getLatLng(),
+                        $previousPullLatLng,
+                        $enemy->getIngameXY(),
                         $closestEnemy
                     );
                     $result               = $result || $foundNewClosestEnemy;
@@ -362,47 +414,73 @@ abstract class DungeonRouteBuilder
             }
         }
 
-        $this->log->findClosestEnemyAndDistanceFromListResult(optional($closestEnemy)->id, $closestEnemyDistance);
+        $this->log->findClosestEnemyAndDistanceFromListResult(
+            optional($closestEnemy->getEnemy())->id,
+            $closestEnemy->getDistanceBetweenEnemies(),
+            $closestEnemy->getDistanceBetweenLastPullAndEnemy()
+        );
 
         return $result;
     }
 
     /**
-     * @param Enemy      $availableEnemy
-     * @param float      $enemyLat
-     * @param float      $enemyLng
-     * @param float      $ingameX
-     * @param float      $ingameY
-     * @param float      $closestEnemyDistance
-     * @param Enemy|null $closestEnemy
+     * @param Enemy        $availableEnemy
+     * @param LatLng       $enemyLatLng
+     * @param LatLng|null  $previousPullLatLng
+     * @param IngameXY     $targetIngameXY
+     * @param ClosestEnemy $closestEnemy
      *
      * @return bool True if an enemy close enough was found
      */
     private function findClosestEnemyAndDistance(
-        Enemy  $availableEnemy,
-        float  $enemyLat,
-        float  $enemyLng,
-        float  $ingameX,
-        float  $ingameY,
-        float  &$closestEnemyDistance,
-        ?Enemy &$closestEnemy
-    ): bool {
+        Enemy        $availableEnemy,
+        LatLng       $enemyLatLng,
+        ?LatLng      $previousPullLatLng,
+        IngameXY     $targetIngameXY,
+        ClosestEnemy $closestEnemy
+    ): bool
+    {
         $result = false;
 
         // Always use the floor that the enemy itself is on, not $this->currentFloor
-        $enemyXY = $availableEnemy->floor->calculateIngameLocationForMapLocation($enemyLat, $enemyLng);
-
-        $distance = MathUtils::distanceBetweenPoints(
+        $enemyXY                = $availableEnemy->floor->calculateIngameLocationForMapLocation($enemyLatLng->getLat(), $enemyLatLng->getLng());
+        $distanceBetweenEnemies = MathUtils::distanceBetweenPoints(
             $enemyXY['x'],
-            $ingameX,
+            $targetIngameXY->getX(),
             $enemyXY['y'],
-            $ingameY
+            $targetIngameXY->getY(),
         );
 
-        if ($closestEnemyDistance > $distance) {
-            $closestEnemyDistance = $distance;
-            $closestEnemy         = $availableEnemy;
-            $result               = $closestEnemyDistance < $this->currentFloor->enemy_engagement_max_range;
+
+        if ($distanceBetweenEnemies < $this->currentFloor->enemy_engagement_max_range) {
+            // Calculate the location of the latLng
+            /** @var IngameXY|null $previousPullIngameXY */
+            $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?
+                null : $previousPullLatLng->getIngameXY();
+
+            $distanceBetweenPreviousPullAndEnemy = min($previousPullIngameXY === null ? 0 : MathUtils::distanceBetweenPoints(
+                $enemyXY['x'],
+                $previousPullIngameXY->getX(),
+                $enemyXY['y'],
+                $previousPullIngameXY->getY(),
+            ), self::ENEMY_LAST_PULL_DISTANCE_CAP_YARDS);
+
+            // Calculate the weighted total distance which is a combination of the distance between our event enemy
+            // and the candidate enemy, AND the candidate enemy with the kill location of the previous pull
+            $weightedTotalDistance = (
+                ($distanceBetweenEnemies * self::ENEMY_DISTANCE_WEIGHT_RATIO) +
+                ($distanceBetweenPreviousPullAndEnemy * (1 - self::ENEMY_DISTANCE_WEIGHT_RATIO))
+            );
+
+            // If a combination of these factors yields a "distance" closer than the enemy we had before, we found a "closer" enemy.
+            if ($closestEnemy->getWeightedTotalDistance() > $weightedTotalDistance) {
+                $closestEnemy->setEnemy($availableEnemy);
+                $closestEnemy->setDistanceBetweenEnemies($distanceBetweenEnemies);
+                $closestEnemy->setDistanceBetweenLastPullAndEnemy($distanceBetweenPreviousPullAndEnemy);
+                $closestEnemy->setWeightedTotalDistance($weightedTotalDistance);
+
+                $result = true;
+            }
         }
 
         return $result;

@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "mapping_version_id": 190,
+        "floor_id": 227,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -156.03181044889,
+        "lng": 270.49912170844,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 190,
+        "floor_id": 227,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -170.72529301143,
+        "lng": 216.02708438663,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 190,
+        "floor_id": 227,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -103.49890175125,
+        "lng": 111.49841846031,
+        "comment": "Large Solid Chest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

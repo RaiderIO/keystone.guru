@@ -717,12 +717,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             $spellId = Spell::SPELL_BLOODLUST;
                         } elseif ($commentLower === 'heroism') {
                             $spellId = Spell::SPELL_HEROISM;
-                        } elseif ($commentLower === 'fury of the ancients') {
+                        } elseif ($commentLower === 'fury of the aspects') {
                             $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
                         } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
                             $spellId = Spell::SPELL_TIME_WARP;
                         } elseif ($commentLower === 'ancient hysteria') {
                             $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
+                        } elseif ($commentLower === 'drums') {
+                            $spellId = Spell::SPELL_FERAL_HIDE_DRUMS;
+                        } elseif ($commentLower === 'primal rage') {
+                            $spellId = Spell::SPELL_PRIMAL_RAGE;
                         }
 
                         $newAttributes = $killZoneAttribute['spells'][] = [

@@ -370,15 +370,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer('common.dungeonroute.coverage.affixgroup', function (View $view) use ($globalViewVariables, $userOrDefaultRegion) {
-            /** @var Collection|Dungeon[] $allActiveDungeons */
-            $allActiveDungeons = $globalViewVariables['activeDungeonsByExpansionIdDesc'];
-
-            /** @var Expansion $currentExpansion */
-            $currentExpansion = $globalViewVariables['currentExpansion'];
-
-            /** @var ExpansionData $expansionsData */
-            $expansionsData = $globalViewVariables['expansionsData']->get($currentExpansion->shortname);
-
             /** @var Season $selectedSeason */
             $selectedSeason         = $globalViewVariables['currentSeason'];
             $cookieSelectedSeasonId = isset($_COOKIE['dungeonroute_coverage_season_id']) ? (int)$_COOKIE['dungeonroute_coverage_season_id'] : 0;
