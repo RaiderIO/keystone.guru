@@ -42,6 +42,8 @@ use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\GameVersion\GameVersionService;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Mapping\MappingService;
@@ -86,7 +88,6 @@ use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -118,6 +119,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
+        $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -173,8 +175,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ExpansionServiceInterface          $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService
-    )
-    {
+    ) {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyways
         if (app()->runningInConsole()) {
             return;
@@ -238,7 +239,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables) {
             $view->with('hasNewChangelog',
-                isset($_COOKIE['changelog_release']) ? $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'] : false);
+                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
+        });
+
+        view()->composer('common.layout.navgameversions', function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
         view()->composer('common.layout.navuser', function (View $view) use ($isUserAdmin) {

@@ -35,6 +35,15 @@ class GameVersion extends CacheModel
         self::GAME_VERSION_CLASSIC => 3,
     ];
 
+    /**
+     * https://stackoverflow.com/a/34485411/771270
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'key';
+    }
+
 
     /**
      * @return GameVersion Gets the default game version.

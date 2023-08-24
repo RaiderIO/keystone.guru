@@ -12,6 +12,7 @@ use App\Models\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
@@ -160,6 +161,7 @@ class ViewService implements ViewServiceInterface
                 'selectableSpellsByCategory'       => $selectableSpellsByCategory,
 
                 // Misc
+                'allGameVersions'                  => GameVersion::all(),
                 'activeExpansions'                 => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                    => $allExpansions,
                 'dungeonsByExpansionIdDesc'        => $allDungeonsByExpansionId,

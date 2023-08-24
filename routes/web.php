@@ -45,6 +45,7 @@ use App\Http\Controllers\DungeonRouteDiscoverController;
 use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\GameVersionController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
@@ -119,6 +120,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('dungeonroutes', [SiteController::class, 'dungeonroutes']);
     Route::get('search', [DungeonRouteDiscoverController::class, 'search'])->name('dungeonroutes.search');
 
+    // Game version toggle
+    Route::group(['prefix' => 'gameversion'], function () {
+        Route::get('/{gameVersion}', [GameVersionController::class, 'update'])->name('gameversion.update');
+    });
 
     // Profile routes
     Route::group(['prefix' => 'routes'], function () {

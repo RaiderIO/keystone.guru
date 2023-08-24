@@ -292,6 +292,7 @@ if (images) {
     mix.copy('resources/assets/images/external', 'public/images/external');
     mix.copy('resources/assets/images/factions', 'public/images/factions');
     mix.copy('resources/assets/images/flags', 'public/images/flags');
+    mix.copy('resources/assets/images/gameversions', 'public/images/gameversions');
     mix.copy('resources/assets/images/home', 'public/images/home');
     mix.copy('resources/assets/images/icon', 'public/images/icon');
     mix.copy('resources/assets/images/lib', 'public/images/lib');

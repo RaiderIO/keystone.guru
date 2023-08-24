@@ -80,10 +80,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
+        'game_server_region_id',
         'patreon_user_link_id',
+        'game_version_id',
         'public_key',
         'oauth_id',
-        'game_server_region_id',
         'name',
         'email',
         'echo_color',

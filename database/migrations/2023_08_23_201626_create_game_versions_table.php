@@ -18,7 +18,6 @@ class CreateGameVersionsTable extends Migration
             $table->string('key');
             $table->string('name');
             $table->string('description');
-            $table->timestamps();
         });
     }
 
