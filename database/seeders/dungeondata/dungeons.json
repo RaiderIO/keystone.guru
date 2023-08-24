@@ -2,6 +2,7 @@
     {
         "id": 1,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7855,
         "map_id": 1516,
         "mdt_id": 12,
@@ -37,6 +38,7 @@
     {
         "id": 2,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7805,
         "map_id": 1501,
         "mdt_id": 1,
@@ -243,6 +245,7 @@
     {
         "id": 3,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 8527,
         "map_id": 1677,
         "mdt_id": 2,
@@ -362,6 +365,7 @@
     {
         "id": 4,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 8079,
         "map_id": 1571,
         "mdt_id": 3,
@@ -397,6 +401,7 @@
     {
         "id": 5,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7673,
         "map_id": 1466,
         "mdt_id": 4,
@@ -432,6 +437,7 @@
     {
         "id": 6,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 8040,
         "map_id": 1456,
         "mdt_id": 5,
@@ -467,6 +473,7 @@
     {
         "id": 7,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7672,
         "map_id": 1477,
         "mdt_id": 6,
@@ -571,6 +578,7 @@
     {
         "id": 8,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 8443,
         "map_id": 1651,
         "mdt_id": 9,
@@ -825,6 +833,7 @@
     {
         "id": 9,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7812,
         "map_id": 1492,
         "mdt_id": 7,
@@ -929,6 +938,7 @@
     {
         "id": 10,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7546,
         "map_id": 1458,
         "mdt_id": 8,
@@ -964,6 +974,7 @@
     {
         "id": 11,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 8443,
         "map_id": 1651,
         "mdt_id": 10,
@@ -1238,6 +1249,7 @@
     {
         "id": 12,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 8910,
         "map_id": 1753,
         "mdt_id": 11,
@@ -1273,6 +1285,7 @@
     {
         "id": 13,
         "expansion_id": 1,
+        "game_version_id": 1,
         "zone_id": 7787,
         "map_id": 1493,
         "mdt_id": 13,
@@ -1377,6 +1390,7 @@
     {
         "id": 14,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9028,
         "map_id": 1763,
         "mdt_id": 15,
@@ -1447,6 +1461,7 @@
     {
         "id": 15,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9164,
         "map_id": 1754,
         "mdt_id": 16,
@@ -1482,6 +1497,7 @@
     {
         "id": 16,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9526,
         "map_id": 1762,
         "mdt_id": 17,
@@ -1517,6 +1533,7 @@
     {
         "id": 17,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9525,
         "map_id": 1864,
         "mdt_id": 18,
@@ -1587,6 +1604,7 @@
     {
         "id": 18,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9354,
         "map_id": 1822,
         "mdt_id": 19,
@@ -1622,6 +1640,7 @@
     {
         "id": 19,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9527,
         "map_id": 1877,
         "mdt_id": 20,
@@ -1692,6 +1711,7 @@
     {
         "id": 20,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 8064,
         "map_id": 1594,
         "mdt_id": 21,
@@ -1727,6 +1747,7 @@
     {
         "id": 21,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9391,
         "map_id": 1841,
         "mdt_id": 22,
@@ -1797,6 +1818,7 @@
     {
         "id": 22,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9327,
         "map_id": 1771,
         "mdt_id": 23,
@@ -2037,6 +2059,7 @@
     {
         "id": 23,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 9424,
         "map_id": 1862,
         "mdt_id": 24,
@@ -2209,6 +2232,7 @@
     {
         "id": 24,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 10225,
         "map_id": 2097,
         "mdt_id": 25,
@@ -2279,6 +2303,7 @@
     {
         "id": 25,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 10225,
         "map_id": 2097,
         "mdt_id": 26,
@@ -2383,6 +2408,7 @@
     {
         "id": 26,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 0,
         "mdt_id": 0,
@@ -2453,6 +2479,7 @@
     {
         "id": 27,
         "expansion_id": 2,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 0,
         "mdt_id": 0,
@@ -2488,6 +2515,7 @@
     {
         "id": 28,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 13309,
         "map_id": 2291,
         "mdt_id": 29,
@@ -2626,6 +2654,7 @@
     {
         "id": 29,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 12831,
         "map_id": 2287,
         "mdt_id": 30,
@@ -2730,6 +2759,7 @@
     {
         "id": 30,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 13334,
         "map_id": 2290,
         "mdt_id": 31,
@@ -2765,6 +2795,7 @@
     {
         "id": 31,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 13228,
         "map_id": 2289,
         "mdt_id": 32,
@@ -2835,6 +2866,7 @@
     {
         "id": 32,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 12842,
         "map_id": 2284,
         "mdt_id": 33,
@@ -2905,6 +2937,7 @@
     {
         "id": 33,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 12837,
         "map_id": 2285,
         "mdt_id": 34,
@@ -3043,6 +3076,7 @@
     {
         "id": 34,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 12916,
         "map_id": 2286,
         "mdt_id": 35,
@@ -3147,6 +3181,7 @@
     {
         "id": 35,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 12841,
         "map_id": 2293,
         "mdt_id": 36,
@@ -3325,6 +3360,7 @@
     {
         "id": 36,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 13577,
         "map_id": 2441,
         "mdt_id": 37,
@@ -3463,6 +3499,7 @@
     {
         "id": 37,
         "expansion_id": 3,
+        "game_version_id": 1,
         "zone_id": 13577,
         "map_id": 2441,
         "mdt_id": 38,
@@ -3601,6 +3638,7 @@
     {
         "id": 38,
         "expansion_id": 9,
+        "game_version_id": 1,
         "zone_id": 6912,
         "map_id": 1182,
         "mdt_id": 0,
@@ -3636,6 +3674,7 @@
     {
         "id": 39,
         "expansion_id": 9,
+        "game_version_id": 1,
         "zone_id": 6874,
         "map_id": 1175,
         "mdt_id": 0,
@@ -3671,6 +3710,7 @@
     {
         "id": 40,
         "expansion_id": 9,
+        "game_version_id": 1,
         "zone_id": 6951,
         "map_id": 1195,
         "mdt_id": 41,
@@ -3706,6 +3746,7 @@
     {
         "id": 41,
         "expansion_id": 9,
+        "game_version_id": 1,
         "zone_id": 6984,
         "map_id": 1208,
         "mdt_id": 40,
@@ -3844,6 +3885,7 @@
     {
         "id": 42,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4494,
         "map_id": 619,
         "mdt_id": 52,
@@ -3879,6 +3921,7 @@
     {
         "id": 43,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4277,
         "map_id": 601,
         "mdt_id": 53,
@@ -3983,6 +4026,7 @@
     {
         "id": 44,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4196,
         "map_id": 600,
         "mdt_id": 54,
@@ -4053,6 +4097,7 @@
     {
         "id": 45,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4416,
         "map_id": 604,
         "mdt_id": 55,
@@ -4088,6 +4133,7 @@
     {
         "id": 46,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4272,
         "map_id": 602,
         "mdt_id": 56,
@@ -4158,6 +4204,7 @@
     {
         "id": 47,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4820,
         "map_id": 668,
         "mdt_id": 57,
@@ -4193,6 +4240,7 @@
     {
         "id": 48,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4264,
         "map_id": 599,
         "mdt_id": 58,
@@ -4228,6 +4276,7 @@
     {
         "id": 49,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4813,
         "map_id": 658,
         "mdt_id": 59,
@@ -4263,6 +4312,7 @@
     {
         "id": 50,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4100,
         "map_id": 595,
         "mdt_id": 60,
@@ -4333,6 +4383,7 @@
     {
         "id": 51,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4809,
         "map_id": 632,
         "mdt_id": 61,
@@ -4368,6 +4419,7 @@
     {
         "id": 52,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4265,
         "map_id": 576,
         "mdt_id": 62,
@@ -4403,6 +4455,7 @@
     {
         "id": 53,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4228,
         "map_id": 578,
         "mdt_id": 63,
@@ -4575,6 +4628,7 @@
     {
         "id": 54,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4415,
         "map_id": 1494,
         "mdt_id": 64,
@@ -4610,6 +4664,7 @@
     {
         "id": 55,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4723,
         "map_id": 650,
         "mdt_id": 65,
@@ -4645,6 +4700,7 @@
     {
         "id": 56,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 206,
         "map_id": 574,
         "mdt_id": 66,
@@ -4749,6 +4805,7 @@
     {
         "id": 57,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 1196,
         "map_id": 575,
         "mdt_id": 67,
@@ -4819,6 +4876,7 @@
     {
         "id": 58,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4812,
         "map_id": 631,
         "mdt_id": 68,
@@ -5123,6 +5181,7 @@
     {
         "id": 59,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 2159,
         "map_id": 249,
         "mdt_id": 69,
@@ -5158,6 +5217,7 @@
     {
         "id": 60,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 3456,
         "map_id": 533,
         "mdt_id": 70,
@@ -5757,6 +5817,7 @@
     {
         "id": 61,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4722,
         "map_id": 649,
         "mdt_id": 71,
@@ -5813,6 +5874,7 @@
     {
         "id": 62,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4500,
         "map_id": 616,
         "mdt_id": 72,
@@ -5848,6 +5910,7 @@
     {
         "id": 63,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4493,
         "map_id": 615,
         "mdt_id": 73,
@@ -5883,6 +5946,7 @@
     {
         "id": 64,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4987,
         "map_id": 724,
         "mdt_id": 74,
@@ -5918,6 +5982,7 @@
     {
         "id": 65,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4273,
         "map_id": 603,
         "mdt_id": 75,
@@ -6692,6 +6757,7 @@
     {
         "id": 66,
         "expansion_id": 6,
+        "game_version_id": 2,
         "zone_id": 4603,
         "map_id": 624,
         "mdt_id": 76,
@@ -6727,6 +6793,7 @@
     {
         "id": 67,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2526,
         "mdt_id": 45,
@@ -6831,6 +6898,7 @@
     {
         "id": 68,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 13991,
         "map_id": 2520,
         "mdt_id": 48,
@@ -6901,6 +6969,7 @@
     {
         "id": 69,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2527,
         "mdt_id": 49,
@@ -6971,6 +7040,7 @@
     {
         "id": 70,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 14011,
         "map_id": 2519,
         "mdt_id": 50,
@@ -7041,6 +7111,7 @@
     {
         "id": 71,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2516,
         "mdt_id": 43,
@@ -7076,6 +7147,7 @@
     {
         "id": 72,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2521,
         "mdt_id": 42,
@@ -7146,6 +7218,7 @@
     {
         "id": 73,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 13954,
         "map_id": 2515,
         "mdt_id": 44,
@@ -7318,6 +7391,7 @@
     {
         "id": 74,
         "expansion_id": 10,
+        "game_version_id": 1,
         "zone_id": 13968,
         "map_id": 2451,
         "mdt_id": 51,
@@ -7388,6 +7462,7 @@
     {
         "id": 75,
         "expansion_id": 9,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 1176,
         "mdt_id": 46,
@@ -7492,6 +7567,7 @@
     {
         "id": 76,
         "expansion_id": 8,
+        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 960,
         "mdt_id": 47,
@@ -7527,6 +7603,7 @@
     {
         "id": 77,
         "expansion_id": 7,
+        "game_version_id": 1,
         "zone_id": 5035,
         "map_id": 657,
         "mdt_id": 77,
@@ -7562,6 +7639,7 @@
     {
         "id": 78,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 719,
         "map_id": 48,
         "mdt_id": 123,
@@ -7666,6 +7744,7 @@
     {
         "id": 79,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 1584,
         "map_id": 230,
         "mdt_id": 123,
@@ -7722,6 +7801,7 @@
     {
         "id": 80,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 1581,
         "map_id": 36,
         "mdt_id": 123,
@@ -7792,6 +7872,7 @@
     {
         "id": 81,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2557,
         "map_id": 429,
         "mdt_id": 123,
@@ -7896,6 +7977,7 @@
     {
         "id": 82,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 721,
         "map_id": 90,
         "mdt_id": 123,
@@ -8034,6 +8116,7 @@
     {
         "id": 83,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 1583,
         "map_id": 229,
         "mdt_id": 123,
@@ -8270,6 +8353,7 @@
     {
         "id": 84,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2100,
         "map_id": 349,
         "mdt_id": 123,
@@ -8340,6 +8424,7 @@
     {
         "id": 85,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2437,
         "map_id": 389,
         "mdt_id": 123,
@@ -8375,6 +8460,7 @@
     {
         "id": 86,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 722,
         "map_id": 129,
         "mdt_id": 123,
@@ -8410,6 +8496,7 @@
     {
         "id": 87,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 491,
         "map_id": 47,
         "mdt_id": 123,
@@ -8445,6 +8532,7 @@
     {
         "id": 88,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 796,
         "map_id": 189,
         "mdt_id": 123,
@@ -8480,6 +8568,7 @@
     {
         "id": 89,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 796,
         "map_id": 189,
         "mdt_id": 123,
@@ -8515,6 +8604,7 @@
     {
         "id": 90,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 796,
         "map_id": 189,
         "mdt_id": 123,
@@ -8550,6 +8640,7 @@
     {
         "id": 91,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 796,
         "map_id": 189,
         "mdt_id": 123,
@@ -8585,6 +8676,7 @@
     {
         "id": 92,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2057,
         "map_id": 289,
         "mdt_id": 123,
@@ -8683,6 +8775,7 @@
     {
         "id": 93,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 209,
         "map_id": 33,
         "mdt_id": 123,
@@ -8929,6 +9022,7 @@
     {
         "id": 94,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2017,
         "map_id": 329,
         "mdt_id": 123,
@@ -8999,6 +9093,7 @@
     {
         "id": 95,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 717,
         "map_id": 34,
         "mdt_id": 123,
@@ -9034,6 +9129,7 @@
     {
         "id": 96,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 1477,
         "map_id": 109,
         "mdt_id": 123,
@@ -9069,6 +9165,7 @@
     {
         "id": 97,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 1337,
         "map_id": 70,
         "mdt_id": 123,
@@ -9139,6 +9236,7 @@
     {
         "id": 98,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 718,
         "map_id": 43,
         "mdt_id": 123,
@@ -9174,6 +9272,7 @@
     {
         "id": 99,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 1176,
         "map_id": 209,
         "mdt_id": 123,
@@ -9209,6 +9308,7 @@
     {
         "id": 100,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2557,
         "map_id": 429,
         "mdt_id": 123,
@@ -9244,6 +9344,7 @@
     {
         "id": 101,
         "expansion_id": 4,
+        "game_version_id": 3,
         "zone_id": 2557,
         "map_id": 429,
         "mdt_id": 123,

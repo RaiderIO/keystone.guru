@@ -1,4 +1,5 @@
 <?php
+/** @var $currentUserGameVersion \App\Models\GameVersion\GameVersion */
 /** @var $allDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $allActiveDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
@@ -13,9 +14,10 @@ $required    = $required ?? true;
 $showAll     = !isset($showAll) || $showAll;
 $showSeasons = isset($showSeasons) && $showSeasons;
 // Show all dungeons if we're debugging
-$activeOnly       = $activeOnly ?? !config('app.debug');
+$activeOnly       = $activeOnly ?? true; // !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
 $selected         = $selected ?? null;
+$isRetail         = $currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VERSION_RETAIL;
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
@@ -42,10 +44,14 @@ if (!isset($dungeons)) {
         $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
     }
 
-    foreach ($seasons as $season) {
-        $dungeonsSelect[__($season->name)] = $season->dungeons->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
-            return [$id => __($name)];
-        })->toArray();
+    if ($isRetail) {
+        foreach ($seasons as $season) {
+            $dungeonsSelect[__($season->name)] = $season->dungeons
+                ->mapWithKeys(function (\App\Models\Dungeon $dungeon) {
+                    return [$dungeon->id => __($dungeon->name)];
+                })
+                ->toArray();
+        }
     }
 
     $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
@@ -56,13 +62,23 @@ $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 // Group the dungeons by expansion
 // @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
+    /** @var \Illuminate\Support\Collection $dungeonsOfExpansion */
     /** @var \App\Models\Expansion $expansion */
     $expansion = $allExpansions->where('id', $expansionId)->first();
 
     if ($expansion->active || !$activeOnly) {
-        $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansion->pluck('name', 'id')->mapWithKeys(function ($name, $id) {
-            return [$id => __($name)];
-        })->toArray();
+        $dungeonsOfExpansionFiltered = $dungeonsOfExpansion
+            ->filter(function (\App\Models\Dungeon $dungeon) use ($currentUserGameVersion) {
+                return $dungeon->game_version_id === $currentUserGameVersion->id;
+            });
+
+        // Only if there's something to display for this expansion
+        if ($dungeonsOfExpansionFiltered->isNotEmpty()) {
+            $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansionFiltered
+                ->mapWithKeys(function (\App\Models\Dungeon $dungeon) {
+                    return [$dungeon->id => __($dungeon->name)];
+                });
+        }
     }
 }
 ?>

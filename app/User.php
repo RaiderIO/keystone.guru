@@ -106,7 +106,7 @@ class User extends Authenticatable
         'initials',
     ];
 
-    protected $with = ['iconfile', 'patreonUserLink'];
+    protected $with = ['iconfile', 'patreonUserLink', 'gameVersion'];
 
     /**
      * @return string

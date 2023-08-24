@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
@@ -18,6 +19,7 @@ use Mockery\Exception;
 /**
  * @property int                                     $id               The ID of this Dungeon.
  * @property int                                     $expansion_id     The linked expansion to this dungeon.
+ * @property int                                     $game_version_id The linked game version to this dungeon.
  * @property int                                     $zone_id          The ID of the location that WoW has given this dungeon.
  * @property int                                     $map_id           The ID of the map (used internally in the game, used for simulation craft purposes)
  * @property int                                     $mdt_id           The ID that MDT has given this dungeon.
@@ -28,6 +30,7 @@ use Mockery\Exception;
  * @property boolean                                 $active           True if this dungeon is active, false if it is not.
  *
  * @property Expansion                               $expansion
+ * @property GameVersion                               $gameVersion
  *
  * @property Collection|MappingVersion[]             $mappingVersions
  * @property Collection|Floor[]                      $floors
@@ -63,9 +66,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends = ['floor_count'];
+    protected $appends  = ['floor_count'];
     protected $fillable = [
         'expansion_id',
+        'game_version_id',
         'active',
         'speedrun_enabled',
         'zone_id',
@@ -76,8 +80,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with = ['expansion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
-    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $with       = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
     // Classic
@@ -465,6 +469,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     /**

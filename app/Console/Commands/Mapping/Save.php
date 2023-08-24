@@ -125,7 +125,7 @@ class Save extends Command
         $this->info('Saving dungeons');
 
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
+        $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
             ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
             ->get();
 

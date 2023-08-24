@@ -23,7 +23,7 @@ class GameVersion extends CacheModel
     ];
     public    $timestamps = false;
 
-    private const DEFAULT_GAME_VERSION = self::GAME_VERSION_RETAIL;
+    public const DEFAULT_GAME_VERSION = self::GAME_VERSION_RETAIL;
 
     public const GAME_VERSION_RETAIL  = 'retail';
     public const GAME_VERSION_WOTLK   = 'wotlk';

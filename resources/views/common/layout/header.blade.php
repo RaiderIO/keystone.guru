@@ -1,4 +1,5 @@
 <?php
+/** @var \App\Models\GameVersion\GameVersion $currentUserGameVersion */
 /** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
 /** @var \App\Models\Season $currentSeason */
 /** @var \App\Models\Season $nextSeason */
@@ -23,14 +24,16 @@ foreach ($activeExpansions as $expansion) {
         );
 }
 
-if ($nextSeason !== null) {
-    $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
-        'text' => $nextSeason->name
+if($currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VERSION_RETAIL ) {
+    if ($nextSeason !== null) {
+        $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
+            'text' => $nextSeason->name
+        ];
+    }
+    $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
+        'text' => $currentSeason->name
     ];
 }
-$navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
-    'text' => $currentSeason->name
-];
 
 $navs[__('views/common.layout.header.expansion_routes')] = $expansionRoutes;
 

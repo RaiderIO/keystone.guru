@@ -35,6 +35,9 @@ class GameVersionService implements GameVersionServiceInterface
 
         if ($gameVersion === null) {
             $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+
+            // Make sure the cookie is set correctly
+            $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
         }
 
         return $gameVersion;
