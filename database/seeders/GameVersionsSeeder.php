@@ -25,7 +25,8 @@ class GameVersionsSeeder extends Seeder
             $gameVersionAttributes[] = [
                 'id'          => $id,
                 'key'         => $key,
-                'description' => sprintf('gameversions.%s', $key),
+                'name'        => sprintf('gameversions.%s.name', $key),
+                'description' => sprintf('gameversions.%s.description', $key),
             ];
         }
 

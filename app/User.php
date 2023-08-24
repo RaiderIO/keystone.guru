@@ -5,6 +5,7 @@ namespace App;
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
@@ -47,6 +48,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  *
  * @property PatreonUserLink           $patreonUserLink
  * @property GameServerRegion          $gameServerRegion
+ * @property GameVersion               $gameVersion
  * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
  *
  * @property boolean                   $is_admin
@@ -150,8 +152,15 @@ class User extends Authenticatable
      */
     public function gameServerRegion(): BelongsTo
     {
-        // Don't know why it won't work without the foreign key specified..
         return $this->belongsTo(GameServerRegion::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     /**
