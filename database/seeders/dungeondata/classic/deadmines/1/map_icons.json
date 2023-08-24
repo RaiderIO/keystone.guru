@@ -63,5 +63,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 196,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -144.08780610389,
+        "lng": 130.54108929071,
+        "comment": "This patrol spawns after defeating Rhahk'Zor, beware!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 196,
+        "floor_id": 196,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -210.96879960117,
+        "lng": 162.98689704257,
+        "comment": "This patrol spawns after defeating Sneed's Shredder. Beware!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
