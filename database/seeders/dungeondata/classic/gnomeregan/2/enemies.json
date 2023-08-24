@@ -312,7 +312,7 @@
         "mapping_version_id": 198,
         "enemy_pack_id": null,
         "enemy_patrol_id": null,
-        "npc_id": null,
+        "npc_id": 6329,
         "floor_id": 205,
         "mdt_id": null,
         "mdt_npc_id": null,
@@ -325,9 +325,9 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -189.24805398576,
-        "lng": 333.40969753789,
-        "kill_priority": null
+        "lat": -192.55056175638,
+        "lng": 333.3379038907,
+        "kill_priority": -1
     },
     {
         "id": 30131,
