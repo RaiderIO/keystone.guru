@@ -38,7 +38,7 @@ class ExpansionsSeeder extends Seeder
                 'color'       => '#5832a8',
                 'released_at' => Carbon::make('2020-11-24 00:00:00'),
             ]), 'expansions.classic.name'            => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_CLASSIC,
                 'color'       => '#ebbd34',
                 'released_at' => Carbon::make('2004-11-23 00:00:00'),
