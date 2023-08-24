@@ -1,1 +1,551 @@
-[]
+[
+    {
+        "public_key": "m97eKqh",
+        "clone_of": null,
+        "author_id": 1,
+        "dungeon_id": 91,
+        "mapping_version_id": 191,
+        "faction_id": 1,
+        "team_id": null,
+        "published_state_id": 3,
+        "title": "Scarlet Monastery Library",
+        "description": "",
+        "level_min": 10,
+        "level_max": 15,
+        "difficulty": "Casual",
+        "seasonal_index": 0,
+        "enemy_forces": 0,
+        "teeming": 0,
+        "demo": 1,
+        "pull_gradient": "",
+        "pull_gradient_apply_always": 0,
+        "dungeon_difficulty": null,
+        "rating": null,
+        "rating_count": 0,
+        "created_at": "2023-08-24T19:29:50+00:00",
+        "updated_at": "2023-08-24T19:29:58+00:00",
+        "playerspecializations": [],
+        "playerraces": [
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            },
+            {
+                "character_race_id": 0
+            }
+        ],
+        "playerclasses": [],
+        "routeattributesraw": [],
+        "affixgroups": [
+            {
+                "affix_group_id": 118
+            }
+        ],
+        "brushlines": [],
+        "paths": [],
+        "kill_zones": [
+            {
+                "floor_id": null,
+                "color": "#39126a",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 1,
+                "enemies": [
+                    29271,
+                    29272
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#0eb5ca",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 2,
+                "enemies": [
+                    29273,
+                    29274
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#036fa2",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 3,
+                "enemies": [
+                    29682
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#73be08",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 4,
+                "enemies": [
+                    29275,
+                    29276
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#0c5acb",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 5,
+                "enemies": [
+                    29681
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#21c619",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 6,
+                "enemies": [
+                    29280,
+                    29281
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#0d827a",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 7,
+                "enemies": [
+                    29680,
+                    29679
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fb38d3",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 8,
+                "enemies": [
+                    29285,
+                    29286
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#04b90c",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 9,
+                "enemies": [
+                    29282
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#9de762",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 10,
+                "enemies": [
+                    29287,
+                    29288
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#466701",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 11,
+                "enemies": [
+                    29291,
+                    29292
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#fbeb5b",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 12,
+                "enemies": [
+                    29283,
+                    29297
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#12220c",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 13,
+                "enemies": [
+                    29290,
+                    29289
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#ed93df",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 14,
+                "enemies": [
+                    29293,
+                    29294,
+                    29295,
+                    29296
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#830692",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 15,
+                "enemies": [
+                    29298
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#7d974a",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 16,
+                "enemies": [
+                    29299,
+                    29300
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#a4059e",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 17,
+                "enemies": [
+                    29301
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#95a20a",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 18,
+                "enemies": [
+                    29302,
+                    29303
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#955c45",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 19,
+                "enemies": [
+                    29304,
+                    29305,
+                    29306
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#888c8c",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 20,
+                "enemies": [
+                    29308,
+                    29309
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#2d52f4",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 21,
+                "enemies": [
+                    29686,
+                    29307
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#d6b38d",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 22,
+                "enemies": [
+                    29311,
+                    29312
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#37a54a",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 23,
+                "enemies": [
+                    29313,
+                    29314
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#e55eb2",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 24,
+                "enemies": [
+                    29687
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#e92e88",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 25,
+                "enemies": [
+                    29318,
+                    29319
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#8cc488",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 26,
+                "enemies": [
+                    29316,
+                    29317
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#58534b",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 27,
+                "enemies": [
+                    29320,
+                    29321
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#e1b344",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 28,
+                "enemies": [
+                    29324,
+                    29325,
+                    29326
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#2964ed",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 29,
+                "enemies": [
+                    29322,
+                    29323
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#e69699",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 30,
+                "enemies": [
+                    29327
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#958b00",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 31,
+                "enemies": [
+                    29328,
+                    29329
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#70f27c",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 32,
+                "enemies": [
+                    29330
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#015809",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 33,
+                "enemies": [
+                    29331,
+                    29688
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#95f0c9",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 34,
+                "enemies": [
+                    29332,
+                    29333
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#290683",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 35,
+                "enemies": [
+                    29334,
+                    29335,
+                    29336
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#49d041",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 36,
+                "enemies": [
+                    29337,
+                    29338
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#5e06ec",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 37,
+                "enemies": [
+                    29339,
+                    29340,
+                    29341
+                ],
+                "spells": []
+            },
+            {
+                "floor_id": null,
+                "color": "#92e3a9",
+                "description": null,
+                "lat": null,
+                "lng": null,
+                "index": 38,
+                "enemies": [
+                    29342
+                ],
+                "spells": []
+            }
+        ],
+        "enemy_raid_markers": [],
+        "prideful_enemies": [],
+        "mapicons": []
+    }
+]

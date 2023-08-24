@@ -7,7 +7,7 @@
         "mapping_version_id": 197,
         "faction_id": 1,
         "team_id": null,
-        "published_state_id": 1,
+        "published_state_id": 3,
         "title": "Blackfathom Deeps",
         "description": "",
         "level_min": 10,
@@ -23,7 +23,7 @@
         "rating": null,
         "rating_count": 0,
         "created_at": "2023-08-24T18:19:43+00:00",
-        "updated_at": "2023-08-24T18:19:43+00:00",
+        "updated_at": "2023-08-24T18:59:35+00:00",
         "playerspecializations": [],
         "playerraces": [
             {
@@ -60,9 +60,9 @@
                 "lng": null,
                 "index": 1,
                 "enemies": [
-                    30730,
+                    29864,
                     29865,
-                    29864
+                    30730
                 ],
                 "spells": []
             },
@@ -74,8 +74,8 @@
                 "lng": null,
                 "index": 2,
                 "enemies": [
-                    29867,
                     29866,
+                    29867,
                     29868,
                     29871
                 ],
@@ -89,9 +89,9 @@
                 "lng": null,
                 "index": 3,
                 "enemies": [
-                    30731,
                     30058,
-                    30059
+                    30059,
+                    30731
                 ],
                 "spells": []
             },
@@ -128,8 +128,8 @@
                 "lng": null,
                 "index": 6,
                 "enemies": [
-                    29881,
-                    29880
+                    29880,
+                    29881
                 ],
                 "spells": []
             },
@@ -154,8 +154,8 @@
                 "index": 8,
                 "enemies": [
                     29886,
-                    29888,
-                    29887
+                    29887,
+                    29888
                 ],
                 "spells": []
             },
@@ -181,8 +181,8 @@
                 "lng": null,
                 "index": 10,
                 "enemies": [
-                    29897,
-                    29893
+                    29893,
+                    29897
                 ],
                 "spells": []
             },
@@ -194,8 +194,8 @@
                 "lng": null,
                 "index": 11,
                 "enemies": [
-                    29901,
-                    29898
+                    29898,
+                    29901
                 ],
                 "spells": []
             },
@@ -233,8 +233,8 @@
                 "lng": null,
                 "index": 14,
                 "enemies": [
-                    29907,
-                    29906
+                    29906,
+                    29907
                 ],
                 "spells": []
             },
@@ -308,8 +308,8 @@
                 "lng": null,
                 "index": 20,
                 "enemies": [
-                    30065,
-                    30060
+                    30060,
+                    30065
                 ],
                 "spells": []
             },
@@ -321,9 +321,9 @@
                 "lng": null,
                 "index": 21,
                 "enemies": [
-                    30748,
                     30066,
-                    30067
+                    30067,
+                    30748
                 ],
                 "spells": []
             },
@@ -361,8 +361,8 @@
                 "lng": null,
                 "index": 24,
                 "enemies": [
-                    30068,
-                    29931
+                    29931,
+                    30068
                 ],
                 "spells": []
             },
@@ -389,8 +389,8 @@
                 "index": 26,
                 "enemies": [
                     29939,
-                    30749,
-                    29940
+                    29940,
+                    30749
                 ],
                 "spells": []
             },
@@ -558,8 +558,8 @@
                 "index": 39,
                 "enemies": [
                     29958,
-                    30752,
-                    30751
+                    30751,
+                    30752
                 ],
                 "spells": []
             },
@@ -597,8 +597,8 @@
                 "lng": null,
                 "index": 42,
                 "enemies": [
-                    29972,
-                    29971
+                    29971,
+                    29972
                 ],
                 "spells": []
             },
@@ -610,8 +610,8 @@
                 "lng": null,
                 "index": 43,
                 "enemies": [
-                    30750,
-                    29973
+                    29973,
+                    30750
                 ],
                 "spells": []
             },
@@ -700,10 +700,10 @@
                 "lng": null,
                 "index": 50,
                 "enemies": [
-                    30754,
+                    29978,
                     29979,
                     29980,
-                    29978
+                    30754
                 ],
                 "spells": []
             },
@@ -716,8 +716,8 @@
                 "index": 51,
                 "enemies": [
                     29988,
-                    29990,
-                    29989
+                    29989,
+                    29990
                 ],
                 "spells": []
             },
@@ -729,8 +729,8 @@
                 "lng": null,
                 "index": 52,
                 "enemies": [
-                    30753,
-                    29987
+                    29987,
+                    30753
                 ],
                 "spells": []
             },
@@ -862,8 +862,8 @@
                 "lng": null,
                 "index": 62,
                 "enemies": [
-                    30026,
-                    30021
+                    30021,
+                    30026
                 ],
                 "spells": []
             },
