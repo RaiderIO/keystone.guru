@@ -1983,7 +1983,7 @@
         "id": 29694,
         "mapping_version_id": 192,
         "enemy_pack_id": null,
-        "enemy_patrol_id": null,
+        "enemy_patrol_id": 1637,
         "npc_id": 4301,
         "floor_id": 220,
         "mdt_id": null,

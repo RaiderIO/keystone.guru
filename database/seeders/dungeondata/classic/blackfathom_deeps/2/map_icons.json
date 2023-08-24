@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -193.19670458106,
         "lng": 136.69510424465,
-        "comment": "Many enemies change between Reaver, Acolyte, Loreseeker.",
+        "comment": "Many enemies change between Reaver, Acolyte, Loreseeker, and Aquamancer. Aquamancers will have Elemental pets.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -151,6 +151,19 @@
         "lat": -189.31984763295,
         "lng": 214.23224320695,
         "comment": "Enemies may change between Shadowmage, Elementalist.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 197,
+        "floor_id": 192,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 40,
+        "lat": -195.4327047944344,
+        "lng": 146.02981795473613,
+        "comment": "Baron Aquanis can be spawned by Horde characters only through quest [Amongst The Ruins]",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
