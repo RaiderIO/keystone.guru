@@ -76,5 +76,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 200,
+        "floor_id": 240,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -176.72307842657167,
+        "lng": 371.87158636478534,
+        "comment": "Enemy behaviour in this area can be erratic, beware!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 200,
+        "floor_id": 240,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -119.60821621406625,
+        "lng": 116.59288303219903,
+        "comment": "Lady Anacondras can spawn in any of the 4 corners of the Screaming Gully. She will replace a Druid of the Fang in all cases.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
