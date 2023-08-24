@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -193.19670458106,
         "lng": 136.69510424465,
-        "comment": "Many enemies change between Reaver, Acolyte, Loreseeker.",
+        "comment": "Many enemies change between Reaver, Acolyte, Loreseeker, and Aquamancer. Aquamancers will have Elemental pets.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
