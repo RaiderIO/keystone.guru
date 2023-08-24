@@ -22,6 +22,7 @@ use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\LocalizationSync;
+use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
@@ -103,6 +104,7 @@ class Kernel extends ConsoleKernel
         LocalizationSync::class,
 
         // Mapping
+        AssignMDTIDs::class,
         MappingCommit::class,
         MappingMerge::class,
         MappingSave::class,
