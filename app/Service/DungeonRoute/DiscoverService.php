@@ -92,7 +92,7 @@ class DiscoverService extends BaseDiscoverService
             ->whereNull('dungeon_routes.expires_at')
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)')
-            ->where('dungeon_routes.demo', false)
+//            ->where('dungeon_routes.demo', false)
             ->groupBy('dungeon_routes.id');
     }
 
@@ -124,7 +124,7 @@ class DiscoverService extends BaseDiscoverService
             ->whereNull('dungeon_routes.expires_at')
             ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
                                     dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)')
-            ->where('dungeon_routes.demo', false)
+//            ->where('dungeon_routes.demo', false)
             ->orderBy('published_at', 'desc');
     }
 
