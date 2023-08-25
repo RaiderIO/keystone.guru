@@ -156,10 +156,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::group(['prefix' => 'explore'], function () {
-        Route::get('/', [DungeonExploreController::class, 'list'])->name('dungeons.explore.list');
+        Route::get('/', [DungeonExploreController::class, 'list'])->name('dungeon.explore.list');
 
         Route::group(['prefix' => '{dungeon}'], function () {
-            Route::get('/', [DungeonExploreController::class, 'viewDungeon'])->name('dungeons.explore.view');
+            Route::get('/', [DungeonExploreController::class, 'viewDungeon'])->name('dungeon.explore.view');
         });
     });
 

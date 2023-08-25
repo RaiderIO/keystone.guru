@@ -6,8 +6,19 @@
  * @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions
  * @var string                                                 $id
  * @var string                                                 $tabsId
+ * @var bool                                                   $selectable
  */
 $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
+$selectable = $selectable ?? true;
+$route = $route ?? null;
+$routeParams = $routeParams ?? [];
+$linkMapFn = function(\App\Models\Dungeon $dungeon) use($route, $routeParams) {
+    return [
+        'dungeon' => $dungeon->key,
+        'link' => route($route, array_merge($routeParams, ['dungeon' => $dungeon]))
+    ];
+};
+
 ?>
 <div id="{{ $id }}">
     <ul id="{{ $tabsId }}" class="nav nav-tabs" role="tablist">
@@ -37,9 +48,11 @@ $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $curr
                 >{{ $currentSeason->name }}</a>
             </li>
         @endif
-        <?php $index = 0; ?>
+        <?php
+        $index = 0; ?>
         @foreach($activeExpansions as $expansion)
-            <?php /** @var \App\Models\Expansion $expansion */ ?>
+                <?php
+                /** @var \App\Models\Expansion $expansion */ ?>
             @if($expansion->hasDungeonForGameVersion($currentUserGameVersion))
                 @php($active = $selectedSeasonId === null && $index === 0)
                 <li class="nav-item">
@@ -65,25 +78,44 @@ $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $curr
                      class="tab-pane fade show {{ $selectedSeasonId === $nextSeason->id ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="season-{{ $nextSeason->id }}-grid-content">
-                    @include('common.dungeon.grid', ['dungeons' => $nextSeason->dungeons, 'names' => true, 'selectable' => true])
+                    @include('common.dungeon.grid', [
+                        'dungeons' => $nextSeason->dungeons,
+                        'names' => true,
+                        'selectable' => true,
+                        'route' => $route
+                    ])
                 </div>
             @endif
             <div id="season-{{ $currentSeason->id }}-grid-content"
                  class="tab-pane fade show {{ $selectedSeasonId === $currentSeason->id ? 'active' : '' }}"
                  role="tabpanel"
                  aria-labelledby="season-{{ $currentSeason->id }}-grid-content">
-                @include('common.dungeon.grid', ['dungeons' => $currentSeason->dungeons, 'names' => true, 'selectable' => true])
+                @include('common.dungeon.grid', [
+                    'dungeons' => $currentSeason->dungeons,
+                    'names' => true,
+                    'selectable' => true,
+                    'route' => $route,
+                    'links' => $route === null ? collect() : $currentSeason->dungeons->map($linkMapFn),
+                ])
             </div>
         @endif
-        <?php $index = 0; ?>
+        <?php
+        $index = 0; ?>
         @foreach($activeExpansions as $expansion)
-                <?php /** @var \App\Models\Expansion $expansion */ ?>
+                <?php
+                /** @var \App\Models\Expansion $expansion */ ?>
             @if($expansion->hasDungeonForGameVersion($currentUserGameVersion))
                 <div id="{{ $expansion->shortname }}-grid-content"
                      class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-grid-content">
-                    @include('common.dungeon.grid', ['expansion' => $expansion, 'names' => true, 'selectable' => true])
+                    @include('common.dungeon.grid', [
+                        'expansion' => $expansion,
+                        'names' => true,
+                        'selectable' => true,
+                        'route' => $route,
+                        'links' => $route === null ? collect() : $expansion->dungeons()->active()->get()->map($linkMapFn),
+                    ])
                 </div>
                 @php($index++)
             @endif

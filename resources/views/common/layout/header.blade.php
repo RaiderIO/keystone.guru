@@ -9,7 +9,7 @@ $navs = [
         'fa'   => 'fas fa-search',
         'text' => __('views/common.layout.header.search')
     ],
-    route('dungeons.explore.list') => [
+    route('dungeon.explore.list') => [
         'fa'   => 'fas fa-compass',
         'text' => __('views/common.layout.header.explore')
     ]
