@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $key
  * @property string $name
  * @property string $description
+ * @property bool   $has_seasons
  */
 class GameVersion extends CacheModel
 {
@@ -20,6 +21,7 @@ class GameVersion extends CacheModel
         'key',
         'name',
         'description',
+        'has_seasons'
     ];
     public    $timestamps = false;
 

@@ -94,7 +94,7 @@ class ViewService implements ViewServiceInterface
             }
 
             /** @var Collection|Expansion[] $activeExpansions */
-            $activeExpansions = Expansion::active()->orderBy('released_at', 'desc')->get();
+            $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
 
             // Build a list of all valid affix groups we may select across all currently active seasons
             $allAffixGroups    = collect();

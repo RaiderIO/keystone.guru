@@ -38,6 +38,7 @@ use App\Http\Controllers\Ajax\AjaxUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
@@ -150,6 +151,15 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
                 Route::get('new', [DungeonRouteDiscoverController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
             });
+        });
+    });
+
+    // Explore dungeons (just show me the mapping but don't allow me to create routes)
+    Route::group(['prefix' => 'explore'], function () {
+        Route::get('/', [DungeonExploreController::class, 'list'])->name('dungeons.explore.list');
+
+        Route::group(['prefix' => '{dungeon}'], function () {
+            Route::get('/', [DungeonExploreController::class, 'viewDungeon'])->name('dungeons.explore.view');
         });
     });
 

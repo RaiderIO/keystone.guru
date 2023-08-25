@@ -11,6 +11,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this.limit = this.options.limit;
         this.loading = false;
         this.hasMore = true;
+        this.initialized = false;
 
         this.filters = {
             'season': new SearchFilterManualSeason(this._search.bind(this)),
@@ -53,11 +54,11 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         // Restore selected expansion tab
         if (this.filters.expansion.getValue() !== '') {
-            $(`#${this.filters.expansion.getValue()}-search-tab`).tab('show');
+            $(`#${this.filters.expansion.getValue()}-grid-tab`).tab('show');
         }
 
         // Whenever the tab is changed, apply the new filter
-        $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
 
             if (typeof expansion !== 'undefined') {
@@ -80,7 +81,16 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
-        this._selectSeason(this.options.nextSeason ?? this.options.currentSeason);
+        if (this.options.gameVersion.has_seasons) {
+            this._selectSeason(this.options.nextSeason ?? this.options.currentSeason);
+            this._selectExpansion(this.options.currentExpansion);
+        } else {
+            // Select the first tab instead
+            this._selectSeason(null);
+            this._selectExpansion($($tabs[0]).data('expansion'));
+        }
+
+        this.initialized = true;
 
         // Show some not very useful routes to get people to start using the filters
         this._search();
@@ -94,7 +104,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     _selectExpansion(expansion) {
         if (expansion !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
-            $(`#${expansion}-search-content .grid_dungeon`).addClass('selectable');
+            $(`#${expansion}-grid-content .grid_dungeon`).addClass('selectable');
 
             // Update the affix group list
             this.filters.affixgroups.options.selector = `.filter_affix.${expansion} select`;
@@ -113,7 +123,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     _selectSeason(season) {
         if (season !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
-            $(`#season-${season}-search-content .grid_dungeon`).addClass('selectable');
+            $(`#season-${season}-grid-content .grid_dungeon`).addClass('selectable');
         }
         this.filters.season.setValue(season);
 
@@ -173,6 +183,9 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     }
 
     _search(searchMore = false) {
+        if (!this.initialized) {
+            return;
+        }
         let self = this;
 
         // If we're not searching for more, we have to start over with searching and replace the entire contents

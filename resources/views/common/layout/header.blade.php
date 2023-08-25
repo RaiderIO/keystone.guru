@@ -8,6 +8,10 @@ $navs = [
     route('dungeonroutes.search') => [
         'fa'   => 'fas fa-search',
         'text' => __('views/common.layout.header.search')
+    ],
+    route('dungeons.explore.list') => [
+        'fa'   => 'fas fa-compass',
+        'text' => __('views/common.layout.header.explore')
     ]
 ];
 
@@ -94,8 +98,8 @@ $navs[route('misc.affixes')] = [
                                 {{ $headerText }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="{{ $dropdownId }}">
-                                @foreach($opts as $route => $text)
-                                    <a class="dropdown-item" href="{{ $route }}">{!! $text !!}</a>
+                                @foreach($opts as $optsKey => $text)
+                                    <a class="dropdown-item" href="{{ $optsKey }}">{!! $text !!}</a>
                                 @endforeach
                             </div>
                         </li>

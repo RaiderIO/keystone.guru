@@ -221,6 +221,7 @@ return [
             'search'                  => 'Search',
             'expansion_routes'        => 'Expansion routes',
             'routes'                  => ':expansion',
+            'explore'                 => 'Explore',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
         ],

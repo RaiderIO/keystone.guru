@@ -27,6 +27,7 @@ class GameVersionsSeeder extends Seeder
                 'key'         => $key,
                 'name'        => sprintf('gameversions.%s.name', $key),
                 'description' => sprintf('gameversions.%s.description', $key),
+                'has_seasons' => $key === GameVersion::GAME_VERSION_RETAIL,
             ];
         }
 

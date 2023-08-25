@@ -286,7 +286,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('currentExpansion', $globalViewVariables['currentExpansion']);
             $view->with('allAffixGroupsByActiveExpansion', $globalViewVariables['allAffixGroupsByActiveExpansion']);
             $view->with('featuredAffixesByActiveExpansion', $globalViewVariables['featuredAffixesByActiveExpansion']);
-            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $globalViewVariables['currentSeason']);
             $view->with('nextSeason', $globalViewVariables['nextSeason']);
         });
@@ -344,6 +343,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Dungeon grid display
+        view()->composer('common.dungeon.gridtabs', function (View $view) use ($globalViewVariables) {
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+            $view->with('currentSeason', $globalViewVariables['currentSeason']);
+            $view->with('nextSeason', $globalViewVariables['nextSeason']);
+        });
+
         view()->composer('common.dungeon.griddiscover', function (View $view) use ($globalViewVariables, $affixGroupEaseTierService) {
             /** @var AffixGroup|null $currentAffixGroup */
             $currentAffixGroup = $view->getData()['currentAffixGroup'];
