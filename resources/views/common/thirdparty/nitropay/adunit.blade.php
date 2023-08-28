@@ -11,6 +11,7 @@ $defaultReportAdPosition = [
     'header'           => 'bottom-right',
     'footer'           => 'top-right',
     'footer_map_right' => 'top-right',
+    'sidebar_map_right' => 'top-right',
 ];
 
 $reportAdPosition = $reportAdPosition ?? $defaultReportAdPosition[$type];
@@ -58,9 +59,13 @@ if ($isMobile) {
                 // Add a css class to the pulls sidebar so that we know the ads have loaded and its height can be adjusted accordingly
                 // The height will stay normal if an adblocker is enabled as a result
                 let pullsSidebar = document.getElementById(`pulls_sidebar`);
-                let existingClasses = pullsSidebar.getAttribute('class');
-                if (!existingClasses.includes('ad_loaded')) {
-                    pullsSidebar.setAttribute('class', `${existingClasses} ad_loaded`);
+                if( pullsSidebar !== null ) {
+                    let existingClasses = pullsSidebar.getAttribute('class');
+                    if (!existingClasses.includes('ad_loaded')) {
+                        pullsSidebar.setAttribute('class', `${existingClasses} ad_loaded`);
+                    }
+                } else {
+                    console.log('Cannot find pulls sidebar! Is it enabled?');
                 }
                 @endif
             } else {
@@ -105,7 +110,7 @@ if ($isMobile) {
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
                  style="min-height: 90px;"
-            @endif
+                @endif
         ></div>
         @if( $isMobile )
             <script type="text/javascript">
@@ -151,7 +156,7 @@ if ($isMobile) {
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
                  style="min-height: {{ $height }}px;"
-            @endif
+                @endif
         ></div>
 
         @if( $isMobile )
@@ -194,35 +199,66 @@ if ($isMobile) {
                 });
             </script>
         @endif
-    @elseif( $type === 'footer_map_right' && $map && !$isMobile )
-        <!-- Footer ad unit -->
-        <div id="{{ $id }}" class="ad_block_me"></div>
+    @elseif($map && !$isMobile)
+        @if( $type === 'footer_map_right' )
+            <!-- Footer ad unit -->
+            <div id="{{ $id }}" class="ad_block_me"></div>
 
-        <script type="text/javascript">
-            nitropayAdSizes['{{ $id }}'] = window.innerHeight > 1000 ? ['336', '280'] : ['300', '250'];
-            window['nitroAds'].createAd('{{ $id }}', {
-                "refreshLimit": 20,
-                "refreshTime": 60,
-                "renderVisibleOnly": false,
-                "refreshVisibleOnly": true,
-                "demo": {{$demo}},
-                "sizes": [
-                    nitropayAdSizes['{{ $id }}']
-                ],
-                "report": {
-                    "enabled": true,
-                    "wording": "Report Ad",
-                    "position": "{{ $reportAdPosition }}"
-                },
-                "mediaQuery": "(min-width: 1025px)"
-            });
+            <script type="text/javascript">
+                nitropayAdSizes['{{ $id }}'] = window.innerHeight > 1000 ? ['336', '280'] : ['300', '250'];
+                window['nitroAds'].createAd('{{ $id }}', {
+                    "refreshLimit": 20,
+                    "refreshTime": 60,
+                    "renderVisibleOnly": false,
+                    "refreshVisibleOnly": true,
+                    "demo": {{$demo}},
+                    "sizes": [
+                        nitropayAdSizes['{{ $id }}']
+                    ],
+                    "report": {
+                        "enabled": true,
+                        "wording": "Report Ad",
+                        "position": "{{ $reportAdPosition }}"
+                    },
+                    "mediaQuery": "(min-width: 1025px)"
+                });
 
-            // Bit of a hack to make the bigger ad fit properly
-            if (window.innerHeight > 1000) {
-                var adContainer = document.getElementsByClassName('map_ad_unit_footer_right')[0];
-                adContainer.style = 'width: 336px !important';
-            }
-        </script>
+                // Bit of a hack to make the bigger ad fit properly
+                if (window.innerHeight > 1000) {
+                    var adContainer = document.getElementsByClassName('map_ad_unit_footer_right')[0];
+                    adContainer.style = 'width: 336px !important';
+                }
+            </script>
+        @elseif( $type === 'sidebar_map_right' )
+            <!-- Footer ad unit -->
+            <div id="{{ $id }}" class="ad_block_me"></div>
+
+            <script type="text/javascript">
+                nitropayAdSizes['{{ $id }}'] = window.innerWidth > 1920 ? ['300', '600'] : ['160', '600'];
+                window['nitroAds'].createAd('{{ $id }}', {
+                    "refreshLimit": 20,
+                    "refreshTime": 60,
+                    "renderVisibleOnly": false,
+                    "refreshVisibleOnly": true,
+                    "demo": {{$demo}},
+                    "sizes": [
+                        nitropayAdSizes['{{ $id }}']
+                    ],
+                    "report": {
+                        "enabled": true,
+                        "wording": "Report Ad",
+                        "position": "{{ $reportAdPosition }}"
+                    },
+                    "mediaQuery": "(min-width: 1025px)"
+                });
+
+                // Bit of a hack to make the bigger ad fit properly
+                if (window.innerWidth > 1920) {
+                    var adContainer = document.getElementsByClassName('map_ad_unit_sidebar_right')[0];
+                    adContainer.style = 'width: 300px !important';
+                }
+            </script>
+        @endif
     @endif
 </div>
 

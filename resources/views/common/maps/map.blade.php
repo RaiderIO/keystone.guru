@@ -3,6 +3,7 @@
  * @var \App\User                          $user
  * @var \App\Logic\MapContext\MapContext   $mapContext
  * @var \App\Models\Dungeon                $dungeon
+ * @var \App\Models\Floor                  $floor
  * @var \App\Models\Mapping\MappingVersion $mappingVersion
  * @var \App\Models\DungeonRoute|null      $dungeonroute
  * @var \App\Models\LiveSession|null       $livesession
@@ -29,8 +30,8 @@ $mapBackgroundColor = $mapBackgroundColor ?? null;
 // Ensure default values for showing/hiding certain elements
 $show['controls']                = $show['controls'] ?? [];
 $show['controls']['enemyInfo']   = $show['controls']['enemyInfo'] ?? true;
-$show['controls']['enemyForces'] = $show['controls']['enemyForces'] ?? true;
 $show['controls']['pulls']       = $show['controls']['pulls'] ?? true;
+$show['controls']['enemyForces'] = $show['controls']['pulls'] && $show['controls']['enemyForces'] ?? true;
 $show['controls']['draw']        = $show['controls']['draw'] ?? false;
 $show['controls']['view']        = $show['controls']['view'] ?? false;
 $show['controls']['present']     = $show['controls']['present'] ?? false;
@@ -99,9 +100,6 @@ if ($isAdmin) {
     'defaultZoom' => $defaultZoom,
     'showAttribution' => $showAttribution,
     'dungeonroute' => $dungeonroute ?? null,
-    // @TODO Temp fix
-    'npcsMinHealth' => $mapContext['npcsMinHealth'],
-    'npcsMaxHealth' => $mapContext['npcsMaxHealth'],
 ], $adminOptions)])
 
 @section('scripts')
@@ -114,7 +112,7 @@ if ($isAdmin) {
         'echo' => $echo,
         'patreonBenefits' => Auth::check() ? $user->getPatreonBenefits() : collect(),
         'userData' => $user,
-        'mapContext' => $mapContext,
+        'mapContext' => $mapContext->getProperties(),
     ])
     <script>
         var dungeonMap;
@@ -129,23 +127,22 @@ if ($isAdmin) {
 
     @if($dungeon->isFactionSelectionRequired())
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
-        <div id="map_faction_display_controls" class="leaflet-draw-section">
-            <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                <a class="map_faction_display_control map_controls_custom" href="#"
-                   data-faction="{{ strtolower($faction->key) }}"
-                       title="{{ __($faction->name) }}">
-                        <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
-                           style="width: 15px"></i>
-                        <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                             data-toggle="tooltip" title="{{ __($faction->name) }}"/>
-                </a>
+            <div id="map_faction_display_controls" class="leaflet-draw-section">
+                <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
+                    @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                        <a class="map_faction_display_control map_controls_custom" href="#"
+                           data-faction="{{ strtolower($faction->key) }}"
+                           title="{{ __($faction->name) }}">
+                            <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
+                               style="width: 15px"></i>
+                            <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
+                                 data-toggle="tooltip" title="{{ __($faction->name) }}"/>
+                        </a>
 
-
-            @endforeach
+                    @endforeach
+                </div>
+                <ul class="leaflet-draw-actions"></ul>
             </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
 
 
         </script>
@@ -155,9 +152,11 @@ if ($isAdmin) {
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
         @include('common.maps.controls.header', [
-            'title' => optional($dungeonroute)->title,
             'echo' => $echo,
             'edit' => $edit,
+            'mapContext' => $mapContext,
+            'dungeon' => $dungeon,
+            'floor' => $floor,
             'dungeonroute' => $dungeonroute,
             'livesession' => $livesession,
             'mappingVersion' => $mappingVersion,
@@ -168,14 +167,14 @@ if ($isAdmin) {
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
             'floors' => $dungeon->floors()->active()->get(),
-            'selectedFloorId' => $floorId,
+            'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,
             'floors' => $dungeon->floors()->active()->get(),
-            'selectedFloorId' => $floorId,
+            'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
         ])
@@ -183,7 +182,7 @@ if ($isAdmin) {
         @include('common.maps.controls.present', [
             'isAdmin' => $isAdmin,
             'floors' => $dungeon->floors()->active()->get(),
-            'selectedFloorId' => $floorId,
+            'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
         ])
@@ -235,15 +234,21 @@ if ($isAdmin) {
         So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
         have to fight for height in the sidebar. This will only make it worse, so don't render this ad
         */ ?>
-    @if(!$adFree && $showAds && !$dungeon->speedrun_enabled)
-        <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">
-            @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
-        </footer>
+    @if(!$adFree && $showAds)
+        @if( $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore )
+            <footer class="fixed-bottom container p-0 m-0 map_ad_unit_sidebar_right">
+                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])
+            </footer>
+        @elseif(!$dungeon->speedrun_enabled)
+            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">
+                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
+            </footer>
+        @endif
     @endif
 
 
 
-    @isset($dungeonroute)
+    @if($mapContext instanceof \App\Logic\MapContext\MapContextDungeonRoute || $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore)
         @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
             @include('common.modal.userreport.dungeonroute', ['dungeonroute' => $dungeonroute])
         @endcomponent

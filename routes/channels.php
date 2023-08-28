@@ -75,7 +75,7 @@ Broadcast::channel(sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', c
     return $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB);
 });
 
-Broadcast::channel(sprintf('%s-dungeon-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {
+Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {
     $result = false;
     if ($user->hasRole('admin')) {
         $result = [

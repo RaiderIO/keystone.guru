@@ -160,6 +160,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
         Route::group(['prefix' => '{dungeon}'], function () {
             Route::get('/', [DungeonExploreController::class, 'viewDungeon'])->name('dungeon.explore.view');
+            Route::get('/{floorIndex}', [DungeonExploreController::class, 'viewDungeonFloor'])->name('dungeon.explore.view.floor');
         });
     });
 

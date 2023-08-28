@@ -115,28 +115,30 @@ class EnemyVisualMain extends EnemyVisualIcon {
     getSize() {
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
 
-        let zoomLevelOffset = getState().getMapZoomLevel() * 2;
+        let state = getState();
+        let zoomLevelOffset = state.getMapZoomLevel() * 2;
 
         // Don't do expensive calculations if we don't need to
         if (this._sizeCache.hasOwnProperty(zoomLevelOffset)) {
             return this._sizeCache[zoomLevelOffset];
         }
 
+        let mapContext = state.getMapContext();
         let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health * ((this.enemyvisual.enemy.npc.health_percentage ?? 100) / 100);
         if (this.enemyvisual.enemy.npc === null) {
-            if (!getState().isMapAdmin()) {
+            if (!state.isMapAdmin()) {
                 console.warn('Enemy has no NPC!', this.enemyvisual.enemy);
             }
         } else {
             // Special catch for all dungeon enemies
             if (this.enemyvisual.enemy.npc.dungeon_id === -1) {
-                health = (this.enemyvisual.map.options.npcsMinHealth + this.enemyvisual.map.options.npcsMaxHealth) / 2;
+                health = (mapContext.getNpcsMinHealth() + mapContext.getNpcsMaxHealth()) / 2;
             }
         }
         let calculatedSize = c.map.enemy.calculateSize(
             health,
-            this.enemyvisual.map.options.npcsMinHealth,
-            this.enemyvisual.map.options.npcsMaxHealth
+            mapContext.getNpcsMinHealth(),
+            mapContext.getNpcsMaxHealth()
         );
 
         // Smaller MDT icons to make it easier to link them

@@ -420,6 +420,8 @@ class AdminEnemy extends Enemy {
             enemyForces = 'unknown';
         }
 
+        let mapContext = getState().getMapContext();
+
         data = $.extend({}, getHandlebarsDefaultVariables(), {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
             enemy_forces: enemyForces,
@@ -429,9 +431,9 @@ class AdminEnemy extends Enemy {
             is_teeming: this.teeming === TEEMING_VISIBLE,
             id: this.id,
             size: c.map.enemy.calculateSize(
-                this.npc === null ? this.map.options.npcsMinHealth : this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100),
-                this.map.options.npcsMinHealth,
-                this.map.options.npcsMaxHealth
+                this.npc === null ? mapContext.getNpcsMinHealth() : this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100),
+                mapContext.getNpcsMinHealth(),
+                mapContext.getNpcsMaxHealth()
             ),
             faction: this.faction,
             seasonal_type: this.seasonal_type,

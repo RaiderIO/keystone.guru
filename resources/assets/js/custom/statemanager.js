@@ -54,8 +54,10 @@ class StateManager extends Signalable {
             this._mapContext = new MapContextDungeonRoute(mapContext);
         } else if (mapContext.type === 'livesession') {
             this._mapContext = new MapContextLiveSession(mapContext);
-        } else if (mapContext.type === 'dungeon') {
-            this._mapContext = new MapContextDungeon(mapContext);
+        } else if (mapContext.type === 'mappingVersionEdit') {
+            this._mapContext = new MapContextMappingVersionEdit(mapContext);
+        } else if (mapContext.type === 'dungeonExplore') {
+            this._mapContext = new MapContextDungeonExplore(mapContext);
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }
@@ -336,7 +338,7 @@ class StateManager extends Signalable {
 
     /**
      * Get the context of the map we are editing at this point.
-     * @returns {MapContextDungeon|MapContextDungeonRoute|MapContextLiveSession}
+     * @returns {MapContextMappingVersionEdit|MapContextDungeonRoute|MapContextLiveSession|MapContextDungeonExplore}
      */
     getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -522,7 +524,7 @@ class StateManager extends Signalable {
     isMapAdmin() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._mapContext.getType() === 'dungeon';
+        return this._mapContext.getType() === 'mappingVersion';
     }
 
     /**

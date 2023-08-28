@@ -775,7 +775,7 @@ class Enemy extends VersionableMapObject {
         }
 
         let mapContext = getState().getMapContext();
-        if (mapContext instanceof MapContextDungeonRoute) {
+        if (!(mapContext instanceof MapContextMappingVersionEdit)) {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
                 let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
