@@ -10,6 +10,7 @@ namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
 use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -30,10 +31,16 @@ class DungeonColumnHandler extends DatatablesColumnHandler
             if ((int)$searchValue !== -1 && !empty($searchValue)) {
                 $explode = explode('-', $searchValue);
                 if (count($explode) === 2) {
-                    $seasonId = $explode[1];
-                    // Joins need to be added to the main builder
-                    $this->getDtHandler()->getBuilder()->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
-                    $subBuilder->whereColumn('dungeon_routes.dungeon_id', '=', 'season_dungeons.dungeon_id');
+                    if ($explode[0] === 'season') {
+                        $seasonId = $explode[1];
+                        // Joins need to be added to the main builder
+                        $this->getDtHandler()->getBuilder()->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
+                        $subBuilder->whereColumn('dungeon_routes.dungeon_id', '=', 'season_dungeons.dungeon_id');
+                    } else if ($explode[0] === 'expansion') {
+                        $subBuilder->where('dungeons.expansion_id', $explode[1]);
+                    } else {
+                        throw new Exception(sprintf('Unable to find prefix %s', $explode[0]));
+                    }
                 } else {
                     $subBuilder->where('dungeon_routes.dungeon_id', $searchValue);
                 }

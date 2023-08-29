@@ -8,6 +8,7 @@
 
 <?php
 /**
+ * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
  * @var $expansion \App\Models\Expansion
  * @var $season \App\Models\Season|null
  * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
@@ -54,37 +55,39 @@
         </div>
     @endif
 
-    @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
-        'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
-        'link' => isset($season) ?
-            route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]) :
-            route('dungeonroutes.thisweek', ['expansion' => $expansion]) ,
-        'currentAffixGroup' => $currentAffixGroup,
-        'affixgroup' => $currentAffixGroup,
-        'dungeonroutes' => $dungeonroutes['thisweek'],
-        'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => true,
-    ])
+    @if($currentUserGameVersion->has_seasons)
+        @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
+            'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
+            'link' => isset($season) ?
+                route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]) :
+                route('dungeonroutes.thisweek', ['expansion' => $expansion]) ,
+            'currentAffixGroup' => $currentAffixGroup,
+            'affixgroup' => $currentAffixGroup,
+            'dungeonroutes' => $dungeonroutes['thisweek'],
+            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
+            'showDungeonImage' => true,
+        ])
 
-    @if( !$adFree && !$isMobile)
-        <div align="center" class="mt-4">
-            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-        </div>
+        @if( !$adFree && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
+
+        @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
+            'title' => __('views/dungeonroute.discover.discover.popular_by_next_affixes'),
+            'link' => isset($season) ?
+                route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]) :
+                route('dungeonroutes.nextweek', ['expansion' => $expansion]),
+            'currentAffixGroup' => $nextAffixGroup,
+            'affixgroup' => $nextAffixGroup,
+            'dungeonroutes' => $dungeonroutes['nextweek'],
+            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
+            'showDungeonImage' => true,
+        ])
     @endif
-
-    @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
-        'title' => __('views/dungeonroute.discover.discover.popular_by_next_affixes'),
-        'link' => isset($season) ?
-            route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]) :
-            route('dungeonroutes.nextweek', ['expansion' => $expansion]),
-        'currentAffixGroup' => $nextAffixGroup,
-        'affixgroup' => $nextAffixGroup,
-        'dungeonroutes' => $dungeonroutes['nextweek'],
-        'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => true,
-    ])
 
     @if( !$adFree && !$isMobile)
         <div align="center" class="mt-4">

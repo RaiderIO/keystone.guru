@@ -1,23 +1,24 @@
 <?php
-/** @var $currentUserGameVersion \App\Models\GameVersion\GameVersion */
-/** @var $allDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
-/** @var $allActiveDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
-/** @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[] */
-/** @var $siegeOfBoralus \App\Models\Dungeon */
-/** @var $currentSeason \App\Models\Season */
-/** @var $nextSeason \App\Models\Season|null */
-
-$id          = $id ?? 'dungeon_id_select';
-$name        = $name ?? 'dungeon_id';
-$label       = $label ?? __('views/common.dungeon.select.dungeon');
-$required    = $required ?? true;
-$showAll     = !isset($showAll) || $showAll;
-$showSeasons = isset($showSeasons) && $showSeasons;
+/**
+ * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
+ * @var $allDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[]
+ * @var $allActiveDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[]
+ * @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[]
+ * @var $siegeOfBoralus \App\Models\Dungeon
+ * @var $currentSeason \App\Models\Season
+ * @var $nextSeason \App\Models\Season|null
+ */
+$id             = $id ?? 'dungeon_id_select';
+$name           = $name ?? 'dungeon_id';
+$label          = $label ?? __('views/common.dungeon.select.dungeon');
+$required       = $required ?? true;
+$showAll        = !isset($showAll) || $showAll;
+$showSeasons    = isset($showSeasons) && $showSeasons && $currentUserGameVersion->has_seasons;
+$showExpansions = isset($showExpansions) && $showExpansions;
 // Show all dungeons if we're debugging
 $activeOnly       = $activeOnly ?? true; // !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
 $selected         = $selected ?? null;
-$isRetail         = $currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VERSION_RETAIL;
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
@@ -44,7 +45,23 @@ if (!isset($dungeons)) {
         $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
     }
 
-    if ($isRetail) {
+    if ($showExpansions) {
+        $validExpansions = $allExpansions->filter(function (\App\Models\Expansion $expansion) use ($currentUserGameVersion) {
+            return $expansion->hasDungeonForGameVersion($currentUserGameVersion);
+        });
+
+        foreach ($validExpansions as $expansion) {
+            $key                                                         = sprintf('expansion-%d', $expansion->id);
+            $dungeonsSelect[__('views/common.dungeon.select.all')][$key] =
+                __('views/common.dungeon.select.all_expansion_dungeons', ['expansion' => __($expansion->name)]);
+
+            if ($selected === null) {
+                $selected = $key;
+            }
+        }
+    }
+
+    if ($showSeasons) {
         foreach ($seasons as $season) {
             $dungeonsSelect[__($season->name)] = $season->dungeons
                 ->mapWithKeys(function (\App\Models\Dungeon $dungeon) {
