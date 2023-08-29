@@ -32,6 +32,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 }
             } else if (this.enemyvisual.enemy.isAwakenedNpc()) {
                 mainVisualInnerClasses.push('awakened');
+            } else if (this.enemyvisual.enemy.enemy_patrol_id !== null) {
+                mainVisualInnerClasses.push('patrol');
             }
 
             let mapContext = state.getMapContext();
@@ -97,7 +99,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
             width -= 10;
         }
         // Dangerous = less space
-        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant()) {
+        if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
             width -= 2;
             // Obsolete enemies require additional subtraction to keep it looking nice
             if (this.enemyvisual.enemy.isObsolete()) {

@@ -759,7 +759,8 @@ html, body, #map, #app, .wrapper {
 }
 
 /** Odd case where the background would otherwise be white and it'd show through the border */
-.enemy_icon.enemy_portrait.dangerous {
+.enemy_icon.enemy_portrait.dangerous,
+.enemy_icon.enemy_portrait.patrol {
     background-color: black;
 }
 
@@ -977,6 +978,10 @@ html, body, #map, #app, .wrapper {
 
 .prideful {
     border: 3px solid #ff9900;
+}
+
+.patrol {
+    border: 3px dashed #0017be;
 }
 
 .modifier_external {

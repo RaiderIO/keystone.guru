@@ -643,6 +643,20 @@ class EnemyVisual extends Signalable {
         return result;
     }
 
+    /**
+     *
+     */
+    forceMouseOver() {
+        this._mouseOver();
+    }
+
+    /**
+     *
+     */
+    forceMouseOut() {
+        this._mouseOut();
+    }
+
     // @TODO Listen to killzone selectable changed event
     refresh() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);

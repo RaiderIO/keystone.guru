@@ -206,6 +206,29 @@ class EnemyPatrol extends Polyline {
     }
 
     /**
+     *
+     */
+    onLayerInit() {
+        super.onLayerInit();
+
+        // if (this.layer !== null) {
+        //     let self = this;
+        //     this.layer.on('mouseover', function (e) {
+        //         console.log('mouseover', e);
+        //
+        //         this.highlighted = true;
+        //         self.enemies[0].visual.forceMouseOver();
+        //     });
+        //     this.layer.on('mouseout', function (e) {
+        //         console.log('mouseout', e);
+        //
+        //         self.enemies[0].visual.forceMouseOut();
+        //         this.highlighted = false;
+        //     });
+        // }
+    }
+
+    /**
      * Users cannot delete this. AdminEnemyPatrols may be deleted instead.
      * @returns {boolean}
      */
