@@ -19,7 +19,7 @@ class GameVersionService implements GameVersionServiceInterface
     {
         optional($user)->update(['game_version_id' => $gameVersion->id]);
 
-        setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '', '', true);
+        setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', '', true);
     }
 
 
@@ -37,7 +37,7 @@ class GameVersionService implements GameVersionServiceInterface
             $gameVersion = GameVersion::getUserOrDefaultGameVersion();
 
             // Make sure the cookie is set correctly
-            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '', '', true);
+            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', '', true);
         }
 
         return $gameVersion;
