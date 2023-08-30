@@ -648,12 +648,18 @@ class EnemyVisual extends Signalable {
      */
     forceMouseOver() {
         this._mouseOver();
+
+        // Jesus, take the wheel
+        this._managedBy = 999999999;
     }
 
     /**
      *
      */
     forceMouseOut() {
+        // Give the wheel back!
+        this._managedBy = this.enemy.id;
+
         this._mouseOut();
     }
 

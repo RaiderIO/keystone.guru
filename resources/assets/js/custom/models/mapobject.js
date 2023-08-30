@@ -557,6 +557,9 @@ class MapObject extends Signalable {
 
         if (this.decorator !== null) {
             this.map.leafletMap.removeLayer(this.decorator);
+
+            this.decorator = null;
+            this.signal('object:decoratorchanged', {decorator: this.decorator});
         }
     }
 
@@ -574,6 +577,8 @@ class MapObject extends Signalable {
         if (this.decorator !== null) {
             this.decorator.addTo(this.map.leafletMap);
             this._assignPopup(this.decorator);
+
+            this.signal('object:decoratorchanged', {decorator: this.decorator});
         }
     }
 
