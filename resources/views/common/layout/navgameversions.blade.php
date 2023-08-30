@@ -1,8 +1,9 @@
 <?php
-/** @var \Illuminate\Support\Collection|\App\Models\GameVersion\GameVersion[] $allGameVersions */
+/**
+ * @var \Illuminate\Support\Collection|\App\Models\GameVersion\GameVersion[] $allGameVersions
+ * @var \App\Models\GameVersion\GameVersion $currentUserGameVersion
+ */
 $user = Auth::user();
-// Default local or user locale
-$currentUserGameVersion = \App\Models\GameVersion\GameVersion::getUserOrDefaultGameVersion();
 ?>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"

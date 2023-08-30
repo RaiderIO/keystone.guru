@@ -19,6 +19,7 @@ $showExpansions = isset($showExpansions) && $showExpansions;
 $activeOnly       = $activeOnly ?? true; // !config('app.debug');
 $showSiegeWarning = $showSiegeWarning ?? false;
 $selected         = $selected ?? null;
+$dungeonsSelect = [];
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
@@ -32,7 +33,6 @@ if (!isset($dungeons)) {
     }
     $seasons[] = $currentSeason;
 
-    $dungeonsSelect = [];
     // Show a selector to only show all dungeons in a specific season
     if ($showSeasons) {
         $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [];
