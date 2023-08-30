@@ -1960,7 +1960,7 @@
     {
         "id": 30810,
         "mapping_version_id": 196,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 6171,
         "enemy_patrol_id": 1777,
         "npc_id": 634,
         "floor_id": 196,
@@ -1982,7 +1982,7 @@
     {
         "id": 30811,
         "mapping_version_id": 196,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 6171,
         "enemy_patrol_id": 1777,
         "npc_id": 1729,
         "floor_id": 196,
