@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $floor \App\Models\Floor
- * @var $mapContext \App\Logic\MapContext\MapContextDungeon
+ * @var $mapContext \App\Logic\MapContext\MapContextMappingVersion
  * @var $mappingVersion \App\Models\Mapping\MappingVersion
  */
 ?>

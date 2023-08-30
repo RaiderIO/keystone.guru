@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
 use App\Traits\UserCurrentTime;
@@ -166,6 +167,24 @@ class Expansion extends CacheModel
     public function hasTimewalkingEvent(): bool
     {
         return $this->timewalkingevent instanceof TimewalkingEvent;
+    }
+
+    /**
+     * @param GameVersion $gameVersion
+     * @return bool
+     */
+    public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
+    {
+        $result = false;
+
+        foreach ($this->dungeons as $dungeon) {
+            if ($dungeon->game_version_id === $gameVersion->id) {
+                $result = true;
+                break;
+            }
+        }
+
+        return $result;
     }
 
     /**

@@ -7,7 +7,7 @@
         "mapping_version_id": 196,
         "faction_id": 1,
         "team_id": null,
-        "published_state_id": 1,
+        "published_state_id": 3,
         "title": "The Deadmines",
         "description": "",
         "level_min": 10,
@@ -23,7 +23,7 @@
         "rating": null,
         "rating_count": 0,
         "created_at": "2023-08-24T18:31:14+00:00",
-        "updated_at": "2023-08-24T18:31:14+00:00",
+        "updated_at": "2023-08-24T18:59:04+00:00",
         "playerspecializations": [],
         "playerraces": [
             {
@@ -73,8 +73,8 @@
                 "lng": null,
                 "index": 2,
                 "enemies": [
-                    30803,
-                    29603
+                    29603,
+                    30803
                 ],
                 "spells": []
             },
@@ -86,9 +86,9 @@
                 "lng": null,
                 "index": 3,
                 "enemies": [
-                    29610,
+                    29608,
                     29609,
-                    29608
+                    29610
                 ],
                 "spells": []
             },
@@ -100,8 +100,8 @@
                 "lng": null,
                 "index": 4,
                 "enemies": [
-                    30804,
-                    29616
+                    29616,
+                    30804
                 ],
                 "spells": []
             },
@@ -127,8 +127,8 @@
                 "index": 6,
                 "enemies": [
                     29618,
-                    30808,
-                    29619
+                    29619,
+                    30808
                 ],
                 "spells": []
             },
@@ -298,8 +298,8 @@
                 "index": 19,
                 "enemies": [
                     29741,
-                    29743,
-                    29742
+                    29742,
+                    29743
                 ],
                 "spells": []
             },
@@ -324,8 +324,8 @@
                 "lng": null,
                 "index": 21,
                 "enemies": [
-                    29748,
-                    29746
+                    29746,
+                    29748
                 ],
                 "spells": []
             },
@@ -400,8 +400,8 @@
                 "lng": null,
                 "index": 27,
                 "enemies": [
-                    29757,
-                    29752
+                    29752,
+                    29757
                 ],
                 "spells": []
             },
@@ -649,8 +649,8 @@
                 "lng": null,
                 "index": 47,
                 "enemies": [
-                    30831,
-                    30825
+                    30825,
+                    30831
                 ],
                 "spells": []
             },
@@ -752,9 +752,9 @@
                 "lng": null,
                 "index": 55,
                 "enemies": [
+                    29800,
                     29801,
-                    29802,
-                    29800
+                    29802
                 ],
                 "spells": []
             },
@@ -778,8 +778,8 @@
                 "lng": null,
                 "index": 57,
                 "enemies": [
-                    29805,
-                    29804
+                    29804,
+                    29805
                 ],
                 "spells": []
             },
@@ -1136,8 +1136,8 @@
                 "lng": null,
                 "index": 85,
                 "enemies": [
-                    29852,
-                    29851
+                    29851,
+                    29852
                 ],
                 "spells": []
             },
@@ -1150,8 +1150,8 @@
                 "index": 86,
                 "enemies": [
                     29853,
-                    30846,
-                    29854
+                    29854,
+                    30846
                 ],
                 "spells": []
             },

@@ -1,0 +1,50 @@
+{
+    "id": 198,
+    "release_changelog_id": 205,
+    "version": "v7.1",
+    "title": "Added explore dungeon, ability to select game versions",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-08-30T19:17:40+00:00",
+    "updated_at": "2023-08-30T19:17:40+00:00",
+    "changelog": {
+        "id": 205,
+        "release_id": 198,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 205,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1975,
+                "change": "Added new feature: Explore allows you to view a dungeon mapping without having to create a (temporary) route.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 205,
+                "release_changelog_category_id": 1,
+                "ticket_id": 1976,
+                "change": "Added new feature: You can now select the game version most appropriate for what you play: Retail, WotLK or Classic, defaulting to Retail.  Dungeons not relevant for your selection will be hidden from view along with a few more tweaks in many places to tailor Keystone.guru for your game version.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 205,
+                "release_changelog_category_id": 3,
+                "ticket_id": 1993,
+                "change": "Hovering over a patrol path now highlights the associated enemies. Enemies associated with a patrol now have a blue dotted border.",
+                "category": {
+                    "id": 3,
+                    "key": "map_changes",
+                    "name": "releasechangelogcategories.map_changes"
+                }
+            }
+        ]
+    }
+}

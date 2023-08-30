@@ -127,9 +127,11 @@ let scripts = [
 
     // Map Context
     'resources/assets/js/custom/mapcontext/mapcontext.js',
-    'resources/assets/js/custom/mapcontext/mapcontextdungeon.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeonroute.js',
     'resources/assets/js/custom/mapcontext/mapcontextlivesession.js',
+    'resources/assets/js/custom/mapcontext/mapcontextmappingversion.js',
+    'resources/assets/js/custom/mapcontext/mapcontextmappingversionedit.js',
+    'resources/assets/js/custom/mapcontext/mapcontextdungeonexplore.js',
 
     // Depends on map object groups + Map Context
     'resources/assets/js/custom/statemanager.js',
@@ -292,6 +294,7 @@ if (images) {
     mix.copy('resources/assets/images/external', 'public/images/external');
     mix.copy('resources/assets/images/factions', 'public/images/factions');
     mix.copy('resources/assets/images/flags', 'public/images/flags');
+    mix.copy('resources/assets/images/gameversions', 'public/images/gameversions');
     mix.copy('resources/assets/images/home', 'public/images/home');
     mix.copy('resources/assets/images/icon', 'public/images/icon');
     mix.copy('resources/assets/images/lib', 'public/images/lib');

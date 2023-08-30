@@ -102,7 +102,7 @@ class AdminToolsController extends Controller
             'dungeonroute' => $dungeonRoute,
             'title'        => $dungeonRoute->getTitleSlug(),
             'floor'        => $floor,
-            'mapContext'   => (new MapContextDungeonRoute($dungeonRoute, $floor))->getProperties(),
+            'mapContext'   => (new MapContextDungeonRoute($dungeonRoute, $floor)),
             'floorindex'   => 1,
         ]);
     }

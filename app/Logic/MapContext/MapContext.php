@@ -52,6 +52,14 @@ abstract class MapContext
     public abstract function getEchoChannelName(): string;
 
     /**
+     * @return Model
+     */
+    public function getContext(): Model
+    {
+        return $this->context;
+    }
+
+    /**
      * @return array
      * @throws InvalidArgumentException
      */

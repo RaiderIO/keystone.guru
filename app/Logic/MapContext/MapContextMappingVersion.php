@@ -15,30 +15,25 @@ use Illuminate\Support\Facades\App;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class MapContextDungeon
+ * Class MapContextMappingVersion
  * @package App\Logic\MapContext
  * @author Wouter
  * @since 06/08/2020
  *
  * @property Dungeon $context
  */
-class MapContextDungeon extends MapContext
+abstract class MapContextMappingVersion extends MapContext
 {
-
     /**
-     * MapContextDungeon constructor.
-     * @param Dungeon $dungeon
-     * @param Floor $floor
+     * MapContextMappingVersion constructor.
+     *
+     * @param Dungeon        $dungeon
+     * @param Floor          $floor
      * @param MappingVersion $mappingVersion
      */
     public function __construct(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion)
     {
         parent::__construct($dungeon, $floor, $mappingVersion);
-    }
-
-    public function getType(): string
-    {
-        return 'dungeon';
     }
 
     public function isTeeming(): bool
@@ -58,11 +53,6 @@ class MapContextDungeon extends MapContext
         } catch (InvalidMDTDungeonException $e) {
             return $this->listEnemies($this->mappingVersion);
         }
-    }
-
-    public function getEchoChannelName(): string
-    {
-        return sprintf('%s-dungeon-edit.%s', config('app.type'), $this->context->getRouteKey());
     }
 
     public function getProperties(): array

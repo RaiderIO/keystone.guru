@@ -29,6 +29,7 @@ class DungeonFormRequest extends FormRequest
         return [
             'active'           => 'nullable|boolean',
             'speedrun_enabled' => 'nullable|boolean',
+            'game_version_id'  => Rule::exists('game_versions', 'id'),
             'zone_id'          => 'int',
             'map_id'           => 'int',
             'mdt_id'           => 'int',

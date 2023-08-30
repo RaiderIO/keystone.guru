@@ -38,6 +38,7 @@ use App\Http\Controllers\Ajax\AjaxUserReportController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\DungeonRouteDiscoverController;
 use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\GameVersionController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
@@ -119,6 +121,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('dungeonroutes', [SiteController::class, 'dungeonroutes']);
     Route::get('search', [DungeonRouteDiscoverController::class, 'search'])->name('dungeonroutes.search');
 
+    // Game version toggle
+    Route::group(['prefix' => 'gameversion'], function () {
+        Route::get('/{gameVersion}', [GameVersionController::class, 'update'])->name('gameversion.update');
+    });
 
     // Profile routes
     Route::group(['prefix' => 'routes'], function () {
@@ -145,6 +151,16 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('affixes/next', [DungeonRouteDiscoverController::class, 'discoverdungeonnextweek'])->name('dungeonroutes.discoverdungeon.nextweek');
                 Route::get('new', [DungeonRouteDiscoverController::class, 'discoverdungeonnew'])->name('dungeonroutes.discoverdungeon.new');
             });
+        });
+    });
+
+    // Explore dungeons (just show me the mapping but don't allow me to create routes)
+    Route::group(['prefix' => 'explore'], function () {
+        Route::get('/', [DungeonExploreController::class, 'list'])->name('dungeon.explore.list');
+
+        Route::group(['prefix' => '{dungeon}'], function () {
+            Route::get('/', [DungeonExploreController::class, 'viewDungeon'])->name('dungeon.explore.view');
+            Route::get('/{floorIndex}', [DungeonExploreController::class, 'viewDungeonFloor'])->name('dungeon.explore.view.floor');
         });
     });
 
