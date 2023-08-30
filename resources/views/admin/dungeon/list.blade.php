@@ -39,6 +39,7 @@
         <tr>
             <th width="50px">{{ __('views/admin.dungeon.list.table_header_active') }}</th>
             <th width="50px">{{ __('views/admin.dungeon.list.table_header_expansion') }}</th>
+            <th width="50px">{{ __('views/admin.dungeon.list.table_header_game_version') }}</th>
             <th width="45%">{{ __('views/admin.dungeon.list.table_header_name') }}</th>
             <th width="10%">{{ __('views/admin.dungeon.list.table_header_enemy_forces') }}</th>
             <th width="10%">{{ __('views/admin.dungeon.list.table_header_enemy_forces_teeming') }}</th>
@@ -65,10 +66,18 @@
                 @endif
                 <td data-order="{{ $dungeon->expansion_id }}">
                     <img src="{{ url(sprintf('images/expansions/%s.png', $dungeon->expansion->shortname)) }}"
+                         alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
                          data-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>
+                    <td data-order="{{ $dungeon->game_version_id }}">
+                        <img src="{{ url(sprintf('images/gameversions/%s.png', $dungeon->gameVersion->key)) }}"
+                             alt="{{ __($dungeon->gameVersion->name) }}"
+                             title="{{ __($dungeon->gameVersion->name) }}"
+                             data-toggle="tooltip"
+                             style="width: 50px;"/>
+                    </td>
                 <td>{{ __($dungeon->name) }}</td>
                 <td>{{ optional($mappingVersion)->enemy_forces_required }}</td>
                 <td>{{ optional($mappingVersion)->enemy_forces_required_teeming }}</td>

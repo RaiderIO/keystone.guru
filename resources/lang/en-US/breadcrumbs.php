@@ -8,6 +8,10 @@ return [
         'routes'           => 'Routes',
         'routes_expansion' => ':expansion routes',
 
+        'dungeon' => [
+            'explore' => 'Explore'
+        ],
+
         'dungeonroutes' => [
             'search'            => 'Search',
             'popular'           => 'Popular',

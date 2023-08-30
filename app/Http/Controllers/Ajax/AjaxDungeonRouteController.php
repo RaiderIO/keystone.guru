@@ -327,11 +327,13 @@ class AjaxDungeonRouteController extends Controller
         // Disable some checks when we're local - otherwise we'd get no routes at all
         $query->when(config('app.env') !== 'local', function (Builder $builder) {
             $builder->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
-                ->where('demo', 0)
+//                ->where('demo', 0)
                 ->where('dungeons.active', 1);
         })->offset((int)$request->get('offset', 0))
             ->limit((int)$request->get('limit', 20))
             ->selectRaw($selectRaw);
+
+//        $query->dd();
 
         $result = $query->get();
 

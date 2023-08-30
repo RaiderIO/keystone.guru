@@ -1,9 +1,14 @@
 <?php
 /**
- * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor
+ * @var $dungeon             \App\Models\Dungeon
+ * @var $floor               \App\Models\Floor
  * @var $availableKeysSelect \Illuminate\Support\Collection
  */
+
+$gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
+                                                         ->mapWithKeys(function (\App\Models\GameVersion\GameVersion $gameVersion) {
+                                                             return [$gameVersion->id => __($gameVersion->name)];
+                                                         });
 ?>
 
 @extends('layouts.sitepage', [
@@ -56,6 +61,13 @@
                 @include('common.forms.form-error', ['key' => 'id'])
             </div>
         @endisset
+
+        <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+            {!! Form::label('game_version_id', __('views/admin.dungeon.edit.game_version_id'), [], false) !!}
+            <span class="form-required">*</span>
+            {!! Form::select('game_version_id', $gameVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+            @include('common.forms.form-error', ['key' => 'game_version_id'])
+        </div>
 
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
             {!! Form::label('zone_id', __('views/admin.dungeon.edit.zone_id')) !!}

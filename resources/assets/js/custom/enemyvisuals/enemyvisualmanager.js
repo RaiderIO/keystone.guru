@@ -23,6 +23,7 @@ class EnemyVisualManager extends Signalable {
 
         let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         enemyMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
+            /** @type Enemy addedEnemy */
             let addedEnemy = objectAddEvent.data.object;
             if (addedEnemy.id > 0 && !self._enemyVisibilityMap.hasOwnProperty(addedEnemy.id)) {
                 self._enemyVisibilityMap[addedEnemy.id] = {
@@ -33,6 +34,39 @@ class EnemyVisualManager extends Signalable {
                     lastCheckTime: 0,
                     lastDistanceSquared: 99999
                 };
+            }
+        });
+
+        // This can in theory be moved completely to enemy patrol but I prefer to keep it in here so all the mouse overing
+        // code is handled in this class.
+        // This code allows mouse over of enemy patrols to highlight the enemies that the patrol is attached to.
+        let enemyPatrolMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+        enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
+            /** @type EnemyPatrol addedEnemyPatrol */
+            let addedEnemyPatrol = objectAddEvent.data.object;
+            if (addedEnemyPatrol.id > 0) {
+                let mouseOverFn = function (e) {
+                    if (addedEnemyPatrol.enemies.length > 0) {
+                        addedEnemyPatrol.enemies[0].visual.forceMouseOver();
+                    }
+                }
+
+                let mouseOutFn = function (e) {
+                    if (addedEnemyPatrol.enemies.length > 0) {
+                        addedEnemyPatrol.enemies[0].visual.forceMouseOut();
+                    }
+                };
+
+                addedEnemyPatrol.layer.on('mouseover', mouseOverFn);
+                addedEnemyPatrol.layer.on('mouseout', mouseOutFn);
+
+                // If decorator gets added, register functions to it as well
+                addedEnemyPatrol.register('object:decoratorchanged', self, function (e) {
+                    if (e.data.decorator !== null) {
+                        e.data.decorator.on('mouseover', mouseOverFn);
+                        e.data.decorator.on('mouseout', mouseOutFn);
+                    }
+                });
             }
         });
 

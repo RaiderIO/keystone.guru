@@ -9,7 +9,7 @@ if (count($affixes) == 0) {
     $affixes         = [-1 => __('views/dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
-$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
+$dungeon = $dungeonroute->dungeon;
 ?>
 @section('scripts')
     @parent

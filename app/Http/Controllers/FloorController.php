@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\FloorFormRequest;
-use App\Logic\MapContext\MapContextDungeon;
+use App\Logic\MapContext\MapContextMappingVersion;
+use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\Floor;
 use App\Models\FloorCoupling;
@@ -139,7 +140,7 @@ class FloorController extends Controller
 
             return view('admin.floor.mapping', [
                 'floor'          => $floor,
-                'mapContext'     => (new MapContextDungeon($dungeon, $floor, $mappingVersion))->getProperties(),
+                'mapContext'     => (new MapContextMappingVersionEdit($dungeon, $floor, $mappingVersion)),
                 'mappingVersion' => $mappingVersion,
             ]);
         } else {

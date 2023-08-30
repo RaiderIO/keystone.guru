@@ -1,12 +1,17 @@
 <?php
-/** @var $theme string */
-/** @var $dungeonroute \App\Models\DungeonRoute|null */
-/** @var $livesession \App\Models\LiveSession|null */
-/** @var $mappingVersion \App\Models\Mapping\MappingVersion|null */
-/** @var $edit bool */
+/**
+ * @var $theme string
+ * @var $isUserAdmin bool
+ * @var $mapContext \App\Logic\MapContext\MapContext
+ * @var $dungeon \App\Models\Dungeon
+ * @var $floor \App\Models\Floor
+ * @var $dungeonroute \App\Models\DungeonRoute|null
+ * @var $livesession \App\Models\LiveSession|null
+ * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
+ * @var $edit bool
+ */
 $echo        = $echo ?? false;
 $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
-
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
@@ -30,7 +35,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
-                                    @isset($livesession)
+                                    @if( $mapContext instanceof \App\Logic\MapContext\MapContextLiveSession )
                                             <?php $stopped = $livesession->expires_at !== null; ?>
                                         @if(!$stopped)
                                             <button id="stop_live_session" class="btn btn-danger btn-sm"
@@ -68,7 +73,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                                 data-target="#start_live_session_modal">
                                             <i class="fas fa-play"></i> {{ __('views/common.maps.controls.header.start') }}
                                         </button>
-                                    @endisset
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -84,7 +89,9 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                 <div class="col-auto">
                                     <h5 class="mb-0 mr-2">
                                         @isset($dungeonroute)
-                                            {{ $title }}
+                                            {{ $dungeonroute->title }}
+                                        @elseif($mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore)
+                                            {{ __('views/common.maps.map.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
                                         @else
                                             <a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
                                                 {{ sprintf(__('views/common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
@@ -112,31 +119,33 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             </div>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col">
-                            @if($dungeonroute && $dungeonroute->team instanceof \App\Models\Team)
-                                <span class="text-primary">
-                                    @if($dungeonroute->team->isUserMember(Auth::user()))
-                                        <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
+                    @if(!($mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore))
+                        <div class="row no-gutters">
+                            <div class="col">
+                                @if(isset($dungeonroute) && $dungeonroute->team instanceof \App\Models\Team)
+                                    <span class="text-primary">
+                                        @if($dungeonroute->team->isUserMember(Auth::user()))
+                                            <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
+                                                <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
+                                            </a>
+                                        @else
                                             <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                        </a>
-                                    @else
-                                        <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                    @endif
-                                </span>
-                            @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
-                                <span data-toggle="tooltip"
-                                     title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
-                                        <span class="text-warning">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                        </span>
-                                    {{ __('views/common.maps.map.new_mapping_version_header_title') }}
-                                </span>
-                            @else
-                            &nbsp;
-                            @endif
+                                        @endif
+                                    </span>
+                                @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
+                                    <span data-toggle="tooltip"
+                                         title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
+                                            <span class="text-warning">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </span>
+                                        {{ __('views/common.maps.map.new_mapping_version_header_title') }}
+                                    </span>
+                                @else
+                                &nbsp;
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </li>
             </ul>
             @if($echo)
@@ -168,7 +177,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
                 @isset($dungeonroute)
                     @auth
-                        @if(Auth::user()->hasRole('admin'))
+                        @if($isUserAdmin)
                         <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
                             @if( $challengeModeRun !== null )
                                 <li class="nav-item mr-2">
@@ -213,7 +222,8 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             </div>
                         </li>
                     @endif
-                @else
+                @endisset
+                @if( $mapContext instanceof \App\Logic\MapContext\MapContextMappingVersionEdit )
                     <li class="nav-item mr-2">
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
@@ -226,18 +236,22 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             </div>
                         </div>
                     </li>
-                @endisset
-                <li class="nav-item">
-                    <div class="d-flex h-100">
-                        <div class="row justify-content-center align-self-center">
-                            <div class="col">
-                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
-                                    <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
-                                </button>
+                @endif
+
+
+                @if(!empty($show['share']))
+                    <li class="nav-item">
+                        <div class="d-flex h-100">
+                            <div class="row justify-content-center align-self-center">
+                                <div class="col">
+                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
+                                        <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                @endif
                 <li class="nav-item nav-item-divider">
 
                 </li>
@@ -250,12 +264,14 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
 @isset($dungeonroute)
 
-    @component('common.general.modal', ['id' => 'share_modal'])
-        @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
-    @endcomponent
+    @if(!empty($show['share']))
+        @component('common.general.modal', ['id' => 'share_modal'])
+            @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
+        @endcomponent
+    @endif
 
     @auth
-        @if(Auth::user()->hasRole('admin'))
+        @if($isUserAdmin)
             @component('common.general.modal', ['id' => 'edit_route_admin_settings_modal', 'size' => 'xl'])
                 @include('common.modal.routeadminsettings', ['dungeonRoute' => $dungeonroute])
             @endcomponent
@@ -349,7 +365,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
             </div>
         </div>
     @endcomponent
-@elseif(isset($mappingVersion))
+@elseif($mapContext instanceof \App\Logic\MapContext\MapContextMappingVersionEdit)
     @component('common.general.modal', ['id' => 'edit_mapping_version_modal', 'size' => 'xl'])
         @include('common.modal.mappingversion', ['mappingVersion' => $mappingVersion])
     @endcomponent
