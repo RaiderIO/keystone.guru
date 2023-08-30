@@ -54,25 +54,28 @@ class ReleasesSeeder extends Seeder
             }
 
             // Save the release last!
-            $this->command->info(sprintf('Adding release %s', $modelsData['version']));
             /** @var array{created_at: \Carbon\Carbon, updated_at: \Carbon\Carbon} $releaseAttribute */
             $releaseAttribute = array_filter($modelsData, function ($value) {
                 return !is_array($value);
             });
-            
+
             $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
             $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
-            
+
             $releaseAttributes[] = $releaseAttribute;
         }
 
         $this->command->info(sprintf('Inserting %d releases..', count($releaseAttributes)));
-        
-        Release::insert($releaseAttributes);
-        ReleaseChangelog::insert($releaseChangeLogAttributes);
-        ReleaseChangelogChange::insert($releaseChangeLogChangesAttributes);
-        
-        $this->command->info(sprintf('Inserting %d releases OK', count($releaseAttributes)));
+
+        $result = Release::insert($releaseAttributes) &&
+            ReleaseChangelog::insert($releaseChangeLogAttributes) &&
+            ReleaseChangelogChange::insert($releaseChangeLogChangesAttributes);
+
+        if ($result) {
+            $this->command->info(sprintf('Inserting %d releases OK', count($releaseAttributes)));
+        } else {
+            $this->command->warn(sprintf('Inserting %d releases FAILED', count($releaseAttributes)));
+        }
     }
 
     private function rollback()

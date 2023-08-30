@@ -16,7 +16,7 @@ class MapContextDungeonRoute extends MapContext {
      *
      * @returns {Number}|null
      */
-    getDungeonDifficulty(){
+    getDungeonDifficulty() {
         return this._options.dungeonDifficulty;
     }
 

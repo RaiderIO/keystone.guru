@@ -5,6 +5,7 @@ namespace App;
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
@@ -29,6 +30,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string                    $public_key
  * @property int                       $game_server_region_id
  * @property int                       $patreon_user_link_id
+ * @property int                       $game_version_id
  * @property string                    $timezone
  * @property string                    $name
  * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
@@ -46,6 +48,7 @@ use Laratrust\Traits\LaratrustUserTrait;
  *
  * @property PatreonUserLink           $patreonUserLink
  * @property GameServerRegion          $gameServerRegion
+ * @property GameVersion               $gameVersion
  * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
  *
  * @property boolean                   $is_admin
@@ -77,10 +80,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
+        'game_server_region_id',
         'patreon_user_link_id',
+        'game_version_id',
         'public_key',
         'oauth_id',
-        'game_server_region_id',
         'name',
         'email',
         'echo_color',
@@ -102,7 +106,7 @@ class User extends Authenticatable
         'initials',
     ];
 
-    protected $with = ['iconfile', 'patreonUserLink'];
+    protected $with = ['iconfile', 'patreonUserLink', 'gameVersion'];
 
     /**
      * @return string
@@ -149,8 +153,15 @@ class User extends Authenticatable
      */
     public function gameServerRegion(): BelongsTo
     {
-        // Don't know why it won't work without the foreign key specified..
         return $this->belongsTo(GameServerRegion::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     /**
@@ -171,6 +182,7 @@ class User extends Authenticatable
 
     /**
      * @param int|null $categoryId
+     *
      * @return HasMany|Tag
      */
     public function tags(?int $categoryId = null): HasMany
@@ -198,6 +210,7 @@ class User extends Authenticatable
      * Checks if this user has paid for a certain tier one way or the other.
      *
      * @param string $key
+     *
      * @return bool
      */
     public function hasPatreonBenefit(string $key): bool
@@ -269,7 +282,7 @@ class User extends Authenticatable
     public function getRemainingRouteCount(): int
     {
         return (int)max(0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
+                        config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
 
@@ -277,6 +290,7 @@ class User extends Authenticatable
      * Sends the password reset notification.
      *
      * @param string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)

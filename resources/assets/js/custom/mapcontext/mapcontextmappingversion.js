@@ -1,4 +1,4 @@
-class MapContextDungeon extends MapContext {
+class MapContextMappingVersion extends MapContext {
     constructor(options) {
         super(options);
     }
@@ -17,7 +17,7 @@ class MapContextDungeon extends MapContext {
      * @param model {object}
      */
     addRawNpc(model) {
-        console.assert(this instanceof MapContextDungeon, 'this is not a MapContextDungeon', this);
+        console.assert(this instanceof MapContextMappingVersionEdit, 'this is not a MapContextMappingVersionEdit', this);
 
         this._options.npcs.push(model);
 
@@ -29,7 +29,7 @@ class MapContextDungeon extends MapContext {
      * @param id {Number}
      */
     removeRawNpcById(id) {
-        console.assert(this instanceof MapContextDungeon, 'this is not a MapContextDungeon', this);
+        console.assert(this instanceof MapContextMappingVersionEdit, 'this is not a MapContextMappingVersionEdit', this);
 
         for (let index in this._options.npcs) {
             if (this._options.npcs.hasOwnProperty(index)) {
@@ -74,13 +74,5 @@ class MapContextDungeon extends MapContext {
      */
     getTeamId() {
         return -1;
-    }
-
-    /**
-     *
-     * @returns {[]}
-     */
-    getMdtEnemies() {
-        return this._options.dungeon.enemiesMdt;
     }
 }

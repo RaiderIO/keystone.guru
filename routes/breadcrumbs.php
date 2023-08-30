@@ -35,6 +35,14 @@ Breadcrumbs::for('misc.changelog', function (Generator $trail) {
     $trail->push(__('breadcrumbs.home.changelog'), route('misc.changelog'));
 });
 
+/**
+ * Explore page
+ */
+Breadcrumbs::for('dungeon.explore.list', function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.dungeon.explore'), route('dungeon.explore.list'));
+});
+
 
 /**
  * Routes page

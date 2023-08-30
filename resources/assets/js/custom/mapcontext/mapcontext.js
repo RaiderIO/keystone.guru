@@ -495,4 +495,20 @@ class MapContext extends Signalable {
     getMappingVersionUpgradeUrl() {
         return this._options.mappingVersionUpgradeUrl;
     }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getNpcsMinHealth() {
+        return this._options.npcsMinHealth;
+    }
+
+    /**
+     *
+     * @returns {Number}
+     */
+    getNpcsMaxHealth() {
+        return this._options.npcsMaxHealth;
+    }
 }

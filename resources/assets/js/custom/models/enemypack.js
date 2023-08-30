@@ -142,7 +142,7 @@ class EnemyPack extends VersionableMapObject {
         super.loadRemoteMapObject(remoteMapObject, parentAttribute);
 
         // Only called when not in admin state
-        if (getState().getMapContext() instanceof MapContextDungeonRoute) {
+        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
             // Re-set the layer now that we know of the raw enemies
             this.setRawEnemies(remoteMapObject.enemies);
             this._updateHullLayer();

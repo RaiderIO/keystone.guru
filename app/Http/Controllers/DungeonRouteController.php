@@ -130,7 +130,7 @@ class DungeonRouteController extends Controller
                 'title'          => $dungeonroute->getTitleSlug(),
                 'current_report' => $currentReport,
                 'floor'          => $floor,
-                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor)),
             ]);
         }
     }
@@ -213,7 +213,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute'   => $dungeonroute,
                 'title'          => $dungeonroute->getTitleSlug(),
                 'floor'          => $floor,
-                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+                'mapContext'     => (new MapContextDungeonRoute($dungeonroute, $floor)),
             ]);
         }
     }
@@ -251,7 +251,7 @@ class DungeonRouteController extends Controller
         return view('dungeonroute.preview', [
             'dungeonroute' => $dungeonroute,
             'floorId'      => $floor->id,
-            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor)),
         ]);
     }
 
@@ -440,7 +440,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
-                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+                'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor)),
                 'floorindex'   => $floorIndex,
             ]);
         }
@@ -493,10 +493,10 @@ class DungeonRouteController extends Controller
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'floor'        => $floor,
-            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor))->getProperties(),
+            'mapContext'   => (new MapContextDungeonRoute($dungeonroute, $floor)),
             'embedOptions' => [
                 'style'                 => $style,
-                // Null if not set - but cast to an bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
+                // Null if not set - but cast to a bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
                 'pullsDefaultState'     => (int)$pullsDefaultState, // Default false - closed
                 'pullsHideOnMove'       => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
                 'headerBackgroundColor' => $headerBackgroundColor,

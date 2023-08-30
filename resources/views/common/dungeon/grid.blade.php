@@ -2,12 +2,14 @@
 /** @var $expansionService \App\Service\Expansion\ExpansionService */
 /** @var $expansion \App\Models\Expansion */
 /** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
+/** @var $route string|null */
 $dungeons = $dungeons ?? $expansion->dungeons()->active()->get();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
 $names = $names ?? true;
 $links = $links ?? collect();
+$route = $route ?? null;
 $selectable = $selectable ?? false;
 
 // @formatter:off
@@ -31,7 +33,7 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
                     @endif
 
                     @isset($link)
-                        <a href="{{ __($link['link']) }}">
+                        <a href="{{ $link['link'] }}">
                             @endisset
 
                             <img class="card-img-top"
@@ -49,5 +51,4 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
     // @formatter:on
     ?>
 </div>
-<?php } ?>
-
+<?php }

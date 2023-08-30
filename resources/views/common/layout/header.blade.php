@@ -1,4 +1,5 @@
 <?php
+/** @var \App\Models\GameVersion\GameVersion $currentUserGameVersion */
 /** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
 /** @var \App\Models\Season $currentSeason */
 /** @var \App\Models\Season $nextSeason */
@@ -7,6 +8,10 @@ $navs = [
     route('dungeonroutes.search') => [
         'fa'   => 'fas fa-search',
         'text' => __('views/common.layout.header.search')
+    ],
+    route('dungeon.explore.list') => [
+        'fa'   => 'fas fa-compass',
+        'text' => __('views/common.layout.header.explore')
     ]
 ];
 
@@ -23,14 +28,16 @@ foreach ($activeExpansions as $expansion) {
         );
 }
 
-if ($nextSeason !== null) {
-    $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
-        'text' => $nextSeason->name
+if($currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VERSION_RETAIL ) {
+    if ($nextSeason !== null) {
+        $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
+            'text' => $nextSeason->name
+        ];
+    }
+    $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
+        'text' => $currentSeason->name
     ];
 }
-$navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
-    'text' => $currentSeason->name
-];
 
 $navs[__('views/common.layout.header.expansion_routes')] = $expansionRoutes;
 
@@ -91,8 +98,8 @@ $navs[route('misc.affixes')] = [
                                 {{ $headerText }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="{{ $dropdownId }}">
-                                @foreach($opts as $route => $text)
-                                    <a class="dropdown-item" href="{{ $route }}">{!! $text !!}</a>
+                                @foreach($opts as $optsKey => $text)
+                                    <a class="dropdown-item" href="{{ $optsKey }}">{!! $text !!}</a>
                                 @endforeach
                             </div>
                         </li>
@@ -101,6 +108,7 @@ $navs[route('misc.affixes')] = [
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
+                @include('common.layout.navgameversions')
                 @include('vendor.language.flags')
                 @include('common.layout.navuser')
                 @include('common.layout.navthemeswitch')

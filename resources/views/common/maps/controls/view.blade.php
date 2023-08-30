@@ -6,6 +6,7 @@
 ?>
 <nav class="route_sidebar route_manipulation_tools left h-100 row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="bg-header">
+        @isset($dungeonroute)
         <div id="view_route_actions_container" class="mb-2">
             @auth
                 @if($dungeonroute->mayUserEdit(Auth::user()))
@@ -17,15 +18,12 @@
 
                 @include('common.maps.controls.elements.dungeonroute.report', ['dungeonroute' => $dungeonroute])
 
-                @isset($dungeonroute)
-                    @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
-                @endisset
+                @include('common.maps.controls.elements.rating', ['dungeonroute' => $dungeonroute])
             @endauth
 
-            @isset($dungeonroute)
                 @include('common.maps.controls.elements.dungeonroute.info', ['dungeonroute' => $dungeonroute])
-            @endisset
         </div>
+        @endisset
 
         <div id="view_route_map_actions_container" class="mb-2">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])

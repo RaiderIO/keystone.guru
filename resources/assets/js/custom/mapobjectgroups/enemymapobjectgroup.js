@@ -45,7 +45,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _getRawObjects() {
         let mapContext = getState().getMapContext();
         let enemies = mapContext.getEnemies();
-        if (mapContext instanceof MapContextDungeon) {
+        if (mapContext instanceof MapContextMappingVersionEdit) {
             // Union to create new array
             enemies = _.union(enemies, mapContext.getMdtEnemies());
         }

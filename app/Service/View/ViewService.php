@@ -12,6 +12,7 @@ use App\Models\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
@@ -93,7 +94,7 @@ class ViewService implements ViewServiceInterface
             }
 
             /** @var Collection|Expansion[] $activeExpansions */
-            $activeExpansions = Expansion::active()->orderBy('released_at', 'desc')->get();
+            $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
 
             // Build a list of all valid affix groups we may select across all currently active seasons
             $allAffixGroups    = collect();
@@ -160,6 +161,7 @@ class ViewService implements ViewServiceInterface
                 'selectableSpellsByCategory'       => $selectableSpellsByCategory,
 
                 // Misc
+                'allGameVersions'                  => GameVersion::all(),
                 'activeExpansions'                 => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                    => $allExpansions,
                 'dungeonsByExpansionIdDesc'        => $allDungeonsByExpansionId,
