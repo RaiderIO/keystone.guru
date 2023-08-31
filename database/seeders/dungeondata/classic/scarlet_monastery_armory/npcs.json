@@ -350,41 +350,6 @@
         ]
     },
     {
-        "id": 6490,
-        "dungeon_id": 88,
-        "classification_id": 5,
-        "npc_type_id": 10,
-        "npc_class_id": 1,
-        "display_id": 5534,
-        "name": "Azshir the Sleepless",
-        "base_health": 2784,
-        "health_percentage": 100,
-        "aggressiveness": "aggressive",
-        "dangerous": 1,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 11674,
-                "mapping_version_id": 193,
-                "npc_id": 6490,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 11557,
-                "mapping_version_id": 170,
-                "npc_id": 6490,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 6547,
         "dungeon_id": 88,
         "classification_id": 1,
