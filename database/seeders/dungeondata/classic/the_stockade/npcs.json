@@ -243,6 +243,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12879,
+                "mapping_version_id": 201,
+                "npc_id": 1716,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12751,
                 "mapping_version_id": 198,
                 "npc_id": 1716,
