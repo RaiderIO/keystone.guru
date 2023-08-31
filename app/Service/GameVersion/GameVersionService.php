@@ -3,9 +3,7 @@
 namespace App\Service\GameVersion;
 
 use App\Models\GameVersion\GameVersion;
-use App\Service\GameVersion\GameVersionServiceInterface;
 use App\User;
-use Auth;
 
 class GameVersionService implements GameVersionServiceInterface
 {
@@ -19,7 +17,16 @@ class GameVersionService implements GameVersionServiceInterface
     {
         optional($user)->update(['game_version_id' => $gameVersion->id]);
 
-        setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', '', true);
+        // Only if changed or not set
+        if (!isset($_COOKIE[self::GAME_VERSION_COOKIE]) || $_COOKIE[self::GAME_VERSION_COOKIE] !== $gameVersion->key) {
+            $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
+            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, [
+                'path'     => '/',
+                'secure'   => true,
+                'httponly' => false,
+                'samesite' => 'None',
+            ]);
+        }
     }
 
 
@@ -36,8 +43,7 @@ class GameVersionService implements GameVersionServiceInterface
         if ($gameVersion === null) {
             $gameVersion = GameVersion::getUserOrDefaultGameVersion();
 
-            // Make sure the cookie is set correctly
-            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', '', true);
+            $this->setGameVersion($gameVersion, $user);
         }
 
         return $gameVersion;

@@ -22,10 +22,11 @@ class DebugBarMessageLogger
         if (config('app.debug')) {
             // Dev dependency
             if (class_exists('Debugbar')) {
-                Debugbar::info('CacheService details');
+                Debugbar::info('Counter details');
                 foreach (Counter::getAll() as $counter) {
                     Debugbar::info('- ' . $counter);
                 }
+
                 Debugbar::info('Stopwatch details');
                 foreach (Stopwatch::getAll() as $key => $time) {
                     Debugbar::info('- ' . $key . ' -> ' . $time);
