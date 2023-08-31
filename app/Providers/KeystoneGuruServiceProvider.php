@@ -183,6 +183,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             return;
         }
 
+        session_set_cookie_params([
+            'secure'   => true,
+            'httponly' => false,
+            'samesite' => 'None',
+        ]);
+
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
 
