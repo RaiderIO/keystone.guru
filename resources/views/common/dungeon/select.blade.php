@@ -50,7 +50,7 @@ if (!isset($dungeons)) {
         $validExpansions = $allExpansions->when(!$ignoreGameVersion, function (\Illuminate\Support\Collection $collection) use ($currentUserGameVersion) {
             return $collection->filter(function (\App\Models\Expansion $expansion) use ($currentUserGameVersion) {
                 return $expansion->hasDungeonForGameVersion($currentUserGameVersion);
-            }
+            });
         });
 
         foreach ($validExpansions as $expansion) {
@@ -91,7 +91,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
             ->when(!$ignoreGameVersion, function (\Illuminate\Support\Collection $collection) use ($currentUserGameVersion) {
                 return $collection->filter(function (\App\Models\Dungeon $dungeon) use ($currentUserGameVersion) {
                     return $dungeon->game_version_id === $currentUserGameVersion->id;
-                }
+                });
         });
 
         // Only if there's something to display for this expansion
