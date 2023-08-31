@@ -16,10 +16,11 @@ $showAll        = !isset($showAll) || $showAll;
 $showSeasons    = isset($showSeasons) && $showSeasons && $currentUserGameVersion->has_seasons;
 $showExpansions = isset($showExpansions) && $showExpansions;
 // Show all dungeons if we're debugging
-$activeOnly       = $activeOnly ?? true; // !config('app.debug');
-$showSiegeWarning = $showSiegeWarning ?? false;
-$selected         = $selected ?? null;
-$dungeonsSelect = [];
+$activeOnly        = $activeOnly ?? true; // !config('app.debug');
+$showSiegeWarning  = $showSiegeWarning ?? false;
+$selected          = $selected ?? null;
+$ignoreGameVersion = $ignoreGameVersion ?? false;
+$dungeonsSelect    = [];
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
@@ -46,8 +47,10 @@ if (!isset($dungeons)) {
     }
 
     if ($showExpansions) {
-        $validExpansions = $allExpansions->filter(function (\App\Models\Expansion $expansion) use ($currentUserGameVersion) {
-            return $expansion->hasDungeonForGameVersion($currentUserGameVersion);
+        $validExpansions = $allExpansions->when(!$ignoreGameVersion, function (\Illuminate\Support\Collection $collection) use ($currentUserGameVersion) {
+            return $collection->filter(function (\App\Models\Expansion $expansion) use ($currentUserGameVersion) {
+                return $expansion->hasDungeonForGameVersion($currentUserGameVersion);
+            }
         });
 
         foreach ($validExpansions as $expansion) {
@@ -85,9 +88,11 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
 
     if ($expansion->active || !$activeOnly) {
         $dungeonsOfExpansionFiltered = $dungeonsOfExpansion
-            ->filter(function (\App\Models\Dungeon $dungeon) use ($currentUserGameVersion) {
-                return $dungeon->game_version_id === $currentUserGameVersion->id;
-            });
+            ->when(!$ignoreGameVersion, function (\Illuminate\Support\Collection $collection) use ($currentUserGameVersion) {
+                return $collection->filter(function (\App\Models\Dungeon $dungeon) use ($currentUserGameVersion) {
+                    return $dungeon->game_version_id === $currentUserGameVersion->id;
+                }
+        });
 
         // Only if there's something to display for this expansion
         if ($dungeonsOfExpansionFiltered->isNotEmpty()) {

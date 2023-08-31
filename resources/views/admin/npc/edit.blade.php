@@ -48,7 +48,7 @@
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
-    @include('common.dungeon.select', ['activeOnly' => false])
+    @include('common.dungeon.select', ['activeOnly' => false, 'ignoreGameVersion' => true])
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('views/admin.npc.edit.classification'), [], false) !!}
