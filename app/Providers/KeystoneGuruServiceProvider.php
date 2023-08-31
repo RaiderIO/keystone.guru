@@ -176,11 +176,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService,
         GameVersionServiceInterface        $gameVersionService
-    ) {
+    )
+    {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (app()->runningInConsole()) {
             return;
         }
+
+        session_set_cookie_params([
+            'secure'   => true,
+            'httponly' => false,
+            'samesite' => 'None',
+        ]);
 
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
@@ -195,11 +202,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
 
-        $isUserAdmin = null;
-        $adFree      = null;
+        $isUserAdmin            = null;
+        $adFree                 = null;
+        $currentUserGameVersion = null;
 
         // Can use the Auth() global here!
-        view()->composer('*', function (View $view) use (&$isUserAdmin, &$adFree, $gameVersionService) {
+        view()->composer('*', function (View $view) use (&$isUserAdmin, &$adFree, &$currentUserGameVersion, $gameVersionService) {
             // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
             if ($isUserAdmin === null) {
                 $isUserAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
@@ -212,7 +220,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                     );
             }
 
-            $currentUserGameVersion = $gameVersionService->getGameVersion(Auth::user());
+            if ($currentUserGameVersion === null) {
+                $currentUserGameVersion = $gameVersionService->getGameVersion(Auth::user());
+            }
 
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (strpos($view->getName(), 'layouts') !== 0) {
