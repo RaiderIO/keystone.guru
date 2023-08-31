@@ -341,7 +341,7 @@
         "classification_id": 5,
         "npc_type_id": 10,
         "npc_class_id": 1,
-        "display_id": 5534,
+        "display_id": null,
         "name": "Azshir the Sleepless",
         "base_health": 2784,
         "health_percentage": 100,
