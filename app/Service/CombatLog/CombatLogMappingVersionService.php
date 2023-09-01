@@ -162,7 +162,11 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 //                    }
 
                     // If the dungeon was found, update the mapping version
-                    $mappingVersion->update(['dungeon_id' => $dungeon->id]);
+                    $mostRecentMappingVersion = MappingVersion::where('dungeon_id', $dungeon->id)->orderByDesc('version')->first();
+
+                    $newMappingVersionVersion = $mostRecentMappingVersion === null ? 1 : $mostRecentMappingVersion->version + 1;
+
+                    $mappingVersion->update(['dungeon_id' => $dungeon->id, 'version' => $newMappingVersionVersion]);
                     $mappingVersion->setRelation('dungeon', $dungeon);
                 }
 
