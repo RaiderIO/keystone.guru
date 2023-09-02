@@ -26,6 +26,7 @@ use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
+use App\Console\Commands\Mapping\RotateIngameCoords;
 use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\Mapping\Sync as MappingSync;
 use App\Console\Commands\MDT\Decode;
@@ -110,6 +111,7 @@ class Kernel extends ConsoleKernel
         MappingSave::class,
         MappingRestore::class,
         MappingSync::class,
+        RotateIngameCoords::class,
 
         // MDT
         Encode::class,
