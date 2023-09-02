@@ -57,6 +57,7 @@
     "laravelcollective/html": "6.3.*",
     "marvinlabs/laravel-discord-logger": "^1.1",
     "nnoggie/mythicdungeontools": "4.0.4.20",
+    "paquettg/php-html-parser": "^3.0",
     "patreon/patreon": "^1.0.0",
     "phlak/semver": "^4.0",
     "php-http/guzzle6-adapter": "^2.0",

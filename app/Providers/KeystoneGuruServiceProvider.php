@@ -84,6 +84,8 @@ use App\Service\User\UserService;
 use App\Service\User\UserServiceInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
+use App\Service\Wowhead\WowheadService;
+use App\Service\Wowhead\WowheadServiceInterface;
 use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Contracts\View\View;
@@ -158,6 +160,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(NitroPayServiceInterface::class, NitroPayService::class);
+        $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
     }
 
     /**
@@ -176,8 +179,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService,
         GameVersionServiceInterface        $gameVersionService
-    )
-    {
+    ) {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (app()->runningInConsole()) {
             return;
