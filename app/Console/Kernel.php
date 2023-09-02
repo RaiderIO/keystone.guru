@@ -50,6 +50,7 @@ use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
+use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Logic\Scheduler\UpdateDungeonRouteRating;
@@ -149,6 +150,9 @@ class Kernel extends ConsoleKernel
 
         // View
         Cache::class,
+
+        // Wowhead
+        FetchHealth::class,
 
         // WowTools
         RefreshDisplayIds::class,
