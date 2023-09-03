@@ -63,5 +63,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -101.0625,
+        "lng": 187.34375,
+        "comment": "If Sandarr does not spawn he is replaced by a regular elite.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -73.18069047683014,
+        "lng": 267.8081708453059,
+        "comment": "Patrol spawns after defeating Antu'sul.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
