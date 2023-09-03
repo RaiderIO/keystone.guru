@@ -37,5 +37,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -191.30348628432327,
+        "lng": 204.57938237458916,
+        "comment": "All Scarabs and Sul'lithuz Sandcrawlers respawn eventually when killed.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 50,
+        "lat": -111.17246266955674,
+        "lng": 125.56708893061332,
+        "comment": "Gong",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
