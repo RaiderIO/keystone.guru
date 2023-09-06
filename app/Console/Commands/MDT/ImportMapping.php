@@ -49,7 +49,7 @@ class ImportMapping extends Command
             // If it's an ID we should treat it as a season instead
             $season = Season::findOrFail($dungeonKey);
 
-            foreach ($season->dungeons as $dungeon) {
+            foreach ($season->dungeons()->with('npcs')->get() as $dungeon) {
                 try {
                     $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
                 } catch (\Exception $exception) {
@@ -57,7 +57,9 @@ class ImportMapping extends Command
                 }
             }
         } else {
-            $mappingImportService->importMappingVersionFromMDT($mappingService, Dungeon::where('key', $dungeonKey)->firstOrFail(), $force);
+            /** @var Dungeon $dungeon */
+            $dungeon = Dungeon::with('npcs')->where('key', $dungeonKey)->firstOrFail();
+            $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
         }
     }
 }
