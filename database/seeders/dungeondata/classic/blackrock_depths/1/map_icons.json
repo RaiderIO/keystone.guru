@@ -26,7 +26,7 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 205,
+        "mapping_version_id": 206,
         "floor_id": 194,
         "dungeon_route_id": null,
         "team_id": null,
@@ -39,7 +39,7 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 205,
+        "mapping_version_id": 206,
         "floor_id": 194,
         "dungeon_route_id": null,
         "team_id": null,
@@ -52,39 +52,39 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 205,
+        "mapping_version_id": 206,
         "floor_id": 194,
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 6,
-        "lat": -127.33251338958428,
-        "lng": 170.8762744450898,
+        "lat": -127.33251338958,
+        "lng": 170.87627444509,
         "comment": null,
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
     },
     {
-        "mapping_version_id": 205,
+        "mapping_version_id": 206,
         "floor_id": 194,
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 9,
-        "lat": -204.14410709294108,
-        "lng": 136.89407607831552,
+        "lat": -204.14410709294,
+        "lng": 136.89407607832,
         "comment": "Abandoned Mole Machine: Entrance.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
     },
     {
-        "mapping_version_id": 205,
+        "mapping_version_id": 206,
         "floor_id": 194,
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 6,
-        "lat": -169.64854102233218,
-        "lng": 146.36131345416086,
+        "lat": -169.64854102233,
+        "lng": 146.36131345416,
         "comment": "Shadowforge Gate",
         "permanent_tooltip": 0,
         "seasonal_index": null,
