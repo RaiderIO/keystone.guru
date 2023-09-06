@@ -33,5 +33,33 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 4076,
+        "dungeon_id": 83,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Roach",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13316,
+                "mapping_version_id": 165,
+                "npc_id": 4076,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]

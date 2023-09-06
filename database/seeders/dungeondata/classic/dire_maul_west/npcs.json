@@ -1,5 +1,33 @@
 [
     {
+        "id": 1412,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Squirrel",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13336,
+                "mapping_version_id": 163,
+                "npc_id": 1412,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
         "id": 2914,
         "dungeon_id": 81,
         "classification_id": 1,
@@ -56,6 +84,1434 @@
         ]
     },
     {
+        "id": 11441,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Brute",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13307,
+                "mapping_version_id": 163,
+                "npc_id": 11441,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11444,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Mage-Lord",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13292,
+                "mapping_version_id": 163,
+                "npc_id": 11444,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11445,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Captain",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13297,
+                "mapping_version_id": 163,
+                "npc_id": 11445,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11446,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Spirit",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13329,
+                "mapping_version_id": 163,
+                "npc_id": 11446,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11448,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Warlock",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13315,
+                "mapping_version_id": 163,
+                "npc_id": 11448,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11450,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Reaver",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13301,
+                "mapping_version_id": 163,
+                "npc_id": 11450,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11451,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Satyr",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13293,
+                "mapping_version_id": 163,
+                "npc_id": 11451,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11452,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Rogue",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13331,
+                "mapping_version_id": 163,
+                "npc_id": 11452,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11453,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Trickster",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13320,
+                "mapping_version_id": 163,
+                "npc_id": 11453,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11454,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Betrayer",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13314,
+                "mapping_version_id": 163,
+                "npc_id": 11454,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11455,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Felsworn",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13319,
+                "mapping_version_id": 163,
+                "npc_id": 11455,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11456,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Shadowstalker",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13306,
+                "mapping_version_id": 163,
+                "npc_id": 11456,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11457,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Hellcaller",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13355,
+                "mapping_version_id": 163,
+                "npc_id": 11457,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11458,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Petrified Treant",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13309,
+                "mapping_version_id": 163,
+                "npc_id": 11458,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11459,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Ironbark Protector",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13290,
+                "mapping_version_id": 163,
+                "npc_id": 11459,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11460,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Alzzin's Minion",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13338,
+                "mapping_version_id": 163,
+                "npc_id": 11460,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11461,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Warpwood Guardian",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13313,
+                "mapping_version_id": 163,
+                "npc_id": 11461,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11462,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Warpwood Treant",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13308,
+                "mapping_version_id": 163,
+                "npc_id": 11462,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11464,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Warpwood Tangler",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13318,
+                "mapping_version_id": 163,
+                "npc_id": 11464,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11465,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Warpwood Stomper",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13337,
+                "mapping_version_id": 163,
+                "npc_id": 11465,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11466,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Highborne Summoner",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13343,
+                "mapping_version_id": 163,
+                "npc_id": 11466,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11467,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Tsu'zee",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13284,
+                "mapping_version_id": 163,
+                "npc_id": 11467,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11469,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Seether",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13334,
+                "mapping_version_id": 163,
+                "npc_id": 11469,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11470,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Sorcerer",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13325,
+                "mapping_version_id": 163,
+                "npc_id": 11470,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11471,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Apparition",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13333,
+                "mapping_version_id": 163,
+                "npc_id": 11471,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11472,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Spirit",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13303,
+                "mapping_version_id": 163,
+                "npc_id": 11472,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11473,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Spectre",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13287,
+                "mapping_version_id": 163,
+                "npc_id": 11473,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11475,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Phantasm",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13291,
+                "mapping_version_id": 163,
+                "npc_id": 11475,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11476,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Skeletal Highborne",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13354,
+                "mapping_version_id": 163,
+                "npc_id": 11476,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11477,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Rotting Highborne",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13326,
+                "mapping_version_id": 163,
+                "npc_id": 11477,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11480,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Arcane Aberration",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13339,
+                "mapping_version_id": 163,
+                "npc_id": 11480,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11483,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Mana Remnant",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13302,
+                "mapping_version_id": 163,
+                "npc_id": 11483,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11484,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Residual Monstrosity",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13349,
+                "mapping_version_id": 163,
+                "npc_id": 11484,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11486,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Prince Tortheldrin",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13260,
+                "mapping_version_id": 163,
+                "npc_id": 11486,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11487,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Magister Kalendris",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13272,
+                "mapping_version_id": 163,
+                "npc_id": 11487,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11488,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Illyanna Ravenoak",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13275,
+                "mapping_version_id": 163,
+                "npc_id": 11488,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11489,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Tendris Warpwood",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13271,
+                "mapping_version_id": 163,
+                "npc_id": 11489,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11490,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Zevrim Thornhoof",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13270,
+                "mapping_version_id": 163,
+                "npc_id": 11490,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11491,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Old Ironbark",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13299,
+                "mapping_version_id": 163,
+                "npc_id": 11491,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11492,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Alzzin the Wildshaper",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13262,
+                "mapping_version_id": 163,
+                "npc_id": 11492,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11496,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Immol'thar",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13266,
+                "mapping_version_id": 163,
+                "npc_id": 11496,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 11501,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "King Gordok",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13263,
+                "mapping_version_id": 163,
+                "npc_id": 11501,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13021,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Warpwood Crusher",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13317,
+                "mapping_version_id": 163,
+                "npc_id": 13021,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13022,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Whip Lasher",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13285,
+                "mapping_version_id": 163,
+                "npc_id": 13022,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13036,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Mastiff",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13286,
+                "mapping_version_id": 163,
+                "npc_id": 13036,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13160,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Carrion Swarmer",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13310,
+                "mapping_version_id": 163,
+                "npc_id": 13160,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13196,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Phase Lasher",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13312,
+                "mapping_version_id": 163,
+                "npc_id": 13196,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13197,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Fel Lash",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13328,
+                "mapping_version_id": 163,
+                "npc_id": 13197,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13276,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wildspawn Imp",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13327,
+                "mapping_version_id": 163,
+                "npc_id": 13276,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13280,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Hydrospawn",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13277,
+                "mapping_version_id": 163,
+                "npc_id": 13280,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 13285,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Death Lash",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13341,
+                "mapping_version_id": 163,
+                "npc_id": 13285,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
         "id": 13321,
         "dungeon_id": 81,
         "classification_id": 1,
@@ -78,6 +1534,1266 @@
                 "id": 12948,
                 "mapping_version_id": 163,
                 "npc_id": 13321,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14122,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Massive Geyser",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13348,
+                "mapping_version_id": 163,
+                "npc_id": 14122,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14303,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Petrified Guardian",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13311,
+                "mapping_version_id": 163,
+                "npc_id": 14303,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14308,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Ferra",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13295,
+                "mapping_version_id": 163,
+                "npc_id": 14308,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14321,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Guard Fengus",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13281,
+                "mapping_version_id": 163,
+                "npc_id": 14321,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14322,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Stomper Kreeg",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13273,
+                "mapping_version_id": 163,
+                "npc_id": 14322,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14323,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Guard Slip'kik",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13278,
+                "mapping_version_id": 163,
+                "npc_id": 14323,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14324,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Cho'Rush the Observer",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13268,
+                "mapping_version_id": 163,
+                "npc_id": 14324,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14325,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Captain Kromcrush",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13267,
+                "mapping_version_id": 163,
+                "npc_id": 14325,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14326,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Guard Mol'dar",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13265,
+                "mapping_version_id": 163,
+                "npc_id": 14326,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14327,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Lethtendris",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13279,
+                "mapping_version_id": 163,
+                "npc_id": 14327,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14338,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Knot Thimblejack",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13283,
+                "mapping_version_id": 163,
+                "npc_id": 14338,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14349,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Pimgib",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13321,
+                "mapping_version_id": 163,
+                "npc_id": 14349,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14350,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Hydroling",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13344,
+                "mapping_version_id": 163,
+                "npc_id": 14350,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14351,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Gordok Bushwacker",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13294,
+                "mapping_version_id": 163,
+                "npc_id": 14351,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14353,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Mizzle the Crafty",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13264,
+                "mapping_version_id": 163,
+                "npc_id": 14353,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14354,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Pusillin",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13259,
+                "mapping_version_id": 163,
+                "npc_id": 14354,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14358,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Shen'dralar Ancient",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13269,
+                "mapping_version_id": 163,
+                "npc_id": 14358,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14361,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Shen'dralar Wisp",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13353,
+                "mapping_version_id": 163,
+                "npc_id": 14361,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14364,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Shen'dralar Spirit",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13350,
+                "mapping_version_id": 163,
+                "npc_id": 14364,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14368,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Lorekeeper Lydros",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13258,
+                "mapping_version_id": 163,
+                "npc_id": 14368,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14369,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Shen'dralar Zealot",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13345,
+                "mapping_version_id": 163,
+                "npc_id": 14369,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14370,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Cadaverous Worm",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13351,
+                "mapping_version_id": 163,
+                "npc_id": 14370,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14371,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Shen'dralar Provisioner",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13296,
+                "mapping_version_id": 163,
+                "npc_id": 14371,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14381,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Lorekeeper Javon",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13289,
+                "mapping_version_id": 163,
+                "npc_id": 14381,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14382,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Lorekeeper Mykos",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13282,
+                "mapping_version_id": 163,
+                "npc_id": 14382,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14383,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Lorekeeper Kildrath",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13298,
+                "mapping_version_id": 163,
+                "npc_id": 14383,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14385,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Doomguard Minion",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13352,
+                "mapping_version_id": 163,
+                "npc_id": 14385,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14386,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Wandering Eye of Kilrogg",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13330,
+                "mapping_version_id": 163,
+                "npc_id": 14386,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14389,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Netherwalker",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13300,
+                "mapping_version_id": 163,
+                "npc_id": 14389,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14396,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eye of Immol'thar",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13342,
+                "mapping_version_id": 163,
+                "npc_id": 14396,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14397,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Mana Burst",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13347,
+                "mapping_version_id": 163,
+                "npc_id": 14397,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14398,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Eldreth Darter",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13324,
+                "mapping_version_id": 163,
+                "npc_id": 14398,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14399,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Arcane Torrent",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13322,
+                "mapping_version_id": 163,
+                "npc_id": 14399,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14400,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Arcane Feedback",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13340,
+                "mapping_version_id": 163,
+                "npc_id": 14400,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14482,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Xorothian Imp",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13346,
+                "mapping_version_id": 163,
+                "npc_id": 14482,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14483,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Dread Guard",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13323,
+                "mapping_version_id": 163,
+                "npc_id": 14483,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14500,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "J'eevee",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13304,
+                "mapping_version_id": 163,
+                "npc_id": 14500,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14502,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Xorothian Dreadsteed",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13288,
+                "mapping_version_id": 163,
+                "npc_id": 14502,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14504,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Dreadsteed Spirit",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13332,
+                "mapping_version_id": 163,
+                "npc_id": 14504,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14506,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Lord Hel'nurath",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13276,
+                "mapping_version_id": 163,
+                "npc_id": 14506,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14566,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Ancient Equine Spirit",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13305,
+                "mapping_version_id": 163,
+                "npc_id": 14566,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14690,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Revanchion",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13274,
+                "mapping_version_id": 163,
+                "npc_id": 14690,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 16032,
+        "dungeon_id": 81,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Falrin Treeshaper",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13280,
+                "mapping_version_id": 163,
+                "npc_id": 16032,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 16097,
+        "dungeon_id": 81,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Isalien",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13261,
+                "mapping_version_id": 163,
+                "npc_id": 16097,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 16098,
+        "dungeon_id": 81,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Empyrean",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13335,
+                "mapping_version_id": 163,
+                "npc_id": 16098,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }
