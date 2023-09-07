@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 10974,
         "name": "Ravaged Cadaver",
-        "base_health": 12345,
+        "base_health": 8352,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -18,13 +18,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13549,
-                "mapping_version_id": 210,
-                "npc_id": 10381,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13500,
                 "mapping_version_id": 176,
@@ -42,7 +35,7 @@
         "npc_class_id": 1,
         "display_id": 10972,
         "name": "Mangled Cadaver",
-        "base_health": 12345,
+        "base_health": 7842,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -53,13 +46,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13550,
-                "mapping_version_id": 210,
-                "npc_id": 10382,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13525,
                 "mapping_version_id": 176,
@@ -77,7 +63,7 @@
         "npc_class_id": 1,
         "display_id": 10970,
         "name": "Broken Cadaver",
-        "base_health": 12345,
+        "base_health": 270,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -88,13 +74,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13551,
-                "mapping_version_id": 210,
-                "npc_id": 10383,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13523,
                 "mapping_version_id": 176,
@@ -112,7 +91,7 @@
         "npc_class_id": 1,
         "display_id": 10483,
         "name": "Spectral Citizen",
-        "base_health": 12345,
+        "base_health": 5228,
         "health_percentage": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
@@ -123,13 +102,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13552,
-                "mapping_version_id": 210,
-                "npc_id": 10384,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13505,
                 "mapping_version_id": 176,
@@ -147,7 +119,7 @@
         "npc_class_id": 1,
         "display_id": 10478,
         "name": "Ghostly Citizen",
-        "base_health": 12345,
+        "base_health": 5568,
         "health_percentage": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
@@ -158,13 +130,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13553,
-                "mapping_version_id": 210,
-                "npc_id": 10385,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13508,
                 "mapping_version_id": 176,
@@ -182,7 +147,7 @@
         "npc_class_id": 1,
         "display_id": 146,
         "name": "Vengeful Phantom",
-        "base_health": 12345,
+        "base_health": 810,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -193,13 +158,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13554,
-                "mapping_version_id": 210,
-                "npc_id": 10387,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13531,
                 "mapping_version_id": 176,
@@ -217,7 +175,7 @@
         "npc_class_id": 1,
         "display_id": 10700,
         "name": "Spiteful Phantom",
-        "base_health": 12345,
+        "base_health": 287,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -228,13 +186,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13555,
-                "mapping_version_id": 210,
-                "npc_id": 10388,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13530,
                 "mapping_version_id": 176,
@@ -252,7 +203,7 @@
         "npc_class_id": 1,
         "display_id": 10701,
         "name": "Wrath Phantom",
-        "base_health": 12345,
+        "base_health": 244,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -263,13 +214,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13556,
-                "mapping_version_id": 210,
-                "npc_id": 10389,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13532,
                 "mapping_version_id": 176,
@@ -287,7 +231,7 @@
         "npc_class_id": 1,
         "display_id": 9789,
         "name": "Skeletal Guardian",
-        "base_health": 12345,
+        "base_health": 2823,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -298,13 +242,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13557,
-                "mapping_version_id": 210,
-                "npc_id": 10390,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13522,
                 "mapping_version_id": 176,
@@ -322,7 +259,7 @@
         "npc_class_id": 1,
         "display_id": 9784,
         "name": "Skeletal Berserker",
-        "base_health": 12345,
+        "base_health": 2699,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -333,13 +270,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13558,
-                "mapping_version_id": 210,
-                "npc_id": 10391,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13514,
                 "mapping_version_id": 176,
@@ -357,7 +287,7 @@
         "npc_class_id": 1,
         "display_id": 2606,
         "name": "Skul",
-        "base_health": 12345,
+        "base_health": 13065,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -368,13 +298,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13559,
-                "mapping_version_id": 210,
-                "npc_id": 10393,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13476,
                 "mapping_version_id": 176,
@@ -392,7 +315,7 @@
         "npc_class_id": 1,
         "display_id": 775,
         "name": "Black Guard Sentry",
-        "base_health": 12345,
+        "base_health": 7107,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -403,13 +326,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13560,
-                "mapping_version_id": 210,
-                "npc_id": 10394,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13517,
                 "mapping_version_id": 176,
@@ -427,7 +343,7 @@
         "npc_class_id": 1,
         "display_id": 10631,
         "name": "Thuzadin Shadowcaster",
-        "base_health": 12345,
+        "base_health": 6030,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -438,13 +354,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13561,
-                "mapping_version_id": 210,
-                "npc_id": 10398,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13494,
                 "mapping_version_id": 176,
@@ -462,7 +371,7 @@
         "npc_class_id": 1,
         "display_id": 10535,
         "name": "Thuzadin Acolyte",
-        "base_health": 12345,
+        "base_health": 2961,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -473,13 +382,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13562,
-                "mapping_version_id": 210,
-                "npc_id": 10399,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13503,
                 "mapping_version_id": 176,
@@ -497,7 +399,7 @@
         "npc_class_id": 1,
         "display_id": 10539,
         "name": "Thuzadin Necromancer",
-        "base_health": 12345,
+        "base_health": 6603,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -508,13 +410,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13563,
-                "mapping_version_id": 210,
-                "npc_id": 10400,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13506,
                 "mapping_version_id": 176,
@@ -532,7 +427,7 @@
         "npc_class_id": 1,
         "display_id": 559,
         "name": "Plague Ghoul",
-        "base_health": 12345,
+        "base_health": 8613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -543,13 +438,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13564,
-                "mapping_version_id": 210,
-                "npc_id": 10405,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13521,
                 "mapping_version_id": 176,
@@ -567,7 +455,7 @@
         "npc_class_id": 1,
         "display_id": 10626,
         "name": "Ghoul Ravener",
-        "base_health": 12345,
+        "base_health": 8883,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -578,13 +466,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13565,
-                "mapping_version_id": 210,
-                "npc_id": 10406,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13513,
                 "mapping_version_id": 176,
@@ -602,7 +483,7 @@
         "npc_class_id": 1,
         "display_id": 414,
         "name": "Fleshflayer Ghoul",
-        "base_health": 12345,
+        "base_health": 8883,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -613,13 +494,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13566,
-                "mapping_version_id": 210,
-                "npc_id": 10407,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13504,
                 "mapping_version_id": 176,
@@ -637,7 +511,7 @@
         "npc_class_id": 1,
         "display_id": 7533,
         "name": "Rockwing Gargoyle",
-        "base_health": 12345,
+        "base_health": 8613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -648,13 +522,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13567,
-                "mapping_version_id": 210,
-                "npc_id": 10408,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13543,
                 "mapping_version_id": 176,
@@ -672,7 +539,7 @@
         "npc_class_id": 1,
         "display_id": 11071,
         "name": "Rockwing Screecher",
-        "base_health": 12345,
+        "base_health": 8883,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -683,13 +550,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13568,
-                "mapping_version_id": 210,
-                "npc_id": 10409,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13509,
                 "mapping_version_id": 176,
@@ -707,7 +567,7 @@
         "npc_class_id": 1,
         "display_id": 4629,
         "name": "Eye of Naxxramas",
-        "base_health": 12345,
+        "base_health": 270,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -718,13 +578,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13569,
-                "mapping_version_id": 210,
-                "npc_id": 10411,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13499,
                 "mapping_version_id": 176,
@@ -742,7 +595,7 @@
         "npc_class_id": 1,
         "display_id": 6841,
         "name": "Crypt Crawler",
-        "base_health": 12345,
+        "base_health": 8883,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -753,13 +606,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13570,
-                "mapping_version_id": 210,
-                "npc_id": 10412,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13533,
                 "mapping_version_id": 176,
@@ -777,7 +623,7 @@
         "npc_class_id": 1,
         "display_id": 9758,
         "name": "Crypt Beast",
-        "base_health": 12345,
+        "base_health": 9156,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -788,13 +634,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13571,
-                "mapping_version_id": 210,
-                "npc_id": 10413,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13518,
                 "mapping_version_id": 176,
@@ -812,7 +651,7 @@
         "npc_class_id": 1,
         "display_id": 1693,
         "name": "Patchwork Horror",
-        "base_health": 12345,
+        "base_health": 16704,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -823,13 +662,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13572,
-                "mapping_version_id": 210,
-                "npc_id": 10414,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13495,
                 "mapping_version_id": 176,
@@ -847,7 +679,7 @@
         "npc_class_id": 1,
         "display_id": 9760,
         "name": "Bile Spewer",
-        "base_health": 12345,
+        "base_health": 14805,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -858,13 +690,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13573,
-                "mapping_version_id": 210,
-                "npc_id": 10416,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13516,
                 "mapping_version_id": 176,
@@ -882,7 +707,7 @@
         "npc_class_id": 1,
         "display_id": 12819,
         "name": "Venom Belcher",
-        "base_health": 12345,
+        "base_health": 15720,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -893,13 +718,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13574,
-                "mapping_version_id": 210,
-                "npc_id": 10417,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13507,
                 "mapping_version_id": 176,
@@ -917,7 +735,7 @@
         "npc_class_id": 1,
         "display_id": 34451,
         "name": "Crimson Guardsman",
-        "base_health": 12345,
+        "base_health": 8352,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -928,13 +746,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13575,
-                "mapping_version_id": 210,
-                "npc_id": 10418,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13501,
                 "mapping_version_id": 176,
@@ -952,7 +763,7 @@
         "npc_class_id": 1,
         "display_id": 34457,
         "name": "Crimson Conjuror",
-        "base_health": 12345,
+        "base_health": 6030,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -963,13 +774,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13576,
-                "mapping_version_id": 210,
-                "npc_id": 10419,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13529,
                 "mapping_version_id": 176,
@@ -987,7 +791,7 @@
         "npc_class_id": 1,
         "display_id": 34459,
         "name": "Crimson Initiate",
-        "base_health": 12345,
+        "base_health": 6891,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -998,13 +802,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13577,
-                "mapping_version_id": 210,
-                "npc_id": 10420,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13512,
                 "mapping_version_id": 176,
@@ -1022,7 +819,7 @@
         "npc_class_id": 1,
         "display_id": 34468,
         "name": "Crimson Defender",
-        "base_health": 12345,
+        "base_health": 7107,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1033,13 +830,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13578,
-                "mapping_version_id": 210,
-                "npc_id": 10421,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13511,
                 "mapping_version_id": 176,
@@ -1057,7 +847,7 @@
         "npc_class_id": 1,
         "display_id": 34472,
         "name": "Crimson Sorcerer",
-        "base_health": 12345,
+        "base_health": 6219,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1068,13 +858,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13579,
-                "mapping_version_id": 210,
-                "npc_id": 10422,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13493,
                 "mapping_version_id": 176,
@@ -1092,7 +875,7 @@
         "npc_class_id": 1,
         "display_id": 34476,
         "name": "Crimson Priest",
-        "base_health": 12345,
+        "base_health": 6219,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1103,13 +886,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13580,
-                "mapping_version_id": 210,
-                "npc_id": 10423,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13524,
                 "mapping_version_id": 176,
@@ -1127,7 +903,7 @@
         "npc_class_id": 1,
         "display_id": 34464,
         "name": "Crimson Gallant",
-        "base_health": 12345,
+        "base_health": 7326,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1138,13 +914,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13581,
-                "mapping_version_id": 210,
-                "npc_id": 10424,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13498,
                 "mapping_version_id": 176,
@@ -1162,7 +931,7 @@
         "npc_class_id": 1,
         "display_id": 34485,
         "name": "Crimson Battle Mage",
-        "base_health": 12345,
+        "base_health": 6219,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1173,13 +942,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13582,
-                "mapping_version_id": 210,
-                "npc_id": 10425,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13488,
                 "mapping_version_id": 176,
@@ -1197,7 +959,7 @@
         "npc_class_id": 1,
         "display_id": 34493,
         "name": "Crimson Inquisitor",
-        "base_health": 12345,
+        "base_health": 7107,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1208,13 +970,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13583,
-                "mapping_version_id": 210,
-                "npc_id": 10426,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13490,
                 "mapping_version_id": 176,
@@ -1232,7 +987,7 @@
         "npc_class_id": 1,
         "display_id": 10433,
         "name": "Magistrate Barthilas",
-        "base_health": 12345,
+        "base_health": 28710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1243,13 +998,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13584,
-                "mapping_version_id": 210,
-                "npc_id": 10435,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13467,
                 "mapping_version_id": 176,
@@ -1267,7 +1015,7 @@
         "npc_class_id": 1,
         "display_id": 10698,
         "name": "Baroness Anastari",
-        "base_health": 12345,
+        "base_health": 35535,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1278,13 +1026,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13585,
-                "mapping_version_id": 210,
-                "npc_id": 10436,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13474,
                 "mapping_version_id": 176,
@@ -1302,7 +1043,7 @@
         "npc_class_id": 1,
         "display_id": 9793,
         "name": "Nerub'enkan",
-        "base_health": 12345,
+        "base_health": 30520,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1313,13 +1054,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13586,
-                "mapping_version_id": 210,
-                "npc_id": 10437,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13477,
                 "mapping_version_id": 176,
@@ -1337,7 +1071,7 @@
         "npc_class_id": 1,
         "display_id": 10546,
         "name": "Maleki the Pallid",
-        "base_health": 12345,
+        "base_health": 22010,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1348,13 +1082,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13587,
-                "mapping_version_id": 210,
-                "npc_id": 10438,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13475,
                 "mapping_version_id": 176,
@@ -1372,7 +1099,7 @@
         "npc_class_id": 1,
         "display_id": 12818,
         "name": "Ramstein the Gorger",
-        "base_health": 12345,
+        "base_health": 28296,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1383,13 +1110,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13588,
-                "mapping_version_id": 210,
-                "npc_id": 10439,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13472,
                 "mapping_version_id": 176,
@@ -1407,7 +1127,7 @@
         "npc_class_id": 1,
         "display_id": 10729,
         "name": "Baron Rivendare",
-        "base_health": 12345,
+        "base_health": 46620,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1418,13 +1138,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13589,
-                "mapping_version_id": 210,
-                "npc_id": 10440,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13465,
                 "mapping_version_id": 176,
@@ -1442,7 +1155,7 @@
         "npc_class_id": 1,
         "display_id": 1141,
         "name": "Plagued Rat",
-        "base_health": 12345,
+        "base_health": 784,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1453,13 +1166,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13590,
-                "mapping_version_id": 210,
-                "npc_id": 10441,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13534,
                 "mapping_version_id": 176,
@@ -1477,7 +1183,7 @@
         "npc_class_id": 1,
         "display_id": 7511,
         "name": "Plagued Insect",
-        "base_health": 12345,
+        "base_health": 784,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1488,13 +1194,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13591,
-                "mapping_version_id": 210,
-                "npc_id": 10461,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13537,
                 "mapping_version_id": 176,
@@ -1512,7 +1211,7 @@
         "npc_class_id": 1,
         "display_id": 10728,
         "name": "Shrieking Banshee",
-        "base_health": 12345,
+        "base_health": 8613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1523,13 +1222,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13592,
-                "mapping_version_id": 210,
-                "npc_id": 10463,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13502,
                 "mapping_version_id": 176,
@@ -1547,7 +1239,7 @@
         "npc_class_id": 1,
         "display_id": 8782,
         "name": "Wailing Banshee",
-        "base_health": 12345,
+        "base_health": 8613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1558,13 +1250,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13593,
-                "mapping_version_id": 210,
-                "npc_id": 10464,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13535,
                 "mapping_version_id": 176,
@@ -1582,7 +1267,7 @@
         "npc_class_id": 1,
         "display_id": 10771,
         "name": "The Unforgiven",
-        "base_health": 12345,
+        "base_health": 11136,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1593,13 +1278,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13594,
-                "mapping_version_id": 210,
-                "npc_id": 10516,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13469,
                 "mapping_version_id": 176,
@@ -1617,7 +1295,7 @@
         "npc_class_id": 1,
         "display_id": 9904,
         "name": "Plagued Maggot",
-        "base_health": 12345,
+        "base_health": 784,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1628,13 +1306,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13595,
-                "mapping_version_id": 210,
-                "npc_id": 10536,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13538,
                 "mapping_version_id": 176,
@@ -1652,7 +1323,7 @@
         "npc_class_id": 1,
         "display_id": 10482,
         "name": "Hearthsinger Forresten",
-        "base_health": 12345,
+        "base_health": 6960,
         "health_percentage": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
@@ -1663,13 +1334,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13596,
-                "mapping_version_id": 210,
-                "npc_id": 10558,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13473,
                 "mapping_version_id": 176,
@@ -1687,7 +1351,7 @@
         "npc_class_id": 1,
         "display_id": 10029,
         "name": "Bile Slime",
-        "base_health": 12345,
+        "base_health": 888,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1698,13 +1362,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13597,
-                "mapping_version_id": 210,
-                "npc_id": 10697,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13515,
                 "mapping_version_id": 176,
@@ -1722,7 +1379,7 @@
         "npc_class_id": 1,
         "display_id": 571,
         "name": "Timmy the Cruel",
-        "base_health": 12345,
+        "base_health": 22968,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1733,13 +1390,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13598,
-                "mapping_version_id": 210,
-                "npc_id": 10808,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13479,
                 "mapping_version_id": 176,
@@ -1757,7 +1407,7 @@
         "npc_class_id": 1,
         "display_id": 7856,
         "name": "Stonespine",
-        "base_health": 12345,
+        "base_health": 15260,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1768,13 +1418,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13599,
-                "mapping_version_id": 210,
-                "npc_id": 10809,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13481,
                 "mapping_version_id": 176,
@@ -1792,7 +1435,7 @@
         "npc_class_id": 1,
         "display_id": 34498,
         "name": "Archivist Galford",
-        "base_health": 12345,
+        "base_health": 19536,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1803,13 +1446,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13600,
-                "mapping_version_id": 210,
-                "npc_id": 10811,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13468,
                 "mapping_version_id": 176,
@@ -1827,7 +1463,7 @@
         "npc_class_id": 1,
         "display_id": 10545,
         "name": "Grand Crusader Dathrohan",
-        "base_health": 12345,
+        "base_health": 25900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1838,13 +1474,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13601,
-                "mapping_version_id": 210,
-                "npc_id": 10812,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13470,
                 "mapping_version_id": 176,
@@ -1857,15 +1486,15 @@
     {
         "id": 10813,
         "dungeon_id": 94,
-        "classification_id": 0,
+        "classification_id": 3,
         "npc_type_id": 4,
         "npc_class_id": 1,
-        "display_id": 34424,
+        "display_id": null,
         "name": "Balnazzar",
-        "base_health": 12345,
-        "health_percentage": null,
+        "base_health": 25000,
+        "health_percentage": 100,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -1873,13 +1502,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13602,
-                "mapping_version_id": 210,
-                "npc_id": 10813,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13466,
                 "mapping_version_id": 176,
@@ -1897,7 +1519,7 @@
         "npc_class_id": 1,
         "display_id": 10031,
         "name": "Undead Scarab",
-        "base_health": 12345,
+        "base_health": 1949,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1908,13 +1530,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13603,
-                "mapping_version_id": 210,
-                "npc_id": 10876,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13528,
                 "mapping_version_id": 176,
@@ -1932,7 +1547,7 @@
         "npc_class_id": 1,
         "display_id": 10217,
         "name": "Aurius",
-        "base_health": 12345,
+        "base_health": 7326,
         "health_percentage": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
@@ -1943,13 +1558,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13604,
-                "mapping_version_id": 210,
-                "npc_id": 10917,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13484,
                 "mapping_version_id": 176,
@@ -1967,7 +1575,7 @@
         "npc_class_id": 1,
         "display_id": 4606,
         "name": "Summoned Water Elemental",
-        "base_health": 12345,
+        "base_health": 1350,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1978,13 +1586,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13605,
-                "mapping_version_id": 210,
-                "npc_id": 10955,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13540,
                 "mapping_version_id": 176,
@@ -2002,7 +1603,7 @@
         "npc_class_id": 1,
         "display_id": 34480,
         "name": "Cannon Master Willey",
-        "base_health": 12345,
+        "base_health": 36624,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2013,13 +1614,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13606,
-                "mapping_version_id": 210,
-                "npc_id": 10997,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13471,
                 "mapping_version_id": 176,
@@ -2037,7 +1631,7 @@
         "npc_class_id": 1,
         "display_id": 9784,
         "name": "Mindless Undead",
-        "base_health": 12345,
+        "base_health": 1080,
         "health_percentage": 100,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2048,13 +1642,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13607,
-                "mapping_version_id": 210,
-                "npc_id": 11030,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13520,
                 "mapping_version_id": 176,
@@ -2072,7 +1659,7 @@
         "npc_class_id": 1,
         "display_id": 34463,
         "name": "Malor the Zealous",
-        "base_health": 12345,
+        "base_health": 17094,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2083,13 +1670,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13608,
-                "mapping_version_id": 210,
-                "npc_id": 11032,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13485,
                 "mapping_version_id": 176,
@@ -2107,7 +1687,7 @@
         "npc_class_id": 1,
         "display_id": 34489,
         "name": "Crimson Monk",
-        "base_health": 12345,
+        "base_health": 9156,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2118,13 +1698,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13609,
-                "mapping_version_id": 210,
-                "npc_id": 11043,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13496,
                 "mapping_version_id": 176,
@@ -2142,7 +1715,7 @@
         "npc_class_id": 1,
         "display_id": 34481,
         "name": "Crimson Rifleman",
-        "base_health": 12345,
+        "base_health": 3052,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2153,13 +1726,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13610,
-                "mapping_version_id": 210,
-                "npc_id": 11054,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13536,
                 "mapping_version_id": 176,
@@ -2177,7 +1743,7 @@
         "npc_class_id": 1,
         "display_id": 10475,
         "name": "Fras Siabi",
-        "base_health": 12345,
+        "base_health": 28296,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2188,13 +1754,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13611,
-                "mapping_version_id": 210,
-                "npc_id": 11058,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13486,
                 "mapping_version_id": 176,
@@ -2212,7 +1771,7 @@
         "npc_class_id": 1,
         "display_id": 10547,
         "name": "Stratholme Courier",
-        "base_health": 12345,
+        "base_health": 12528,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2223,13 +1782,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13612,
-                "mapping_version_id": 210,
-                "npc_id": 11082,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13497,
                 "mapping_version_id": 176,
@@ -2247,7 +1799,7 @@
         "npc_class_id": 1,
         "display_id": 34497,
         "name": "Crimson Hammersmith",
-        "base_health": 12345,
+        "base_health": 15260,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2258,13 +1810,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13613,
-                "mapping_version_id": 210,
-                "npc_id": 11120,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13483,
                 "mapping_version_id": 176,
@@ -2282,7 +1827,7 @@
         "npc_class_id": 1,
         "display_id": 775,
         "name": "Black Guard Swordsmith",
-        "base_health": 12345,
+        "base_health": 9711,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2293,13 +1838,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13614,
-                "mapping_version_id": 210,
-                "npc_id": 11121,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13487,
                 "mapping_version_id": 176,
@@ -2317,7 +1855,7 @@
         "npc_class_id": 1,
         "display_id": 1825,
         "name": "Restless Soul",
-        "base_health": 12345,
+        "base_health": 42,
         "health_percentage": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
@@ -2328,13 +1866,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13615,
-                "mapping_version_id": 210,
-                "npc_id": 11122,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13526,
                 "mapping_version_id": 176,
@@ -2352,7 +1883,7 @@
         "npc_class_id": 1,
         "display_id": 10668,
         "name": "Undead Postman",
-        "base_health": 12345,
+        "base_health": 7178,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2363,13 +1894,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13616,
-                "mapping_version_id": 210,
-                "npc_id": 11142,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13541,
                 "mapping_version_id": 176,
@@ -2387,7 +1911,7 @@
         "npc_class_id": 1,
         "display_id": 10669,
         "name": "Postmaster Malown",
-        "base_health": 12345,
+        "base_health": 15873,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2398,13 +1922,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13617,
-                "mapping_version_id": 210,
-                "npc_id": 11143,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13478,
                 "mapping_version_id": 176,
@@ -2422,7 +1939,7 @@
         "npc_class_id": 1,
         "display_id": 9784,
         "name": "Mindless Skeleton",
-        "base_health": 12345,
+        "base_health": 336,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2433,13 +1950,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13618,
-                "mapping_version_id": 210,
-                "npc_id": 11197,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13542,
                 "mapping_version_id": 176,
@@ -2457,7 +1967,7 @@
         "npc_class_id": 1,
         "display_id": 7919,
         "name": "Balzaphon",
-        "base_health": 12345,
+        "base_health": 14652,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2468,13 +1978,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13619,
-                "mapping_version_id": 210,
-                "npc_id": 14684,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13491,
                 "mapping_version_id": 176,
@@ -2492,7 +1995,7 @@
         "npc_class_id": 1,
         "display_id": 15610,
         "name": "Elder Farwhisper",
-        "base_health": 12345,
+        "base_health": 2563,
         "health_percentage": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
@@ -2503,13 +2006,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13620,
-                "mapping_version_id": 210,
-                "npc_id": 15607,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13519,
                 "mapping_version_id": 176,
@@ -2527,7 +2023,7 @@
         "npc_class_id": 1,
         "display_id": 15967,
         "name": "Ysida Harmon",
-        "base_health": 12345,
+        "base_health": 6104,
         "health_percentage": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
@@ -2538,13 +2034,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13621,
-                "mapping_version_id": 210,
-                "npc_id": 16031,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13492,
                 "mapping_version_id": 176,
@@ -2562,7 +2051,7 @@
         "npc_class_id": 1,
         "display_id": 16018,
         "name": "Jarien",
-        "base_health": 12345,
+        "base_health": 19536,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2573,13 +2062,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13622,
-                "mapping_version_id": 210,
-                "npc_id": 16101,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13482,
                 "mapping_version_id": 176,
@@ -2597,7 +2079,7 @@
         "npc_class_id": 1,
         "display_id": 16003,
         "name": "Sothos",
-        "base_health": 12345,
+        "base_health": 14652,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2608,13 +2090,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13623,
-                "mapping_version_id": 210,
-                "npc_id": 16102,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13489,
                 "mapping_version_id": 176,
@@ -2644,13 +2119,6 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 13624,
-                "mapping_version_id": 210,
-                "npc_id": 16103,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 13539,
                 "mapping_version_id": 176,
                 "npc_id": 16103,
@@ -2679,13 +2147,6 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
-                "id": 13625,
-                "mapping_version_id": 210,
-                "npc_id": 16104,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 13527,
                 "mapping_version_id": 176,
                 "npc_id": 16104,
@@ -2702,7 +2163,7 @@
         "npc_class_id": 1,
         "display_id": 16164,
         "name": "Atiesh",
-        "base_health": 12345,
+        "base_health": 249825,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2713,13 +2174,6 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
-            {
-                "id": 13626,
-                "mapping_version_id": 210,
-                "npc_id": 16387,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
             {
                 "id": 13480,
                 "mapping_version_id": 176,

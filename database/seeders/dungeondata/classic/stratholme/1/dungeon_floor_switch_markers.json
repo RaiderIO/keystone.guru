@@ -8,11 +8,11 @@
         "lng": 344.56
     },
     {
-        "id": 574,
-        "mapping_version_id": 210,
+        "id": 594,
+        "mapping_version_id": 215,
         "floor_id": 234,
         "target_floor_id": 235,
-        "lat": -84.28,
-        "lng": 344.56
+        "lat": -84.12,
+        "lng": 345.39
     }
 ]

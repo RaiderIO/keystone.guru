@@ -13,27 +13,14 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 210,
+        "mapping_version_id": 215,
         "floor_id": 234,
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 10,
-        "lat": -225.14103727563,
-        "lng": 254.66502677917,
+        "lat": -225.47259589369614,
+        "lng": 255.18013386617636,
         "comment": null,
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 210,
-        "floor_id": 234,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 44,
-        "lat": -81.31467500138,
-        "lng": 307.77522018778,
-        "comment": "Festival Lane Postbox",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
