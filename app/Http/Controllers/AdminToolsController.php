@@ -153,11 +153,11 @@ class AdminToolsController extends Controller
         ];
 
         $classificationMapping = [
-            0 => NpcClassification::NPC_CLASSIFICATION_NORMAL,
-            1 => NpcClassification::NPC_CLASSIFICATION_NORMAL,
-            2 => NpcClassification::NPC_CLASSIFICATION_ELITE,
-            3 => NpcClassification::NPC_CLASSIFICATION_BOSS,
-            4 => NpcClassification::NPC_CLASSIFICATION_RARE,
+            0 => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+            1 => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+            2 => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+            3 => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+            4 => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
         ];
 
         try {
