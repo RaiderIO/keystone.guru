@@ -1,1 +1,30 @@
-[]
+[
+    {
+        "id": 8477,
+        "dungeon_id": 86,
+        "classification_id": 0,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 7846,
+        "name": "Skeletal Servant",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13510,
+                "mapping_version_id": 168,
+                "npc_id": 8477,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]
