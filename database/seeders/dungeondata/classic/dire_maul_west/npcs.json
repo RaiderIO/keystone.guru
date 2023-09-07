@@ -1820,34 +1820,6 @@
         ]
     },
     {
-        "id": 14338,
-        "dungeon_id": 81,
-        "classification_id": 1,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 14381,
-        "name": "Knot Thimblejack",
-        "base_health": 12345,
-        "health_percentage": null,
-        "aggressiveness": "friendly",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13283,
-                "mapping_version_id": 163,
-                "npc_id": 14338,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 14349,
         "dungeon_id": 81,
         "classification_id": 3,
