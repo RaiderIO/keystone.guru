@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcClassification;
+use App\Models\NpcType;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -33,6 +34,7 @@ class NpcFormRequest extends FormRequest
             'id'                        => 'required',
             'name'                      => 'required',
             'dungeon_id'                => [Rule::in([-1] + Dungeon::all()->pluck('id')->toArray())],
+            'npc_type_id'               => Rule::in(array_values(NpcType::ALL)),
             'npc_class_id'              => Rule::in(array_values(NpcClass::ALL)),
             'classification_id'         => [Rule::in(NpcClassification::ALL), 'required'],
             'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),

@@ -162,6 +162,7 @@ return [
             'game_id'                              => 'Game ID',
             'classification'                       => 'Classification',
             'aggressiveness'                       => 'Aggressiveness',
+            'type'                                 => 'Type',
             'class'                                => 'Class',
             'base_health'                          => 'Base health',
             'scaled_health_to_base_health_apply'   => '<- Apply to Base Health',

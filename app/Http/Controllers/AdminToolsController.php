@@ -75,7 +75,7 @@ class AdminToolsController extends Controller
 //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
 //                'WoWCombatLog-051323_095734_13_neltharus.zip',
 //                'WoWCombatLog-060223_181049_20_neltharus.zip'
-                'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip',
+                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip',
 //                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold_events.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
@@ -152,6 +152,14 @@ class AdminToolsController extends Controller
             1  => 'friendly',
         ];
 
+        $classificationMapping = [
+            0 => NpcClassification::NPC_CLASSIFICATION_NORMAL,
+            1 => NpcClassification::NPC_CLASSIFICATION_NORMAL,
+            2 => NpcClassification::NPC_CLASSIFICATION_ELITE,
+            3 => NpcClassification::NPC_CLASSIFICATION_BOSS,
+            4 => NpcClassification::NPC_CLASSIFICATION_RARE,
+        ];
+
         try {
             foreach ($decoded['data'] as $npcData) {
                 $npcCandidate = Npc::findOrNew($npcData['id']);
@@ -171,7 +179,7 @@ class AdminToolsController extends Controller
                 }
 
                 $npcCandidate->id                = $npcData['id'];
-                $npcCandidate->classification_id = ($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1;
+                $npcCandidate->classification_id = $classificationMapping[($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1];
                 // Bosses
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     $npcCandidate->dangerous = true;
@@ -341,7 +349,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request          $request
      * @param ThumbnailService $thumbnailService
      * @return void
      */
@@ -377,7 +385,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                         $request
      * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return JsonResponse
      */
@@ -399,7 +407,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                         $request
      * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return never|void
      * @throws Throwable
@@ -423,6 +431,7 @@ class AdminToolsController extends Controller
             } else {
                 $message = __('controller.admintools.error.invalid_mdt_string');
             }
+
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
@@ -442,7 +451,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                         $request
      * @param MDTImportStringServiceInterface $mdtImportStringService
      * @param MDTExportStringServiceInterface $mdtExportStringService
      * @return never|void
@@ -472,6 +481,7 @@ class AdminToolsController extends Controller
             } else {
                 $message = __('controller.admintools.error.invalid_mdt_string');
             }
+
             return abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
@@ -491,7 +501,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                          $request
      * @param MDTMappingImportServiceInterface $mdtMappingService
      * @return void
      * @throws Throwable
@@ -514,6 +524,7 @@ class AdminToolsController extends Controller
                 ->groupBy('dungeon_id')
                 ->mapWithKeys(function (Collection $mappingVersionByDungeon, int $id) {
                     $dungeon = Dungeon::findOrFail($id);
+
                     return [
                         __($dungeon->name) =>
                             $mappingVersionByDungeon->mapWithKeys(function (MappingVersion $mappingVersion) use ($dungeon) {
@@ -527,7 +538,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request                          $request
      * @param MDTMappingExportServiceInterface $mdtMappingService
      * @return void
      * @throws Throwable
@@ -817,7 +828,7 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request               $request
      * @param CacheServiceInterface $cacheService
      * @return RedirectResponse
      */
