@@ -13,9 +13,12 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc;
+use App\Models\NpcType;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Collection;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface
 {
@@ -30,8 +33,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     public function __construct(
         CombatLogServiceInterface                      $combatLogService,
         CombatLogMappingVersionServiceLoggingInterface $log
-    )
-    {
+    ) {
         $this->combatLogService = $combatLogService;
         $this->log              = $log;
     }
@@ -127,8 +129,11 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor = null;
+        /** @var Collection|Npc[] $npcs */
+        $npcs = collect();
+
         $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
-        use ($targetFilePath, $extractDungeonCallable, &$mappingVersion, &$dungeon, &$currentFloor) {
+        use ($targetFilePath, $extractDungeonCallable, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
             $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
@@ -168,6 +173,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
                     $mappingVersion->update(['dungeon_id' => $dungeon->id, 'version' => $newMappingVersionVersion]);
                     $mappingVersion->setRelation('dungeon', $dungeon);
+
+                    $npcs = $dungeon->getInUseNpcs()->keyBy('id');
                 }
 
                 return;
@@ -185,7 +192,15 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             if ($parsedEvent instanceof AdvancedCombatLogEvent) {
                 $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
 
-                if ($guid instanceof Creature) {
+                if ($guid instanceof Creature && $npcs->has($guid->getId())) {
+                    /** @var Npc $npc */
+                    $npc = $npcs->get($guid->getId());
+                    if ($npc->npc_type_id === NpcType::CRITTER) {
+                        $this->log->createMappingVersionFromCombatLogSkipEnemyIsCritter($currentFloor->id, $guid->getId());
+
+                        return;
+                    }
+
                     $latLng = $currentFloor->calculateMapLocationForIngameLocation(
                         $parsedEvent->getAdvancedData()->getPositionX(),
                         $parsedEvent->getAdvancedData()->getPositionY()

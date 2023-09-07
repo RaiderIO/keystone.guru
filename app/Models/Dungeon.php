@@ -745,11 +745,11 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|Npc[]
      */
-    public function getInUseNpcIds(): Collection
+    public function getInUseNpcs(): Collection
     {
-        return Npc::select('npcs.id')
+        return Npc::select('npcs.*')
             ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
             ->where(function (Builder $builder) {
                 return $builder->where('npcs.dungeon_id', $this->id)
@@ -782,7 +782,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
                         197857,
                     ]);
             })
-            ->get()
+            ->get();
+    }
+
+
+    /**
+     * @return Collection|int[]
+     */
+    public function getInUseNpcIds(): Collection
+    {
+        return $this->getInUseNpcs()
             ->pluck('id')
             // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so
             // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert
