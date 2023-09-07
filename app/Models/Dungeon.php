@@ -708,7 +708,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-            ->where('npc_type', '!=', NpcType::CRITTER)
+            ->where('npc_type_id', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
             ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
                 function (Builder $builder) use ($mappingVersion) {
