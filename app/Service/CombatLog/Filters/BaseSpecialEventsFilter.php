@@ -23,6 +23,12 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     private const IGNORE_FLOOR_MAP_UI_IDS = [
         // Wailing Caverns
         11,
+        // Kalimdor,
+        12,
+        // Feralas,
+        69,
+        // Dire Maul (outside)
+        234,
         // Pandaria
         424,
         // Draenor

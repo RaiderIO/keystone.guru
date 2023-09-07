@@ -57,6 +57,13 @@ interface CombatLogMappingVersionServiceLoggingInterface
     /**
      * @param int $floorId
      * @param int $npcId
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogSkipEnemyIsCritter(int $floorId, int $npcId): void;
+
+    /**
+     * @param int $floorId
+     * @param int $npcId
      * @return mixed
      */
     public function createMappingVersionFromCombatLogNewEnemy(int $floorId, int $npcId);
