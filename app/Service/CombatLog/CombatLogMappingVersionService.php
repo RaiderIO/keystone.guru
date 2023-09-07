@@ -174,7 +174,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     $mappingVersion->update(['dungeon_id' => $dungeon->id, 'version' => $newMappingVersionVersion]);
                     $mappingVersion->setRelation('dungeon', $dungeon);
 
-                    $npcs = $dungeon->getInUseNpcs()->keyBy('id');
+                    $npcs = Npc::whereIn('dungeon_id', [-1, $dungeon->id])->get()->keyBy('id');
                 }
 
                 return;
