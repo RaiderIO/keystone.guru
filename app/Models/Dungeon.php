@@ -30,7 +30,7 @@ use Mockery\Exception;
  * @property boolean                                 $active           True if this dungeon is active, false if it is not.
  *
  * @property Expansion                               $expansion
- * @property GameVersion                               $gameVersion
+ * @property GameVersion                             $gameVersion
  *
  * @property Collection|MappingVersion[]             $mappingVersions
  * @property Collection|Floor[]                      $floors
@@ -708,6 +708,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+            ->where('npc_type', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
             ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
                 function (Builder $builder) use ($mappingVersion) {

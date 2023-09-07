@@ -38,7 +38,7 @@ class NpcController extends Controller
 
     /**
      * @param NpcFormRequest $request
-     * @param Npc|null $npc
+     * @param Npc|null       $npc
      * @return array|mixed
      * @throws Exception
      */
@@ -59,6 +59,7 @@ class NpcController extends Controller
             'id'                => $validated['id'],
             'dungeon_id'        => $validated['dungeon_id'],
             'classification_id' => $validated['classification_id'],
+            'npc_type_id'       => $validated['npc_type_id'],
             'npc_class_id'      => $validated['npc_class_id'],
             'name'              => $validated['name'],
             'display_id'        => null,
@@ -107,7 +108,7 @@ class NpcController extends Controller
             $existingEnemyForces = 0;
 
             // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
-            if( $oldId === null ) {
+            if ($oldId === null) {
                 $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
             } else {
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
@@ -191,6 +192,7 @@ class NpcController extends Controller
                     ->mapWithKeys(function ($value, $key) {
                         // Halls of Valor => [npcs]
                         $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+
                         return [$dungeonName => $value->pluck('name', 'id')
                             ->map(function ($value, $key) {
                                 // Make sure the value is formatted as 'Hymdal (123456)'
@@ -203,9 +205,9 @@ class NpcController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request             $request
      * @param NpcServiceInterface $npcService
-     * @param Npc $npc
+     * @param Npc                 $npc
      * @return Factory|View
      */
     public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
@@ -222,9 +224,9 @@ class NpcController extends Controller
 
     /**
      * Override to give the type hint which is required.
-     * @param NpcFormRequest $request
+     * @param NpcFormRequest      $request
      * @param NpcServiceInterface $npcService
-     * @param Npc $npc
+     * @param Npc                 $npc
      * @return Factory|RedirectResponse|View
      * @throws Exception
      */
