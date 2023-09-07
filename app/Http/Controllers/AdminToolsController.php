@@ -186,7 +186,7 @@ class AdminToolsController extends Controller
                 }
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
-                $npcCandidate->dungeon_id = count($npcData['location']) >= 1 ? -1 : $dungeon->id;
+                $npcCandidate->dungeon_id = count($npcData['location']) > 1 ? -1 : $dungeon->id;
                 $npcCandidate->name       = $npcData['name'];
                 // Do not overwrite health if it was set already
                 if ($npcCandidate->base_health <= 0) {
