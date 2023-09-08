@@ -50,5 +50,18 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 203,
+        "floor_id": 214,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -113.38921086932017,
+        "lng": 205.88520821953335,
+        "comment": "Spewed Larva will occasionally spawn here.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

@@ -24,5 +24,57 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 215,
+        "floor_id": 235,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -91.46402156036181,
+        "lng": 224.657614842463,
+        "comment": "Plagued Insects attack you when you enter. WARNING: this event can respawn, never go here alone!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 215,
+        "floor_id": 235,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -34.5625,
+        "lng": 216,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 215,
+        "floor_id": 235,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -77.11208032121648,
+        "lng": 164.7868104653023,
+        "comment": "After defeating Ramstein the Gorder, Mindless Undead will swarm your party.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 215,
+        "floor_id": 235,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -135.8125,
+        "lng": 281.09375,
+        "comment": "Black Guard Swordsmith spawns if you pick up the Blacksmithing plans on the floor.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

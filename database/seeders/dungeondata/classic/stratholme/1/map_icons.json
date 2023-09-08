@@ -180,5 +180,18 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 215,
+        "floor_id": 234,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -118.41535675862481,
+        "lng": 50.25547740836037,
+        "comment": "Crimson Hammersmith spawns when you pick up the Blacksmithing Plans.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
