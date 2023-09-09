@@ -18,7 +18,7 @@ class FetchHealth extends Command
      *
      * @var string
      */
-    protected $signature = 'wowhead:fetchhealth {dungeonId}';
+    protected $signature = 'wowhead:fetchhealth {dungeon}';
 
     /**
      * The console command description.
@@ -41,10 +41,15 @@ class FetchHealth extends Command
      * Execute the console command.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle(WowheadServiceInterface $wowheadService)
     {
-        $dungeon = Dungeon::findOrFail($this->argument('dungeonId'));
+        $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
+
+        if ($dungeon === null) {
+            throw new \Exception('Unable to find dungeon!');
+        }
 
         foreach ($dungeon->npcs as $npc) {
             if ($npc->dungeon_id === -1) {
