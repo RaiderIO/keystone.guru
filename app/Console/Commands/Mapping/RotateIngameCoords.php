@@ -12,23 +12,29 @@ class RotateIngameCoords extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:rotateingamecoords {dungeonId}';
+    protected $signature = 'mapping:rotateingamecoords {dungeon}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Commits any saved mapping to Git';
+    protected $description = 'Rotates the in-game coordinates of all floors by 90 degrees.';
 
     /**
      * Execute the console command.
      *
      * @return int
+     * @throws \Exception
      */
     public function handle()
     {
-        $dungeon = Dungeon::findOrFail((int)$this->argument('dungeonId'));
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
+
+        if ($dungeon === null) {
+            throw new \Exception('Unable to find dungeon!');
+        }
 
         foreach ($dungeon->floors as $floor) {
             $newCoordinates = [
