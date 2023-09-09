@@ -56,7 +56,9 @@
                         'name': 'enemy_forces',
                         'searchable': false,
                         'render': function (data, type, row, meta) {
-                            return lang.get(typeof row.enemy_forces !== 'undefined' ? row.enemy_forces.enemy_forces : 0);
+                            return lang.get(typeof row.enemy_forces !== 'undefined' && row.enemy_forces !== null
+                                ? row.enemy_forces.enemy_forces
+                                : 0);
                         },
                     },
                     {
