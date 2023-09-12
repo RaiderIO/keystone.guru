@@ -220,26 +220,6 @@
         "npc_enemy_forces": []
     },
     {
-        "id": 11489,
-        "dungeon_id": 101,
-        "classification_id": 3,
-        "npc_type_id": 6,
-        "npc_class_id": 1,
-        "display_id": 14383,
-        "name": "Tendris Warpwood",
-        "base_health": 33572,
-        "health_percentage": 100,
-        "aggressiveness": "aggressive",
-        "dangerous": 1,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": []
-    },
-    {
         "id": 11490,
         "dungeon_id": 101,
         "classification_id": 3,
