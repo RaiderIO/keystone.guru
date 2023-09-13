@@ -240,6 +240,26 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 14324,
+        "dungeon_id": 100,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 11537,
+        "name": "Cho'Rush the Observer",
+        "base_health": 19536,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 14325,
         "dungeon_id": 100,
         "classification_id": 3,
