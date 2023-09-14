@@ -25,7 +25,7 @@
     },
     {
         "id": 568,
-        "mapping_version_id": 209,
+        "mapping_version_id": 216,
         "floor_id": 199,
         "target_floor_id": 200,
         "lat": -88.57,
@@ -33,7 +33,7 @@
     },
     {
         "id": 571,
-        "mapping_version_id": 209,
+        "mapping_version_id": 216,
         "floor_id": 199,
         "target_floor_id": 201,
         "lat": -109.25,
@@ -41,7 +41,7 @@
     },
     {
         "id": 573,
-        "mapping_version_id": 209,
+        "mapping_version_id": 216,
         "floor_id": 199,
         "target_floor_id": 200,
         "lat": -49.15,
