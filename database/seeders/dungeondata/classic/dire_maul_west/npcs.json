@@ -70,41 +70,6 @@
         ]
     },
     {
-        "id": 4075,
-        "dungeon_id": 81,
-        "classification_id": 1,
-        "npc_type_id": 3,
-        "npc_class_id": 1,
-        "display_id": 1141,
-        "name": "Rat",
-        "base_health": 8,
-        "health_percentage": null,
-        "aggressiveness": "neutral",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13364,
-                "mapping_version_id": 209,
-                "npc_id": 4075,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 11579,
-                "mapping_version_id": 163,
-                "npc_id": 4075,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 11458,
         "dungeon_id": 81,
         "classification_id": 2,
@@ -1694,41 +1659,6 @@
                 "id": 13323,
                 "mapping_version_id": 163,
                 "npc_id": 14483,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 14500,
-        "dungeon_id": 81,
-        "classification_id": 1,
-        "npc_type_id": 4,
-        "npc_class_id": 1,
-        "display_id": 10812,
-        "name": "J'eevee",
-        "base_health": 2871,
-        "health_percentage": null,
-        "aggressiveness": "friendly",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13456,
-                "mapping_version_id": 209,
-                "npc_id": 14500,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 13304,
-                "mapping_version_id": 163,
-                "npc_id": 14500,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }
