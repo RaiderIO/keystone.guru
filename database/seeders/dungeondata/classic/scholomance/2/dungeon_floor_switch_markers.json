@@ -11,7 +11,7 @@
         "id": 598,
         "mapping_version_id": 219,
         "floor_id": 224,
-        "target_floor_id": null,
+        "target_floor_id": 225,
         "lat": -83.62,
         "lng": 112.82
     }
