@@ -22,5 +22,69 @@
         "target_floor_id": 225,
         "lat": -217.53,
         "lng": 114.04
+    },
+    {
+        "id": 602,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -199.74,
+        "lng": 96.98
+    },
+    {
+        "id": 603,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -188.52,
+        "lng": 96.98
+    },
+    {
+        "id": 604,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -175,
+        "lng": 96.32
+    },
+    {
+        "id": 605,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -162.13,
+        "lng": 96.32
+    },
+    {
+        "id": 606,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -161.64,
+        "lng": 155.7
+    },
+    {
+        "id": 607,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -175.16,
+        "lng": 156.03
+    },
+    {
+        "id": 608,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -189.02,
+        "lng": 156.36
+    },
+    {
+        "id": 609,
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "target_floor_id": 225,
+        "lat": -200.07,
+        "lng": 156.53
     }
 ]
