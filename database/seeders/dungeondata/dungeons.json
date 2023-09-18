@@ -8747,15 +8747,21 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 728,
+                        "id": 730,
                         "floor1_id": 224,
                         "floor2_id": 223,
                         "direction": "up"
                     },
                     {
-                        "id": 729,
+                        "id": 731,
                         "floor1_id": 224,
                         "floor2_id": 225,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 732,
+                        "floor1_id": 224,
+                        "floor2_id": 226,
                         "direction": "down"
                     }
                 ],
@@ -8781,10 +8787,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 727,
+                        "id": 734,
                         "floor1_id": 225,
                         "floor2_id": 224,
                         "direction": "up"
+                    },
+                    {
+                        "id": 735,
+                        "floor1_id": 225,
+                        "floor2_id": 226,
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -8807,7 +8819,20 @@
                 "ingame_max_y": 356.92,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 736,
+                        "floor1_id": 226,
+                        "floor2_id": 224,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 737,
+                        "floor1_id": 226,
+                        "floor2_id": 225,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "mapping_version_id": 219,
+        "floor_id": 226,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -83.79049171725194,
+        "lng": 237.33384731860582,
+        "comment": "Darkmaster Gandling spawns when ALL enemies in all 6 rooms have been defeated.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

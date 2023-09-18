@@ -89,5 +89,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -119.265427171569,
+        "lng": 219.7051984118593,
+        "comment": "When Rattlegore is defeated, many enemies in this room will despawn.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -175.96003260622908,
+        "lng": 221.44629953845157,
+        "comment": "Iron Gate",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 219,
+        "floor_id": 224,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -215.57008323620272,
+        "lng": 184.0126253167182,
+        "comment": "Iron Gate",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
