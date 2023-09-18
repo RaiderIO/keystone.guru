@@ -76,5 +76,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -64.4375,
+        "lng": 170.5625,
+        "comment": "Temple Door",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -41.625,
+        "lng": 160.125,
+        "comment": "Altar of The Keepers.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 238,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -160.2396607657711,
+        "lng": 134.09354999346675,
+        "comment": "Animals here can be either Jadespine Basilisk or Venomlash Scorpid.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

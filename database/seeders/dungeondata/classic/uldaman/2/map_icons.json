@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "mapping_version_id": 222,
+        "floor_id": 239,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -155.1241173537985,
+        "lng": 224.7523471278699,
+        "comment": "Temple Door",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 239,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -138.02493983785308,
+        "lng": 217.9316225785731,
+        "comment": "Altar of Archaedas",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 222,
+        "floor_id": 239,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 40,
+        "lat": -87.15748768540001,
+        "lng": 193.2684982282511,
+        "comment": "The Discs of Norgannon",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
