@@ -48,7 +48,8 @@ class EnemyAttaching {
             // For each enemy we know of
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 // Check if it falls in the layer and if something changed; we don't want to make unnecessary requests
-                if (!enemy.is_mdt && enemy.layer !== null && enemy.enemy_pack_id !== newEnemyPack.id) {
+                if (!enemy.is_mdt && enemy.layer !== null && enemy.enemy_pack_id !== newEnemyPack.id &&
+                    enemy.floor_id === newEnemyPack.floor_id) {
                     let latLng = enemy.layer.getLatLng();
                     if (gju.pointInPolygon({
                             type: 'Point',
@@ -72,7 +73,8 @@ class EnemyAttaching {
             // For each enemy we know of
             $.each(enemyMapObjectGroup.objects, function (i, enemy) {
                 // Check if it falls in the layer and is actually part of the pack
-                if (!enemy.is_mdt && enemy.layer !== null && enemy.enemy_pack_id === changedEnemyPack.id) {
+                if (!enemy.is_mdt && enemy.layer !== null && enemy.enemy_pack_id === changedEnemyPack.id &&
+                    enemy.floor_id === changedEnemyPack.floor_id) {
                     let latLng = enemy.layer.getLatLng();
                     // If NOT part of the polygon (and visible, we shouldn't add faction hidden enemies to our pack)..
                     if (!gju.pointInPolygon({
@@ -110,16 +112,19 @@ class EnemyAttaching {
         // let layers = leafletPip.pointInLayer(e.latlng, self.map.leafletMap);
         let currTime = (new Date()).getTime();
 
+        let currentFloor = getState().getCurrentFloor();
+
         // Only update once every 1/20th of a second
         if (currTime - this.lastMouseMoveTime > 200) {
             let isMouseStillInLayer = false;
             let enemyPackManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
             for(let index in enemyPackManager.objects ) {
-                let layer = enemyPackManager.objects[index].layer;
+                let enemyPack = enemyPackManager.objects[index];
+                let layer = enemyPack.layer;
 
                 // Only track this when we're 'ghosting' an enemy around to place it somewhere
                 // Only polygons may be a target for enemies
-                if (layer instanceof L.Polygon) {
+                if (layer instanceof L.Polygon && enemyPack.floor_id === currentFloor.id) {
                     // If the mouse is currently in the polygon
                     if (gju.pointInPolygon({
                         type: 'Point',
