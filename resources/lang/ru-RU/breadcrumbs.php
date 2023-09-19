@@ -8,6 +8,10 @@ return [
         'routes'           => 'Маршруты',
         'routes_expansion' => ':expansion маршруты',
 
+        'dungeon' => [
+            'explore' => '@todo ru-RU: .home.dungeon.explore'
+        ],
+
         'dungeonroutes' => [
             'search'            => 'Поиск',
             'popular'           => 'Популярные',
@@ -15,8 +19,8 @@ return [
             'this_week_affixes' => 'Текущие Аффиксы',
             'new'               => 'Новые',
 
-            'routes_season'            => '@todo ru-RU: .home.dungeonroutes.routes_season',
-            'season' => [
+            'routes_season' => '@todo ru-RU: .home.dungeonroutes.routes_season',
+            'season'        => [
                 'popular'           => '@todo ru-RU: .home.dungeonroutes.season.popular',
                 'next_week_affixes' => '@todo ru-RU: .home.dungeonroutes.season.next_week_affixes',
                 'this_week_affixes' => '@todo ru-RU: .home.dungeonroutes.season.this_week_affixes',
@@ -81,6 +85,10 @@ return [
                 'npcs'     => 'НПЦ',
                 'new_npc'  => 'Новый НПЦ',
                 'edit_npc' => 'Редактировать НПЦ',
+            ],
+
+            'npcenemyforces' => [
+                'edit_npc_enemy_forces' => '@todo ru-RU: .home.admin.npcenemyforces.edit_npc_enemy_forces',
             ],
 
             'spells' => [

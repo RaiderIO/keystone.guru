@@ -155,7 +155,11 @@ return [
         'the_temple_of_atal_hakkar'   => [
             'name'   => 'The Temple of Atal\'Hakkar',
             'floors' => [
+                'the_pit_of_refuse'         => 'The Pit of Refuse',
+                'hall_of_serpents'          => 'Hall of Serpents',
+                'entrance'                  => 'Entrance',
                 'the_temple_of_atal_hakkar' => 'The Temple of Atal\'Hakkar',
+                'hall_of_the_cursed'        => 'Hall of the Cursed',
             ],
         ],
         'uldaman'                     => [

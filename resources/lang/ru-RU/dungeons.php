@@ -5,6 +5,179 @@ return [
         '1' => '@todo ru-RU: .difficulty.1',
         '2' => '@todo ru-RU: .difficulty.2',
     ],
+    'classic'      => [
+        'blackfathom_deeps'           => [
+            'name'   => '@todo ru-RU: .classic.blackfathom_deeps.name',
+            'floors' => [
+                'the_pool_of_ask_ar' => '@todo ru-RU: .classic.blackfathom_deeps.floors.the_pool_of_ask_ar',
+                'moonshrine_sanctum' => '@todo ru-RU: .classic.blackfathom_deeps.floors.moonshrine_sanctum',
+                'the_forgotten_pool' => '@todo ru-RU: .classic.blackfathom_deeps.floors.the_forgotten_pool',
+            ],
+        ],
+        'blackrock_depths'            => [
+            'name'   => '@todo ru-RU: .classic.blackrock_depths.name',
+            'floors' => [
+                'detention_block'  => '@todo ru-RU: .classic.blackrock_depths.floors.detention_block',
+                'shadowforge_city' => '@todo ru-RU: .classic.blackrock_depths.floors.shadowforge_city',
+            ],
+        ],
+        'deadmines'                   => [
+            'name'   => '@todo ru-RU: .classic.deadmines.name',
+            'floors' => [
+                'the_deadmines' => '@todo ru-RU: .classic.deadmines.floors.the_deadmines',
+                'ironclad_cove' => '@todo ru-RU: .classic.deadmines.floors.ironclad_cove',
+            ],
+        ],
+        'dire_maul_west'              => [
+            'name'   => '@todo ru-RU: .classic.dire_maul_west.name',
+            'floors' => [
+                'capital_gardens'        => '@todo ru-RU: .classic.dire_maul_west.floors.capital_gardens',
+                'court_of_the_highborne' => '@todo ru-RU: .classic.dire_maul_west.floors.court_of_the_highborne',
+                'prison_of_immol_thar'   => '@todo ru-RU: .classic.dire_maul_west.floors.prison_of_immol_thar',
+            ],
+        ],
+        'dire_maul_north'             => [
+            'name'   => '@todo ru-RU: .classic.dire_maul_north.name',
+            'floors' => [
+                'gordok_commons' => '@todo ru-RU: .classic.dire_maul_north.floors.gordok_commons',
+            ],
+        ],
+        'dire_maul_east'              => [
+            'name'   => '@todo ru-RU: .classic.dire_maul_east.name',
+            'floors' => [
+                'warpwood_quarter'         => '@todo ru-RU: .classic.dire_maul_east.floors.warpwood_quarter',
+                'the_shrine_of_eldretharr' => '@todo ru-RU: .classic.dire_maul_east.floors.the_shrine_of_eldretharr',
+            ],
+        ],
+        'gnomeregan'                  => [
+            'name'   => '@todo ru-RU: .classic.gnomeregan.name',
+            'floors' => [
+                'the_hall_of_gears' => '@todo ru-RU: .classic.gnomeregan.floors.the_hall_of_gears',
+                'the_dormitory'     => '@todo ru-RU: .classic.gnomeregan.floors.the_dormitory',
+                'launch_bay'        => '@todo ru-RU: .classic.gnomeregan.floors.launch_bay',
+                'tinkers_court'     => '@todo ru-RU: .classic.gnomeregan.floors.tinkers_court',
+            ],
+        ],
+        'lower_blackrock_spire'       => [
+            'name'   => '@todo ru-RU: .classic.lower_blackrock_spire.name',
+            'floors' => [
+                'tazz_alor'          => '@todo ru-RU: .classic.lower_blackrock_spire.floors.tazz_alor',
+                'skitterweb_tunnels' => '@todo ru-RU: .classic.lower_blackrock_spire.floors.skitterweb_tunnels',
+                'hordemar_city'      => '@todo ru-RU: .classic.lower_blackrock_spire.floors.hordemar_city',
+                'hall_of_blackhand'  => '@todo ru-RU: .classic.lower_blackrock_spire.floors.hall_of_blackhand',
+                'halycons_lair'      => '@todo ru-RU: .classic.lower_blackrock_spire.floors.halycons_lair',
+                'chamber_of_battle'  => '@todo ru-RU: .classic.lower_blackrock_spire.floors.chamber_of_battle',
+            ],
+        ],
+        'maraudon'                    => [
+            'name'   => '@todo ru-RU: .classic.maraudon.name',
+            'floors' => [
+                'caverns_of_maraudon' => '@todo ru-RU: .classic.maraudon.floors.caverns_of_maraudon',
+                'zaetars_grave'       => '@todo ru-RU: .classic.maraudon.floors.zaetars_grave',
+            ],
+        ],
+        'ragefire_chasm'              => [
+            'name'   => '@todo ru-RU: .classic.ragefire_chasm.name',
+            'floors' => [
+                'ragefire_chasm' => '@todo ru-RU: .classic.ragefire_chasm.floors.ragefire_chasm',
+            ],
+        ],
+        'razorfen_downs'              => [
+            'name'   => '@todo ru-RU: .classic.razorfen_downs.name',
+            'floors' => [
+                'razorfen_downs' => '@todo ru-RU: .classic.razorfen_downs.floors.razorfen_downs',
+            ],
+        ],
+        'razorfen_kraul'              => [
+            'name'   => '@todo ru-RU: .classic.razorfen_kraul.name',
+            'floors' => [
+                'razorfen_kraul' => '@todo ru-RU: .classic.razorfen_kraul.floors.razorfen_kraul',
+            ],
+        ],
+        'scarlet_monastery_armory'    => [
+            'name'   => '@todo ru-RU: .classic.scarlet_monastery_armory.name',
+            'floors' => [
+                'armory' => '@todo ru-RU: .classic.scarlet_monastery_armory.floors.armory',
+            ],
+        ],
+        'scarlet_monastery_cathedral' => [
+            'name'   => '@todo ru-RU: .classic.scarlet_monastery_cathedral.name',
+            'floors' => [
+                'cathedral' => '@todo ru-RU: .classic.scarlet_monastery_cathedral.floors.cathedral',
+            ],
+        ],
+        'scarlet_monastery_graveyard' => [
+            'name'   => '@todo ru-RU: .classic.scarlet_monastery_graveyard.name',
+            'floors' => [
+                'graveyard' => '@todo ru-RU: .classic.scarlet_monastery_graveyard.floors.graveyard',
+            ],
+        ],
+        'scarlet_monastery_library'   => [
+            'name'   => '@todo ru-RU: .classic.scarlet_monastery_library.name',
+            'floors' => [
+                'library' => '@todo ru-RU: .classic.scarlet_monastery_library.floors.library',
+            ],
+        ],
+        'scholomance'                 => [
+            'name'   => '@todo ru-RU: .classic.scholomance.name',
+            'floors' => [
+                'the_reliquary'        => '@todo ru-RU: .classic.scholomance.floors.the_reliquary',
+                'chamber_of_summoning' => '@todo ru-RU: .classic.scholomance.floors.chamber_of_summoning',
+                'the_upper_study'      => '@todo ru-RU: .classic.scholomance.floors.the_upper_study',
+                'headmasters_story'    => '@todo ru-RU: .classic.scholomance.floors.headmasters_story',
+            ],
+        ],
+        'shadowfang_keep'             => [
+            'name'   => '@todo ru-RU: .classic.shadowfang_keep.name',
+            'floors' => [
+                'the_courtyard'         => '@todo ru-RU: .classic.shadowfang_keep.floors.the_courtyard',
+                'dining_hall'           => '@todo ru-RU: .classic.shadowfang_keep.floors.dining_hall',
+                'the_vacant_den'        => '@todo ru-RU: .classic.shadowfang_keep.floors.the_vacant_den',
+                'lower_observatory'     => '@todo ru-RU: .classic.shadowfang_keep.floors.lower_observatory',
+                'upper_observatory'     => '@todo ru-RU: .classic.shadowfang_keep.floors.upper_observatory',
+                'lord_godfreys_chamber' => '@todo ru-RU: .classic.shadowfang_keep.floors.lord_godfreys_chamber',
+                'the_wall_walk'         => '@todo ru-RU: .classic.shadowfang_keep.floors.the_wall_walk',
+            ],
+        ],
+        'stratholme'                  => [
+            'name'   => '@todo ru-RU: .classic.stratholme.name',
+            'floors' => [
+                'crusaders_square' => '@todo ru-RU: .classic.stratholme.floors.crusaders_square',
+                'the_gauntlet'     => '@todo ru-RU: .classic.stratholme.floors.the_gauntlet',
+            ],
+        ],
+        'the_stockade'                => [
+            'name'   => '@todo ru-RU: .classic.the_stockade.name',
+            'floors' => [
+                'the_stockade' => '@todo ru-RU: .classic.the_stockade.floors.the_stockade',
+            ],
+        ],
+        'the_temple_of_atal_hakkar'   => [
+            'name'   => '@todo ru-RU: .classic.the_temple_of_atal_hakkar.name',
+            'floors' => [
+                'the_temple_of_atal_hakkar' => '@todo ru-RU: .classic.the_temple_of_atal_hakkar.floors.the_temple_of_atal_hakkar',
+            ],
+        ],
+        'uldaman'                     => [
+            'name'   => '@todo ru-RU: .classic.uldaman.name',
+            'floors' => [
+                'hall_of_the_keepers' => '@todo ru-RU: .classic.uldaman.floors.hall_of_the_keepers',
+                'khaz_goroths_seat'   => '@todo ru-RU: .classic.uldaman.floors.khaz_goroths_seat',
+            ],
+        ],
+        'wailing_caverns'             => [
+            'name'   => '@todo ru-RU: .classic.wailing_caverns.name',
+            'floors' => [
+                'wailing_caverns' => '@todo ru-RU: .classic.wailing_caverns.floors.wailing_caverns',
+            ],
+        ],
+        'zul_farrak'                  => [
+            'name'   => '@todo ru-RU: .classic.zul_farrak.name',
+            'floors' => [
+                'zul_farrak' => '@todo ru-RU: .classic.zul_farrak.floors.zul_farrak',
+            ],
+        ],
+    ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom' => [
             'name'   => '@todo ru: .wotlk.ahn_kahet_the_old_kingdom.name',
@@ -389,8 +562,8 @@ return [
         'temple_of_sethraliss'      => [
             'name'   => 'Храм Сетралисс',
             'floors' => [
-                'temple_of_sethraliss' => 'Храм Сетралисс',
-                'atrium_of_sethraliss' => 'Атриум Сетралисс',
+                'temple_of_sethraliss'  => 'Храм Сетралисс',
+                'atrium_of_the_wardens' => '@todo ru-RU: .bfa.temple_of_sethraliss.floors.atrium_of_the_wardens',
             ],
         ],
         'the_motherlode'            => [
@@ -413,7 +586,7 @@ return [
                 'the_drain'         => 'Стоки',
                 'the_brig'          => 'Гауптвахта',
                 'detention_block'   => 'Тюремный блок',
-                'officer_ouarters'  => 'Офицерская',
+                'officer_quarters'  => '@todo ru-RU: .bfa.tol_dagor.floors.officer_quarters',
                 'overseers_redoubt' => 'Цитадель надзирателя',
                 'overseers_summit'  => 'Терраса надзирателя',
             ],
@@ -432,6 +605,7 @@ return [
             'name'   => 'Мехагон: Свалка',
             'floors' => [
                 'mechagon_island' => 'Остров Мехагон',
+                'tunnels'         => '@todo ru-RU: .bfa.mechagon_junkyard.floors.tunnels',
             ],
         ],
         'mechagon_workshop'         => [
@@ -447,6 +621,7 @@ return [
             'name'   => 'Оргриммар (Жуткие Видения)',
             'floors' => [
                 'orgrimmar_horrific_vision' => 'Видение Оргриммара',
+                'the_drag'                  => '@todo ru-RU: .bfa.orgrimmar_horrific_vision.floors.the_drag',
             ],
         ],
         'stormwind_horrific_vision' => [

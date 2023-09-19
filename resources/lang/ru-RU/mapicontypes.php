@@ -107,4 +107,7 @@ return [
     'class_druid'        => '@todo ru-RU: .class_druid',
     'class_demon_hunter' => '@todo ru-RU: .class_demon_hunter',
     'class_evoker'       => '@todo ru-RU: .class_evoker',
+
+    'chest'        => '@todo ru-RU: .chest',
+    'chest_locked' => '@todo ru-RU: .chest_locked',
 ];
