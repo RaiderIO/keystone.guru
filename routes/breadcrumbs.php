@@ -264,7 +264,7 @@ Breadcrumbs::for('admin.dungeon.edit', function (Generator $trail, ?Dungeon $dun
     if ($dungeon === null) {
         $trail->push(__('breadcrumbs.home.admin.dungeons.new_dungeon'), route('admin.dungeon.new'));
     } else {
-        $trail->push(__('breadcrumbs.home.admin.dungeons.edit_dungeon'), route('admin.dungeon.edit', $dungeon));
+        $trail->push(__('breadcrumbs.home.admin.dungeons.edit_dungeon', ['dungeon' => __($dungeon->name)]), route('admin.dungeon.edit', $dungeon));
     }
 });
 Breadcrumbs::for('admin.floor.edit', function (Generator $trail, Dungeon $dungeon, ?Floor $floor) {

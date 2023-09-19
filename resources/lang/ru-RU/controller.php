@@ -86,6 +86,7 @@ return [
             'registered_successfully' => 'Регистрация прошла успешно.',
             'user_exists'             => 'Пользователь с таким именем уже существует %s. Может быть вы уже зарегистрированы?',
             'email_exists'            => 'Пользователь с таким электронным адресом уже существует %s. Может быть вы уже зарегистрированы?',
+            'permission_denied'       => '@todo ru-RU: .oauthlogin.flash.permission_denied',
         ],
     ],
     'register'                    => [
@@ -168,12 +169,14 @@ return [
     ],
     'user'                        => [
         'flash' => [
-            'user_is_now_an_admin'         => 'Пользователь %s теперь администратор',
-            'user_is_no_longer_an_admin'   => 'Пользователь %s больше не администратор',
-            'user_is_now_a_user'           => 'Пользователь %s теперь пользователь',
-            'account_deleted_successfully' => 'Аккаунт успешно удален.',
-            'account_deletion_error'       => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
-            'user_is_not_a_patron'         => 'Этот пользователь не подписчик Patron',
+            'user_is_now_an_admin'              => 'Пользователь %s теперь администратор',
+            'user_is_no_longer_an_admin'        => 'Пользователь %s больше не администратор',
+            'user_is_now_a_user'                => 'Пользователь %s теперь пользователь',
+            'account_deleted_successfully'      => 'Аккаунт успешно удален.',
+            'account_deletion_error'            => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
+            'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',
+            'all_benefits_granted_successfully' => '@todo ru-RU: .user.flash.all_benefits_granted_successfully',
+            'error_granting_all_benefits'       => '@todo ru-RU: .user.flash.error_granting_all_benefits'
         ],
     ],
 ];

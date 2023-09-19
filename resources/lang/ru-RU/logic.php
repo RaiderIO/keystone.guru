@@ -32,6 +32,8 @@ return [
                 'unable_to_find_awakened_enemy_for_final_boss_details' => 'В Keystone.guru есть ошибка сопоставления, которую необходимо исправить. Отправьте администратору вышеприведенное предупреждение, чтоб исправить его.',
                 'unable_to_find_enemies_pull_skipped'                  => 'Ошибка в поиске врагов привела к пропуску пака.',
                 'unable_to_find_enemies_pull_skipped_details'          => 'Эта ошибка может означать, что у MDT недавно было обновление, которое еще не интегрировано в Keystone.guru.',
+                'unable_to_find_awakened_obelisks'                     => '@todo ru-RU: .mdt.io.import_string.unable_to_find_awakened_obelisks',
+                'unable_to_find_awakened_obelisk_different_floor'      => '@todo ru-RU: .mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
             ],
         ],
     ],
