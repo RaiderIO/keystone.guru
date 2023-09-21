@@ -3,7 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
-use App\Logic\CombatLog\CombatEvents\Generic\GenericData;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use Exception;
@@ -19,7 +19,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
      */
     public function setParameters(array $parameters): CombatLogEvent
     {
-        $this->genericData = new GenericData($this->getCombatLogVersion());
+        $this->genericData = GenericDataBuilder::create($this->getCombatLogVersion());
         $this->genericData->setParameters(array_slice($parameters, 0, $this->genericData->getParameterCount()));
 
         $this->prefix = Prefix::createFromEventName($this->getCombatLogVersion(), $this->getEventName());

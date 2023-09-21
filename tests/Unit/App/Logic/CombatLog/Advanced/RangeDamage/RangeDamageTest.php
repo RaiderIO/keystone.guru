@@ -4,7 +4,7 @@ namespace Tests\Unit\App\Logic\CombatLog\Advanced\RangeDamage;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\Generic\GenericData;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
@@ -16,15 +16,16 @@ class RangeDamageTest extends PublicTestCase
 
     /**
      * @test
+     * @param string $advancedRangeDamageEvent
      * @return void
+     * @throws \Exception
      * @group CombatLog
      * @group RangeDamage
      * @dataProvider parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
     public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
-    )
-    {
+    ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -34,7 +35,7 @@ class RangeDamageTest extends PublicTestCase
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
-        Assert::assertInstanceOf(GenericData::class, $parseEventResult->getGenericData());
+        Assert::assertInstanceOf(GenericDataInterface::class, $parseEventResult->getGenericData());
         Assert::assertInstanceOf(Range::class, $parseEventResult->getPrefix());
         Assert::assertInstanceOf(Damage::class, $parseEventResult->getSuffix());
         Assert::assertInstanceOf(AdvancedData::class, $parseEventResult->getAdvancedData());
@@ -42,7 +43,12 @@ class RangeDamageTest extends PublicTestCase
 
     /**
      * @test
+     * @param string $advancedRangeDamageEvent
+     * @param int    $expectedSpellId
+     * @param string $expectedSpellName
+     * @param string $expectedSpellSchool
      * @return void
+     * @throws \Exception
      * @group CombatLog
      * @group RangeDamage
      * @dataProvider parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider
@@ -52,8 +58,7 @@ class RangeDamageTest extends PublicTestCase
         int    $expectedSpellId,
         string $expectedSpellName,
         string $expectedSpellSchool
-    )
-    {
+    ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -71,7 +76,19 @@ class RangeDamageTest extends PublicTestCase
 
     /**
      * @test
+     * @param string $advancedRangeDamageEvent
+     * @param int    $expectedAmount
+     * @param int    $expectedRawAmount
+     * @param int    $expectedOverKill
+     * @param int    $expectedSchool
+     * @param int    $expectedResisted
+     * @param int    $expectedBlocked
+     * @param int    $expectedAbsorbed
+     * @param bool   $expectedIsCritical
+     * @param bool   $expectedIsGlancing
+     * @param bool   $expectedIsCrushing
      * @return void
+     * @throws \Exception
      * @group CombatLog
      * @group RangeDamage
      * @dataProvider parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
@@ -88,8 +105,7 @@ class RangeDamageTest extends PublicTestCase
         bool   $expectedIsCritical,
         bool   $expectedIsGlancing,
         bool   $expectedIsCrushing
-    )
-    {
+    ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
