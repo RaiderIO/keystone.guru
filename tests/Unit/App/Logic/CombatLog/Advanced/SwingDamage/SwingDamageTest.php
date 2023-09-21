@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\SwingDamage;
 
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
@@ -25,8 +25,7 @@ class SwingDamageTest extends PublicTestCase
      */
     public function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent
-    )
-    {
+    ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);
 
@@ -39,7 +38,7 @@ class SwingDamageTest extends PublicTestCase
         Assert::assertInstanceOf(GenericDataInterface::class, $parseEventResult->getGenericData());
         Assert::assertInstanceOf(Swing::class, $parseEventResult->getPrefix());
         Assert::assertInstanceOf(Damage::class, $parseEventResult->getSuffix());
-        Assert::assertInstanceOf(AdvancedData::class, $parseEventResult->getAdvancedData());
+        Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
     /**
@@ -73,8 +72,7 @@ class SwingDamageTest extends PublicTestCase
         bool   $expectedIsCritical,
         bool   $expectedIsGlancing,
         bool   $expectedIsCrushing
-    )
-    {
+    ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);
 

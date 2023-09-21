@@ -2,7 +2,8 @@
 
 namespace App\Logic\CombatLog\CombatEvents;
 
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataBuilder;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
@@ -10,7 +11,7 @@ use Exception;
 
 class AdvancedCombatLogEvent extends CombatLogEvent
 {
-    private ?AdvancedData $advancedData = null;
+    private ?AdvancedDataInterface $advancedData = null;
 
     /**
      * @param array $parameters
@@ -25,7 +26,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
         $this->prefix = Prefix::createFromEventName($this->getCombatLogVersion(), $this->getEventName());
         $this->prefix->setParameters(array_slice($parameters, $this->genericData->getParameterCount(), $this->prefix->getParameterCount()));
 
-        $this->advancedData = new AdvancedData($this->getCombatLogVersion());
+        $this->advancedData = AdvancedDataBuilder::create($this->getCombatLogVersion());
         $this->advancedData->setParameters(
             array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount(), $this->advancedData->getParameterCount())
         );
@@ -40,9 +41,9 @@ class AdvancedCombatLogEvent extends CombatLogEvent
 
 
     /**
-     * @return AdvancedData
+     * @return AdvancedDataInterface
      */
-    public function getAdvancedData(): AdvancedData
+    public function getAdvancedData(): AdvancedDataInterface
     {
         return $this->advancedData;
     }

@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
@@ -214,11 +214,11 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param AdvancedData $advancedData
+     * @param AdvancedDataInterface $advancedData
      *
      * @return string|null
      */
-    private function hasAdvancedDataNewGuid(AdvancedData $advancedData): ?string
+    private function hasAdvancedDataNewGuid(AdvancedDataInterface $advancedData): ?string
     {
         $guid = $advancedData->getInfoGuid();
 
