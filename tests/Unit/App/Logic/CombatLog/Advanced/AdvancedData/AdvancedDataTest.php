@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\AdvancedData;
 
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
@@ -32,7 +32,7 @@ class AdvancedDataTest extends PublicTestCase
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
-        Assert::assertInstanceOf(AdvancedData::class, $parseEventResult->getAdvancedData());
+        Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
     /**

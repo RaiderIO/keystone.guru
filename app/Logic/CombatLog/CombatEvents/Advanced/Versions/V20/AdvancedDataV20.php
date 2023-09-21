@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents\Advanced;
+namespace App\Logic\CombatLog\CombatEvents\Advanced\Versions\V20;
 
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\Guid\Guid;
 
@@ -12,9 +13,8 @@ use App\Logic\CombatLog\Guid\Guid;
  * @author Wouter
  * @since 27/05/2023
  */
-class AdvancedData implements HasParameters
+class AdvancedDataV20 implements AdvancedDataInterface
 {
-    private int   $combatLogVersion;
     private ?Guid $infoGuid;
     private ?Guid $ownerGuid;
     private int   $currentHP;
@@ -36,14 +36,6 @@ class AdvancedData implements HasParameters
     private int   $uiMapId;
     private float $facing;
     private int   $level;
-
-    /**
-     * @param int $combatLogVersion
-     */
-    public function __construct(int $combatLogVersion)
-    {
-        $this->combatLogVersion = $combatLogVersion;
-    }
 
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\RangeDamage;
 
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
@@ -38,7 +38,7 @@ class RangeDamageTest extends PublicTestCase
         Assert::assertInstanceOf(GenericDataInterface::class, $parseEventResult->getGenericData());
         Assert::assertInstanceOf(Range::class, $parseEventResult->getPrefix());
         Assert::assertInstanceOf(Damage::class, $parseEventResult->getSuffix());
-        Assert::assertInstanceOf(AdvancedData::class, $parseEventResult->getAdvancedData());
+        Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
     /**

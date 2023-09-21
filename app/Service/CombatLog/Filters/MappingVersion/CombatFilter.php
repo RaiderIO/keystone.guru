@@ -3,22 +3,9 @@
 namespace App\Service\CombatLog\Filters\MappingVersion;
 
 use App\Logic\CombatLog\BaseEvent;
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
-use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
-use App\Logic\CombatLog\Guid\Creature;
-use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
-use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
-use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Service\CombatLog\Filters\BaseCombatFilter;
-use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
-use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
-use App\Service\CombatLog\ResultEvents\BaseResultEvent;
-use App\Service\CombatLog\ResultEvents\EnemyEngaged;
-use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
