@@ -4,7 +4,7 @@ namespace Tests\Unit\App\Logic\CombatLog\Advanced\SwingDamage;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
@@ -16,7 +16,9 @@ class SwingDamageTest extends PublicTestCase
 
     /**
      * @test
+     * @param string $advancedSwingDamageEvent
      * @return void
+     * @throws \Exception
      * @group CombatLog
      * @group SwingDamage
      * @dataProvider parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider
@@ -34,7 +36,7 @@ class SwingDamageTest extends PublicTestCase
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
-        Assert::assertInstanceOf(GenericData::class, $parseEventResult->getGenericData());
+        Assert::assertInstanceOf(GenericDataInterface::class, $parseEventResult->getGenericData());
         Assert::assertInstanceOf(Swing::class, $parseEventResult->getPrefix());
         Assert::assertInstanceOf(Damage::class, $parseEventResult->getSuffix());
         Assert::assertInstanceOf(AdvancedData::class, $parseEventResult->getAdvancedData());
@@ -42,7 +44,19 @@ class SwingDamageTest extends PublicTestCase
 
     /**
      * @test
+     * @param string $advancedSwingDamageEvent
+     * @param int    $expectedAmount
+     * @param int    $expectedRawAmount
+     * @param int    $expectedOverKill
+     * @param int    $expectedSchool
+     * @param int    $expectedResisted
+     * @param int    $expectedBlocked
+     * @param int    $expectedAbsorbed
+     * @param bool   $expectedIsCritical
+     * @param bool   $expectedIsGlancing
+     * @param bool   $expectedIsCrushing
      * @return void
+     * @throws \Exception
      * @group CombatLog
      * @group SwingDamage
      * @dataProvider parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider

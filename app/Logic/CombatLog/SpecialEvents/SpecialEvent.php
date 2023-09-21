@@ -103,9 +103,9 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_WORLD_MARKER_REMOVED => WorldMarkerRemoved::class,
     ];
 
-    private function __construct(Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)
+    private function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)
     {
-        parent::__construct($timestamp, $eventName, $rawEvent);
+        parent::__construct($combatLogVersion, $timestamp, $eventName, $rawEvent);
 
         $this->setParameters($parameters);
     }
@@ -123,15 +123,17 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     }
 
     /**
+     * @param int    $combatLogVersion
      * @param Carbon $timestamp
      * @param string $eventName
      * @param array  $parameters
      * @param string $rawEvent
      *
      * @return SpecialEvent
-     * @throws \Exception
+     * @throws Exception
      */
     public static function createFromEventName(
+        int    $combatLogVersion,
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
@@ -139,7 +141,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     ): SpecialEvent {
         foreach (self::SPECIAL_EVENT_CLASS_MAPPING as $specialEvent => $className) {
             if (Str::startsWith($eventName, $specialEvent)) {
-                return new $className($timestamp, $eventName, $parameters, $rawEvent);
+                return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
             }
         }
 

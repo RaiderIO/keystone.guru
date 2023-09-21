@@ -38,6 +38,16 @@ abstract class Prefix implements HasParameters
         self::PREFIX_SPELL_BUILDING              => SpellBuilding::class,
     ];
 
+    protected int $combatLogVersion;
+
+    /**
+     * @param int $combatLogVersion
+     */
+    public function __construct(int $combatLogVersion)
+    {
+        $this->combatLogVersion = $combatLogVersion;
+    }
+
     /**
      * @param array $parameters
      * @return self
@@ -49,17 +59,17 @@ abstract class Prefix implements HasParameters
         return $this;
     }
 
-
     /**
+     * @param int    $combatLogVersion
      * @param string $eventName
      * @return Prefix
      * @throws Exception
      */
-    public static function createFromEventName(string $eventName): Prefix
+    public static function createFromEventName(int $combatLogVersion, string $eventName): Prefix
     {
         foreach (self::PREFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::startsWith($eventName, $prefix)) {
-                return new $className();
+                return new $className($combatLogVersion);
             }
         }
 

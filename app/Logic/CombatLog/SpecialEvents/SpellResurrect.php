@@ -2,9 +2,6 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
-use App\Logic\CombatLog\CombatEvents\GenericData;
-use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
-
 /**
  * 5/27 13:08:17.696  SPELL_RESURRECT,Player-3676-0E1A2816,"Dudeurdead-Area52",0x512,0x0,Player-63-0CD36083,"Bunnicula-Ysera",0x10512,0x0,7328,"Redemption",0x2
  *

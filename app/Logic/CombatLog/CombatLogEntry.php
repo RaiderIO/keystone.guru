@@ -36,11 +36,11 @@ class CombatLogEntry
 
     /**
      * @param array $eventWhiteList Empty to return all events
-     *
+     * @param int   $combatLogVersion
      * @return BaseEvent|null
      * @throws Exception
      */
-    public function parseEvent(array $eventWhiteList = []): ?BaseEvent
+    public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL): ?BaseEvent
     {
         $matches = [];
         if (!preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
@@ -74,14 +74,14 @@ class CombatLogEntry
 
             try {
                 if (in_array($eventName, SpecialEvent::SPECIAL_EVENT_ALL)) {
-                    $this->parsedEvent = SpecialEvent::createFromEventName($this->parsedTimestamp, $eventName, $parameters, $this->rawEvent);
+                    $this->parsedEvent = SpecialEvent::createFromEventName($combatLogVersion, $this->parsedTimestamp, $eventName, $parameters, $this->rawEvent);
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
                 else if (count($parameters) > 23) {
-                    $this->parsedEvent = (new AdvancedCombatLogEvent($this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
+                    $this->parsedEvent = (new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 } else {
-                    $this->parsedEvent = (new CombatLogEvent($this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
+                    $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
 
             } catch (\Error|Exception $exception) {
