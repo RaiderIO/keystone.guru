@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents;
+namespace App\Logic\CombatLog\CombatEvents\Generic;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
@@ -9,6 +9,8 @@ use App\Logic\CombatLog\Guid\Guid;
 class GenericData implements HasParameters
 {
     use ValidatesParameterCount;
+
+    private int $combatLogVersion;
 
     private ?Guid $sourceGuid;
 
@@ -25,6 +27,14 @@ class GenericData implements HasParameters
     private string $destFlags;
 
     private string $destRaidFlags;
+
+    /**
+     * @param int $combatLogVersion
+     */
+    public function __construct(int $combatLogVersion)
+    {
+        $this->combatLogVersion = $combatLogVersion;
+    }
 
     /**
      * @return Guid|null

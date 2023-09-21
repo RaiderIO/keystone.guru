@@ -14,14 +14,15 @@ use App\Logic\CombatLog\Guid\Guid;
  */
 class AdvancedData implements HasParameters
 {
+    private int   $combatLogVersion;
     private ?Guid $infoGuid;
     private ?Guid $ownerGuid;
-    private int $currentHP;
-    private int $maxHP;
-    private int $attackPower;
-    private int $spellPower;
-    private int $armor;
-    private int $absorb;
+    private int   $currentHP;
+    private int   $maxHP;
+    private int   $attackPower;
+    private int   $spellPower;
+    private int   $armor;
+    private int   $absorb;
     /** @var int[] */
     private array $powerType;
     /** @var int[] */
@@ -32,9 +33,18 @@ class AdvancedData implements HasParameters
     private array $powerCost;
     private float $positionX;
     private float $positionY;
-    private int $uiMapId;
+    private int   $uiMapId;
     private float $facing;
-    private int $level;
+    private int   $level;
+
+    /**
+     * @param int $combatLogVersion
+     */
+    public function __construct(int $combatLogVersion)
+    {
+        $this->combatLogVersion = $combatLogVersion;
+    }
+
 
     /**
      * @return Guid|null
@@ -196,11 +206,11 @@ class AdvancedData implements HasParameters
         // x-position = -pos2
         // y-position = pos1
         // This fixes the above issue. X and Y are fine after this
-        $this->positionX    = $parameters[13] * -1;
-        $this->positionY    = $parameters[12];
-        $this->uiMapId      = $parameters[14];
-        $this->facing       = $parameters[15];
-        $this->level        = $parameters[16];
+        $this->positionX = $parameters[13] * -1;
+        $this->positionY = $parameters[12];
+        $this->uiMapId   = $parameters[14];
+        $this->facing    = $parameters[15];
+        $this->level     = $parameters[16];
 
         return $this;
     }

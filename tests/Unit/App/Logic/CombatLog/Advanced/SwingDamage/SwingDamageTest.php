@@ -4,7 +4,7 @@ namespace Tests\Unit\App\Logic\CombatLog\Advanced\SwingDamage;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\Generic\GenericData;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;

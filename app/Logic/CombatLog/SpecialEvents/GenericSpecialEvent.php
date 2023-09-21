@@ -2,7 +2,7 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
-use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\Generic\GenericData;
 
 abstract class GenericSpecialEvent extends SpecialEvent
 {

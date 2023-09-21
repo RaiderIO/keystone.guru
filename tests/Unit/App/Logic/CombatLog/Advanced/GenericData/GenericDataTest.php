@@ -3,7 +3,7 @@
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\GenericData;
 
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\Generic\GenericData;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
 use Tests\PublicTestCase;

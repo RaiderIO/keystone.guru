@@ -127,7 +127,16 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];
 
+    protected int $combatLogVersion;
 
+    /**
+     * @param int $combatLogVersion
+     */
+    public function __construct(int $combatLogVersion)
+    {
+        $this->combatLogVersion = $combatLogVersion;
+    }
+    
     /**
      * @param array $parameters
      * @return self
@@ -140,15 +149,16 @@ abstract class Suffix implements HasParameters
     }
 
     /**
+     * @param int    $combatLogVersion
      * @param string $eventName
      * @return Suffix
      * @throws Exception
      */
-    public static function createFromEventName(string $eventName): Suffix
+    public static function createFromEventName(int $combatLogVersion, string $eventName): Suffix
     {
         foreach (self::SUFFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::endsWith($eventName, $prefix)) {
-                return new $className();
+                return new $className($combatLogVersion);
             }
         }
 

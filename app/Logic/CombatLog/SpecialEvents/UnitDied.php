@@ -2,8 +2,6 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
-use App\Logic\CombatLog\CombatEvents\GenericData;
-
 /**
  * UNIT_DIED,0000000000000000,nil,0x80000000,0x80000000,Creature-0-4242-1841-14566-131402-0005E285EB,"Underrot Tick",0xa48,0x0,0
  *
