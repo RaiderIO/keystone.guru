@@ -1117,8 +1117,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -116.37820222294,
-        "lng": 246.17282955886,
+        "lat": -116.8125,
+        "lng": 245.96875,
         "kill_priority": -1
     },
     {
@@ -1564,7 +1564,7 @@
     {
         "id": 35366,
         "mapping_version_id": 223,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 6732,
         "enemy_patrol_id": null,
         "npc_id": 8384,
         "floor_id": 243,
@@ -1586,7 +1586,7 @@
     {
         "id": 35367,
         "mapping_version_id": 223,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 6732,
         "enemy_patrol_id": null,
         "npc_id": 8384,
         "floor_id": 243,

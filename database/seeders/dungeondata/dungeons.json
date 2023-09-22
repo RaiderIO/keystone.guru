@@ -9360,9 +9360,15 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 747,
+                        "id": 750,
                         "floor1_id": 245,
                         "floor2_id": 243,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 751,
+                        "floor1_id": 245,
+                        "floor2_id": 244,
                         "direction": "down"
                     }
                 ],
