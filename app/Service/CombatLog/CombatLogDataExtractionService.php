@@ -60,17 +60,17 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
         $result = new ExtractedDataResult();
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
+        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
         use ($targetFilePath, &$result, &$dungeon, &$currentFloor, &$checkedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
-            $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
-            $parsedEvent    = $combatLogEntry->parseEvent();
+            $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
 
             if ($combatLogEntry->getParsedTimestamp() === null) {
                 $this->log->extractDataTimestampNotSet();
 
-                return;
+                return $parsedEvent;
             }
 
 
@@ -166,6 +166,8 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     }
                 }
             }
+
+            return $parsedEvent;
         });
 
         return $result;

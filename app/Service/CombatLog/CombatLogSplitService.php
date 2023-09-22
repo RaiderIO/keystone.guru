@@ -72,16 +72,16 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 return $result;
             }
 
-            $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
+            $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
             use ($filePath, $targetFilePath, &$result) {
-                $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+                $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
                 $combatLogEntry = (new CombatLogEntry($rawEvent));
-                $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP);
+                $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);
 
                 if ($combatLogEntry->getParsedTimestamp() === null) {
                     $this->log->splitCombatLogOnChallengeModesTimestampNotSet();
-                    return;
+                    return $parsedEvent;
                 }
 
                 // If we have started a challenge mode
@@ -97,7 +97,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
                         // Reset variables
                         $this->resetCurrentChallengeMode();
-                        return;
+                        return $parsedEvent;
                     }
 
                     // Save ALL events that come through after the challenge mode start event has been given
@@ -120,7 +120,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                         // Reset variables
                         $this->resetCurrentChallengeMode();
                     }
-                } 
+                }
                 // If we're going to start a challenge mode event
                 else if ($parsedEvent instanceof ChallengeModeStartEvent) {
                     $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent();
@@ -131,8 +131,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                     $this->rawEvents->push($this->lastZoneChange);
                     $this->rawEvents->push($this->lastMapChange);
                     $this->rawEvents->push($rawEvent);
-                } 
-                
+                }
+
                 // Always keep track of these events
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
                     $this->log->splitCombatLogOnChallengeModesCombatLogVersionEvent();
@@ -144,6 +144,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                     $this->log->splitCombatLogOnChallengeModesMapChangeEvent();
                     $this->lastMapChange = $rawEvent;
                 }
+
+                return $parsedEvent;
             });
 
             if ($this->lastChallengeModeStartEvent !== null) {
