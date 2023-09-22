@@ -8717,7 +8717,14 @@
                 "ingame_max_y": 251.41,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 723,
+                        "floor1_id": 223,
+                        "floor2_id": 224,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -8738,7 +8745,26 @@
                 "ingame_max_y": 311.41,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 730,
+                        "floor1_id": 224,
+                        "floor2_id": 223,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 731,
+                        "floor1_id": 224,
+                        "floor2_id": 225,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 732,
+                        "floor1_id": 224,
+                        "floor2_id": 226,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -8759,7 +8785,20 @@
                 "ingame_max_y": 296.43,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 734,
+                        "floor1_id": 225,
+                        "floor2_id": 224,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 735,
+                        "floor1_id": 225,
+                        "floor2_id": 226,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -8780,7 +8819,20 @@
                 "ingame_max_y": 356.92,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 736,
+                        "floor1_id": 226,
+                        "floor2_id": 224,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 737,
+                        "floor1_id": 226,
+                        "floor2_id": 225,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
@@ -9151,11 +9203,74 @@
         "name": "dungeons.classic.the_temple_of_atal_hakkar.name",
         "slug": "the-temple-of-atalhakkar",
         "speedrun_enabled": 0,
-        "floor_count": 1,
+        "floor_count": 5,
         "floors": [
             {
-                "id": 237,
+                "id": 242,
                 "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 220,
+                "name": "dungeons.classic.the_temple_of_atal_hakkar.floors.the_pit_of_refuse",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 243,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 220,
+                "name": "dungeons.classic.the_temple_of_atal_hakkar.floors.hall_of_serpents",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 244,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": 220,
+                "name": "dungeons.classic.the_temple_of_atal_hakkar.floors.entrance",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 237,
+                "index": 4,
                 "mdt_sub_level": null,
                 "ui_map_id": 220,
                 "name": "dungeons.classic.the_temple_of_atal_hakkar.floors.the_temple_of_atal_hakkar",
@@ -9168,6 +9283,27 @@
                 "ingame_min_y": -252.27,
                 "ingame_max_x": -255.16,
                 "ingame_max_y": 442.75,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 245,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": 220,
+                "name": "dungeons.classic.the_temple_of_atal_hakkar.floors.hall_of_the_cursed",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "active": 1,
                 "floorcouplings": [],
@@ -9200,10 +9336,10 @@
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": -391.47,
-                "ingame_min_y": -248.54,
-                "ingame_max_x": 204.3,
-                "ingame_max_y": 645.11,
+                "ingame_min_x": 248.54,
+                "ingame_min_y": -391.47,
+                "ingame_max_x": -645.11,
+                "ingame_max_y": 204.3,
                 "percentage_display_zoom": null,
                 "active": 1,
                 "floorcouplings": [
@@ -9228,10 +9364,10 @@
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
                 "enemy_engagement_max_range_patrols": 50,
-                "ingame_min_x": -57.77,
-                "ingame_min_y": 52.54,
-                "ingame_max_x": 270.6,
-                "ingame_max_y": 545.11,
+                "ingame_min_x": -52.54,
+                "ingame_min_y": -57.77,
+                "ingame_max_x": -545.11,
+                "ingame_max_y": 270.6,
                 "percentage_display_zoom": null,
                 "active": 1,
                 "floorcouplings": [

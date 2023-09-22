@@ -5033,8 +5033,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -67.68621792322995,
-        "lng": 120.26263632405936,
+        "lat": -67.68621792323,
+        "lng": 120.26263632406,
         "kill_priority": -1
     },
     {
@@ -5055,8 +5055,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -67.54411949511959,
-        "lng": 123.19933717167326,
+        "lat": -67.54411949512,
+        "lng": 123.19933717167,
         "kill_priority": -1
     }
 ]
