@@ -11,5 +11,70 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 237,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -132.81824729653215,
+        "lng": 184.0789113882748,
+        "comment": "Weaver and Dreamscythe spawn when Jammal'an the Prophet is defeated.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 237,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -223.9243855772344,
+        "lng": 269.58514518836654,
+        "comment": "Shade of Eranikus can only be engaged if the shield is lowered by defeating the mini-bosses in the Hall of the Cursed.\n\nWarning: Attacking Shade of Eranikus causes all green dragons on this floor to aggro.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 237,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -75.54182789174818,
+        "lng": 206.75039576922785,
+        "comment": "Many enemies can be either a Nightmare Whelp, Nightmare Wanderer, Nightmare Scalebane or Nightmare Wyrmkin.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 237,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -143.74389302982215,
+        "lng": 292.43594072504266,
+        "comment": "You can remove the shield by defeating the mini-bosses in the Hall of the Cursed.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 237,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -89.0959161594575,
+        "lng": 299.37950877110217,
+        "comment": "Warning: Attacking Jammal'an the Prophet causes all enemies in this room to aggro.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
