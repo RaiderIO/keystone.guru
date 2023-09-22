@@ -209,6 +209,6 @@ class AdvancedDataV9 implements AdvancedDataInterface
      */
     public function getParameterCount(): int
     {
-        return 17;
+        return 16;
     }
 }
