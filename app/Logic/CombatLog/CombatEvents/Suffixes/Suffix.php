@@ -4,7 +4,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
-use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage;
+use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\EnvironmentalDamageV20;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -122,7 +122,7 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DURABILITY_DAMAGE     => DurabilityDamage::class,
         self::SUFFIX_CREATE                => Create::class,
         self::SUFFIX_SUMMON                => Summon::class,
-        self::SUFFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamage::class,
+        self::SUFFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamageV20::class,
         self::SUFFIX_EMPOWER_START         => EmpowerStart::class,
         self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];
@@ -136,7 +136,7 @@ abstract class Suffix implements HasParameters
     {
         $this->combatLogVersion = $combatLogVersion;
     }
-    
+
     /**
      * @param array $parameters
      * @return self
