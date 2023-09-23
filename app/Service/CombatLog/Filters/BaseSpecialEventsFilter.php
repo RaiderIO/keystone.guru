@@ -39,8 +39,14 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         619,
         // Suramar
         680,
+        // The Barrens
+        1413,
+        // Kalimdor
+        1414,
         // Eastern Kingdoms
         1415,
+        // Thousand Needles
+        1441,
         // The Waking Shores
         2022,
         // Thaldraszus
