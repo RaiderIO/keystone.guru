@@ -76,5 +76,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 224,
+        "floor_id": 180,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -218.35791786290417,
+        "lng": 294.52267533005164,
+        "comment": "Unlocked after defeating Valithria Dreamwalker.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 224,
+        "floor_id": 180,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -137.62842165808223,
+        "lng": 306.98963537295754,
+        "comment": "Unlocks after defeating Sindragosa.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
