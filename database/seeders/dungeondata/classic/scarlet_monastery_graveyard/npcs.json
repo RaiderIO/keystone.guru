@@ -1,5 +1,25 @@
 [
     {
+        "id": 3981,
+        "dungeon_id": 90,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2046,
+        "name": "Vorrel Sengutz",
+        "base_health": 156,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 3983,
         "dungeon_id": 90,
         "classification_id": 3,
@@ -396,5 +416,25 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 6547,
+        "dungeon_id": 90,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 1027,
+        "name": "Suffering Victim",
+        "base_health": 713,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
     }
 ]
