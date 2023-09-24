@@ -2,17 +2,18 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
-use App\Logic\CombatLog\CombatEvents\GenericData;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 
 abstract class GenericSpecialEvent extends SpecialEvent
 {
-    private GenericData $genericData;
+    private GenericDataInterface $genericData;
 
 
     /**
-     * @return GenericData
+     * @return GenericDataInterface
      */
-    public function getGenericData(): GenericData
+    public function getGenericData(): GenericDataInterface
     {
         return $this->genericData;
     }
@@ -26,7 +27,7 @@ abstract class GenericSpecialEvent extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->genericData = new GenericData();
+        $this->genericData = GenericDataBuilder::create($this->getCombatLogVersion());
         $this->genericData->setParameters(array_slice($parameters, 0, $this->genericData->getParameterCount()));
 
         return $this;

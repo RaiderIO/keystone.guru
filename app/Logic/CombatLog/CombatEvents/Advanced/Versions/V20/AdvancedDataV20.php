@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents\Advanced;
+namespace App\Logic\CombatLog\CombatEvents\Advanced\Versions\V20;
 
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\Guid\Guid;
 
@@ -12,16 +13,16 @@ use App\Logic\CombatLog\Guid\Guid;
  * @author Wouter
  * @since 27/05/2023
  */
-class AdvancedData implements HasParameters
+class AdvancedDataV20 implements AdvancedDataInterface
 {
     private ?Guid $infoGuid;
     private ?Guid $ownerGuid;
-    private int $currentHP;
-    private int $maxHP;
-    private int $attackPower;
-    private int $spellPower;
-    private int $armor;
-    private int $absorb;
+    private int   $currentHP;
+    private int   $maxHP;
+    private int   $attackPower;
+    private int   $spellPower;
+    private int   $armor;
+    private int   $absorb;
     /** @var int[] */
     private array $powerType;
     /** @var int[] */
@@ -32,9 +33,10 @@ class AdvancedData implements HasParameters
     private array $powerCost;
     private float $positionX;
     private float $positionY;
-    private int $uiMapId;
+    private int   $uiMapId;
     private float $facing;
-    private int $level;
+    private int   $level;
+
 
     /**
      * @return Guid|null
@@ -196,11 +198,11 @@ class AdvancedData implements HasParameters
         // x-position = -pos2
         // y-position = pos1
         // This fixes the above issue. X and Y are fine after this
-        $this->positionX    = $parameters[13] * -1;
-        $this->positionY    = $parameters[12];
-        $this->uiMapId      = $parameters[14];
-        $this->facing       = $parameters[15];
-        $this->level        = $parameters[16];
+        $this->positionX = $parameters[13] * -1;
+        $this->positionY = $parameters[12];
+        $this->uiMapId   = $parameters[14];
+        $this->facing    = $parameters[15];
+        $this->level     = $parameters[16];
 
         return $this;
     }

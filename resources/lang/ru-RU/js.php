@@ -43,12 +43,19 @@ return [
     'preset_label' => 'Предустановка',
     'add_label'    => 'Добавить',
 
-    'color_label'                  => 'Цвет',
-    'weight_label'                 => 'Толщина',
-    'mapobject_visibility_label'   => 'Видимость',
+    'color_label'                => 'Цвет',
+    'weight_label'               => 'Толщина',
+    'mapobject_visibility_label' => 'Видимость',
+
+    'mapping_manipulation_tools_header_label'  => '@todo ru-RU: .mapping_manipulation_tools_header_label',
+    'mapping_manipulation_tools_rotate_label'  => '@todo ru-RU: .mapping_manipulation_tools_rotate_label',
+    'mapping_manipulation_tools_scale_x_label' => '@todo ru-RU: .mapping_manipulation_tools_scale_x_label',
+    'mapping_manipulation_tools_scale_y_label' => '@todo ru-RU: .mapping_manipulation_tools_scale_y_label',
+    'mapping_manipulation_tools_move_x_label'  => '@todo ru-RU: .mapping_manipulation_tools_move_x_label',
+    'mapping_manipulation_tools_move_y_label'  => '@todo ru-RU: .mapping_manipulation_tools_move_y_label',
 
     // Map object translations
-    'header_floor_selection_label' => 'Уровень',
+    'header_floor_selection_label'             => 'Уровень',
 
     'header_map_object_group_label'                   => 'Показать/Спрятать',
     'enemy_map_object_group_label'                    => 'Враги',
@@ -73,7 +80,6 @@ return [
 
     'publish_state_title_world_with_link'   => 'Общедоступно по ссылкой',
     'publish_state_subtext_world_with_link' => 'Любой, у кого есть ссылка, может увидеть ваш маршрут (только для подписчиков',
-
 
     'publish_label'              => 'Опубликовать',
     'unpublish_label'            => 'Отменить публикацию',
@@ -101,10 +107,10 @@ return [
 
     'select_category_label' => 'Выбрать категорию...',
 
-    'show_details_label'     => 'Показать детали',
-    'add_kill_area_label'    => 'Добавить зону поражения',
-    'remove_kill_area_label' => 'Удалить зону поражения',
-    'delete_killzone_label'  => 'Удалить пул',
+    'pull_workbench_header_label'           => '@todo ru-RU: .pull_workbench_header_label',
+    'pull_workbench_add_kill_area_label'    => '@todo ru-RU: .pull_workbench_add_kill_area_label',
+    'pull_workbench_remove_kill_area_label' => '@todo ru-RU: .pull_workbench_remove_kill_area_label',
+    'pull_workbench_pull_description_label' => '@todo ru-RU: .pull_workbench_pull_description_label',
 
     'kill_zone_has_boss_label'               => 'Босс в пуле',
     'kill_zone_has_awakened_label'           => 'Пробудившийся в пуле',
@@ -174,7 +180,6 @@ return [
     'npc_class_label'                             => 'Класс',
     'enemy_portrait_label'                        => 'Портрет',
 
-
     // Admin
     'object.deleted'                              => 'Обьект успешно удален',
     'delete_all_pulls_successful'                 => 'Пул успешно удален',
@@ -198,6 +203,8 @@ return [
     'make_user_label'                                                => 'Создать пользователя',
     'make_admin_label'                                               => 'Создать Админа',
     'delete_user_label'                                              => 'Удалить пользователя',
+    'grant_all_benefits_label'                                       => '@todo ru-RU: .grant_all_benefits_label',
+    'patreon_benefits_manually_granted_label'                        => '@todo ru-RU: .patreon_benefits_manually_granted_label',
 
     // Home page
     'import_notes_label'                                             => 'Импорт заметки',
@@ -215,6 +222,9 @@ return [
     'route_published_state_changed'                                  => 'Настройки доступа к маршруту успешно обновлены',
     'datatable_no_routes_in_table'                                   => 'Маршруты не найдены',
     'cannot_change_sharing_settings_not_all_required_enemies_killed' => 'Невозможно изменить настройки доступа: не были убиты все необходимые враги',
+
+    // Mapping version edit
+    'mapping_version_saved'                                          => '@todo ru-RU: .mapping_version_saved',
 
     // Dungeonroute table
     'vote'                                                           => 'Оценка',
@@ -314,6 +324,9 @@ return [
     // Popups
     // Map Object
     'map_object_readonly_label'                          => '@todo ru: .map_object_readonly_label',
+    'map_object_category_general_label'                  => '@todo ru-RU: .map_object_category_general_label',
+    'map_object_category_legacy_label'                   => '@todo ru-RU: .map_object_category_legacy_label',
+    'map_object_category_advanced_label'                 => '@todo ru-RU: .map_object_category_advanced_label',
 
     'mapicon_faction_select_default_label'                          => 'Фракция',
     'mapicon_teeming_select_default_label'                          => 'Кишащий',
@@ -345,6 +358,7 @@ return [
     'enemy_faction_label'                                           => 'Фракция',
     'enemy_teeming_label'                                           => 'Кишащий',
     'enemy_npc_id_label'                                            => 'NPC',
+    'enemy_floor_id_label'                                          => '@todo ru-RU: .enemy_floor_id_label',
     'enemy_mdt_id_label'                                            => '@todo ru: .enemy_mdt_id_label',
     'enemy_mdt_npc_id_label'                                        => 'MDT Npc (Необязательно)',
     'enemy_seasonal_type_label'                                     => 'Тип сезона',
@@ -359,6 +373,8 @@ return [
     'enemy_dungeon_difficulty_label'                                => '@todo ru-RU: .enemy_dungeon_difficulty_label',
     'enemy_required_label'                                          => 'Необходимый',
     'enemy_skippable_label'                                         => 'Пропускаемый',
+    'enemy_kill_priority_label'                                     => '@todo ru-RU: .enemy_kill_priority_label',
+    'enemy_kill_priority_select_default_label'                      => '@todo ru-RU: .enemy_kill_priority_select_default_label',
     'enemy_npc_id_select_default_label'                             => 'Выбрать NPC',
     'enemy_mdt_npc_id_select_default_label'                         => 'Выбрать NPC',
 
@@ -366,7 +382,6 @@ return [
     'admin_enemy_pack_faction_label'                                => 'Фракция',
     'admin_enemy_pack_teeming_label'                                => 'Кишащий',
     'admin_enemy_pack_label_label'                                  => 'Метка',
-
 
     // Brushline
     'brushline_color_label'                                         => 'Цвет',

@@ -16,7 +16,7 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
-    
+
     /**
      * @param string $combatLogFilePath
      *
@@ -75,6 +75,15 @@ class CombatLogServiceLogging extends StructuredLogging implements CombatLogServ
     public function parseCombatLogParseEventsStart(): void
     {
         $this->start(__METHOD__);
+    }
+
+    /**
+     * @param int $combatLogVersion
+     * @return void
+     */
+    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     /**

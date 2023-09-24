@@ -35,6 +35,76 @@
         ]
     },
     {
+        "id": 2914,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": 1206,
+        "name": "Snake",
+        "base_health": 8,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13363,
+                "mapping_version_id": 209,
+                "npc_id": 2914,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 12874,
+                "mapping_version_id": 163,
+                "npc_id": 2914,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 4075,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": 1141,
+        "name": "Rat",
+        "base_health": 8,
+        "health_percentage": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13364,
+                "mapping_version_id": 209,
+                "npc_id": 4075,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 11579,
+                "mapping_version_id": 163,
+                "npc_id": 4075,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
         "id": 4076,
         "dungeon_id": -1,
         "classification_id": 0,
@@ -88,6 +158,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 13837,
+                "mapping_version_id": 219,
+                "npc_id": 4295,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 13832,
                 "mapping_version_id": 212,
@@ -1503,6 +1580,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 13838,
+                "mapping_version_id": 219,
+                "npc_id": 4298,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 13833,
                 "mapping_version_id": 212,
                 "npc_id": 4298,
@@ -2917,6 +3001,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 13839,
+                "mapping_version_id": 219,
+                "npc_id": 4299,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 13834,
                 "mapping_version_id": 212,
                 "npc_id": 4299,
@@ -4330,6 +4421,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 13840,
+                "mapping_version_id": 219,
+                "npc_id": 4540,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 13835,
                 "mapping_version_id": 212,
@@ -5748,6 +5846,41 @@
                 "id": 13510,
                 "mapping_version_id": 168,
                 "npc_id": 8477,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 14500,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": 10812,
+        "name": "J'eevee",
+        "base_health": 2871,
+        "health_percentage": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 13456,
+                "mapping_version_id": 209,
+                "npc_id": 14500,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 13304,
+                "mapping_version_id": 163,
+                "npc_id": 14500,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }

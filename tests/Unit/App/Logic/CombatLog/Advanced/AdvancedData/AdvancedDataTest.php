@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Logic\CombatLog\Advanced\AdvancedData;
+namespace Tests\Unit\App\Logic\CombatLog\Advanced\AdvancedData;
 
-use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
+use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
@@ -13,7 +13,9 @@ class AdvancedDataTest extends PublicTestCase
 
     /**
      * @test
+     * @param string $advancedRangeDamageEvent
      * @return void
+     * @throws \Exception
      * @group CombatLog
      * @group AdvancedData
      * @dataProvider parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
@@ -30,7 +32,7 @@ class AdvancedDataTest extends PublicTestCase
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
-        Assert::assertInstanceOf(AdvancedData::class, $parseEventResult->getAdvancedData());
+        Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
     /**
@@ -41,24 +43,24 @@ class AdvancedDataTest extends PublicTestCase
      * @dataProvider parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider
      */
     public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent(
-        string $advancedRangeDamageEvent,
-        string $expectedInfoGUID,
+        string  $advancedRangeDamageEvent,
+        string  $expectedInfoGUID,
         ?string $expectedOwnerGUID,
-        int $expectedCurrentHP,
-        int $expectedMaxHP,
-        int $expectedAttackPower,
-        int $expectedSpellPower,
-        int $expectedArmor,
-        int $expectedAbsorb,
-        array $expectedPowerType,
-        array $expectedCurrentPower,
-        array $expectedMaxPower,
-        array $expectedPowerCost,
-        float $expectedPositionX,
-        float $expectedPositionY,
-        int $expectedUiMapId,
-        float $expectedFacing,
-        int $expectedLevel
+        int     $expectedCurrentHP,
+        int     $expectedMaxHP,
+        int     $expectedAttackPower,
+        int     $expectedSpellPower,
+        int     $expectedArmor,
+        int     $expectedAbsorb,
+        array   $expectedPowerType,
+        array   $expectedCurrentPower,
+        array   $expectedMaxPower,
+        array   $expectedPowerCost,
+        float   $expectedPositionX,
+        float   $expectedPositionY,
+        int     $expectedUiMapId,
+        float   $expectedFacing,
+        int     $expectedLevel
     ) {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);

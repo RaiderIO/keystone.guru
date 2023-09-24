@@ -1,0 +1,41 @@
+[
+    {
+        "mapping_version_id": 223,
+        "floor_id": 245,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -67.98858388638699,
+        "lng": 249.0521620927946,
+        "comment": "WARNING: broken geometry can cause you to fall down and DIE.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 245,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -62.74764764171302,
+        "lng": 249.77009856466773,
+        "comment": "WARNING: broken geometry can cause you to fall down and DIE.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 223,
+        "floor_id": 245,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -61.95791752265256,
+        "lng": 246.68297173561322,
+        "comment": "WARNING: broken geometry can cause you to fall down and DIE.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

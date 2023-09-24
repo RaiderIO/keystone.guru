@@ -1,1 +1,67 @@
-[]
+[
+    {
+        "id": 1973,
+        "mapping_version_id": 219,
+        "floor_id": 226,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-238.8125,\"lng\":156.5},{\"lat\":-238.713877,\"lng\":162.756198},{\"lat\":-230.026846,\"lng\":162.253643},{\"lat\":-230.170433,\"lng\":150.335897},{\"lat\":-238.857464,\"lng\":150.407691},{\"lat\":-238.8125,\"lng\":156.5}]"
+        }
+    },
+    {
+        "id": 1974,
+        "mapping_version_id": 219,
+        "floor_id": 226,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#c41f3b",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-16.96875,\"lng\":257.125},{\"lat\":-55.281108,\"lng\":257.452019},{\"lat\":-55.209315,\"lng\":259.318654},{\"lat\":-16.9375,\"lng\":258.71875},{\"lat\":-17,\"lng\":257.09375}]"
+        }
+    },
+    {
+        "id": 1975,
+        "mapping_version_id": 219,
+        "floor_id": 226,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-36.235099,\"lng\":248.29332},{\"lat\":-36.235099,\"lng\":267.950269},{\"lat\":-34.5,\"lng\":267.90625},{\"lat\":-34.65625,\"lng\":248.28125},{\"lat\":-36.25,\"lng\":248.28125}]"
+        }
+    },
+    {
+        "id": 1976,
+        "mapping_version_id": 219,
+        "floor_id": 226,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-32.125,\"lng\":248.25},{\"lat\":-32.03125,\"lng\":267.84375},{\"lat\":-30.125,\"lng\":267.71875},{\"lat\":-30.4375,\"lng\":248.3125},{\"lat\":-32.09375,\"lng\":248.25}]"
+        }
+    },
+    {
+        "id": 1977,
+        "mapping_version_id": 219,
+        "floor_id": 226,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-26.15625,\"lng\":248.34375},{\"lat\":-27.875,\"lng\":248.34375},{\"lat\":-27.6875,\"lng\":267.5},{\"lat\":-25.90625,\"lng\":267.53125},{\"lat\":-26.125,\"lng\":248.3125}]"
+        }
+    }
+]

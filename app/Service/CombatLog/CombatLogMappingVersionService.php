@@ -132,17 +132,17 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         /** @var Collection|Npc[] $npcs */
         $npcs = collect();
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (string $rawEvent, int $lineNr)
+        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
         use ($targetFilePath, $extractDungeonCallable, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
-            $this->log->addContext('lineNr', ['rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
-            $parsedEvent    = $combatLogEntry->parseEvent();
+            $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
 
             if ($combatLogEntry->getParsedTimestamp() === null) {
                 $this->log->createMappingVersionFromCombatLogTimestampNotSet();
 
-                return;
+                return $parsedEvent;
             }
 
             // One way or another, enforce we extract the dungeon from the combat log
@@ -177,7 +177,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     $npcs = Npc::whereIn('dungeon_id', [-1, $dungeon->id])->get()->keyBy('id');
                 }
 
-                return;
+                return $parsedEvent;
             }
 
             // Ensure we know the floor
@@ -186,7 +186,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
-                return;
+                return $parsedEvent;
             }
 
             if ($parsedEvent instanceof AdvancedCombatLogEvent) {
@@ -198,7 +198,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     if ($npc->npc_type_id === NpcType::CRITTER) {
                         $this->log->createMappingVersionFromCombatLogSkipEnemyIsCritter($currentFloor->id, $guid->getId());
 
-                        return;
+                        return $parsedEvent;
                     }
 
                     $latLng = $currentFloor->calculateMapLocationForIngameLocation(
@@ -217,6 +217,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     $this->log->createMappingVersionFromCombatLogNewEnemy($currentFloor->id, $guid->getId());
                 }
             }
+
+            return $parsedEvent;
         });
 
 

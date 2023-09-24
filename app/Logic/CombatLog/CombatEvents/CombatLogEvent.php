@@ -3,12 +3,14 @@
 namespace App\Logic\CombatLog\CombatEvents;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 
 class CombatLogEvent extends BaseEvent
 {
-    protected GenericData $genericData;
+    protected GenericDataInterface $genericData;
 
     protected Prefix $prefix;
 
@@ -21,13 +23,13 @@ class CombatLogEvent extends BaseEvent
      */
     public function setParameters(array $parameters): CombatLogEvent
     {
-        $this->genericData = (new GenericData());
+        $this->genericData = GenericDataBuilder::create($this->getCombatLogVersion());
         $this->genericData->setParameters(array_slice($parameters, 0, $this->genericData->getParameterCount()));
 
-        $this->prefix = Prefix::createFromEventName($this->getEventName());
+        $this->prefix = Prefix::createFromEventName($this->getCombatLogVersion(), $this->getEventName());
         $this->prefix->setParameters(array_slice($parameters, $this->genericData->getParameterCount(), $this->prefix->getParameterCount()));
 
-        $this->suffix = Suffix::createFromEventName($this->getEventName());
+        $this->suffix = Suffix::createFromEventName($this->getCombatLogVersion(), $this->getEventName());
         $this->suffix->setParameters(
             array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount())
         );
@@ -36,9 +38,9 @@ class CombatLogEvent extends BaseEvent
     }
 
     /**
-     * @return GenericData
+     * @return GenericDataInterface
      */
-    public function getGenericData(): GenericData
+    public function getGenericData(): GenericDataInterface
     {
         return $this->genericData;
     }

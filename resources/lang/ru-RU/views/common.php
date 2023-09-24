@@ -17,6 +17,7 @@ return [
             'dungeon'                  => 'Подземелье',
             'all'                      => 'Все',
             'all_dungeons'             => 'Все подземелья',
+            'all_expansion_dungeons'   => '@todo ru-RU: .dungeon.select.all_expansion_dungeons',
             'seasons'                  => '@todo ru: .dungeon.select.seasons',
             'siege_of_boralus_warning' => 'Так как подземелье Осада Боралуса отличаются для Орды и Альянса вам необходимо выбрать фракцию.',
         ],
@@ -84,6 +85,8 @@ return [
             'save_settings'                                  => 'Сохранить настройки',
         ],
         'createtemporaryroute' => [
+            'key_levels'                => '@todo ru-RU: .forms.createtemporaryroute.key_levels',
+            'key_levels_title'          => '@todo ru-RU: .forms.createtemporaryroute.key_levels_title',
             'unregistered_user_message' => 'Если вы незарегистрированный пользователь, все созданные вами маршруты будут временными, срок действия которых истечет через %d часа.',
             'registered_user_message'   => 'Временный маршрут не будет отображаться в вашем профиле и будет автоматически удален через %d часов.',
             'create_route'              => 'Создать маршрут',
@@ -123,6 +126,7 @@ return [
             'temporary_route'                        => 'Временный маршрут',
             'temporary_route_title'                  => 'Временный маршрут не будет отображаться в вашем профиле и будет автоматически удален через %d часов.',
             'parsing_your_string'                    => 'Разбор вашей строки MDT...',
+            'import_as_this_week'                    => '@todo ru-RU: .forms.mdtimport.import_as_this_week',
             'import_route'                           => 'Импорт маршрута',
         ],
         'oauth'                => [
@@ -218,6 +222,7 @@ return [
             'search'                  => 'Поиск',
             'expansion_routes'        => '@todo ru: .layout.header.expansion_routes',
             'routes'                  => ':expansion',
+            'explore'                 => '@todo ru-RU: .layout.header.explore',
             'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',
         ],
@@ -244,11 +249,11 @@ return [
     ],
     'maps'         => [
         'controls' => [
-            'draw'      => [
+            'draw'           => [
                 'admin'           => '@todo ru: .maps.controls.draw.admin',
                 'view_this_route' => '@todo ru: .maps.controls.draw.view_this_route',
             ],
-            'elements'  => [
+            'elements'       => [
                 'dungeonrouteinfo'         => [
                     'timer'            => 'Таймер',
                     'timer_title'      => '+2: %s, +3: %s',
@@ -284,11 +289,11 @@ return [
                     'your_rating'              => 'Ваш рейтинг',
                 ],
             ],
-            'enemyinfo' => [
+            'enemyinfo'      => [
                 'enemy_info'      => 'Информация о враге',
                 'report_an_issue' => 'Сообщить о проблеме',
             ],
-            'header'    => [
+            'header'         => [
                 'toggle_navigation'              => 'Включить навигацию',
                 'stop'                           => 'Стоп',
                 'start'                          => 'Старт',
@@ -296,8 +301,10 @@ return [
                 'edit_route'                     => 'Редактировать маршрут',
                 'view_route'                     => 'Показать маршрут',
                 'save_to_profile'                => 'Сохранить в профиль',
+                'edit_route_admin_settings'      => '@todo ru-RU: .maps.controls.header.edit_route_admin_settings',
                 'simulate_route'                 => '@todo ru: .maps.controls.header.simulate_route',
                 'edit_route_settings'            => '@todo ru: .maps.controls.header.edit_route_settings',
+                'edit_mapping_version'           => '@todo ru-RU: .maps.controls.header.edit_mapping_version',
                 'share'                          => 'Поделиться',
                 'start_live_session'             => 'Начать живую сессию',
                 'start_live_session_paragraph_1' => 'После запуска маршрута в игре вы можете создать сеанс в реальном времени, в котором Keystone.guru поможет вам пройти M+ ключ. Вы можете следить за перемещениями карты другого пользователя, щелкнув на иконку вверху.',
@@ -311,7 +318,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'Вы не можете оценить свой собственный маршрут',
                 'review_live_session'            => 'Просмотреть сеанс в прямом эфире',
             ],
-            'pulls'     => [
+            'pulls'          => [
                 'settings_title'              => 'Настройки карты/пула',
                 'new_pull'                    => 'Новый пул',
                 'delete_all_pulls_title'      => 'Удалить все пулы',
@@ -320,7 +327,24 @@ return [
                 'no_pulls_created_edit'       => 'Никаких пулов еще не создано. Нажмите кнопку выше или на врага, чтобы создать ваш первый пул.',
                 'no_pulls_created_view'       => 'Никаких пулов еще не создано.',
             ],
-            'view'      => [
+            'pullsworkbench' => [
+                'modal'            => [
+                    'description' => [
+                        'label' => '@todo ru-RU: .maps.controls.pullsworkbench.modal.description.label',
+                        'save'  => '@todo ru-RU: .maps.controls.pullsworkbench.modal.description.save',
+                    ],
+                    'spells'      => [
+                        'label' => '@todo ru-RU: .maps.controls.pullsworkbench.modal.spells.label',
+                        'save'  => '@todo ru-RU: .maps.controls.pullsworkbench.modal.spells.save',
+                    ],
+                ],
+                'description'      => '@todo ru-RU: .maps.controls.pullsworkbench.description',
+                'spells'           => '@todo ru-RU: .maps.controls.pullsworkbench.spells',
+                'add_kill_area'    => '@todo ru-RU: .maps.controls.pullsworkbench.add_kill_area',
+                'remove_kill_area' => '@todo ru-RU: .maps.controls.pullsworkbench.remove_kill_area',
+                'delete_killzone'  => '@todo ru-RU: .maps.controls.pullsworkbench.delete_killzone',
+            ],
+            'view'           => [
                 'edit_this_route_title'          => 'Редактировать это маршрут',
                 'clone_this_route_title'         => 'Клонировать',
                 'report_for_moderation'          => 'Сообщить',
@@ -338,15 +362,14 @@ return [
 
             'new_mapping_version_header_title'       => '@todo ru: .maps.map.new_mapping_version_header_title',
             'new_mapping_version_header_description' => '@todo ru: .maps.map.new_mapping_version_header_description',
+            'explore_header_title'                   => '@todo ru-RU: .maps.map.explore_header_title',
             'admin_header_title'                     => '@todo ru: .maps.map.admin_header_title',
 
-            'route'         => 'Маршрут',
-            'map_settings'  => 'Настройки карты',
-            'pull_settings' => 'Настройки пула',
+            'route' => 'Маршрут',
         ],
     ],
     'modal'        => [
-        'userreport'      => [
+        'userreport'         => [
             'dungeonroute' => [
                 'report_route'           => 'Отправить жалобу',
                 'your_name'              => 'Ваше имя',
@@ -364,22 +387,43 @@ return [
                 'submit'                 => 'Отправить',
             ],
         ],
-        'createroute'     => [
+        'createroute'        => [
             'create_route'           => 'Создать маршрут',
             'create_temporary_route' => 'Создать временный маршрут',
             'import_from_mdt'        => 'Импорт из MDT',
         ],
-        'legal'           => [
+        'legal'              => [
             'welcome_back_agree' => 'С возвращением! Чтобы продолжить, вы должны согласиться с нашими %s, %s и %s.',
             'terms_of_service'   => 'Условиями использования',
             'privacy_policy'     => 'Политикой конфиденциальности',
             'cookie_policy'      => 'Политикой в отношении файлов cookie',
             'i_agree'            => 'Согласен',
         ],
-        'routesettings'   => [
+        'mappingversion'     => [
+            'enemy_forces_required'           => '@todo ru-RU: .modal.mappingversion.enemy_forces_required',
+            'enemy_forces_required_teeming'   => '@todo ru-RU: .modal.mappingversion.enemy_forces_required_teeming',
+            'enemy_forces_shrouded'           => '@todo ru-RU: .modal.mappingversion.enemy_forces_shrouded',
+            'enemy_forces_shrouded_zul_gamux' => '@todo ru-RU: .modal.mappingversion.enemy_forces_shrouded_zul_gamux',
+            'timer_max_seconds'               => '@todo ru-RU: .modal.mappingversion.timer_max_seconds',
+            'save'                            => '@todo ru-RU: .modal.mappingversion.save',
+        ],
+        'mapsettings'        => [
+            'map_settings'  => '@todo ru-RU: .modal.mapsettings.map_settings',
+            'pull_settings' => '@todo ru-RU: .modal.mapsettings.pull_settings',
+        ],
+        'routeadminsettings' => [
+            'title'                             => '@todo ru-RU: .modal.routeadminsettings.title',
+            'dungeon_route_info'                => '@todo ru-RU: .modal.routeadminsettings.dungeon_route_info',
+            'combatlog_info'                    => '@todo ru-RU: .modal.routeadminsettings.combatlog_info',
+            'challenge_mode_run'                => '@todo ru-RU: .modal.routeadminsettings.challenge_mode_run',
+            'challenge_mode_run_data'           => '@todo ru-RU: .modal.routeadminsettings.challenge_mode_run_data',
+            'route_not_created_from_combat_log' => '@todo ru-RU: .modal.routeadminsettings.route_not_created_from_combat_log',
+            'route_not_created_through_api'     => '@todo ru-RU: .modal.routeadminsettings.route_not_created_through_api',
+        ],
+        'routesettings'      => [
             'title' => '@todo ru: .modal.routesettings.title',
         ],
-        'share'           => [
+        'share'              => [
             'share'                            => 'Поделиться',
             'publish'                          => 'Опубликовать',
             'review_route_settings'            => 'Предпросмотр %s перед публикацией маршрута',
@@ -393,7 +437,7 @@ return [
             'loading'                          => 'Загрузка...',
             'copy_to_clipboard'                => 'Скопировать в буфер обмена',
         ],
-        'simulate'        => [
+        'simulate'           => [
             'intro'                                   => '@todo ru: .modal.simulate.intro',
             'title'                                   => '@todo ru: .modal.simulate.title',
             'key_level'                               => '@todo ru: .modal.simulate.key_level',
@@ -435,7 +479,7 @@ return [
             'loading'                                 => '@todo ru: .modal.simulate.loading',
             'copy_to_clipboard'                       => '@todo ru: .modal.simulate.copy_to_clipboard',
         ],
-        'simulateoptions' => [
+        'simulateoptions'    => [
             'advanced' => [
                 'patreon_link_text' => '@todo ru: .modal.simulateoptions.advanced.patreon_link_text',
                 'patreon_only'      => '@todo ru: .modal.simulateoptions.advanced.patreon_only',

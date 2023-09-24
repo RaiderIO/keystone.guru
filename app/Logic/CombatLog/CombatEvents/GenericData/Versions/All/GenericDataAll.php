@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents;
+namespace App\Logic\CombatLog\CombatEvents\GenericData\Versions\All;
 
+use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use App\Logic\CombatLog\Guid\Guid;
 
-class GenericData implements HasParameters
+class GenericDataAll implements GenericDataInterface
 {
     use ValidatesParameterCount;
 

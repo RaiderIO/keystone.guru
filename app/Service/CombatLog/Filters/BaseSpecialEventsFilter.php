@@ -3,11 +3,13 @@
 namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
+use App\Service\CombatLog\ResultEvents\CombatLogVersion as CombatLogVersionResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\CombatLog\ResultEvents\ZoneChange as ZoneChangeResultEvent;
 use Illuminate\Support\Collection;
@@ -37,6 +39,14 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         619,
         // Suramar
         680,
+        // The Barrens
+        1413,
+        // Kalimdor
+        1414,
+        // Eastern Kingdoms
+        1415,
+        // Thousand Needles
+        1441,
         // The Waking Shores
         2022,
         // Thaldraszus
@@ -65,6 +75,13 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
+        // Combat log versions yes please
+        if( $combatLogEvent instanceof CombatLogVersion ){
+            $this->resultEvents->push((new CombatLogVersionResultEvent($combatLogEvent)));
+
+            return true;
+        }
+
         // Zone changes yes please
         if ($combatLogEvent instanceof ZoneChange) {
             try {
