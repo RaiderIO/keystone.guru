@@ -2,7 +2,7 @@
     {
         "id": 2110,
         "dungeon_id": -1,
-        "classification_id": 0,
+        "classification_id": 1,
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 1141,
@@ -107,7 +107,7 @@
     {
         "id": 4076,
         "dungeon_id": -1,
-        "classification_id": 0,
+        "classification_id": 1,
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 2177,
@@ -158,6 +158,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14124,
+                "mapping_version_id": 224,
+                "npc_id": 4295,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 13837,
                 "mapping_version_id": 219,
@@ -1580,6 +1587,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 14125,
+                "mapping_version_id": 224,
+                "npc_id": 4298,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 13838,
                 "mapping_version_id": 219,
                 "npc_id": 4298,
@@ -3001,6 +3015,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 14126,
+                "mapping_version_id": 224,
+                "npc_id": 4299,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 13839,
                 "mapping_version_id": 219,
                 "npc_id": 4299,
@@ -4421,6 +4442,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14127,
+                "mapping_version_id": 224,
+                "npc_id": 4540,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 13840,
                 "mapping_version_id": 219,
