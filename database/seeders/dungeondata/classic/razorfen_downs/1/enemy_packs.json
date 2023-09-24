@@ -550,5 +550,53 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-150.05594\",\"lng\":\"97.100593\"},{\"lat\":\"-157.91872\",\"lng\":\"99.232069\"},{\"lat\":\"-155.739877\",\"lng\":\"105.910695\"},{\"lat\":\"-148.58759\",\"lng\":\"102.78453\"}]"
+    },
+    {
+        "id": 6866,
+        "mapping_version_id": 228,
+        "floor_id": 217,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-59.160312\",\"lng\":\"116.473345\"},{\"lat\":\"-67.638852\",\"lng\":\"116.425979\"},{\"lat\":\"-69.722962\",\"lng\":\"125.899207\"},{\"lat\":\"-63.233801\",\"lng\":\"128.883274\"}]"
+    },
+    {
+        "id": 6867,
+        "mapping_version_id": 228,
+        "floor_id": 217,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-94.3125\",\"lng\":\"115.90625\"},{\"lat\":\"-101.40625\",\"lng\":\"116.75\"},{\"lat\":\"-102.6875\",\"lng\":\"124.875\"},{\"lat\":\"-94.875\",\"lng\":\"122.78125\"}]"
+    },
+    {
+        "id": 6868,
+        "mapping_version_id": 228,
+        "floor_id": 217,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-107.538359\",\"lng\":\"106.175586\"},{\"lat\":\"-117.058954\",\"lng\":\"107.028176\"},{\"lat\":\"-118.148375\",\"lng\":\"112.38055\"},{\"lat\":\"-107.301528\",\"lng\":\"113.375239\"}]"
+    },
+    {
+        "id": 6869,
+        "mapping_version_id": 228,
+        "floor_id": 217,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":\"-106.384357\",\"lng\":\"115.099727\"},{\"lat\":\"-117.894329\",\"lng\":\"116.378613\"},{\"lat\":\"-117.799597\",\"lng\":\"123.388802\"},{\"lat\":\"-107.615876\",\"lng\":\"123.862463\"}]"
     }
 ]

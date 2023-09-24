@@ -128,5 +128,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 228,
+        "floor_id": 217,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -70.90711562706454,
+        "lng": 121.92045131868011,
+        "comment": "Enemies here can be one of Freezing Spirit, Boneflayer Ghoul, Splinterbone Centurion or Skeletal Summoner.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 228,
+        "floor_id": 217,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -107.51299456707132,
+        "lng": 146.25249463374885,
+        "comment": "Enemies here can be one of Freezing Spirit, Thorn Eater Ghoul, Boneflayer Ghoul, Splinterbone Centurion, Skeletal Frostweaver or Skeletal Summoner.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
