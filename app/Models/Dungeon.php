@@ -168,7 +168,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_SHADOWFANG_KEEP_CATA     = 'shadowfang_keep_cataclysm';
     const DUNGEON_THE_STONECORE            = 'the_stonecore';
     const DUNGEON_THE_VORTEX_PINNACLE      = 'skywall';
-    const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides';
+    const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides'; // throneoftides
     const DUNGEON_WELL_OF_ETERNITY         = 'well_of_eternity';
     const DUNGEON_ZUL_AMAN                 = 'zul_aman';
     const DUNGEON_ZUL_GURUB                = 'zul_gurub';
@@ -191,7 +191,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
     const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
     const DUNGEON_SKYREACH                  = 'skyreach';
-    const DUNGEON_THE_EVERBLOOM             = 'theeverbloom';
+    const DUNGEON_THE_EVERBLOOM             = 'theeverbloom'; // overgrownoutput
     const DUNGEON_UPPER_BLACKROCK_SPIRE     = 'upperblackrockspire';
 
     // Legion
@@ -338,6 +338,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         Expansion::EXPANSION_WOD          => [
             self::DUNGEON_IRON_DOCKS,
             self::DUNGEON_GRIMRAIL_DEPOT,
+            self::DUNGEON_THE_EVERBLOOM,
         ],
         Expansion::EXPANSION_LEGION       => [
             self::DUNGEON_ARCWAY,

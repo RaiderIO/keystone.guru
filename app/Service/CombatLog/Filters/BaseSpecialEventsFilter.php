@@ -19,6 +19,8 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     private const IGNORE_MAP_IDS = [
         // Northern Barrens
         1,
+        // Gorgrond
+        1116,
     ];
 
     // @TODO should be removed when all floor map UIs have been resolved for all existing dungeons

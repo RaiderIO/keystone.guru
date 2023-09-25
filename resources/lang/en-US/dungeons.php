@@ -374,6 +374,22 @@ return [
                 'cyclone_summit' => 'Cyclone Summit',
             ],
         ],
+        'throne_of_the_tides' => [
+            'name'   => 'Throne of the Tides',
+            'floors' => [
+                'abyssal_halls'      => 'Abyssal Halls',
+                'throne_of_neptulon' => 'Throne of Neptulon',
+            ],
+        ],
+    ],
+    'mop'          => [
+        'temple_of_the_jade_serpent' => [
+            'name'   => 'Temple of the Jade Serpent',
+            'floors' => [
+                'temple_of_the_jade_serpent' => 'Temple of the Jade Serpent',
+                'scrollkeepers_sanctum'      => 'Scrollkeeper\'s Sanctum',
+            ],
+        ],
     ],
     'wod'          => [
         'auchindoun'                => [
@@ -411,13 +427,11 @@ return [
                 'edge_of_reality'       => 'Edge of Reality',
             ],
         ],
-    ],
-    'mop'          => [
-        'temple_of_the_jade_serpent' => [
-            'name'   => 'Temple of the Jade Serpent',
+        'the_everbloom'             => [
+            'name'   => 'The Everbloom',
             'floors' => [
-                'temple_of_the_jade_serpent' => 'Temple of the Jade Serpent',
-                'scrollkeepers_sanctum'      => 'Scrollkeeper\'s Sanctum',
+                'the_everbloom' => 'The Everbloom',
+                'the_overlook'  => 'The Overlook',
             ],
         ],
     ],
