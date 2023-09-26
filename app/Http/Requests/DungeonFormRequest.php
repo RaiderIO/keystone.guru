@@ -37,7 +37,7 @@ class DungeonFormRequest extends FormRequest
             'key'              => [
                 'required',
                 Rule::unique('dungeons', 'key')->ignore($this->get('key'), 'key'),
-                Rule::in(collect(Dungeon::ALL)->flatten()),
+                Rule::in(collect(array_merge(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
             ],
             'slug'             => ['required', Rule::unique('dungeons', 'slug')->ignore($this->get('slug'), 'slug')],
         ];
