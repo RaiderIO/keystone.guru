@@ -545,7 +545,7 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 59768,
         "name": "Twisted Abomination",
         "base_health": 29000,
         "health_percentage": 100,
