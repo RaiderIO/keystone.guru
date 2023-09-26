@@ -2,8 +2,8 @@
 
 
 return [
-    'vanilla'             => [
-        'name' => '@todo ru: .vanilla.name',
+    'classic'             => [
+        'name' => '@todo ru-RU: .classic.name',
     ],
     'tbc'             => [
         'name' => '@todo ru: .tbc.name',

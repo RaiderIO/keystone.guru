@@ -11,5 +11,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 217,
+        "floor_id": 203,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -161.59594831184,
+        "lng": 195.87387674163,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 217,
+        "floor_id": 203,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -70.57315518513,
+        "lng": 205.47341825009,
+        "comment": "During the fight, Alzzin the Wildshaper breaks the entrance to the cave and Whip Lashers come pouring out to assist him.\n\nAfter defeating Alzzin the Wildshaper, you can use the cave to exit the instance.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 217,
+        "floor_id": 203,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -142.33501709892,
+        "lng": 107.62181338748,
+        "comment": "This \"entrance\" is an exit only.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

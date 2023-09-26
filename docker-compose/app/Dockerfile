@@ -7,6 +7,9 @@ ARG uid
 # Add nodejs
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 
+# Install handlebars
+RUN npm i -g handlebars
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -70,7 +73,7 @@ RUN apt-get update && apt-get install -y libssl-dev && \
 
 # Install cli weakauras parser
 RUN /root/.cargo/bin/cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git && \
-    ln -s ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser 
+    ln -s ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
 
 # Install actual LUA language
 RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \

@@ -11,5 +11,83 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -39.625,
+        "lng": 167.1875,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -230.8883693544,
+        "lng": 217.319370036,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -191.30348628432,
+        "lng": 204.57938237459,
+        "comment": "All Scarabs and Sul'lithuz Sandcrawlers respawn eventually when killed.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 50,
+        "lat": -111.17246266956,
+        "lng": 125.56708893061,
+        "comment": "Gong",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -101.0625,
+        "lng": 187.34375,
+        "comment": "If Sandarr does not spawn he is replaced by a regular elite.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 204,
+        "floor_id": 241,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -73.18069047683,
+        "lng": 267.80817084531,
+        "comment": "Patrol spawns after defeating Antu'sul.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

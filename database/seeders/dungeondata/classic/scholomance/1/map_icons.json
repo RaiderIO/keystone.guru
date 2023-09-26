@@ -1,1 +1,28 @@
-[]
+[
+    {
+        "mapping_version_id": 219,
+        "floor_id": 223,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -166.25799675738,
+        "lng": 148.6095784508,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 219,
+        "floor_id": 223,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 3,
+        "lat": -139.94100304985,
+        "lng": 233.08991332254,
+        "comment": "Iron Gate",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

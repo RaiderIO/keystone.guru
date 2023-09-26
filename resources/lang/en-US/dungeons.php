@@ -155,7 +155,11 @@ return [
         'the_temple_of_atal_hakkar'   => [
             'name'   => 'The Temple of Atal\'Hakkar',
             'floors' => [
+                'the_pit_of_refuse'         => 'The Pit of Refuse',
+                'hall_of_serpents'          => 'Hall of Serpents',
+                'entrance'                  => 'Entrance',
                 'the_temple_of_atal_hakkar' => 'The Temple of Atal\'Hakkar',
+                'hall_of_the_cursed'        => 'Hall of the Cursed',
             ],
         ],
         'uldaman'                     => [
@@ -370,6 +374,22 @@ return [
                 'cyclone_summit' => 'Cyclone Summit',
             ],
         ],
+        'throne_of_the_tides' => [
+            'name'   => 'Throne of the Tides',
+            'floors' => [
+                'abyssal_halls'      => 'Abyssal Halls',
+                'throne_of_neptulon' => 'Throne of Neptulon',
+            ],
+        ],
+    ],
+    'mop'          => [
+        'temple_of_the_jade_serpent' => [
+            'name'   => 'Temple of the Jade Serpent',
+            'floors' => [
+                'temple_of_the_jade_serpent' => 'Temple of the Jade Serpent',
+                'scrollkeepers_sanctum'      => 'Scrollkeeper\'s Sanctum',
+            ],
+        ],
     ],
     'wod'          => [
         'auchindoun'                => [
@@ -407,13 +427,11 @@ return [
                 'edge_of_reality'       => 'Edge of Reality',
             ],
         ],
-    ],
-    'mop'          => [
-        'temple_of_the_jade_serpent' => [
-            'name'   => 'Temple of the Jade Serpent',
+        'the_everbloom'             => [
+            'name'   => 'The Everbloom',
             'floors' => [
-                'temple_of_the_jade_serpent' => 'Temple of the Jade Serpent',
-                'scrollkeepers_sanctum'      => 'Scrollkeeper\'s Sanctum',
+                'the_everbloom' => 'The Everbloom',
+                'the_overlook'  => 'The Overlook',
             ],
         ],
     ],

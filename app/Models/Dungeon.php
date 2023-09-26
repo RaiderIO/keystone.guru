@@ -30,7 +30,7 @@ use Mockery\Exception;
  * @property boolean                                 $active           True if this dungeon is active, false if it is not.
  *
  * @property Expansion                               $expansion
- * @property GameVersion                               $gameVersion
+ * @property GameVersion                             $gameVersion
  *
  * @property Collection|MappingVersion[]             $mappingVersions
  * @property Collection|Floor[]                      $floors
@@ -168,7 +168,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_SHADOWFANG_KEEP_CATA     = 'shadowfang_keep_cataclysm';
     const DUNGEON_THE_STONECORE            = 'the_stonecore';
     const DUNGEON_THE_VORTEX_PINNACLE      = 'skywall';
-    const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides';
+    const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides'; // throneoftides
     const DUNGEON_WELL_OF_ETERNITY         = 'well_of_eternity';
     const DUNGEON_ZUL_AMAN                 = 'zul_aman';
     const DUNGEON_ZUL_GURUB                = 'zul_gurub';
@@ -191,7 +191,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
     const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
     const DUNGEON_SKYREACH                  = 'skyreach';
-    const DUNGEON_THE_EVERBLOOM             = 'theeverbloom';
+    const DUNGEON_THE_EVERBLOOM             = 'theeverbloom'; // overgrownoutput
     const DUNGEON_UPPER_BLACKROCK_SPIRE     = 'upperblackrockspire';
 
     // Legion
@@ -338,6 +338,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         Expansion::EXPANSION_WOD          => [
             self::DUNGEON_IRON_DOCKS,
             self::DUNGEON_GRIMRAIL_DEPOT,
+            self::DUNGEON_THE_EVERBLOOM,
         ],
         Expansion::EXPANSION_LEGION       => [
             self::DUNGEON_ARCWAY,
@@ -708,6 +709,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+            ->where('npc_type_id', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
             ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
                 function (Builder $builder) use ($mappingVersion) {
@@ -744,11 +746,11 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|Npc[]
      */
-    public function getInUseNpcIds(): Collection
+    public function getInUseNpcs(): Collection
     {
-        return Npc::select('npcs.id')
+        return Npc::select('npcs.*')
             ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
             ->where(function (Builder $builder) {
                 return $builder->where('npcs.dungeon_id', $this->id)
@@ -781,7 +783,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
                         197857,
                     ]);
             })
-            ->get()
+            ->get();
+    }
+
+
+    /**
+     * @return Collection|int[]
+     */
+    public function getInUseNpcIds(): Collection
+    {
+        return $this->getInUseNpcs()
             ->pluck('id')
             // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so
             // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert

@@ -96,6 +96,16 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
     /**
      * @param int $floorId
      * @param int $npcId
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogSkipEnemyIsCritter(int $floorId, int $npcId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param int $floorId
+     * @param int $npcId
      *
      * @return void
      */

@@ -26,6 +26,7 @@ use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
+use App\Console\Commands\Mapping\RotateIngameCoords;
 use App\Console\Commands\Mapping\Save as MappingSave;
 use App\Console\Commands\Mapping\Sync as MappingSync;
 use App\Console\Commands\MDT\Decode;
@@ -49,6 +50,7 @@ use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\View\Cache;
+use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Logic\Scheduler\UpdateDungeonRouteRating;
@@ -110,6 +112,7 @@ class Kernel extends ConsoleKernel
         MappingSave::class,
         MappingRestore::class,
         MappingSync::class,
+        RotateIngameCoords::class,
 
         // MDT
         Encode::class,
@@ -147,6 +150,9 @@ class Kernel extends ConsoleKernel
 
         // View
         Cache::class,
+
+        // Wowhead
+        FetchHealth::class,
 
         // WowTools
         RefreshDisplayIds::class,

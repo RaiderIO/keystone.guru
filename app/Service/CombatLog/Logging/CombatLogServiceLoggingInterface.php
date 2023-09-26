@@ -12,6 +12,7 @@ interface CombatLogServiceLoggingInterface
     public function extractCombatLogExtractedArchive(string $extractedFilePath): void;
     public function extractCombatLogExtractingArchiveEnd(): void;
     public function parseCombatLogParseEventsStart(): void;
+    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion): void;
     public function parseCombatLogParseEventsEnd(): void;
     public function compressCombatLogCompressingArchiveStart(): void;
     public function compressCombatLogInvalidZipFile(): void;

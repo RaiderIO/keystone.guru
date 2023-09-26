@@ -48,7 +48,7 @@
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
-    @include('common.dungeon.select', ['activeOnly' => false])
+    @include('common.dungeon.select', ['activeOnly' => false, 'ignoreGameVersion' => true])
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('views/admin.npc.edit.classification'), [], false) !!}
@@ -68,6 +68,13 @@
         ?>
         {!! Form::select('aggressiveness', $aggressivenessSelect, null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'aggressiveness'])
+    </div>
+
+    <div class="form-group{{ $errors->has('npc_type_id') ? ' has-error' : '' }}">
+        {!! Form::label('npc_class_id', __('views/admin.npc.edit.type'), [], false) !!}
+        <span class="form-required">*</span>
+        {!! Form::select('npc_type_id', \App\Models\NpcType::pluck('type', 'id'), null, ['class' => 'form-control selectpicker']) !!}
+        @include('common.forms.form-error', ['key' => 'npc_type_id'])
     </div>
 
     <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">

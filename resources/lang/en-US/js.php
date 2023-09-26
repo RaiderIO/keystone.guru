@@ -43,12 +43,19 @@ return [
     'preset_label' => 'Preset',
     'add_label'    => 'Add',
 
-    'color_label'                  => 'Color',
-    'weight_label'                 => 'Weight',
-    'mapobject_visibility_label'   => 'Visibility',
+    'color_label'                => 'Color',
+    'weight_label'               => 'Weight',
+    'mapobject_visibility_label' => 'Visibility',
+
+    'mapping_manipulation_tools_header_label'  => 'Mapping manipulation',
+    'mapping_manipulation_tools_rotate_label'  => 'Rotate',
+    'mapping_manipulation_tools_scale_x_label' => 'Scale X',
+    'mapping_manipulation_tools_scale_y_label' => 'Scale Y',
+    'mapping_manipulation_tools_move_x_label'  => 'Move X',
+    'mapping_manipulation_tools_move_y_label'  => 'Move Y',
 
     // Map object translations
-    'header_floor_selection_label' => 'Floors',
+    'header_floor_selection_label'             => 'Floors',
 
     'header_map_object_group_label'                   => 'Show/hide',
     'enemy_map_object_group_label'                    => 'Enemies',

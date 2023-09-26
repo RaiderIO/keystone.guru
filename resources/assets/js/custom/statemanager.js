@@ -524,7 +524,7 @@ class StateManager extends Signalable {
     isMapAdmin() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._mapContext.getType() === 'mappingVersion';
+        return this._mapContext instanceof MapContextMappingVersionEdit;
     }
 
     /**

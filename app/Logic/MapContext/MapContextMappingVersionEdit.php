@@ -27,7 +27,7 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
 
     public function getType(): string
     {
-        return 'mappingVersion';
+        return 'mappingVersionEdit';
     }
 
     public function getEchoChannelName(): string

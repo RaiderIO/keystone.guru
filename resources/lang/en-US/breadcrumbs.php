@@ -68,7 +68,7 @@ return [
             'dungeons' => [
                 'dungeons'     => 'Dungeons',
                 'new_dungeon'  => 'New dungeon',
-                'edit_dungeon' => 'Edit dungeon',
+                'edit_dungeon' => 'Edit :dungeon',
             ],
 
             'floors' => [

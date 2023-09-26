@@ -11,4 +11,5 @@ return [
     'mdt_exporter_changes'     => '@todo ru-RU: .mdt_exporter_changes',
     'live_session_changes'     => '@todo ru-RU: .live_session_changes',
     'simulation_craft_changes' => '@todo ru-RU: .simulation_craft_changes',
+    'auto_route_changes'       => '@todo ru-RU: .auto_route_changes',
 ];

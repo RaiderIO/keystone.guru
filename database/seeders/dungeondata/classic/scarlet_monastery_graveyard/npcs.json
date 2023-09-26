@@ -1,5 +1,25 @@
 [
     {
+        "id": 3981,
+        "dungeon_id": 90,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2046,
+        "name": "Vorrel Sengutz",
+        "base_health": 156,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 3983,
         "dungeon_id": 90,
         "classification_id": 3,
@@ -18,6 +38,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 12923,
+                "mapping_version_id": 202,
+                "npc_id": 3983,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 12488,
                 "mapping_version_id": 194,
@@ -54,6 +81,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12924,
+                "mapping_version_id": 202,
+                "npc_id": 4283,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12484,
                 "mapping_version_id": 194,
                 "npc_id": 4283,
@@ -88,6 +122,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 12925,
+                "mapping_version_id": 202,
+                "npc_id": 4293,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 12505,
                 "mapping_version_id": 194,
@@ -124,6 +165,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12929,
+                "mapping_version_id": 202,
+                "npc_id": 4306,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12486,
                 "mapping_version_id": 194,
                 "npc_id": 4306,
@@ -158,6 +206,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 12930,
+                "mapping_version_id": 202,
+                "npc_id": 4308,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 12511,
                 "mapping_version_id": 194,
@@ -194,6 +249,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12932,
+                "mapping_version_id": 202,
+                "npc_id": 4543,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12515,
                 "mapping_version_id": 194,
                 "npc_id": 4543,
@@ -228,6 +290,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 12933,
+                "mapping_version_id": 202,
+                "npc_id": 6426,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 12513,
                 "mapping_version_id": 194,
@@ -264,6 +333,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12934,
+                "mapping_version_id": 202,
+                "npc_id": 6427,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12509,
                 "mapping_version_id": 194,
                 "npc_id": 6427,
@@ -278,6 +354,26 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 6490,
+        "dungeon_id": 90,
+        "classification_id": 5,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 5534,
+        "name": "Azshir the Sleepless",
+        "base_health": 2784,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
     },
     {
         "id": 6493,
@@ -299,6 +395,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 12935,
+                "mapping_version_id": 202,
+                "npc_id": 6493,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 12507,
                 "mapping_version_id": 194,
                 "npc_id": 6493,
@@ -313,5 +416,25 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 6547,
+        "dungeon_id": 90,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 1027,
+        "name": "Suffering Victim",
+        "base_health": 713,
+        "health_percentage": 100,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
     }
 ]
