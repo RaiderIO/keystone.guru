@@ -2,7 +2,7 @@
 
 namespace App\Logic\Structs;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 
 class IngameXY
 {

@@ -4,7 +4,7 @@ namespace App\Http\Requests\EnemyPack;
 
 use App\Models\Enemy;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

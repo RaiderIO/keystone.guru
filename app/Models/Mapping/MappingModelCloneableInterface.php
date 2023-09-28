@@ -2,7 +2,6 @@
 
 namespace App\Models\Mapping;
 
-use App\Models\Floor;
 use Illuminate\Database\Eloquent\Model;
 
 /**

@@ -9,7 +9,7 @@
 <?php
 /**
  * @var $spell \App\Models\Spell
- * @var $floor \App\Models\Floor
+ * @var $floor \App\Models\Floor\Floor
  * @var $dispelTypes array
  */
 ?>

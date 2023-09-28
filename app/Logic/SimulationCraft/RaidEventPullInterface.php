@@ -3,7 +3,7 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 
 interface RaidEventPullInterface

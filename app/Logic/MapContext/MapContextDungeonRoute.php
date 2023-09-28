@@ -4,7 +4,7 @@
 namespace App\Logic\MapContext;
 
 use App\Models\DungeonRoute;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 
 /**
  * Class MapContextDungeonRoute

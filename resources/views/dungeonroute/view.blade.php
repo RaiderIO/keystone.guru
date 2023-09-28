@@ -1,9 +1,9 @@
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $dungeonroute->title, 'cookieConsent' => $dungeonroute->demo === 1 ? false : null ])
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
-/** @var $floor \App\Models\Floor */
+/** @var $floor \App\Models\Floor\Floor */
 
-$affixes = $dungeonroute->affixes->pluck('text', 'id');
+$affixes         = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
     $affixes         = [-1 => __('views/dungeonroute.view.any')];

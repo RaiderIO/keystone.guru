@@ -1,12 +1,12 @@
 <?php
 /** @var $dungeonRoute \App\Models\DungeonRoute */
 /** @var $dungeon \App\Models\Dungeon */
-/** @var $floor \App\Models\Floor */
+/** @var $floor \App\Models\Floor\Floor */
 /** @var $embedOptions array */
 
-$routeParams = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
+$routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
 $presentRouteUrl = route('dungeonroute.present', $routeParams);
-$viewRouteUrl = route('dungeonroute.view', $routeParams);
+$viewRouteUrl    = route('dungeonroute.view', $routeParams);
 ?>
 <header class="header_embed_compact"
         style="

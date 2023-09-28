@@ -5,7 +5,7 @@ namespace App\Models\KillZone;
 use App\Models\Affix;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Spell;
 use Carbon\Carbon;
 use Eloquent;

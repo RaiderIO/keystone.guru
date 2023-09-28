@@ -11,7 +11,7 @@ use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Npc;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
 use App\Service\CombatLog\Models\ExtractedDataResult;

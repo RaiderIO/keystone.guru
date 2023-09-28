@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Floor\Floor;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;

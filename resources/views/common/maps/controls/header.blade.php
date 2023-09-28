@@ -4,7 +4,7 @@
  * @var $isUserAdmin bool
  * @var $mapContext \App\Logic\MapContext\MapContext
  * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor
+ * @var $floor \App\Models\Floor\Floor
  * @var $dungeonroute \App\Models\DungeonRoute|null
  * @var $livesession \App\Models\LiveSession|null
  * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
@@ -134,14 +134,14 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                     </span>
                                 @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
                                     <span data-toggle="tooltip"
-                                         title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
+                                          title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
                                             <span class="text-warning">
                                                 <i class="fas fa-exclamation-triangle"></i>
                                             </span>
                                         {{ __('views/common.maps.map.new_mapping_version_header_title') }}
                                     </span>
                                 @else
-                                &nbsp;
+                                    &nbsp;
                                 @endif
                             </div>
                         </div>
@@ -178,13 +178,14 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 @isset($dungeonroute)
                     @auth
                         @if($isUserAdmin)
-                        <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
+                                <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
                             @if( $challengeModeRun !== null )
                                 <li class="nav-item mr-2">
                                     <div class="d-flex h-100">
                                         <div class="row justify-content-center align-self-center">
                                             <div class="col">
-                                                <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                <button id="edit_route_admin_settings_button"
+                                                        class="btn btn-info btn-sm" data-toggle="modal"
                                                         data-target="#edit_route_admin_settings_modal">
                                                     <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
                                                 </button>
@@ -213,7 +214,8 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                             <div class="d-flex h-100">
                                 <div class="row justify-content-center align-self-center">
                                     <div class="col">
-                                        <button id="edit_route_settings_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                        <button id="edit_route_settings_button" class="btn btn-info btn-sm"
+                                                data-toggle="modal"
                                                 data-target="#edit_route_settings_modal">
                                             <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_route_settings') }}
                                         </button>
@@ -228,7 +230,8 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
-                                    <button id="edit_mapping_version_button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    <button id="edit_mapping_version_button" class="btn btn-info btn-sm"
+                                            data-toggle="modal"
                                             data-target="#edit_mapping_version_modal">
                                         <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_mapping_version') }}
                                     </button>

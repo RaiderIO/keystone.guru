@@ -1,10 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Floor;
 
 use App\Logic\Utils\MathUtils;
+use App\Models\CacheModel;
+use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
+use App\Models\Enemy;
+use App\Models\EnemyPack;
+use App\Models\EnemyPatrol;
+use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

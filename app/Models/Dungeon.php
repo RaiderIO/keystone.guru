@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;

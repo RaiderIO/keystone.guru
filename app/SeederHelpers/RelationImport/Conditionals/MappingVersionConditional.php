@@ -4,7 +4,7 @@
 namespace App\SeederHelpers\RelationImport\Conditionals;
 
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
 use Exception;

@@ -1,14 +1,14 @@
 <?php
 /**
  * @var $dungeon             \App\Models\Dungeon
- * @var $floor               \App\Models\Floor
+ * @var $floor               \App\Models\Floor\Floor
  * @var $availableKeysSelect \Illuminate\Support\Collection
  */
 
 $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
-                                                         ->mapWithKeys(function (\App\Models\GameVersion\GameVersion $gameVersion) {
-                                                             return [$gameVersion->id => __($gameVersion->name)];
-                                                         });
+    ->mapWithKeys(function (\App\Models\GameVersion\GameVersion $gameVersion) {
+        return [$gameVersion->id => __($gameVersion->name)];
+    });
 ?>
 
 @extends('layouts.sitepage', [

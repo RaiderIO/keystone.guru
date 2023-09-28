@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Floor;
 
+use App\Models\CacheModel;
 use Eloquent;
 
 /**
