@@ -1,0 +1,28 @@
+{
+    "id": 201,
+    "release_changelog_id": 208,
+    "version": "v7.2.1",
+    "title": "Added Icecrown Citadel graphics - corrections to many enemy packs for the new dungeons",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-09-28T07:45:03+00:00",
+    "updated_at": "2023-09-28T07:45:03+00:00",
+    "changelog": {
+        "id": 208,
+        "release_id": 201,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 208,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2039,
+                "change": "Many new dungeons had their enemy packs assigned incorrectly - this has been corrected.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}
