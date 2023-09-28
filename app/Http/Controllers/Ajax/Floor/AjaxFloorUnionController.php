@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Ajax;
+namespace App\Http\Controllers\Ajax\Floor;
 
 use App\Events\Model\ModelDeletedEvent;
+use App\Http\Controllers\Ajax\AjaxMappingModelBaseController;
 use App\Http\Requests\Floor\FloorUnionFormRequest;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingModelInterface;

@@ -19,7 +19,6 @@ use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
 use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
-use App\Http\Controllers\Ajax\AjaxFloorUnionController;
 use App\Http\Controllers\Ajax\AjaxKillZoneController;
 use App\Http\Controllers\Ajax\AjaxLiveSessionController;
 use App\Http\Controllers\Ajax\AjaxMapIconController;
@@ -36,6 +35,8 @@ use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
 use App\Http\Controllers\Ajax\AjaxUserReportController;
+use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionAreaController;
+use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -481,6 +482,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/floorunion', [AjaxFloorUnionController::class, 'store']);
                 Route::put('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'store']);
                 Route::delete('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'delete']);
+
+                Route::post('/floorunionarea', [AjaxFloorUnionAreaController::class, 'store']);
+                Route::put('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'store']);
+                Route::delete('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
             });
