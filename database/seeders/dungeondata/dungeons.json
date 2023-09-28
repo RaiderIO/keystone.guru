@@ -5164,10 +5164,10 @@
                 "ingame_max_x": 579.39,
                 "ingame_max_y": -2400.33,
                 "percentage_display_zoom": null,
-                "active": 1,
+                "active": 0,
                 "floorcouplings": [
                     {
-                        "id": 752,
+                        "id": 761,
                         "floor1_id": 183,
                         "floor2_id": 182,
                         "direction": "down"

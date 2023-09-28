@@ -2972,7 +2972,7 @@
     {
         "id": 36556,
         "mapping_version_id": 227,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 6903,
         "enemy_patrol_id": null,
         "npc_id": 4437,
         "floor_id": 218,
@@ -2994,7 +2994,7 @@
     {
         "id": 36557,
         "mapping_version_id": 227,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 6903,
         "enemy_patrol_id": null,
         "npc_id": 4437,
         "floor_id": 218,

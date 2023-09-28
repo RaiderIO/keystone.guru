@@ -1,18 +1,5 @@
 [
     {
-        "mapping_version_id": 171,
-        "floor_id": 220,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 10,
-        "lat": -236.5,
-        "lng": 238.5,
-        "comment": null,
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
         "mapping_version_id": 192,
         "floor_id": 220,
         "dungeon_route_id": null,
@@ -27,6 +14,32 @@
     },
     {
         "mapping_version_id": 192,
+        "floor_id": 220,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -62.21875,
+        "lng": 216.25,
+        "comment": "Open using Torch on the wall.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 233,
+        "floor_id": 220,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -236.5,
+        "lng": 238.5,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 233,
         "floor_id": 220,
         "dungeon_route_id": null,
         "team_id": null,

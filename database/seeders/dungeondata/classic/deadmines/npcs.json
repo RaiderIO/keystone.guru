@@ -170,7 +170,7 @@
     {
         "id": 642,
         "dungeon_id": 80,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 1269,
@@ -198,7 +198,7 @@
     {
         "id": 643,
         "dungeon_id": 80,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 7125,
@@ -282,7 +282,7 @@
     {
         "id": 646,
         "dungeon_id": 80,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 2026,
