@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -43,6 +44,8 @@ use Illuminate\Support\Collection;
  *
  * @property Dungeon                                 $dungeon
  *
+ * @property FloorUnion|null                         $floorUnion
+ *
  * @property Collection|Enemy[]                      $enemies
  * @property Collection|EnemyPack[]                  $enemypacks
  * @property Collection|EnemyPatrol[]                $enemypatrols
@@ -62,6 +65,8 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[]                      $connectedFloors
  * @property Collection|Floor[]                      $directConnectedFloors
  * @property Collection|Floor[]                      $reverseConnectedFloors
+ *
+ * @property Collection|FloorUnion[]                 $floorUnions
  *
  * @method static Builder active()
  *
@@ -246,6 +251,24 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * @return HasMany
+     */
+    public function floorUnions(): HasMany
+    {
+        return $this->hasMany(FloorUnion::class);
+    }
+
+    /**
+     * If this floor is unioned to another floor (this floor will not contain enemies and delegates it to this other floor instead)
+     *
+     * @return HasOne
+     */
+    public function floorUnion(): HasOne
+    {
+        return $this->hasOne(FloorUnion::class, 'target_floor_id');
+    }
+
+    /**
      * @return Collection|Floor[] A list of all connected floors, regardless of direction
      */
     public function connectedFloors(): Collection
@@ -409,7 +432,7 @@ class Floor extends CacheModel implements MappingModelInterface
         if (!$hasCoupling) {
             FloorCoupling::create([
                 'floor1_id' => $this->id,
-                'floor2_id' => $targetFloor->id
+                'floor2_id' => $targetFloor->id,
             ]);
         }
 

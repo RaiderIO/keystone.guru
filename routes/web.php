@@ -19,6 +19,7 @@ use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
 use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
+use App\Http\Controllers\Ajax\AjaxFloorUnionController;
 use App\Http\Controllers\Ajax\AjaxKillZoneController;
 use App\Http\Controllers\Ajax\AjaxLiveSessionController;
 use App\Http\Controllers\Ajax\AjaxMapIconController;
@@ -45,7 +46,7 @@ use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
 use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
-use App\Http\Controllers\FloorController;
+use App\Http\Controllers\Floor\FloorController;
 use App\Http\Controllers\GameVersionController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
@@ -476,6 +477,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/mountablearea', [AjaxMountableAreaController::class, 'store']);
                 Route::put('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'store']);
                 Route::delete('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'delete']);
+
+                Route::post('/floorunion', [AjaxFloorUnionController::class, 'store']);
+                Route::put('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'store']);
+                Route::delete('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
             });

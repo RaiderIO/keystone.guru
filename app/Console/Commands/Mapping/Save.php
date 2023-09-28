@@ -125,7 +125,7 @@ class Save extends Command
 
         // Save all dungeons
         $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
-            ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
+            ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man', 'floors.floorUnions'])
             ->get();
 
         $this->saveDataToJsonFile(

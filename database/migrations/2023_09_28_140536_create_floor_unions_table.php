@@ -17,8 +17,8 @@ class CreateFloorUnionsTable extends Migration
             $table->id();
             $table->integer('floor_id');
             $table->integer('target_floor_id');
-            $table->integer('lat');
-            $table->integer('lng');
+            $table->float('lat');
+            $table->float('lng');
             $table->float('size');
             $table->float('rotation');
 

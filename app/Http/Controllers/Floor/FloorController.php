@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Floor;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\FloorFormRequest;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
