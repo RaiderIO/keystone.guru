@@ -180,5 +180,57 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 194,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -171.9375,
+        "lng": 208.3125,
+        "comment": "Cell Door: Requires Prison Cell Key.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 194,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -173.53125,
+        "lng": 219.28125,
+        "comment": "Cell Door: Requires Prison Cell Key.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 194,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -152.03125,
+        "lng": 186.375,
+        "comment": "Cell Door: Requires Prison Cell Key.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 194,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -163.3125,
+        "lng": 181.46875,
+        "comment": "Cell Door: Requires Prison Cell Key.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
