@@ -232,5 +232,18 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 194,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -155.65625,
+        "lng": 195.90625,
+        "comment": "The Ring of Law: three waves will spawn. Two waves of the same enemies. Then finally a boss.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
