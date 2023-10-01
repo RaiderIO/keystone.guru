@@ -14,8 +14,9 @@ interface CombatLogMappingVersionServiceInterface
 
 
     /**
-     * @param string $filePath
+     * @param string              $filePath
+     * @param MappingVersion|null $mappingVersion
      * @return MappingVersion|null
      */
-    public function createMappingVersionFromDungeonOrRaid(string $filePath): ?MappingVersion;
+    public function createMappingVersionFromDungeonOrRaid(string $filePath, ?MappingVersion $mappingVersion = null): ?MappingVersion;
 }

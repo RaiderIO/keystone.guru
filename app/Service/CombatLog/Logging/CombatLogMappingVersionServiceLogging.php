@@ -67,6 +67,16 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
     }
 
     /**
+     * @param int $dungeonId
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogDungeonFromExistingMappingVersion(int $dungeonId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
+    /**
      * @return void
      */
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void
