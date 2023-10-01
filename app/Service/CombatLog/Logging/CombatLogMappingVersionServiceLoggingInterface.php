@@ -37,6 +37,12 @@ interface CombatLogMappingVersionServiceLoggingInterface
     public function createMappingVersionFromCombatLogTimestampNotSet(): void;
 
     /**
+     * @param int $dungeonId
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogDungeonFromExistingMappingVersion(int $dungeonId): void;
+
+    /**
      * @return void
      */
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void;
