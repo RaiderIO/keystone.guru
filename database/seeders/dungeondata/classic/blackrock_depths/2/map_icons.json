@@ -102,5 +102,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 195,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -207.71875,
+        "lng": 219.21875,
+        "comment": "WARNING: Entering this bridges causes 2 Anvilrage Guardsman to spawn, one from opposite ends. They will walk to the center of the bridge.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 195,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -229.9375,
+        "lng": 222.375,
+        "comment": "Enemies here can be one of Shadowforge Peasant, Anvilrage Medic, Doomforge Craftsman, Twilight Emissary.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 195,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -160.0501961949573,
+        "lng": 218.21581943479381,
+        "comment": "Some of the Fireguard Destroyers live in the lava below.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
