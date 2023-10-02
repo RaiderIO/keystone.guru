@@ -46,7 +46,7 @@
         "map_icon_type_id": 6,
         "lat": -189.34474751691,
         "lng": 138.09108310285,
-        "comment": "Shadowforge Gate",
+        "comment": "Shadowforge Gate: Requires Shadowforge Key.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 6,
         "lat": -169.64854102233,
         "lng": 146.36131345416,
-        "comment": "Shadowforge Gate",
+        "comment": "Shadowforge Gate: Requires Shadowforge Key.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -242,6 +242,19 @@
         "lat": -155.65625,
         "lng": 195.90625,
         "comment": "The Ring of Law: three waves will spawn. Two waves of the same enemies. Then finally a boss.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 206,
+        "floor_id": 194,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -79.34375,
+        "lng": 217.3125,
+        "comment": "The Black Anvil",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

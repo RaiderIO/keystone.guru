@@ -537,13 +537,6 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 9658,
-                "mapping_version_id": 165,
-                "npc_id": 1716,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 9656,
                 "mapping_version_id": 163,
                 "npc_id": 1716,
