@@ -36,9 +36,14 @@ class AssignMDTIDs extends Command
 
 
         foreach ($mappingVersions as $mappingVersion) {
-            if ($mappingVersion->dungeon->expansion->shortname === Expansion::EXPANSION_CLASSIC) {
+            if ($mappingVersion->dungeon->expansion->shortname === Expansion::EXPANSION_WOTLK) {
                 $index   = 1;
                 $enemies = $mappingVersion->enemies->sortBy('npc_id');
+
+                if ($enemies->isEmpty()) {
+                    // We don't care for empty mapping versions
+                    continue;
+                }
 
                 if ($enemies->filter(function (Enemy $enemy) {
                     return $enemy->mdt_id > 0;
