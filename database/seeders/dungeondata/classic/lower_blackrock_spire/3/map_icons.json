@@ -1,6 +1,6 @@
 [
     {
-        "mapping_version_id": 165,
+        "mapping_version_id": 238,
         "floor_id": 210,
         "dungeon_route_id": null,
         "team_id": null,
@@ -13,33 +13,7 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 165,
-        "floor_id": 210,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 2,
-        "lat": -143.51550072744,
-        "lng": 194.63257752481,
-        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 211,
-        "floor_id": 210,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 2,
-        "lat": -121.11534711857,
-        "lng": 201.42363658264,
-        "comment": "Keystone.guru: Only if you jump down.",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 211,
+        "mapping_version_id": 238,
         "floor_id": 210,
         "dungeon_route_id": null,
         "team_id": null,
