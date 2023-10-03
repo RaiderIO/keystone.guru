@@ -41,7 +41,13 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        $previousFloor = optional($enemy)->floor;
+        $previousFloor = null;
+        if ($enemy !== null) {
+            // Load the enemy from database - don't use the given enemy's floor since that'll be the new floor potentially
+            /** @var Enemy|null $previousEnemy */
+            $previousEnemy = optional(Enemy::with(['floor'])->find($enemy->id));
+            $previousFloor = $previousEnemy->floor;
+        }
 
         return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);

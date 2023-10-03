@@ -129,13 +129,6 @@
                 "npc_id": 4076,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
-            },
-            {
-                "id": 13316,
-                "mapping_version_id": 165,
-                "npc_id": 4076,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
             }
         ]
     },
@@ -448,13 +441,6 @@
             {
                 "id": 12033,
                 "mapping_version_id": 166,
-                "npc_id": 4295,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 12032,
-                "mapping_version_id": 165,
                 "npc_id": 4295,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -1888,13 +1874,6 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 11842,
-                "mapping_version_id": 165,
-                "npc_id": 4298,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 11840,
                 "mapping_version_id": 163,
                 "npc_id": 4298,
@@ -3323,13 +3302,6 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 12422,
-                "mapping_version_id": 165,
-                "npc_id": 4299,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 12420,
                 "mapping_version_id": 163,
                 "npc_id": 4299,
@@ -4753,13 +4725,6 @@
             {
                 "id": 12231,
                 "mapping_version_id": 166,
-                "npc_id": 4540,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 12230,
-                "mapping_version_id": 165,
                 "npc_id": 4540,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
