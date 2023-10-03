@@ -85,5 +85,6 @@ return [
         'linkpreview_title'                       => '%s',
         'linkpreview_default_description'         => 'M+ route for dungeon %s by %s.',
         'linkpreview_default_description_sandbox' => 'Temporary M+ route for dungeon %s.',
+        'linkpreview_default_description_explore' => 'Explore %s.'
     ],
 ];
