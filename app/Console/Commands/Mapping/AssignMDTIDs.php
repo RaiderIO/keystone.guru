@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands\Mapping;
 
-use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Models\Enemy;
 use App\Models\Expansion;
-use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -37,13 +36,29 @@ class AssignMDTIDs extends Command
 
 
         foreach ($mappingVersions as $mappingVersion) {
-            if ($mappingVersion->dungeon->expansion->shortname === Expansion::EXPANSION_CLASSIC) {
-                $this->info(sprintf('Assigning MDT IDs for dungeon %s', __($mappingVersion->dungeon->name, [], 'en')));
+            if ($mappingVersion->dungeon->expansion->shortname === Expansion::EXPANSION_WOTLK) {
                 $index   = 1;
                 $enemies = $mappingVersion->enemies->sortBy('npc_id');
 
+                if ($enemies->isEmpty()) {
+                    // We don't care for empty mapping versions
+                    continue;
+                }
+
+                if ($enemies->filter(function (Enemy $enemy) {
+                    return $enemy->mdt_id > 0;
+                })->isNotEmpty()) {
+                    $this->comment(
+                        sprintf('- Skipping dungeon %s - already assigned has assigned MDT IDs', __($mappingVersion->dungeon->name, [], 'en'))
+                    );
+                    continue;
+                }
+
+                $this->info(sprintf('Assigning MDT IDs for dungeon %s', __($mappingVersion->dungeon->name, [], 'en')));
+
                 $previousNpcId = 0;
                 foreach ($enemies as $enemy) {
+
                     if ($previousNpcId !== $enemy->npc_id) {
                         $index         = 1;
                         $previousNpcId = $enemy->npc_id;

@@ -565,7 +565,7 @@
         "classification_id": 3,
         "npc_type_id": 10,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 6701,
         "name": "Zul'Lor",
         "base_health": 17783,
         "health_percentage": 100,
