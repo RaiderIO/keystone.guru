@@ -107,6 +107,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_STOCKADE                = 'the_stockade';              //thestockade
     const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
     const DUNGEON_ULDAMAN                     = 'uldaman';
+    const DUNGEON_UPPER_BLACKROCK_SPIRE       = 'upper_blackrock_spire'; //upperblackrockspire
     const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns'; //wailingcaverns
     const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';      //zulfarrak
 
@@ -192,7 +193,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
     const DUNGEON_SKYREACH                  = 'skyreach';
     const DUNGEON_THE_EVERBLOOM             = 'theeverbloom'; // overgrownoutput
-    const DUNGEON_UPPER_BLACKROCK_SPIRE     = 'upperblackrockspire';
 
     // Legion
     const DUNGEON_ARCWAY                      = 'arcway';
@@ -269,6 +269,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_THE_STOCKADE,
             self::DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR,
             self::DUNGEON_ULDAMAN,
+            self::DUNGEON_UPPER_BLACKROCK_SPIRE,
             self::DUNGEON_WAILING_CAVERNS,
             self::DUNGEON_ZUL_FARRAK,
         ],
