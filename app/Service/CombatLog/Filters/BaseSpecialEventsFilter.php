@@ -47,6 +47,8 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         1414,
         // Eastern Kingdoms
         1415,
+        // Burning Steppes
+        1428,
         // Thousand Needles
         1441,
         // The Waking Shores
@@ -78,7 +80,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // Combat log versions yes please
-        if( $combatLogEvent instanceof CombatLogVersion ){
+        if ($combatLogEvent instanceof CombatLogVersion) {
             $this->resultEvents->push((new CombatLogVersionResultEvent($combatLogEvent)));
 
             return true;
