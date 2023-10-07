@@ -372,14 +372,17 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int $uiMapId
-     *
+     * @param int      $uiMapId
+     * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
      * @return Floor
      */
-    public static function findByUiMapId(int $uiMapId): Floor
+    public static function findByUiMapId(int $uiMapId, int $dungeonId = null): Floor
     {
         return Floor
             ::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
+            ->when($dungeonId !== null, function (Builder $builder) use ($dungeonId) {
+                return $builder->where('dungeon_id', $dungeonId);
+            })
             ->firstOrFail();
     }
 
@@ -401,7 +404,7 @@ class Floor extends CacheModel implements MappingModelInterface
         if (!$hasCoupling) {
             FloorCoupling::create([
                 'floor1_id' => $this->id,
-                'floor2_id' => $targetFloor->id
+                'floor2_id' => $targetFloor->id,
             ]);
         }
 
