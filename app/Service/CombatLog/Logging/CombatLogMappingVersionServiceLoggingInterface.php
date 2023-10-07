@@ -65,6 +65,13 @@ interface CombatLogMappingVersionServiceLoggingInterface
      * @param int $npcId
      * @return void
      */
+    public function createMappingVersionFromCombatLogUnableToFindNpc(int $floorId, int $npcId): void;
+
+    /**
+     * @param int $floorId
+     * @param int $npcId
+     * @return void
+     */
     public function createMappingVersionFromCombatLogSkipEnemyIsCritter(int $floorId, int $npcId): void;
 
     /**

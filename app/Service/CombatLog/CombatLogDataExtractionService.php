@@ -101,7 +101,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             if ($parsedEvent instanceof MapChange) {
                 $previousFloor = $currentFloor;
 
-                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
+                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
 
                 $newIngameMinX = round($parsedEvent->getXMin(), 2);
                 $newIngameMinY = round($parsedEvent->getYMin(), 2);
