@@ -192,7 +192,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
-                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
+                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
