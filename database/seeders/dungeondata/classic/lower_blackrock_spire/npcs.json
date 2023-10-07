@@ -448,34 +448,6 @@
         ]
     },
     {
-        "id": 9258,
-        "dungeon_id": 83,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 9637,
-        "name": "Scarshield Raider",
-        "base_health": 7842,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13752,
-                "mapping_version_id": 211,
-                "npc_id": 9258,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 9259,
         "dungeon_id": 83,
         "classification_id": 2,
@@ -784,34 +756,6 @@
         ]
     },
     {
-        "id": 9416,
-        "dungeon_id": 83,
-        "classification_id": 2,
-        "npc_type_id": 2,
-        "npc_class_id": 1,
-        "display_id": 11420,
-        "name": "Scarshield Worg",
-        "base_health": 3189,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13764,
-                "mapping_version_id": 211,
-                "npc_id": 9416,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 9568,
         "dungeon_id": 83,
         "classification_id": 3,
@@ -1086,34 +1030,6 @@
                 "id": 13776,
                 "mapping_version_id": 211,
                 "npc_id": 9736,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 9816,
-        "dungeon_id": 83,
-        "classification_id": 2,
-        "npc_type_id": 6,
-        "npc_class_id": 1,
-        "display_id": 2172,
-        "name": "Pyroguard Emberseer",
-        "base_health": 24416,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13777,
-                "mapping_version_id": 211,
-                "npc_id": 9816,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
             }
