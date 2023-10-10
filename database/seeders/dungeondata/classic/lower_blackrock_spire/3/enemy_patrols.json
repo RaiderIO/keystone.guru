@@ -1,31 +1,5 @@
 [
     {
-        "id": 2140,
-        "mapping_version_id": 238,
-        "floor_id": 210,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#003280",
-            "color_animated": null,
-            "weight": 3,
-            "vertices_json": "[{\"lat\":-151.5625,\"lng\":223.8125},{\"lat\":-144.04044,\"lng\":223.662926},{\"lat\":-143.993074,\"lng\":222.810335},{\"lat\":-151.5625,\"lng\":222.71875},{\"lat\":-151.5625,\"lng\":223.84375}]"
-        }
-    },
-    {
-        "id": 2141,
-        "mapping_version_id": 238,
-        "floor_id": 210,
-        "teeming": null,
-        "faction": "any",
-        "polyline": {
-            "color": "#003280",
-            "color_animated": null,
-            "weight": 3,
-            "vertices_json": "[{\"lat\":-147.024507,\"lng\":219.163142},{\"lat\":-148.208661,\"lng\":219.115776},{\"lat\":-148.4375,\"lng\":186.4375},{\"lat\":-147.15625,\"lng\":186.46875},{\"lat\":-147.03125,\"lng\":219.15625}]"
-        }
-    },
-    {
         "id": 2148,
         "mapping_version_id": 239,
         "floor_id": 210,

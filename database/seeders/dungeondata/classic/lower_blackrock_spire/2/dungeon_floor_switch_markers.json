@@ -1,37 +1,5 @@
 [
     {
-        "id": 581,
-        "mapping_version_id": 238,
-        "floor_id": 209,
-        "target_floor_id": 208,
-        "lat": -183.29,
-        "lng": 249.48
-    },
-    {
-        "id": 582,
-        "mapping_version_id": 238,
-        "floor_id": 209,
-        "target_floor_id": 210,
-        "lat": -191.47,
-        "lng": 196.5
-    },
-    {
-        "id": 651,
-        "mapping_version_id": 238,
-        "floor_id": 209,
-        "target_floor_id": 208,
-        "lat": -154.22,
-        "lng": 228.4
-    },
-    {
-        "id": 652,
-        "mapping_version_id": 238,
-        "floor_id": 209,
-        "target_floor_id": 210,
-        "lat": -130.59,
-        "lng": 219.98
-    },
-    {
         "id": 658,
         "mapping_version_id": 239,
         "floor_id": 209,

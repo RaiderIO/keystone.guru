@@ -122,15 +122,7 @@
         "sanguine": 1,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 13727,
-                "mapping_version_id": 211,
-                "npc_id": 4076,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 4295,
@@ -196,13 +188,6 @@
             {
                 "id": 13832,
                 "mapping_version_id": 212,
-                "npc_id": 4295,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 13728,
-                "mapping_version_id": 211,
                 "npc_id": 4295,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -1636,13 +1621,6 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 13729,
-                "mapping_version_id": 211,
-                "npc_id": 4298,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 13366,
                 "mapping_version_id": 209,
                 "npc_id": 4298,
@@ -3071,13 +3049,6 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 13730,
-                "mapping_version_id": 211,
-                "npc_id": 4299,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
                 "id": 13367,
                 "mapping_version_id": 209,
                 "npc_id": 4299,
@@ -4501,13 +4472,6 @@
             {
                 "id": 13835,
                 "mapping_version_id": 212,
-                "npc_id": 4540,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 13731,
-                "mapping_version_id": 211,
                 "npc_id": 4540,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
