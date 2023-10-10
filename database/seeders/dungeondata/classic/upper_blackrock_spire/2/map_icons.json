@@ -1,0 +1,41 @@
+[
+    {
+        "mapping_version_id": 244,
+        "floor_id": 251,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 44,
+        "lat": -69.29666677514724,
+        "lng": 124.9518844517009,
+        "comment": "Blackrock Altar",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 244,
+        "floor_id": 251,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -82.93811587374083,
+        "lng": 116.71017562130062,
+        "comment": "Unlocked after defeating Pyroguard Emberseer.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 244,
+        "floor_id": 251,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -98.28550299943379,
+        "lng": 120.75691456906327,
+        "comment": "Stepping on an egg releases a Rookery Hatchling. Stepping on enough of them will spawn Solakar Flamewreath.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

@@ -1,23 +1,23 @@
 [
     {
-        "id": 576,
-        "mapping_version_id": 238,
+        "id": 653,
+        "mapping_version_id": 239,
         "floor_id": 211,
         "target_floor_id": 210,
         "lat": -100.55,
         "lng": 198.27
     },
     {
-        "id": 585,
-        "mapping_version_id": 238,
+        "id": 662,
+        "mapping_version_id": 239,
         "floor_id": 211,
         "target_floor_id": 210,
         "lat": -166.93,
         "lng": 177.7
     },
     {
-        "id": 586,
-        "mapping_version_id": 238,
+        "id": 663,
+        "mapping_version_id": 239,
         "floor_id": 211,
         "target_floor_id": 212,
         "lat": -189.89,
