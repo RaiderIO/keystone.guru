@@ -42,5 +42,27 @@
         "lat": -135.24956085422,
         "lng": 190.99877008438,
         "kill_priority": -1
+    },
+    {
+        "id": 40509,
+        "mapping_version_id": 245,
+        "enemy_pack_id": null,
+        "enemy_patrol_id": null,
+        "npc_id": 36597,
+        "floor_id": 182,
+        "mdt_id": 1,
+        "mdt_npc_id": null,
+        "seasonal_type": null,
+        "seasonal_index": null,
+        "teeming": null,
+        "faction": "any",
+        "required": 0,
+        "skippable": 0,
+        "enemy_forces_override": null,
+        "enemy_forces_override_teeming": null,
+        "dungeon_difficulty": null,
+        "lat": -135.24956085422,
+        "lng": 190.99877008438,
+        "kill_priority": -1
     }
 ]
