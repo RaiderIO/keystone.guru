@@ -4883,7 +4883,7 @@
         "key": "icecrowncitadel",
         "name": "dungeons.wotlk.icecrown_citadel.name",
         "slug": "icecrown-citadel",
-        "speedrun_enabled": 0,
+        "speedrun_enabled": 1,
         "floor_count": 8,
         "floors": [
             {
