@@ -169,6 +169,14 @@ return [
                 'khaz_goroths_seat'   => 'Khaz\'Goroth\'s Seat',
             ],
         ],
+        'upper_blackrock_spire'       => [
+            'name'   => 'Upper Blackrock Spire',
+            'floors' => [
+                'dragonspire_hall'  => 'Dragonspire Hall',
+                'the_rookery'       => 'The Rookery',
+                'hall_of_blackhand' => 'Hall of Blackhand',
+            ],
+        ],
         'wailing_caverns'             => [
             'name'   => 'Wailing Caverns',
             'floors' => [

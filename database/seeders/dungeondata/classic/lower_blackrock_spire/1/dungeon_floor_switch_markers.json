@@ -1,15 +1,15 @@
 [
     {
-        "id": 579,
-        "mapping_version_id": 238,
+        "id": 656,
+        "mapping_version_id": 239,
         "floor_id": 208,
         "target_floor_id": 210,
-        "lat": -121.66,
-        "lng": 217.2
+        "lat": -113.77,
+        "lng": 215.47
     },
     {
-        "id": 580,
-        "mapping_version_id": 238,
+        "id": 657,
+        "mapping_version_id": 239,
         "floor_id": 208,
         "target_floor_id": 209,
         "lat": -179.77,

@@ -192,7 +192,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
-                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
+                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
@@ -202,7 +202,13 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             if ($parsedEvent instanceof AdvancedCombatLogEvent) {
                 $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
 
-                if ($guid instanceof Creature && $npcs->has($guid->getId())) {
+                if ($guid instanceof Creature) {
+                    if( !$npcs->has($guid->getId()) ){
+                        $this->log->createMappingVersionFromCombatLogUnableToFindNpc($currentFloor->id, $guid->getId());
+
+                        return $parsedEvent;
+                    }
+                    
                     /** @var Npc $npc */
                     $npc = $npcs->get($guid->getId());
                     if ($npc->npc_type_id === NpcType::CRITTER) {

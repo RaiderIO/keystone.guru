@@ -170,7 +170,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             /** @var $event array{type: string, timestamp: Carbon, npc: CreateRouteNpc} */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
-                $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId);
+                $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
             }
 
             $uniqueUid = $event['npc']->getUniqueId();

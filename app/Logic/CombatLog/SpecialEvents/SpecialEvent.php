@@ -5,8 +5,9 @@ namespace App\Logic\CombatLog\SpecialEvents;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
+use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldBuilder;
+use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\DamageShieldMissedBuilder;
 use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\EnvironmentalDamageBuilder;
-use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\EnvironmentalDamageV20;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\SpellAbsorbedBuilder;
 use Carbon\Carbon;
 use Exception;
@@ -32,6 +33,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     public const SPECIAL_EVENT_SPELL_ABSORBED       = 'SPELL_ABSORBED';
     public const SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE = 'ENVIRONMENTAL_DAMAGE';
     public const SPECIAL_EVENT_DAMAGE_SPLIT         = 'DAMAGE_SPLIT';
+    public const SPECIAL_EVENT_DAMAGE_SHIELD_MISSED = 'DAMAGE_SHIELD_MISSED';
     public const SPECIAL_EVENT_DAMAGE_SHIELD        = 'DAMAGE_SHIELD';
     public const SPECIAL_EVENT_SPELL_RESURRECT      = 'SPELL_RESURRECT';
 
@@ -63,6 +65,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_ABSORBED,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE,
         self::SPECIAL_EVENT_DAMAGE_SPLIT,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED,
         self::SPECIAL_EVENT_DAMAGE_SHIELD,
         self::SPECIAL_EVENT_SPELL_RESURRECT,
 
@@ -95,7 +98,8 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_ABSORBED       => SpellAbsorbedBuilder::class,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE => EnvironmentalDamageBuilder::class,
         self::SPECIAL_EVENT_DAMAGE_SPLIT         => DamageSplit::class,
-        self::SPECIAL_EVENT_DAMAGE_SHIELD        => DamageShield::class,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED => DamageShieldMissedBuilder::class,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD        => DamageShieldBuilder::class,
         self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
 
         self::SPECIAL_EVENT_EMOTE           => Emote::class,
