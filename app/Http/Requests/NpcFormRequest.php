@@ -48,6 +48,7 @@ class NpcFormRequest extends FormRequest
             'bursting'                  => 'bool',
             'bolstering'                => 'bool',
             'sanguine'                  => 'bool',
+            'runs_away_in_fear'         => 'bool',
             'bolstering_whitelist_npcs' => 'array',
             'spells'                    => 'array',
         ];

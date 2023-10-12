@@ -144,14 +144,14 @@
             <div class="col">
                 <div class="{{ $errors->has('dangerous') ? ' has-error' : '' }}">
                     {!! Form::label('dangerous', __('views/admin.npc.edit.dangerous')) !!}
-                    {!! Form::checkbox('dangerous', 1, isset($npc) ? $npc->dangerous : 1, ['class' => 'form-control left_checkbox']) !!}
+                    {!! Form::checkbox('dangerous', 1, isset($npc) ? $npc->dangerous : 0, ['class' => 'form-control left_checkbox']) !!}
                     @include('common.forms.form-error', ['key' => 'dangerous'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('truesight') ? ' has-error' : '' }}">
                     {!! Form::label('truesight', __('views/admin.npc.edit.truesight')) !!}
-                    {!! Form::checkbox('truesight', 1, isset($npc) ? $npc->truesight : 1, ['class' => 'form-control left_checkbox']) !!}
+                    {!! Form::checkbox('truesight', 1, isset($npc) ? $npc->truesight : 0, ['class' => 'form-control left_checkbox']) !!}
                     @include('common.forms.form-error', ['key' => 'truesight'])
                 </div>
             </div>
@@ -174,6 +174,13 @@
                     {!! Form::label('sanguine', __('views/admin.npc.edit.sanguine')) !!}
                     {!! Form::checkbox('sanguine', 1, isset($npc) ? $npc->sanguine : 1, ['class' => 'form-control left_checkbox']) !!}
                     @include('common.forms.form-error', ['key' => 'sanguine'])
+                </div>
+            </div>
+            <div class="col">
+                <div class="{{ $errors->has('runs_away_in_fear') ? ' has-error' : '' }}">
+                    {!! Form::label('runs_away_in_fear', __('views/admin.npc.edit.runs_away_in_fear')) !!}
+                    {!! Form::checkbox('runs_away_in_fear', 1, isset($npc) ? $npc->runs_away_in_fear : 0, ['class' => 'form-control left_checkbox']) !!}
+                    @include('common.forms.form-error', ['key' => 'runs_away_in_fear'])
                 </div>
             </div>
         </div>

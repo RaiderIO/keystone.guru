@@ -292,6 +292,8 @@ return [
     'sidebar_enemy_bolstering_whitelist_npcs_label'      => 'Bolsters only',
     'sidebar_enemy_spell_label'                          => 'Spells',
     'sidebar_enemy_skippable_label'                      => 'Skippable',
+    'sidebar_enemy_runs_away_in_fear_label'              => 'Runs away',
+    'sidebar_hyper_respawns_label'                       => 'Hyperspawns',
     'sidebar_enemy_health_fortified_label'               => 'This health value is scaled by the Fortified affix',
     'sidebar_enemy_health_tyrannical_label'              => 'This health value is scaled by the Tyrannical affix',
     'sidebar_enemy_skippable_info_label'                 => 'A skippable enemy is an enemy that can be skipped without using invisibility potions or Rogue Shroud. These enemies may be excluded from your routes once you mark enemies as overpulled during a live session.',
