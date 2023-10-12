@@ -280,6 +280,14 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @returns {{}}
+     */
+    getGameVersion() {
+        return this._options.dungeon.game_version;
+    }
+
+    /**
+     *
      * @returns {[]}
      */
     getEnemies() {
