@@ -381,6 +381,7 @@ return [
     'enemy_dungeon_difficulty_label'                                => 'Dungeon difficulty',
     'enemy_required_label'                                          => 'Required',
     'enemy_skippable_label'                                         => 'Skippable',
+    'enemy_hyper_respawn_label'                                     => 'Hyper respawn',
     'enemy_kill_priority_label'                                     => 'Kill priority',
     'enemy_kill_priority_select_default_label'                      => 'Select kill priority',
     'enemy_npc_id_select_default_label'                             => 'Select NPC',

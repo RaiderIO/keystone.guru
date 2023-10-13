@@ -319,6 +319,13 @@ class Enemy extends VersionableMapObject {
                 category: 'advanced',
             }),
             new Attribute({
+                name: 'hyper_respawn',
+                type: 'bool',
+                admin: true,
+                default: false,
+                category: 'advanced',
+            }),
+            new Attribute({
                 name: 'lat',
                 type: 'float',
                 edit: false,
