@@ -3021,7 +3021,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-10-04T20:06:36.000000Z",
         "updated_at": "2023-10-04T20:06:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 244,
@@ -3035,7 +3035,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-10-07T20:20:52.000000Z",
         "updated_at": "2023-10-07T20:20:52.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 245,
@@ -3049,6 +3049,6 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-10-10T19:40:54.000000Z",
         "updated_at": "2023-10-10T19:40:54.000000Z",
-        "merged": false
+        "merged": true
     }
 ]
