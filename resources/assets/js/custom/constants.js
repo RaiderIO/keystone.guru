@@ -141,9 +141,16 @@ const NPC_TYPE_UNDEAD = 10;
 const NPC_TYPE_UNCATEGORIZED = 11;
 
 // Expansions
+const EXPANSION_CLASSIC = 'classic';
+const EXPANSION_TBC = 'tbc';
+const EXPANSION_WOTLK = 'wotlk';
+const EXPANSION_CATACLYSM = 'cata';
+const EXPANSION_MOP = 'mop';
+const EXPANSION_WOD = 'wod';
 const EXPANSION_LEGION = 'legion';
 const EXPANSION_BFA = 'bfa';
 const EXPANSION_SHADOWLANDS = 'shadowlands';
+const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
 // Map icons
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
@@ -178,6 +185,11 @@ const METRIC_TAG_MDT_COPY_EMBED = 'embed';
 // Teeming states
 const TEEMING_VISIBLE = 'visible';
 const TEEMING_HIDDEN = 'hidden';
+
+// Game versions
+const GAME_VERSION_CLASSIC = 'classic';
+const GAME_VERSION_WOTLK = 'wotlk';
+const GAME_VERSION_RETAIL = 'retail';
 
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';

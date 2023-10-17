@@ -72,6 +72,7 @@ class NpcController extends Controller
             'bursting'          => $validated['bursting'] ?? 0,
             'bolstering'        => $validated['bolstering'] ?? 0,
             'sanguine'          => $validated['sanguine'] ?? 0,
+            'runs_away_in_fear' => $validated['runs_away_in_fear'] ?? 0,
         ];
 
         if ($oldId === null) {

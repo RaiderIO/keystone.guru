@@ -179,6 +179,7 @@ return [
             'bursting'                             => 'Bursting',
             'bolstering'                           => 'Bolstering',
             'sanguine'                             => 'Sanguine',
+            'runs_away_in_fear'                    => 'Runs away in fear',
             'bolstering_npc_whitelist'             => 'Bolstering NPC Whitelist',
             'bolstering_npc_whitelist_count'       => '{0} NPCs',
             'spells'                               => 'Spells',
