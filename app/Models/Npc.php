@@ -13,30 +13,32 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $dungeon_id
- * @property int $classification_id
- * @property int $npc_type_id
- * @property int $npc_class_id
- * @property int $display_id
- * @property string $name
- * @property int $base_health
- * @property int|null $health_percentage Null = 100% health
- * @property string $aggressiveness
- * @property bool $dangerous
- * @property bool $truesight
- * @property bool $bursting
- * @property bool $bolstering
- * @property bool $sanguine
+ * @property int                                 $id
+ * @property int                                 $dungeon_id
+ * @property int                                 $classification_id
+ * @property int                                 $npc_type_id
+ * @property int                                 $npc_class_id
+ * @property int                                 $display_id
+ * @property string                              $name
+ * @property int                                 $base_health
+ * @property int|null                            $health_percentage Null = 100% health
+ * @property string                              $aggressiveness
+ * @property bool                                $dangerous
+ * @property bool                                $truesight
+ * @property bool                                $bursting
+ * @property bool                                $bolstering
+ * @property bool                                $sanguine
+ * @property bool                                $runs_away_in_fear
+ * @property bool                                $hyper_respawn
  *
- * @property Dungeon $dungeon
- * @property NpcClassification $classification
- * @property NpcType $type
- * @property NpcClass $class
- * @property NpcEnemyForces $enemyForces
+ * @property Dungeon                             $dungeon
+ * @property NpcClassification                   $classification
+ * @property NpcType                             $type
+ * @property NpcClass                            $class
+ * @property NpcEnemyForces                      $enemyForces
  *
- * @property NpcEnemyForces[]|Collection $npcEnemyForces
- * @property Enemy[]|Collection $enemies
+ * @property NpcEnemyForces[]|Collection         $npcEnemyForces
+ * @property Enemy[]|Collection                  $enemies
  * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
  *
  * @mixin Eloquent
@@ -44,9 +46,9 @@ use Illuminate\Support\Collection;
 class Npc extends CacheModel implements MappingModelInterface
 {
     public $incrementing = false;
-    public $timestamps = false;
+    public $timestamps   = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+    protected $with     = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
     protected $fillable = [
         'id',
         'dungeon_id',
@@ -63,6 +65,7 @@ class Npc extends CacheModel implements MappingModelInterface
         'bursting',
         'bolstering',
         'sanguine',
+        'runs_away_in_fear',
     ];
 
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
@@ -266,7 +269,7 @@ class Npc extends CacheModel implements MappingModelInterface
             $keyLevelFactor *= 1.3;
         }
 
-        if( $thundering ) {
+        if ($thundering) {
             $keyLevelFactor *= 1.05;
         }
 
@@ -274,7 +277,7 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int $keyLevel
+     * @param int  $keyLevel
      * @param bool $fortified
      * @param bool $tyrannical
      * @param bool $thundering
@@ -283,6 +286,7 @@ class Npc extends CacheModel implements MappingModelInterface
     public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
         $thundering = $thundering && $keyLevel >= 10;
+
         return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical, $thundering));
     }
 

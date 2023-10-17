@@ -32,6 +32,7 @@ use Illuminate\Support\Collection;
  * @property string                       $faction
  * @property boolean                      $required
  * @property boolean                      $skippable
+ * @property boolean                      $hyper_respawn
  * @property int|null                     $kill_priority      Used for determining the group in which enemies are scanned for and killed when parsing a combat log. Null = default, negative = lower priority, positive = higher priority
  * @property int|null                     $enemy_forces_override
  * @property int|null                     $enemy_forces_override_teeming
@@ -69,6 +70,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'faction',
         'required',
         'skippable',
+        'hyper_respawn',
         'kill_priority',
         'enemy_forces_override',
         'enemy_forces_override_teeming',
@@ -93,6 +95,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'enemy_patrol_id'    => 'integer',
         'required'           => 'integer',
         'skippable'          => 'integer',
+        'hyper_respawn'      => 'integer',
         'lat'                => 'double',
         'lng'                => 'double',
         'kill_priority'      => 'integer',

@@ -319,6 +319,13 @@ class Enemy extends VersionableMapObject {
                 category: 'advanced',
             }),
             new Attribute({
+                name: 'hyper_respawn',
+                type: 'bool',
+                admin: true,
+                default: false,
+                category: 'advanced',
+            }),
+            new Attribute({
                 name: 'lat',
                 type: 'float',
                 edit: false,
@@ -476,20 +483,25 @@ class Enemy extends VersionableMapObject {
                 warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
                     (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
             });
-            result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
-            result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
-            result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
-            // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
-            // result.info.push({
-            //     key: lang.get('messages.sidebar_enemy_skippable_label'),
-            //     value: this.required ? 0 : 1
-            // });
-            // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
-            result.info.push({
-                key: lang.get('messages.sidebar_enemy_skippable_label'),
-                value: this.skippable ? 1 : 0,
-                info: lang.get('messages.sidebar_enemy_skippable_info_label')
-            });
+            if( mapContext.getGameVersion().key === GAME_VERSION_RETAIL ) {
+                result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
+                result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
+                result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+                // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
+                // result.info.push({
+                //     key: lang.get('messages.sidebar_enemy_skippable_label'),
+                //     value: this.required ? 0 : 1
+                // });
+                // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
+                result.info.push({
+                    key: lang.get('messages.sidebar_enemy_skippable_label'),
+                    value: this.skippable ? 1 : 0,
+                    info: lang.get('messages.sidebar_enemy_skippable_info_label')
+                });
+            } else {
+                result.info.push({key: lang.get('messages.sidebar_enemy_runs_away_in_fear_label'), value: this.npc.runs_away_in_fear});
+                result.info.push({key: lang.get('messages.sidebar_hyper_respawns_label'), value: this.hyper_respawn ?? 0});
+            }
             // @formatter:on
 
             if (typeof this.npc.npcbolsteringwhitelists !== 'undefined' && this.npc.npcbolsteringwhitelists.length > 0) {

@@ -67,6 +67,16 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
     }
 
     /**
+     * @param int $dungeonId
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogDungeonFromExistingMappingVersion(int $dungeonId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
+    /**
      * @return void
      */
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void
@@ -91,6 +101,16 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
     public function createMappingVersionFromCombatLogSkipEntryNoFloor(): void
     {
         $this->debug(__METHOD__);
+    }
+
+    /**
+     * @param int $floorId
+     * @param int $npcId
+     * @return void
+     */
+    public function createMappingVersionFromCombatLogUnableToFindNpc(int $floorId, int $npcId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     /**

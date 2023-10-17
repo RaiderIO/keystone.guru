@@ -1,6 +1,6 @@
 [
     {
-        "mapping_version_id": 165,
+        "mapping_version_id": 239,
         "floor_id": 213,
         "dungeon_route_id": null,
         "team_id": null,
@@ -13,14 +13,14 @@
         "is_admin": true
     },
     {
-        "mapping_version_id": 211,
+        "mapping_version_id": 239,
         "floor_id": 213,
         "dungeon_route_id": null,
         "team_id": null,
-        "map_icon_type_id": 2,
-        "lat": -147.53594496993,
-        "lng": 183.50456221078,
-        "comment": "Keystone.guru: Only if you jump down.",
+        "map_icon_type_id": 42,
+        "lat": -137.07761698378,
+        "lng": 223.37872898947,
+        "comment": "These two adds spawn during the fight.",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

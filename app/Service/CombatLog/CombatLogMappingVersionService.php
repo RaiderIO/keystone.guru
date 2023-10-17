@@ -79,11 +79,11 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     }
 
     /**
-     * @param string $filePath
-     *
+     * @param string              $filePath
+     * @param MappingVersion|null $mappingVersion
      * @return MappingVersion|null
      */
-    public function createMappingVersionFromDungeonOrRaid(string $filePath): ?MappingVersion
+    public function createMappingVersionFromDungeonOrRaid(string $filePath, ?MappingVersion $mappingVersion = null): ?MappingVersion
     {
         $this->log->createMappingVersionFromDungeonOrRaidStart($filePath);
         try {
@@ -96,7 +96,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 }
 
                 return $dungeon;
-            });
+            }, $mappingVersion);
         } finally {
             $this->log->createMappingVersionFromDungeonOrRaidEnd();
         }
@@ -106,17 +106,22 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
 
     /**
-     * @param string   $filePath
-     * @param callable $extractDungeonCallable
-     *
+     * @param string              $filePath
+     * @param callable            $extractDungeonCallable
+     * @param MappingVersion|null $mappingVersion
      * @return MappingVersion|null
      */
-    private function createMappingVersionFromCombatLog(string $filePath, callable $extractDungeonCallable): ?MappingVersion
-    {
+    private function createMappingVersionFromCombatLog(
+        string          $filePath,
+        callable        $extractDungeonCallable,
+        ?MappingVersion $mappingVersion = null
+    ): ?MappingVersion {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
+        $hasExistingMappingVersion = $mappingVersion !== null;
+
         $now            = Carbon::now();
-        $mappingVersion = MappingVersion::create([
+        $mappingVersion = $mappingVersion ?? MappingVersion::create([
             'dungeon_id'            => -1,
             'version'               => 1,
             'enemy_forces_required' => 0,
@@ -133,7 +138,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $npcs = collect();
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
-        use ($targetFilePath, $extractDungeonCallable, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
+        use ($targetFilePath, $extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
@@ -150,29 +155,34 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 if (($dungeon = $extractDungeonCallable($parsedEvent)) === null) {
                     $this->log->createMappingVersionFromCombatLogSkipEntryNoDungeon();
                 } else {
-                    /** @var Dungeon $dungeon */
-                    foreach ($dungeon->floors as $floor) {
-                        if ($floor->ingame_min_x === null || $floor->ingame_min_y === null || $floor->ingame_max_x === null || $floor->ingame_max_y === null) {
-                            throw new Exception(
-                                sprintf('Floor %s is not configured yet - cannot place enemies on it!', __($floor->name, [], 'en'))
-                            );
+                    if ($hasExistingMappingVersion) {
+                        $dungeon = $mappingVersion->dungeon;
+                        $this->log->createMappingVersionFromCombatLogDungeonFromExistingMappingVersion($dungeon->id);
+                    } else {
+                        /** @var Dungeon $dungeon */
+                        foreach ($dungeon->floors as $floor) {
+                            if ($floor->ingame_min_x === null || $floor->ingame_min_y === null || $floor->ingame_max_x === null || $floor->ingame_max_y === null) {
+                                throw new Exception(
+                                    sprintf('Floor %s is not configured yet - cannot place enemies on it!', __($floor->name, [], 'en'))
+                                );
+                            }
                         }
-                    }
 
-                    // We expect it to be 1 since we just created a mapping version
+                        // We expect it to be 1 since we just created a mapping version
 //                    if ($dungeon->mappingVersions()->count() > 1) {
 //                        $mappingVersion->delete();
 //
 //                        throw new Exception('Unable to create initial mapping version from combat log - there are already mapping versions for this dungeon!');
 //                    }
 
-                    // If the dungeon was found, update the mapping version
-                    $mostRecentMappingVersion = MappingVersion::where('dungeon_id', $dungeon->id)->orderByDesc('version')->first();
+                        // If the dungeon was found, update the mapping version
+                        $mostRecentMappingVersion = MappingVersion::where('dungeon_id', $dungeon->id)->orderByDesc('version')->first();
 
-                    $newMappingVersionVersion = $mostRecentMappingVersion === null ? 1 : $mostRecentMappingVersion->version + 1;
+                        $newMappingVersionVersion = $mostRecentMappingVersion === null ? 1 : $mostRecentMappingVersion->version + 1;
 
-                    $mappingVersion->update(['dungeon_id' => $dungeon->id, 'version' => $newMappingVersionVersion]);
-                    $mappingVersion->setRelation('dungeon', $dungeon);
+                        $mappingVersion->update(['dungeon_id' => $dungeon->id, 'version' => $newMappingVersionVersion]);
+                        $mappingVersion->setRelation('dungeon', $dungeon);
+                    }
 
                     $npcs = Npc::whereIn('dungeon_id', [-1, $dungeon->id])->get()->keyBy('id');
                 }
@@ -182,7 +192,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
-                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID());
+                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
@@ -192,7 +202,13 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             if ($parsedEvent instanceof AdvancedCombatLogEvent) {
                 $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
 
-                if ($guid instanceof Creature && $npcs->has($guid->getId())) {
+                if ($guid instanceof Creature) {
+                    if( !$npcs->has($guid->getId()) ){
+                        $this->log->createMappingVersionFromCombatLogUnableToFindNpc($currentFloor->id, $guid->getId());
+
+                        return $parsedEvent;
+                    }
+                    
                     /** @var Npc $npc */
                     $npc = $npcs->get($guid->getId());
                     if ($npc->npc_type_id === NpcType::CRITTER) {

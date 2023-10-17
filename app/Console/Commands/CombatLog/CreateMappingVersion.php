@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
+use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
 
 class CreateMappingVersion extends BaseCombatLogCommand
@@ -11,7 +12,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:createmappingversion {filePath}';
+    protected $signature = 'combatlog:createmappingversion {filePath} {--mappingVersion=} ';
 
     /**
      * The console command description.
@@ -29,20 +30,30 @@ class CreateMappingVersion extends BaseCombatLogCommand
      */
     public function handle(CombatLogMappingVersionServiceInterface $combatLogMappingVersionService): int
     {
-        $filePath = $this->argument('filePath');
+        $filePath         = $this->argument('filePath');
+        $mappingVersionId = $this->option('mappingVersion');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogMappingVersionService) {
-            return $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath);
+        $mappingVersion = null;
+        if (is_numeric($mappingVersionId)) {
+            $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
+        }
+
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath)
+        use ($combatLogMappingVersionService, $mappingVersion) {
+            return $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath, $mappingVersion);
         });
     }
 
     /**
      * @param CombatLogMappingVersionServiceInterface $combatLogMappingVersionService
      * @param string                                  $filePath
-     *
+     * @param MappingVersion|null                     $mappingVersion
      * @return int
      */
-    private function createMappingVersionFromCombatLog(CombatLogMappingVersionServiceInterface $combatLogMappingVersionService, string $filePath): int
+    private function createMappingVersionFromCombatLog(
+        CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
+        string                                  $filePath,
+        ?MappingVersion                         $mappingVersion = null): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -52,10 +63,13 @@ class CreateMappingVersion extends BaseCombatLogCommand
             return 0;
         }
 
-        $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid($filePath);
+        $hasMappingVersion = $mappingVersion !== null;
+
+        $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid($filePath, $mappingVersion);
         $this->info(
             sprintf(
-                '- Created mapping version %s (%s, %d, %d enemies)',
+                '- %s mapping version %s (%s, %d, %d enemies)',
+                $hasMappingVersion ? 'Updated' : 'Created',
                 $mappingVersion->version,
                 __($mappingVersion->dungeon->name, [], 'en'),
                 $mappingVersion->id,

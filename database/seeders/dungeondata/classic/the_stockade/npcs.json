@@ -15,6 +15,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -43,6 +44,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -71,6 +73,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -99,6 +102,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -127,6 +131,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -155,6 +160,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -183,6 +189,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -211,6 +218,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -239,9 +247,17 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14454,
+                "mapping_version_id": 245,
+                "npc_id": 1716,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14442,
                 "mapping_version_id": 234,
@@ -280,13 +296,6 @@
             {
                 "id": 13831,
                 "mapping_version_id": 212,
-                "npc_id": 1716,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 13726,
-                "mapping_version_id": 211,
                 "npc_id": 1716,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -532,13 +541,6 @@
             {
                 "id": 9659,
                 "mapping_version_id": 166,
-                "npc_id": 1716,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 9658,
-                "mapping_version_id": 165,
                 "npc_id": 1716,
                 "enemy_forces": 0,
                 "enemy_forces_teeming": null
@@ -1674,6 +1676,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
@@ -1702,6 +1705,7 @@
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
+        "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
