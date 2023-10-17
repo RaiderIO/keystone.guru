@@ -30,5 +30,37 @@
         "target_floor_id": 210,
         "lat": -130.59,
         "lng": 219.98
+    },
+    {
+        "id": 701,
+        "mapping_version_id": 247,
+        "floor_id": 209,
+        "target_floor_id": 208,
+        "lat": -180.42,
+        "lng": 248.98
+    },
+    {
+        "id": 702,
+        "mapping_version_id": 247,
+        "floor_id": 209,
+        "target_floor_id": 210,
+        "lat": -191.47,
+        "lng": 196.5
+    },
+    {
+        "id": 712,
+        "mapping_version_id": 247,
+        "floor_id": 209,
+        "target_floor_id": 208,
+        "lat": -154.22,
+        "lng": 228.4
+    },
+    {
+        "id": 713,
+        "mapping_version_id": 247,
+        "floor_id": 209,
+        "target_floor_id": 210,
+        "lat": -130.59,
+        "lng": 219.98
     }
 ]
