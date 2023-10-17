@@ -500,7 +500,7 @@ class Enemy extends VersionableMapObject {
                 });
             } else {
                 result.info.push({key: lang.get('messages.sidebar_enemy_runs_away_in_fear_label'), value: this.npc.runs_away_in_fear});
-                result.info.push({key: lang.get('messages.sidebar_hyper_respawns_label'), value: this.hyper_respawn ?? 0});
+                result.info.push({key: lang.get('messages.sidebar_hyper_respawns_label'), value: this.hyper_respawn ? 1 : 0});
             }
             // @formatter:on
 
