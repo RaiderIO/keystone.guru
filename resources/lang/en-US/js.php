@@ -155,6 +155,10 @@ return [
     'dungeonfloorswitchmarker_title'              => 'Draw a dungeon floor switch marker. Hotkey: <b>:hotkey</b>',
     'mountablearea'                               => 'Mountable',
     'mountablearea_title'                         => 'Draw an area in which players are allowed to mount. Hotkey: <b>:hotkey</b>',
+    'floorunion'                                  => 'Union',
+    'floorunion_title'                            => 'Mark a location on the map that represents another floor. Hotkey: <b>:hotkey</b>',
+    'floorunionarea'                              => 'Unionarea',
+    'floorunionarea_title'                        => 'Draws a floor union area on the map which represents the area in which a floor union is actually active. Hotkey: <b>:hotkey</b>',
 
     'draw_handler_route_tooltip_start' => 'Click to start drawing path.',
     'draw_handler_route_tooltip_cont'  => 'Click to continue drawing path.',

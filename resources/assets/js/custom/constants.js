@@ -54,6 +54,8 @@ const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
+const MAP_OBJECT_GROUP_FLOOR_UNION = 'floorunion';
+const MAP_OBJECT_GROUP_FLOOR_UNION_AREA = 'floorunionarea';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_KILLZONE_PATH = 'killzonepath';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
@@ -77,7 +79,9 @@ const MAP_OBJECT_GROUP_NAMES = [
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
     MAP_OBJECT_GROUP_KILLZONE,
     MAP_OBJECT_GROUP_KILLZONE_PATH,
-    MAP_OBJECT_GROUP_MOUNTABLE_AREA
+    MAP_OBJECT_GROUP_MOUNTABLE_AREA,
+    MAP_OBJECT_GROUP_FLOOR_UNION,
+    MAP_OBJECT_GROUP_FLOOR_UNION_AREA
 ];
 
 // Kill zones
@@ -500,6 +504,9 @@ let c = {
         },
         mountablearea: {
             color: '#eb4934'
+        },
+        floorunionarea: {
+            color: '#00b08c',
         },
         placeholderColors: {},
         editsidebar: {

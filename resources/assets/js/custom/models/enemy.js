@@ -483,6 +483,7 @@ class Enemy extends VersionableMapObject {
                 warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
                     (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
             });
+
             if( mapContext.getGameVersion().key === GAME_VERSION_RETAIL ) {
                 result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
                 result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
