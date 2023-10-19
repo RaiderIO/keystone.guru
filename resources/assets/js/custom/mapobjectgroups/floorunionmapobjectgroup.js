@@ -23,7 +23,7 @@ class FloorUnionMapObjectGroup extends MapObjectGroup {
     }
 
     _createMapObject(layer, options = {}) {
-        console.assert(this instanceof MapIconMapObjectGroup, 'this is not an MapIconMapObjectGroup', this);
+        console.assert(this instanceof FloorUnionMapObjectGroup, 'this is not an FloorUnionMapObjectGroup', this);
 
         return new FloorUnion(this.manager.map, layer);
     }

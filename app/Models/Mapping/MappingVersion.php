@@ -8,6 +8,8 @@ use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
+use App\Models\Floor\FloorUnion;
+use App\Models\Floor\FloorUnionArea;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
 use App\Models\Npc\NpcEnemyForces;
@@ -16,6 +18,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 
 /**
@@ -41,6 +44,8 @@ use Illuminate\Support\Collection;
  * @property Collection|EnemyPatrol[]              $enemyPatrols
  * @property Collection|MapIcon[]                  $mapIcons
  * @property Collection|MountableArea[]            $mountableAreas
+ * @property Collection|FloorUnion[]               $floorUnions
+ * @property Collection|FloorUnionArea[]           $floorUnionAreas
  * @property Collection|NpcEnemyForces[]           $npcEnemyForces
  *
  * @mixin Eloquent
@@ -160,6 +165,22 @@ class MappingVersion extends Model
     /**
      * @return HasMany
      */
+    public function floorUnions(): HasMany
+    {
+        return $this->hasMany(FloorUnion::class);
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function floorUnionAreas(): HasManyThrough
+    {
+        return $this->hasManyThrough(FloorUnionArea::class, FloorUnion::class);
+    }
+
+    /**
+     * @return HasMany
+     */
     public function npcEnemyForces(): HasMany
     {
         return $this->hasMany(NpcEnemyForces::class);
@@ -224,6 +245,7 @@ class MappingVersion extends Model
                 'enemyPatrols',
                 'mapIcons',
                 'mountableAreas',
+                'floorUnions',
                 'npcEnemyForces',
             ]);
 
@@ -235,6 +257,7 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->enemyPatrols)
                 ->merge($previousMappingVersion->mapIcons)
                 ->merge($previousMappingVersion->mountableAreas)
+                ->merge($previousMappingVersion->floorUnions)
                 ->merge($previousMappingVersion->npcEnemyForces);
 
             $idMapping = collect([
@@ -244,6 +267,7 @@ class MappingVersion extends Model
                 EnemyPatrol::class              => collect(),
                 MapIcon::class                  => collect(),
                 MountableArea::class            => collect(),
+                FloorUnion::class               => collect(),
                 NpcEnemyForces::class           => collect(),
             ]);
 
@@ -279,10 +303,28 @@ class MappingVersion extends Model
                     foreach ($idMapping->get(EnemyPatrol::class) as $enemyPatrolRelationCoupling) {
                         /** @var array{oldModel: EnemyPatrol, newModel: EnemyPatrol} $enemyPatrolRelationCoupling */
                         if ($enemyPatrolRelationCoupling['oldModel']->id === $oldEnemyPatrolId) {
-                            $enemyRelationCoupling['newModel']->enemy_patrol_id = $enemyPatrolRelationCoupling['newModel']->id;
-                            $enemyRelationCoupling['newModel']->save();
+                            $enemyRelationCoupling['newModel']->update([
+                                'enemy_patrol_id' => $enemyPatrolRelationCoupling['newModel']->id,
+                            ]);
                             break;
                         }
+                    }
+                }
+            }
+
+            // Change floor unions of floor union areas
+            foreach ($idMapping->get(FloorUnionArea::class) as $floorUnionAreaRelationCoupling) {
+                /** @var array{oldModel: FloorUnionArea, newModel: FloorUnionArea} $floorUnionAreaRelationCoupling */
+                $oldFloorUnionId = $floorUnionAreaRelationCoupling['oldModel']->floor_union_id;
+
+                // Find the new ID of the floor union
+                foreach ($idMapping->get(FloorUnion::class) as $floorUnionRelationCoupling) {
+                    /** @var array{oldModel: FloorUnion, newModel: FloorUnion} $floorUnionRelationCoupling */
+                    if ($floorUnionRelationCoupling['oldModel']->id === $oldFloorUnionId) {
+                        $floorUnionAreaRelationCoupling['newModel']->update([
+                            'floor_union_id' => $floorUnionRelationCoupling['newModel']->id,
+                        ]);
+                        break;
                     }
                 }
             }
@@ -300,6 +342,7 @@ class MappingVersion extends Model
             }
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
+            $mappingVersion->floorUnions()->delete();
             $mappingVersion->npcEnemyForces()->delete();
         });
     }

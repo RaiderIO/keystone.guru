@@ -62,7 +62,7 @@ class Save extends Command
 
 
             $tmpZippedFilePath = '/tmp';
-            $zippedFileName = 'mapping.gz';
+            $zippedFileName    = 'mapping.gz';
             $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
             $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
 
@@ -124,8 +124,8 @@ class Save extends Command
         $this->info('Saving dungeons');
 
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
-            ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man', 'floors.floorUnions'])
+        $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man', 'floors.floorUnions6'])
+            ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
             ->get();
 
         $this->saveDataToJsonFile(
@@ -198,6 +198,7 @@ class Save extends Command
                 'dungeonFloorSwitchMarkersForExport',
                 'mapIconsForExport',
                 'mountableAreasForExport',
+                'floorUnionsForExport',
             ])->get();
 
             foreach ($floors as $floor) {
@@ -208,7 +209,7 @@ class Save extends Command
 
     /**
      * @param Dungeon $dungeon
-     * @param string $rootDirPath
+     * @param string  $rootDirPath
      * @return void
      */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
@@ -298,7 +299,7 @@ class Save extends Command
 
     /**
      * @param Dungeon $dungeon
-     * @param string $rootDirPath
+     * @param string  $rootDirPath
      * @return void
      */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
@@ -317,7 +318,7 @@ class Save extends Command
     }
 
     /**
-     * @param Floor $floor
+     * @param Floor  $floor
      * @param string $rootDirPath
      * @return void
      */
@@ -325,7 +326,7 @@ class Save extends Command
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemies                   = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
         $enemyPacks                = $floor->enemyPacksForExport->values();
         $enemyPatrols              = $floor->enemyPatrolsForExport->values();
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
@@ -334,6 +335,7 @@ class Save extends Command
         $dungeonFloorSwitchMarkers->makeHidden(['direction']);
         $mapIcons       = $floor->mapIconsForExport->values();
         $mountableAreas = $floor->mountableAreasForExport->values();
+        $floorUnions    = $floor->floorUnionsForExport->values();
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.
@@ -345,6 +347,7 @@ class Save extends Command
         $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
         $result['map_icons']                    = $mapIcons;
         $result['mountable_areas']              = $mountableAreas;
+        $result['floor_unions']                 = $floorUnions;
 
         foreach ($result as $category => $categoryData) {
             // Save enemies, packs, patrols, markers on a per-floor basis

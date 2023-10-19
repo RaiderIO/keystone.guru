@@ -3,22 +3,24 @@
 namespace App\Models\Floor;
 
 use App\Models\CacheModel;
+use App\Models\Mapping\MappingVersion;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int   $id
- * @property int   $floor_id
- * @property int   $target_floor_id
- * @property float $lat
- * @property float $lng
- * @property float $size
- * @property float $rotation
+ * @property int                         $id
+ * @property int                         $mapping_version_id
+ * @property int                         $floor_id
+ * @property int                         $target_floor_id
+ * @property float                       $lat
+ * @property float                       $lng
+ * @property float                       $size
+ * @property float                       $rotation
  *
- * @property Floor $floor
- * @property Floor $targetFloor
+ * @property Floor                       $floor
+ * @property Floor                       $targetFloor
  *
  * @property Collection|FloorUnionArea[] $floorUnionAreas
  *
@@ -27,6 +29,7 @@ use Illuminate\Support\Collection;
 class FloorUnion extends CacheModel
 {
     protected $fillable = [
+        'mapping_version_id',
         'floor_id',
         'target_floor_id',
         'lat',
@@ -36,8 +39,16 @@ class FloorUnion extends CacheModel
     ];
 
     protected $with = [
-        'floorUnionAreas'
+        'floorUnionAreas',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
+    }
 
     /**
      * @return BelongsTo

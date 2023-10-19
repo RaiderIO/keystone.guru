@@ -338,6 +338,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getFloorUnions() {
+        return this._options.dungeon.floorUnions;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getNpcs() {
         return this._options.npcs;
     }

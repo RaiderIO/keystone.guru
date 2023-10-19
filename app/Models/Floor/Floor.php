@@ -52,6 +52,7 @@ use Illuminate\Support\Collection;
  * @property Collection|MapIcon[]                    $mapicons
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[]              $mountableareas
+ * @property Collection|FloorUnion[]                 $floorUnions
  *
  * @property Collection|Enemy[]                      $enemiesForExport
  * @property Collection|EnemyPack[]                  $enemyPacksForExport
@@ -59,14 +60,13 @@ use Illuminate\Support\Collection;
  * @property Collection|MapIcon[]                    $mapIconsForExport
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
  * @property Collection|MountableArea[]              $mountableAreasForExport
+ * @property Collection|FloorUnion[]                 $floorUnionsForExport
  *
  * @property Collection|FloorCoupling[]              $floorcouplings
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
  * @property Collection|Floor[]                      $connectedFloors
  * @property Collection|Floor[]                      $directConnectedFloors
  * @property Collection|Floor[]                      $reverseConnectedFloors
- *
- * @property Collection|FloorUnion[]                 $floorUnions
  *
  * @method static Builder active()
  *
@@ -232,6 +232,14 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mountableAreasForExport(): HasMany
     {
         return $this->hasMany(MountableArea::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function floorUnionsForExport(): HasMany
+    {
+        return $this->hasMany(FloorUnion::class);
     }
 
     /**

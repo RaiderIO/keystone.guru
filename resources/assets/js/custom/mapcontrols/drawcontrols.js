@@ -587,10 +587,8 @@ class DrawControls extends MapControl {
         // Surely there must be a better way for this but whatever, this works..
         for (let optionName in this.drawControlOptions.draw) {
             if (this.drawControlOptions.draw.hasOwnProperty(optionName)) {
-                console.log(optionName, this.drawControlOptions.draw);
                 let option = this.drawControlOptions.draw[optionName];
                 if (option.hasOwnProperty('faClass')) {
-                    console.log(option);
                     // Set the FA icon and remove the background image that was initially there
                     let $option = $(`.leaflet-draw-draw-${optionName}`)
                         .html(this._getButtonHtml(option.faClass, lang.get(`messages.${optionName}`), option.hotkey))
