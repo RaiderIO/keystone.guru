@@ -18,20 +18,19 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 
 /**
  * @property int                                   $id
  * @property int                                   $dungeon_id
  * @property int                                   $version
- * @property int                                   $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
- * @property int                                   $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
- * @property int                                   $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
+ * @property int                                   $enemy_forces_required           The amount of total enemy forces required to complete the dungeon.
+ * @property int                                   $enemy_forces_required_teeming   The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property int                                   $enemy_forces_shrouded           The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
  * @property int                                   $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
- * @property int                                   $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
+ * @property int                                   $timer_max_seconds               The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null                           $mdt_mapping_hash
- * @property bool                                  $merged Not saved in the database
+ * @property bool                                  $merged                          Not saved in the database
  *
  * @property Carbon                                $updated_at
  * @property Carbon                                $created_at
@@ -171,11 +170,11 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return HasManyThrough
+     * @return HasMany
      */
-    public function floorUnionAreas(): HasManyThrough
+    public function floorUnionAreas(): HasMany
     {
-        return $this->hasManyThrough(FloorUnionArea::class, FloorUnion::class);
+        return $this->hasMany(FloorUnionArea::class);
     }
 
     /**
@@ -246,6 +245,7 @@ class MappingVersion extends Model
                 'mapIcons',
                 'mountableAreas',
                 'floorUnions',
+                'floorUnionAreas',
                 'npcEnemyForces',
             ]);
 
@@ -258,6 +258,7 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->mapIcons)
                 ->merge($previousMappingVersion->mountableAreas)
                 ->merge($previousMappingVersion->floorUnions)
+                ->merge($previousMappingVersion->floorUnionAreas)
                 ->merge($previousMappingVersion->npcEnemyForces);
 
             $idMapping = collect([
@@ -268,6 +269,7 @@ class MappingVersion extends Model
                 MapIcon::class                  => collect(),
                 MountableArea::class            => collect(),
                 FloorUnion::class               => collect(),
+                FloorUnionArea::class           => collect(),
                 NpcEnemyForces::class           => collect(),
             ]);
 
@@ -343,6 +345,7 @@ class MappingVersion extends Model
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
             $mappingVersion->floorUnions()->delete();
+            $mappingVersion->floorUnionAreas()->delete();
             $mappingVersion->npcEnemyForces()->delete();
         });
     }

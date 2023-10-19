@@ -199,6 +199,7 @@ class Save extends Command
                 'mapIconsForExport',
                 'mountableAreasForExport',
                 'floorUnionsForExport',
+                'floorUnionAreasForExport',
             ])->get();
 
             foreach ($floors as $floor) {
@@ -210,6 +211,7 @@ class Save extends Command
     /**
      * @param Dungeon $dungeon
      * @param string  $rootDirPath
+     *
      * @return void
      */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
@@ -300,6 +302,7 @@ class Save extends Command
     /**
      * @param Dungeon $dungeon
      * @param string  $rootDirPath
+     *
      * @return void
      */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
@@ -320,6 +323,7 @@ class Save extends Command
     /**
      * @param Floor  $floor
      * @param string $rootDirPath
+     *
      * @return void
      */
     private function saveFloor(Floor $floor, string $rootDirPath): void
@@ -333,9 +337,10 @@ class Save extends Command
 
         // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
         $dungeonFloorSwitchMarkers->makeHidden(['direction']);
-        $mapIcons       = $floor->mapIconsForExport->values();
-        $mountableAreas = $floor->mountableAreasForExport->values();
-        $floorUnions    = $floor->floorUnionsForExport->values();
+        $mapIcons        = $floor->mapIconsForExport->values();
+        $mountableAreas  = $floor->mountableAreasForExport->values();
+        $floorUnions     = $floor->floorUnionsForExport->values();
+        $floorUnionAreas = $floor->floorUnionAreasForExport->values();
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.
@@ -348,6 +353,7 @@ class Save extends Command
         $result['map_icons']                    = $mapIcons;
         $result['mountable_areas']              = $mountableAreas;
         $result['floor_unions']                 = $floorUnions;
+        $result['floor_union_areas']            = $floorUnionAreas;
 
         foreach ($result as $category => $categoryData) {
             // Save enemies, packs, patrols, markers on a per-floor basis

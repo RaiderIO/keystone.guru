@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax\Floor;
 
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Ajax\AjaxMappingModelBaseController;
-use App\Http\Requests\FloorUnionArea\FloorUnionAreaFormRequest;
+use App\Http\Requests\Floor\FloorUnionAreaFormRequest;
 use App\Models\Floor\FloorUnionArea;
 use DB;
 use Exception;
@@ -20,7 +20,8 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
 {
     /**
      * @param FloorUnionAreaFormRequest $request
-     * @param FloorUnionArea|null $floorUnionArea
+     * @param FloorUnionArea|null       $floorUnionArea
+     *
      * @return FloorUnionArea|Model
      * @throws Exception
      * @throws Throwable
@@ -36,8 +37,9 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request        $request
      * @param FloorUnionArea $floorUnionArea
+     *
      * @return Response|ResponseFactory
      * @throws Throwable
      */

@@ -26,9 +26,10 @@ L.Draw.FloorUnion = L.Draw.Marker.extend({
  */
 class FloorUnion extends Icon {
     constructor(map, layer) {
-        super(map, layer, {name: 'floor_union', route_suffix: 'floorunion', hasRouteModelBinding: true});
+        super(map, layer, {name: 'floorunion', route_suffix: 'floorunion', hasRouteModelBinding: true});
 
         this.label = 'FloorUnion';
+        this.comment = '';
     }
 
     /**
@@ -43,7 +44,9 @@ class FloorUnion extends Icon {
 
         let self = this;
 
-        return this._cachedAttributes = super._getAttributes(force).concat([
+        return this._cachedAttributes = super._getAttributes(force).filter((attribute) => {
+            return !['faction', 'teeming', 'map_icon_type_id', 'comment'].includes(attribute.options.name);
+        }).concat([
 
             new Attribute({
                 name: 'target_floor_id',
@@ -65,6 +68,26 @@ class FloorUnion extends Icon {
                 default: 0
             }),
         ]);
+    }
+
+    /**
+     *
+     * @private
+     */
+    _refreshVisual() {
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
+
+        this.layer.setIcon(LeafletIconFloorUnion);
+    }
+
+    /**
+     * Sets the map icon type ID and refreshes the layer for it.
+     * @param mapIconTypeId
+     */
+    setMapIconTypeId(mapIconTypeId) {
+        console.assert(this instanceof FloorUnion, 'this is not a FloorUnion', this);
+
+        // Do nothing - we don't actually have a map icon type
     }
 
     /**

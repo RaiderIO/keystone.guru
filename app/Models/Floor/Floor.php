@@ -53,6 +53,7 @@ use Illuminate\Support\Collection;
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[]              $mountableareas
  * @property Collection|FloorUnion[]                 $floorUnions
+ * @property Collection|FloorUnionArea[]             $floorUnionAreas
  *
  * @property Collection|Enemy[]                      $enemiesForExport
  * @property Collection|EnemyPack[]                  $enemyPacksForExport
@@ -61,6 +62,7 @@ use Illuminate\Support\Collection;
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
  * @property Collection|MountableArea[]              $mountableAreasForExport
  * @property Collection|FloorUnion[]                 $floorUnionsForExport
+ * @property Collection|FloorUnionArea[]             $floorUnionAreasForExport
  *
  * @property Collection|FloorCoupling[]              $floorcouplings
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
@@ -136,7 +138,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -147,7 +149,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -158,7 +160,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -169,7 +171,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mapicons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -180,7 +182,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -191,7 +193,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -245,6 +247,14 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @return HasMany
      */
+    public function floorUnionAreasForExport(): HasMany
+    {
+        return $this->hasMany(FloorUnionArea::class);
+    }
+
+    /**
+     * @return HasMany
+     */
     public function dungeonFloorSwitchMarkersForExport(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class);
@@ -267,7 +277,15 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * If this floor is unioned to another floor (this floor will not contain enemies and delegates it to this other floor instead)
+     * @return HasMany
+     */
+    public function floorUnionAreas(): HasMany
+    {
+        return $this->hasMany(FloorUnionArea::class);
+    }
+
+    /**
+     * If this floor is in a union to another floor (this floor will not contain enemies and delegates it to this other floor instead)
      *
      * @return HasOne
      */
@@ -306,7 +324,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
+                    ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -315,7 +333,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+                    ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
@@ -413,6 +431,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param int      $uiMapId
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
+     *
      * @return Floor
      */
     public static function findByUiMapId(int $uiMapId, int $dungeonId = null): Floor

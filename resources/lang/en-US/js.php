@@ -438,6 +438,15 @@ return [
     'mountablearea_teeming_label'                                   => 'Teeming',
     'mountablearea_speed_label'                                     => 'Speed (yards p/s)',
 
+    // Floor Union
+    'floorunion_target_floor_id_select_default_label'               => 'Select floor',
+    'floorunion_target_floor_id_label'                              => 'Target floor',
+    'floorunion_size_label'                                         => 'Size',
+    'floorunion_rotation_label'                                     => 'Rotation',
+
+    // Floor Union Area
+    'floorunionarea_floor_union_id_label'                           => 'Floor Union ID',
+
     // Dungeonroute table
     'actions_label'                                                 => 'Actions',
     'add_to_team_label'                                             => 'Add to team...',

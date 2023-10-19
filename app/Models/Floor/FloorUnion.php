@@ -3,6 +3,7 @@
 namespace App\Models\Floor;
 
 use App\Models\CacheModel;
+use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ use Illuminate\Support\Collection;
  * @property float                       $size
  * @property float                       $rotation
  *
+ * @property MappingVersion              $mappingVersion
  * @property Floor                       $floor
  * @property Floor                       $targetFloor
  *
@@ -26,8 +28,10 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel
+class FloorUnion extends CacheModel implements MappingModelInterface
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'mapping_version_id',
         'floor_id',
@@ -40,6 +44,18 @@ class FloorUnion extends CacheModel
 
     protected $with = [
         'floorUnionAreas',
+    ];
+
+    protected $hidden = ['floor'];
+
+    protected $casts = [
+        'mapping_version_id' => 'integer',
+        'floor_id'           => 'integer',
+        'target_floor_id'    => 'integer',
+        'lat'                => 'float',
+        'lng'                => 'float',
+        'size'               => 'float',
+        'rotation'           => 'float',
     ];
 
     /**
@@ -72,5 +88,13 @@ class FloorUnion extends CacheModel
     public function floorUnionAreas(): HasMany
     {
         return $this->hasMany(FloorUnionArea::class);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDungeonId(): ?int
+    {
+        return $this->floor->dungeon_id;
     }
 }

@@ -33,7 +33,9 @@ class FloorUnionArea extends VersionableMapObject {
 
         let self = this;
 
-        return this._cachedAttributes = super._getAttributes(force).concat([
+        return this._cachedAttributes = super._getAttributes(force).filter((attribute) => {
+            return !['faction', 'teeming'].includes(attribute.options.name);
+        }).concat([
             new Attribute({
                 name: 'floor_id',
                 type: 'int',

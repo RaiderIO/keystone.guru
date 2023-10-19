@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
