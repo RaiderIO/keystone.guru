@@ -7,6 +7,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;

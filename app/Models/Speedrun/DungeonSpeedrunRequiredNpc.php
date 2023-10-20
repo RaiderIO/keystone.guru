@@ -4,7 +4,7 @@ namespace App\Models\Speedrun;
 
 use App\Models\CacheModel;
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Npc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

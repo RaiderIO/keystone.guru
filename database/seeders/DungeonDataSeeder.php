@@ -12,6 +12,8 @@ use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPackRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPatrolRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\FloorUnionAreaRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\FloorUnionRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MapIconRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MappingCommitLogRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\MappingVersionRelationMapping;
@@ -59,6 +61,8 @@ class DungeonDataSeeder extends Seeder
             new DungeonFloorSwitchMarkerRelationMapping(),
             new MapIconRelationMapping(),
             new MountableAreaRelationMapping(),
+            new FloorUnionRelationMapping(),
+            new FloorUnionAreaRelationMapping(),
         ]);
 
         $this->resetImportedModels();
@@ -440,6 +444,8 @@ class DungeonDataSeeder extends Seeder
         DB::table('enemy_patrols')->truncate();
         DB::table('dungeon_floor_switch_markers')->truncate();
         DB::table('mountable_areas')->truncate();
+        DB::table('floor_unions')->truncate();
+        DB::table('floor_union_areas')->truncate();
         DB::table('dungeon_speedrun_required_npcs')->truncate();
         // Delete all map icons that are always there
         DB::table('map_icons')->whereNull('dungeon_route_id')->whereNull('team_id')->delete();

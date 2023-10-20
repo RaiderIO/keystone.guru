@@ -65,6 +65,8 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
 /**
  * @property {Number} floor_id
  * @property {Number} map_icon_type_id
+ * @property {Number} lat
+ * @property {Number} lng
  * @property {Number} permanent_tooltip
  * @property {String} comment
  */

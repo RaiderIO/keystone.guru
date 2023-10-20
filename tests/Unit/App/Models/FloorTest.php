@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Models;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Tests\TestCase;
 
 class FloorTest extends TestCase

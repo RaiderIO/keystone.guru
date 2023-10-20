@@ -9,7 +9,7 @@ use App\Logic\Utils\MathUtils;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;

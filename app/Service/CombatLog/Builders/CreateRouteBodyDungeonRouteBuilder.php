@@ -8,7 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\PublishedState;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
@@ -20,7 +20,6 @@ use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Collection;
 
 /**
  * @package App\Service\CombatLog\Builders

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Speedrun;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Speedrun\DungeonSpeedrunRequiredNpcsFormRequest;
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;

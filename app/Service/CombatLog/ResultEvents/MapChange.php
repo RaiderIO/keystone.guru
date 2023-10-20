@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\ResultEvents;
 
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
 use Exception;
 

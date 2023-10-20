@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Path;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

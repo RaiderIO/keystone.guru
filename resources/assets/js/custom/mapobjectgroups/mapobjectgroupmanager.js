@@ -24,7 +24,7 @@ class MapObjectGroupManager extends Signalable {
                     self._loadMapObjectGroups();
                 }
                 self._updateMapObjectGroups();
-            } catch (e){
+            } catch (e) {
                 console.error(e);
             }
         });
@@ -64,6 +64,10 @@ class MapObjectGroupManager extends Signalable {
             result = new DungeonFloorSwitchMarkerMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_MOUNTABLE_AREA) {
             result = new MountableAreaMapObjectGroup(this, getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_FLOOR_UNION) {
+            result = new FloorUnionMapObjectGroup(this, getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_FLOOR_UNION_AREA) {
+            result = new FloorUnionAreaMapObjectGroup(this, getState().isMapAdmin());
         }
 
         console.assert(result !== null, `Unable to find map object group ${name}`, this);

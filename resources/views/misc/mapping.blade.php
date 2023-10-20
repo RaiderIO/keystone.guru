@@ -19,7 +19,7 @@
         </div>
     </div>
     @foreach(\App\Models\Dungeon::active()->get() as $dungeon )
-        <?php /** @var $dungeon \App\Models\Dungeon */ ?>
+            <?php /** @var $dungeon \App\Models\Dungeon */ ?>
         <div class="row">
             <div class="col-lg-2">
                 {{ __($dungeon->name) }}
@@ -40,17 +40,17 @@
             </div>
             <div class="col-lg-4">
                 <div class="progress">
-                    <?php
-                    $totalEnemies = 0;
-                    $totalUnassignedEnemies = 0;
-                    $hasTeemingEnemy = false;
-                    foreach ($dungeon->floors as $floor) {
-                        /** @var $floor \App\Models\Floor */
-                        $totalEnemies           += $floor->enemies->count();
-                        $totalUnassignedEnemies += $floor->enemies->whereNull('npc_id')->count();
-                        $hasTeemingEnemy        = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
-                    }
-                    ?>
+                        <?php
+                        $totalEnemies           = 0;
+                        $totalUnassignedEnemies = 0;
+                        $hasTeemingEnemy        = false;
+                        foreach ($dungeon->floors as $floor) {
+                            /** @var $floor \App\Models\Floor\Floor */
+                            $totalEnemies           += $floor->enemies->count();
+                            $totalUnassignedEnemies += $floor->enemies->whereNull('npc_id')->count();
+                            $hasTeemingEnemy        = $hasTeemingEnemy || $floor->enemies->where('teeming', 'visible')->count() > 0;
+                        }
+                        ?>
                     @php($curr = $totalEnemies - $totalUnassignedEnemies)
                     @php($percent = $totalEnemies === 0 ? 0 : ($curr / $totalEnemies) * 100)
                     @php($total = $totalEnemies)

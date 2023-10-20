@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -245,6 +246,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_NOKHUD_OFFENSIVE  = 'nokhudoffensive';
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
+    const DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL = 'dawn_of_the_infinite_galakronds_fall';
+    const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE = 'dawn_of_the_infinite_murozonds_rise';
+
     const ALL = [
         Expansion::EXPANSION_CLASSIC      => [
             self::DUNGEON_BLACKFATHOM_DEEPS,
@@ -391,6 +395,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_THE_AZURE_VAULT,
             self::DUNGEON_THE_NOKHUD_OFFENSIVE,
             self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+            self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
+            self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
         ],
     ];
 

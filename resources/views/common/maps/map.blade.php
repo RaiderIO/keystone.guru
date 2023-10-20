@@ -3,7 +3,7 @@
  * @var \App\User                          $user
  * @var \App\Logic\MapContext\MapContext   $mapContext
  * @var \App\Models\Dungeon                $dungeon
- * @var \App\Models\Floor                  $floor
+ * @var \App\Models\Floor\Floor            $floor
  * @var \App\Models\Mapping\MappingVersion $mappingVersion
  * @var \App\Models\DungeonRoute|null      $dungeonroute
  * @var \App\Models\LiveSession|null       $livesession

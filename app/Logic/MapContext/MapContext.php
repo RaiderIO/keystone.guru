@@ -5,7 +5,8 @@ namespace App\Logic\MapContext;
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
@@ -70,8 +71,7 @@ abstract class MapContext
 
         // Get the DungeonData
         $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function () {
-            // Bit of a loss why the [0] is needed - was introduced after including the without() function
-            return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
+            return array_merge($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->first()->toArray(), $this->getEnemies(), [
                 'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
                 'enemies'                   => $this->mappingVersion->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
                 'npcs'                      => $this->floor->dungeon->npcs()->with([
@@ -87,6 +87,8 @@ abstract class MapContext
                 'mapIcons'                  => $this->mappingVersion->mapIcons,
                 'dungeonFloorSwitchMarkers' => $this->mappingVersion->dungeonFloorSwitchMarkers,
                 'mountableAreas'            => $this->mappingVersion->mountableAreas,
+                'floorUnions'               => $this->mappingVersion->floorUnions,
+                'floorUnionAreas'           => $this->mappingVersion->floorUnionAreas,
             ]);
         }, config('keystoneguru.cache.dungeonData.ttl'));
 
