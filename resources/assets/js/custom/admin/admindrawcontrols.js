@@ -18,11 +18,17 @@ class AdminDrawControls extends DrawControls {
         }, {
             hotkey: '6',
             cssClass: 'leaflet-draw-draw-mountablearea',
-        }, {
+        },  {
             hotkey: '7',
+            cssClass: 'leaflet-draw-draw-floorunion',
+        },  {
+            hotkey: '8',
+            cssClass: 'leaflet-draw-draw-floorunionarea',
+        }, {
+            hotkey: '9',
             cssClass: 'leaflet-draw-edit-edit',
         }, {
-            hotkey: '8',
+            hotkey: '0',
             cssClass: 'leaflet-draw-edit-remove',
         }];
     }
@@ -40,7 +46,9 @@ class AdminDrawControls extends DrawControls {
             enemy: this._findHotkeyByCssClass('enemy'),
             enemypatrol: this._findHotkeyByCssClass('enemypatrol'),
             dungeonfloorswitchmarker: this._findHotkeyByCssClass('dungeonfloorswitchmarker'),
-            mountablearea: this._findHotkeyByCssClass('mountablearea')
+            mountablearea: this._findHotkeyByCssClass('mountablearea'),
+            floorunion: this._findHotkeyByCssClass('floorunion'),
+            floorunionarea: this._findHotkeyByCssClass('floorunionarea')
         }
 
         options = $.extend(true, options, {
@@ -97,6 +105,26 @@ class AdminDrawControls extends DrawControls {
                     faClass: 'fa-horse-head',
                     title: lang.get('messages.mountablearea_title', {hotkey: hotkeys.mountablearea}),
                     hotkey: hotkeys.mountablearea
+                },
+                floorunion: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-vector-square',
+                    title: lang.get('messages.floorunion_title', {hotkey: hotkeys.floorunion}),
+                    hotkey: hotkeys.floorunion
+                },
+                floorunionarea: {
+                    shapeOptions: {
+                        color: c.map.floorunionarea.color
+                    },
+                    allowIntersection: false, // Restricts shapes to simple polygons
+                    drawError: {
+                        color: '#e1e100', // Color the shape will turn when intersects
+                        message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                    },
+                    faClass: 'fa-chart-pie',
+                    title: lang.get('messages.floorunionarea_title', {hotkey: hotkeys.floorunionarea}),
+                    hotkey: hotkeys.floorunionarea
                 },
             }
         });

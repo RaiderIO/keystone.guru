@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $floor \App\Models\Floor
+ * @var $floor \App\Models\Floor\Floor
  * @var $mapContext \App\Logic\MapContext\MapContextMappingVersion
  * @var $mappingVersion \App\Models\Mapping\MappingVersion
  */

@@ -119,6 +119,8 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mountableareamapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/floorunionmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/floorunionareamapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
@@ -234,8 +236,10 @@ let scripts = [
     'resources/assets/js/custom/admin/enemyattaching.js',
     'resources/assets/js/custom/admin/admindungeonmap.js',
     'resources/assets/js/custom/admin/adminenemy.js',
-    'resources/assets/js/custom/admin/adminenemypatrol.js',
     'resources/assets/js/custom/admin/adminenemypack.js',
+    'resources/assets/js/custom/admin/adminenemypatrol.js',
+    'resources/assets/js/custom/admin/adminfloorunion.js',
+    'resources/assets/js/custom/admin/adminfloorunionarea.js',
     'resources/assets/js/custom/admin/admindrawcontrols.js',
     'resources/assets/js/custom/admin/adminpanelcontrols.js',
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',

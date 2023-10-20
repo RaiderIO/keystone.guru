@@ -1,11 +1,11 @@
 <?php
 /**
  * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor
+ * @var $floor \App\Models\Floor\Floor
  * @var $title string
  * @var $mapContext \App\Logic\MapContext\MapContext
  */
-    ?>
+?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
 @section('linkpreview')
     <?php

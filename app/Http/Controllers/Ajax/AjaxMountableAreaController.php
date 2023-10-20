@@ -18,8 +18,6 @@ use Throwable;
 
 class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
-    use ChangesMapping;
-
     /**
      * @param MountableAreaFormRequest $request
      * @param MountableArea|null $mountableArea

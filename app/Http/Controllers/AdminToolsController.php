@@ -10,7 +10,7 @@ use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTString;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;

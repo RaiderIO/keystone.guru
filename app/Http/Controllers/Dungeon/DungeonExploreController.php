@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dungeon;
 
 use App\Http\Controllers\Controller;
 use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Illuminate\Http\Request;
 use Psr\SimpleCache\InvalidArgumentException;
 

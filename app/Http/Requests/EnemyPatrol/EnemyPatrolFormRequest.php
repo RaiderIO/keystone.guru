@@ -4,7 +4,7 @@ namespace App\Http\Requests\EnemyPatrol;
 
 use App\Models\Enemy;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
 use Illuminate\Foundation\Http\FormRequest;

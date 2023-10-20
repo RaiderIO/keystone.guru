@@ -5,7 +5,7 @@ namespace App\Service\DungeonRoute;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Floor;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\FloorFormRequest;
-use App\Logic\MapContext\MapContextMappingVersion;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
-use App\Models\Floor;
-use App\Models\FloorCoupling;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
 use App\Models\Mapping\MappingVersion;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;

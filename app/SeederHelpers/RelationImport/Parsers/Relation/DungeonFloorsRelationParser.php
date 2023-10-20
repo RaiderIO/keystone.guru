@@ -4,8 +4,8 @@
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\Dungeon;
-use App\Models\Floor;
-use App\Models\FloorCoupling;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 
 class DungeonFloorsRelationParser implements RelationParserInterface

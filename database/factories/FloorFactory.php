@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FloorFactory extends Factory

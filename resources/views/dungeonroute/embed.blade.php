@@ -9,7 +9,7 @@
 ])
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
-/** @var $floor \App\Models\Floor */
+/** @var $floor \App\Models\Floor\Floor */
 /** @var $embedOptions array */
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
 

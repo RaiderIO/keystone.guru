@@ -11,7 +11,7 @@ use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\Dungeon;
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcType;

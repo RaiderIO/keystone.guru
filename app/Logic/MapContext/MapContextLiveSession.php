@@ -3,7 +3,7 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Illuminate\Support\Facades\App;

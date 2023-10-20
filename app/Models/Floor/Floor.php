@@ -1,10 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Floor;
 
 use App\Logic\Utils\MathUtils;
+use App\Models\CacheModel;
+use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
+use App\Models\Enemy;
+use App\Models\EnemyPack;
+use App\Models\EnemyPatrol;
+use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,6 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
@@ -35,12 +44,16 @@ use Illuminate\Support\Collection;
  *
  * @property Dungeon                                 $dungeon
  *
+ * @property FloorUnion|null                         $floorUnion
+ *
  * @property Collection|Enemy[]                      $enemies
  * @property Collection|EnemyPack[]                  $enemypacks
  * @property Collection|EnemyPatrol[]                $enemypatrols
  * @property Collection|MapIcon[]                    $mapicons
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
  * @property Collection|MountableArea[]              $mountableareas
+ * @property Collection|FloorUnion[]                 $floorUnions
+ * @property Collection|FloorUnionArea[]             $floorUnionAreas
  *
  * @property Collection|Enemy[]                      $enemiesForExport
  * @property Collection|EnemyPack[]                  $enemyPacksForExport
@@ -48,6 +61,8 @@ use Illuminate\Support\Collection;
  * @property Collection|MapIcon[]                    $mapIconsForExport
  * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
  * @property Collection|MountableArea[]              $mountableAreasForExport
+ * @property Collection|FloorUnion[]                 $floorUnionsForExport
+ * @property Collection|FloorUnionArea[]             $floorUnionAreasForExport
  *
  * @property Collection|FloorCoupling[]              $floorcouplings
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
@@ -123,7 +138,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -134,7 +149,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -145,7 +160,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -156,7 +171,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mapicons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -167,7 +182,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -178,7 +193,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+                    ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -224,6 +239,22 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @return HasMany
      */
+    public function floorUnionsForExport(): HasMany
+    {
+        return $this->hasMany(FloorUnion::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function floorUnionAreasForExport(): HasMany
+    {
+        return $this->hasMany(FloorUnionArea::class);
+    }
+
+    /**
+     * @return HasMany
+     */
     public function dungeonFloorSwitchMarkersForExport(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class);
@@ -235,6 +266,32 @@ class Floor extends CacheModel implements MappingModelInterface
     public function floorcouplings(): HasMany
     {
         return $this->hasMany(FloorCoupling::class, 'floor1_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function floorUnions(): HasMany
+    {
+        return $this->hasMany(FloorUnion::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function floorUnionAreas(): HasMany
+    {
+        return $this->hasMany(FloorUnionArea::class);
+    }
+
+    /**
+     * If this floor is in a union to another floor (this floor will not contain enemies and delegates it to this other floor instead)
+     *
+     * @return HasOne
+     */
+    public function floorUnion(): HasOne
+    {
+        return $this->hasOne(FloorUnion::class, 'target_floor_id');
     }
 
     /**
@@ -267,7 +324,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
+                    ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -276,7 +333,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+                    ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
@@ -374,6 +431,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param int      $uiMapId
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
+     *
      * @return Floor
      */
     public static function findByUiMapId(int $uiMapId, int $dungeonId = null): Floor

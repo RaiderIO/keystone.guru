@@ -17,7 +17,7 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use Exception;

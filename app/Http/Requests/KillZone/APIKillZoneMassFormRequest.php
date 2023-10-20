@@ -2,12 +2,7 @@
 
 namespace App\Http\Requests\KillZone;
 
-use App\Models\Enemy;
-use App\Models\Faction;
-use App\Models\Floor;
-use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class APIKillZoneMassFormRequest extends FormRequest
 {

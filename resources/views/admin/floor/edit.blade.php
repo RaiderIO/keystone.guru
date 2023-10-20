@@ -1,7 +1,7 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
-/* @var $floor \App\Models\Floor */
-/* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
+/* @var $floor \App\Models\Floor\Floor */
+/* @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection */
 $floor = $floor ?? null;
 ?>
 @extends('layouts.sitepage', [
@@ -106,7 +106,7 @@ $floor = $floor ?? null;
         @include('admin.floor.connectedfloors', ['floor' => $floor])
 
         {!! Form::submit(__('views/admin.floor.edit.submit'), ['class' => 'btn btn-info']) !!}
-    
+
         {!! Form::close() !!}
     </div>
 

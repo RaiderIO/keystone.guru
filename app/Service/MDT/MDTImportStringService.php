@@ -15,7 +15,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
