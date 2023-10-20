@@ -505,6 +505,14 @@ let c = {
         mountablearea: {
             color: '#eb4934'
         },
+        floorunion: {
+            polygonOptions: {
+                color: '#ff6200',
+                weight: 1,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
+        },
         floorunionarea: {
             color: '#00b08c',
         },

@@ -30,6 +30,8 @@ class FloorUnion extends Icon {
 
         this.label = 'FloorUnion';
         this.comment = '';
+
+        this.floorLayer = null;
     }
 
     /**
@@ -47,7 +49,6 @@ class FloorUnion extends Icon {
         return this._cachedAttributes = super._getAttributes(force).filter((attribute) => {
             return !['faction', 'teeming', 'map_icon_type_id', 'comment'].includes(attribute.options.name);
         }).concat([
-
             new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
@@ -78,6 +79,32 @@ class FloorUnion extends Icon {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
 
         this.layer.setIcon(LeafletIconFloorUnion);
+
+        let floorUnionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_FLOOR_UNION);
+        if( this.floorLayer !== null ) {
+            floorUnionMapObjectGroup.layerGroup.removeLayer(this.floorLayer);
+        }
+
+        let aspectRatio = 1.5;
+        this.floorLayer = L.polygon([
+            // Top left corner
+            [
+                this.lat - this.size, this.lng - (this.size * aspectRatio)
+            ],
+            // Top right corner
+            [
+                this.lat - this.size, this.lng + (this.size * aspectRatio)
+            ],
+            // Bottom right corner
+            [
+                this.lat + this.size, this.lng + (this.size * aspectRatio)
+            ],
+            // Bottom left corner
+            [
+                this.lat + this.size, this.lng - (this.size * aspectRatio)
+            ],
+        ], c.map.floorunion.polygonOptions);
+        floorUnionMapObjectGroup.layerGroup.addLayer(this.floorLayer);
     }
 
     /**
