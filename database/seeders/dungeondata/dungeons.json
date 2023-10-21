@@ -9873,5 +9873,33 @@
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
+    },
+    {
+        "id": 105,
+        "expansion_id": 10,
+        "game_version_id": 1,
+        "zone_id": 14514,
+        "map_id": 2198,
+        "mdt_id": 100,
+        "key": "dawn_of_the_infinite_galakronds_fall",
+        "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.name",
+        "slug": "dawn-of-the-infinite-galakronds-fall",
+        "speedrun_enabled": 0,
+        "floor_count": 0,
+        "floors": []
+    },
+    {
+        "id": 106,
+        "expansion_id": 10,
+        "game_version_id": 1,
+        "zone_id": 14514,
+        "map_id": 2198,
+        "mdt_id": 101,
+        "key": "dawn_of_the_infinite_murozonds_rise",
+        "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.name",
+        "slug": "dawn-of-the-infinite-murozonds-rise",
+        "speedrun_enabled": 0,
+        "floor_count": 0,
+        "floors": []
     }
 ]
