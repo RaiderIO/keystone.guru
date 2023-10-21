@@ -804,6 +804,7 @@ return [
         'dawn_of_the_infinite_galakronds_fall' => [
             'name'   => 'Dawn of the Infinite: Galakrond\'s Fall',
             'floors' => [
+                'galakronds_fall'         => 'Galakrond\'s Fall',
                 'sanctum_of_chronology'   => 'Sanctum of Chronology',
                 'millennias_threshold'    => 'Millennia\'s Threshold',
                 'locus_of_eternity'       => 'Locus of Eternity',
@@ -814,6 +815,7 @@ return [
         'dawn_of_the_infinite_murozonds_rise'  => [
             'name'   => 'Dawn of the Infinite: Murozond\'s Rise',
             'floors' => [
+                'murozonds_rise'         => 'Murozond\'s Rise',
                 'sanctum_of_chronology'  => 'Sanctum of Chronology',
                 'millennias_threshold'   => 'Millennia\'s Threshold',
                 'locus_of_eternity'      => 'Locus of Eternity',
