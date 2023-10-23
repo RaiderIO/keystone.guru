@@ -76,5 +76,83 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 247,
+        "floor_id": 208,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -113.82084091639,
+        "lng": 213.14764216552,
+        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 247,
+        "floor_id": 208,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -133.17721553247,
+        "lng": 212.50919567445,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 247,
+        "floor_id": 208,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -149.09375,
+        "lng": 258.0625,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 247,
+        "floor_id": 208,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -127.7464868712,
+        "lng": 189.36983852839,
+        "comment": "Enemies here may be one of Firebrand Darkweaver, Firebrand Grunt, Firebrand Invoker.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 247,
+        "floor_id": 208,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -196.40625,
+        "lng": 216.8125,
+        "comment": "Enemies may be one of Firebrand Pyromancer, Firebrand Legionnaire, Firebrand Dreadweaver.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 247,
+        "floor_id": 208,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -164.90625,
+        "lng": 199.1875,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

@@ -9873,5 +9873,481 @@
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]
+    },
+    {
+        "id": 105,
+        "expansion_id": 10,
+        "game_version_id": 1,
+        "zone_id": 14514,
+        "map_id": 2198,
+        "mdt_id": 100,
+        "key": "dawn_of_the_infinite_galakronds_fall",
+        "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.name",
+        "slug": "dawn-of-the-infinite-galakronds-fall",
+        "speedrun_enabled": 0,
+        "floor_count": 6,
+        "floors": [
+            {
+                "id": 253,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 2190,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.floors.sanctum_of_chronology",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -1875,
+                "ingame_min_y": -3551.25,
+                "ingame_max_x": -1400,
+                "ingame_max_y": -2838.75,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 254,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 2191,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.floors.millennias_threshold",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -1958.33,
+                "ingame_min_y": -3626.11,
+                "ingame_max_x": -1550.67,
+                "ingame_max_y": -3014.625,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 255,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": 2192,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.floors.locus_of_eternity",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -2192.5,
+                "ingame_min_y": -4700,
+                "ingame_max_x": -1782.5,
+                "ingame_max_y": -4085,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 256,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": 2193,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.floors.spoke_of_endless_winter",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -2250,
+                "ingame_min_y": -5151.25,
+                "ingame_max_x": -2075,
+                "ingame_max_y": -4888.75,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 257,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": 2194,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.floors.crossroads_of_fate",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -2768.75,
+                "ingame_min_y": -5695.83,
+                "ingame_max_x": -2114.58,
+                "ingame_max_y": -4714.58,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 265,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.floors.galakronds_fall",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 106,
+        "expansion_id": 10,
+        "game_version_id": 1,
+        "zone_id": 14514,
+        "map_id": 2198,
+        "mdt_id": 101,
+        "key": "dawn_of_the_infinite_murozonds_rise",
+        "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.name",
+        "slug": "dawn-of-the-infinite-murozonds-rise",
+        "speedrun_enabled": 0,
+        "floor_count": 8,
+        "floors": [
+            {
+                "id": 258,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 2190,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.sanctum_of_chronology",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -1875,
+                "ingame_min_y": -3551.25,
+                "ingame_max_x": -1400,
+                "ingame_max_y": -2838.75,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 793,
+                        "floor1_id": 258,
+                        "floor2_id": 259,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 794,
+                        "floor1_id": 258,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 259,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 2191,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.millennias_threshold",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -1958.33,
+                "ingame_min_y": -3626.11,
+                "ingame_max_x": -1550.67,
+                "ingame_max_y": -3014.625,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 795,
+                        "floor1_id": 259,
+                        "floor2_id": 258,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 796,
+                        "floor1_id": 259,
+                        "floor2_id": 260,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 797,
+                        "floor1_id": 259,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 260,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": 2192,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.locus_of_eternity",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -2192.5,
+                "ingame_min_y": -4700,
+                "ingame_max_x": -1782.5,
+                "ingame_max_y": -4085,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 798,
+                        "floor1_id": 260,
+                        "floor2_id": 259,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 799,
+                        "floor1_id": 260,
+                        "floor2_id": 261,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 800,
+                        "floor1_id": 260,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 261,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": 2194,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.crossroads_of_fate",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -2768.75,
+                "ingame_min_y": -5695.83,
+                "ingame_max_x": -2114.58,
+                "ingame_max_y": -4714.58,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 801,
+                        "floor1_id": 261,
+                        "floor2_id": 260,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 802,
+                        "floor1_id": 261,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 262,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": 2195,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.infinite_conflux",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -1620,
+                "ingame_min_y": -3405,
+                "ingame_max_x": -1080,
+                "ingame_max_y": -2595,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 803,
+                        "floor1_id": 262,
+                        "floor2_id": 263,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 804,
+                        "floor1_id": 262,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 263,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": 2196,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.twisting_approach",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -2715.41,
+                "ingame_min_y": -4065,
+                "ingame_max_x": -2322.08,
+                "ingame_max_y": -3474.99,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 805,
+                        "floor1_id": 263,
+                        "floor2_id": 262,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 806,
+                        "floor1_id": 263,
+                        "floor2_id": 264,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 807,
+                        "floor1_id": 263,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 264,
+                "index": 7,
+                "mdt_sub_level": null,
+                "ui_map_id": 2197,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.immemorial_battlefield",
+                "default": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -1275,
+                "ingame_min_y": -4342.81,
+                "ingame_max_x": -951.25,
+                "ingame_max_y": -3857.18,
+                "percentage_display_zoom": null,
+                "active": 0,
+                "floorcouplings": [
+                    {
+                        "id": 808,
+                        "floor1_id": 264,
+                        "floor2_id": 263,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 809,
+                        "floor1_id": 264,
+                        "floor2_id": 266,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 266,
+                "index": 8,
+                "mdt_sub_level": null,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.murozonds_rise",
+                "default": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 786,
+                        "floor1_id": 266,
+                        "floor2_id": 258,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 787,
+                        "floor1_id": 266,
+                        "floor2_id": 259,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 788,
+                        "floor1_id": 266,
+                        "floor2_id": 260,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 789,
+                        "floor1_id": 266,
+                        "floor2_id": 261,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 790,
+                        "floor1_id": 266,
+                        "floor2_id": 262,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 791,
+                        "floor1_id": 266,
+                        "floor2_id": 263,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 792,
+                        "floor1_id": 266,
+                        "floor2_id": 264,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
     }
 ]
