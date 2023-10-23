@@ -47,6 +47,8 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
 });
 
 /**
+ * @property {Number|null} source_floor_id
+ * @property {Number} target_floor_id
  * @property {String} floorCouplingDirection
  * @property {String|null} direction
  */
@@ -72,6 +74,8 @@ class DungeonFloorSwitchMarker extends Icon {
 
         // Whenever we have to display which users are on this floor, these users are on here
         this.usersOnThisFloor = [];
+        // An optional layer that is shown to draw connections between floor unions on the same map
+        this.targetFloorLayer = null;
     }
 
     /**
@@ -139,7 +143,6 @@ class DungeonFloorSwitchMarker extends Icon {
                     );
 
                     self.direction = value;
-                    console.log(self.direction);
                 },
                 default: null
             }),
@@ -176,6 +179,28 @@ class DungeonFloorSwitchMarker extends Icon {
 
         if (changed) {
             this.rebindTooltip();
+        }
+    }
+
+    _refreshVisual() {
+        super._refreshVisual();
+
+        /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
+        let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+        if (this.targetFloorLayer !== null) {
+            dungeonFloorSwitchMarkerMapObjectGroup.layerGroup.removeLayer(this.targetFloorLayer);
+        }
+
+        if (this.source_floor_id !== null && this.target_floor_id !== null) {
+            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(this.target_floor_id, this.source_floor_id, this.layer.getLatLng());
+
+            if (closestDungeonFloorSwitchMarker !== null) {
+                this.targetFloorLayer = L.polyline(
+                    [this.layer.getLatLng(), closestDungeonFloorSwitchMarker.layer.getLatLng()],
+                    c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions
+                );
+                dungeonFloorSwitchMarkerMapObjectGroup.layerGroup.addLayer(this.targetFloorLayer);
+            }
         }
     }
 
@@ -241,7 +266,6 @@ class DungeonFloorSwitchMarker extends Icon {
 
     cleanup() {
         super.cleanup();
-
         getState().unregister('floorid:changed', this);
 
         if (getState().isEchoEnabled()) {

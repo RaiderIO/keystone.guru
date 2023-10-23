@@ -177,7 +177,7 @@ class Icon extends VersionableMapObject {
 
     /**
      *
-     * @private
+     * @protected
      */
     _refreshVisual() {
         console.assert(this instanceof Icon, 'this is not an Icon', this);

@@ -415,6 +415,12 @@ let c = {
                 weight: 4,
             },
         },
+        dungeonfloorswitchmarker: {
+            floorUnionConnectionPolylineOptions: {
+                color: '#006b77',
+                weight: 5,
+            }
+        },
         path: {
             defaultColor: polylineDefaultColor,
         },
@@ -437,8 +443,8 @@ let c = {
             awakenedObeliskGatewayPolylineColorAnimated: '#244812',
             awakenedObeliskGatewayPolylineWeight: 3,
             killzonepath: {
-                color: 'red',
-                colorAnimated: 'red',
+                color: '#F00',
+                colorAnimated: '#F00',
                 weight: 5,
             },
         },
