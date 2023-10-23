@@ -46,6 +46,12 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
     }
 });
 
+/**
+ * @property {Number|null} source_floor_id
+ * @property {Number} target_floor_id
+ * @property {String} floorCouplingDirection
+ * @property {String|null} direction
+ */
 class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
@@ -68,6 +74,8 @@ class DungeonFloorSwitchMarker extends Icon {
 
         // Whenever we have to display which users are on this floor, these users are on here
         this.usersOnThisFloor = [];
+        // An optional layer that is shown to draw connections between floor unions on the same map
+        this.targetFloorLayer = null;
     }
 
     /**
@@ -94,6 +102,15 @@ class DungeonFloorSwitchMarker extends Icon {
 
         return this._cachedAttributes = superAttributes.concat([
             new Attribute({
+                name: 'source_floor_id',
+                type: 'select',
+                values: function () {
+                    // Fill it with all floors except our current floor, this is done for floor unions so selecting the current floor would make no sense
+                    return getState().getMapContext().getFloorSelectValues(self.floor_id);
+                },
+                default: null
+            }),
+            new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
                 values: function () {
@@ -105,13 +122,12 @@ class DungeonFloorSwitchMarker extends Icon {
             new Attribute({
                 name: 'direction',
                 type: 'select',
-                edit: false, // Not directly changeable by user, should be done in the dungeon edit page
                 values: function () {
                     return [
-                        {id: 'down', name: 'mapicontypes.door_down'},
-                        {id: 'left', name: 'mapicontypes.door_left'},
-                        {id: 'right', name: 'mapicontypes.door_right'},
-                        {id: 'up', name: 'mapicontypes.door_up'},
+                        {id: 'down', name: lang.get('mapicontypes.door_down')},
+                        {id: 'left', name: lang.get('mapicontypes.door_left')},
+                        {id: 'right', name: lang.get('mapicontypes.door_right')},
+                        {id: 'up', name: lang.get('mapicontypes.door_up')},
                     ];
                 },
                 setter: function (value) {
@@ -122,15 +138,13 @@ class DungeonFloorSwitchMarker extends Icon {
                         'up': 'door_up',
                     };
 
-                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByKey(mapping[value]));
-
                     self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByKey(mapping[value])
+                        getState().getMapContext().getMapIconTypeByKey(mapping[value] ?? mapping[self.floorCouplingDirection])
                     );
 
                     self.direction = value;
                 },
-                default: 'down'
+                default: null
             }),
         ]);
     }
@@ -165,6 +179,28 @@ class DungeonFloorSwitchMarker extends Icon {
 
         if (changed) {
             this.rebindTooltip();
+        }
+    }
+
+    _refreshVisual() {
+        super._refreshVisual();
+
+        /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
+        let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+        if (this.targetFloorLayer !== null) {
+            dungeonFloorSwitchMarkerMapObjectGroup.layerGroup.removeLayer(this.targetFloorLayer);
+        }
+
+        if (this.source_floor_id !== null && this.target_floor_id !== null) {
+            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(this.target_floor_id, this.source_floor_id, this.layer.getLatLng());
+
+            if (closestDungeonFloorSwitchMarker !== null) {
+                this.targetFloorLayer = L.polyline(
+                    [this.layer.getLatLng(), closestDungeonFloorSwitchMarker.layer.getLatLng()],
+                    c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions
+                );
+                dungeonFloorSwitchMarkerMapObjectGroup.layerGroup.addLayer(this.targetFloorLayer);
+            }
         }
     }
 
@@ -230,7 +266,6 @@ class DungeonFloorSwitchMarker extends Icon {
 
     cleanup() {
         super.cleanup();
-
         getState().unregister('floorid:changed', this);
 
         if (getState().isEchoEnabled()) {

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -29,17 +30,17 @@ class DungeonFormRequest extends FormRequest
         return [
             'active'           => 'nullable|boolean',
             'speedrun_enabled' => 'nullable|boolean',
-            'game_version_id'  => Rule::exists('game_versions', 'id'),
+            'game_version_id'  => Rule::exists(GameVersion::class, 'id'),
             'zone_id'          => 'int',
             'map_id'           => 'int',
             'mdt_id'           => 'int',
-            'name'             => ['required', Rule::unique('dungeons', 'name')->ignore($this->get('name'), 'name')],
+            'name'             => ['required', Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name')],
             'key'              => [
                 'required',
-                Rule::unique('dungeons', 'key')->ignore($this->get('key'), 'key'),
+                Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),
                 Rule::in(collect(array_merge(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
             ],
-            'slug'             => ['required', Rule::unique('dungeons', 'slug')->ignore($this->get('slug'), 'slug')],
+            'slug'             => ['required', Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug')],
         ];
     }
 }
