@@ -427,9 +427,12 @@ return [
     // Dungeon floor switch marker
     'dungeonfloorswitchmarker_faction_label'                        => 'Faction',
     'dungeonfloorswitchmarker_teeming_label'                        => 'Teeming',
+    'dungeonfloorswitchmarker_source_floor_id_label'                => 'Source floor',
+    'dungeonfloorswitchmarker_source_floor_id_select_default_label' => 'Select floor',
     'dungeonfloorswitchmarker_target_floor_id_label'                => 'Target floor',
-    'dungeonfloorswitchmarker_direction_label'                      => 'Direction',
     'dungeonfloorswitchmarker_target_floor_id_select_default_label' => 'Select floor',
+    'dungeonfloorswitchmarker_direction_label'                      => 'Direction',
+    'dungeonfloorswitchmarker_direction_select_default_label'       => 'Use floor coupling direction',
     'dungeonfloorswitchmarker_go_to_label'                          => 'Go to',
     'dungeonfloorswitchmarker_unknown_label'                        => 'Unknown',
 

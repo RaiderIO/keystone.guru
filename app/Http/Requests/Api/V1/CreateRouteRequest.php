@@ -2,6 +2,10 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Models\Affix;
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use App\Models\Spell;
 use App\Rules\CreateRouteNpcChronologicalRule;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use Illuminate\Contracts\Validation\Validator;
@@ -39,10 +43,10 @@ class CreateRouteRequest extends APIFormRequest
             'challengeMode.durationMs' => ['required', 'int'],
             // @TODO Make non-optional when it's actually being sent
             'challengeMode.success'    => ['nullable', 'bool'],
-            'challengeMode.mapId'      => ['required', Rule::exists('dungeons', 'map_id')],
+            'challengeMode.mapId'      => ['required', Rule::exists(Dungeon::class, 'map_id')],
             'challengeMode.level'      => ['required', 'int'],
             'challengeMode.affixes'    => ['required', 'array'],
-            'challengeMode.affixes.*'  => ['required', Rule::exists('affixes', 'affix_id')],
+            'challengeMode.affixes.*'  => ['required', Rule::exists(Affix::class, 'affix_id')],
             'npcs'                     => ['required', 'array', new CreateRouteNpcChronologicalRule()],
             'npcs.*.npcId'             => ['required', 'integer'], // #1818 Rule::exists('npcs', 'id')
             'npcs.*.spawnUid'          => ['required', 'string', 'max:10'],
@@ -50,14 +54,14 @@ class CreateRouteRequest extends APIFormRequest
             'npcs.*.diedAt'            => ['required', $dateFormat],
             'npcs.*.coord.x'           => ['required', 'numeric'],
             'npcs.*.coord.y'           => ['required', 'numeric'],
-            'npcs.*.coord.uiMapId'     => ['required', Rule::exists('floors', 'ui_map_id')],
+            'npcs.*.coord.uiMapId'     => ['required', Rule::exists(Floor::class, 'ui_map_id')],
             'spells'                   => 'nullable|array',
-            'spells.*.spellId'         => Rule::exists('spells', 'id'),
+            'spells.*.spellId'         => Rule::exists(Spell::class, 'id'),
             'spells.*.playerUid'       => 'string|max:32',
             'spells.*.castAt'          => $dateFormat,
             'spells.*.coord.x'         => 'numeric',
             'spells.*.coord.y'         => 'numeric',
-            'spells.*.coord.uiMapId'   => Rule::exists('floors', 'ui_map_id'),
+            'spells.*.coord.uiMapId'   => Rule::exists(Floor::class, 'ui_map_id'),
         ];
     }
 }

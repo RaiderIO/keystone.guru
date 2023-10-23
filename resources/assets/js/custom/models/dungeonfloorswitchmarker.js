@@ -46,6 +46,10 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
     }
 });
 
+/**
+ * @property {String} floorCouplingDirection
+ * @property {String|null} direction
+ */
 class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
@@ -94,6 +98,15 @@ class DungeonFloorSwitchMarker extends Icon {
 
         return this._cachedAttributes = superAttributes.concat([
             new Attribute({
+                name: 'source_floor_id',
+                type: 'select',
+                values: function () {
+                    // Fill it with all floors except our current floor, this is done for floor unions so selecting the current floor would make no sense
+                    return getState().getMapContext().getFloorSelectValues(self.floor_id);
+                },
+                default: null
+            }),
+            new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
                 values: function () {
@@ -105,13 +118,12 @@ class DungeonFloorSwitchMarker extends Icon {
             new Attribute({
                 name: 'direction',
                 type: 'select',
-                edit: false, // Not directly changeable by user, should be done in the dungeon edit page
                 values: function () {
                     return [
-                        {id: 'down', name: 'mapicontypes.door_down'},
-                        {id: 'left', name: 'mapicontypes.door_left'},
-                        {id: 'right', name: 'mapicontypes.door_right'},
-                        {id: 'up', name: 'mapicontypes.door_up'},
+                        {id: 'down', name: lang.get('mapicontypes.door_down')},
+                        {id: 'left', name: lang.get('mapicontypes.door_left')},
+                        {id: 'right', name: lang.get('mapicontypes.door_right')},
+                        {id: 'up', name: lang.get('mapicontypes.door_up')},
                     ];
                 },
                 setter: function (value) {
@@ -122,15 +134,14 @@ class DungeonFloorSwitchMarker extends Icon {
                         'up': 'door_up',
                     };
 
-                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByKey(mapping[value]));
-
                     self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByKey(mapping[value])
+                        getState().getMapContext().getMapIconTypeByKey(mapping[value] ?? mapping[self.floorCouplingDirection])
                     );
 
                     self.direction = value;
+                    console.log(self.direction);
                 },
-                default: 'down'
+                default: null
             }),
         ]);
     }
