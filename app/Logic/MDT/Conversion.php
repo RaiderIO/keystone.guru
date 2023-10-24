@@ -111,26 +111,32 @@ class Conversion
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
             // Cata
-            Dungeon::DUNGEON_THE_VORTEX_PINNACLE        => 'TheVortexPinnacle',
+            Dungeon::DUNGEON_THE_VORTEX_PINNACLE                  => 'TheVortexPinnacle',
             // MoP
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT           => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_THRONE_OF_THE_TIDES                  => 'ThroneOfTides',
             // WoD
-            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS            => 'ShadowmoonBurialGrounds',
+            Dungeon::DUNGEON_THE_EVERBLOOM                        => 'Everbloom',
             // DF
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
-            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW         => 'BrackenhideHollow',
-            Dungeon::DUNGEON_HALLS_OF_INFUSION          => 'HallsOfInfusion',
-            Dungeon::DUNGEON_NELTHARUS                  => 'Neltharus',
-            Dungeon::DUNGEON_RUBY_LIFE_POOLS            => 'RubyLifePools',
-            Dungeon::DUNGEON_THE_AZURE_VAULT            => 'TheAzureVault',
-            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE       => 'TheNokhudOffensive',
-            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR      => 'UldamanLegacyOfTyr',
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
+            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
+            Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
+            Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
+            Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
+            Dungeon::DUNGEON_THE_AZURE_VAULT                      => 'TheAzureVault',
+            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE                 => 'TheNokhudOffensive',
+            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR                => 'UldamanLegacyOfTyr',
+            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL => 'DawnOfTheInfiniteLower',
+            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  => 'DawnOfTheInfiniteUpper',
         ],
     ];
 
     /**
      * Rounds a number to the nearest two decimals.
+     *
      * @param $nr
+     *
      * @return float
      */
     private static function round($nr): float
@@ -140,6 +146,7 @@ class Conversion
 
     /**
      * @param string $dungeonKey
+     *
      * @return string|null
      */
     public static function getExpansionName(string $dungeonKey): ?string
@@ -157,6 +164,7 @@ class Conversion
 
     /**
      * @param string $dungeonKey
+     *
      * @return string|null
      */
     public static function getMDTExpansionName(string $dungeonKey): ?string
@@ -166,6 +174,7 @@ class Conversion
 
     /**
      * @param $dungeonKey string
+     *
      * @return bool True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -175,6 +184,7 @@ class Conversion
 
     /**
      * @param $dungeonKey string
+     *
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -191,7 +201,9 @@ class Conversion
 
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
+     *
      * @param $mdtDungeonId int
+     *
      * @return Dungeon
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
@@ -207,7 +219,9 @@ class Conversion
 
     /**
      * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
+     *
      * @param $xy array
+     *
      * @return array
      */
     public static function convertMDTCoordinateToLatLng(array $xy): array
@@ -219,7 +233,9 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     *
      * @param $latLng array
+     *
      * @return array
      */
     public static function convertLatLngToMDTCoordinateString(array $latLng): array
@@ -233,7 +249,9 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     *
      * @param $latLng array
+     *
      * @return array
      */
     public static function convertLatLngToMDTCoordinate(array $latLng): array
@@ -243,9 +261,11 @@ class Conversion
 
     /**
      * Convert a MDT week to a matching affix group
+     *
      * @param SeasonService $seasonService
      * @param Dungeon       $dungeon
      * @param int           $mdtWeek
+     *
      * @return AffixGroup|null
      * @throws Exception
      */
@@ -273,6 +293,7 @@ class Conversion
 
     /**
      * @param AffixGroup $affixGroup
+     *
      * @return int
      */
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int

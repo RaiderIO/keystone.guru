@@ -212,7 +212,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 return $enemy->getUniqueKey();
             });
 
-            $enemies = $mdtDungeon->getClonesAsEnemies($dungeon->floors);
+            $enemies = $mdtDungeon->getClonesAsEnemies($dungeon->floors()->active()->get());
 
             foreach ($enemies as $enemy) {
                 $enemy->exists = false;
@@ -278,7 +278,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $savedEnemies = $savedEnemies->keyBy('id');
 
             // Conserve the enemy_pack_id
-            $enemiesWithGroups = $mdtDungeon->getClonesAsEnemies($dungeon->floors);
+            $enemiesWithGroups = $mdtDungeon->getClonesAsEnemies($dungeon->floors()->active()->get());
             $enemyPacks        = $enemiesWithGroups->groupBy('enemy_pack_id');
 
             // Save enemy packs
@@ -481,10 +481,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
     {
+        $activeFloors = $dungeon->floors()->active()->get();
         // First check for mdt_sub_level, if that isn't found just match on our own index
-        return $dungeon->floors->first(function (Floor $floor) use ($mdtSubLevel) {
+        return $activeFloors->first(function (Floor $floor) use ($mdtSubLevel) {
             return $floor->mdt_sub_level === $mdtSubLevel;
-        }) ?? $dungeon->floors->first(function (Floor $floor) use ($mdtSubLevel) {
+        }) ?? $activeFloors->first(function (Floor $floor) use ($mdtSubLevel) {
             return $floor->index === $mdtSubLevel;
         });
     }
