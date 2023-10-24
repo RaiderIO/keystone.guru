@@ -205,11 +205,10 @@ class Icon extends VersionableMapObject {
     setMapIconType(mapIconType, refreshVisual = true) {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
         this.map_icon_type_id = mapIconType.id;
-
         // Set the icon and refresh the visual
         this.map_icon_type = mapIconType;
 
-        if( refreshVisual ) {
+        if (refreshVisual) {
             this._refreshVisual();
         }
     }
