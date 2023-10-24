@@ -120,6 +120,12 @@ class DungeonFloorSwitchMarker extends Icon {
                 default: null
             }),
             new Attribute({
+                name: 'floorCouplingDirection',
+                type: 'string',
+                edit: false,
+                save: false
+            }),
+            new Attribute({
                 name: 'direction',
                 type: 'select',
                 values: function () {
@@ -139,13 +145,15 @@ class DungeonFloorSwitchMarker extends Icon {
                     };
 
                     self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByKey(mapping[value] ?? mapping[self.floorCouplingDirection])
+                        getState().getMapContext().getMapIconTypeByKey(
+                            value === null ? mapping[self.floorCouplingDirection] : mapping[value]
+                        )
                     );
 
                     self.direction = value;
                 },
                 default: null
-            }),
+            })
         ]);
     }
 

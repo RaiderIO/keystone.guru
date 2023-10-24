@@ -166,7 +166,7 @@ if ($isAdmin) {
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors()->when(!$isAdmin, function(Builder $builder) {
+            'floors' => $dungeon->floors()->when(!$isAdmin, function(\Illuminate\Database\Eloquent\Builder $builder) {
                     $builder->active();
                 })->get(),
             'selectedFloorId' => $floor->id,
