@@ -5,9 +5,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 223,
+        "direction": null,
         "lat": -75.87,
-        "lng": 239.49,
-        "floorCouplingDirection": "up"
+        "lng": 239.49
     },
     {
         "id": 598,
@@ -15,9 +15,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -83.62,
-        "lng": 112.82,
-        "floorCouplingDirection": "down"
+        "lng": 112.82
     },
     {
         "id": 600,
@@ -25,9 +25,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -217.53,
-        "lng": 114.04,
-        "floorCouplingDirection": "down"
+        "lng": 114.04
     },
     {
         "id": 602,
@@ -35,9 +35,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -199.74,
-        "lng": 96.98,
-        "floorCouplingDirection": "down"
+        "lng": 96.98
     },
     {
         "id": 603,
@@ -45,9 +45,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -188.52,
-        "lng": 96.98,
-        "floorCouplingDirection": "down"
+        "lng": 96.98
     },
     {
         "id": 604,
@@ -55,9 +55,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -175,
-        "lng": 96.32,
-        "floorCouplingDirection": "down"
+        "lng": 96.32
     },
     {
         "id": 605,
@@ -65,9 +65,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -162.13,
-        "lng": 96.32,
-        "floorCouplingDirection": "down"
+        "lng": 96.32
     },
     {
         "id": 606,
@@ -75,9 +75,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -161.64,
-        "lng": 155.7,
-        "floorCouplingDirection": "down"
+        "lng": 155.7
     },
     {
         "id": 607,
@@ -85,9 +85,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -175.16,
-        "lng": 156.03,
-        "floorCouplingDirection": "down"
+        "lng": 156.03
     },
     {
         "id": 608,
@@ -95,9 +95,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -189.02,
-        "lng": 156.36,
-        "floorCouplingDirection": "down"
+        "lng": 156.36
     },
     {
         "id": 609,
@@ -105,9 +105,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 225,
+        "direction": null,
         "lat": -200.07,
-        "lng": 156.53,
-        "floorCouplingDirection": "down"
+        "lng": 156.53
     },
     {
         "id": 610,
@@ -115,9 +115,9 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 226,
+        "direction": null,
         "lat": -228.81,
-        "lng": 156.81,
-        "floorCouplingDirection": "down"
+        "lng": 156.81
     },
     {
         "id": 613,
@@ -125,8 +125,8 @@
         "floor_id": 224,
         "source_floor_id": null,
         "target_floor_id": 226,
+        "direction": null,
         "lat": -137.44,
-        "lng": 247.02,
-        "floorCouplingDirection": "down"
+        "lng": 247.02
     }
 ]

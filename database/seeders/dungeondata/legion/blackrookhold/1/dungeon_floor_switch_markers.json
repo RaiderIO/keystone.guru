@@ -5,8 +5,8 @@
         "floor_id": 2,
         "source_floor_id": null,
         "target_floor_id": 3,
+        "direction": null,
         "lat": -220.9,
-        "lng": 243.86,
-        "floorCouplingDirection": "up"
+        "lng": 243.86
     }
 ]
