@@ -3,120 +3,150 @@
         "id": 341,
         "mapping_version_id": 101,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207.56,
-        "lng": 239.34
+        "lng": 239.34,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 369,
         "mapping_version_id": 108,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207.56,
-        "lng": 239.34
+        "lng": 239.34,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 375,
         "mapping_version_id": 110,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207.56,
-        "lng": 239.34
+        "lng": 239.34,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 377,
         "mapping_version_id": 111,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207.56,
-        "lng": 239.34
+        "lng": 239.34,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 379,
         "mapping_version_id": 111,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -189.78,
-        "lng": 193.26
+        "lng": 193.26,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 380,
         "mapping_version_id": 111,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -189.78,
-        "lng": 110.02
+        "lng": 110.02,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 384,
         "mapping_version_id": 112,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207,
-        "lng": 239
+        "lng": 239,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 404,
         "mapping_version_id": 130,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207,
-        "lng": 239
+        "lng": 239,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 414,
         "mapping_version_id": 144,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207,
-        "lng": 239
+        "lng": 239,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 426,
         "mapping_version_id": 152,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207,
-        "lng": 238
+        "lng": 238,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 427,
         "mapping_version_id": 152,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -190,
-        "lng": 193
+        "lng": 193,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 428,
         "mapping_version_id": 152,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -190,
-        "lng": 110
+        "lng": 110,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 487,
         "mapping_version_id": 185,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -207,
-        "lng": 238
+        "lng": 238,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 488,
         "mapping_version_id": 185,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -190,
-        "lng": 193
+        "lng": 193,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 489,
         "mapping_version_id": 185,
         "floor_id": 149,
+        "source_floor_id": null,
         "target_floor_id": 150,
         "lat": -190,
-        "lng": 110
+        "lng": 110,
+        "floorCouplingDirection": "left"
     }
 ]

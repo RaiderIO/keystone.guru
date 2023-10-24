@@ -3,40 +3,50 @@
         "id": 4,
         "mapping_version_id": 7,
         "floor_id": 18,
+        "source_floor_id": null,
         "target_floor_id": 16,
         "lat": -12.01,
-        "lng": 197.75
+        "lng": 197.75,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 5,
         "mapping_version_id": 7,
         "floor_id": 18,
+        "source_floor_id": null,
         "target_floor_id": 16,
         "lat": -12.01,
-        "lng": 197.75
+        "lng": 197.75,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 266,
         "mapping_version_id": 73,
         "floor_id": 18,
+        "source_floor_id": null,
         "target_floor_id": 16,
         "lat": -155,
-        "lng": 197
+        "lng": 197,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 288,
         "mapping_version_id": 82,
         "floor_id": 18,
+        "source_floor_id": null,
         "target_floor_id": 16,
         "lat": -155,
-        "lng": 197
+        "lng": 197,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 340,
         "mapping_version_id": 98,
         "floor_id": 18,
+        "source_floor_id": null,
         "target_floor_id": 16,
         "lat": -35.79,
-        "lng": 197.6
+        "lng": 197.6,
+        "floorCouplingDirection": "up"
     }
 ]

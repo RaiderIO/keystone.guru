@@ -3,64 +3,80 @@
         "id": 176,
         "mapping_version_id": 8,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 22,
         "lat": -29.75,
-        "lng": 148.75
+        "lng": 148.75,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 177,
         "mapping_version_id": 8,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 24,
         "lat": -63,
-        "lng": 282.25
+        "lng": 282.25,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 178,
         "mapping_version_id": 8,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 24,
         "lat": -183.75,
-        "lng": 207.5
+        "lng": 207.5,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 179,
         "mapping_version_id": 8,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 24,
         "lat": -184.5,
-        "lng": 93.75
+        "lng": 93.75,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 362,
         "mapping_version_id": 107,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 22,
         "lat": -29.75,
-        "lng": 148.75
+        "lng": 148.75,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 363,
         "mapping_version_id": 107,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 24,
         "lat": -63,
-        "lng": 282.25
+        "lng": 282.25,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 364,
         "mapping_version_id": 107,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 24,
         "lat": -183.75,
-        "lng": 207.5
+        "lng": 207.5,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 365,
         "mapping_version_id": 107,
         "floor_id": 23,
+        "source_floor_id": null,
         "target_floor_id": 24,
         "lat": -184.5,
-        "lng": 93.75
+        "lng": 93.75,
+        "floorCouplingDirection": "down"
     }
 ]

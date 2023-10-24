@@ -3,64 +3,80 @@
         "id": 28,
         "mapping_version_id": 21,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -136.76,
-        "lng": 181.75
+        "lng": 181.75,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 349,
         "mapping_version_id": 106,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -136.76,
-        "lng": 181.75
+        "lng": 181.75,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 393,
         "mapping_version_id": 121,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -199,
-        "lng": 280
+        "lng": 280,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 397,
         "mapping_version_id": 126,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -199,
-        "lng": 280
+        "lng": 280,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 399,
         "mapping_version_id": 128,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -199,
-        "lng": 280
+        "lng": 280,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 411,
         "mapping_version_id": 136,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -199,
-        "lng": 280
+        "lng": 280,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 421,
         "mapping_version_id": 150,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -199,
-        "lng": 280
+        "lng": 280,
+        "floorCouplingDirection": "up"
     },
     {
         "id": 435,
         "mapping_version_id": 158,
         "floor_id": 52,
+        "source_floor_id": null,
         "target_floor_id": 51,
         "lat": -199,
-        "lng": 280
+        "lng": 280,
+        "floorCouplingDirection": "up"
     }
 ]

@@ -3,64 +3,80 @@
         "id": 1,
         "mapping_version_id": 7,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 17,
         "lat": -189.38,
-        "lng": 150.88
+        "lng": 150.88,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 3,
         "mapping_version_id": 7,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 18,
         "lat": -188.13,
-        "lng": 184
+        "lng": 184,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 263,
         "mapping_version_id": 73,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 18,
         "lat": -199,
-        "lng": 184
+        "lng": 184,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 264,
         "mapping_version_id": 73,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 17,
         "lat": -189,
-        "lng": 150
+        "lng": 150,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 285,
         "mapping_version_id": 82,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 18,
         "lat": -199,
-        "lng": 184
+        "lng": 184,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 286,
         "mapping_version_id": 82,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 17,
         "lat": -189,
-        "lng": 150
+        "lng": 150,
+        "floorCouplingDirection": "left"
     },
     {
         "id": 337,
         "mapping_version_id": 98,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 18,
         "lat": -190.27,
-        "lng": 183.64
+        "lng": 183.64,
+        "floorCouplingDirection": "down"
     },
     {
         "id": 338,
         "mapping_version_id": 98,
         "floor_id": 16,
+        "source_floor_id": null,
         "target_floor_id": 17,
         "lat": -189,
-        "lng": 150
+        "lng": 150,
+        "floorCouplingDirection": "left"
     }
 ]
