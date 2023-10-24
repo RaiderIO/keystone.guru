@@ -335,8 +335,8 @@ class Save extends Command
         $enemyPatrols              = $floor->enemyPatrolsForExport->values();
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
 
-        // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
-        $dungeonFloorSwitchMarkers->makeHidden(['direction']);
+        // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
+        $dungeonFloorSwitchMarkers->makeHidden(['floorCouplingDirection']);
         $mapIcons        = $floor->mapIconsForExport->values();
         $mountableAreas  = $floor->mountableAreasForExport->values();
         $floorUnions     = $floor->floorUnionsForExport->values();
