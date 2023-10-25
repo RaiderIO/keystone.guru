@@ -109,8 +109,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
     const DUNGEON_ULDAMAN                     = 'uldaman';
     const DUNGEON_UPPER_BLACKROCK_SPIRE       = 'upper_blackrock_spire'; //upperblackrockspire
-    const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns'; //wailingcaverns
-    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';      //zulfarrak
+    const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns';       //wailingcaverns
+    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';            //zulfarrak
 
     // The Burning Crusade
     const DUNGEON_ACHENAI_CRYPTS          = 'auchenai_crypts';
@@ -247,7 +247,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
     const DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL = 'dawn_of_the_infinite_galakronds_fall';
-    const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE = 'dawn_of_the_infinite_murozonds_rise';
+    const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  = 'dawn_of_the_infinite_murozonds_rise';
 
     const ALL = [
         Expansion::EXPANSION_CLASSIC      => [

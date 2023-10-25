@@ -89,7 +89,7 @@ class Icon extends VersionableMapObject {
                 self._refreshVisual();
             }
         });
-        getState().register('mapzoomlevel:changed', this, function (mapStateChangedEvent) {
+        getState().register(['floorid:changed', 'mapzoomlevel:changed'], this, function (mapStateChangedEvent) {
             self._refreshVisual();
         });
     }
@@ -302,7 +302,7 @@ class Icon extends VersionableMapObject {
     cleanup() {
         super.cleanup();
 
-        getState().unregister('mapzoomlevel:changed', this);
+        getState().unregister(['floorid:changed', 'mapzoomlevel:changed'], this);
         this.map.unregister('map:mapstatechanged', this);
         this.unregister('object:changed', this);
     }
