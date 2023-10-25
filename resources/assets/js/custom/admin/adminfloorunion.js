@@ -30,8 +30,6 @@ class FloorUnion extends Icon {
 
         this.label = 'FloorUnion';
         this.comment = '';
-
-        this.floorLayer = null;
     }
 
     /**
@@ -71,22 +69,10 @@ class FloorUnion extends Icon {
         ]);
     }
 
-    /**
-     *
-     * @private
-     */
-    _refreshVisual() {
-        console.assert(this instanceof Icon, 'this is not an Icon', this);
-
-        this.layer.setIcon(LeafletIconFloorUnion);
-
-        let floorUnionMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_FLOOR_UNION);
-        if( this.floorLayer !== null ) {
-            floorUnionMapObjectGroup.layerGroup.removeLayer(this.floorLayer);
-        }
-
+    _getDecorator() {
         let aspectRatio = 1.5;
-        this.floorLayer = L.polygon([
+
+        return L.polygon([
             // Top left corner
             [
                 this.lat - this.size, this.lng - (this.size * aspectRatio)
@@ -104,7 +90,16 @@ class FloorUnion extends Icon {
                 this.lat + this.size, this.lng - (this.size * aspectRatio)
             ],
         ], c.map.floorunion.polygonOptions);
-        floorUnionMapObjectGroup.layerGroup.addLayer(this.floorLayer);
+    }
+
+    /**
+     *
+     * @private
+     */
+    _refreshVisual() {
+        console.assert(this instanceof Icon, 'this is not an Icon', this);
+
+        this.layer.setIcon(LeafletIconFloorUnion);
     }
 
     /**
