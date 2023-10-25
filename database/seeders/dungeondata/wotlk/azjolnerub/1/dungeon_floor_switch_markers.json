@@ -3,7 +3,9 @@
         "id": 248,
         "mapping_version_id": 43,
         "floor_id": 111,
+        "source_floor_id": null,
         "target_floor_id": 112,
+        "direction": null,
         "lat": -133.27,
         "lng": 87.75
     }

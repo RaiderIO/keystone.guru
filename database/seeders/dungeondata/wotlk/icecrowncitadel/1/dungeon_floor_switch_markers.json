@@ -3,7 +3,9 @@
         "id": 490,
         "mapping_version_id": 187,
         "floor_id": 176,
+        "source_floor_id": null,
         "target_floor_id": 177,
+        "direction": null,
         "lat": -180.42,
         "lng": 149.62
     },
@@ -11,7 +13,9 @@
         "id": 632,
         "mapping_version_id": 224,
         "floor_id": 176,
+        "source_floor_id": null,
         "target_floor_id": 177,
+        "direction": null,
         "lat": -180.42,
         "lng": 149.62
     },
@@ -19,7 +23,9 @@
         "id": 674,
         "mapping_version_id": 245,
         "floor_id": 176,
+        "source_floor_id": null,
         "target_floor_id": 177,
+        "direction": null,
         "lat": -180.42,
         "lng": 149.62
     }
