@@ -4,22 +4,28 @@ namespace App\Logic\SimulationCraft;
 
 use App\Models\KillZone\KillZone;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
 class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOutputInterface
 {
-    /** @var SimulationCraftRaidEventsOptions */
+    private CoordinatesServiceInterface $coordinatesService;
+
     private SimulationCraftRaidEventsOptions $options;
 
     /** @var Collection|RaidEventPull[] */
     private Collection $raidEventPulls;
 
     /**
+     * @param CoordinatesServiceInterface      $coordinatesService
      * @param SimulationCraftRaidEventsOptions $options
      */
-    public function __construct(SimulationCraftRaidEventsOptions $options)
-    {
-        $this->options = $options;
+    public function __construct(
+        CoordinatesServiceInterface      $coordinatesService,
+        SimulationCraftRaidEventsOptions $options
+    ) {
+        $this->coordinatesService = $coordinatesService;
+        $this->options            = $options;
     }
 
     /**
@@ -39,12 +45,11 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
                 continue;
             }
 
-            $previousKillLocation  = $previousKillZone === null ? ['lat' => $dungeonStartIcon->lat, 'lng' => $dungeonStartIcon->lng] : $previousKillZone->getKillLocation();
-            $previousDominantFloor = $previousKillZone === null ? $dungeonStartIcon->floor : $previousKillZone->getDominantFloor();
+            $previousKillLocation  = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
 
             $this->raidEventPulls->push(
-                (new RaidEventPull($this->options))
-                    ->calculateRaidEventPullEnemies($killZone, $previousKillLocation, $previousDominantFloor)
+                (new RaidEventPull($this->coordinatesService, $this->options))
+                    ->calculateRaidEventPullEnemies($killZone, $previousKillLocation)
             );
 
             $previousKillZone = $killZone;

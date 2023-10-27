@@ -6,6 +6,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\HasLatLng;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +32,8 @@ use Illuminate\Support\Collection;
  */
 class FloorUnion extends CacheModel implements MappingModelInterface
 {
+    use HasLatLng;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -97,13 +100,5 @@ class FloorUnion extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
-    }
-
-    /**
-     * @return LatLng
-     */
-    public function getLatLng(): LatLng
-    {
-        return new LatLng($this->lat, $this->lng);
     }
 }

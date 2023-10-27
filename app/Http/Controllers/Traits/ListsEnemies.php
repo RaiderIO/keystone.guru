@@ -28,11 +28,11 @@ trait ListsEnemies
      *
      * @param MappingVersion $mappingVersion
      * @param bool $showMdtEnemies
-     * @return array|bool
+     * @return array|null
      * @throws InvalidArgumentException
      * @throws InvalidMDTDungeonException
      */
-    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false)
+    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false): ?array
     {
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::selectRaw('enemies.*')
@@ -63,7 +63,7 @@ trait ListsEnemies
 
             } // Thrown when Lua hasn't been configured
             catch (Error $ex) {
-                return false;
+                return null;
             }
         }
 

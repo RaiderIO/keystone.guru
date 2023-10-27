@@ -15,6 +15,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Traits\HasLatLng;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -78,13 +79,7 @@ use Illuminate\Support\Collection;
 class Floor extends CacheModel implements MappingModelInterface
 {
     use HasFactory;
-
-    /** @var int Y */
-    const MAP_MAX_LAT = -256;
-
-    /** @var int X */
-    const MAP_MAX_LNG = 384;
-
+    use HasLatLng;
 
     // Can map certain floors to others here, so that we can put enemies that are on their own floor (like some final
     // bosses) and put them on the main floor without introducing a 2nd floor.
@@ -350,13 +345,12 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param float $lat
-     * @param float $lng
-     * @param int   $targetFloorId
+     * @param LatLng $latLng
+     * @param int    $targetFloorId
      *
      * @return DungeonFloorSwitchMarker|null
      */
-    public function findClosestFloorSwitchMarker(float $lat, float $lng, int $targetFloorId): ?DungeonFloorSwitchMarker
+    public function findClosestFloorSwitchMarker(LatLng $latLng, int $targetFloorId): ?DungeonFloorSwitchMarker
     {
         $result = null;
 
@@ -367,7 +361,9 @@ class Floor extends CacheModel implements MappingModelInterface
             // Find the closest floors switch marker with the same target floor
             $distanceToClosestFloorSwitchMarker = 99999999999;
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-                $distanceToFloorSwitchMarker = MathUtils::distanceBetweenPoints($lng, $dungeonFloorSwitchMarker->lng, $lat, $dungeonFloorSwitchMarker->lat);
+                $distanceToFloorSwitchMarker = MathUtils::distanceBetweenPoints(
+                    $latLng->getLng(), $dungeonFloorSwitchMarker->lng,
+                    $latLng->getLat(), $dungeonFloorSwitchMarker->lat);
                 if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
                     $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
                     $result                             = $dungeonFloorSwitchMarker;
@@ -378,66 +374,6 @@ class Floor extends CacheModel implements MappingModelInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @param float $lat
-     * @param float $lng
-     *
-     * @return array{x: float, y: float}
-     */
-    public function calculateIngameLocationForMapLocation(float $lat, float $lng): array
-    {
-        $latLng = new LatLng($lat, $lng);
-        $targetFloor = $this;
-
-        // Check if this floor has unions.
-        // If it has unions, check if the lat/lng is inside the union floor area
-        // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
-        // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
-        foreach ($this->floorUnions as $floorUnion) {
-            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
-                if ($floorUnionArea->containsPoint(new LatLng($lat, $lng, $this))) {
-                    // Ok this lat lng is inside a floor union area - this means we must use it's attached floor union's target floor
-                    $targetFloor = $floorUnion->targetFloor;
-
-                    // @TODO rotate latLng around floor union point
-                    $latLng->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
-                }
-            }
-        }
-
-        $ingameMapSizeX = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;
-        $ingameMapSizeY = $targetFloor->ingame_max_y - $targetFloor->ingame_min_y;
-
-        // Invert the lat/lngs
-        $factorLat = ((self::MAP_MAX_LAT - $latLng->getLat()) / self::MAP_MAX_LAT);
-        $factorLng = ((self::MAP_MAX_LNG - $latLng->getLng()) / self::MAP_MAX_LNG);
-
-        return [
-            'x' => ($ingameMapSizeX * $factorLng) + $targetFloor->ingame_min_x,
-            'y' => ($ingameMapSizeY * $factorLat) + $targetFloor->ingame_min_y,
-        ];
-    }
-
-    /**
-     * @param float $x
-     * @param float $y
-     *
-     * @return array{lat: float, lng: float}
-     */
-    public function calculateMapLocationForIngameLocation(float $x, float $y): array
-    {
-        $ingameMapSizeX = $this->ingame_max_x - $this->ingame_min_x;
-        $ingameMapSizeY = $this->ingame_max_y - $this->ingame_min_y;
-
-        $factorX = (($this->ingame_min_x - $x) / $ingameMapSizeX);
-        $factorY = (($this->ingame_min_y - $y) / $ingameMapSizeY);
-
-        return [
-            'lat' => (self::MAP_MAX_LAT * $factorY) + self::MAP_MAX_LAT,
-            'lng' => (self::MAP_MAX_LNG * $factorX) + self::MAP_MAX_LNG,
-        ];
     }
 
     /**

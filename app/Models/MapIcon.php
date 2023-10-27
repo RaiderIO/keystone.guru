@@ -7,6 +7,7 @@ use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\HasLatLng;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,7 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLinkedAwakenedObelisk;
+    use HasLatLng;
 
     protected $visible  = ['id', 'mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'linked_awakened_obelisk_id', 'is_admin', 'lat', 'lng', 'comment', 'permanent_tooltip', 'seasonal_index'];
     protected $fillable = ['mapping_version_id', 'floor_id', 'dungeon_route_id', 'team_id', 'map_icon_type_id', 'lat', 'lng', 'comment', 'permanent_tooltip'];

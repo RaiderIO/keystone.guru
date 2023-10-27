@@ -4,6 +4,7 @@ namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\Structs\IngameXY;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute;
@@ -20,11 +21,12 @@ use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResul
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
-use App\Service\Season\SeasonServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use App\Service\Season\SeasonServiceInterface;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {
@@ -32,22 +34,26 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
     protected SeasonServiceInterface $seasonService;
 
+    protected CoordinatesServiceInterface $coordinatesService;
+
     private CombatLogDungeonRouteServiceLoggingInterface $log;
 
     /**
      * @param CombatLogService                             $combatLogService
      * @param SeasonServiceInterface                       $seasonService
+     * @param CoordinatesServiceInterface                  $coordinatesService
      * @param CombatLogDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
         CombatLogService                             $combatLogService,
         SeasonServiceInterface                       $seasonService,
+        CoordinatesServiceInterface                  $coordinatesService,
         CombatLogDungeonRouteServiceLoggingInterface $log
-    )
-    {
-        $this->combatLogService = $combatLogService;
-        $this->seasonService    = $seasonService;
-        $this->log              = $log;
+    ) {
+        $this->combatLogService   = $combatLogService;
+        $this->seasonService      = $seasonService;
+        $this->coordinatesService = $coordinatesService;
+        $this->log                = $log;
     }
 
     /**
@@ -113,7 +119,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // Store found enemy positions in the database for analyzing
             $this->saveChallengeModeRun($resultEvents, $dungeonRoute);
 
-            $dungeonRoute = (new ResultEventDungeonRouteBuilder($dungeonRoute, $resultEvents))->build();
+            $dungeonRoute = (new ResultEventDungeonRouteBuilder($this->coordinatesService, $dungeonRoute, $resultEvents))->build();
 
             if (config('app.debug')) {
                 $this->generateMapIconsFromEvents(
@@ -170,20 +176,21 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                     continue;
                 }
 
-                $latLng = $currentFloor->calculateMapLocationForIngameLocation(
-                    $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
-                    $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY(
+                        $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
+                        $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
+                        $currentFloor
+                    )
                 );
 
-                $enemyPositionAttributes[] = [
+                $enemyPositionAttributes[] = array_merge([
                     'challenge_mode_run_id' => null,
                     'floor_id'              => $currentFloor->id,
                     'npc_id'                => $resultEvent->getGuid()->getId(),
                     'guid'                  => $resultEvent->getGuid()->getGuid(),
-                    'lat'                   => $latLng['lat'],
-                    'lng'                   => $latLng['lng'],
                     'created_at'            => $now,
-                ];
+                ], $latLng->toArray());
             }
 
             // Insert a run
@@ -206,7 +213,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
                 // Mark it as a duplicate if we couldn't insert any new positions
                 $challengeModeRun->update([
-                    'duplicate' => 1
+                    'duplicate' => 1,
                 ]);
             }
         } finally {
@@ -225,8 +232,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
         MappingVersion $mappingVersion,
         Collection     $resultEvents,
         ?DungeonRoute  $dungeonRoute = null
-    ): void
-    {
+    ): void {
         $currentFloor      = null;
         $mapIconAttributes = collect();
         foreach ($resultEvents as $resultEvent) {
@@ -245,9 +251,12 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             /** @var AdvancedCombatLogEvent $combatLogEvent */
             $combatLogEvent = $resultEvent->getBaseEvent();
 
-            $latLng = $currentFloor->calculateMapLocationForIngameLocation(
-                $combatLogEvent->getAdvancedData()->getPositionX(),
-                $combatLogEvent->getAdvancedData()->getPositionY(),
+            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                new IngameXY(
+                    $combatLogEvent->getAdvancedData()->getPositionX(),
+                    $combatLogEvent->getAdvancedData()->getPositionY(),
+                    $currentFloor
+                )
             );
 
             $comment    = '';
@@ -275,17 +284,15 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 );
             }
 
-            $mapIconAttributes->push([
+            $mapIconAttributes->push(array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
                 'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
-                'lat'                => $latLng['lat'],
-                'lng'                => $latLng['lng'],
                 'comment'            => $comment,
                 'permanent_tooltip'  => 0,
-            ]);
+            ], $latLng->toArray()));
         }
 
         MapIcon::insert($mapIconAttributes->toArray());

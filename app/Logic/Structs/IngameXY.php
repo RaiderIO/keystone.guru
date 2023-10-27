@@ -84,32 +84,6 @@ class IngameXY
     }
 
     /**
-     * @return LatLng
-     */
-    public function getLatLng(): ?LatLng
-    {
-        return $this->latLng ?? ($this->latLng = $this->calculateLatLng());
-    }
-
-    /**
-     * @return LatLng|null
-     */
-    private function calculateLatLng(): ?LatLng
-    {
-        $result = null;
-
-        if ($this->floor !== null) {
-            $latLng = $this->floor->calculateMapLocationForIngameLocation(
-                $this->x,
-                $this->y
-            );
-            $result = LatLng::fromArray($latLng, $this->floor);
-        }
-
-        return $result;
-    }
-
-    /**
      * @param array      $ingameXY
      * @param Floor|null $floor
      *

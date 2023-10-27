@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
@@ -45,36 +46,20 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     }
 
     /**
-     * @return array
-     */
-    public function getVerticesAsIngameCoordinates(): array
-    {
-        $vertices = json_decode($this->vertices_json, true);
-
-        $result = [];
-        foreach ($vertices as $vertex) {
-            $result[] =
-                array_values($this->floor->calculateIngameLocationForMapLocation($vertex['lat'], $vertex['lng']));
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $p1
+     * @param LatLng $latLng
      * @return bool
      */
-    public function contains(array $p1): bool
+    public function contains(LatLng $latLng): bool
     {
-        return polygonContainsPoint($p1, json_decode($this->vertices_json, true));
+        return polygonContainsPoint($latLng->toArray(), json_decode($this->vertices_json, true));
     }
 
     /**
-     * @param array{lat: float, lng: float} $p1
-     * @param array{lat: float, lng: float} $p2
+     * @param LatLng $latLngA
+     * @param LatLng $latLngB
      * @return array{array{lat: float, lng: float}}
      */
-    public function getIntersections(array $p1, array $p2): array
+    public function getIntersections(LatLng $latLngA, LatLng $latLngB): array
     {
         $vertices = json_decode($this->vertices_json, true);
 
@@ -84,7 +69,7 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
             $nextVertex = $vertices[$vertexIndex + 1] ?? $vertices[0];
             // Calculate the intersection between the line and the line of the vertex
             $intersection = intersection(
-                $p1, $p2,
+                $latLngA->toArray(), $latLngB->toArray(),
                 $vertex, $nextVertex
             );
 

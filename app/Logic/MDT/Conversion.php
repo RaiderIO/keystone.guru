@@ -8,6 +8,7 @@
 
 namespace App\Logic\MDT;
 
+use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
@@ -220,15 +221,15 @@ class Conversion
     /**
      * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
      *
-     * @param $xy array
+     * @param array{x: float, y: float} $xy
      *
-     * @return array
+     * @return LatLng
      */
-    public static function convertMDTCoordinateToLatLng(array $xy): array
+    public static function convertMDTCoordinateToLatLng(array $xy): LatLng
     {
         // This seems to match my coordinate system for about 99%. Needs some more refinement, but it should be very minor.
         // Yes I know about php's round() function but it gives floating point rounding errors.
-        return ['lat' => self::round($xy['y'] / 2.185), 'lng' => self::round($xy['x'] / 2.185)];
+        return new LatLng(self::round($xy['y'] / 2.185), self::round($xy['x'] / 2.185));
     }
 
     /**
