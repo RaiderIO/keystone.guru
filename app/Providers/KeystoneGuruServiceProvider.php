@@ -28,6 +28,8 @@ use App\Service\CombatLog\CreateRouteDungeonRouteService;
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\Coordinates\CoordinatesService;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\DungeonRoute\CoverageService;
@@ -118,10 +120,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
-        $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
-        $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
+        $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {
@@ -149,6 +150,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
+
+        // Depends on CombatLogService, SeasonService, CoordinatesService
+        $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
+        $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
 
         // Depends on all of the above - pretty much
         $this->app->bind(ViewServiceInterface::class, ViewService::class);

@@ -2,11 +2,13 @@
 
 namespace App\Models\KillZone;
 
+use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Spell;
+use App\Models\Traits\HasLatLng;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +44,8 @@ use Illuminate\Support\Facades\DB;
  */
 class KillZone extends Model
 {
+    use HasLatLng;
+
     public $visible = [
         'id',
         'floor_id',
@@ -220,12 +224,12 @@ class KillZone extends Model
     /**
      * @param bool $useCache
      *
-     * @return array{lat: float, lng: float}
+     * @return LatLng|null
      */
-    public function getKillLocation(bool $useCache = false): ?array
+    public function getKillLocation(bool $useCache = false): ?LatLng
     {
         if (isset($this->lat) && isset($this->lng)) {
-            return ['lat' => $this->lat, 'lng' => $this->lng];
+            return new LatLng($this->lat, $this->lng, $this->getDominantFloor(true));
         } else {
             $enemies = $this->getEnemies($useCache);
 
@@ -241,7 +245,7 @@ class KillZone extends Model
                 $totalLng += $enemy->lng;
             }
 
-            return ['lat' => $totalLat / $enemies->count(), 'lng' => $totalLng / $enemies->count()];
+            return new LatLng($totalLat / $enemies->count(), $totalLng / $enemies->count(), $this->getDominantFloor(true));
         }
     }
 

@@ -2,26 +2,23 @@
 
 namespace App\Logic\SimulationCraft\Models;
 
+use App\Logic\Structs\LatLng;
 use App\Models\MountableArea;
 
 class MountableAreaIntersection
 {
     private MountableArea $mountableArea;
 
-    private float $lat;
-
-    private float $lng;
+    private LatLng $latLng;
 
     /**
      * @param MountableArea $mountableArea
-     * @param float $lat
-     * @param float $lng
+     * @param LatLng        $latLng
      */
-    public function __construct(MountableArea $mountableArea, float $lat, float $lng)
+    public function __construct(MountableArea $mountableArea, LatLng $latLng)
     {
         $this->mountableArea = $mountableArea;
-        $this->lat           = $lat;
-        $this->lng           = $lng;
+        $this->latLng        = $latLng;
     }
 
     /**
@@ -33,18 +30,10 @@ class MountableAreaIntersection
     }
 
     /**
-     * @return float
+     * @return LatLng
      */
-    public function getLat(): float
+    public function getLatLng(): LatLng
     {
-        return $this->lat;
-    }
-
-    /**
-     * @return float
-     */
-    public function getLng(): float
-    {
-        return $this->lng;
+        return $this->latLng;
     }
 }

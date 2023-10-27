@@ -16,6 +16,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Carbon\Carbon;
@@ -35,15 +36,16 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     private CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
-        SeasonServiceInterface $seasonService,
-        CreateRouteBody        $createRouteBody
+        SeasonServiceInterface      $seasonService,
+        CoordinatesServiceInterface $coordinatesService,
+        CreateRouteBody             $createRouteBody
     ) {
         $this->seasonService   = $seasonService;
         $this->createRouteBody = $createRouteBody;
 
         $dungeonRoute = $this->initDungeonRoute();
 
-        parent::__construct($dungeonRoute);
+        parent::__construct($coordinatesService, $dungeonRoute);
 
 
         /** @var CreateRouteBodyDungeonRouteBuilderLoggingInterface $log */

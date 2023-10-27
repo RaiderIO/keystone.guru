@@ -7,6 +7,7 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTString;
+use App\Logic\Structs\LatLng;
 use App\Logic\Utils\MathUtils;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
@@ -27,11 +28,13 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Models\Spell;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -54,11 +57,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     private string $encodedString;
 
     /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private SeasonService $seasonService;
+    private SeasonServiceInterface $seasonService;
 
-    function __construct(SeasonService $seasonService)
-    {
-        $this->seasonService = $seasonService;
+    private CoordinatesServiceInterface $coordinatesService;
+
+    function __construct(
+        SeasonServiceInterface      $seasonService,
+        CoordinatesServiceInterface $coordinatesService
+    ) {
+        $this->seasonService      = $seasonService;
+        $this->coordinatesService = $coordinatesService;
     }
 
     /**
@@ -311,16 +319,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseMdtNpcClonesInPull(
         ImportStringPulls $importStringPulls,
-        Collection $mdtEnemiesByMdtNpcIndex,
-        Collection $enemiesByNpcId,
-        Collection $enemyForcesByNpcIds,
-        int &$totalEnemiesSelected,
-        int &$totalEnemiesMatched,
-        bool &$seasonalIndexSkip,
-        array &$killZoneAttributes,
-        int $newPullIndex,
-        string $mdtNpcIndex,
-        $mdtNpcClones
+        Collection        $mdtEnemiesByMdtNpcIndex,
+        Collection        $enemiesByNpcId,
+        Collection        $enemyForcesByNpcIds,
+        int               &$totalEnemiesSelected,
+        int               &$totalEnemiesMatched,
+        bool              &$seasonalIndexSkip,
+        array             &$killZoneAttributes,
+        int               $newPullIndex,
+        string            $mdtNpcIndex,
+                          $mdtNpcClones
     ): bool {
         if ($mdtNpcIndex === 'color') {
             // Make sure there is a pound sign in front of the value at all times, but never double up should
@@ -329,7 +337,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             return false;
         } // Numeric means it's an index of the dungeon's NPCs, if it isn't numeric skip to the next pull
-        elseif (!is_numeric($mdtNpcIndex)) {
+        else if (!is_numeric($mdtNpcIndex)) {
             return false;
         }
 
@@ -348,11 +356,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 if ($npcIndex === 35) {
                     $cloneIndex += 15;
                 }
-            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
+            } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
                 if ($npcIndex === 11) {
                     $cloneIndex += 2;
                 }
-            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
+            } else if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
                 if ($npcIndex === 23) {
                     $cloneIndex += 5;
                 }
@@ -448,7 +456,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Keep track of our enemy forces
             if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded);
-            } elseif ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+            } else if ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
             } else {
                 /** @var NpcEnemyForces $npcEnemyForces */
@@ -628,7 +636,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 }
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
-                elseif (isset($object['n']) && $object['n']) {
+                else if (isset($object['n']) && $object['n']) {
                     $this->parseObjectComment($importStringObjects, $floor, $details);
                 }
                 // Triangles (t = triangle)
@@ -695,15 +703,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     {
         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
 
-        $ingameXY = $floor->calculateIngameLocationForMapLocation($latLng['lat'], $latLng['lng']);
+        $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
 
         // Try to see if we can import this comment and apply it to our pulls directly instead
         foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
             foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
-                $enemyIngameXY = $floor->calculateIngameLocationForMapLocation($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng);
+                $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
+                    new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng)
+                );
                 if (MathUtils::distanceBetweenPoints(
-                        $enemyIngameXY['x'], $ingameXY['x'],
-                        $enemyIngameXY['y'], $ingameXY['y']
+                        $enemyIngameXY->getX(), $ingameXY->getX(),
+                        $enemyIngameXY->getY(), $ingameXY->getY()
                     ) < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS) {
 
                     $bloodLustNames = ['bloodlust', 'heroism', 'fury of the ancients', 'time warp', 'timewarp', 'ancient hysteria'];
@@ -715,17 +725,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                         if ($commentLower === 'bloodlust') {
                             $spellId = Spell::SPELL_BLOODLUST;
-                        } elseif ($commentLower === 'heroism') {
+                        } else if ($commentLower === 'heroism') {
                             $spellId = Spell::SPELL_HEROISM;
-                        } elseif ($commentLower === 'fury of the aspects') {
+                        } else if ($commentLower === 'fury of the aspects') {
                             $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
-                        } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
+                        } else if ($commentLower === 'time warp' || $commentLower === 'timewarp') {
                             $spellId = Spell::SPELL_TIME_WARP;
-                        } elseif ($commentLower === 'ancient hysteria') {
+                        } else if ($commentLower === 'ancient hysteria') {
                             $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
-                        } elseif ($commentLower === 'drums') {
+                        } else if ($commentLower === 'drums') {
                             $spellId = Spell::SPELL_FERAL_HIDE_DRUMS;
-                        } elseif ($commentLower === 'primal rage') {
+                        } else if ($commentLower === 'primal rage') {
                             $spellId = Spell::SPELL_PRIMAL_RAGE;
                         }
 

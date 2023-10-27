@@ -11,6 +11,7 @@ use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
 use App\Models\RaidMarker;
 use App\Models\Spell;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -27,15 +28,18 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     use PublicKeyDungeonRoute;
 
     /**
-     * @param APIEnemyFormRequest $request
-     * @param Enemy|null          $enemy
+     * @param APIEnemyFormRequest         $request
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param Enemy|null                  $enemy
      *
      * @return Enemy|Model
-     * @throws Exception
      * @throws Throwable
      */
-    public function store(APIEnemyFormRequest $request, Enemy $enemy = null): Enemy
-    {
+    public function store(
+        APIEnemyFormRequest         $request,
+        CoordinatesServiceInterface $coordinatesService,
+        Enemy                       $enemy = null
+    ): Enemy {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
@@ -49,7 +53,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $previousFloor) {
+        return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
 
             // Clear current active auras
@@ -71,10 +75,10 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
-                $ingameXY  = $previousFloor->calculateIngameLocationForMapLocation($enemy->lat, $enemy->lng);
-                $newLatLng = $enemy->floor->calculateMapLocationForIngameLocation($ingameXY['x'], $ingameXY['y']);
+                $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
+                $newLatLng = $coordinatesService->calculateMapLocationForIngameLocation($ingameXY->setFloor($enemy->floor));
 
-                $enemy->update($newLatLng);
+                $enemy->update($newLatLng->toArray());
             }
         });
     }

@@ -47,9 +47,9 @@ abstract class MapContextMappingVersion extends MapContext
     public function getEnemies(): array
     {
         try {
-            return $this->listEnemies($this->mappingVersion, true);
+            return $this->listEnemies($this->mappingVersion, true) ?? [];
         } catch (InvalidMDTDungeonException $e) {
-            return $this->listEnemies($this->mappingVersion);
+            return $this->listEnemies($this->mappingVersion) ?? [];
         }
     }
 

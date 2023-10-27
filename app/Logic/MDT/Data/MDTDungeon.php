@@ -191,7 +191,7 @@ class MDTDungeon
                     foreach ($clones as $mdtCloneIndex => $clone) {
                         $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
 
-                        $enemy = new Enemy([
+                        $enemy = new Enemy(array_merge([
                             // Dummy so we can ID them later on
                             'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
                             'floor_id'                      => $floorId,
@@ -205,9 +205,7 @@ class MDTDungeon
                                 : 'any',
                             'enemy_forces_override'         => null,
                             'enemy_forces_override_teeming' => null,
-                            'lat'                           => $latLng['lat'],
-                            'lng'                           => $latLng['lng'],
-                        ]);
+                        ], $latLng->toArray()));
                         // Special MDT fields which are not fillable
                         $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
                         $enemy->is_mdt        = true;
