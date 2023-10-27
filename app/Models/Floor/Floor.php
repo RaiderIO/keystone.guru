@@ -2,6 +2,7 @@
 
 namespace App\Models\Floor;
 
+use App\Logic\Structs\LatLng;
 use App\Logic\Utils\MathUtils;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
@@ -138,7 +139,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-                    ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -149,7 +150,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-                    ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -160,7 +161,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-                    ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -171,7 +172,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mapicons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-                    ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -182,7 +183,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-                    ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -193,7 +194,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-                    ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /**
@@ -324,7 +325,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-                    ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -333,7 +334,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-                    ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
@@ -387,16 +388,35 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public function calculateIngameLocationForMapLocation(float $lat, float $lng): array
     {
-        $ingameMapSizeX = $this->ingame_max_x - $this->ingame_min_x;
-        $ingameMapSizeY = $this->ingame_max_y - $this->ingame_min_y;
+        $latLng = new LatLng($lat, $lng);
+        $targetFloor = $this;
+
+        // Check if this floor has unions.
+        // If it has unions, check if the lat/lng is inside the union floor area
+        // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
+        // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
+        foreach ($this->floorUnions as $floorUnion) {
+            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                if ($floorUnionArea->containsPoint(new LatLng($lat, $lng, $this))) {
+                    // Ok this lat lng is inside a floor union area - this means we must use it's attached floor union's target floor
+                    $targetFloor = $floorUnion->targetFloor;
+
+                    // @TODO rotate latLng around floor union point
+                    $latLng->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
+                }
+            }
+        }
+
+        $ingameMapSizeX = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;
+        $ingameMapSizeY = $targetFloor->ingame_max_y - $targetFloor->ingame_min_y;
 
         // Invert the lat/lngs
-        $factorLat = ((self::MAP_MAX_LAT - $lat) / self::MAP_MAX_LAT);
-        $factorLng = ((self::MAP_MAX_LNG - $lng) / self::MAP_MAX_LNG);
+        $factorLat = ((self::MAP_MAX_LAT - $latLng->getLat()) / self::MAP_MAX_LAT);
+        $factorLng = ((self::MAP_MAX_LNG - $latLng->getLng()) / self::MAP_MAX_LNG);
 
         return [
-            'x' => ($ingameMapSizeX * $factorLng) + $this->ingame_min_x,
-            'y' => ($ingameMapSizeY * $factorLat) + $this->ingame_min_y,
+            'x' => ($ingameMapSizeX * $factorLng) + $targetFloor->ingame_min_x,
+            'y' => ($ingameMapSizeY * $factorLat) + $targetFloor->ingame_min_y,
         ];
     }
 
