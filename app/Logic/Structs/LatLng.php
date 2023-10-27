@@ -42,6 +42,7 @@ class LatLng
     public function setLat(float $lat): LatLng
     {
         $this->lat = $lat;
+
         return $this;
     }
 
@@ -61,6 +62,7 @@ class LatLng
     public function setLng(float $lng): LatLng
     {
         $this->lng = $lng;
+
         return $this;
     }
 
@@ -80,6 +82,7 @@ class LatLng
     public function setFloor(?Floor $floor): LatLng
     {
         $this->floor = $floor;
+
         return $this;
     }
 
@@ -89,6 +92,34 @@ class LatLng
     public function getIngameXY(): ?IngameXY
     {
         return $this->ingameXY ?? ($this->ingameXY = $this->calculateIngameCoordinates());
+    }
+
+    /**
+     * @param LatLng $centerLatLng
+     * @param float  $degrees
+     * @return self
+     */
+    public function rotate(LatLng $centerLatLng, float $degrees): self
+    {
+        $lng1 = $this->lng - $centerLatLng->lng;
+        $lat1 = $this->lat - $centerLatLng->lat;
+
+        $angle = $degrees * (pi() / 180);
+
+        $lng2 = $lng1 * cos($angle) - $lat1 * sin($angle);
+        $lat2 = $lng1 * sin($angle) + $lat1 * cos($angle);
+
+        $this->lng = $lng2 + $centerLatLng->lng;
+        $this->lat = $lat2 + $centerLatLng->lat;
+    }
+
+    /**
+     * @deprecated Like don't use this - trying to get rid of this structure as much as possible by using this class in the first place
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return ['lat' => $this->lat, 'lng' => $this->lng];
     }
 
     /**

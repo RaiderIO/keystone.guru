@@ -2,6 +2,7 @@
 
 namespace App\Models\Floor;
 
+use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -40,6 +41,8 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface
         'floor_union_id'     => 'integer',
     ];
 
+    private ?array $cachedVertices = null;
+
     /**
      * @return BelongsTo
      */
@@ -62,6 +65,20 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface
     public function floorUnion(): BelongsTo
     {
         return $this->belongsTo(FloorUnion::class);
+    }
+
+    /**
+     * @param LatLng $latLng
+     * @return bool
+     */
+    public function containsPoint(LatLng $latLng): bool
+    {
+        if( $this->cachedVertices === null ) {
+            $this->cachedVertices = json_decode($this->vertices_json, true);
+        }
+
+
+        return polygonContainsPoint($latLng->toArray(), $this->cachedVertices);
     }
 
     public function getDungeonId(): ?int

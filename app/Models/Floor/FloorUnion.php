@@ -2,6 +2,7 @@
 
 namespace App\Models\Floor;
 
+use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -96,5 +97,13 @@ class FloorUnion extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
+    }
+
+    /**
+     * @return LatLng
+     */
+    public function getLatLng(): LatLng
+    {
+        return new LatLng($this->lat, $this->lng);
     }
 }
