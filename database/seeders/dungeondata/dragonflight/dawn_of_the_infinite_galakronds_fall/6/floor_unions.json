@@ -7,8 +7,7 @@
         "lat": -56.41,
         "lng": 91.61,
         "size": 100,
-        "rotation": -50.8,
-        "floor_union_areas": []
+        "rotation": -50.8
     },
     {
         "id": 2,
@@ -18,8 +17,7 @@
         "lat": -60.83,
         "lng": 233.2,
         "size": 140,
-        "rotation": -12.1,
-        "floor_union_areas": []
+        "rotation": -12.1
     },
     {
         "id": 3,
@@ -29,8 +27,7 @@
         "lat": -170.8,
         "lng": 67.27,
         "size": 80,
-        "rotation": -13.2,
-        "floor_union_areas": []
+        "rotation": -13.2
     },
     {
         "id": 4,
@@ -40,7 +37,6 @@
         "lat": -181.4,
         "lng": 274.66,
         "size": 100,
-        "rotation": 0,
-        "floor_union_areas": []
+        "rotation": 0
     }
 ]
