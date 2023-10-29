@@ -20,35 +20,35 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Lua;
 use LuaException;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MythicDungeonTools/blob/master/Transmission.lua
- * All rights belong to their respective owners, I did write this but I did not make this up.  I merely translated the LUA
- * to PHP to allow for importing of the exported strings.
- * @package App\Logic\MDT
+ * @package App\Logic\MDT\Data
  * @author Wouter
  * @since 05/01/2019
  */
 class MDTDungeon
 {
-    /** @var Dungeon */
     private Dungeon $dungeon;
 
-    /** @var CacheServiceInterface|mixed */
     private CacheServiceInterface $cacheService;
 
+    private CoordinatesServiceInterface $coordinatesService;
 
-    function __construct(Dungeon $dungeon)
-    {
-        $this->dungeon = $dungeon;
+    function __construct(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
+        Dungeon                     $dungeon
+    ) {
+        $this->cacheService       = $cacheService;
+        $this->coordinatesService = $coordinatesService;
+        $this->dungeon            = $dungeon;
 
-        $this->cacheService = App::make(CacheServiceInterface::class);
 
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
@@ -78,6 +78,7 @@ class MDTDungeon
     public function getMDTDungeonID(): int
     {
         $lua = $this->getLua();
+
         return $lua->call('GetDungeonIndex');
     }
 
@@ -97,6 +98,7 @@ class MDTDungeon
             foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
                 $mdtNpcs->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
             }
+
             return $mdtNpcs;
         }, config('keystoneguru.cache.mdt.ttl'));
     }
@@ -136,6 +138,7 @@ class MDTDungeon
                 $mdtNpcs = $this->getMDTNPCs();
             } catch (Exception $exception) {
                 logger()->error($exception->getMessage());
+
                 return $enemies;
             }
 
@@ -173,8 +176,14 @@ class MDTDungeon
                                 $mdtCloneIndex += (count($npcClones[$npcId][$floor->id]) - $cloneCount);
                             }
 
+                            // Place the enemy on the correct floor
+                            $latLng = Conversion::convertMDTCoordinateToLatLng($clone, $floor);
+                            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($latLng);
+
+                            $clone = array_merge($clone, $latLng->toArray());
+
                             // Append this clone to the array
-                            $npcClones[$npcId][$floor->id][$mdtCloneIndex] = $clone;
+                            $npcClones[$npcId][$latLng->getFloor()->id][$mdtCloneIndex] = $clone;
                         }
                     }
 
@@ -189,9 +198,7 @@ class MDTDungeon
             foreach ($npcClones as $npcId => $floorIndexes) {
                 foreach ($floorIndexes as $floorId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
-                        $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
-
-                        $enemy = new Enemy(array_merge([
+                        $enemy = new Enemy([
                             // Dummy so we can ID them later on
                             'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
                             'floor_id'                      => $floorId,
@@ -199,13 +206,15 @@ class MDTDungeon
                             'npc_id'                        => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
                             'mdt_id'                        => $mdtCloneIndex,
+                            'lat'                           => $clone['lat'],
+                            'lng'                           => $clone['lng'],
                             'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
                             'faction'                       => isset($clone['faction']) ?
                                 ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
                                 : 'any',
                             'enemy_forces_override'         => null,
                             'enemy_forces_override_teeming' => null,
-                        ], $latLng->toArray()));
+                        ]);
                         // Special MDT fields which are not fillable
                         $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
                         $enemy->is_mdt        = true;

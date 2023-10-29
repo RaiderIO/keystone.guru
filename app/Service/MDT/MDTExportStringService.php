@@ -8,8 +8,11 @@ use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\KillZone\KillZone;
+use App\Models\MapIcon;
 use App\Models\NpcClassification;
 use App\Models\Path;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -22,7 +25,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
 {
-    /** @var int How far away do we create notes in MDT  */
+    /** @var int How far away do we create notes in MDT */
     private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
     /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
@@ -30,6 +33,21 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
+
+    private CacheServiceInterface $cacheService;
+
+    private CoordinatesServiceInterface $coordinatesService;
+
+    /**
+     * @param CacheServiceInterface       $cacheService
+     * @param CoordinatesServiceInterface $coordinatesService
+     */
+    public function __construct(CacheServiceInterface $cacheService, CoordinatesServiceInterface $coordinatesService)
+    {
+        $this->cacheService       = $cacheService;
+        $this->coordinatesService = $coordinatesService;
+    }
+
 
     /**
      * @param Collection $warnings
@@ -42,7 +60,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
         foreach ($this->dungeonRoute->mapicons()->with(['floor'])->get() as $mapIcon) {
-            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]);
+            /** @var MapIcon $mapIcon */
+            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($mapIcon->getLatLng());
 
             $result[$currentObjectIndex++] = [
                 'n' => true,
@@ -81,10 +100,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             }
 
             $vertexIndex            = 1;
-            $vertices               = json_decode($line->polyline->vertices_json, true);
+            $verticesLatLngs        = $line->polyline->getDecodedLatLngs($line->floor);
             $previousMdtCoordinates = null;
-            foreach ($vertices as $latLng) {
-                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
+            foreach ($verticesLatLngs as $vertexLatLng) {
+                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($vertexLatLng);
 
                 if ($previousMdtCoordinates !== null) {
                     // We must do A -> B, B -> C, C -> D. I don't know why he wants the previous coordinates too, but alas that's how it works
@@ -136,7 +155,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
-        $mdtEnemies = (new MDTDungeon($this->dungeonRoute->dungeon))
+        $mdtEnemies = (new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon))
             ->getClonesAsEnemies($this->dungeonRoute->dungeon->floors);
 
         // Lua is 1 based, not 0 based

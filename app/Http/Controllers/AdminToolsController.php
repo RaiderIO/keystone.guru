@@ -18,6 +18,7 @@ use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -735,15 +736,17 @@ class AdminToolsController extends Controller
      * @return Factory|
      * @throws Exception
      */
-    public function mdtdiff()
-    {
+    public function mdtdiff(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService
+    ) {
         $warnings = new Collection();
         $npcs     = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
         foreach (Dungeon::all() as $dungeon) {
             /** @var Dungeon $dungeon */
-            $mdtNpcs = (new MDTDungeon($dungeon))->getMDTNPCs();
+            $mdtNpcs = (new MDTDungeon($cacheService, $coordinatesService, $dungeon))->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {

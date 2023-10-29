@@ -12,6 +12,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\Floor\Floor;
 use App\Service\Season\SeasonService;
 use Exception;
 
@@ -222,24 +223,24 @@ class Conversion
      * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
      *
      * @param array{x: float, y: float} $xy
-     *
+     * @param Floor|null                $floor
      * @return LatLng
      */
-    public static function convertMDTCoordinateToLatLng(array $xy): LatLng
+    public static function convertMDTCoordinateToLatLng(array $xy, ?Floor $floor = null): LatLng
     {
         // This seems to match my coordinate system for about 99%. Needs some more refinement, but it should be very minor.
         // Yes I know about php's round() function but it gives floating point rounding errors.
-        return new LatLng(self::round($xy['y'] / 2.185), self::round($xy['x'] / 2.185));
+        return new LatLng(self::round($xy['y'] / 2.185), self::round($xy['x'] / 2.185), $floor);
     }
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
      *
-     * @param $latLng array
+     * @param LatLng $latLng
      *
      * @return array
      */
-    public static function convertLatLngToMDTCoordinateString(array $latLng): array
+    public static function convertLatLngToMDTCoordinateString(LatLng $latLng): array
     {
         $mdtCoordinate      = self::convertLatLngToMDTCoordinate($latLng);
         $mdtCoordinate['x'] = (string)$mdtCoordinate['x'];
@@ -251,13 +252,13 @@ class Conversion
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
      *
-     * @param $latLng array
+     * @param LatLng $latLng
      *
      * @return array
      */
-    public static function convertLatLngToMDTCoordinate(array $latLng): array
+    public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {
-        return ['y' => round($latLng['lat'] * 2.185, 1), 'x' => round($latLng['lng'] * 2.185, 1)];
+        return ['y' => round($latLng->getLat() * 2.185, 1), 'x' => round($latLng->getLng() * 2.185, 1)];
     }
 
     /**

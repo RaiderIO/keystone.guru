@@ -72,22 +72,24 @@ class FloorUnion extends Icon {
     _getDecorator() {
         let aspectRatio = 1.5;
 
+        let radius = this.size / 2;
+
         return L.polygon([
             // Top left corner
             [
-                this.lat - this.size, this.lng - (this.size * aspectRatio)
+                this.lat - radius, this.lng - (radius * aspectRatio)
             ],
             // Top right corner
             [
-                this.lat - this.size, this.lng + (this.size * aspectRatio)
+                this.lat - radius, this.lng + (radius * aspectRatio)
             ],
             // Bottom right corner
             [
-                this.lat + this.size, this.lng + (this.size * aspectRatio)
+                this.lat + radius, this.lng + (radius * aspectRatio)
             ],
             // Bottom left corner
             [
-                this.lat + this.size, this.lng - (this.size * aspectRatio)
+                this.lat + radius, this.lng - (radius * aspectRatio)
             ],
         ], c.map.floorunion.polygonOptions);
     }

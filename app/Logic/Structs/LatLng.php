@@ -3,8 +3,10 @@
 namespace App\Logic\Structs;
 
 use App\Models\Floor\Floor;
+use App\Service\Coordinates\CoordinatesService;
+use Illuminate\Contracts\Support\Arrayable;
 
-class LatLng
+class LatLng implements Arrayable
 {
     private float $lat;
 
@@ -85,6 +87,34 @@ class LatLng
     }
 
     /**
+     * @param LatLng $currentMapCenter
+     * @param int    $currentMapSize
+     * @param LatLng $targetMapCenter
+     * @param int    $targetMapSize
+     * @return $this
+     */
+    public function scale(LatLng $currentMapCenter, int $currentMapSize, LatLng $targetMapCenter, int $targetMapSize): self
+    {
+        $currentMapSizeLat = $currentMapSize;
+        $currentMapSizeLng = $currentMapSize * CoordinatesService::MAP_ASPECT_RATIO;
+        // Lat is inverted. The dead center is top left, not bottom left
+        $currentMapOffsetLat = $currentMapCenter->getLat() + ($currentMapSizeLat / 2);
+        $currentMapOffsetLng = $currentMapCenter->getLng() - ($currentMapSizeLng / 2);
+
+        $targetMapSizeLat = $targetMapSize;
+        $targetMapSizeLng = $targetMapSize * CoordinatesService::MAP_ASPECT_RATIO;
+        // Lat is inverted. The dead center is top left, not bottom left
+        $targetMapOffsetLat = $targetMapCenter->getLat() + ($targetMapSizeLat / 2);
+        $targetMapOffsetLng = $targetMapCenter->getLng() - ($targetMapSizeLng / 2);
+
+        // Undo the offset. Then scale by the correct factor, and apply the new offset
+        $this->lat = (($this->lat - $currentMapOffsetLat) * ($targetMapSizeLat / $currentMapSizeLat)) + $targetMapOffsetLat;
+        $this->lng = (($this->lng - $currentMapOffsetLng) * ($targetMapSizeLng / $currentMapSizeLng)) + $targetMapOffsetLng;
+
+        return $this;
+    }
+
+    /**
      * @param LatLng $centerLatLng
      * @param float  $degrees
      * @return self
@@ -114,6 +144,15 @@ class LatLng
     public function toArray(): array
     {
         return ['lat' => $this->lat, 'lng' => $this->lng];
+    }
+
+    public function __clone()
+    {
+        return new LatLng(
+            $this->lat,
+            $this->lng,
+            $this->floor
+        );
     }
 
     /**
