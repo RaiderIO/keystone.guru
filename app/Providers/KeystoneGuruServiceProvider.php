@@ -146,7 +146,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
 
-        // Depends on SeasonService
+        // Depends on SeasonService, CacheService, CoordinatesService
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);

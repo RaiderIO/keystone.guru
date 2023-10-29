@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Floor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
-use App\Http\Requests\FloorFormRequest;
+use App\Http\Requests\Floor\FloorFormRequest;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
@@ -45,6 +45,7 @@ class FloorController extends Controller
         $floor->ui_map_id      = $request->get('ui_map_id');
         $floor->name           = $request->get('name');
         $floor->default        = $request->get('default', false);
+        $floor->facade         = $request->get('facade', false);
         $defaultMinEnemySize   = config('keystoneguru.min_enemy_size_default');
         $floor->min_enemy_size = $request->get('min_enemy_size', $defaultMinEnemySize);
         $floor->min_enemy_size = empty($floor->min_enemy_size) ? null : $floor->min_enemy_size;
@@ -120,6 +121,7 @@ class FloorController extends Controller
             ]);
         } else {
             Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
+
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
     }
@@ -145,6 +147,7 @@ class FloorController extends Controller
             ]);
         } else {
             Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));
+
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
     }

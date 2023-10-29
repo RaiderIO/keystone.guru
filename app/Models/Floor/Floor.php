@@ -33,6 +33,7 @@ use Illuminate\Support\Collection;
  * @property int|null                                $ui_map_id
  * @property string                                  $name
  * @property boolean                                 $default
+ * @property boolean                                 $facade
  * @property int                                     $min_enemy_size
  * @property int                                     $max_enemy_size
  * @property int                                     $enemy_engagement_max_range         When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
@@ -104,6 +105,7 @@ class Floor extends CacheModel implements MappingModelInterface
         'index',
         'name',
         'default',
+        'facade',
         'ui_map_id',
         'enemy_engagement_max_range',
         'enemy_engagement_max_range_patrols',

@@ -28,6 +28,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Models\Spell;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
@@ -59,13 +60,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /** @var SeasonService Used for grabbing info about the current M+ season. */
     private SeasonServiceInterface $seasonService;
 
+    private CacheServiceInterface $cacheService;
+
     private CoordinatesServiceInterface $coordinatesService;
 
     function __construct(
         SeasonServiceInterface      $seasonService,
+        CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService
     ) {
         $this->seasonService      = $seasonService;
+        $this->cacheService       = $cacheService;
         $this->coordinatesService = $coordinatesService;
     }
 

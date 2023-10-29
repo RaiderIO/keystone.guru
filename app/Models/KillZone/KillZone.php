@@ -175,7 +175,7 @@ class KillZone extends Model
             $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
                 ->join('kill_zone_enemies', function (JoinClause $clause) {
                     $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
-                           ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+                        ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
                 })
                 ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
                 ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
@@ -301,18 +301,18 @@ class KillZone extends Model
      *
      * @return array|null
      */
-    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?array
+    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?LatLng
     {
         $boundingBox = $this->getEnemiesBoundingBox($boundingBoxMargin);
         if ($boundingBox === null) {
             return null;
         }
 
-        return [
-            // Max lat is at the top
-            'lat' => $boundingBox['latMax'],
-            'lng' => $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
-        ];
+        return new LatLng(
+            $boundingBox['latMax'],
+            $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
+            $this->getDominantFloor(true)
+        );
     }
 
     /**

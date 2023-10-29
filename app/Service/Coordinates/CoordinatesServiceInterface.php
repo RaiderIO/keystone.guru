@@ -10,4 +10,6 @@ interface CoordinatesServiceInterface
     public function calculateIngameLocationForMapLocation(LatLng $latLng): IngameXY;
 
     public function calculateMapLocationForIngameLocation(IngameXY $ingameXY): LatLng;
+
+    public function convertFacadeMapLocationToMapLocation(LatLng $latLng): LatLng;
 }

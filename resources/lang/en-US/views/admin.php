@@ -119,6 +119,8 @@ return [
             'percentage_display_zoom'            => 'Map zoom level at which percentages are displayed (higher is more zoomed in)',
             'default'                            => 'Default',
             'default_title'                      => 'If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)',
+            'facade'                             => 'Facade',
+            'facade_title'                       => 'Facade floors do not actually have enemies on them, but using Floor Unions and Floor Union Areas you can make them render enemies of other floors instead.',
             'connected_floors'                   => 'Connected floors',
             'connected_floors_title'             => 'A connected floor is any other floor that we may reach from this floor',
             'connected'                          => 'Connected',

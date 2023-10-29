@@ -36,7 +36,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
 
     /**
      * @param MappingVersion $mappingVersion
-     * @param Collection $translations
+     * @param Collection     $translations
      * @return string
      */
     private function getHeader(MappingVersion $mappingVersion, Collection $translations): string
@@ -44,6 +44,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         $translations->push(__($mappingVersion->dungeon->name));
 
         $translationsLua = $this->getTranslations($translations);
+
         return sprintf('
 local MDT = MDT
 local L = MDT.L
@@ -75,6 +76,7 @@ MDT.mapInfo[dungeonIndex] = {
         foreach ($mappingVersion->dungeon->floors as $floor) {
             $dungeonMaps[] = sprintf('[%d] = "%s%d_",', ++$index, $mappingVersion->dungeon->key, $index);
         }
+
         return sprintf('
 MDT.dungeonMaps[dungeonIndex] = {
 %s
@@ -84,7 +86,7 @@ MDT.dungeonMaps[dungeonIndex] = {
 
     /**
      * @param MappingVersion $mappingVersion
-     * @param Collection $translations
+     * @param Collection     $translations
      * @return string
      */
     private function getDungeonSubLevels(MappingVersion $mappingVersion, Collection $translations): string
@@ -135,10 +137,10 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
                     'template'        => 'MapLinkPinTemplate',
                     'type'            => 'mapLink',
-                    'target'          => $dungeonFloorSwitchMarker->targetfloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetfloor->index,
+                    'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
                     'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
                     'connectionIndex' => $mapPOIIndex, // @TODO this is wrong?
-                ], Conversion::convertLatLngToMDTCoordinate(['lat' => $dungeonFloorSwitchMarker->lat, 'lng' => $dungeonFloorSwitchMarker->lng]));
+                ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
             }
 
             foreach ($floor->mapicons as $mapIcon) {
@@ -151,7 +153,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                     'template'             => 'DeathReleasePinTemplate',
                     'type'                 => 'graveyard',
                     'graveyardDescription' => $mapIcon->comment ?? '',
-                ], Conversion::convertLatLngToMDTCoordinate(['lat' => $mapIcon->lat, 'lng' => $mapIcon->lng]));
+                ], Conversion::convertLatLngToMDTCoordinate($mapIcon->getLatLng()));
             }
 
             if (!empty($mapPOIsOnFloor)) {
@@ -166,7 +168,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
      * Takes a mapping version and outputs an array in the way MDT would read it
      *
      * @param MappingVersion $mappingVersion
-     * @param Collection $translations
+     * @param Collection     $translations
      * @return string
      */
     private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations): string
@@ -255,7 +257,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
                 $dungeonEnemy['clones'][++$cloneIndex] = array_merge([
                     'sublevel' => $enemy->floor->mdt_sub_level ?? $enemy->floor->index,
-                ], Conversion::convertLatLngToMDTCoordinate(['lat' => $enemy->lat, 'lng' => $enemy->lng]));
+                ], Conversion::convertLatLngToMDTCoordinate($enemy->getLatLng()));
 
                 // Only add the group if the enemy had a group - group is optional
                 if (!is_null($group)) {
@@ -264,11 +266,12 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
                 // Add patrol if any
                 if ($enemy->enemy_patrol_id !== null && !$savedEnemyPatrols->has($enemy->enemy_patrol_id)) {
-                    $patrolVertices   = [];
-                    $polylineVertices = json_decode($enemy->enemyPatrol->polyline->vertices_json, true);
-                    $vertexIndex      = 0;
-                    foreach ($polylineVertices as $vertex) {
-                        $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($vertex);
+                    $patrolVertices = [];
+
+                    $polylineLatLngs = $enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor);
+                    $vertexIndex     = 0;
+                    foreach ($polylineLatLngs as $vertexLatLng) {
+                        $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($vertexLatLng);
                     }
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
 
