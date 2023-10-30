@@ -18,6 +18,7 @@ use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -125,13 +126,13 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
+     * @param MappingVersion   $mappingVersion
      * @param Floor|Collection $floors The floors that you want to get the clones for.
      * @return Collection|Enemy[]
-     * @throws InvalidArgumentException
      */
-    public function getClonesAsEnemies(Collection $floors): Collection
+    public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
-        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($floors) {
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($mappingVersion, $floors) {
             $enemies = new Collection();
 
             try {
@@ -145,6 +146,17 @@ class MDTDungeon
             // Ensure floors is a collection
             if (!($floors instanceof Collection)) {
                 $floors = [$floors];
+            }
+
+            // A bit of a hack, but it works. If we have a floor with a facade in it, we only parse THAT floor
+            // since that's the only floor that MDT will have. We will then put the enemies in the correct floors.
+            // Pinky promise.
+            $facadeFloors = $floors->filter(function (Floor $floor) {
+                return $floor->facade;
+            });
+
+            if ($facadeFloors->isNotEmpty()) {
+                $floors = $facadeFloors;
             }
 
             $floors->load(['dungeon']);
@@ -178,7 +190,7 @@ class MDTDungeon
 
                             // Place the enemy on the correct floor
                             $latLng = Conversion::convertMDTCoordinateToLatLng($clone, $floor);
-                            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($latLng);
+                            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng);
 
                             $clone = array_merge($clone, $latLng->toArray());
 

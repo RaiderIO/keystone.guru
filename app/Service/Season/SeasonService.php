@@ -25,13 +25,13 @@ class SeasonService implements SeasonServiceInterface
     use UserCurrentTime;
 
     /** @var Collection|Season[] */
-    private $seasonCache;
+    private Collection $seasonCache;
 
     /** @var ExpansionService */
-    private $expansionService;
+    private ExpansionService $expansionService;
 
     /** @var Season */
-    private $firstSeasonCache = null;
+    private ?Season $firstSeasonCache = null;
 
     public function __construct(
         ExpansionServiceInterface $expansionService
@@ -118,13 +118,13 @@ class SeasonService implements SeasonServiceInterface
             ->limit(1)
             ->first();
 
-        if ($season === null) {
+//        if ($season === null) {
 //            logger()->error('Season is null for date', [
 //                'date'      => $date,
 //                'expansion' => $expansion->shortname,
 //                'trace'     => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
 //            ]);
-        }
+//        }
 
         return $season;
     }

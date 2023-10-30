@@ -9,6 +9,7 @@ use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
+use App\Models\Mapping\MappingVersion;
 use App\Models\NpcClassification;
 use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
@@ -150,13 +151,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
      * @return array
      * @throws InvalidArgumentException
      */
-    private function extractPulls(Collection $warnings): array
+    private function extractPulls(MappingVersion $mappingVersion, Collection $warnings): array
     {
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
         $mdtEnemies = (new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon))
-            ->getClonesAsEnemies($this->dungeonRoute->dungeon->floors);
+            ->getClonesAsEnemies($mappingVersion, $this->dungeonRoute->dungeon->floors);
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
@@ -251,7 +252,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 'riftOffsets'       => [
 
                 ],
-                'pulls'             => $this->extractPulls($warnings),
+                'pulls'             => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
                 'currentSublevel'   => 1,
             ],
             'text'       => $this->dungeonRoute->title,

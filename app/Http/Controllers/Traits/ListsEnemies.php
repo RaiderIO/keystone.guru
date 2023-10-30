@@ -55,7 +55,7 @@ trait ListsEnemies
         if ($showMdtEnemies) {
             try {
                 $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
-                $mdtEnemies = (new MDTDungeon($dungeon))->getClonesAsEnemies($dungeon->floors()->with(['dungeon'])->get());
+                $mdtEnemies = (new MDTDungeon($dungeon))->getClonesAsEnemies($this->mappingVersion, $dungeon->floors()->with(['dungeon'])->get());
 
                 $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy) {
                     return !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]);

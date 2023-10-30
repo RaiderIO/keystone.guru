@@ -15,7 +15,7 @@ class ImportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importmapping {dungeon} {force=false}';
+    protected $signature = 'mdt:importmapping {dungeon} {--force=}';
 
     /**
      * The console command description.
@@ -43,22 +43,27 @@ class ImportMapping extends Command
     public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService)
     {
         $dungeonKey = $this->argument('dungeon');
-        $force      = $this->argument('force') === 'true';
+        $force      = (bool)$this->option('force');
 
         if (is_numeric($dungeonKey)) {
             // If it's an ID we should treat it as a season instead
             $season = Season::findOrFail($dungeonKey);
 
-            foreach ($season->dungeons()->with('npcs')->get() as $dungeon) {
+            // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
+            foreach ($season->dungeons as $dungeon) {
                 try {
+                    $dungeon->setRelation('npcs', $dungeon->npcs()->get());
                     $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
                 } catch (\Exception $exception) {
                     $this->error($exception->getMessage());
                 }
             }
         } else {
+            // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
             /** @var Dungeon $dungeon */
-            $dungeon = Dungeon::with('npcs')->where('key', $dungeonKey)->firstOrFail();
+            $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
+            $dungeon->setRelation('npcs', $dungeon->npcs()->get());
+
             $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
         }
     }

@@ -171,7 +171,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     'comment'            => __($obeliskMapIcon->mapicontype->name),
                     'obelisk_map_icon'   => $obeliskMapIcon,
                     // MDT has the x and y inverted here
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']]));
+                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])->toArray());
 
                 $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
 
@@ -233,7 +233,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $enemyForcesByNpcIds = NpcEnemyForces::where('mapping_version_id', $importStringPulls->getMappingVersion()->id)->get()->keyBy('npc_id');
 
         // Fetch all enemies of this dungeon
-        $mdtEnemies = (new MDTDungeon($importStringPulls->getDungeon()))->getClonesAsEnemies($floors);
+        $mdtEnemies = (new MDTDungeon($this->cacheService, $this->coordinatesService, $importStringPulls->getDungeon()))
+            ->getClonesAsEnemies($importStringPulls->getMappingVersion(), $floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 
@@ -673,7 +674,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $vertices  = [];
         $lineCount = count($line);
         for ($i = 0; $i < $lineCount; $i += 2) {
-            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])]);
+            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])])->toArray();
         }
 
         $lineOrPathAttribute = [

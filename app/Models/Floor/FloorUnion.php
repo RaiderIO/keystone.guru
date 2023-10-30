@@ -2,8 +2,8 @@
 
 namespace App\Models\Floor;
 
-use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
+use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
@@ -30,7 +30,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel implements MappingModelInterface
+class FloorUnion extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
     use HasLatLng;
 
@@ -100,5 +100,27 @@ class FloorUnion extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
+    }
+
+    /**
+     * @param MappingVersion             $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     *
+     * @return FloorUnion
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): FloorUnion
+    {
+        /** @var FloorUnion|MappingModelInterface $clonedFloorUnion */
+        $clonedFloorUnion                     = clone $this;
+        $clonedFloorUnion->exists             = false;
+        $clonedFloorUnion->id                 = null;
+        $clonedFloorUnion->mapping_version_id = $mappingVersion->id;
+        $clonedFloorUnion->save();
+
+        foreach($this->floorUnionAreas as $floorUnionArea){
+            $floorUnionArea->cloneForNewMappingVersion($mappingVersion, $clonedFloorUnion);
+        }
+
+        return $clonedFloorUnion;
     }
 }
