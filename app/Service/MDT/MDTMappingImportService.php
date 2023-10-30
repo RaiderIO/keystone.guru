@@ -17,6 +17,8 @@ use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcType;
 use App\Models\Polyline;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
@@ -25,15 +27,25 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
+    private CacheServiceInterface $cacheService;
+
+    private CoordinatesServiceInterface $coordinatesService;
 
     private MDTMappingImportServiceLoggingInterface $log;
 
     /**
+     * @param CacheServiceInterface                   $cacheService
+     * @param CoordinatesServiceInterface             $coordinatesService
      * @param MDTMappingImportServiceLoggingInterface $log
      */
-    public function __construct(MDTMappingImportServiceLoggingInterface $log)
-    {
-        $this->log = $log;
+    public function __construct(
+        CacheServiceInterface                   $cacheService,
+        CoordinatesServiceInterface             $coordinatesService,
+        MDTMappingImportServiceLoggingInterface $log
+    ) {
+        $this->cacheService       = $cacheService;
+        $this->coordinatesService = $coordinatesService;
+        $this->log                = $log;
     }
 
     /**
@@ -52,7 +64,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $this->getMDTMappingHash($dungeon));
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
 
-            $mdtDungeon = new MDTDungeon($dungeon);
+            $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
             try {
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
@@ -81,7 +93,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     public function getMDTMappingHash(Dungeon $dungeon): string
     {
-        $mdtDungeon = new MDTDungeon($dungeon);
+        $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
         return md5(
             json_encode([
@@ -93,8 +105,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * @param MDTDungeon $mdtDungeon
-     * @param Dungeon $dungeon
+     * @param MDTDungeon     $mdtDungeon
+     * @param Dungeon        $dungeon
      * @param MappingVersion $newMappingVersion
      * @return void
      * @throws Exception
@@ -124,8 +136,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     /**
      * @param MappingVersion $newMappingVersion
-     * @param MDTDungeon $mdtDungeon
-     * @param Dungeon $dungeon
+     * @param MDTDungeon     $mdtDungeon
+     * @param Dungeon        $dungeon
      * @return void
      * @throws Exception
      */
@@ -197,8 +209,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @param MappingVersion $currentMappingVersion
      * @param MappingVersion $newMappingVersion
-     * @param MDTDungeon $mdtDungeon
-     * @param Dungeon $dungeon
+     * @param MDTDungeon     $mdtDungeon
+     * @param Dungeon        $dungeon
      * @return Collection|Enemy
      * @throws InvalidArgumentException
      */
@@ -263,9 +275,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     /**
      * @param MappingVersion $newMappingVersion
-     * @param MDTDungeon $mdtDungeon
-     * @param Dungeon $dungeon
-     * @param Collection $savedEnemies
+     * @param MDTDungeon     $mdtDungeon
+     * @param Dungeon        $dungeon
+     * @param Collection     $savedEnemies
      * @return void
      * @throws InvalidArgumentException
      */
@@ -273,7 +285,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     {
         try {
             $this->log->importEnemyPacksStart();
-
 
             $savedEnemies = $savedEnemies->keyBy('id');
 
@@ -332,9 +343,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     /**
      * @param MappingVersion $newMappingVersion
-     * @param MDTDungeon $mdtDungeon
-     * @param Dungeon $dungeon
-     * @param Collection $savedEnemies
+     * @param MDTDungeon     $mdtDungeon
+     * @param Dungeon        $dungeon
+     * @param Collection     $savedEnemies
      * @return void
      * @throws Exception
      */
@@ -362,7 +373,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $vertices = [];
                     foreach ($mdtNpcClone['patrol'] as $xy) {
-                        $vertices[] = Conversion::convertMDTCoordinateToLatLng($xy);
+                        $vertices[] = Conversion::convertMDTCoordinateToLatLng($xy)->toArray();
                     }
 
                     // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
@@ -425,8 +436,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     /**
      * @param MappingVersion $newMappingVersion
-     * @param MDTDungeon $mdtDungeon
-     * @param Dungeon $dungeon
+     * @param MDTDungeon     $mdtDungeon
+     * @param Dungeon        $dungeon
      * @return void
      * @throws Exception
      */
@@ -445,7 +456,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     'mapping_version_id' => $newMappingVersion->id,
                     'floor_id'           => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel())->id,
                     'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtMapPOI->getX(), 'y' => $mdtMapPOI->getY()])));
+                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtMapPOI->getX(), 'y' => $mdtMapPOI->getY()])->toArray()));
                 if ($dungeonFloorSwitchMarker !== null) {
                     $this->log->importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(
                         $dungeonFloorSwitchMarker->id,
@@ -463,8 +474,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     /**
      * @param Collection $savedEnemies
-     * @param int $npcId
-     * @param int $mdtId
+     * @param int        $npcId
+     * @param int        $mdtId
      * @return Enemy
      */
     private function findSavedEnemyFromCloneEnemy(Collection $savedEnemies, int $npcId, int $mdtId): Enemy
@@ -476,12 +487,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     /**
      * @param Dungeon $dungeon
-     * @param int $mdtSubLevel
+     * @param int     $mdtSubLevel
      * @return Floor
      */
     public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
     {
         $activeFloors = $dungeon->floors()->active()->get();
+
         // First check for mdt_sub_level, if that isn't found just match on our own index
         return $activeFloors->first(function (Floor $floor) use ($mdtSubLevel) {
             return $floor->mdt_sub_level === $mdtSubLevel;
