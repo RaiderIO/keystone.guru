@@ -67,7 +67,9 @@ return [
     'mapicon_map_object_group_label'                  => 'Icons',
     'killzone_map_object_group_label'                 => 'Pulls',
     'killzonepath_map_object_group_label'             => 'Pull connections',
-    'mountablearea_map_object_group_label'            => 'Mountable area',
+    'floorunion_map_object_group_label'               => 'Floor unions',
+    'floorunionarea_map_object_group_label'           => 'Floor union areas',
+    'mountablearea_map_object_group_label'            => 'Mountable areas',
 
     'publish_state_title_unpublished'   => 'Unpublished',
     'publish_state_subtext_unpublished' => 'Only you may view this route',

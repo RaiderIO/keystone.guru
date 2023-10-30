@@ -116,6 +116,10 @@ class MappingService implements MappingServiceInterface
             foreach ($currentMappingVersion->mountableAreas as $mountableArea) {
                 $mountableArea->cloneForNewMappingVersion($newMappingVersion);
             }
+
+            foreach ($currentMappingVersion->floorUnions as $floorUnion) {
+                $floorUnion->cloneForNewMappingVersion($newMappingVersion);
+            }
         }
 
         return $newMappingVersion;

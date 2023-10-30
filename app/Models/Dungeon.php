@@ -341,8 +341,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ],
         Expansion::EXPANSION_WOD          => [
+            self::DUNGEON_AUCHINDOUN,
+            self::DUNGEON_BLOODMAUL_SLAG_MINES,
             self::DUNGEON_IRON_DOCKS,
             self::DUNGEON_GRIMRAIL_DEPOT,
+            self::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
+            self::DUNGEON_SKYREACH,
             self::DUNGEON_THE_EVERBLOOM,
         ],
         Expansion::EXPANSION_LEGION       => [

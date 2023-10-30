@@ -5,6 +5,7 @@ namespace App\Service\Coordinates;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use InvalidArgumentException;
 
 class CoordinatesService implements CoordinatesServiceInterface
@@ -19,7 +20,7 @@ class CoordinatesService implements CoordinatesServiceInterface
     /** @var int */
     const MAP_SIZE = 256;
 
-    /** @var int  */
+    /** @var int */
     const MAP_ASPECT_RATIO = 1.5;
 
     /**
@@ -91,23 +92,26 @@ class CoordinatesService implements CoordinatesServiceInterface
         // If it has unions, check if the lat/lng is inside the union floor area
         // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
         // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
-        foreach ($targetFloor->floorUnions as $floorUnion) {
+        foreach ($targetFloor->floorUnions()->with(['floor', 'targetFloor'])->get() as $floorUnion) {
+            /** @var FloorUnion $floorUnion */
             foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
                 if ($floorUnionArea->containsPoint($latLng)) {
                     // Ok this lat lng is inside a floor union area - this means we must use it's attached floor union's target floor
                     $result->setFloor($floorUnion->targetFloor);
 
                     // Move the enemy according to the floor union's latlng + size
-                    // 1. Calculate the %-age away that this latLng is from the location of the floor union
+                    // 1. Scale the point from the current floor map to the new floor map
                     $result->scale(
                         $floorUnion->getLatLng(),
-                        self::getMapCenterLatLng($floorUnion->targetFloor)
+                        $floorUnion->size,
+                        self::getMapCenterLatLng($floorUnion->targetFloor),
+                        self::MAP_SIZE
                     );
 
                     // 2. Rotate the point according to the floor union's rotation
                     $result->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
 
-                    // 3. Calculate new lat/lng by taking this %-age, and projecting it on the center of the map instead
+                    // The point is now on the new map plane
                 }
             }
         }

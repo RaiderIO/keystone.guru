@@ -151,6 +151,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 $npc = $npcs->get($mdtNpc->getId());
+
                 if ($newlyCreated = ($npc === null)) {
                     $npc = new Npc();
                 }
@@ -166,7 +167,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
                 try {
-                    if ($npc->save()) {
+                    if ($newlyCreated ? $npc->save() : $npc->update()) {
                         if ($newlyCreated) {
                             // For new NPCs go back and create enemy forces for all historical mapping versions
                             $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
@@ -288,6 +289,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             $savedEnemies = $savedEnemies->keyBy('id');
 
+            // Get a list of enemies from the new mapping version - these contain the correct Lat/Lngs
+            $newMappingVersionEnemies = $newMappingVersion
+                ->enemies()
+                ->whereIn('floor_id', $dungeon->floors()->active()->get()->pluck('id'))
+                ->get();
+
             // Conserve the enemy_pack_id
             $enemiesWithGroups = $mdtDungeon->getClonesAsEnemies($dungeon->floors()->active()->get());
             $enemyPacks        = $enemiesWithGroups->groupBy('enemy_pack_id');
@@ -302,6 +309,18 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     continue;
                 }
 
+                // We cannot use the enemies from MDT directly since they may contain an incorrect lat/lng
+                // We do not re-import the lat/lng from MDT - we allow ourselves to adjust the lat/lng, so we must
+                // fetch the adjusted lat/lng by matching enemies with what we actually saved
+                // 1. Get a list of unique keys which we must look for in the real enemy list
+                $enemiesWithGroupsByEnemyPackUniqueIds = $enemiesWithGroupsByEnemyPack->map(function (Enemy $enemy) {
+                    return $enemy->getUniqueKey();
+                });
+                // 2. Find the enemies that were saved in the database by key
+                $boundingBoxEnemies = $newMappingVersionEnemies->filter(function (Enemy $enemy) use ($enemiesWithGroupsByEnemyPackUniqueIds) {
+                    return $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false;
+                });
+
                 $enemyPack = EnemyPack::create([
                     'mapping_version_id' => $newMappingVersion->id,
                     'floor_id'           => $enemiesWithGroupsByEnemyPack->first()->floor_id,
@@ -309,7 +328,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     'teeming'            => null,
                     'faction'            => Faction::FACTION_ANY,
                     'label'              => sprintf('Imported from MDT - group %d', $groupIndex),
-                    'vertices_json'      => json_encode($this->getVerticesBoundingBoxFromEnemies($enemiesWithGroupsByEnemyPack)),
+                    // 3. Create a new bounding box according to the new enemies lat/lngs
+                    'vertices_json'      => json_encode($this->getVerticesBoundingBoxFromEnemies($boundingBoxEnemies)),
                 ]);
                 if ($enemyPack === null) {
                     throw new Exception('Unable to save enemy pack!');
