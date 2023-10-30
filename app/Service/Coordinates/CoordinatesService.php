@@ -6,6 +6,7 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
+use App\Models\Mapping\MappingVersion;
 use InvalidArgumentException;
 
 class CoordinatesService implements CoordinatesServiceInterface
@@ -75,10 +76,11 @@ class CoordinatesService implements CoordinatesServiceInterface
     }
 
     /**
-     * @param LatLng $latLng
+     * @param MappingVersion $mappingVersion
+     * @param LatLng         $latLng
      * @return LatLng
      */
-    public function convertFacadeMapLocationToMapLocation(LatLng $latLng): LatLng
+    public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng
     {
         $targetFloor = $latLng->getFloor();
 
@@ -92,7 +94,13 @@ class CoordinatesService implements CoordinatesServiceInterface
         // If it has unions, check if the lat/lng is inside the union floor area
         // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
         // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
-        foreach ($targetFloor->floorUnions()->with(['floor', 'targetFloor'])->get() as $floorUnion) {
+        $floorUnions = $mappingVersion
+            ->floorUnions()
+            ->where('floor_id', $targetFloor->id)
+            ->with(['floor', 'targetFloor'])
+            ->get();
+
+        foreach ($floorUnions as $floorUnion) {
             /** @var FloorUnion $floorUnion */
             foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
                 if ($floorUnionArea->containsPoint($latLng)) {

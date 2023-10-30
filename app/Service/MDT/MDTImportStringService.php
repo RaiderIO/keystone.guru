@@ -233,7 +233,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $enemyForcesByNpcIds = NpcEnemyForces::where('mapping_version_id', $importStringPulls->getMappingVersion()->id)->get()->keyBy('npc_id');
 
         // Fetch all enemies of this dungeon
-        $mdtEnemies = (new MDTDungeon($this->cacheService, $this->coordinatesService, $importStringPulls->getDungeon()))->getClonesAsEnemies($floors);
+        $mdtEnemies = (new MDTDungeon($this->cacheService, $this->coordinatesService, $importStringPulls->getDungeon()))
+            ->getClonesAsEnemies($importStringPulls->getMappingVersion(), $floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
 

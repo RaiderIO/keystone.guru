@@ -225,7 +225,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 return $enemy->getUniqueKey();
             });
 
-            $enemies = $mdtDungeon->getClonesAsEnemies($dungeon->floors()->active()->get());
+            $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
             foreach ($enemies as $enemy) {
                 $enemy->exists = false;
@@ -296,7 +296,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 ->get();
 
             // Conserve the enemy_pack_id
-            $enemiesWithGroups = $mdtDungeon->getClonesAsEnemies($dungeon->floors()->active()->get());
+            $enemiesWithGroups = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
             $enemyPacks        = $enemiesWithGroups->groupBy('enemy_pack_id');
 
             // Save enemy packs
