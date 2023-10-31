@@ -62,10 +62,9 @@ class NpcController extends Controller
             'npc_type_id'       => $validated['npc_type_id'],
             'npc_class_id'      => $validated['npc_class_id'],
             'name'              => $validated['name'],
-            'display_id'        => null,
             // Remove commas or dots in the name; we want the integer value
             'base_health'       => str_replace([',', '.'], '', $validated['base_health']),
-            'health_percentage' => $validated['health_percentage'] ?? 100,
+            'health_percentage' => $validated['health_percentage'],
             'aggressiveness'    => $validated['aggressiveness'],
             'dangerous'         => $validated['dangerous'] ?? 0,
             'truesight'         => $validated['truesight'] ?? 0,
@@ -76,6 +75,7 @@ class NpcController extends Controller
         ];
 
         if ($oldId === null) {
+            $attributes['display_id'] = null;
             $npc->setRawAttributes($attributes);
             $saveResult = $npc->save();
         } else {

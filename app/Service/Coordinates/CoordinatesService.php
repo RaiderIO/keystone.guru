@@ -107,17 +107,17 @@ class CoordinatesService implements CoordinatesServiceInterface
                     // Ok this lat lng is inside a floor union area - this means we must use it's attached floor union's target floor
                     $result->setFloor($floorUnion->targetFloor);
 
+                    // 1. Rotate the point according to the floor union's rotation
+                    $result->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
+
                     // Move the enemy according to the floor union's latlng + size
-                    // 1. Scale the point from the current floor map to the new floor map
+                    // 2. Scale the point from the current floor map to the new floor map
                     $result->scale(
                         $floorUnion->getLatLng(),
                         $floorUnion->size,
                         self::getMapCenterLatLng($floorUnion->targetFloor),
                         self::MAP_SIZE
                     );
-
-                    // 2. Rotate the point according to the floor union's rotation
-                    $result->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
 
                     // The point is now on the new map plane
                 }
