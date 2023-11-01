@@ -15,6 +15,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\NpcClassification;
 use App\Models\NpcType;
 use App\Models\Polyline;
 use App\Service\Cache\CacheServiceInterface;
@@ -42,7 +43,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         CacheServiceInterface                   $cacheService,
         CoordinatesServiceInterface             $coordinatesService,
         MDTMappingImportServiceLoggingInterface $log
-    ) {
+    )
+    {
         $this->cacheService       = $cacheService;
         $this->coordinatesService = $coordinatesService;
         $this->log                = $log;
@@ -71,7 +73,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
                 $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon);
-                $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
+                $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $forceImport);
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importDungeonFloorSwitchMarkers($newMappingVersion, $mdtDungeon, $dungeon);
@@ -160,6 +162,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // Allow manual override to -1
                 $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
                 $npc->display_id        = $mdtNpc->getDisplayId();
+                $npc->classification_id = $npc->classification_id ?? NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
                 $npc->name              = $mdtNpc->getName();
                 $npc->base_health       = $mdtNpc->getHealth();
                 $npc->health_percentage = $mdtNpc->getHealthPercentage();
@@ -215,7 +218,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @return Collection|Enemy
      * @throws InvalidArgumentException
      */
-    private function importEnemies(Mappingversion $currentMappingVersion, MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon): Collection
+    private function importEnemies(
+        Mappingversion $currentMappingVersion,
+        MappingVersion $newMappingVersion,
+        MDTDungeon     $mdtDungeon,
+        Dungeon        $dungeon,
+        bool           $forceImport = false): Collection
     {
         // Get a list of new enemies and save them
         try {
@@ -244,9 +252,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $currentEnemy = $currentEnemies->get($enemy->getUniqueKey());
                 if ($currentEnemy instanceof Enemy) {
+                    $fields = ['teeming', 'faction', 'required', 'skippable', 'kill_priority'];
                     // We ignore MDT's position - we want to keep agency in the location we place enemies still
                     // since we value VERY MUCH the enemy location being accurate to where they are in-game
-                    $fields        = ['lat', 'lng', 'teeming', 'faction', 'required', 'skippable', 'kill_priority'];
+                    if (!$forceImport) {
+                        $fields = array_merge($fields, ['lat', 'lng']);
+                    }
+
                     $updatedFields = [];
                     foreach ($fields as $field) {
                         $enemy->$field         = $currentEnemy->$field;
@@ -377,6 +389,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of new enemies and save them
             $mdtNPCs = $mdtDungeon->getMDTNPCs();
 
+            // Pretend the patrol is on the facade floor for correct translations, IF the facade floor is available
+            $facadeFloor = $dungeon->getFacadeFloor();
+
             foreach ($mdtNPCs as $mdtNPC) {
                 foreach ($mdtNPC->getRawMdtNpc()['clones'] as $mdtCloneIndex => $mdtNpcClone) {
                     if (!isset($mdtNpcClone['patrol'])) {
@@ -393,7 +408,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $vertices = [];
                     foreach ($mdtNpcClone['patrol'] as $xy) {
-                        $vertices[] = Conversion::convertMDTCoordinateToLatLng($xy)->toArray();
+                        $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
+                        $latLng     = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
+                        $vertices[] = $latLng->toArray();
                     }
 
                     // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
@@ -472,11 +489,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     continue;
                 }
 
+                $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+
+                $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $mdtMapPOI->getX(), 'y' => $mdtMapPOI->getY()], $floor);
+                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
+
                 $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
                     'mapping_version_id' => $newMappingVersion->id,
-                    'floor_id'           => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel())->id,
+                    'floor_id'           => $floor->id,
                     'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtMapPOI->getX(), 'y' => $mdtMapPOI->getY()])->toArray()));
+                ], $latLng->toArray()));
                 if ($dungeonFloorSwitchMarker !== null) {
                     $this->log->importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(
                         $dungeonFloorSwitchMarker->id,

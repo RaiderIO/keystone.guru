@@ -1,1 +1,1154 @@
-[]
+[
+    {
+        "id": 198998,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 112999,
+        "name": "Tyr, the Infinite Keeper",
+        "base_health": 7498538,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14728,
+                "mapping_version_id": 252,
+                "npc_id": 198998,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14729,
+                "mapping_version_id": 248,
+                "npc_id": 198998,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 198999,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 111457,
+        "name": "Morchie",
+        "base_health": 6215893,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14758,
+                "mapping_version_id": 252,
+                "npc_id": 198999,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14759,
+                "mapping_version_id": 248,
+                "npc_id": 198999,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 199000,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 106056,
+        "name": "Chrono-Lord Deios",
+        "base_health": 78931974,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14791,
+                "mapping_version_id": 252,
+                "npc_id": 199000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14792,
+                "mapping_version_id": 248,
+                "npc_id": 199000,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 199748,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 113587,
+        "name": "Timeline Marauder",
+        "base_health": 1185606,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14734,
+                "mapping_version_id": 252,
+                "npc_id": 199748,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14735,
+                "mapping_version_id": 248,
+                "npc_id": 199748,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 201222,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 111368,
+        "name": "Valow, Timesworn Keeper",
+        "base_health": 2371212,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14719,
+                "mapping_version_id": 252,
+                "npc_id": 201222,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14720,
+                "mapping_version_id": 248,
+                "npc_id": 201222,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 201223,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 110868,
+        "name": "Infinite Twilight Magus",
+        "base_health": 988005,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14716,
+                "mapping_version_id": 252,
+                "npc_id": 201223,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14717,
+                "mapping_version_id": 248,
+                "npc_id": 201223,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 203679,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 112018,
+        "name": "Anduin Lothar",
+        "base_health": 5919898,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14800,
+                "mapping_version_id": 252,
+                "npc_id": 203679,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14801,
+                "mapping_version_id": 248,
+                "npc_id": 203679,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 203763,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 86744,
+        "name": "Alliance Footman",
+        "base_health": 197601,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14779,
+                "mapping_version_id": 252,
+                "npc_id": 203763,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14780,
+                "mapping_version_id": 248,
+                "npc_id": 203763,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205151,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 113780,
+        "name": "Tyr's Vanguard",
+        "base_health": 988005,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14713,
+                "mapping_version_id": 252,
+                "npc_id": 205151,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14714,
+                "mapping_version_id": 248,
+                "npc_id": 205151,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205152,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 108311,
+        "name": "Lerai, Timesworn Maiden",
+        "base_health": 2371212,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14722,
+                "mapping_version_id": 252,
+                "npc_id": 205152,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14723,
+                "mapping_version_id": 248,
+                "npc_id": 205152,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205158,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 105939,
+        "name": "Spurlok, Timesworn Sentinel",
+        "base_health": 2371212,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14725,
+                "mapping_version_id": 252,
+                "npc_id": 205158,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14726,
+                "mapping_version_id": 248,
+                "npc_id": 205158,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205212,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 112687,
+        "name": "Infinite Keeper",
+        "base_health": 658670,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14794,
+                "mapping_version_id": 252,
+                "npc_id": 205212,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14795,
+                "mapping_version_id": 248,
+                "npc_id": 205212,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205265,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 112511,
+        "name": "Time-Displaced Trooper",
+        "base_health": 197601,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14797,
+                "mapping_version_id": 252,
+                "npc_id": 205265,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14798,
+                "mapping_version_id": 248,
+                "npc_id": 205265,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205337,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 110868,
+        "name": "Infinite Timebender",
+        "base_health": 1580808,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14746,
+                "mapping_version_id": 252,
+                "npc_id": 205337,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14747,
+                "mapping_version_id": 248,
+                "npc_id": 205337,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205363,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 983,
+        "name": "Time-Lost Waveshaper",
+        "base_health": 790404,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14752,
+                "mapping_version_id": 252,
+                "npc_id": 205363,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14753,
+                "mapping_version_id": 248,
+                "npc_id": 205363,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205365,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 31,
+        "name": "Time-Lost Tidehunter",
+        "base_health": 889205,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14755,
+                "mapping_version_id": 252,
+                "npc_id": 205365,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14756,
+                "mapping_version_id": 248,
+                "npc_id": 205365,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205366,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 1762,
+        "name": "Time-Lost Wakethrasher",
+        "base_health": 197601,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14749,
+                "mapping_version_id": 252,
+                "npc_id": 205366,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14750,
+                "mapping_version_id": 248,
+                "npc_id": 205366,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205723,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 90548,
+        "name": "Time-Lost Aerobot",
+        "base_health": 988005,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14767,
+                "mapping_version_id": 252,
+                "npc_id": 205723,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14768,
+                "mapping_version_id": 248,
+                "npc_id": 205723,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205727,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 91402,
+        "name": "Time-Lost Rocketeer",
+        "base_health": 988005,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14764,
+                "mapping_version_id": 252,
+                "npc_id": 205727,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14765,
+                "mapping_version_id": 248,
+                "npc_id": 205727,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 205790,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 91293,
+        "name": "Time-Lost Smack-o-Tron",
+        "base_health": 197601,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14761,
+                "mapping_version_id": 252,
+                "npc_id": 205790,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14762,
+                "mapping_version_id": 248,
+                "npc_id": 205790,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 206070,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 90738,
+        "name": "Chronaxie",
+        "base_health": 1264646,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14803,
+                "mapping_version_id": 252,
+                "npc_id": 206070,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14804,
+                "mapping_version_id": 248,
+                "npc_id": 206070,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 206074,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 74319,
+        "name": "Pendule",
+        "base_health": 632323,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14785,
+                "mapping_version_id": 252,
+                "npc_id": 206074,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14786,
+                "mapping_version_id": 248,
+                "npc_id": 206074,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 206230,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 113583,
+        "name": "Infinite Diversionist",
+        "base_health": 2173611,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14737,
+                "mapping_version_id": 252,
+                "npc_id": 206230,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14738,
+                "mapping_version_id": 248,
+                "npc_id": 206230,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 206351,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 112993,
+        "name": "Alliance Conjuror",
+        "base_health": 148201,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14770,
+                "mapping_version_id": 252,
+                "npc_id": 206351,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14771,
+                "mapping_version_id": 248,
+                "npc_id": 206351,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 206352,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 88837,
+        "name": "Alliance Archer",
+        "base_health": 247001,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14776,
+                "mapping_version_id": 252,
+                "npc_id": 206352,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14777,
+                "mapping_version_id": 248,
+                "npc_id": 206352,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 207177,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 113584,
+        "name": "Infinite Watchkeeper",
+        "base_health": 2964015,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14731,
+                "mapping_version_id": 252,
+                "npc_id": 207177,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14732,
+                "mapping_version_id": 248,
+                "npc_id": 207177,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 208165,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 113860,
+        "name": "Alliance Knight",
+        "base_health": 988005,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14806,
+                "mapping_version_id": 252,
+                "npc_id": 208165,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14807,
+                "mapping_version_id": 248,
+                "npc_id": 208165,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 208193,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 113859,
+        "name": "Paladin of the Silver Hand",
+        "base_health": 1580808,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14782,
+                "mapping_version_id": 252,
+                "npc_id": 208193,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14783,
+                "mapping_version_id": 248,
+                "npc_id": 208193,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 208208,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 113517,
+        "name": "Alliance Destroyer",
+        "base_health": 2964015,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14773,
+                "mapping_version_id": 252,
+                "npc_id": 208208,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14774,
+                "mapping_version_id": 248,
+                "npc_id": 208208,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 208438,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 113585,
+        "name": "Infinite Saboteur",
+        "base_health": 2964015,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14740,
+                "mapping_version_id": 252,
+                "npc_id": 208438,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14741,
+                "mapping_version_id": 248,
+                "npc_id": 208438,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 208440,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 113771,
+        "name": "Infinite Slayer",
+        "base_health": 2964015,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14788,
+                "mapping_version_id": 252,
+                "npc_id": 208440,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14789,
+                "mapping_version_id": 248,
+                "npc_id": 208440,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 208698,
+        "dungeon_id": 106,
+        "classification_id": 0,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 110868,
+        "name": "Infinite Riftmage",
+        "base_health": 1284407,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14743,
+                "mapping_version_id": 252,
+                "npc_id": 208698,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14744,
+                "mapping_version_id": 248,
+                "npc_id": 208698,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]
