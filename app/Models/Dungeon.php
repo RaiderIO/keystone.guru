@@ -665,6 +665,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * @return Floor|null
+     */
+    public function getFacadeFloor(): ?Floor
+    {
+        return $this->floors->filter(function (Floor $floor) {
+            return $floor->facade;
+        })->first();
+    }
+
+    /**
      * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
      *
      * @param SeasonServiceInterface $seasonService

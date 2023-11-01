@@ -205,8 +205,6 @@ class MDTDungeon
 
             // We now know a list of clones that we want to display, convert those clones to TEMP enemies
 
-            /** @var Collection|Npc[] $npcs */
-            $npcs = Npc::whereIn('dungeon_id', [$floors->first()->dungeon->id, -1])->get();
             foreach ($npcClones as $npcId => $floorIndexes) {
                 foreach ($floorIndexes as $floorId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
@@ -232,7 +230,7 @@ class MDTDungeon
                         $enemy->is_mdt        = true;
                         $enemy->enemy_id      = -1;
 
-                        $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+                        $enemy->npc = $this->dungeon->npcs->firstWhere('id', $enemy->npc_id);
 
                         if ($enemy->npc === null) {
                             $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);

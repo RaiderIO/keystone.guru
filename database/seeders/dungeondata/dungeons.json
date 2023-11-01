@@ -10292,7 +10292,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 2190,
                 "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.sanctum_of_chronology",
-                "default": 0,
+                "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -10303,16 +10303,16 @@
                 "ingame_max_x": -1400,
                 "ingame_max_y": -2838.75,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 793,
+                        "id": 810,
                         "floor1_id": 258,
                         "floor2_id": 259,
                         "direction": "right"
                     },
                     {
-                        "id": 794,
+                        "id": 811,
                         "floor1_id": 258,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10338,22 +10338,22 @@
                 "ingame_max_x": -1550.67,
                 "ingame_max_y": -3014.625,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 795,
+                        "id": 812,
                         "floor1_id": 259,
                         "floor2_id": 258,
                         "direction": "left"
                     },
                     {
-                        "id": 796,
+                        "id": 813,
                         "floor1_id": 259,
                         "floor2_id": 260,
                         "direction": "right"
                     },
                     {
-                        "id": 797,
+                        "id": 814,
                         "floor1_id": 259,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10379,22 +10379,22 @@
                 "ingame_max_x": -1782.5,
                 "ingame_max_y": -4085,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 798,
+                        "id": 815,
                         "floor1_id": 260,
                         "floor2_id": 259,
                         "direction": "left"
                     },
                     {
-                        "id": 799,
+                        "id": 816,
                         "floor1_id": 260,
                         "floor2_id": 261,
                         "direction": "right"
                     },
                     {
-                        "id": 800,
+                        "id": 817,
                         "floor1_id": 260,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10420,16 +10420,16 @@
                 "ingame_max_x": -2114.58,
                 "ingame_max_y": -4714.58,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 801,
+                        "id": 818,
                         "floor1_id": 261,
                         "floor2_id": 260,
                         "direction": "left"
                     },
                     {
-                        "id": 802,
+                        "id": 819,
                         "floor1_id": 261,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10455,16 +10455,16 @@
                 "ingame_max_x": -1080,
                 "ingame_max_y": -2595,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 803,
+                        "id": 820,
                         "floor1_id": 262,
                         "floor2_id": 263,
                         "direction": "right"
                     },
                     {
-                        "id": 804,
+                        "id": 821,
                         "floor1_id": 262,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10490,22 +10490,22 @@
                 "ingame_max_x": -2322.08,
                 "ingame_max_y": -3474.99,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 805,
+                        "id": 822,
                         "floor1_id": 263,
                         "floor2_id": 262,
                         "direction": "right"
                     },
                     {
-                        "id": 806,
+                        "id": 823,
                         "floor1_id": 263,
                         "floor2_id": 264,
                         "direction": "left"
                     },
                     {
-                        "id": 807,
+                        "id": 824,
                         "floor1_id": 263,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10531,16 +10531,16 @@
                 "ingame_max_x": -951.25,
                 "ingame_max_y": -3857.18,
                 "percentage_display_zoom": null,
-                "active": 0,
+                "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 808,
+                        "id": 825,
                         "floor1_id": 264,
                         "floor2_id": 263,
                         "direction": "down"
                     },
                     {
-                        "id": 809,
+                        "id": 826,
                         "floor1_id": 264,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10552,11 +10552,11 @@
             {
                 "id": 266,
                 "index": 8,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "ui_map_id": 0,
                 "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.murozonds_rise",
-                "default": 1,
-                "facade": 0,
+                "default": 0,
+                "facade": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 150,
@@ -10569,43 +10569,43 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 786,
+                        "id": 834,
                         "floor1_id": 266,
                         "floor2_id": 258,
                         "direction": "up"
                     },
                     {
-                        "id": 787,
+                        "id": 835,
                         "floor1_id": 266,
                         "floor2_id": 259,
                         "direction": "up"
                     },
                     {
-                        "id": 788,
+                        "id": 836,
                         "floor1_id": 266,
                         "floor2_id": 260,
                         "direction": "up"
                     },
                     {
-                        "id": 789,
+                        "id": 837,
                         "floor1_id": 266,
                         "floor2_id": 261,
                         "direction": "up"
                     },
                     {
-                        "id": 790,
+                        "id": 838,
                         "floor1_id": 266,
                         "floor2_id": 262,
                         "direction": "up"
                     },
                     {
-                        "id": 791,
+                        "id": 839,
                         "floor1_id": 266,
                         "floor2_id": 263,
                         "direction": "up"
                     },
                     {
-                        "id": 792,
+                        "id": 840,
                         "floor1_id": 266,
                         "floor2_id": 264,
                         "direction": "up"

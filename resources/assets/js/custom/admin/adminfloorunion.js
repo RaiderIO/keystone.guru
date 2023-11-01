@@ -70,6 +70,10 @@ class FloorUnion extends Icon {
     }
 
     _getDecorator() {
+        if (typeof this.lat === 'undefined' || typeof this.lng === 'undefined') {
+            return null;
+        }
+
         let aspectRatio = 1.5;
 
         let radius = this.size / 2;
