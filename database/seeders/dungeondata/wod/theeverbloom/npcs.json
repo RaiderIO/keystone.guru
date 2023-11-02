@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 56613,
         "name": "Witherbark",
-        "base_health": 278265,
+        "base_health": 14784946,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -18,7 +18,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14899,
+                "mapping_version_id": 258,
+                "npc_id": 81522,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 81638,
@@ -70,7 +78,7 @@
         "npc_class_id": 1,
         "display_id": 57021,
         "name": "Everbloom Naturalist",
-        "base_health": 9296,
+        "base_health": 888633,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -81,7 +89,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14894,
+                "mapping_version_id": 258,
+                "npc_id": 81819,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 81820,
@@ -91,7 +107,7 @@
         "npc_class_id": 1,
         "display_id": 57964,
         "name": "Everbloom Mender",
-        "base_health": 9458,
+        "base_health": 888633,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -102,7 +118,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14897,
+                "mapping_version_id": 258,
+                "npc_id": 81820,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 81864,
@@ -112,7 +136,7 @@
         "npc_class_id": 1,
         "display_id": 25328,
         "name": "Dreadpetal",
-        "base_health": 4540,
+        "base_health": 394948,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -123,7 +147,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14895,
+                "mapping_version_id": 258,
+                "npc_id": 81864,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 81983,
@@ -154,7 +186,7 @@
         "npc_class_id": 1,
         "display_id": 58575,
         "name": "Gnarlroot",
-        "base_health": 57932,
+        "base_health": 2764635,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -165,7 +197,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14898,
+                "mapping_version_id": 258,
+                "npc_id": 81984,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 81985,
@@ -174,8 +214,8 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 58429,
-        "name": "Everbloom Tender",
-        "base_health": 6162,
+        "name": "Everbloom Cultivator",
+        "base_health": 789896,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -186,7 +226,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14893,
+                "mapping_version_id": 258,
+                "npc_id": 81985,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 82039,
@@ -196,7 +244,7 @@
         "npc_class_id": 1,
         "display_id": 56044,
         "name": "Rockspine Stinger",
-        "base_health": 14085,
+        "base_health": 592422,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -207,7 +255,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14896,
+                "mapping_version_id": 258,
+                "npc_id": 82039,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 82682,
@@ -217,7 +273,7 @@
         "npc_class_id": 1,
         "display_id": 57193,
         "name": "Archmage Sol",
-        "base_health": 149835,
+        "base_health": 6899642,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -228,7 +284,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14911,
+                "mapping_version_id": 258,
+                "npc_id": 82682,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 83846,
@@ -238,7 +302,7 @@
         "npc_class_id": 1,
         "display_id": 57231,
         "name": "Yalnu",
-        "base_health": 299670,
+        "base_health": 31541219,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -249,7 +313,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14912,
+                "mapping_version_id": 258,
+                "npc_id": 83846,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 83892,
@@ -259,7 +331,7 @@
         "npc_class_id": 1,
         "display_id": 57022,
         "name": "Life Warden Gola",
-        "base_health": 68496,
+        "base_health": 3154122,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -270,7 +342,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14904,
+                "mapping_version_id": 258,
+                "npc_id": 83892,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 83893,
@@ -280,7 +360,7 @@
         "npc_class_id": 1,
         "display_id": 58016,
         "name": "Earthshaper Telu",
-        "base_health": 68496,
+        "base_health": 3154122,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -291,7 +371,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14902,
+                "mapping_version_id": 258,
+                "npc_id": 83893,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 83894,
@@ -301,7 +389,7 @@
         "npc_class_id": 1,
         "display_id": 59767,
         "name": "Dulhu",
-        "base_health": 102744,
+        "base_health": 4731183,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -312,7 +400,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14903,
+                "mapping_version_id": 258,
+                "npc_id": 83894,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 84329,
@@ -427,7 +523,7 @@
         "npc_class_id": 1,
         "display_id": 60380,
         "name": "Vicious Mandragora",
-        "base_health": 384927,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -438,7 +534,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14914,
+                "mapping_version_id": 258,
+                "npc_id": 84399,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 84400,
@@ -448,7 +552,7 @@
         "npc_class_id": 1,
         "display_id": 54675,
         "name": "Gnarled Ancient",
-        "base_health": 744180,
+        "base_health": 658246,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -459,7 +563,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14913,
+                "mapping_version_id": 258,
+                "npc_id": 84400,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 84401,
@@ -574,28 +686,7 @@
         "npc_class_id": 1,
         "display_id": 59768,
         "name": "Twisted Abomination",
-        "base_health": 29000,
-        "health_percentage": 100,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": []
-    },
-    {
-        "id": 84957,
-        "dungeon_id": 102,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 58590,
-        "name": "Putrid Pyromancer",
-        "base_health": 20690,
+        "base_health": 1382317,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -606,7 +697,44 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14901,
+                "mapping_version_id": 258,
+                "npc_id": 84767,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 84957,
+        "dungeon_id": 102,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 58590,
+        "name": "Putrid Pyromancer",
+        "base_health": 1579791,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14909,
+                "mapping_version_id": 258,
+                "npc_id": 84957,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 84983,
@@ -679,7 +807,7 @@
         "npc_class_id": 1,
         "display_id": 58602,
         "name": "Infested Icecaller",
-        "base_health": 10809,
+        "base_health": 1579791,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -690,7 +818,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14908,
+                "mapping_version_id": 258,
+                "npc_id": 84989,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 84990,
@@ -700,7 +836,7 @@
         "npc_class_id": 1,
         "display_id": 58603,
         "name": "Addled Arcanomancer",
-        "base_health": 10809,
+        "base_health": 1579791,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -711,7 +847,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14910,
+                "mapping_version_id": 258,
+                "npc_id": 84990,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 85194,
@@ -784,7 +928,7 @@
         "npc_class_id": 1,
         "display_id": 59535,
         "name": "Melded Berserker",
-        "base_health": 10809,
+        "base_health": 987370,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -795,7 +939,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 14900,
+                "mapping_version_id": 258,
+                "npc_id": 86372,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 86547,
@@ -859,5 +1011,48 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": []
+    },
+    {
+        "id": 212981,
+        "dungeon_id": 102,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 109997,
+        "name": "Hapless Assistant",
+        "base_health": 592422,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 14905,
+                "mapping_version_id": 258,
+                "npc_id": 212981,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14906,
+                "mapping_version_id": 257,
+                "npc_id": 212981,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 14907,
+                "mapping_version_id": 231,
+                "npc_id": 212981,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]
