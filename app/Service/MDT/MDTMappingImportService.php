@@ -43,8 +43,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         CacheServiceInterface                   $cacheService,
         CoordinatesServiceInterface             $coordinatesService,
         MDTMappingImportServiceLoggingInterface $log
-    )
-    {
+    ) {
         $this->cacheService       = $cacheService;
         $this->coordinatesService = $coordinatesService;
         $this->log                = $log;
@@ -76,7 +75,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $forceImport);
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
-                $this->importDungeonFloorSwitchMarkers($newMappingVersion, $mdtDungeon, $dungeon);
+                $this->importDungeonFloorSwitchMarkers($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
             } finally {
                 $this->log->importMappingVersionFromMDTEnd();
             }
@@ -472,13 +471,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
+     * @param MappingVersion $currentMappingVersion
      * @param MappingVersion $newMappingVersion
      * @param MDTDungeon     $mdtDungeon
      * @param Dungeon        $dungeon
      * @return void
      * @throws Exception
      */
-    private function importDungeonFloorSwitchMarkers(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon)
+    private function importDungeonFloorSwitchMarkers(MappingVersion $currentMappingVersion, MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon)
     {
         try {
             $this->log->importDungeonFloorSwitchMarkersStart();
@@ -507,6 +507,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     );
                 } else {
                     throw new Exception(sprintf('Unable to save dungeon floor switch marker!'));
+                }
+            }
+
+            // If MDT didn't contain any MapPOIs try to recover them from the previous mapping version
+            if ($mdtMapPOIs->isEmpty()) {
+                foreach ($currentMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                    $dungeonFloorSwitchMarker->cloneForNewMappingVersion($newMappingVersion);
                 }
             }
         } finally {
