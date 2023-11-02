@@ -5,7 +5,7 @@ $floorCouplings = $floorCouplings ?? collect();
 
 $connectedFloorCandidates = $dungeon->floors;
 if (isset($floor)) {
-    $connectedFloorCandidates = $connectedFloorCandidates->except(optional($floor)->id);
+    $connectedFloorCandidates = $connectedFloorCandidates;
 }
 ?>
 @if($connectedFloorCandidates->isNotEmpty())
@@ -33,11 +33,14 @@ if (isset($floor)) {
             if ($floorCouplings->isNotEmpty()) {
                 $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
             }
+
+            $disabled = $connectedFloorCandidate->id === optional($floor)->id ? ['disabled' => 'disabled'] : [];
             ?>
         <div class="row mb-3">
             <div class="col-2">
                 {!! Form::checkbox(sprintf('floor_%s_connected', $connectedFloorCandidate->id),
-                    $connectedFloorCandidate->id, isset($floorCoupling) ? 1 : 0, ['class' => 'form-control left_checkbox']) !!}
+                    $connectedFloorCandidate->id, isset($floorCoupling) ? 1 : 0,
+                    array_merge(['class' => 'form-control left_checkbox'], $disabled)) !!}
             </div>
             <div class="col-8">
                 <a href="{{ route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $connectedFloorCandidate]) }}">{{ __($connectedFloorCandidate->name) }}</a>
@@ -49,7 +52,7 @@ if (isset($floor)) {
                             \App\Models\Floor\FloorCoupling::DIRECTION_DOWN => __('views/admin.floor.edit.floor_direction.down'),
                             \App\Models\Floor\FloorCoupling::DIRECTION_LEFT => __('views/admin.floor.edit.floor_direction.left'),
                             \App\Models\Floor\FloorCoupling::DIRECTION_RIGHT => __('views/admin.floor.edit.floor_direction.right')
-                        ], isset($floorCoupling) ? $floorCoupling->direction : '', ['class' => 'form-control selectpicker']) !!}
+                        ], isset($floorCoupling) ? $floorCoupling->direction : '', array_merge(['class' => 'form-control selectpicker'], $disabled)) !!}
             </div>
         </div>
         <?php } ?>
