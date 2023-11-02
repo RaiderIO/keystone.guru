@@ -385,8 +385,9 @@ return [
         'throne_of_the_tides' => [
             'name'   => 'Throne of the Tides',
             'floors' => [
-                'abyssal_halls'      => 'Abyssal Halls',
-                'throne_of_neptulon' => 'Throne of Neptulon',
+                'abyssal_halls'       => 'Abyssal Halls',
+                'throne_of_neptulon'  => 'Throne of Neptulon',
+                'throne_of_the_tides' => 'Throne of the Tides',
             ],
         ],
     ],
