@@ -10261,16 +10261,16 @@
                 "ingame_max_x": -2075,
                 "ingame_max_y": -4888.75,
                 "percentage_display_zoom": null,
-                "active": 1,
+                "active": 0,
                 "floorcouplings": [
                     {
-                        "id": 848,
+                        "id": 866,
                         "floor1_id": 256,
                         "floor2_id": 255,
                         "direction": "left"
                     },
                     {
-                        "id": 849,
+                        "id": 867,
                         "floor1_id": 256,
                         "floor2_id": 257,
                         "direction": "right"
@@ -10388,7 +10388,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 2190,
                 "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.sanctum_of_chronology",
-                "default": 1,
+                "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -10399,16 +10399,16 @@
                 "ingame_max_x": -1400,
                 "ingame_max_y": -2838.75,
                 "percentage_display_zoom": null,
-                "active": 1,
+                "active": 0,
                 "floorcouplings": [
                     {
-                        "id": 810,
+                        "id": 871,
                         "floor1_id": 258,
                         "floor2_id": 259,
                         "direction": "right"
                     },
                     {
-                        "id": 811,
+                        "id": 872,
                         "floor1_id": 258,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10423,7 +10423,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 2191,
                 "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.millennias_threshold",
-                "default": 0,
+                "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -10437,19 +10437,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 812,
+                        "id": 873,
                         "floor1_id": 259,
                         "floor2_id": 258,
                         "direction": "left"
                     },
                     {
-                        "id": 813,
+                        "id": 874,
                         "floor1_id": 259,
                         "floor2_id": 260,
                         "direction": "right"
                     },
                     {
-                        "id": 814,
+                        "id": 875,
                         "floor1_id": 259,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10554,13 +10554,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 820,
+                        "id": 868,
+                        "floor1_id": 262,
+                        "floor2_id": 259,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 869,
                         "floor1_id": 262,
                         "floor2_id": 263,
                         "direction": "right"
                     },
                     {
-                        "id": 821,
+                        "id": 870,
                         "floor1_id": 262,
                         "floor2_id": 266,
                         "direction": "down"
