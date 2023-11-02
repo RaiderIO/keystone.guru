@@ -1,6 +1,9 @@
 <?php
 /** @var boolean $isMobile */
 /** @var string $id */
+/** @var string $type */
+/** @var bool $map */
+
 $id   = 'nitropay-' . $id;
 $type = $type ?? 'responsive';
 $map  = $map ?? false;
@@ -105,7 +108,7 @@ if ($isMobile) {
                 }
             });
         </script>
-    @elseif( $type === 'header' )
+    @elseif( $type === 'header' || $type === 'header_middle' )
         <!-- Top header ad unit -->
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
@@ -124,7 +127,8 @@ if ($isMobile) {
                         "enabled": true,
                         "wording": "Report Ad",
                         "position": "{{ $reportAdPosition }}"
-                    }
+                    },
+                    "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
                 });
                 nitropayIsAnchor['{{ $id }}'] = true;
             </script>
@@ -146,7 +150,8 @@ if ($isMobile) {
                         "enabled": true,
                         "wording": "Report Ad",
                         "position": "{{ $id }}"
-                    }
+                    },
+                    "mediaQuery": "(min-width: 1025px), (min-width: 768px) and (max-width: 1024px)"
                 });
             </script>
         @endif
