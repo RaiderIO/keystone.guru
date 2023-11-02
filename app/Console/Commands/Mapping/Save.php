@@ -4,6 +4,7 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingCommitLog;
@@ -12,9 +13,9 @@ use App\Models\Npc;
 use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class Save extends Command
 {
@@ -330,13 +331,22 @@ class Save extends Command
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies                   = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
-        $enemyPacks                = $floor->enemyPacksForExport->values();
-        $enemyPatrols              = $floor->enemyPatrolsForExport->values();
+        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemyPacks   = $floor->enemyPacksForExport->values();
+        $enemyPatrols = $floor->enemyPatrolsForExport->values();
+        /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
-        $dungeonFloorSwitchMarkers->makeHidden(['floorCouplingDirection']);
+        $dungeonFloorSwitchMarkers
+            ->makeHidden(['floorCouplingDirection'])
+            ->map(function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
+                $dungeonFloorSwitchMarker->direction = $dungeonFloorSwitchMarker->direction === '' ?
+                    null : $dungeonFloorSwitchMarker->direction;
 
+                return $dungeonFloorSwitchMarker;
+            });
+
+        /** @var \Illuminate\Database\Eloquent\Collection $mapIcons */
         $mapIcons        = $floor->mapIconsForExport->values();
         $mountableAreas  = $floor->mountableAreasForExport->values();
         $floorUnions     = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values();
