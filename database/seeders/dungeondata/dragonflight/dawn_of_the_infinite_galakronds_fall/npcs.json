@@ -144,42 +144,6 @@
         ]
     },
     {
-        "id": 199749,
-        "dungeon_id": 105,
-        "classification_id": 2,
-        "npc_type_id": 1,
-        "npc_class_id": 1,
-        "display_id": 93213,
-        "name": "Timestream Anomaly",
-        "base_health": 1264646,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 14716,
-                "mapping_version_id": 252,
-                "npc_id": 199749,
-                "enemy_forces": 12,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 14677,
-                "mapping_version_id": 249,
-                "npc_id": 199749,
-                "enemy_forces": 12,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 201788,
         "dungeon_id": 105,
         "classification_id": 3,
@@ -576,42 +540,6 @@
         ]
     },
     {
-        "id": 206063,
-        "dungeon_id": 105,
-        "classification_id": 1,
-        "npc_type_id": 1,
-        "npc_class_id": 1,
-        "display_id": 88582,
-        "name": "Temporal Deviation",
-        "base_health": 217361,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 14718,
-                "mapping_version_id": 252,
-                "npc_id": 206063,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 14681,
-                "mapping_version_id": 249,
-                "npc_id": 206063,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 206064,
         "dungeon_id": 105,
         "classification_id": 2,
@@ -679,42 +607,6 @@
                 "mapping_version_id": 249,
                 "npc_id": 206066,
                 "enemy_forces": 3,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 206068,
-        "dungeon_id": 105,
-        "classification_id": 2,
-        "npc_type_id": 6,
-        "npc_class_id": 1,
-        "display_id": 41677,
-        "name": "Temporal Fusion",
-        "base_health": 622443,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 14717,
-                "mapping_version_id": 252,
-                "npc_id": 206068,
-                "enemy_forces": 2,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 14679,
-                "mapping_version_id": 249,
-                "npc_id": 206068,
-                "enemy_forces": 2,
                 "enemy_forces_teeming": null
             }
         ]
