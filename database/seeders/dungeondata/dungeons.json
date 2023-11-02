@@ -10157,7 +10157,14 @@
                 "ingame_max_y": -2838.75,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 841,
+                        "floor1_id": 253,
+                        "floor2_id": 254,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -10179,7 +10186,14 @@
                 "ingame_max_y": -3014.625,
                 "percentage_display_zoom": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 842,
+                        "floor1_id": 254,
+                        "floor2_id": 253,
+                        "direction": "left"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
