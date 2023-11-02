@@ -10337,31 +10337,31 @@
                         "id": 852,
                         "floor1_id": 265,
                         "floor2_id": 253,
-                        "direction": ""
+                        "direction": "down"
                     },
                     {
                         "id": 853,
                         "floor1_id": 265,
                         "floor2_id": 254,
-                        "direction": ""
+                        "direction": "down"
                     },
                     {
                         "id": 854,
                         "floor1_id": 265,
                         "floor2_id": 255,
-                        "direction": ""
+                        "direction": "down"
                     },
                     {
                         "id": 855,
                         "floor1_id": 265,
                         "floor2_id": 256,
-                        "direction": ""
+                        "direction": "down"
                     },
                     {
                         "id": 856,
                         "floor1_id": 265,
                         "floor2_id": 257,
-                        "direction": ""
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
