@@ -37,6 +37,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemiesStart(): void;
 
+    public function importEnemiesSkipTeemingEnemy(string $uniqueKey): void;
+
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void;
 
     public function importEnemiesCannotRecoverPropertiesFromExistingEnemy(string $uniqueKey): void;

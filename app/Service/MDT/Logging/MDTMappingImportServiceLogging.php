@@ -145,6 +145,15 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
 
     /**
      * @param string $uniqueKey
+     * @return void
+     */
+    public function importEnemiesSkipTeemingEnemy(string $uniqueKey): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param string $uniqueKey
      * @param array $updatedFields
      * @return void
      */
