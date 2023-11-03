@@ -81,18 +81,21 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         let dungeonStartLineDrawn = false;
 
         // Only on the default floor!
-        if (currentFloor.default === 1) {
-            for (let key in mapIconMapObjectGroup.objects) {
-                let mapIcon = mapIconMapObjectGroup.objects[key];
+        // if (currentFloor.default === 1) {
+        let usesMapFacade = getState().getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE;
+        for (let key in mapIconMapObjectGroup.objects) {
+            let mapIcon = mapIconMapObjectGroup.objects[key];
 
-                // 10 = dungeon start
-                if (mapIcon.floor_id === currentFloorId && mapIcon.map_icon_type_id === MAP_ICON_TYPE_DUNGEON_START_ID) {
-                    dungeonStartOffset++;
-                    dungeonStartLatLng = mapIcon.layer.getLatLng();
-                    break;
-                }
+            if (((usesMapFacade && currentFloor.facade) || (!usesMapFacade && !currentFloor.facade)) &&
+                mapIcon.floor_id === currentFloorId &&
+                mapIcon.map_icon_type_id === MAP_ICON_TYPE_DUNGEON_START_ID
+            ) {
+                dungeonStartOffset++;
+                dungeonStartLatLng = mapIcon.layer.getLatLng();
+                break;
             }
         }
+        // }
 
         let sortedObjects = _.sortBy(_.values(killzoneMapObjectGroup.objects), 'index');
         for (let i = 0; i < sortedObjects.length; i++) {
@@ -186,7 +189,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             // If we should draw a line from the dungeon start to the first pull, but only if we're processing the first pull
             if (previousKillZone === null && dungeonStartLatLng !== null && !dungeonStartLineDrawn) {
                 // If the first pull is not on the first floor
-                if( !killZoneOnCurrentFloor ) {
+                if (!killZoneOnCurrentFloor) {
                     let closestMarkerToKillZoneFloor = floorSwitchMapObjectGroup.getClosestMarker(currentFloorId, killZoneFloorIds[0]);
                     killZoneCenteroid.lat = closestMarkerToKillZoneFloor.lat;
                     killZoneCenteroid.lng = closestMarkerToKillZoneFloor.lng;

@@ -74,6 +74,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[]                      $reverseConnectedFloors
  *
  * @method static Builder active()
+ * @method static Builder defaultOrFacade()
  *
  * @mixin Eloquent
  */
@@ -344,6 +345,28 @@ class Floor extends CacheModel implements MappingModelInterface
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('floors.active', 1);
+    }
+
+    /**
+     * @param Builder $builder
+     *
+     * @return Builder
+     */
+    public function scopeDefaultOrFacade(Builder $builder): Builder
+    {
+        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
+
+        return $builder->where(function (Builder $builder) {
+            $builder->where('facade', 1)
+                ->orWhere('default', 1);
+        })->orderByDesc($useFacade ? 'facade' : 'default')
+            ->limit(1);
+
+//        return $builder->when($isDungeonFacadeEnabled && , function (Builder $builder) {
+//            $builder->where('facade', 1);
+//        })->when(!$isDungeonFacadeEnabled || $_COOKIE['map_facade_style'] === 'split_floors', function (Builder $builder) {
+//            $builder->where('default', 1);
+//        });
     }
 
     /**

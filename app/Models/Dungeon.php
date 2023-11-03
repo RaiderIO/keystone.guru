@@ -20,7 +20,7 @@ use Mockery\Exception;
 /**
  * @property int                                     $id               The ID of this Dungeon.
  * @property int                                     $expansion_id     The linked expansion to this dungeon.
- * @property int                                     $game_version_id The linked game version to this dungeon.
+ * @property int                                     $game_version_id  The linked game version to this dungeon.
  * @property int                                     $zone_id          The ID of the location that WoW has given this dungeon.
  * @property int                                     $map_id           The ID of the map (used internally in the game, used for simulation craft purposes)
  * @property int                                     $mdt_id           The ID that MDT has given this dungeon.
@@ -67,7 +67,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends  = ['floor_count'];
+    protected $appends = ['floor_count'];
     protected $fillable = [
         'expansion_id',
         'game_version_id',
@@ -81,8 +81,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with       = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
-    public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $with = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
     // Classic
@@ -418,6 +418,15 @@ class Dungeon extends CacheModel implements MappingModelInterface
         ],
     ];
 
+    // @TODO Revamp this
+    const USES_FACADE = [
+        105, // self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL
+        106, // self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE
+        103, // self::DUNGEON_THRONE_OF_THE_TIDES
+        2,   // self::DUNGEON_BLACK_ROOK_HOLD
+        23,  // self::DUNGEON_WAYCREST_MANOR
+    ];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string
@@ -505,6 +514,18 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
+    }
+
+    /**
+     * @param bool $useFacade
+     *
+     * @return HasMany
+     */
+    public function floorsForMapFacade(bool $useFacade): HasMany
+    {
+        return $this->hasMany(Floor::class)
+            ->where('facade', $useFacade)
+            ->orderBy('index');
     }
 
     /**
