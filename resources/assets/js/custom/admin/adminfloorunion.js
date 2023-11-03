@@ -78,23 +78,40 @@ class FloorUnion extends Icon {
 
         let radius = this.size / 2;
 
+        let centerLatLng = {
+            lat: this.lat,
+            lng: this.lng,
+        };
+        // @TODO Figure out why I need to * -1 this, not time now
+        let topLeft = rotateLatLng(centerLatLng, {
+            lat: this.lat - radius,
+            lng: this.lng - (radius * aspectRatio),
+        }, this.rotation * -1);
+
+        let topRight = rotateLatLng(centerLatLng, {
+            lat: this.lat - radius,
+            lng: this.lng + (radius * aspectRatio),
+        }, this.rotation * -1);
+
+        let bottomRight = rotateLatLng(centerLatLng, {
+            lat: this.lat + radius,
+            lng: this.lng + (radius * aspectRatio),
+        }, this.rotation * -1);
+
+        let bottomLeft = rotateLatLng(centerLatLng, {
+            lat: this.lat + radius,
+            lng: this.lng - (radius * aspectRatio),
+        }, this.rotation * -1);
+
         return L.polygon([
             // Top left corner
-            [
-                this.lat - radius, this.lng - (radius * aspectRatio)
-            ],
+            [topLeft.lat, topLeft.lng],
             // Top right corner
-            [
-                this.lat - radius, this.lng + (radius * aspectRatio)
-            ],
+            [topRight.lat, topRight.lng],
             // Bottom right corner
-            [
-                this.lat + radius, this.lng + (radius * aspectRatio)
-            ],
+            [bottomRight.lat, bottomRight.lng],
             // Bottom left corner
-            [
-                this.lat + radius, this.lng - (radius * aspectRatio)
-            ],
+            [bottomLeft.lat, bottomLeft.lng],
         ], c.map.floorunion.polygonOptions);
     }
 

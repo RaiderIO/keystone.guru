@@ -42,12 +42,12 @@
         "game_version_id": 1,
         "zone_id": 7805,
         "map_id": 1501,
-        "mdt_id": 1,
+        "mdt_id": 103,
         "key": "blackrookhold",
         "name": "dungeons.legion.black_rook_hold.name",
         "slug": "black-rook-hold",
         "speedrun_enabled": 0,
-        "floor_count": 6,
+        "floor_count": 7,
         "floors": [
             {
                 "id": 2,
@@ -244,6 +244,28 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 268,
+                "index": 7,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.legion.black_rook_hold.floors.black_rook_hold",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
@@ -2126,7 +2148,7 @@
         "name": "dungeons.bfa.waycrest_manor.name",
         "slug": "waycrest-manor",
         "speedrun_enabled": 0,
-        "floor_count": 5,
+        "floor_count": 6,
         "floors": [
             {
                 "id": 60,
@@ -2288,6 +2310,28 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 269,
+                "index": 6,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.bfa.waycrest_manor.floors.waycrest_manor",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

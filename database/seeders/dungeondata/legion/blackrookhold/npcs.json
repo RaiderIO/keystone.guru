@@ -36,7 +36,7 @@
         "npc_class_id": 1,
         "display_id": 65762,
         "name": "Soul-Torn Champion",
-        "base_health": 17303012,
+        "base_health": 1383207,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -48,6 +48,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14945,
+                "mapping_version_id": 262,
+                "npc_id": 98243,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 60,
                 "mapping_version_id": 2,
@@ -65,7 +72,7 @@
         "npc_class_id": 2,
         "display_id": 65743,
         "name": "Risen Archer",
-        "base_health": 12359293,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -77,6 +84,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14947,
+                "mapping_version_id": 262,
+                "npc_id": 98275,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 61,
                 "mapping_version_id": 2,
@@ -94,7 +108,7 @@
         "npc_class_id": 3,
         "display_id": 65718,
         "name": "Risen Arcanist",
-        "base_health": 12359293,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -106,6 +120,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14948,
+                "mapping_version_id": 262,
+                "npc_id": 98280,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 62,
                 "mapping_version_id": 2,
@@ -123,7 +144,7 @@
         "npc_class_id": 1,
         "display_id": 65812,
         "name": "Troubled Soul",
-        "base_health": 2471858,
+        "base_health": 197601,
         "health_percentage": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
@@ -135,6 +156,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14936,
+                "mapping_version_id": 262,
+                "npc_id": 98362,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 63,
                 "mapping_version_id": 2,
@@ -152,7 +180,7 @@
         "npc_class_id": 3,
         "display_id": 65785,
         "name": "Ghostly Retainer",
-        "base_health": 12359293,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -164,6 +192,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14938,
+                "mapping_version_id": 262,
+                "npc_id": 98366,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 64,
                 "mapping_version_id": 2,
@@ -181,7 +216,7 @@
         "npc_class_id": 1,
         "display_id": 65786,
         "name": "Ghostly Protector",
-        "base_health": 20457127,
+        "base_health": 1580808,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -193,6 +228,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14937,
+                "mapping_version_id": 262,
+                "npc_id": 98368,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 65,
                 "mapping_version_id": 2,
@@ -210,7 +252,7 @@
         "npc_class_id": 3,
         "display_id": 65787,
         "name": "Ghostly Councilor",
-        "base_health": 12359293,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -222,6 +264,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14939,
+                "mapping_version_id": 262,
+                "npc_id": 98370,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 66,
                 "mapping_version_id": 2,
@@ -239,8 +288,8 @@
         "npc_class_id": 1,
         "display_id": 65814,
         "name": "Lord Etheldrin Ravencrest",
-        "base_health": 30685693,
-        "health_percentage": 100,
+        "base_health": 2371212,
+        "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -251,6 +300,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14941,
+                "mapping_version_id": 262,
+                "npc_id": 98521,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 67,
                 "mapping_version_id": 2,
@@ -268,8 +324,8 @@
         "npc_class_id": 1,
         "display_id": 65833,
         "name": "Lady Velandras Ravencrest",
-        "base_health": 22277813,
-        "health_percentage": 100,
+        "base_health": 1565000,
+        "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -280,6 +336,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14940,
+                "mapping_version_id": 262,
+                "npc_id": 98538,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 68,
                 "mapping_version_id": 2,
@@ -297,7 +360,7 @@
         "npc_class_id": 1,
         "display_id": 65837,
         "name": "Amalgam of Souls",
-        "base_health": 111016239,
+        "base_health": 6904734,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -309,6 +372,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14942,
+                "mapping_version_id": 262,
+                "npc_id": 98542,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 69,
                 "mapping_version_id": 2,
@@ -355,7 +425,7 @@
         "npc_class_id": 1,
         "display_id": 35688,
         "name": "Rook Spiderling",
-        "base_health": 1483115,
+        "base_health": 197601,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -367,6 +437,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14943,
+                "mapping_version_id": 262,
+                "npc_id": 98677,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 71,
                 "mapping_version_id": 2,
@@ -384,7 +461,7 @@
         "npc_class_id": 1,
         "display_id": 42742,
         "name": "Rook Spinner",
-        "base_health": 20457127,
+        "base_health": 1580808,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -396,6 +473,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14944,
+                "mapping_version_id": 262,
+                "npc_id": 98681,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 72,
                 "mapping_version_id": 2,
@@ -413,7 +497,7 @@
         "npc_class_id": 1,
         "display_id": 65950,
         "name": "Risen Scout",
-        "base_health": 12359293,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -425,6 +509,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14946,
+                "mapping_version_id": 262,
+                "npc_id": 98691,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 73,
                 "mapping_version_id": 2,
@@ -442,7 +533,7 @@
         "npc_class_id": 1,
         "display_id": 65951,
         "name": "Illysanna Ravencrest",
-        "base_health": 98328668,
+        "base_health": 6115622,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -454,6 +545,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14952,
+                "mapping_version_id": 262,
+                "npc_id": 98696,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 74,
                 "mapping_version_id": 2,
@@ -471,7 +569,7 @@
         "npc_class_id": 1,
         "display_id": 65954,
         "name": "Commander Shemdah'sohn",
-        "base_health": 20457127,
+        "base_health": 1580808,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -483,6 +581,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14951,
+                "mapping_version_id": 262,
+                "npc_id": 98706,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 75,
                 "mapping_version_id": 2,
@@ -500,7 +605,7 @@
         "npc_class_id": 1,
         "display_id": 64476,
         "name": "Wyrmtongue Scavenger",
-        "base_health": 13595223,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -512,6 +617,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14954,
+                "mapping_version_id": 262,
+                "npc_id": 98792,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 76,
                 "mapping_version_id": 2,
@@ -529,7 +641,7 @@
         "npc_class_id": 1,
         "display_id": 63994,
         "name": "Wrathguard Bladelord",
-        "base_health": 19774869,
+        "base_health": 1185606,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -541,6 +653,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14955,
+                "mapping_version_id": 262,
+                "npc_id": 98810,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 77,
                 "mapping_version_id": 2,
@@ -558,7 +677,7 @@
         "npc_class_id": 1,
         "display_id": 65054,
         "name": "Bloodscent Felhound",
-        "base_health": 9887435,
+        "base_health": 691604,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -570,6 +689,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14956,
+                "mapping_version_id": 262,
+                "npc_id": 98813,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 78,
                 "mapping_version_id": 2,
@@ -587,7 +713,7 @@
         "npc_class_id": 1,
         "display_id": 64483,
         "name": "Wyrmtongue Trickster",
-        "base_health": 4943717,
+        "base_health": 494003,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -599,6 +725,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14953,
+                "mapping_version_id": 262,
+                "npc_id": 98900,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 79,
                 "mapping_version_id": 2,
@@ -616,7 +749,7 @@
         "npc_class_id": 1,
         "display_id": 65304,
         "name": "Smashspite the Hateful",
-        "base_health": 98816653,
+        "base_health": 6904734,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -628,6 +761,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14958,
+                "mapping_version_id": 262,
+                "npc_id": 98949,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 80,
                 "mapping_version_id": 2,
@@ -645,7 +785,7 @@
         "npc_class_id": 1,
         "display_id": 66853,
         "name": "Kur'talos Ravencrest",
-        "base_health": 38062709,
+        "base_health": 2367337,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -657,6 +797,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14961,
+                "mapping_version_id": 262,
+                "npc_id": 98965,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 81,
                 "mapping_version_id": 2,
@@ -672,9 +819,9 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 66032,
-        "name": "Latosius",
-        "base_health": 12345,
+        "display_id": 66281,
+        "name": "Dantalionax",
+        "base_health": 17755031,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -686,6 +833,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14962,
+                "mapping_version_id": 262,
+                "npc_id": 98970,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 82,
                 "mapping_version_id": 2,
@@ -877,7 +1031,7 @@
         "npc_class_id": 1,
         "display_id": 32542,
         "name": "Stinging Swarm",
-        "base_health": 12345,
+        "base_health": 370502,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -889,6 +1043,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14963,
+                "mapping_version_id": 262,
+                "npc_id": 101008,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 89,
                 "mapping_version_id": 2,
@@ -935,7 +1096,7 @@
         "npc_class_id": 1,
         "display_id": 67018,
         "name": "Arcane Minion",
-        "base_health": 2471858,
+        "base_health": 247001,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -947,6 +1108,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14949,
+                "mapping_version_id": 262,
+                "npc_id": 101549,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 91,
                 "mapping_version_id": 2,
@@ -964,7 +1132,7 @@
         "npc_class_id": 1,
         "display_id": 64620,
         "name": "Risen Companion",
-        "base_health": 9887435,
+        "base_health": 592803,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -976,6 +1144,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14950,
+                "mapping_version_id": 262,
+                "npc_id": 101839,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 92,
                 "mapping_version_id": 2,
@@ -993,7 +1168,7 @@
         "npc_class_id": 1,
         "display_id": 67488,
         "name": "Risen Swordsman",
-        "base_health": 11408579,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1005,6 +1180,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14960,
+                "mapping_version_id": 262,
+                "npc_id": 102094,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 93,
                 "mapping_version_id": 2,
@@ -1022,7 +1204,7 @@
         "npc_class_id": 1,
         "display_id": 67478,
         "name": "Risen Lancer",
-        "base_health": 13310009,
+        "base_health": 1086806,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1034,6 +1216,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14959,
+                "mapping_version_id": 262,
+                "npc_id": 102095,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 94,
                 "mapping_version_id": 2,
@@ -1080,7 +1269,7 @@
         "npc_class_id": 1,
         "display_id": 5047,
         "name": "Felspite Dominator",
-        "base_health": 12359293,
+        "base_health": 1580808,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1092,6 +1281,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 14957,
+                "mapping_version_id": 262,
+                "npc_id": 102788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 96,
                 "mapping_version_id": 2,

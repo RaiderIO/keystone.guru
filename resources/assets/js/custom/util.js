@@ -58,6 +58,25 @@ function getLatLngDistance(latLng1, latLng2) {
     return Math.sqrt(getLatLngDistanceSquared(latLng1, latLng2));
 }
 
+function rotateLatLng(centerLatLng, latLng, degrees) {
+    if (degrees === 0) {
+        return latLng;
+    }
+
+    let lng1 = latLng.lng - centerLatLng.lng;
+    let lat1 = latLng.lat - centerLatLng.lat;
+
+    let angle = degrees * (Math.PI / 180);
+
+    let lng2 = lng1 * Math.cos(angle) - lat1 * Math.sin(angle);
+    let lat2 = lng1 * Math.sin(angle) + lat1 * Math.cos(angle);
+
+    latLng.lng = lng2 + centerLatLng.lng;
+    latLng.lat = lat2 + centerLatLng.lat;
+
+    return latLng;
+}
+
 function _getHandlebarsTranslations() {
     let locale = lang.getLocale();
     return lang.messages[locale + '.messages'];

@@ -34,5 +34,53 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":\"-188.256559\",\"lng\":\"199.682535\"},{\"lat\":\"-206.64694\",\"lng\":\"192.500493\"},{\"lat\":\"-209.693867\",\"lng\":\"201.532455\"},{\"lat\":\"-189.12711\",\"lng\":\"208.170403\"}]"
+    },
+    {
+        "id": 7837,
+        "mapping_version_id": 262,
+        "floor_id": 5,
+        "group": 28,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 28",
+        "vertices_json": "[{\"lat\":-205.11245714286,\"lng\":144.6128},{\"lat\":-198.46057142857,\"lng\":144.6128},{\"lat\":-198.46057142857,\"lng\":154.93645714286},{\"lat\":-205.11245714286,\"lng\":154.93645714286}]"
+    },
+    {
+        "id": 7841,
+        "mapping_version_id": 262,
+        "floor_id": 5,
+        "group": 29,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 29",
+        "vertices_json": "[{\"lat\":-227.97691428571,\"lng\":162.06468571429},{\"lat\":-225.97691428571,\"lng\":162.06468571429},{\"lat\":-225.97691428571,\"lng\":164.06468571429},{\"lat\":-227.97691428571,\"lng\":164.06468571429}]"
+    },
+    {
+        "id": 7842,
+        "mapping_version_id": 262,
+        "floor_id": 5,
+        "group": 30,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 30",
+        "vertices_json": "[{\"lat\":-197.63725714286,\"lng\":195.34468571429},{\"lat\":-138.41028571429,\"lng\":195.34468571429},{\"lat\":-138.41028571429,\"lng\":211.51977142857},{\"lat\":-197.63725714286,\"lng\":211.51977142857}]"
+    },
+    {
+        "id": 7843,
+        "mapping_version_id": 262,
+        "floor_id": 5,
+        "group": 31,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 31",
+        "vertices_json": "[{\"lat\":-69.739657142857,\"lng\":277.8352},{\"lat\":-67.739657142857,\"lng\":277.8352},{\"lat\":-67.739657142857,\"lng\":279.8352},{\"lat\":-69.739657142857,\"lng\":279.8352}]"
     }
 ]

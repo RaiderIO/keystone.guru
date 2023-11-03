@@ -194,7 +194,12 @@ class DungeonFloorSwitchMarker extends Icon {
         /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
         let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
         if (this.source_floor_id !== null && this.target_floor_id !== null) {
-            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(this.target_floor_id, this.source_floor_id, this.layer.getLatLng());
+            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(
+                this.target_floor_id,
+                this.source_floor_id,
+                this.layer.getLatLng(),
+                true
+            );
 
             if (closestDungeonFloorSwitchMarker !== null) {
                 result = L.polyline(
