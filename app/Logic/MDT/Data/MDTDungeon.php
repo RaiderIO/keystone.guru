@@ -17,38 +17,39 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Lua;
 use LuaException;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class ImportString. This file was created as a sort of copy of https://github.com/nnoggie/MythicDungeonTools/blob/master/Transmission.lua
- * All rights belong to their respective owners, I did write this but I did not make this up.  I merely translated the LUA
- * to PHP to allow for importing of the exported strings.
- * @package App\Logic\MDT
+ * @package App\Logic\MDT\Data
  * @author Wouter
  * @since 05/01/2019
  */
 class MDTDungeon
 {
-    /** @var Dungeon */
     private Dungeon $dungeon;
 
-    /** @var CacheServiceInterface|mixed */
     private CacheServiceInterface $cacheService;
 
+    private CoordinatesServiceInterface $coordinatesService;
 
-    function __construct(Dungeon $dungeon)
-    {
-        $this->dungeon = $dungeon;
+    function __construct(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
+        Dungeon                     $dungeon
+    ) {
+        $this->cacheService       = $cacheService;
+        $this->coordinatesService = $coordinatesService;
+        $this->dungeon            = $dungeon;
 
-        $this->cacheService = App::make(CacheServiceInterface::class);
 
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
@@ -78,6 +79,7 @@ class MDTDungeon
     public function getMDTDungeonID(): int
     {
         $lua = $this->getLua();
+
         return $lua->call('GetDungeonIndex');
     }
 
@@ -97,6 +99,7 @@ class MDTDungeon
             foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
                 $mdtNpcs->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
             }
+
             return $mdtNpcs;
         }, config('keystoneguru.cache.mdt.ttl'));
     }
@@ -123,25 +126,37 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
+     * @param MappingVersion   $mappingVersion
      * @param Floor|Collection $floors The floors that you want to get the clones for.
      * @return Collection|Enemy[]
-     * @throws InvalidArgumentException
      */
-    public function getClonesAsEnemies(Collection $floors): Collection
+    public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
-        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($floors) {
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($mappingVersion, $floors) {
             $enemies = new Collection();
 
             try {
                 $mdtNpcs = $this->getMDTNPCs();
             } catch (Exception $exception) {
                 logger()->error($exception->getMessage());
+
                 return $enemies;
             }
 
             // Ensure floors is a collection
             if (!($floors instanceof Collection)) {
                 $floors = [$floors];
+            }
+
+            // A bit of a hack, but it works. If we have a floor with a facade in it, we only parse THAT floor
+            // since that's the only floor that MDT will have. We will then put the enemies in the correct floors.
+            // Pinky promise.
+            $facadeFloors = $floors->filter(function (Floor $floor) {
+                return $floor->facade;
+            });
+
+            if ($facadeFloors->isNotEmpty()) {
+                $floors = $facadeFloors;
             }
 
             $floors->load(['dungeon']);
@@ -173,8 +188,14 @@ class MDTDungeon
                                 $mdtCloneIndex += (count($npcClones[$npcId][$floor->id]) - $cloneCount);
                             }
 
+                            // Place the enemy on the correct floor
+                            $latLng = Conversion::convertMDTCoordinateToLatLng($clone, $floor);
+                            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng);
+
+                            $clone = array_merge($clone, $latLng->toArray());
+
                             // Append this clone to the array
-                            $npcClones[$npcId][$floor->id][$mdtCloneIndex] = $clone;
+                            $npcClones[$npcId][$latLng->getFloor()->id][$mdtCloneIndex] = $clone;
                         }
                     }
 
@@ -184,13 +205,9 @@ class MDTDungeon
 
             // We now know a list of clones that we want to display, convert those clones to TEMP enemies
 
-            /** @var Collection|Npc[] $npcs */
-            $npcs = Npc::whereIn('dungeon_id', [$floors->first()->dungeon->id, -1])->get();
             foreach ($npcClones as $npcId => $floorIndexes) {
                 foreach ($floorIndexes as $floorId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {
-                        $latLng = Conversion::convertMDTCoordinateToLatLng($clone);
-
                         $enemy = new Enemy([
                             // Dummy so we can ID them later on
                             'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
@@ -199,21 +216,21 @@ class MDTDungeon
                             'npc_id'                        => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
                             'mdt_id'                        => $mdtCloneIndex,
+                            'lat'                           => $clone['lat'],
+                            'lng'                           => $clone['lng'],
                             'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
                             'faction'                       => isset($clone['faction']) ?
                                 ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
                                 : 'any',
                             'enemy_forces_override'         => null,
                             'enemy_forces_override_teeming' => null,
-                            'lat'                           => $latLng['lat'],
-                            'lng'                           => $latLng['lng'],
                         ]);
                         // Special MDT fields which are not fillable
                         $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
                         $enemy->is_mdt        = true;
                         $enemy->enemy_id      = -1;
 
-                        $enemy->npc = $npcs->firstWhere('id', $enemy->npc_id);
+                        $enemy->npc = $this->dungeon->npcs->firstWhere('id', $enemy->npc_id);
 
                         if ($enemy->npc === null) {
                             $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);

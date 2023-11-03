@@ -14,8 +14,6 @@ L.Draw.MapIcon = L.Draw.Marker.extend({
 });
 
 /**
- * @property {Number} floor_id
- * @property {Number} map_icon_type_id
  * @property {Number} linked_awakened_obelisk_id
  * @property {Number} permanent_tooltip
  * @property {Number} seasonal_index

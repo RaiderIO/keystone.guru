@@ -4,18 +4,18 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute;
-use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class Save extends Command
 {
@@ -63,7 +63,7 @@ class Save extends Command
 
 
             $tmpZippedFilePath = '/tmp';
-            $zippedFileName = 'mapping.gz';
+            $zippedFileName    = 'mapping.gz';
             $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
             $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
 
@@ -125,7 +125,7 @@ class Save extends Command
         $this->info('Saving dungeons');
 
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
+        $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man', 'floors.floorUnions6'])
             ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
             ->get();
 
@@ -199,6 +199,8 @@ class Save extends Command
                 'dungeonFloorSwitchMarkersForExport',
                 'mapIconsForExport',
                 'mountableAreasForExport',
+                'floorUnionsForExport',
+                'floorUnionAreasForExport',
             ])->get();
 
             foreach ($floors as $floor) {
@@ -209,7 +211,8 @@ class Save extends Command
 
     /**
      * @param Dungeon $dungeon
-     * @param string $rootDirPath
+     * @param string  $rootDirPath
+     *
      * @return void
      */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
@@ -299,7 +302,8 @@ class Save extends Command
 
     /**
      * @param Dungeon $dungeon
-     * @param string $rootDirPath
+     * @param string  $rootDirPath
+     *
      * @return void
      */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
@@ -318,23 +322,35 @@ class Save extends Command
     }
 
     /**
-     * @param Floor $floor
+     * @param Floor  $floor
      * @param string $rootDirPath
+     *
      * @return void
      */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
-        $enemyPacks                = $floor->enemyPacksForExport->values();
-        $enemyPatrols              = $floor->enemyPatrolsForExport->values();
+        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemyPacks   = $floor->enemyPacksForExport->values();
+        $enemyPatrols = $floor->enemyPatrolsForExport->values();
+        /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
+        // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
+        $dungeonFloorSwitchMarkers
+            ->makeHidden(['floorCouplingDirection'])
+            ->map(function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
+                $dungeonFloorSwitchMarker->direction = $dungeonFloorSwitchMarker->direction === '' ?
+                    null : $dungeonFloorSwitchMarker->direction;
 
-        // Direction is an attributed column which does not exist in the database; it exists in the DungeonData seeder
-        $dungeonFloorSwitchMarkers->makeHidden(['direction']);
-        $mapIcons       = $floor->mapIconsForExport->values();
-        $mountableAreas = $floor->mountableAreasForExport->values();
+                return $dungeonFloorSwitchMarker;
+            });
+
+        /** @var \Illuminate\Database\Eloquent\Collection $mapIcons */
+        $mapIcons        = $floor->mapIconsForExport->values();
+        $mountableAreas  = $floor->mountableAreasForExport->values();
+        $floorUnions     = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values();
+        $floorUnionAreas = $floor->floorUnionAreasForExport->values();
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.
@@ -346,6 +362,8 @@ class Save extends Command
         $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
         $result['map_icons']                    = $mapIcons;
         $result['mountable_areas']              = $mountableAreas;
+        $result['floor_unions']                 = $floorUnions;
+        $result['floor_union_areas']            = $floorUnionAreas;
 
         foreach ($result as $category => $categoryData) {
             // Save enemies, packs, patrols, markers on a per-floor basis

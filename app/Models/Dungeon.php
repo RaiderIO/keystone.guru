@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -19,7 +20,7 @@ use Mockery\Exception;
 /**
  * @property int                                     $id               The ID of this Dungeon.
  * @property int                                     $expansion_id     The linked expansion to this dungeon.
- * @property int                                     $game_version_id The linked game version to this dungeon.
+ * @property int                                     $game_version_id  The linked game version to this dungeon.
  * @property int                                     $zone_id          The ID of the location that WoW has given this dungeon.
  * @property int                                     $map_id           The ID of the map (used internally in the game, used for simulation craft purposes)
  * @property int                                     $mdt_id           The ID that MDT has given this dungeon.
@@ -66,7 +67,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends  = ['floor_count'];
+    protected $appends = ['floor_count'];
     protected $fillable = [
         'expansion_id',
         'game_version_id',
@@ -80,8 +81,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with       = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
-    public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $with = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
     // Classic
@@ -108,8 +109,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
     const DUNGEON_ULDAMAN                     = 'uldaman';
     const DUNGEON_UPPER_BLACKROCK_SPIRE       = 'upper_blackrock_spire'; //upperblackrockspire
-    const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns'; //wailingcaverns
-    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';      //zulfarrak
+    const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns';       //wailingcaverns
+    const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';            //zulfarrak
 
     // The Burning Crusade
     const DUNGEON_ACHENAI_CRYPTS          = 'auchenai_crypts';
@@ -245,6 +246,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     const DUNGEON_THE_NOKHUD_OFFENSIVE  = 'nokhudoffensive';
     const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
+    const DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL = 'dawn_of_the_infinite_galakronds_fall';
+    const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  = 'dawn_of_the_infinite_murozonds_rise';
+
     const ALL = [
         Expansion::EXPANSION_CLASSIC      => [
             self::DUNGEON_BLACKFATHOM_DEEPS,
@@ -337,8 +341,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ],
         Expansion::EXPANSION_WOD          => [
+            self::DUNGEON_AUCHINDOUN,
+            self::DUNGEON_BLOODMAUL_SLAG_MINES,
             self::DUNGEON_IRON_DOCKS,
             self::DUNGEON_GRIMRAIL_DEPOT,
+            self::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
+            self::DUNGEON_SKYREACH,
             self::DUNGEON_THE_EVERBLOOM,
         ],
         Expansion::EXPANSION_LEGION       => [
@@ -391,6 +399,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_THE_AZURE_VAULT,
             self::DUNGEON_THE_NOKHUD_OFFENSIVE,
             self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+            self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
+            self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
         ],
     ];
 
@@ -406,6 +416,15 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::RAID_ULDUAR,
             self::RAID_VAULT_OF_ARCHAVON,
         ],
+    ];
+
+    // @TODO Revamp this
+    const USES_FACADE = [
+        105, // self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL
+        106, // self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE
+        103, // self::DUNGEON_THRONE_OF_THE_TIDES
+        2,   // self::DUNGEON_BLACK_ROOK_HOLD
+        23,  // self::DUNGEON_WAYCREST_MANOR
     ];
 
     /**
@@ -441,7 +460,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     /** @var NpcEnemyForces $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
 
-                    $npcs[$npc->id] = $npcEnemyForces->enemy_forces >= 0;
+                    $npcs[$npc->id] = ($npcEnemyForces->enemy_forces ?? -1) >= 0;
                 }
             }
         } catch (Exception $ex) {
@@ -495,6 +514,34 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
+    }
+
+    /**
+     * @param bool $useFacade
+     *
+     * @return HasMany
+     */
+    public function floorsForMapFacade(bool $useFacade): HasMany
+    {
+        // If we use facade
+        // If we have facade, only return facade floor
+        // Otherwise, return all non-facade floors
+
+        return $this->hasMany(Floor::class)
+            ->where(function (Builder $builder) use ($useFacade) {
+                $builder->when(!$useFacade, function (Builder $builder) use ($useFacade) {
+                    $builder->where('facade', 0);
+                })->when($useFacade, function (Builder $builder) use ($useFacade) {
+                    $builder->where(function (Builder $builder) use ($useFacade) {
+                        $builder->whereIn('dungeon_id', self::USES_FACADE)
+                            ->where('facade', $useFacade);
+                    })->orWhere(function (Builder $builder) use ($useFacade) {
+                        $builder->whereNotIn('dungeon_id', self::USES_FACADE)
+                            ->where('facade', 0);
+                    });
+                });
+            })
+            ->orderBy('index');
     }
 
     /**
@@ -652,6 +699,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @return Floor|null
+     */
+    public function getFacadeFloor(): ?Floor
+    {
+        return $this->floors->filter(function (Floor $floor) {
+            return $floor->facade;
+        })->first();
     }
 
     /**

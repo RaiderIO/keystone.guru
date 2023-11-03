@@ -35,7 +35,7 @@ return [
     ],
     'raging'                => [
         'name'        => 'Raging',
-        'description' => 'Non-boss enemies enrage at 30% health remaining, dealing 100% increased damage until defeated.',
+        'description' => 'Non-boss enemies enrage at 30% health, becoming immune to crowd control other than interrupts.',
     ],
     'relentless'            => [
         'name'        => 'Relentless',

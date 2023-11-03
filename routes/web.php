@@ -35,6 +35,8 @@ use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
 use App\Http\Controllers\Ajax\AjaxUserReportController;
+use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionAreaController;
+use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -45,7 +47,7 @@ use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
 use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
-use App\Http\Controllers\FloorController;
+use App\Http\Controllers\Floor\FloorController;
 use App\Http\Controllers\GameVersionController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
@@ -476,6 +478,14 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/mountablearea', [AjaxMountableAreaController::class, 'store']);
                 Route::put('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'store']);
                 Route::delete('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'delete']);
+
+                Route::post('/floorunion', [AjaxFloorUnionController::class, 'store']);
+                Route::put('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'store']);
+                Route::delete('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'delete']);
+
+                Route::post('/floorunionarea', [AjaxFloorUnionAreaController::class, 'store']);
+                Route::put('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'store']);
+                Route::delete('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'delete']);
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
             });

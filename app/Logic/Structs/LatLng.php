@@ -2,17 +2,17 @@
 
 namespace App\Logic\Structs;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
+use App\Service\Coordinates\CoordinatesService;
+use Illuminate\Contracts\Support\Arrayable;
 
-class LatLng
+class LatLng implements Arrayable
 {
     private float $lat;
 
     private float $lng;
 
     private ?Floor $floor;
-
-    private ?IngameXY $ingameXY = null;
 
     /**
      * @param float      $lat
@@ -42,6 +42,7 @@ class LatLng
     public function setLat(float $lat): LatLng
     {
         $this->lat = $lat;
+
         return $this;
     }
 
@@ -61,6 +62,7 @@ class LatLng
     public function setLng(float $lng): LatLng
     {
         $this->lng = $lng;
+
         return $this;
     }
 
@@ -80,34 +82,77 @@ class LatLng
     public function setFloor(?Floor $floor): LatLng
     {
         $this->floor = $floor;
+
         return $this;
     }
 
     /**
-     * @return IngameXY|null
+     * @param LatLng $currentMapCenter
+     * @param int    $currentMapSize
+     * @param LatLng $targetMapCenter
+     * @param int    $targetMapSize
+     * @return $this
      */
-    public function getIngameXY(): ?IngameXY
+    public function scale(LatLng $currentMapCenter, int $currentMapSize, LatLng $targetMapCenter, int $targetMapSize): self
     {
-        return $this->ingameXY ?? ($this->ingameXY = $this->calculateIngameCoordinates());
+        $currentMapSizeLat = $currentMapSize;
+        $currentMapSizeLng = $currentMapSize * CoordinatesService::MAP_ASPECT_RATIO;
+        // Lat is inverted. The dead center is top left, not bottom left
+        $currentMapOffsetLat = $currentMapCenter->getLat() + ($currentMapSizeLat / 2);
+        $currentMapOffsetLng = $currentMapCenter->getLng() - ($currentMapSizeLng / 2);
+
+        $targetMapSizeLat = $targetMapSize;
+        $targetMapSizeLng = $targetMapSize * CoordinatesService::MAP_ASPECT_RATIO;
+        // Lat is inverted. The dead center is top left, not bottom left
+        $targetMapOffsetLat = $targetMapCenter->getLat() + ($targetMapSizeLat / 2);
+        $targetMapOffsetLng = $targetMapCenter->getLng() - ($targetMapSizeLng / 2);
+
+        // Undo the offset. Then scale by the correct factor, and apply the new offset
+        $this->lat = (($this->lat - $currentMapOffsetLat) * ($targetMapSizeLat / $currentMapSizeLat)) + $targetMapOffsetLat;
+        $this->lng = (($this->lng - $currentMapOffsetLng) * ($targetMapSizeLng / $currentMapSizeLng)) + $targetMapOffsetLng;
+
+        return $this;
     }
 
     /**
-     * @return void
+     * @param LatLng $centerLatLng
+     * @param float  $degrees
+     * @return self
      */
-    private function calculateIngameCoordinates(): ?IngameXY
+    public function rotate(LatLng $centerLatLng, float $degrees): self
     {
-        $result = null;
+        $lng1 = $this->lng - $centerLatLng->lng;
+        $lat1 = $this->lat - $centerLatLng->lat;
 
-        if ($this->floor !== null) {
-            $ingameXY = $this->floor->calculateIngameLocationForMapLocation(
-                $this->lat,
-                $this->lng
-            );
+        $angle = $degrees * (pi() / 180);
 
-            $result = IngameXY::fromArray($ingameXY, $this->floor);
-        }
+        $lng2 = $lng1 * cos($angle) - $lat1 * sin($angle);
+        $lat2 = $lng1 * sin($angle) + $lat1 * cos($angle);
 
-        return $result;
+        $this->lng = $lng2 + $centerLatLng->lng;
+        $this->lat = $lat2 + $centerLatLng->lat;
+
+        return $this;
+    }
+
+    /**
+     * Only use this when saving the end result to models, please!
+     * Trying to get rid of this structure as much as possible by using this class in the first place.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return ['lat' => $this->lat, 'lng' => $this->lng];
+    }
+
+    public function __clone()
+    {
+        return new LatLng(
+            $this->lat,
+            $this->lng,
+            $this->floor
+        );
     }
 
     /**

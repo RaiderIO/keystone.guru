@@ -9,13 +9,15 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
+use App\Logic\Structs\IngameXY;
 use App\Models\Dungeon;
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcType;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
@@ -24,18 +26,23 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 {
     private CombatLogServiceInterface $combatLogService;
 
+    private CoordinatesServiceInterface $coordinatesService;
+
     private CombatLogMappingVersionServiceLoggingInterface $log;
 
     /**
      * @param CombatLogServiceInterface                      $combatLogService
+     * @param CoordinatesServiceInterface                    $coordinatesService
      * @param CombatLogMappingVersionServiceLoggingInterface $log
      */
     public function __construct(
         CombatLogServiceInterface                      $combatLogService,
+        CoordinatesServiceInterface                    $coordinatesService,
         CombatLogMappingVersionServiceLoggingInterface $log
     ) {
-        $this->combatLogService = $combatLogService;
-        $this->log              = $log;
+        $this->combatLogService   = $combatLogService;
+        $this->coordinatesService = $coordinatesService;
+        $this->log                = $log;
     }
 
     /**
@@ -203,12 +210,12 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
 
                 if ($guid instanceof Creature) {
-                    if( !$npcs->has($guid->getId()) ){
+                    if (!$npcs->has($guid->getId())) {
                         $this->log->createMappingVersionFromCombatLogUnableToFindNpc($currentFloor->id, $guid->getId());
 
                         return $parsedEvent;
                     }
-                    
+
                     /** @var Npc $npc */
                     $npc = $npcs->get($guid->getId());
                     if ($npc->npc_type_id === NpcType::CRITTER) {
@@ -217,9 +224,12 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         return $parsedEvent;
                     }
 
-                    $latLng = $currentFloor->calculateMapLocationForIngameLocation(
-                        $parsedEvent->getAdvancedData()->getPositionX(),
-                        $parsedEvent->getAdvancedData()->getPositionY()
+                    $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                        new IngameXY(
+                            $parsedEvent->getAdvancedData()->getPositionX(),
+                            $parsedEvent->getAdvancedData()->getPositionY(),
+                            $currentFloor
+                        )
                     );
 
                     Enemy::create(array_merge([
@@ -228,7 +238,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         'npc_id'             => $guid->getId(),
                         'required'           => 0,
                         'skippable'          => 0,
-                    ], $latLng));
+                    ], $latLng->toArray()));
 
                     $this->log->createMappingVersionFromCombatLogNewEnemy($currentFloor->id, $guid->getId());
                 }

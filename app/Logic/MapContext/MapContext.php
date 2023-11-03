@@ -4,17 +4,18 @@ namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
+use App\Models\Dungeon;
 use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -22,34 +23,42 @@ abstract class MapContext
 {
     use ListsEnemies;
 
-    /** @var Model */
+    protected CacheServiceInterface $cacheService;
+
+    protected CoordinatesServiceInterface $coordinatesService;
+
     protected Model $context;
-    /** @var Floor */
+
     protected Floor $floor;
-    /** @var MappingVersion */
+
     protected MappingVersion $mappingVersion;
 
-    function __construct(Model $context, Floor $floor, MappingVersion $mappingVersion)
+    function __construct(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        Floor                       $floor,
+        MappingVersion              $mappingVersion
+    )
     {
-        $this->context        = $context;
-        $this->floor          = $floor;
-        $this->mappingVersion = $mappingVersion;
+        $this->cacheService       = $cacheService;
+        $this->coordinatesService = $coordinatesService;
+        $this->context            = $context;
+        $this->floor              = $floor;
+        $this->mappingVersion     = $mappingVersion;
     }
 
-    /** @return string */
     public abstract function getType(): string;
 
-    /** @return bool */
     public abstract function isTeeming(): bool;
 
-    /** @return int */
     public abstract function getSeasonalIndex(): int;
 
-    /** @return array */
     public abstract function getEnemies(): array;
 
-    /** @return string */
     public abstract function getEchoChannelName(): string;
+
+    public abstract function getMapFacadeStyle(): string;
 
     /**
      * @return Model
@@ -65,32 +74,41 @@ abstract class MapContext
      */
     public function getProperties(): array
     {
-        /** @var CacheServiceInterface $cacheService */
-        $cacheService = App::make(CacheServiceInterface::class);
+        $mapFacadeStyle = $this->getMapFacadeStyle();
 
         // Get the DungeonData
-        $dungeonData = $cacheService->remember(sprintf('dungeon_%d_%d', $this->floor->dungeon->id, $this->mappingVersion->id), function () {
-            // Bit of a loss why the [0] is needed - was introduced after including the without() function
-            return array_merge(($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->get()->toArray())[0], $this->getEnemies(), [
-                'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
-                'enemies'                   => $this->mappingVersion->enemies()->without(['npc'])->get()->makeHidden(['enemyactiveauras']),
-                'npcs'                      => $this->floor->dungeon->npcs()->with([
-                    'spells',
-                    // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                    'enemyForces' => function (HasOne $query) {
-                        return $query->where('mapping_version_id', $this->mappingVersion->id);
-                    },
-                ])->get(),
-                'auras'                     => Spell::where('aura', true)->get(),
-                'enemyPacks'                => $this->mappingVersion->enemyPacks()->with(['enemies:enemies.id,enemies.enemy_pack_id'])->get(),
-                'enemyPatrols'              => $this->mappingVersion->enemyPatrols,
-                'mapIcons'                  => $this->mappingVersion->mapIcons,
-                'dungeonFloorSwitchMarkers' => $this->mappingVersion->dungeonFloorSwitchMarkers,
-                'mountableAreas'            => $this->mappingVersion->mountableAreas,
-            ]);
-        }, config('keystoneguru.cache.dungeonData.ttl'));
+        $dungeonData = $this->cacheService->remember(
+            sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle),
+            function () use ($mapFacadeStyle) {
+                $useFacade = $mapFacadeStyle === 'facade';
 
-        $static = $cacheService->remember('static_data', function () {
+                /** @var Dungeon $dungeon */
+                $dungeon = $this->floor->dungeon()->without(['floors', 'mapicons', 'enemypacks'])->first();
+                // Filter out floors that we do not need
+                $dungeon->setRelation('floors', $dungeon->floorsForMapFacade($useFacade)->get());
+
+                return array_merge($dungeon->toArray(), $this->getEnemies(), [
+                    'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
+                    'npcs'                      => $this->floor->dungeon->npcs()->with([
+                        'spells',
+                        // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                        'enemyForces' => function (HasOne $query) {
+                            return $query->where('mapping_version_id', $this->mappingVersion->id);
+                        },
+                    ])->get(),
+                    'auras'                     => Spell::where('aura', true)->get(),
+                    'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
+                    'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
+                    'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
+                    'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
+                    'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
+                    'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
+                    'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
+                    'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
+                ]);
+            }, config('keystoneguru.cache.dungeonData.ttl'));
+
+        $static = $this->cacheService->remember('static_data', function () {
             return [
                 'spells'                            => Spell::all(),
                 'mapIconTypes'                      => MapIconType::all(),

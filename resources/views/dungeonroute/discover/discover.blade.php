@@ -51,7 +51,7 @@
 
     @if( !$adFree && !$isMobile)
         <div align="center" class="mt-4">
-            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header_middle', 'reportAdPosition' => 'top-right'])
         </div>
     @endif
 
@@ -71,7 +71,7 @@
 
         @if( !$adFree && !$isMobile)
             <div align="center" class="mt-4">
-                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header_middle', 'reportAdPosition' => 'top-right'])
             </div>
         @endif
 
@@ -91,7 +91,7 @@
 
     @if( !$adFree && !$isMobile)
         <div align="center" class="mt-4">
-            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header_middle', 'reportAdPosition' => 'top-right'])
         </div>
     @endif
 

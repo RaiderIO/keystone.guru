@@ -259,6 +259,16 @@ class StateManager extends Signalable {
 
     /**
      *
+     * @param mapFacadeStyle {string}
+     */
+    setMapFacadeStyle(mapFacadeStyle) {
+        Cookies.set('map_facade_style', mapFacadeStyle, cookieDefaultAttributes);
+
+        this.signal('mapfacadestyle:changed');
+    }
+
+    /**
+     *
      * @param numberStyle {string}
      */
     setMapNumberStyle(numberStyle) {
@@ -528,13 +538,20 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Gets the currently logged in user's name, or null if not logged in.
+     * Gets the currently logged-in user's name, or null if not logged in.
      * @returns {*|null}
      */
     getUser() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._userData;
+    }
+
+    /**
+     @returns {String}
+     */
+    getMapFacadeStyle() {
+        return Cookies.get('map_facade_style') ?? MAP_FACADE_STYLE_FACADE;
     }
 
     /**

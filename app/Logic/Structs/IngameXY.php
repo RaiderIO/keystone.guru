@@ -2,9 +2,10 @@
 
 namespace App\Logic\Structs;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
+use Illuminate\Contracts\Support\Arrayable;
 
-class IngameXY
+class IngameXY implements Arrayable
 {
     private float $x;
 
@@ -42,6 +43,7 @@ class IngameXY
     public function setX(float $x): IngameXY
     {
         $this->x = $x;
+
         return $this;
     }
 
@@ -61,6 +63,7 @@ class IngameXY
     public function setY(float $y): IngameXY
     {
         $this->y = $y;
+
         return $this;
     }
 
@@ -80,33 +83,28 @@ class IngameXY
     public function setFloor(?Floor $floor): IngameXY
     {
         $this->floor = $floor;
+
         return $this;
     }
 
     /**
-     * @return LatLng
+     * @return array
      */
-    public function getLatLng(): ?LatLng
+    public function toArray(): array
     {
-        return $this->latLng ?? ($this->latLng = $this->calculateLatLng());
+        return [
+            'x' => $this->getX(),
+            'y' => $this->getY(),
+        ];
     }
 
-    /**
-     * @return LatLng|null
-     */
-    private function calculateLatLng(): ?LatLng
+    public function __clone()
     {
-        $result = null;
-
-        if ($this->floor !== null) {
-            $latLng = $this->floor->calculateMapLocationForIngameLocation(
-                $this->x,
-                $this->y
-            );
-            $result = LatLng::fromArray($latLng, $this->floor);
-        }
-
-        return $result;
+        return new IngameXY(
+            $this->x,
+            $this->y,
+            $this->floor
+        );
     }
 
     /**

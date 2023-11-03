@@ -2,11 +2,13 @@
 
 namespace App\Models\KillZone;
 
+use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Spell;
+use App\Models\Traits\HasLatLng;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +44,8 @@ use Illuminate\Support\Facades\DB;
  */
 class KillZone extends Model
 {
+    use HasLatLng;
+
     public $visible = [
         'id',
         'floor_id',
@@ -171,7 +175,7 @@ class KillZone extends Model
             $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
                 ->join('kill_zone_enemies', function (JoinClause $clause) {
                     $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
-                           ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+                        ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
                 })
                 ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
                 ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
@@ -220,12 +224,12 @@ class KillZone extends Model
     /**
      * @param bool $useCache
      *
-     * @return array{lat: float, lng: float}
+     * @return LatLng|null
      */
-    public function getKillLocation(bool $useCache = false): ?array
+    public function getKillLocation(bool $useCache = false): ?LatLng
     {
         if (isset($this->lat) && isset($this->lng)) {
-            return ['lat' => $this->lat, 'lng' => $this->lng];
+            return new LatLng($this->lat, $this->lng, $this->getDominantFloor(true));
         } else {
             $enemies = $this->getEnemies($useCache);
 
@@ -241,7 +245,7 @@ class KillZone extends Model
                 $totalLng += $enemy->lng;
             }
 
-            return ['lat' => $totalLat / $enemies->count(), 'lng' => $totalLng / $enemies->count()];
+            return new LatLng($totalLat / $enemies->count(), $totalLng / $enemies->count(), $this->getDominantFloor(true));
         }
     }
 
@@ -297,18 +301,18 @@ class KillZone extends Model
      *
      * @return array|null
      */
-    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?array
+    public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?LatLng
     {
         $boundingBox = $this->getEnemiesBoundingBox($boundingBoxMargin);
         if ($boundingBox === null) {
             return null;
         }
 
-        return [
-            // Max lat is at the top
-            'lat' => $boundingBox['latMax'],
-            'lng' => $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
-        ];
+        return new LatLng(
+            $boundingBox['latMax'],
+            $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
+            $this->getDominantFloor(true)
+        );
     }
 
     /**

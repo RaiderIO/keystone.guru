@@ -3,7 +3,7 @@
 namespace App\Http\Requests\MapIcon;
 
 use App\Models\DungeonRoute;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;

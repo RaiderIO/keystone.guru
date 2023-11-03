@@ -1,6 +1,6 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute */
-/** @var $floor \App\Models\Floor */
+/** @var $floor \App\Models\Floor\Floor */
 $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 
 $sandbox = $dungeonroute->isSandbox();
@@ -52,7 +52,10 @@ $sandbox = $dungeonroute->isSandbox();
                     'publish' => !$sandbox,
                 ]
             ],
-            'hiddenMapObjectGroups' => [],
+            'hiddenMapObjectGroups' => [
+                'floorunion',
+                'floorunionarea'
+            ],
         ])
     </div>
 @endsection

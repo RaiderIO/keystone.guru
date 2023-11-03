@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests\KillZone;
 
-use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Spell;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

@@ -20,7 +20,7 @@
 <?php
 /**
  * @var $npc \App\Models\Npc
- * @var $floor \App\Models\Floor
+ * @var $floor \App\Models\Floor\Floor
  * @var $classifications array
  * @var $spells \App\Models\Spell[]
  * @var $bolsteringNpcs array

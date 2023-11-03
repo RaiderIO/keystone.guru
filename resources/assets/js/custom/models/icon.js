@@ -65,6 +65,8 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
 /**
  * @property {Number} floor_id
  * @property {Number} map_icon_type_id
+ * @property {Number} lat
+ * @property {Number} lng
  * @property {Number} permanent_tooltip
  * @property {String} comment
  */
@@ -87,7 +89,7 @@ class Icon extends VersionableMapObject {
                 self._refreshVisual();
             }
         });
-        getState().register('mapzoomlevel:changed', this, function (mapStateChangedEvent) {
+        getState().register(['floorid:changed', 'mapzoomlevel:changed'], this, function (mapStateChangedEvent) {
             self._refreshVisual();
         });
     }
@@ -175,7 +177,7 @@ class Icon extends VersionableMapObject {
 
     /**
      *
-     * @private
+     * @protected
      */
     _refreshVisual() {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
@@ -203,11 +205,10 @@ class Icon extends VersionableMapObject {
     setMapIconType(mapIconType, refreshVisual = true) {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
         this.map_icon_type_id = mapIconType.id;
-
         // Set the icon and refresh the visual
         this.map_icon_type = mapIconType;
 
-        if( refreshVisual ) {
+        if (refreshVisual) {
             this._refreshVisual();
         }
     }
@@ -301,7 +302,7 @@ class Icon extends VersionableMapObject {
     cleanup() {
         super.cleanup();
 
-        getState().unregister('mapzoomlevel:changed', this);
+        getState().unregister(['floorid:changed', 'mapzoomlevel:changed'], this);
         this.map.unregister('map:mapstatechanged', this);
         this.unregister('object:changed', this);
     }

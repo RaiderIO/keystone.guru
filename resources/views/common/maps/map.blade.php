@@ -3,7 +3,7 @@
  * @var \App\User                          $user
  * @var \App\Logic\MapContext\MapContext   $mapContext
  * @var \App\Models\Dungeon                $dungeon
- * @var \App\Models\Floor                  $floor
+ * @var \App\Models\Floor\Floor            $floor
  * @var \App\Models\Mapping\MappingVersion $mappingVersion
  * @var \App\Models\DungeonRoute|null      $dungeonroute
  * @var \App\Models\LiveSession|null       $livesession
@@ -43,6 +43,7 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
+$useFacade                        = ($_COOKIE['map_facade_style'] ?? 'facade') === 'facade';
 
 // Allow echo to be overridden
 $echo           = $echo ?? Auth::check() && !$sandboxMode;
@@ -129,9 +130,9 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                    @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                        <a class="map_faction_display_control map_controls_custom" href="#"
-                           data-faction="{{ strtolower($faction->key) }}"
+            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
@@ -139,10 +140,10 @@ if ($isAdmin) {
                                  data-toggle="tooltip" title="{{ __($faction->name) }}"/>
                         </a>
 
-                    @endforeach
-                </div>
-                <ul class="leaflet-draw-actions"></ul>
+            @endforeach
             </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
 
 
         </script>
@@ -166,14 +167,16 @@ if ($isAdmin) {
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors()->active()->get(),
+            'floors' => $dungeon->floorsForMapFacade($useFacade)->when(!$isAdmin, function(\Illuminate\Database\Eloquent\Builder $builder) {
+                    $builder->active();
+                })->get(),
             'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors()->active()->get(),
+            'floors' => $dungeon->floorsForMapFacade($useFacade)->active()->get(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
@@ -181,7 +184,7 @@ if ($isAdmin) {
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floors()->active()->get(),
+            'floors' => $dungeon->floorsForMapFacade($useFacade)->active()->get(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,

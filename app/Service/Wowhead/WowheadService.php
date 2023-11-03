@@ -7,6 +7,12 @@ use App\Models\Npc;
 use App\Service\Traits\Curl;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
+use PHPHtmlParser\Exceptions\ChildNotFoundException;
+use PHPHtmlParser\Exceptions\CircularException;
+use PHPHtmlParser\Exceptions\ContentLengthException;
+use PHPHtmlParser\Exceptions\LogicalException;
+use PHPHtmlParser\Exceptions\NotLoadedException;
+use PHPHtmlParser\Exceptions\StrictException;
 
 class WowheadService implements WowheadServiceInterface
 {
@@ -45,21 +51,24 @@ class WowheadService implements WowheadServiceInterface
             // Find the health value from this little html
 
             $dom = new Dom();
-            $dom->loadStr($html);
-            $tds = $dom->getElementsbyTag('td');
+            try {
+                $dom->loadStr($html);
+                $tds = $dom->getElementsbyTag('td');
 
-            $grabNext = false;
+                $grabNext = false;
 
-            foreach ($tds as $td) {
-                if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
-                    $grabNext = true;
-                } else if ($grabNext) {
-                    $possibleHealth = (int)str_replace(',', '', $td->innerHtml);
-                    if ($possibleHealth > 0) {
-                        $health = $possibleHealth;
-                        break;
+                foreach ($tds as $td) {
+                    if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
+                        $grabNext = true;
+                    } else if ($grabNext) {
+                        $possibleHealth = (int)str_replace(',', '', $td->innerHtml);
+                        if ($possibleHealth > 0) {
+                            $health = $possibleHealth;
+                            break;
+                        }
                     }
                 }
+            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException $e) {
             }
         }
 

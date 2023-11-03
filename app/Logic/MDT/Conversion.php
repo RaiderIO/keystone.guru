@@ -8,9 +8,11 @@
 
 namespace App\Logic\MDT;
 
+use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\Floor\Floor;
 use App\Service\Season\SeasonService;
 use Exception;
 
@@ -63,7 +65,7 @@ class Conversion
 
         Expansion::EXPANSION_LEGION => [
             Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
-            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
+            //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
             Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
             Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
             Dungeon::DUNGEON_DARKHEART_THICKET           => 'DarkheartThicket',
@@ -87,7 +89,7 @@ class Conversion
             Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
             Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
             Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
-            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
+            //            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
             Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
             Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
         ],
@@ -111,26 +113,36 @@ class Conversion
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
             // Cata
-            Dungeon::DUNGEON_THE_VORTEX_PINNACLE        => 'TheVortexPinnacle',
+            Dungeon::DUNGEON_THE_VORTEX_PINNACLE                  => 'TheVortexPinnacle',
             // MoP
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT           => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_THRONE_OF_THE_TIDES                  => 'ThroneOfTides',
             // WoD
-            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS            => 'ShadowmoonBurialGrounds',
+            Dungeon::DUNGEON_THE_EVERBLOOM                        => 'Everbloom',
+            // Legion
+            Dungeon::DUNGEON_BLACK_ROOK_HOLD                      => 'BlackrookHold',
+            // BFA
+            Dungeon::DUNGEON_WAYCREST_MANOR                       => 'WaycrestManor',
             // DF
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
-            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW         => 'BrackenhideHollow',
-            Dungeon::DUNGEON_HALLS_OF_INFUSION          => 'HallsOfInfusion',
-            Dungeon::DUNGEON_NELTHARUS                  => 'Neltharus',
-            Dungeon::DUNGEON_RUBY_LIFE_POOLS            => 'RubyLifePools',
-            Dungeon::DUNGEON_THE_AZURE_VAULT            => 'TheAzureVault',
-            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE       => 'TheNokhudOffensive',
-            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR      => 'UldamanLegacyOfTyr',
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
+            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
+            Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
+            Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
+            Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
+            Dungeon::DUNGEON_THE_AZURE_VAULT                      => 'TheAzureVault',
+            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE                 => 'TheNokhudOffensive',
+            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR                => 'UldamanLegacyOfTyr',
+            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL => 'DawnOfTheInfiniteLower',
+            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  => 'DawnOfTheInfiniteUpper',
         ],
     ];
 
     /**
      * Rounds a number to the nearest two decimals.
+     *
      * @param $nr
+     *
      * @return float
      */
     private static function round($nr): float
@@ -140,6 +152,7 @@ class Conversion
 
     /**
      * @param string $dungeonKey
+     *
      * @return string|null
      */
     public static function getExpansionName(string $dungeonKey): ?string
@@ -157,6 +170,7 @@ class Conversion
 
     /**
      * @param string $dungeonKey
+     *
      * @return string|null
      */
     public static function getMDTExpansionName(string $dungeonKey): ?string
@@ -166,6 +180,7 @@ class Conversion
 
     /**
      * @param $dungeonKey string
+     *
      * @return bool True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -175,6 +190,7 @@ class Conversion
 
     /**
      * @param $dungeonKey string
+     *
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -191,7 +207,9 @@ class Conversion
 
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
+     *
      * @param $mdtDungeonId int
+     *
      * @return Dungeon
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
@@ -207,22 +225,26 @@ class Conversion
 
     /**
      * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
-     * @param $xy array
-     * @return array
+     *
+     * @param array{x: float, y: float} $xy
+     * @param Floor|null                $floor
+     * @return LatLng
      */
-    public static function convertMDTCoordinateToLatLng(array $xy): array
+    public static function convertMDTCoordinateToLatLng(array $xy, ?Floor $floor = null): LatLng
     {
         // This seems to match my coordinate system for about 99%. Needs some more refinement, but it should be very minor.
         // Yes I know about php's round() function but it gives floating point rounding errors.
-        return ['lat' => self::round($xy['y'] / 2.185), 'lng' => self::round($xy['x'] / 2.185)];
+        return new LatLng(self::round($xy['y'] / 2.185), self::round($xy['x'] / 2.185), $floor);
     }
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
-     * @param $latLng array
+     *
+     * @param LatLng $latLng
+     *
      * @return array
      */
-    public static function convertLatLngToMDTCoordinateString(array $latLng): array
+    public static function convertLatLngToMDTCoordinateString(LatLng $latLng): array
     {
         $mdtCoordinate      = self::convertLatLngToMDTCoordinate($latLng);
         $mdtCoordinate['x'] = (string)$mdtCoordinate['x'];
@@ -233,19 +255,23 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
-     * @param $latLng array
+     *
+     * @param LatLng $latLng
+     *
      * @return array
      */
-    public static function convertLatLngToMDTCoordinate(array $latLng): array
+    public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {
-        return ['y' => round($latLng['lat'] * 2.185, 1), 'x' => round($latLng['lng'] * 2.185, 1)];
+        return ['y' => round($latLng->getLat() * 2.185, 1), 'x' => round($latLng->getLng() * 2.185, 1)];
     }
 
     /**
      * Convert a MDT week to a matching affix group
+     *
      * @param SeasonService $seasonService
      * @param Dungeon       $dungeon
      * @param int           $mdtWeek
+     *
      * @return AffixGroup|null
      * @throws Exception
      */
@@ -273,6 +299,7 @@ class Conversion
 
     /**
      * @param AffixGroup $affixGroup
+     *
      * @return int
      */
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int

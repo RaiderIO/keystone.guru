@@ -25,6 +25,7 @@ $hideOnMove             = $hideOnMove ?? $isMobile;
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
     'killZonesContainerSelector' => '#killzones_container',
+    'mapSettingsMapFacadeStyleSelector' => '#map_settings_map_facade_style',
     'killZonesPullsSettingsMapNumberStyleSelector' => '#killzones_pulls_settings_map_number_style',
     'killZonesPullsSettingsNumberStyleSelector' => '#killzones_pulls_settings_number_style',
     'killZonesPullsSettingsDeleteAllSelector' => '#killzones_pulls_settings_delete_all',

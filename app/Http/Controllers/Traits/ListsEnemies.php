@@ -28,11 +28,11 @@ trait ListsEnemies
      *
      * @param MappingVersion $mappingVersion
      * @param bool $showMdtEnemies
-     * @return array|bool
+     * @return array|null
      * @throws InvalidArgumentException
      * @throws InvalidMDTDungeonException
      */
-    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false)
+    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false): ?array
     {
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::selectRaw('enemies.*')
@@ -55,7 +55,7 @@ trait ListsEnemies
         if ($showMdtEnemies) {
             try {
                 $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
-                $mdtEnemies = (new MDTDungeon($dungeon))->getClonesAsEnemies($dungeon->floors()->with(['dungeon'])->get());
+                $mdtEnemies = (new MDTDungeon($dungeon))->getClonesAsEnemies($this->mappingVersion, $dungeon->floors()->with(['dungeon'])->get());
 
                 $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy) {
                     return !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]);
@@ -63,7 +63,7 @@ trait ListsEnemies
 
             } // Thrown when Lua hasn't been configured
             catch (Error $ex) {
-                return false;
+                return null;
             }
         }
 

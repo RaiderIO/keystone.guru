@@ -6,7 +6,7 @@
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Release;

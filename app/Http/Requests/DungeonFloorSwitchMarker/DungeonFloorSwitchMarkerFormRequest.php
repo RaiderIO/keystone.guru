@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\DungeonFloorSwitchMarker;
 
-use App\Models\Enemy;
-use App\Models\Faction;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,7 +31,9 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
             'id'                 => 'int',
             'mapping_version_id' => ['required', Rule::exists(MappingVersion::class, 'id')],
             'floor_id'           => ['required', Rule::exists(Floor::class, 'id')],
+            'source_floor_id'    => ['nullable', Rule::in(array_merge([-1], Floor::all('id')->pluck('id')->toArray()))],
             'target_floor_id'    => ['nullable', Rule::exists(Floor::class, 'id')],
+            'direction'          => ['nullable', Rule::in(array_merge(FloorCoupling::ALL, ['-1', '', null]))],
             'lat'                => 'numeric',
             'lng'                => 'numeric',
         ];

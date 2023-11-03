@@ -5,7 +5,7 @@ namespace App\Service\DungeonRoute;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -102,7 +102,7 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): void
     {
-        foreach ($dungeonRoute->dungeon->floors as $floor) {
+        foreach ($dungeonRoute->dungeon->floors()->where('facade', 0)->get() as $floor) {
             /** @var Floor $floor */
             // Set it for processing in a queue
             ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floor->index);
@@ -146,7 +146,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         $result = true;
 
         // Copy over all thumbnails
-        foreach ($sourceDungeonRoute->dungeon->floors as $floor) {
+        foreach ($sourceDungeonRoute->dungeon->floors()->where('facade', 0)->get() as $floor) {
             $sourcePath = $this->getTargetFilePath($sourceDungeonRoute, $floor->index);
             $targetPath = $this->getTargetFilePath($targetDungeonRoute, $floor->index);
 

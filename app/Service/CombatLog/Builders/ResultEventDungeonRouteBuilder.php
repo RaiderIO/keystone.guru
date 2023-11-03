@@ -14,6 +14,7 @@ use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -28,9 +29,13 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
     private ResultEventDungeonRouteBuilderLoggingInterface $log;
 
-    public function __construct(DungeonRoute $dungeonRoute, Collection $resultEvents)
+    public function __construct(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute $dungeonRoute,
+        Collection $resultEvents
+    )
     {
-        parent::__construct($dungeonRoute);
+        parent::__construct($coordinatesService, $dungeonRoute);
 
         $this->resultEvents = $resultEvents;
 

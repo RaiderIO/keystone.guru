@@ -1,6 +1,6 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
-/** @var $floor \App\Models\Floor */
+/** @var $floor \App\Models\Floor\Floor */
 /** @var $npcIds array */
 /** @var $npcIdsWithNullable array */
 /** @var $difficulty int */
@@ -18,9 +18,9 @@
 )
 @section('header-title')
     @if($difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN )
-            {{ __('views/admin.dungeonspeedrunrequirednpc.new.header_10_man', ['dungeon' => __($dungeon->name)]) }}
-        @else
-            {{ __('views/admin.dungeonspeedrunrequirednpc.new.header_25_man', ['dungeon' => __($dungeon->name)]) }}
+        {{ __('views/admin.dungeonspeedrunrequirednpc.new.header_10_man', ['dungeon' => __($dungeon->name)]) }}
+    @else
+        {{ __('views/admin.dungeonspeedrunrequirednpc.new.header_25_man', ['dungeon' => __($dungeon->name)]) }}
     @endif
 @endsection
 

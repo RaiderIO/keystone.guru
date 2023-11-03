@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Logic\Structs\LatLng;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,6 +55,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
 {
     use CloneForNewMappingVersionNoRelations;
     use Reportable;
+    use HasLatLng;
 
     protected $fillable = [
         'id',
@@ -193,14 +196,6 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     public function enemyActiveAuras(): HasMany
     {
         return $this->hasMany(EnemyActiveAura::class);
-    }
-
-    /**
-     * @return LatLng
-     */
-    public function getLatLng(): LatLng
-    {
-        return new LatLng($this->lat, $this->lng);
     }
 
     /**

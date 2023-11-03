@@ -3,10 +3,9 @@
 namespace App\Console\Commands\Dungeon;
 
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class CreateMissingFloors extends Command
 {

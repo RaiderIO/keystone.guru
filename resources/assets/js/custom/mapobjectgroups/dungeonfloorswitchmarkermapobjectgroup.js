@@ -41,9 +41,10 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
      * @param sourceFloorId {Number}
      * @param targetFloorId {Number}
      * @param latLng {L.latLng|null}
+     * @param facade {Boolean}
      * @private
      */
-    _findMarkerByTargetFloorId(sourceFloorId, targetFloorId, latLng) {
+    _findMarkerByTargetFloorId(sourceFloorId, targetFloorId, latLng, facade = false) {
         if (latLng === null) {
             // Center of the map
             latLng = new L.latLng(-128, 192);
@@ -56,7 +57,8 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         for (let key in this.objects) {
             let object = this.objects[key];
 
-            if (object.floor_id === sourceFloorId && object.target_floor_id === targetFloorId) {
+            if (((facade && object.source_floor_id === sourceFloorId) || (!facade && object.floor_id === sourceFloorId)) &&
+                object.target_floor_id === targetFloorId) {
                 shortlist.push(object);
             }
         }
@@ -85,9 +87,10 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
      * @param floorId {Number}
      * @param targetFloorId {Number}
      * @param latLng {L.latLng|null}
+     * @param facade {Boolean}
      */
-    getClosestMarker(floorId, targetFloorId, latLng = null) {
-        let result = this._findMarkerByTargetFloorId(floorId, targetFloorId, latLng);
+    getClosestMarker(floorId, targetFloorId, latLng = null, facade = false) {
+        let result = this._findMarkerByTargetFloorId(floorId, targetFloorId, latLng, facade);
 
         // If not found, try to find it across all objects we have
         if (result === null) {

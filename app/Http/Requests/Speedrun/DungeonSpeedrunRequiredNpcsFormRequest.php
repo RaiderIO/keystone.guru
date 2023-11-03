@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Speedrun;
 
 use App\Models\Dungeon;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\Npc;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;

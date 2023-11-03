@@ -49,6 +49,14 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             enabled: this.options.mountablearea,
             handler: new L.Draw.MountableArea(map, this.options.mountablearea),
             title: this.options.mountablearea.title
+        }, {
+            enabled: this.options.floorunion,
+            handler: new L.Draw.FloorUnion(map, this.options.floorunion),
+            title: this.options.floorunion.title
+        }, {
+            enabled: this.options.floorunionarea,
+            handler: new L.Draw.FloorUnionArea(map, this.options.floorunionarea),
+            title: this.options.floorunionarea.title
         },
     ];
 };
@@ -310,6 +318,8 @@ class DrawControls extends MapControl {
                 dungeonfloorswitchmarker: false,
                 usermouseposition: false,
                 mountablearea: false,
+                floorunion: false,
+                floorunionarea: false,
             },
             edit: {
                 featureGroup: this.editableItemsLayer, //REQUIRED!!
@@ -458,7 +468,7 @@ class DrawControls extends MapControl {
                 (self.map.getMapState() instanceof PatherMapState ? ' leaflet-draw-toolbar-button-enabled' : ''),
             href: '#',
         });
-        
+
         let hotkey = this._findHotkeyByCssClass('brushline');
         $brushlineButton.html(
             this._getButtonHtml(

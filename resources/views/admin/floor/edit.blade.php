@@ -1,7 +1,7 @@
 <?php
 /** @var $dungeon \App\Models\Dungeon */
-/* @var $floor \App\Models\Floor */
-/* @var $floorCouplings \App\Models\FloorCoupling[]|\Illuminate\Support\Collection */
+/* @var $floor \App\Models\Floor\Floor */
+/* @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection */
 $floor = $floor ?? null;
 ?>
 @extends('layouts.sitepage', [
@@ -34,13 +34,22 @@ $floor = $floor ?? null;
             @include('common.forms.form-error', ['key' => 'active'])
         </div>
 
-        <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
+        <div class="col {{ $errors->has('default') ? ' has-error' : '' }}">
             {!! Form::label('default', __('views/admin.floor.edit.default'), ['class' => 'font-weight-bold']) !!}
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('views/admin.floor.edit.default_title')
                  }}"></i>
             {!! Form::checkbox('default', 1, optional($floor)->default ?? (int)($dungeon->floors()->count() === 0), ['class' => 'form-control left_checkbox']) !!}
             @include('common.forms.form-error', ['key' => 'default'])
+        </div>
+
+        <div class="col {{ $errors->has('facade') ? ' has-error' : '' }}">
+            {!! Form::label('facade', __('views/admin.floor.edit.facade'), ['class' => 'font-weight-bold']) !!}
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+                __('views/admin.floor.edit.facade_title')
+                 }}"></i>
+            {!! Form::checkbox('facade', 1, optional($floor)->facade, ['class' => 'form-control left_checkbox']) !!}
+            @include('common.forms.form-error', ['key' => 'facade'])
         </div>
     </div>
 
@@ -106,7 +115,7 @@ $floor = $floor ?? null;
         @include('admin.floor.connectedfloors', ['floor' => $floor])
 
         {!! Form::submit(__('views/admin.floor.edit.submit'), ['class' => 'btn btn-info']) !!}
-    
+
         {!! Form::close() !!}
     </div>
 

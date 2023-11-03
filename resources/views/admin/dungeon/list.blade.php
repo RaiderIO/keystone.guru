@@ -12,7 +12,7 @@
 <?php
 /**
  * @var $models \App\Models\Dungeon
- * @var $floor \App\Models\Floor
+ * @var $floor \App\Models\Floor\Floor
  */
 ?>
 
@@ -50,7 +50,7 @@
 
         <tbody>
         @foreach ($models as $dungeon)
-            <?php
+                <?php
                 /** @var $dungeon \App\Models\Dungeon */
                 $mappingVersion = $dungeon->getCurrentMappingVersion();
                 ?>
@@ -71,13 +71,13 @@
                          data-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>
-                    <td data-order="{{ $dungeon->game_version_id }}">
-                        <img src="{{ url(sprintf('images/gameversions/%s.png', $dungeon->gameVersion->key)) }}"
-                             alt="{{ __($dungeon->gameVersion->name) }}"
-                             title="{{ __($dungeon->gameVersion->name) }}"
-                             data-toggle="tooltip"
-                             style="width: 50px;"/>
-                    </td>
+                <td data-order="{{ $dungeon->game_version_id }}">
+                    <img src="{{ url(sprintf('images/gameversions/%s.png', $dungeon->gameVersion->key)) }}"
+                         alt="{{ __($dungeon->gameVersion->name) }}"
+                         title="{{ __($dungeon->gameVersion->name) }}"
+                         data-toggle="tooltip"
+                         style="width: 50px;"/>
+                </td>
                 <td>{{ __($dungeon->name) }}</td>
                 <td>{{ optional($mappingVersion)->enemy_forces_required }}</td>
                 <td>{{ optional($mappingVersion)->enemy_forces_required_teeming }}</td>

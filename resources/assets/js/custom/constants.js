@@ -9,6 +9,7 @@ let cookieDefaults = {
     polyline_default_color: null,
     hidden_map_object_groups: '["mountablearea"]',
     hidden_map_object_groups_added_mountablearea: 0,
+    map_facade_style: 'split_floors',
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
     pulls_sidebar_floor_switch_visibility: 1,
@@ -54,6 +55,8 @@ const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
 const MAP_OBJECT_GROUP_ENEMY = 'enemy';
 const MAP_OBJECT_GROUP_ENEMY_PATROL = 'enemypatrol';
 const MAP_OBJECT_GROUP_ENEMY_PACK = 'enemypack';
+const MAP_OBJECT_GROUP_FLOOR_UNION = 'floorunion';
+const MAP_OBJECT_GROUP_FLOOR_UNION_AREA = 'floorunionarea';
 const MAP_OBJECT_GROUP_KILLZONE = 'killzone';
 const MAP_OBJECT_GROUP_KILLZONE_PATH = 'killzonepath';
 const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
@@ -77,8 +80,14 @@ const MAP_OBJECT_GROUP_NAMES = [
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
     MAP_OBJECT_GROUP_KILLZONE,
     MAP_OBJECT_GROUP_KILLZONE_PATH,
-    MAP_OBJECT_GROUP_MOUNTABLE_AREA
+    MAP_OBJECT_GROUP_MOUNTABLE_AREA,
+    MAP_OBJECT_GROUP_FLOOR_UNION,
+    MAP_OBJECT_GROUP_FLOOR_UNION_AREA
 ];
+
+// Map
+const MAP_FACADE_STYLE_FACADE = 'facade';
+const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
 
 // Kill zones
 const NUMBER_STYLE_PERCENTAGE = 'percentage';
@@ -411,6 +420,12 @@ let c = {
                 weight: 4,
             },
         },
+        dungeonfloorswitchmarker: {
+            floorUnionConnectionPolylineOptions: {
+                color: '#006b77',
+                weight: 5,
+            }
+        },
         path: {
             defaultColor: polylineDefaultColor,
         },
@@ -433,8 +448,8 @@ let c = {
             awakenedObeliskGatewayPolylineColorAnimated: '#244812',
             awakenedObeliskGatewayPolylineWeight: 3,
             killzonepath: {
-                color: 'red',
-                colorAnimated: 'red',
+                color: '#F00',
+                colorAnimated: '#F00',
                 weight: 5,
             },
         },
@@ -500,6 +515,17 @@ let c = {
         },
         mountablearea: {
             color: '#eb4934'
+        },
+        floorunion: {
+            polygonOptions: {
+                color: '#ff6200',
+                weight: 1,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
+        },
+        floorunionarea: {
+            color: '#00b08c',
         },
         placeholderColors: {},
         editsidebar: {

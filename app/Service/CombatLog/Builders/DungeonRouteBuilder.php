@@ -9,7 +9,7 @@ use App\Logic\Utils\MathUtils;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
@@ -18,6 +18,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -42,6 +43,8 @@ abstract class DungeonRouteBuilder
      */
     private const ENEMY_LAST_PULL_DISTANCE_CAP_YARDS = 100;
 
+    protected CoordinatesServiceInterface $coordinatesService;
+
     protected DungeonRoute $dungeonRoute;
 
     protected ?Floor $currentFloor;
@@ -59,11 +62,15 @@ abstract class DungeonRouteBuilder
     private DungeonRouteBuilderLoggingInterface $log;
 
     /**
-     * @param DungeonRoute $dungeonRoute
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param DungeonRoute                $dungeonRoute
      */
-    public function __construct(DungeonRoute $dungeonRoute)
-    {
-        $this->dungeonRoute = $dungeonRoute;
+    public function __construct(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute
+    ) {
+        $this->coordinatesService = $coordinatesService;
+        $this->dungeonRoute       = $dungeonRoute;
         /** @var DungeonRouteBuilderLoggingInterface $log */
         $log                    = App::make(DungeonRouteBuilderLoggingInterface::class);
         $this->log              = $log;
@@ -222,10 +229,7 @@ abstract class DungeonRouteBuilder
         /** @var KillZone $previousPull */
         $previousPull = $this->dungeonRoute->killZones->last();
         if ($previousPull !== null) {
-            $previousPullLatLng = LatLng::fromArray(
-                $previousPull->getKillLocation(true),
-                $previousPull->getDominantFloor(true)
-            );
+            $previousPullLatLng = $previousPull->getKillLocation(true);
         }
 
         try {
@@ -360,8 +364,7 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy,
         bool            $considerPatrols = false
-    ): bool
-    {
+    ): bool {
         $result = false;
 
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
@@ -383,7 +386,7 @@ abstract class DungeonRouteBuilder
                     }
 
                     // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
-                    $vertices = $availableEnemy->enemyPatrol->polyline->getDecodedLatLngs();
+                    $vertices = $availableEnemy->enemyPatrol->polyline->getDecodedLatLngs($availableEnemy->floor);
 
                     foreach ($vertices as $latLng) {
                         $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
@@ -438,16 +441,15 @@ abstract class DungeonRouteBuilder
         ?LatLng      $previousPullLatLng,
         IngameXY     $targetIngameXY,
         ClosestEnemy $closestEnemy
-    ): bool
-    {
+    ): bool {
         $result = false;
 
         // Always use the floor that the enemy itself is on, not $this->currentFloor
-        $enemyXY                = $availableEnemy->floor->calculateIngameLocationForMapLocation($enemyLatLng->getLat(), $enemyLatLng->getLng());
+        $enemyXY                = $this->coordinatesService->calculateIngameLocationForMapLocation($enemyLatLng);
         $distanceBetweenEnemies = MathUtils::distanceBetweenPoints(
-            $enemyXY['x'],
+            $enemyXY->getX(),
             $targetIngameXY->getX(),
-            $enemyXY['y'],
+            $enemyXY->getY(),
             $targetIngameXY->getY(),
         );
 
@@ -456,12 +458,12 @@ abstract class DungeonRouteBuilder
             // Calculate the location of the latLng
             /** @var IngameXY|null $previousPullIngameXY */
             $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?
-                null : $previousPullLatLng->getIngameXY();
+                null : $this->coordinatesService->calculateIngameLocationForMapLocation($previousPullLatLng);
 
             $distanceBetweenPreviousPullAndEnemy = min($previousPullIngameXY === null ? 0 : MathUtils::distanceBetweenPoints(
-                $enemyXY['x'],
+                $enemyXY->getX(),
                 $previousPullIngameXY->getX(),
-                $enemyXY['y'],
+                $enemyXY->getY(),
                 $previousPullIngameXY->getY(),
             ), self::ENEMY_LAST_PULL_DISTANCE_CAP_YARDS);
 

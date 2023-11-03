@@ -166,7 +166,28 @@ class SeasonsSeeder extends Seeder
                         Dungeon::DUNGEON_THE_VORTEX_PINNACLE,
                     ])->orderBy('expansions.released_at')
                     ->get(),
-            ],
+            ], [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id'       => null,
+                'index'                   => 3,
+                'start'                   => '2023-10-13 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 10,
+                'start_affix_group_index' => 4,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
+                        Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
+                        Dungeon::DUNGEON_DARKHEART_THICKET,
+                        Dungeon::DUNGEON_BLACK_ROOK_HOLD,
+                        Dungeon::DUNGEON_WAYCREST_MANOR,
+                        Dungeon::DUNGEON_ATAL_DAZAR,
+                        Dungeon::DUNGEON_THE_EVERBLOOM,
+                        Dungeon::DUNGEON_THRONE_OF_THE_TIDES,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
+            ]
         ];
 
 

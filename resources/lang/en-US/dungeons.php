@@ -385,8 +385,9 @@ return [
         'throne_of_the_tides' => [
             'name'   => 'Throne of the Tides',
             'floors' => [
-                'abyssal_halls'      => 'Abyssal Halls',
-                'throne_of_neptulon' => 'Throne of Neptulon',
+                'abyssal_halls'       => 'Abyssal Halls',
+                'throne_of_neptulon'  => 'Throne of Neptulon',
+                'throne_of_the_tides' => 'Throne of the Tides',
             ],
         ],
     ],
@@ -459,6 +460,7 @@ return [
                 'the_rooks_roost'          => 'The Rook\'s Roost',
                 'lord_ravencrests_chamber' => 'Lord Ravencrest\'s Chamber',
                 'the_ravens_crown'         => 'The Raven\'s Crown',
+                'black_rook_hold'          => 'Black Rook Hold',
             ],
         ],
         'court_of_stars'       => [
@@ -625,6 +627,7 @@ return [
                 'the_cellar'      => 'The Cellar',
                 'catacombs'       => 'Catacombs',
                 'the_rupture'     => 'The Rupture',
+                'waycrest_manor'  => 'Waycrest Manor',
             ],
         ],
         'mechagon_junkyard'         => [
@@ -742,7 +745,7 @@ return [
         ],
     ],
     'dragonflight' => [
-        'algeth_ar_academy'     => [
+        'algeth_ar_academy'                    => [
             'name'   => 'Algeth\'ar Academy',
             'floors' => [
                 'algeth_ar_academy'        => 'Algeth\'ar Academy',
@@ -750,35 +753,35 @@ return [
                 'the_headteachers_enclave' => 'The Headteacher\'s Enclave',
             ],
         ],
-        'brackenhide_hollow'    => [
+        'brackenhide_hollow'                   => [
             'name'   => 'Brackenhide Hollow',
             'floors' => [
                 'brackenhide_hollow' => 'Brackenhide Hollow',
                 'den_of_decay'       => 'Den of Decay',
             ],
         ],
-        'halls_of_infusion'     => [
+        'halls_of_infusion'                    => [
             'name'   => 'Halls of Infusion',
             'floors' => [
                 'infusers_rotunda' => 'Infuser\'s Rotunda',
                 'infusion_chamber' => 'Infusion Chamber',
             ],
         ],
-        'neltharus'             => [
+        'neltharus'                            => [
             'name'   => 'Neltharus',
             'floors' => [
                 'the_burning_cauldron' => 'The Burning Cauldron',
                 'chamber_of_flames'    => 'Chamber of Flames',
             ],
         ],
-        'ruby_life_pools'       => [
+        'ruby_life_pools'                      => [
             'name'   => 'Ruby Life Pools',
             'floors' => [
                 'infusion_chambers' => 'Infusion Chambers',
                 'ruby_overlook'     => 'Ruby Overlook',
             ],
         ],
-        'the_azure_vault'       => [
+        'the_azure_vault'                      => [
             'name'   => 'The Azure Vault',
             'floors' => [
                 'the_arcane_conservatory' => 'The Arcane Conservatory',
@@ -788,17 +791,41 @@ return [
                 'sindragosas_lament'      => 'Sindragosa\'s Lament',
             ],
         ],
-        'the_nokhud_offensive'  => [
+        'the_nokhud_offensive'                 => [
             'name'   => 'The Nokhud Offensive',
             'floors' => [
                 'the_nokhud_offensive' => 'The Nokhud Offensive',
             ],
         ],
-        'uldaman_legacy_of_tyr' => [
+        'uldaman_legacy_of_tyr'                => [
             'name'   => 'Uldaman: Legacy of Tyr',
             'floors' => [
                 'hall_of_the_keepers' => 'Hall of the Keepers',
                 'the_vault_of_tyr'    => 'The Vault of Tyr',
+            ],
+        ],
+        'dawn_of_the_infinite_galakronds_fall' => [
+            'name'   => 'Dawn of the Infinite: Galakrond\'s Fall',
+            'floors' => [
+                'galakronds_fall'         => 'Galakrond\'s Fall',
+                'sanctum_of_chronology'   => 'Sanctum of Chronology',
+                'millennias_threshold'    => 'Millennia\'s Threshold',
+                'locus_of_eternity'       => 'Locus of Eternity',
+                'spoke_of_endless_winter' => 'Spoke of Endless Winter',
+                'crossroads_of_fate'      => 'Crossroads of Fate',
+            ],
+        ],
+        'dawn_of_the_infinite_murozonds_rise'  => [
+            'name'   => 'Dawn of the Infinite: Murozond\'s Rise',
+            'floors' => [
+                'murozonds_rise'         => 'Murozond\'s Rise',
+                'sanctum_of_chronology'  => 'Sanctum of Chronology',
+                'millennias_threshold'   => 'Millennia\'s Threshold',
+                'locus_of_eternity'      => 'Locus of Eternity',
+                'crossroads_of_fate'     => 'Crossroads of Fate',
+                'infinite_conflux'       => 'Infinite Conflux',
+                'twisting_approach'      => 'Twisting Approach',
+                'immemorial_battlefield' => 'Immemorial Battlefield',
             ],
         ],
     ],

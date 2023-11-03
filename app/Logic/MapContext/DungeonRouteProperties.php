@@ -16,6 +16,11 @@ use Illuminate\Support\Collection;
  */
 trait DungeonRouteProperties
 {
+    public function getMapFacadeStyle(): string
+    {
+        return $_COOKIE['map_facade_style'] ?? 'facade';
+    }
+
     /**
      * @param array $publicKeys
      * @return Collection

@@ -4,7 +4,8 @@ namespace App\Models\Enemies;
 
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
+use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PridefulEnemy extends Model
 {
     use Reportable;
+    use HasLatLng;
 
     protected $fillable = ['dungeon_route_id', 'enemy_id', 'floor_id', 'lat', 'lng'];
     protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];

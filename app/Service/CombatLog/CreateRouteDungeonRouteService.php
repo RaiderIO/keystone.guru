@@ -5,16 +5,16 @@ namespace App\Service\CombatLog;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
+use App\Logic\Structs\IngameXY;
 use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute;
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Path;
 use App\Models\Polyline;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
@@ -31,6 +31,7 @@ use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartR
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use Exception;
@@ -43,22 +44,26 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
     protected SeasonServiceInterface $seasonService;
 
+    protected CoordinatesServiceInterface $coordinatesService;
+
     protected CreateRouteDungeonRouteServiceLoggingInterface $log;
 
     /**
      * @param CombatLogService                               $combatLogService
      * @param SeasonServiceInterface                         $seasonService
+     * @param CoordinatesServiceInterface                    $coordinatesService
      * @param CreateRouteDungeonRouteServiceLoggingInterface $log
      */
     public function __construct(
         CombatLogService                               $combatLogService,
         SeasonServiceInterface                         $seasonService,
+        CoordinatesServiceInterface                    $coordinatesService,
         CreateRouteDungeonRouteServiceLoggingInterface $log
-    )
-    {
-        $this->combatLogService = $combatLogService;
-        $this->seasonService    = $seasonService;
-        $this->log              = $log;
+    ) {
+        $this->combatLogService   = $combatLogService;
+        $this->seasonService      = $seasonService;
+        $this->coordinatesService = $coordinatesService;
+        $this->log                = $log;
     }
 
     /**
@@ -68,7 +73,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
      */
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
-        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $createRouteBody))->build();
+        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $this->coordinatesService, $createRouteBody))->build();
 
         $this->saveChallengeModeRun($createRouteBody, $dungeonRoute);
 
@@ -137,7 +142,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     }
 
                     $npcEngagedEvents->put($guid->getGuid(), $resultEvent);
-                } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
+                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
@@ -162,7 +167,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                             )
                         )
                     );
-                } elseif ($resultEvent instanceof SpellCast) {
+                } else if ($resultEvent instanceof SpellCast) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -235,23 +240,23 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 continue;
             }
 
-            $ingameLatLng = $floor->calculateMapLocationForIngameLocation($npc->coord->x, $npc->coord->y);
+            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                new IngameXY($npc->coord->x, $npc->coord->y, $floor)
+            );
 
-            $enemyPositionAttributes[] = [
+            $enemyPositionAttributes[] = array_merge([
                 'challenge_mode_run_id' => $challengeModeRun->id,
                 'floor_id'              => $floor->id,
                 'npc_id'                => $npc->npcId,
                 'guid'                  => $npc->getUniqueId(),
-                'lat'                   => $ingameLatLng['lat'],
-                'lng'                   => $ingameLatLng['lng'],
                 'created_at'            => $now,
-            ];
+            ], $latLng->toArray());
         }
 
         if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
             // Then we don't want duplicates - get rid of the challenge mode run
             $challengeModeRun->update([
-                'duplicate' => 1
+                'duplicate' => 1,
             ]);
         }
 
@@ -274,8 +279,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         MappingVersion  $mappingVersion,
         CreateRouteBody $createRouteBody,
         ?DungeonRoute   $dungeonRoute = null
-    ): void
-    {
+    ): void {
         $now                 = now();
         $mapIconAttributes   = [];
         $polylineAttributes  = [];
@@ -296,26 +300,27 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 continue;
             }
 
-            $latLng = $currentFloor->calculateMapLocationForIngameLocation(
-                $npc->coord->x,
-                $npc->coord->y,
+            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                new IngameXY(
+                    $npc->coord->x,
+                    $npc->coord->y,
+                    $currentFloor
+                )
             );
 
             $comment = json_encode($npc);
 
             $hasResolvedEnemy = $npc->getResolvedEnemy() !== null;
 
-            $mapIconAttributes[] = [
+            $mapIconAttributes[] = array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
                 'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
-                'lat'                => $latLng['lat'],
-                'lng'                => $latLng['lng'],
                 'comment'            => $comment,
                 'permanent_tooltip'  => 0,
-            ];
+            ], $latLng->toArray());
 
             if ($hasResolvedEnemy) {
                 $brushlineAttributes[] = [
@@ -331,9 +336,9 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     'color'         => '#f202fa',
                     'weight'        => 2,
                     'vertices_json' => json_encode([
-                        $latLng,
-                        ['lat' => $npc->getResolvedEnemy()->lat, 'lng' => $npc->getResolvedEnemy()->lng],
-                    ])
+                        $latLng->toArray(),
+                        $npc->getResolvedEnemy()->getLatLng()->toArray(),
+                    ]),
                 ];
             }
 

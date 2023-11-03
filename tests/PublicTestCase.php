@@ -3,7 +3,6 @@
 namespace Tests;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 
 class PublicTestCase extends TestCase
 {

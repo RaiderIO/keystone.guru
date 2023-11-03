@@ -28,7 +28,7 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
     {
         $rules = [
             // Only active dungeons are allowed
-            'dungeon_id' => ['required', Rule::exists('dungeons', 'id')->where('active', '1')],
+            'dungeon_id' => ['required', Rule::exists(Dungeon::class, 'id')->where('active', '1')],
 
             'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
         ];

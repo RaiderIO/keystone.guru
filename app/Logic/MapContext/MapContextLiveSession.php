@@ -3,16 +3,18 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\Floor;
+use App\Models\Floor\Floor;
 use App\Models\LiveSession;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Illuminate\Support\Facades\App;
 
 /**
  * Class MapContextLiveSession
  * @package App\Logic\MapContext
- * @author Wouter
- * @since 13/05/2021
+ * @author  Wouter
+ * @since   13/05/2021
  *
  * @property LiveSession $context
  */
@@ -20,9 +22,18 @@ class MapContextLiveSession extends MapContext
 {
     use DungeonRouteProperties;
 
-    public function __construct(LiveSession $liveSession, Floor $floor)
+    private OverpulledEnemyServiceInterface $overpulledEnemyService;
+
+    public function __construct(
+        CacheServiceInterface           $cacheService,
+        CoordinatesServiceInterface     $coordinatesService,
+        OverpulledEnemyServiceInterface $overpulledEnemyService,
+        LiveSession                     $liveSession,
+        Floor                           $floor)
     {
-        parent::__construct($liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
+        $this->overpulledEnemyService = $overpulledEnemyService;
+
+        parent::__construct($cacheService, $coordinatesService, $liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
     }
 
     public function getType(): string
@@ -42,7 +53,7 @@ class MapContextLiveSession extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->mappingVersion, false);
+        return $this->listEnemies($this->mappingVersion, false) ?? [];
     }
 
     public function getEchoChannelName(): string
@@ -52,10 +63,7 @@ class MapContextLiveSession extends MapContext
 
     public function getProperties(): array
     {
-        /** @var OverpulledEnemyServiceInterface $overpulledEnemyService */
-        $overpulledEnemyService = App::make(OverpulledEnemyServiceInterface::class);
-
-        $routeCorrection = $overpulledEnemyService->getRouteCorrection($this->context);
+        $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->context);
 
         return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonroute), [
             'liveSessionPublicKey' => $this->context->public_key,

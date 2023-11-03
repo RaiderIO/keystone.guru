@@ -76,7 +76,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             return;
         }
 
-        let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility();
+        let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility() && getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS;
 
         if (showFloorSwitches && this.rowElements.length === 0) {
             this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
@@ -176,7 +176,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $('.map_killzonessidebar_floor_switch').remove();
 
         // Re-add them only if we should
-        if (getState().getPullsSidebarFloorSwitchVisibility()) {
+        if (getState().getPullsSidebarFloorSwitchVisibility() && getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             /** @type KillZone */
             let previousKillZone = null;
@@ -441,6 +441,9 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Setup new pull button
         $(this.options.newKillZoneSelector).unbind('click').bind('click', this._newPullClicked.bind(this));
 
+        $(this.options.mapSettingsMapFacadeStyleSelector).bind('change', function() {
+            getState().setMapFacadeStyle($(this).is(':checked') ? MAP_FACADE_STYLE_FACADE : MAP_FACADE_STYLE_SPLIT_FLOORS);
+        });
 
         $(this.options.killZonesPullsSettingsMapNumberStyleSelector).bind('change', function () {
             getState().setMapNumberStyle($(this).is(':checked') ? NUMBER_STYLE_PERCENTAGE : NUMBER_STYLE_ENEMY_FORCES);

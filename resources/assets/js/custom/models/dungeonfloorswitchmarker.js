@@ -46,6 +46,12 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
     }
 });
 
+/**
+ * @property {Number|null} source_floor_id
+ * @property {Number} target_floor_id
+ * @property {String} floorCouplingDirection
+ * @property {String|null} direction
+ */
 class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
@@ -94,6 +100,15 @@ class DungeonFloorSwitchMarker extends Icon {
 
         return this._cachedAttributes = superAttributes.concat([
             new Attribute({
+                name: 'source_floor_id',
+                type: 'select',
+                values: function () {
+                    // Fill it with all floors except our current floor, this is done for floor unions so selecting the current floor would make no sense
+                    return getState().getMapContext().getFloorSelectValues(self.floor_id);
+                },
+                default: null
+            }),
+            new Attribute({
                 name: 'target_floor_id',
                 type: 'select',
                 values: function () {
@@ -103,15 +118,20 @@ class DungeonFloorSwitchMarker extends Icon {
                 default: null
             }),
             new Attribute({
+                name: 'floorCouplingDirection',
+                type: 'string',
+                edit: false,
+                save: false
+            }),
+            new Attribute({
                 name: 'direction',
                 type: 'select',
-                edit: false, // Not directly changeable by user, should be done in the dungeon edit page
                 values: function () {
                     return [
-                        {id: 'down', name: 'mapicontypes.door_down'},
-                        {id: 'left', name: 'mapicontypes.door_left'},
-                        {id: 'right', name: 'mapicontypes.door_right'},
-                        {id: 'up', name: 'mapicontypes.door_up'},
+                        {id: 'down', name: lang.get('mapicontypes.door_down')},
+                        {id: 'left', name: lang.get('mapicontypes.door_left')},
+                        {id: 'right', name: lang.get('mapicontypes.door_right')},
+                        {id: 'up', name: lang.get('mapicontypes.door_up')},
                     ];
                 },
                 setter: function (value) {
@@ -122,16 +142,16 @@ class DungeonFloorSwitchMarker extends Icon {
                         'up': 'door_up',
                     };
 
-                    // console.log(value, mapping[value], getState().getMapContext().getMapIconTypeByKey(mapping[value]));
-
                     self.setMapIconType(
-                        getState().getMapContext().getMapIconTypeByKey(mapping[value])
+                        getState().getMapContext().getMapIconTypeByKey(
+                            value === null ? mapping[self.floorCouplingDirection] : mapping[value]
+                        )
                     );
 
                     self.direction = value;
                 },
-                default: 'down'
-            }),
+                default: null
+            })
         ]);
     }
 
@@ -168,6 +188,31 @@ class DungeonFloorSwitchMarker extends Icon {
         }
     }
 
+    _getDecorator() {
+        let result = null;
+
+        /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
+        let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+        // @TODO Hacky fix to disable floor connections in Waycrest Manor - it's bugged there, see #2084
+        if (this.floor_id !== 269 && this.source_floor_id !== null && this.target_floor_id !== null) {
+            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(
+                this.target_floor_id,
+                this.source_floor_id,
+                this.layer.getLatLng(),
+                true
+            );
+
+            if (closestDungeonFloorSwitchMarker !== null) {
+                result = L.polyline(
+                    [this.layer.getLatLng(), closestDungeonFloorSwitchMarker.layer.getLatLng()],
+                    c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions
+                );
+            }
+        }
+
+        return result;
+    }
+
     /**
      * @inheritDoc
      */
@@ -179,8 +224,10 @@ class DungeonFloorSwitchMarker extends Icon {
 
         this.layer.on('click', function () {
             // Tol'dagor doors don't have a target (locked doors)
-            if (self.target_floor_id !== null) {
-                getState().setFloorId(self.target_floor_id);
+            let state = getState();
+            // Don't do anything when we have combined floors! We can already see everything
+            if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS && self.target_floor_id !== null) {
+                state.setFloorId(self.target_floor_id);
             }
         });
     }
@@ -202,8 +249,13 @@ class DungeonFloorSwitchMarker extends Icon {
     getDisplayText() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
+        let state = getState();
+        if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE) {
+            return '';
+        }
+
         if (this.usersOnThisFloor.length > 0) {
-            let echo = getState().getEcho();
+            let echo = state.getEcho();
             let usernames = [];
             for (let i = 0; i < this.usersOnThisFloor.length; i++) {
                 let echoUser = echo.getUserByPublicKey(this.usersOnThisFloor[i]);
@@ -215,7 +267,7 @@ class DungeonFloorSwitchMarker extends Icon {
             return usernames.join(', ');
         }
 
-        let targetFloor = getState().getMapContext().getFloorById(this.target_floor_id);
+        let targetFloor = state.getMapContext().getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
             return `${lang.get('messages.dungeonfloorswitchmarker_go_to_label')} ${lang.get(targetFloor.name)}`;
@@ -230,7 +282,6 @@ class DungeonFloorSwitchMarker extends Icon {
 
     cleanup() {
         super.cleanup();
-
         getState().unregister('floorid:changed', this);
 
         if (getState().isEchoEnabled()) {
