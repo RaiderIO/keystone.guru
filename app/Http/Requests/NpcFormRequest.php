@@ -33,7 +33,7 @@ class NpcFormRequest extends FormRequest
         return [
             'id'                        => 'required',
             'name'                      => 'required',
-            'dungeon_id'                => [Rule::in([-1] + Dungeon::all('id')->pluck('id')->toArray())],
+            'dungeon_id'                => [Rule::in(array_merge([-1], Dungeon::all('id')->pluck('id')->toArray()))],
             'npc_type_id'               => Rule::in(array_values(NpcType::ALL)),
             'npc_class_id'              => Rule::in(array_values(NpcClass::ALL)),
             'classification_id'         => [Rule::in(NpcClassification::ALL), 'required'],
