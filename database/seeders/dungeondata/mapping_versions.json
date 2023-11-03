@@ -3133,7 +3133,7 @@
         "mdt_mapping_hash": "45ac3fde37e3e7e96462a8fe3243bc1e",
         "created_at": "2023-10-31T13:54:00.000000Z",
         "updated_at": "2023-10-31T13:54:00.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 253,
@@ -3147,7 +3147,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-10-31T14:11:58.000000Z",
         "updated_at": "2023-10-31T14:11:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 254,
@@ -3161,7 +3161,7 @@
         "mdt_mapping_hash": "aacf8ae2a450c9072b44dbfeb2c88bf7",
         "created_at": "2023-11-01T21:45:02.000000Z",
         "updated_at": "2023-11-01T21:45:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 255,
@@ -3175,7 +3175,7 @@
         "mdt_mapping_hash": "",
         "created_at": "2023-11-02T13:43:19.000000Z",
         "updated_at": "2023-11-02T13:43:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 256,
@@ -3189,7 +3189,7 @@
         "mdt_mapping_hash": "c65bbe42e5ae852be6f1f8ac3ac58537",
         "created_at": "2023-11-02T14:47:22.000000Z",
         "updated_at": "2023-11-02T14:47:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 257,
@@ -3203,7 +3203,7 @@
         "mdt_mapping_hash": null,
         "created_at": "2023-11-02T14:47:22.000000Z",
         "updated_at": "2023-11-02T14:47:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 258,
@@ -3217,7 +3217,7 @@
         "mdt_mapping_hash": "700b92ed4b20e158e8a23dc3c26d7a09",
         "created_at": "2023-11-02T15:07:34.000000Z",
         "updated_at": "2023-11-02T15:07:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 259,
