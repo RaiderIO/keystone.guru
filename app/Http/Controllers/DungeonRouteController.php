@@ -62,7 +62,11 @@ class DungeonRouteController extends Controller
     public function view(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
     {
         /** @var Floor $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->defaultOrFacade()
+            ->first();
+
+        dd($defaultFloor);
 
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -110,21 +114,27 @@ class DungeonRouteController extends Controller
         if (Auth::check()) {
             // Find any currently active report the user has made
             $currentReport = UserReport::where('user_id', Auth::id())
-                                       ->where('model_id', $dungeonroute->id)
-                                       ->where('model_class', get_class($dungeonroute))
-                                       ->where('category', 'dungeonroute')
-                                       ->where('status', 0)
-                                       ->first();
+                ->where('model_id', $dungeonroute->id)
+                ->where('model_class', get_class($dungeonroute))
+                ->where('category', 'dungeonroute')
+                ->where('status', 0)
+                ->first();
         }
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE);
 
+        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->where('index', $floorIndex)
+            ->where('facade', $useFacade)
+            ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+                ->defaultOrFacade()
+                ->first();
 
             return redirect()->route('dungeonroute.view.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
@@ -157,7 +167,9 @@ class DungeonRouteController extends Controller
     public function present(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
     {
         /** @var Floor $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->defaultOrFacade()
+            ->first();
 
         return redirect()->route('dungeonroute.present.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -216,7 +228,9 @@ class DungeonRouteController extends Controller
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+                ->defaultOrFacade()
+                ->first();
 
             return redirect()->route('dungeonroute.present.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
@@ -413,7 +427,9 @@ class DungeonRouteController extends Controller
     public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
     {
         /** @var Floor $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->defaultOrFacade()
+            ->first();
 
         return redirect()->route('dungeonroute.edit.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -458,12 +474,19 @@ class DungeonRouteController extends Controller
             ]);
         }
 
+        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
+
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->where('index', $floorIndex)
+            ->where('facade', $useFacade)
+            ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('default', true)->first();
+            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+                ->defaultOrFacade()
+                ->first();
 
             return redirect()->route('dungeonroute.edit.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
@@ -514,8 +537,8 @@ class DungeonRouteController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                      ->where('index', $floorIndex)
-                      ->first();
+            ->where('index', $floorIndex)
+            ->first();
 
         $style                 = $request->get('style', 'regular');
         $pullsDefaultState     = $request->get('pullsDefaultState');
@@ -647,9 +670,9 @@ class DungeonRouteController extends Controller
 
         // Store it
         $dungeonroute->update([
-                                  'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
-                                  'updated_at'         => Carbon::now()->toDateTimeString(),
-                              ]);
+            'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
+            'updated_at'         => Carbon::now()->toDateTimeString(),
+        ]);
 
         // Refresh the enemy forces
         (new RefreshEnemyForces($dungeonroute->id))->handle();

@@ -29,6 +29,11 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                        data-off="{{ __('views/common.forms.mapsettings.map_facade_style_split_floors_option') }}">
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                {{ __('views/common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}
+            </div>
+        </div>
     </div>
 
     <h4>{{ __('views/common.forms.mapsettings.enemies') }}</h4>

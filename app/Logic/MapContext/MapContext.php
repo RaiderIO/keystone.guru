@@ -4,6 +4,7 @@ namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
+use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\MapIconType;
@@ -77,18 +78,24 @@ abstract class MapContext
 
         // Get the DungeonData
         $dungeonData = $this->cacheService->remember(
-               sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle),
+            sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle),
             function () use ($mapFacadeStyle) {
                 $useFacade = $mapFacadeStyle === 'facade';
-                return array_merge($this->floor->dungeon()->without(['mapicons', 'enemypacks'])->first()->toArray(), $this->getEnemies(), [
+
+                /** @var Dungeon $dungeon */
+                $dungeon = $this->floor->dungeon()->without(['floors', 'mapicons', 'enemypacks'])->first();
+                // Filter out floors that we do not need
+                $dungeon->setRelation('floors', $dungeon->floorsForMapFacade($useFacade)->get());
+
+                return array_merge($dungeon->toArray(), $this->getEnemies(), [
                     'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
                     'npcs'                      => $this->floor->dungeon->npcs()->with([
-                                                                                           'spells',
-                                                                                           // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                                                                                           'enemyForces' => function (HasOne $query) {
-                                                                                               return $query->where('mapping_version_id', $this->mappingVersion->id);
-                                                                                           },
-                                                                                       ])->get(),
+                        'spells',
+                        // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                        'enemyForces' => function (HasOne $query) {
+                            return $query->where('mapping_version_id', $this->mappingVersion->id);
+                        },
+                    ])->get(),
                     'auras'                     => Spell::where('aura', true)->get(),
                     'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
@@ -112,7 +119,7 @@ abstract class MapContext
                 'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
                 'publishStates'                     => PublishedState::all(),
             ];
-        },                                config('keystoneguru.cache.static_data.ttl'));
+        }, config('keystoneguru.cache.static_data.ttl'));
 
         $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth($this->mappingVersion);
         $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth($this->mappingVersion);

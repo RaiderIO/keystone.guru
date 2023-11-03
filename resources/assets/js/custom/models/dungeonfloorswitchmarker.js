@@ -224,8 +224,10 @@ class DungeonFloorSwitchMarker extends Icon {
 
         this.layer.on('click', function () {
             // Tol'dagor doors don't have a target (locked doors)
-            if (self.target_floor_id !== null) {
-                getState().setFloorId(self.target_floor_id);
+            let state = getState();
+            // Don't do anything when we have combined floors! We can already see everything
+            if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS && self.target_floor_id !== null) {
+                state.setFloorId(self.target_floor_id);
             }
         });
     }
@@ -247,8 +249,13 @@ class DungeonFloorSwitchMarker extends Icon {
     getDisplayText() {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
+        let state = getState();
+        if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE) {
+            return '';
+        }
+
         if (this.usersOnThisFloor.length > 0) {
-            let echo = getState().getEcho();
+            let echo = state.getEcho();
             let usernames = [];
             for (let i = 0; i < this.usersOnThisFloor.length; i++) {
                 let echoUser = echo.getUserByPublicKey(this.usersOnThisFloor[i]);
@@ -260,7 +267,7 @@ class DungeonFloorSwitchMarker extends Icon {
             return usernames.join(', ');
         }
 
-        let targetFloor = getState().getMapContext().getFloorById(this.target_floor_id);
+        let targetFloor = state.getMapContext().getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
             return `${lang.get('messages.dungeonfloorswitchmarker_go_to_label')} ${lang.get(targetFloor.name)}`;
