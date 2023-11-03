@@ -31,15 +31,20 @@ class ConversionTest extends TestCase
      */
     public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
     {
+        $expansions = [
+            Expansion::EXPANSION_CATACLYSM,
+            Expansion::EXPANSION_MOP,
+            Expansion::EXPANSION_LEGION,
+            Expansion::EXPANSION_BFA,
+            Expansion::EXPANSION_SHADOWLANDS,
+            Expansion::EXPANSION_DRAGONFLIGHT
+        ];
+
         $result = [];
-        foreach (Dungeon::ALL[Expansion::EXPANSION_LEGION] as $dungeonKey) {
-            $result[] = [$dungeonKey, Expansion::EXPANSION_LEGION];
-        }
-        foreach (Dungeon::ALL[Expansion::EXPANSION_BFA] as $dungeonKey) {
-            $result[] = [$dungeonKey, Expansion::EXPANSION_BFA];
-        }
-        foreach (Dungeon::ALL[Expansion::EXPANSION_SHADOWLANDS] as $dungeonKey) {
-            $result[] = [$dungeonKey, Expansion::EXPANSION_SHADOWLANDS];
+        foreach ($expansions as $expansion) {
+            foreach (Conversion::DUNGEON_NAME_MAPPING[$expansion] as $dungeonKey => $value) {
+                $result[] = [$dungeonKey, $expansion];
+            }
         }
         return $result;
     }
