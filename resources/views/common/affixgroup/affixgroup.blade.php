@@ -4,6 +4,7 @@ $media    = $media ?? 'lg';
 $showText = $showText ?? true;
 $class    = $class ?? '';
 $dungeon  = $dungeon ?? null;
+$center   = $center ?? false;
 
 $count = $affixgroup->affixes->count();
 $cols  = $cols ?? $count;
@@ -20,12 +21,12 @@ $chunks     = $affixgroup->affixes->chunk($chunkCount);
             ?>
         <div class="col">
             <div class="row no-gutters">
-                <div class="col-auto">
+                <div class="col-auto {{ $center ? 'm-auto' : '' }}">
                     @include('common.affixgroup.affix', ['showText' => $showText, 'media' => $media, 'affix' => $affix])
                 </div>
 
                 @if($affixIndex === $count - 1 && $dungeon instanceof \App\Models\Dungeon)
-                    <div class="col">
+                    <div class="col-auto">
                         <h5 class="font-weight-bold pl-2 mt-2">
                             @include('common.dungeonroute.tier', ['affixgroup' => $affixgroup, 'dungeon' => $dungeon])
                         </h5>
