@@ -2192,7 +2192,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:21:59.000000Z",
         "updated_at": "2023-07-09T12:21:59.000000Z",
         "merged": true
@@ -2206,7 +2206,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:20.000000Z",
         "updated_at": "2023-07-09T12:22:20.000000Z",
         "merged": true
@@ -2220,7 +2220,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:25.000000Z",
         "updated_at": "2023-07-09T12:22:25.000000Z",
         "merged": true
@@ -2234,7 +2234,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:33.000000Z",
         "updated_at": "2023-07-09T12:22:33.000000Z",
         "merged": true
@@ -2248,7 +2248,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:36.000000Z",
         "updated_at": "2023-07-09T12:22:36.000000Z",
         "merged": true
@@ -2262,7 +2262,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:37.000000Z",
         "updated_at": "2023-07-09T12:22:37.000000Z",
         "merged": true
@@ -2276,7 +2276,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:39.000000Z",
         "updated_at": "2023-07-09T12:22:39.000000Z",
         "merged": true
@@ -2290,7 +2290,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:40.000000Z",
         "updated_at": "2023-07-09T12:22:40.000000Z",
         "merged": true
@@ -2304,7 +2304,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:42.000000Z",
         "updated_at": "2023-07-09T12:22:42.000000Z",
         "merged": true
@@ -2318,7 +2318,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:47.000000Z",
         "updated_at": "2023-07-09T12:22:47.000000Z",
         "merged": true
@@ -2332,7 +2332,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:49.000000Z",
         "updated_at": "2023-07-09T12:22:49.000000Z",
         "merged": true
@@ -2346,7 +2346,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:50.000000Z",
         "updated_at": "2023-07-09T12:22:50.000000Z",
         "merged": true
@@ -2360,7 +2360,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:51.000000Z",
         "updated_at": "2023-07-09T12:22:51.000000Z",
         "merged": true
@@ -2374,7 +2374,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:53.000000Z",
         "updated_at": "2023-07-09T12:22:53.000000Z",
         "merged": true
@@ -2388,7 +2388,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:54.000000Z",
         "updated_at": "2023-07-09T12:22:54.000000Z",
         "merged": true
@@ -2402,7 +2402,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-09T12:22:57.000000Z",
         "updated_at": "2023-07-09T12:22:57.000000Z",
         "merged": true
@@ -2416,7 +2416,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-10T12:18:22.000000Z",
         "updated_at": "2023-07-10T12:18:22.000000Z",
         "merged": true
@@ -2430,7 +2430,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-07-10T12:30:21.000000Z",
         "updated_at": "2023-07-10T12:30:21.000000Z",
         "merged": true
@@ -2500,7 +2500,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-11T20:24:18.000000Z",
         "updated_at": "2023-08-11T20:24:18.000000Z",
         "merged": true
@@ -2514,7 +2514,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-13T14:11:57.000000Z",
         "updated_at": "2023-08-13T14:11:57.000000Z",
         "merged": true
@@ -2528,7 +2528,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-13T20:53:38.000000Z",
         "updated_at": "2023-08-13T20:53:38.000000Z",
         "merged": true
@@ -2542,7 +2542,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-15T18:38:46.000000Z",
         "updated_at": "2023-08-15T18:38:46.000000Z",
         "merged": true
@@ -2556,7 +2556,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-15T19:20:40.000000Z",
         "updated_at": "2023-08-15T19:20:40.000000Z",
         "merged": true
@@ -2570,7 +2570,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-15T19:21:05.000000Z",
         "updated_at": "2023-08-15T19:21:05.000000Z",
         "merged": true
@@ -2584,7 +2584,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-16T18:59:20.000000Z",
         "updated_at": "2023-08-16T18:59:20.000000Z",
         "merged": true
@@ -2598,7 +2598,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-16T20:01:14.000000Z",
         "updated_at": "2023-08-16T20:01:14.000000Z",
         "merged": true
@@ -2612,7 +2612,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-20T20:26:21.000000Z",
         "updated_at": "2023-08-20T20:26:21.000000Z",
         "merged": true
@@ -2626,7 +2626,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-22T11:36:25.000000Z",
         "updated_at": "2023-08-22T11:36:25.000000Z",
         "merged": true
@@ -2654,7 +2654,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-31T14:47:25.000000Z",
         "updated_at": "2023-08-31T14:47:25.000000Z",
         "merged": true
@@ -2668,7 +2668,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-08-31T15:00:48.000000Z",
         "updated_at": "2023-08-31T15:00:48.000000Z",
         "merged": true
@@ -2710,7 +2710,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-05T19:37:18.000000Z",
         "updated_at": "2023-09-05T19:37:18.000000Z",
         "merged": true
@@ -2738,7 +2738,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-06T20:07:41.000000Z",
         "updated_at": "2023-09-06T20:07:41.000000Z",
         "merged": true
@@ -2752,7 +2752,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-07T07:38:11.000000Z",
         "updated_at": "2023-09-07T07:38:11.000000Z",
         "merged": true
@@ -2766,7 +2766,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-07T07:55:51.000000Z",
         "updated_at": "2023-09-07T07:55:51.000000Z",
         "merged": true
@@ -2780,7 +2780,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-07T14:30:49.000000Z",
         "updated_at": "2023-09-07T14:30:49.000000Z",
         "merged": true
@@ -2850,7 +2850,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-14T20:04:28.000000Z",
         "updated_at": "2023-09-14T20:04:28.000000Z",
         "merged": true
@@ -2906,7 +2906,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-22T20:05:21.000000Z",
         "updated_at": "2023-09-22T20:05:21.000000Z",
         "merged": true
@@ -2962,7 +2962,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-26T19:33:59.000000Z",
         "updated_at": "2023-09-26T19:33:59.000000Z",
         "merged": true
@@ -2976,7 +2976,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-26T19:35:25.000000Z",
         "updated_at": "2023-09-26T19:35:25.000000Z",
         "merged": true
@@ -2990,7 +2990,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-26T19:36:43.000000Z",
         "updated_at": "2023-09-26T19:36:43.000000Z",
         "merged": true
@@ -3004,7 +3004,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-09-27T19:54:59.000000Z",
         "updated_at": "2023-09-27T19:54:59.000000Z",
         "merged": true
@@ -3018,7 +3018,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-04T20:06:36.000000Z",
         "updated_at": "2023-10-04T20:06:36.000000Z",
         "merged": true
@@ -3032,7 +3032,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-07T20:20:52.000000Z",
         "updated_at": "2023-10-07T20:20:52.000000Z",
         "merged": true
@@ -3046,7 +3046,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-10T19:40:54.000000Z",
         "updated_at": "2023-10-10T19:40:54.000000Z",
         "merged": true
@@ -3060,7 +3060,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-17T19:50:58.000000Z",
         "updated_at": "2023-10-17T19:50:58.000000Z",
         "merged": true
@@ -3074,7 +3074,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-17T19:53:28.000000Z",
         "updated_at": "2023-10-17T19:53:28.000000Z",
         "merged": true
@@ -3088,7 +3088,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-21T20:02:53.000000Z",
         "updated_at": "2023-10-21T20:02:53.000000Z",
         "merged": true
@@ -3102,7 +3102,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-21T21:32:14.000000Z",
         "updated_at": "2023-10-21T21:32:14.000000Z",
         "merged": true
@@ -3144,7 +3144,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-10-31T14:11:58.000000Z",
         "updated_at": "2023-10-31T14:11:58.000000Z",
         "merged": false
@@ -3172,7 +3172,7 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
-        "mdt_mapping_hash": "",
+        "mdt_mapping_hash": null,
         "created_at": "2023-11-02T13:43:19.000000Z",
         "updated_at": "2023-11-02T13:43:19.000000Z",
         "merged": false
@@ -3229,6 +3229,34 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": "da56947483ab2c5b528fff82d2bafe71",
+        "created_at": "2023-11-03T09:17:58.000000Z",
+        "updated_at": "2023-11-03T09:17:58.000000Z",
+        "merged": false
+    },
+    {
+        "id": 260,
+        "dungeon_id": 2,
+        "version": 2,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "created_at": "2023-11-03T09:17:58.000000Z",
+        "updated_at": "2023-11-03T09:17:58.000000Z",
+        "merged": false
+    },
+    {
+        "id": 261,
+        "dungeon_id": 23,
+        "version": 2,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
         "created_at": "2023-11-03T09:17:58.000000Z",
         "updated_at": "2023-11-03T09:17:58.000000Z",
         "merged": false

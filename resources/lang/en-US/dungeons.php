@@ -460,6 +460,7 @@ return [
                 'the_rooks_roost'          => 'The Rook\'s Roost',
                 'lord_ravencrests_chamber' => 'Lord Ravencrest\'s Chamber',
                 'the_ravens_crown'         => 'The Raven\'s Crown',
+                'black_rook_hold'          => 'Black Rook Hold',
             ],
         ],
         'court_of_stars'       => [
@@ -626,6 +627,7 @@ return [
                 'the_cellar'      => 'The Cellar',
                 'catacombs'       => 'Catacombs',
                 'the_rupture'     => 'The Rupture',
+                'waycrest_manor'  => 'Waycrest Manor',
             ],
         ],
         'mechagon_junkyard'         => [
