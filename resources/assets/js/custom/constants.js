@@ -9,7 +9,7 @@ let cookieDefaults = {
     polyline_default_color: null,
     hidden_map_object_groups: '["mountablearea"]',
     hidden_map_object_groups_added_mountablearea: 0,
-    map_facade_style: 'facade',
+    map_facade_style: 'split_floors',
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
     pulls_sidebar_floor_switch_visibility: 1,
