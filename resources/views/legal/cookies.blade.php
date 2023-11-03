@@ -246,7 +246,15 @@
                 dungeon_speedrun_required_npcs_show_all
             </td>
             <td>
-                Remembers if you want to always show all required enemies when viewing a speedrun
+                Remembers if you want to always show all required enemies when viewing a speedrun.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                map_facade_style
+            </td>
+            <td>
+                Remembers if you want to display the map using combined floors (when available) or split (traditional style).
             </td>
         </tr>
         <tr>

@@ -20,7 +20,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
             <div class="col">
                 <input id="killzones_pulls_settings_number_style" type="checkbox"
                        {{ $killZonesNumberStyleChecked ? 'checked' : '' }}
-                       data-toggle="toggle" data-width="150px" data-height="20px"
+                       data-toggle="toggle" data-width="200px" data-height="20px"
                        data-onstyle="primary" data-offstyle="primary"
                        data-on="{{ __('views/common.forms.pullsettings.pull_number_style_percentage') }}"
                        data-off="{{ __('views/common.forms.pullsettings.pull_number_style_enemy_forces') }}">

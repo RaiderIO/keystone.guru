@@ -9,6 +9,7 @@ let cookieDefaults = {
     polyline_default_color: null,
     hidden_map_object_groups: '["mountablearea"]',
     hidden_map_object_groups_added_mountablearea: 0,
+    map_facade_style: 'facade',
     map_number_style: 'enemy_forces',
     kill_zones_number_style: 'percentage',
     pulls_sidebar_floor_switch_visibility: 1,
@@ -83,6 +84,10 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_FLOOR_UNION,
     MAP_OBJECT_GROUP_FLOOR_UNION_AREA
 ];
+
+// Map
+const MAP_FACADE_STYLE_FACADE = 'facade';
+const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
 
 // Kill zones
 const NUMBER_STYLE_PERCENTAGE = 'percentage';
