@@ -57,7 +57,7 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
         for (let key in this.objects) {
             let object = this.objects[key];
 
-            if ((object.source_floor_id === sourceFloorId || (!facade && object.floor_id === sourceFloorId)) &&
+            if (((facade && object.source_floor_id === sourceFloorId) || (!facade && object.floor_id === sourceFloorId)) &&
                 object.target_floor_id === targetFloorId) {
                 shortlist.push(object);
             }
