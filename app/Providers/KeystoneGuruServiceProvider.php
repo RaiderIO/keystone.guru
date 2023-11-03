@@ -48,6 +48,8 @@ use App\Service\GameVersion\GameVersionService;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\MapContext\MapContextService;
+use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTExportStringService;
@@ -146,6 +148,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
 
+        // Depends on CacheService, CoordinatesService, OverpulledEnemyService
+        $this->app->bind(MapContextServiceInterface::class, MapContextService::class);
+
         // Depends on SeasonService, CacheService, CoordinatesService
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
@@ -176,6 +181,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
      * @param MappingServiceInterface            $mappingService
      * @param GameVersionServiceInterface        $gameVersionService
+     *
      * @return void
      */
     public function boot(
@@ -184,17 +190,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService,
         GameVersionServiceInterface        $gameVersionService
-    ) {
+    )
+    {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (app()->runningInConsole()) {
             return;
         }
 
         session_set_cookie_params([
-            'secure'   => true,
-            'httponly' => false,
-            'samesite' => 'None',
-        ]);
+                                      'secure'   => true,
+                                      'httponly' => false,
+                                      'samesite' => 'None',
+                                  ]);
 
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
@@ -261,7 +268,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer(['layouts.app', 'common.layout.footer'], function (View $view) use ($globalViewVariables) {
             $view->with('hasNewChangelog',
-                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
+                        isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
         });
 
         view()->composer('common.layout.navgameversions', function (View $view) use ($globalViewVariables) {
@@ -280,14 +287,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer([
-            'dungeonroute.discover.category',
-            'dungeonroute.discover.dungeon.category',
-            'dungeonroute.discover.season.category',
-            'misc.affixes',
-            'dungeonroute.discover.discover',
-            'dungeonroute.discover.dungeon.overview',
-            'dungeonroute.discover.season.overview',
-        ], function (View $view) use ($globalViewVariables, $expansionService, $userOrDefaultRegion) {
+                             'dungeonroute.discover.category',
+                             'dungeonroute.discover.dungeon.category',
+                             'dungeonroute.discover.season.category',
+                             'misc.affixes',
+                             'dungeonroute.discover.discover',
+                             'dungeonroute.discover.dungeon.overview',
+                             'dungeonroute.discover.season.overview',
+                         ], function (View $view) use ($globalViewVariables, $expansionService, $userOrDefaultRegion) {
             /** @var Expansion $expansion */
             $expansion = $view->getData()['expansion'];
 
@@ -373,9 +380,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $nextAffixGroup = $view->getData()['nextAffixGroup'];
 
             $view->with('tiers', $affixGroupEaseTierService->getTiersByAffixGroups(collect([
-                $currentAffixGroup,
-                $nextAffixGroup,
-            ])));
+                                                                                               $currentAffixGroup,
+                                                                                               $nextAffixGroup,
+                                                                                           ])));
         });
 
         // Dungeon selector

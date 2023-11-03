@@ -15,6 +15,11 @@ use App\Models\Dungeon;
  */
 class MapContextMappingVersionEdit extends MapContextMappingVersion
 {
+    public function getMapFacadeStyle(): string
+    {
+        return 'both';
+    }
+
 
     public function getType(): string
     {

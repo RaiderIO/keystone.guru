@@ -4,9 +4,11 @@ namespace App\Models\Floor;
 
 use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
+use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\HasVertices;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -23,8 +25,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class FloorUnionArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
+class FloorUnionArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
+    use HasVertices;
+
     public $timestamps = false;
 
     protected $fillable = [

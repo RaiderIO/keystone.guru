@@ -5,12 +5,14 @@ namespace App\Logic\MapContext;
 
 use App\Models\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 
 /**
  * Class MapContextDungeonRoute
  * @package App\Logic\MapContext
- * @author Wouter
- * @since 06/08/2020
+ * @author  Wouter
+ * @since   06/08/2020
  *
  * @property DungeonRoute $context
  */
@@ -18,9 +20,14 @@ class MapContextDungeonRoute extends MapContext
 {
     use DungeonRouteProperties;
 
-    public function __construct(DungeonRoute $dungeonRoute, Floor $floor)
+    public function __construct(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        Floor                       $floor
+    )
     {
-        parent::__construct($dungeonRoute, $floor, $dungeonRoute->mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $floor, $dungeonRoute->mappingVersion);
     }
 
     public function getType(): string

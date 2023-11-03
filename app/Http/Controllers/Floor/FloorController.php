@@ -10,6 +10,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
 use App\Models\Mapping\MappingVersion;
+use App\Service\MapContext\MapContextServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -27,6 +28,7 @@ class FloorController extends Controller
      * @param Request    $request
      * @param Dungeon    $dungeon
      * @param Floor|null $floor
+     *
      * @return Floor
      * @throws Exception
      */
@@ -94,6 +96,7 @@ class FloorController extends Controller
     /**
      * @param Request $request
      * @param Dungeon $dungeon
+     *
      * @return Factory|View
      */
     public function new(Request $request, Dungeon $dungeon)
@@ -107,6 +110,7 @@ class FloorController extends Controller
      * @param Request $request
      * @param Dungeon $dungeon
      * @param Floor   $floor
+     *
      * @return Application|Factory|RedirectResponse|View
      */
     public function edit(Request $request, Dungeon $dungeon, Floor $floor)
@@ -127,14 +131,20 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param Floor   $floor
+     * @param Request                    $request
+     * @param MapContextServiceInterface $mapContextService
+     * @param Dungeon                    $dungeon
+     * @param Floor                      $floor
+     *
      * @return Application|Factory|View|RedirectResponse
-     * @throws InvalidArgumentException
      */
-    public function mapping(Request $request, Dungeon $dungeon, Floor $floor)
+    public function mapping(
+        Request                    $request,
+        MapContextServiceInterface $mapContextService,
+        Dungeon                    $dungeon,
+        Floor                      $floor)
     {
+        /** @var MappingVersion $mappingVersion */
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));
 
         if ($dungeon->id === $mappingVersion->dungeon_id) {
@@ -142,7 +152,7 @@ class FloorController extends Controller
 
             return view('admin.floor.mapping', [
                 'floor'          => $floor,
-                'mapContext'     => (new MapContextMappingVersionEdit($dungeon, $floor, $mappingVersion)),
+                'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $floor, $mappingVersion),
                 'mappingVersion' => $mappingVersion,
             ]);
         } else {
@@ -156,6 +166,7 @@ class FloorController extends Controller
      * @param FloorFormRequest $request
      * @param Dungeon          $dungeon
      * @param Floor            $floor
+     *
      * @return Factory|View
      * @throws Exception
      */
@@ -174,6 +185,7 @@ class FloorController extends Controller
     /**
      * @param FloorFormRequest $request
      * @param Dungeon          $dungeon
+     *
      * @return RedirectResponse
      * @throws Exception
      */
