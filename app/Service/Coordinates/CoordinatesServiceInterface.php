@@ -13,4 +13,6 @@ interface CoordinatesServiceInterface
     public function calculateMapLocationForIngameLocation(IngameXY $ingameXY): LatLng;
 
     public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng;
+
+    public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng;
 }

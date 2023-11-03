@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Traits\HasVertices;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -21,9 +23,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
+class MountableArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
     use CloneForNewMappingVersionNoRelations;
+    use HasVertices;
 
     public $timestamps = false;
     public $fillable = [

@@ -10,28 +10,33 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Service\Cache\CacheServiceInterface;
-use Illuminate\Support\Facades\App;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 
 /**
  * Class MapContextMappingVersion
  * @package App\Logic\MapContext
- * @author Wouter
- * @since 06/08/2020
+ * @author  Wouter
+ * @since   06/08/2020
  *
  * @property Dungeon $context
  */
 abstract class MapContextMappingVersion extends MapContext
 {
     /**
-     * MapContextMappingVersion constructor.
-     *
-     * @param Dungeon        $dungeon
-     * @param Floor          $floor
-     * @param MappingVersion $mappingVersion
+     * @param CacheServiceInterface       $cacheService
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param Dungeon                     $dungeon
+     * @param Floor                       $floor
+     * @param MappingVersion              $mappingVersion
      */
-    public function __construct(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion)
+    public function __construct(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
+        Dungeon                     $dungeon,
+        Floor                       $floor,
+        MappingVersion              $mappingVersion)
     {
-        parent::__construct($dungeon, $floor, $mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
     }
 
     public function isTeeming(): bool
@@ -55,15 +60,12 @@ abstract class MapContextMappingVersion extends MapContext
 
     public function getProperties(): array
     {
-        /** @var CacheServiceInterface $cacheService */
-        $cacheService = App::make(CacheServiceInterface::class);
-
         // Get or set the NPCs
-        $npcs = $cacheService->remember(sprintf('npcs_%s', $this->context->id), function () {
+        $npcs = $this->cacheService->remember(sprintf('npcs_%s', $this->context->id), function () {
             return Npc::whereIn('dungeon_id', [$this->context->id, -1])->get()->map(function ($npc) {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
             })->values();
-        }, config('keystoneguru.cache.npcs.ttl'));
+        },                                    config('keystoneguru.cache.npcs.ttl'));
 
         return array_merge(parent::getProperties(), [
             // First should be unspecified

@@ -100,6 +100,11 @@ return [
             'login_through_oauth2' => 'Login through OAuth2',
         ],
         'mapsettings'          => [
+            'map_facade_style'                     => 'Use combined floors',
+            'map_facade_style_title'               => 'With the introduction of Dragonflight Season 3, various dungeons have had their floors combined into a single map. Using this new map is optional and you can toggle between the combined map or the traditional split-floor style here.',
+            'map_facade_style_facade_option'       => 'Use combined floors',
+            'map_facade_style_split_floors_option' => 'Use split floors',
+
             'enemies'                                => 'Enemies',
             'enemy_number_style'                     => 'Enemy number style',
             'enemy_number_style_title'               => 'This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.',

@@ -3,34 +3,37 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Traits\HasVertices;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $mapping_version_id
- * @property int $floor_id
- * @property int $group
- * @property string $teeming
- * @property string $faction
- * @property string|null $color
- * @property string|null $color_animated
- * @property string $label
- * @property string $vertices_json
+ * @property int                $id
+ * @property int                $mapping_version_id
+ * @property int                $floor_id
+ * @property int                $group
+ * @property string             $teeming
+ * @property string             $faction
+ * @property string|null        $color
+ * @property string|null        $color_animated
+ * @property string             $label
+ * @property string             $vertices_json
  *
- * @property Floor $floor
+ * @property Floor              $floor
  * @property Collection|Enemy[] $enemies
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
+class EnemyPack extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
     use CloneForNewMappingVersionNoRelations;
+    use HasVertices;
 
     public $timestamps = false;
 
@@ -45,6 +48,11 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
         'color_animated',
         'label',
         'vertices_json',
+    ];
+
+    protected $casts = [
+        'mapping_version_id' => 'integer',
+        'floor_id'           => 'integer',
     ];
 
     /**
@@ -65,6 +73,7 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
 
     /**
      * @param string $seasonalType
+     *
      * @return Collection|Enemy[]
      */
     public function getEnemiesWithSeasonalType(string $seasonalType): Collection

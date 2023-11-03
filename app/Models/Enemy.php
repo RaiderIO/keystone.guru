@@ -199,14 +199,6 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     }
 
     /**
-     * @return LatLng
-     */
-    public function getLatLng(): LatLng
-    {
-        return new LatLng($this->lat, $this->lng);
-    }
-
-    /**
      * @return int|null
      */
     public function getDungeonId(): ?int

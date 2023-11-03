@@ -52,7 +52,10 @@ $sandbox = $dungeonroute->isSandbox();
                     'publish' => !$sandbox,
                 ]
             ],
-            'hiddenMapObjectGroups' => [],
+            'hiddenMapObjectGroups' => [
+                'floorunion',
+                'floorunionarea'
+            ],
         ])
     </div>
 @endsection
