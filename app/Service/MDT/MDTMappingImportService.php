@@ -235,6 +235,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
             foreach ($enemies as $enemy) {
+                // Skip teeming enemies for now - this affix was removed ages ago
+                if ($enemy->teeming !== null) {
+                    $this->log->importEnemiesSkipTeemingEnemy($enemy->getUniqueKey());
+                    continue;
+                }
+
                 $enemy->exists = false;
                 $enemy->unsetRelations();
 
@@ -313,7 +319,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Save enemy packs
             foreach ($enemyPacks as $groupIndex => $enemiesWithGroupsByEnemyPack) {
                 /** @var $enemiesWithGroupsByEnemyPack Collection|Enemy[] */
-                $enemiesWithGroupsByEnemyPack = $enemiesWithGroupsByEnemyPack->keyBy('id');
+                $enemiesWithGroupsByEnemyPack = $enemiesWithGroupsByEnemyPack
+                    ->filter(function (Enemy $enemy) {
+                        return $enemy->teeming === null;
+                    })
+                    ->keyBy('id');
 
                 // Enemies without a group - don't import that group
                 if (is_null($groupIndex) || $groupIndex === -1) {
@@ -396,6 +406,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if (!isset($mdtNpcClone['patrol'])) {
                         continue;
                     }
+                    if (isset($mdtNpcClone['teeming'])) {
+                        continue;
+                    }
 
                     $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $mdtNPC->getId(), $mdtCloneIndex);
                     $this->log->importEnemyPatrolsEnemyHasPatrol($savedEnemy->getUniqueKey());
@@ -458,6 +471,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     } else {
                         $enemyUpdateResult = $savedEnemy->update(['enemy_patrol_id' => $enemyPatrol->id]);
                     }
+
                     if ($enemyUpdateResult) {
                         $this->log->importEnemyPatrolsCoupleEnemiesToEnemyPatrol($enemyPatrol->id);
                     } else {
