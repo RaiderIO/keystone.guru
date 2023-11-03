@@ -8,5 +8,25 @@
         "direction": null,
         "lat": -210,
         "lng": 182
+    },
+    {
+        "id": 775,
+        "mapping_version_id": 261,
+        "floor_id": 64,
+        "source_floor_id": null,
+        "target_floor_id": 63,
+        "direction": null,
+        "lat": -210,
+        "lng": 182
+    },
+    {
+        "id": 811,
+        "mapping_version_id": 263,
+        "floor_id": 64,
+        "source_floor_id": null,
+        "target_floor_id": 63,
+        "direction": null,
+        "lat": -210,
+        "lng": 182
     }
 ]
