@@ -66,8 +66,6 @@ class DungeonRouteController extends Controller
             ->defaultOrFacade()
             ->first();
 
-        dd($defaultFloor);
-
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
@@ -123,11 +121,9 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE);
 
-        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->where('index', $floorIndex)
-            ->where('facade', $useFacade)
+            ->indexOrFacade($floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -224,7 +220,9 @@ class DungeonRouteController extends Controller
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE);
 
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->indexOrFacade($floorIndex)
+            ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
@@ -474,12 +472,9 @@ class DungeonRouteController extends Controller
             ]);
         }
 
-        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
-
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->where('index', $floorIndex)
-            ->where('facade', $useFacade)
+            ->indexOrFacade($floorIndex)
             ->first();
 
         if ($floor === null) {

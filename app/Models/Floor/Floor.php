@@ -74,6 +74,7 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[]                      $reverseConnectedFloors
  *
  * @method static Builder active()
+ * @method static Builder indexOrFacade(int $floorIndex)
  * @method static Builder defaultOrFacade()
  *
  * @mixin Eloquent
@@ -349,6 +350,24 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param Builder $builder
+     * @param int     $floorIndex
+     *
+     * @return Builder
+     */
+    public function scopeIndexOrFacade(Builder $builder, int $floorIndex): Builder
+    {
+        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
+
+        // @TODO prevent navigation to facade floor when NOT in facade mode
+        return $builder->where(function (Builder $builder) use ($floorIndex) {
+            $builder->where('facade', 1)
+                ->orWhere('index', $floorIndex);
+        })->orderByDesc($useFacade ? 'facade' : 'default')
+            ->limit(1);
+    }
+
+    /**
+     * @param Builder $builder
      *
      * @return Builder
      */
@@ -361,12 +380,6 @@ class Floor extends CacheModel implements MappingModelInterface
                 ->orWhere('default', 1);
         })->orderByDesc($useFacade ? 'facade' : 'default')
             ->limit(1);
-
-//        return $builder->when($isDungeonFacadeEnabled && , function (Builder $builder) {
-//            $builder->where('facade', 1);
-//        })->when(!$isDungeonFacadeEnabled || $_COOKIE['map_facade_style'] === 'split_floors', function (Builder $builder) {
-//            $builder->where('default', 1);
-//        });
     }
 
     /**
