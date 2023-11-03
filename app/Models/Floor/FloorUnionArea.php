@@ -82,11 +82,6 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
             $this->cachedVertices = json_decode($this->vertices_json, true);
         }
 
-
-        if (!is_array($this->cachedVertices)) {
-            dd($this->cachedVertices, $this->vertices_json);
-        }
-
         return polygonContainsPoint($latLng->toArray(), $this->cachedVertices);
     }
 

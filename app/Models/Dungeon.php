@@ -523,8 +523,24 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function floorsForMapFacade(bool $useFacade): HasMany
     {
+        // If we use facade
+        // If we have facade, only return facade floor
+        // Otherwise, return all non-facade floors
+
         return $this->hasMany(Floor::class)
-            ->where('facade', $useFacade)
+            ->where(function (Builder $builder) use ($useFacade) {
+                $builder->when(!$useFacade, function (Builder $builder) use ($useFacade) {
+                    $builder->where('facade', 0);
+                })->when($useFacade, function (Builder $builder) use ($useFacade) {
+                    $builder->where(function (Builder $builder) use ($useFacade) {
+                        $builder->whereIn('dungeon_id', self::USES_FACADE)
+                            ->where('facade', $useFacade);
+                    })->orWhere(function (Builder $builder) use ($useFacade) {
+                        $builder->whereNotIn('dungeon_id', self::USES_FACADE)
+                            ->where('facade', 0);
+                    });
+                });
+            })
             ->orderBy('index');
     }
 
