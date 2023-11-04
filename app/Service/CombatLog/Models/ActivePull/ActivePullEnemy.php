@@ -89,9 +89,9 @@ class ActivePullEnemy
     }
 
     /**
-     * @return Carbon
+     * @return Carbon|null
      */
-    public function getDiedAt(): Carbon
+    public function getDiedAt(): ?Carbon
     {
         return $this->diedAt;
     }
@@ -121,7 +121,8 @@ class ActivePullEnemy
      */
     public function getHPPercentAt(Carbon $carbon): float
     {
-        if ($this->getEngagedAt()->isAfter($carbon)) {
+        // If it didn't die yet, we can't know the health based on engaged -> died
+        if ($this->getEngagedAt()->isAfter($carbon) || $this->getDiedAt() === null) {
             return 100;
         }
 

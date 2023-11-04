@@ -10,6 +10,8 @@ interface ResultEventDungeonRouteBuilderLoggingInterface
 
     public function buildChallengeModeEnded(): void;
 
+    public function buildUnableToFindEnemyForNpc(string $guid): void;
+
     public function buildInCombatWithEnemy(string $guid): void;
 
     public function buildEnemyNotInValidNpcIds(string $guid): void;
