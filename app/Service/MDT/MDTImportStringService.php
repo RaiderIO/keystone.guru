@@ -718,7 +718,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
             foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
                 $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
-                    new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng)
+                    new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng, $floor)
                 );
                 if (MathUtils::distanceBetweenPoints(
                         $enemyIngameXY->getX(), $ingameXY->getX(),
