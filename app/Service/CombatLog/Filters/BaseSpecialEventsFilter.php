@@ -41,6 +41,8 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         619,
         // Suramar
         680,
+        // Waycrest Manor
+        1029,
         // The Barrens
         1413,
         // Kalimdor

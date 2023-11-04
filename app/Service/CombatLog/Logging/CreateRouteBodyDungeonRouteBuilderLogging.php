@@ -34,6 +34,17 @@ class CreateRouteBodyDungeonRouteBuilderLogging extends StructuredLogging implem
 
     /**
      * @param string $uniqueUid
+     *
+     * @return void
+     */
+    public function buildKillZonesUnableToFindEnemyForNpc(string $uniqueUid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
+    /**
+     * @param string $uniqueUid
      * @param string $timestamp
      * @return void
      */

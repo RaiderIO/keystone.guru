@@ -78,7 +78,10 @@ class DungeonRouteFilter implements CombatLogParserInterface
             // Find the correct affix groups that match the affix combination the dungeon was started with
             $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
             if ($currentSeasonForDungeon !== null) {
-                $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds($currentSeasonForDungeon, $combatLogEvent->getAffixIDs());
+                $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
+                    $currentSeasonForDungeon,
+                    collect($combatLogEvent->getAffixIDs())
+                );
 
                 foreach ($affixGroups as $affixGroup) {
                     DungeonRouteAffixGroup::create([

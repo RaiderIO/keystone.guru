@@ -84,7 +84,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 // Find the correct affix groups that match the affix combination the dungeon was started with
                 $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
                 if ($currentSeasonForDungeon !== null) {
-                    $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds($currentSeasonForDungeon, $parsedEvent->getAffixIDs());
+                    $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
+                        $currentSeasonForDungeon,
+                        collect($parsedEvent->getAffixIDs())
+                    );
 
                     /** @var AffixGroup|null $currentKeyAffixGroup */
                     $currentKeyAffixGroup = $affixGroups->first();

@@ -93,6 +93,12 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                             $this->activePullCollection->getInCombatGroups()
                         );
 
+                        if ($resolvedEnemy === null) {
+                            $this->log->buildUnableToFindEnemyForNpc($resultEvent->getGuid()->getGuid());
+
+                            continue;
+                        }
+
                         // Ensure we know about the enemy being resolved fully
                         $resultEvent->setResolvedEnemy($resolvedEnemy);
                         $activePullEnemy->setResolvedEnemy($resolvedEnemy);

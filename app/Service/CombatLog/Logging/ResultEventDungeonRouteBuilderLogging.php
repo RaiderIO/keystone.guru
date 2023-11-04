@@ -39,6 +39,16 @@ class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements
      *
      * @return void
      */
+    public function buildUnableToFindEnemyForNpc(string $guid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param string $guid
+     *
+     * @return void
+     */
     public function buildInCombatWithEnemy(string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
