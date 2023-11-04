@@ -112,8 +112,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
 
         // Internals
+        $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
-        $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
@@ -124,7 +124,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
-        $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
+
+        // Depends on CoordinatesService
+        $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
 
         // Model helpers
         if (config('app.env') === 'local') {

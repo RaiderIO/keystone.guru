@@ -170,7 +170,7 @@ class SeasonsSeeder extends Seeder
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => null,
                 'index'                   => 3,
-                'start'                   => '2023-10-13 00:00:00',
+                'start'                   => '2023-11-13 00:00:00',
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
                 'start_affix_group_index' => 4,
