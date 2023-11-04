@@ -356,7 +356,7 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public function scopeIndexOrFacade(Builder $builder, int $floorIndex): Builder
     {
-        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
+        $useFacade = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
 
         // @TODO prevent navigation to facade floor when NOT in facade mode
         return $builder->where(function (Builder $builder) use ($floorIndex) {
@@ -373,7 +373,7 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public function scopeDefaultOrFacade(Builder $builder): Builder
     {
-        $useFacade = $_COOKIE['map_facade_style'] === 'facade';
+        $useFacade = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
 
         return $builder->where(function (Builder $builder) {
             $builder->where('facade', 1)

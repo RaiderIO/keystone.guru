@@ -171,7 +171,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     'comment'            => __($obeliskMapIcon->mapicontype->name),
                     'obelisk_map_icon'   => $obeliskMapIcon,
                     // MDT has the x and y inverted here
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']])->toArray());
+                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']], $enemy->floor)->toArray());
 
                 $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
 
@@ -674,7 +674,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $vertices  = [];
         $lineCount = count($line);
         for ($i = 0; $i < $lineCount; $i += 2) {
-            $vertices[] = Conversion::convertMDTCoordinateToLatLng(['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])])->toArray();
+            $vertices[] = Conversion::convertMDTCoordinateToLatLng(
+                ['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])],
+                $floor
+            )->toArray();
         }
 
         $lineOrPathAttribute = [
@@ -707,7 +710,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseObjectComment(ImportStringObjects $importStringObjects, Floor $floor, array $details): void
     {
-        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]]);
+        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]], $floor);
 
         $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
 
@@ -765,14 +768,12 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
         }
 
-        $importStringObjects->getMapIcons()->push([
+        $importStringObjects->getMapIcons()->push(array_merge([
             'mapping_version_id' => null,
             'floor_id'           => $floor->id,
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
             'comment'            => $details[4],
-            'lat'                => $latLng['lat'],
-            'lng'                => $latLng['lng'],
-        ]);
+        ], $latLng->toArray()));
     }
 
     /**
@@ -813,7 +814,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $warnings,
             $dungeon,
             $dungeon->getCurrentMappingVersion(),
-            optional($affixGroup)->hasAffix(Affix::AFFIX_TEEMING),
+            optional($affixGroup)->hasAffix(Affix::AFFIX_TEEMING) ?? false,
             null,
             $decoded['value']['pulls']
         ));

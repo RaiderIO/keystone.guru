@@ -555,6 +555,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
     {
+        // @TODO does this need to take into account floor unions?
         $activeFloors = $dungeon->floors()->active()->get();
 
         // First check for mdt_sub_level, if that isn't found just match on our own index
