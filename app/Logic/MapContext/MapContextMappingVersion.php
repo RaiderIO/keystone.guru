@@ -65,7 +65,7 @@ abstract class MapContextMappingVersion extends MapContext
             return Npc::whereIn('dungeon_id', [$this->context->id, -1])->get()->map(function ($npc) {
                 return ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id];
             })->values();
-        },                                    config('keystoneguru.cache.npcs.ttl'));
+        }, config('keystoneguru.cache.npcs.ttl'));
 
         return array_merge(parent::getProperties(), [
             // First should be unspecified

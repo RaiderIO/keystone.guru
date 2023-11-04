@@ -4,6 +4,7 @@
 namespace App\Logic\MapContext;
 
 use App\Models\Dungeon;
+use Illuminate\Support\Collection;
 
 /**
  * Class MapContextDungeonExplore
@@ -15,9 +16,11 @@ use App\Models\Dungeon;
  */
 class MapContextDungeonExplore extends MapContextMappingVersion
 {
-    public function getMapFacadeStyle(): string
+    public function getFloors(): Collection
     {
-        return $_COOKIE['map_facade_style'] ?? 'facade';
+        $useFacade = $this->getMapFacadeStyle() === 'facade';
+
+        return $this->floor->dungeon->floorsForMapFacade($useFacade)->get();
     }
 
     public function getType(): string

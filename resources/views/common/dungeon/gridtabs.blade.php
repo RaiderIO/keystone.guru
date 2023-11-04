@@ -82,7 +82,8 @@ $linkMapFn = function(\App\Models\Dungeon $dungeon) use($route, $routeParams) {
                         'dungeons' => $nextSeason->dungeons,
                         'names' => true,
                         'selectable' => true,
-                        'route' => $route
+                        'route' => $route,
+                        'links' => $route === null ? collect() : $nextSeason->dungeons->map($linkMapFn),
                     ])
                 </div>
             @endif

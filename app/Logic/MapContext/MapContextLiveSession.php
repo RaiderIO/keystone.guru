@@ -8,6 +8,7 @@ use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
 /**
