@@ -202,6 +202,12 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                     $this->activePullCollection->getInCombatGroups()
                 );
 
+                if( $resolvedEnemy === null ) {
+                    $this->log->buildKillZonesUnableToFindEnemyForNpc($uniqueUid);
+
+                    continue;
+                }
+
                 // Ensure we know about the enemy being resolved fully
                 $event['npc']->setResolvedEnemy($resolvedEnemy);
                 $activePullEnemy->setResolvedEnemy($resolvedEnemy);
