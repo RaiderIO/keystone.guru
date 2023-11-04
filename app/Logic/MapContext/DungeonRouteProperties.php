@@ -16,9 +16,11 @@ use Illuminate\Support\Collection;
  */
 trait DungeonRouteProperties
 {
-    public function getMapFacadeStyle(): string
+    public function getFloors(): Collection
     {
-        return $_COOKIE['map_facade_style'] ?? 'facade';
+        $useFacade = $this->getMapFacadeStyle() === 'facade';
+
+        return $this->floor->dungeon->floorsForMapFacade($useFacade)->get();
     }
 
     /**

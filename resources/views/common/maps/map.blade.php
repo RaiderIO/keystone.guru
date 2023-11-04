@@ -167,16 +167,14 @@ if ($isAdmin) {
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floorsForMapFacade($useFacade)->when(!$isAdmin, function(\Illuminate\Database\Eloquent\Builder $builder) {
-                    $builder->active();
-                })->get(),
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floorsForMapFacade($useFacade)->active()->get(),
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
@@ -184,7 +182,7 @@ if ($isAdmin) {
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [
             'isAdmin' => $isAdmin,
-            'floors' => $dungeon->floorsForMapFacade($useFacade)->active()->get(),
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
