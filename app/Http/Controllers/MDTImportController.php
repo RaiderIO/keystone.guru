@@ -37,36 +37,36 @@ class MDTImportController extends Controller
         $validated = $request->validated();
         $string    = $validated['import_string'];
 
-//        try {
+        try {
             $warnings     = new Collection();
             return $mdtImportStringService
                 ->setEncodedString($string)
                 ->getDetails($warnings);
-//        } catch (InvalidMDTString $ex) {
-//            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
-//        } catch (Exception $ex) {
-//            // Different message based on our deployment settings
-//            if (config('app.debug')) {
-//                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
-//            } else {
-//                $message = __('controller.admintools.error.invalid_mdt_string');
-//            }
-//
-//            // We're not interested if the string was 100% not an MDT string - it will never work then
-//            if (isValidBase64($string)) {
-//                report($ex);
-//            }
-//
-//            Log::error($ex->getMessage());
-//            return abort(400, $message);
-//        } catch (Throwable $error) {
-//            if ($error->getMessage() === "Class 'Lua' not found") {
-//                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
-//            }
-//            Log::error($error->getMessage());
-//
-//            throw $error;
-//        }
+        } catch (InvalidMDTString $ex) {
+            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+        } catch (Exception $ex) {
+            // Different message based on our deployment settings
+            if (config('app.debug')) {
+                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
+            } else {
+                $message = __('controller.admintools.error.invalid_mdt_string');
+            }
+
+            // We're not interested if the string was 100% not an MDT string - it will never work then
+            if (isValidBase64($string)) {
+                report($ex);
+            }
+
+            Log::error($ex->getMessage());
+            return abort(400, $message);
+        } catch (Throwable $error) {
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
+            }
+            Log::error($error->getMessage());
+
+            throw $error;
+        }
     }
 
     /**
