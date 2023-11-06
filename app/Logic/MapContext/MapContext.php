@@ -87,8 +87,6 @@ abstract class MapContext
         $dungeonData = $this->cacheService->remember(
             sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle),
             function () use ($mapFacadeStyle) {
-                $useFacade = $mapFacadeStyle === 'facade';
-
                 /** @var Dungeon $dungeon */
                 $dungeon = $this->floor->dungeon()->without(['floors', 'mapicons', 'enemypacks'])->first();
                 // Filter out floors that we do not need
@@ -104,14 +102,14 @@ abstract class MapContext
                         },
                     ])->get(),
                     'auras'                     => Spell::where('aura', true)->get(),
-                    'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
-                    'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
-                    'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
-                    'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
-                    'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
-                    'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
-                    'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
-                    'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
+                    'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $mapFacadeStyle),
+                    'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $mapFacadeStyle),
+                    'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $mapFacadeStyle),
+                    'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $mapFacadeStyle),
+                    'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $mapFacadeStyle),
+                    'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $mapFacadeStyle),
+                    'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $mapFacadeStyle),
+                    'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $mapFacadeStyle),
                 ]);
             }, config('keystoneguru.cache.dungeonData.ttl'));
 

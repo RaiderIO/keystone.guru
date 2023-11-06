@@ -42,6 +42,7 @@ class MapObject extends Signalable {
         this.options = options;
 
         this.id = 0;
+        this.facade = false; // whether this map object is a facade (fake) object or not
         this.faction = 'any'; // sensible default
         this.teeming = null; // visible, hidden, null
         this.local = false;

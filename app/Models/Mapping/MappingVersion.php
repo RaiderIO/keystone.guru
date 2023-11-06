@@ -270,36 +270,6 @@ class MappingVersion extends Model
         return $floorUnion;
     }
 
-
-    /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
-     *
-     * @return Collection
-     */
-    public function mapContextEnemies(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
-    {
-        /** @var Collection|Enemy[] $enemies */
-        $enemies = $this->enemies()
-            ->with(['floor'])
-            ->without(['npc'])
-            ->get()
-            ->makeHidden(['enemyactiveauras']);
-
-        if ($useFacade) {
-            foreach ($enemies as $enemy) {
-                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-                    $this,
-                    $enemy->getLatLng()
-                );
-
-                $enemy->setLatLng($convertedLatLng);
-            }
-        }
-
-        return $enemies;
-    }
-
     /**
      * @param CoordinatesServiceInterface $coordinatesService
      * @param ConvertsVerticesInterface   $hasVertices
@@ -331,18 +301,65 @@ class MappingVersion extends Model
         return $newFloor;
     }
 
+
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextEnemies(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
+    {
+        /** @var Collection|Enemy[] $enemies */
+        $enemies = $this->enemies()
+            ->with(['floor'])
+            ->without(['npc'])
+            ->get()
+            ->makeHidden(['enemyactiveauras', 'floor']);
+
+        $enemiesFacade = $enemies;
+
+        if ($mapFacadeStyle === 'both') {
+            $enemiesFacade = collect();
+            foreach ($enemies as $enemy) {
+                $enemiesFacade->push(clone $enemy);
+            }
+        }
+
+        if ($mapFacadeStyle === 'facade' || $mapFacadeStyle === 'both') {
+            foreach ($enemiesFacade as $enemy) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this,
+                    $enemy->getLatLng()
+                );
+
+                $enemy->setLatLng($convertedLatLng);
+                $enemy->setAttribute('facade', true);
+            }
+
+            if ($mapFacadeStyle === 'both') {
+//                dd($enemies->first(), $enemiesFacade->first());
+//                dd($enemies->count(), $enemiesFacade->count(), $enemies->merge($enemiesFacade)->count());
+                $enemies = $enemies->concat($enemiesFacade);
+            }
+        }
+
+
+        return $enemies;
+    }
+
+    /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param string                      $mapFacadeStyle
+     *
+     * @return Collection
+     */
+    public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         /** @var Collection|EnemyPack[] $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with(['floor', 'enemies:enemies.id,enemies.enemy_pack_id'])->get();
 
-        if ($useFacade) {
+        if ($mapFacadeStyle === 'facade') {
             $enemyPacks = $enemyPacks->map(function (EnemyPack $enemyPack) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack, $enemyPack->floor);
                 $enemyPack->setRelation('floor', $newFloor);
@@ -357,16 +374,16 @@ class MappingVersion extends Model
 
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextEnemyPatrols(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextEnemyPatrols(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         /** @var Collection|EnemyPatrol[] $enemyPatrols */
         $enemyPatrols = $this->enemyPatrols()->with('floor')->get();
 
-        if ($useFacade) {
+        if ($mapFacadeStyle === 'facade') {
             $enemyPatrols = $enemyPatrols->map(function (EnemyPatrol $enemyPatrol) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPatrol->polyline, $enemyPatrol->floor);
                 $enemyPatrol->setRelation('floor', $newFloor);
@@ -381,18 +398,18 @@ class MappingVersion extends Model
 
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         /** @var Collection|MapIcon[] $mapIcons */
         $mapIcons = $this->mapIcons()
             ->with(['floor'])
             ->get();
 
-        if ($useFacade) {
+        if ($mapFacadeStyle === 'facade') {
             foreach ($mapIcons as $mapIcon) {
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
@@ -408,11 +425,11 @@ class MappingVersion extends Model
 
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextDungeonFloorSwitchMarkers(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextDungeonFloorSwitchMarkers(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
@@ -420,8 +437,10 @@ class MappingVersion extends Model
             ->with('floor')
             ->get();
 
-        if ($useFacade) {
+        if ($mapFacadeStyle === 'facade') {
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                $dungeonFloorSwitchMarker->attributes['floorCouplingDirection'] = $dungeonFloorSwitchMarker->getFloorCouplingDirectionAttribute();
+
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
                     $dungeonFloorSwitchMarker->getLatLng()
@@ -436,16 +455,16 @@ class MappingVersion extends Model
 
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextMountableAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextMountableAreas(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         /** @var Collection|MountableArea[] $mountableAreas */
         $mountableAreas = $this->mountableAreas;
 
-        if ($useFacade) {
+        if ($mapFacadeStyle === 'facade') {
             $mountableAreas = $mountableAreas->map(function (MountableArea $mountableArea) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea, $mountableArea->floor);
                 $mountableArea->setRelation('floor', $newFloor);
@@ -460,22 +479,22 @@ class MappingVersion extends Model
 
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextFloorUnions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextFloorUnions(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         return $this->floorUnions;
     }
 
     /**
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
+     * @param string                      $mapFacadeStyle
      *
      * @return Collection
      */
-    public function mapContextFloorUnionAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextFloorUnionAreas(CoordinatesServiceInterface $coordinatesService, string $mapFacadeStyle): Collection
     {
         return $this->floorUnionAreas;
     }

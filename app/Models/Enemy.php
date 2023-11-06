@@ -80,14 +80,14 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'lat',
         'lng',
     ];
-    //    public    $appends    = ['active_auras'];
-    public    $with       = [
+    public $appends = ['facade']; // 'active_auras'
+    public $with = [
         'npc',
         //        'enemyactiveauras'
     ];
-    public    $hidden     = ['laravel_through_key'];
-    public    $timestamps = false;
-    protected $casts      = [
+    public $hidden = ['laravel_through_key'];
+    public $timestamps = false;
+    protected $casts = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'npc_id'             => 'integer',
@@ -134,6 +134,29 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         self::TEEMING_VISIBLE,
         self::TEEMING_HIDDEN,
     ];
+
+    /** @var int */
+    private int $facade = 0;
+
+    /**
+     * @return int
+     */
+    public function getFacadeAttribute(): int
+    {
+        return $this->facade;
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return $this
+     */
+    public function setFacadeAttribute(int $value): self
+    {
+        $this->facade = $value;
+
+        return $this;
+    }
 
     /**
      * @return array

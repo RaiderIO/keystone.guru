@@ -1,4 +1,4 @@
-![alt text](https://keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
+text](https://keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
 
 # About Keystone.guru
 Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Shadowlands™.

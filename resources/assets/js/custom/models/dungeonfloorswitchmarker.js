@@ -191,13 +191,15 @@ class DungeonFloorSwitchMarker extends Icon {
     _getDecorator() {
         let result = null;
 
+        let currentFloor = getState().getCurrentFloor();
+
         /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
         let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
         // @TODO Hacky fix to disable floor connections in Waycrest Manor - it's bugged there, see #2084
-        if (this.floor_id !== 269 && this.source_floor_id !== null && this.target_floor_id !== null) {
+        if (currentFloor.facade && this.target_floor_id !== null) {
             let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(
                 this.target_floor_id,
-                this.source_floor_id,
+                currentFloor.id,
                 this.layer.getLatLng(),
                 true
             );

@@ -32,8 +32,8 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
 
-    protected $appends  = ['floorCouplingDirection'];
-    protected $hidden   = ['floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
+    protected $appends = ['floorCouplingDirection'];
+    protected $hidden = ['floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
     protected $fillable = [
         'id',
         'mapping_version_id',
@@ -44,7 +44,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
         'lat',
         'lng',
     ];
-    protected $casts    = [
+    protected $casts = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'source_floor_id'    => 'integer',
@@ -60,6 +60,13 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
      */
     public function getFloorCouplingDirectionAttribute(): string
     {
+        // This attribute is already set if we use a facade - but then the floor_id of this marker will be changed
+        // and the below query won't resolve properly. This attribute is forcibly set before this happens to prevent
+        // this from happening (see MappingVersion->mapContextDungeonFloorSwitchMarkers() function)
+        if (isset($this->attributes['floorCouplingDirection'])) {
+            return $this->attributes['floorCouplingDirection'];
+        }
+
         /** @var FloorCoupling $floorCoupling */
         $floorCoupling = FloorCoupling::where('floor1_id', $this->source_floor_id ?? $this->floor_id)
             ->where('floor2_id', $this->target_floor_id)

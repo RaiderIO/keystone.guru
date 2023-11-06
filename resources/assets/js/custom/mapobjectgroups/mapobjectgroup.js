@@ -289,11 +289,16 @@ class MapObjectGroup extends Signalable {
     /**
      *
      * @param id {Number}
+     * @param facade {Boolean}
      * @returns {string}
      * @private
      */
-    _getMapObjectKey(id) {
+    _getMapObjectKey(id, facade = false) {
         console.assert(typeof id === 'number' || typeof id === 'string', 'id is not a Number', id);
+
+        if (facade) {
+            return `${this.names[0]}-${id}-facade`;
+        }
 
         return `${this.names[0]}-${id}`;
     }
@@ -313,7 +318,8 @@ class MapObjectGroup extends Signalable {
             mapObject.onLayerInit();
         }
 
-        let mapObjectKey = this._getMapObjectKey(mapObject.id);
+        let mapObjectKey = this._getMapObjectKey(mapObject.id, mapObject.facade ?? false);
+        console.log(mapObjectKey, mapObject.facade ?? false);
         if (this.objects.hasOwnProperty(mapObjectKey)) {
             console.error(`Overriding map object, this is probably not good!`, mapObjectKey);
         }
