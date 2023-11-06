@@ -3,17 +3,27 @@
 
 namespace App\Service\Subcreation;
 
+use App\Service\Subcreation\Exceptions\InvalidResponseException;
+use App\Service\Traits\Curl;
+
 class SubcreationApiService implements SubcreationApiServiceInterface
 {
-    function getDungeonEaseTierListOverall(): array
+    use Curl;
+
+    /**
+     * @return array
+     * @throws InvalidResponseException
+     */
+    public function getDungeonEaseTierListOverall(): array
     {
-        $ch = curl_init();
+        $responseStr = $this->curlGet('https://subcreation.net/api/v0/dungeon_ease_tier_list_overall');
 
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => 'https://subcreation.net/api/v0/dungeon_ease_tier_list_overall',
-            CURLOPT_RETURNTRANSFER => 1,
-        ]);
+        $response = json_decode($responseStr, true);
 
-        return (array)json_decode(curl_exec($ch), true);
+        if (!is_array($response)) {
+            throw new InvalidResponseException($responseStr);
+        }
+
+        return $response;
     }
 }

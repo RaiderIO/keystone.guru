@@ -25,8 +25,11 @@ trait Curl
             CURLOPT_URL            => $url
         ]);
 
-        $response = curl_exec($ch);
-        curl_close($ch);
+        try {
+            $response = curl_exec($ch);
+        } finally {
+            curl_close($ch);
+        }
 
         return $response;
     }
@@ -51,8 +54,11 @@ trait Curl
             ],
         ]);
 
-        $response = curl_exec($ch);
-        curl_close($ch);
+        try {
+            $response = curl_exec($ch);
+        } finally {
+            curl_close($ch);
+        }
 
         return $response;
     }
