@@ -453,6 +453,8 @@ abstract class DungeonRouteBuilder
             $targetIngameXY->getY(),
         );
 
+        // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
+
 
         if ($distanceBetweenEnemies < $this->currentFloor->enemy_engagement_max_range) {
             // Calculate the location of the latLng
