@@ -5,5 +5,5 @@ namespace App\Service\Subcreation;
 
 interface SubcreationApiServiceInterface
 {
-    function getDungeonEaseTierListOverall(): array;
+    public function getDungeonEaseTierListOverall(): array;
 }
