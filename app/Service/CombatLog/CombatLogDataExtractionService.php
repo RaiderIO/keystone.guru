@@ -76,10 +76,9 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
             // One way or another, enforce we extract the dungeon from the combat log
             if ($parsedEvent instanceof ChallengeModeStart) {
-                $dungeon = Dungeon::where('map_id', $parsedEvent->getInstanceID())->firstOrFail();
+                $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
 
                 $currentKeyLevel = $parsedEvent->getKeystoneLevel();
-
 
                 // Find the correct affix groups that match the affix combination the dungeon was started with
                 $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
@@ -94,10 +93,16 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 }
 
                 $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
-            } else if ($parsedEvent instanceof ZoneChange) {
-                $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
+            }
 
-                $this->log->extractDataSetZone(__($dungeon->name, [], 'en'));
+            else if ($parsedEvent instanceof ZoneChange) {
+                if( $currentKeyLevel !== 1 ) {
+                    $this->log->extractDataSetZoneFailedChallengeModeActive();
+                } else {
+                    $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
+
+                    $this->log->extractDataSetZone(__($dungeon->name, [], 'en'));
+                }
             }
 
             // Ensure we know the floor

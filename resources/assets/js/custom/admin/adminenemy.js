@@ -130,6 +130,12 @@ class AdminEnemy extends Enemy {
      */
     getConnectedMDTEnemy() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
+
+        // Facade enemies can be ignored for MDT purposes
+        if (this.facade) {
+            return null;
+        }
+
         let result = null;
 
         if (this._connectedEnemy === null) {

@@ -27,6 +27,14 @@ class CombatLogDataExtractionServiceLogging extends StructuredLogging implements
     }
 
     /**
+     * @return void
+     */
+    public function extractDataSetZoneFailedChallengeModeActive(): void
+    {
+        $this->info(__METHOD__);
+    }
+
+    /**
      * @param string $dungeonName
      *
      * @return void

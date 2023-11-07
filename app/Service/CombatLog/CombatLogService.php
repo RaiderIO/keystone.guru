@@ -105,10 +105,10 @@ class CombatLogService implements CombatLogServiceInterface
 
             if ($parsedEvent instanceof ChallengeModeStartEvent) {
                 try {
-                    $dungeon = Dungeon::where('map_id', $parsedEvent->getInstanceID())->firstOrFail();
+                    $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeId())->firstOrFail();
                 } catch (Exception $exception) {
                     throw new DungeonNotSupportedException(
-                        sprintf('Dungeon with instance ID %d not found', $parsedEvent->getInstanceID())
+                        sprintf('Dungeon with challenge mode ID %d not found', $parsedEvent->getChallengeModeId())
                     );
                 }
 

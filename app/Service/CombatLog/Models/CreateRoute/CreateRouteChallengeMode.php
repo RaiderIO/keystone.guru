@@ -14,18 +14,21 @@ class CreateRouteChallengeMode
 
     public int $mapId;
 
+    public ?int $challengeModeId;
+
     public int $level;
 
     public array $affixes;
 
     /**
-     * @param string $start
-     * @param string $end
-     * @param bool   $success
-     * @param int    $durationMs
-     * @param int    $mapId
-     * @param int    $level
-     * @param array  $affixes
+     * @param string   $start
+     * @param string   $end
+     * @param bool     $success
+     * @param int      $durationMs
+     * @param int      $mapId
+     * @param int|null $challengeModeId
+     * @param int      $level
+     * @param array    $affixes
      */
     public function __construct(
         string $start,
@@ -33,20 +36,23 @@ class CreateRouteChallengeMode
         bool   $success,
         int    $durationMs,
         int    $mapId,
+        ?int   $challengeModeId,
         int    $level,
         array  $affixes)
     {
-        $this->start      = $start;
-        $this->end        = $end;
-        $this->success    = $success;
-        $this->durationMs = $durationMs;
-        $this->mapId      = $mapId;
-        $this->level      = $level;
-        $this->affixes    = $affixes;
+        $this->start           = $start;
+        $this->end             = $end;
+        $this->success         = $success;
+        $this->durationMs      = $durationMs;
+        $this->mapId           = $mapId;
+        $this->challengeModeId = $challengeModeId;
+        $this->level           = $level;
+        $this->affixes         = $affixes;
     }
 
     /**
      * @param array $body
+     *
      * @return CreateRouteChallengeMode
      */
     public static function createFromArray(array $body): CreateRouteChallengeMode
@@ -57,6 +63,7 @@ class CreateRouteChallengeMode
             $body['success'] ?? true,
             $body['durationMs'],
             $body['mapId'],
+            $body['challengeModeId'] ?? null,
             $body['level'],
             $body['affixes'],
         );

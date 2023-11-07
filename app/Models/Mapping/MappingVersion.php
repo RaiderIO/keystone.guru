@@ -443,7 +443,7 @@ class MappingVersion extends Model
     public function mapContextMountableAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
         /** @var Collection|MountableArea[] $mountableAreas */
-        $mountableAreas = $this->mountableAreas;
+        $mountableAreas = $this->mountableAreas()->with('floor')->get();
 
         if ($useFacade) {
             $mountableAreas = $mountableAreas->map(function (MountableArea $mountableArea) use ($coordinatesService) {

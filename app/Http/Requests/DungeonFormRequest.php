@@ -28,19 +28,20 @@ class DungeonFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'active'           => 'nullable|boolean',
-            'speedrun_enabled' => 'nullable|boolean',
-            'game_version_id'  => Rule::exists(GameVersion::class, 'id'),
-            'zone_id'          => 'int',
-            'map_id'           => 'int',
-            'mdt_id'           => 'int',
-            'name'             => ['required', Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name')],
-            'key'              => [
+            'active'            => 'nullable|boolean',
+            'speedrun_enabled'  => 'nullable|boolean',
+            'game_version_id'   => Rule::exists(GameVersion::class, 'id'),
+            'zone_id'           => 'int',
+            'map_id'            => 'int',
+            'challenge_mode_id' => 'int',
+            'mdt_id'            => 'int',
+            'name'              => ['required', Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name')],
+            'key'               => [
                 'required',
                 Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),
                 Rule::in(collect(array_merge(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
             ],
-            'slug'             => ['required', Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug')],
+            'slug'              => ['required', Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug')],
         ];
     }
 }

@@ -11,11 +11,13 @@ use App\Service\CombatLog\Filters\BaseSpecialEventsFilter;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
 
-class SpecialEventsFilter  extends BaseSpecialEventsFilter
+class SpecialEventsFilter extends BaseSpecialEventsFilter
 {
+    private ?ChallengeModeStart $challengeModeStartEvent = null;
+
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int $lineNr
+     * @param int       $lineNr
      *
      * @return bool
      * @throws DungeonNotSupportedException
@@ -25,12 +27,15 @@ class SpecialEventsFilter  extends BaseSpecialEventsFilter
     {
         // Starts
         if ($combatLogEvent instanceof ChallengeModeStart) {
+            $this->challengeModeStartEvent = $combatLogEvent;
+
             $this->resultEvents->push((new ChallengeModeStartResultEvent($combatLogEvent)));
 
             return true;
         } // Ends
-        elseif ($combatLogEvent instanceof ChallengeModeEnd) {
-            $this->resultEvents->push((new ChallengeModeEndResultEvent($combatLogEvent)));
+        elseif ($combatLogEvent instanceof ChallengeModeEnd &&
+            $this->challengeModeStartEvent instanceof ChallengeModeStart) {
+            $this->resultEvents->push((new ChallengeModeEndResultEvent($this->challengeModeStartEvent, $combatLogEvent)));
 
             return true;
         }
