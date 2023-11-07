@@ -1,4 +1,4 @@
-@if(config('app.type') === 'production')
+@if(config('app.type') === 'live')
     @include('common.thirdparty.nitropay.nitropay')
     {{--@include('common.thirdparty.adsense')--}}
 @else
