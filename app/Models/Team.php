@@ -16,15 +16,15 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int $id
- * @property string $public_key
- * @property string $name
- * @property string $description
- * @property string $invite_code
- * @property string $default_role
+ * @property int                       $id
+ * @property string                    $public_key
+ * @property string                    $name
+ * @property string                    $description
+ * @property string                    $invite_code
+ * @property string                    $default_role
  *
- * @property Collection|TeamUser[] $teamusers
- * @property Collection|User[] $members
+ * @property Collection|TeamUser[]     $teamusers
+ * @property Collection|User[]         $members
  * @property Collection|DungeonRoute[] $dungeonroutes
  *
  * @mixin Eloquent
@@ -33,7 +33,7 @@ class Team extends Model
 {
     use HasIconFile;
 
-    protected $visible = ['name', 'description', 'public_key'];
+    protected $visible  = ['name', 'description', 'public_key'];
     protected $fillable = ['default_role'];
 
     use GeneratesPublicKey;
@@ -90,8 +90,9 @@ class Team extends Model
     public function canAddRemoveRoute(User $user): bool
     {
         $userRole = $this->getUserRole($user);
+
         // Moderator or higher
-        return !($userRole === null) && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[TeamUser::ROLE_MODERATOR];
+        return $userRole !== null && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[TeamUser::ROLE_MODERATOR];
     }
 
     /**
@@ -144,6 +145,7 @@ class Team extends Model
     {
         /** @var TeamUser $teamUser */
         $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
+
         return optional($teamUser)->role;
     }
 
@@ -253,6 +255,7 @@ class Team extends Model
     public function isUserAdmin(User $user): bool
     {
         $userRole = $this->getUserRole($user);
+
         return $userRole === TeamUser::ROLE_ADMIN;
     }
 
@@ -275,6 +278,7 @@ class Team extends Model
     public function isUserModerator(User $user): bool
     {
         $userRole = $this->getUserRole($user);
+
         return $userRole === TeamUser::ROLE_MODERATOR || $userRole === TeamUser::ROLE_ADMIN;
     }
 
@@ -296,17 +300,24 @@ class Team extends Model
      */
     public function canRemoveMember(User $user, User $targetUser): bool
     {
+        $result = false;
+
         $userRole       = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
-        $roles          = TeamUser::ALL_ROLES;
-        // Moderator or higher
-        $userRoleKey       = $roles[$userRole];
-        $targetUserRoleKey = $roles[$targetUserRole];
 
-        // Be admin, or moderator that's removing normal users
-        return $userRoleKey === $roles[TeamUser::ROLE_ADMIN] ||
-            ($userRoleKey === $roles[TeamUser::ROLE_MODERATOR] && $userRoleKey > $targetUserRoleKey) ||
-            $user->id === $targetUser->id;
+        if ($userRole !== null && $targetUserRole !== null) {
+            $roles = TeamUser::ALL_ROLES;
+            // Moderator or higher
+            $userRoleKey       = $roles[$userRole];
+            $targetUserRoleKey = $roles[$targetUserRole];
+
+            // Be admin, or moderator that's removing normal users
+            $result = $userRoleKey === $roles[TeamUser::ROLE_ADMIN] ||
+                ($userRoleKey === $roles[TeamUser::ROLE_MODERATOR] && $userRoleKey > $targetUserRoleKey) ||
+                $user->id === $targetUser->id;
+        }
+
+        return $result;
     }
 
     /**
