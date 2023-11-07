@@ -64,15 +64,16 @@ class CreateMissing extends Command
                 $nameTranslated     = __($nameTranslationKey, [], 'en');
 
                 Dungeon::create([
-                    'expansion_id'     => $expansion->id,
-                    'active'           => 0,
-                    'speedrun_enabled' => false,
-                    'zone_id'          => 123,
-                    'map_id'           => 123,
-                    'mdt_id'           => 123,
-                    'name'             => $nameTranslationKey,
-                    'key'              => $dungeonKey,
-                    'slug'             => Str::slug($nameTranslated),
+                    'expansion_id'      => $expansion->id,
+                    'active'            => 0,
+                    'speedrun_enabled'  => false,
+                    'zone_id'           => 123,
+                    'map_id'            => 123,
+                    'challenge_mode_id' => 123,
+                    'mdt_id'            => 123,
+                    'name'              => $nameTranslationKey,
+                    'key'               => $dungeonKey,
+                    'slug'              => Str::slug($nameTranslated),
                 ]);
 
                 $this->info(sprintf('- Added new dungeon %s', $nameTranslated));
