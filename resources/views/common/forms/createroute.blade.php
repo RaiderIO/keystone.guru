@@ -25,7 +25,7 @@ $dungeonSelectId      = 'dungeon_id_select';
 
 <div class="container">
     @if( !isset($dungeonroute) )
-        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSiegeWarning' => true])
+        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true, 'showSiegeWarning' => true])
     @else
         <input id="{{ $dungeonSelectId }}" type="hidden" value="{{ $dungeonroute->dungeon_id }}">
     @endif

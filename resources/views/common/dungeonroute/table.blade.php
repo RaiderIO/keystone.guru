@@ -85,6 +85,7 @@ if (Auth::check()) {
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeon.select', [
             'id' => 'dungeonroute_search_dungeon_id',
+            'allowSeasonSelection' => true,
             'showSeasons' => true,
             'showAll' => true,
             'showExpansions' => true,
