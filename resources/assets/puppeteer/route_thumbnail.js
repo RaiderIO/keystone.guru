@@ -16,24 +16,28 @@ function delay(timeout) {
     let startTime = new Date().getTime();
     console.log('Creating browser');
     const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
+        args: ['--no-sandbox'],
+        userDataDir: '/dev/null'
     });
-    const page = await browser.newPage();
-    await page.setViewport({width: 768, height: 512});
 
-    console.log(`Navigating to ${process.argv[2]}`);
-    await page.goto(process.argv[2]);
+    try {
+        const page = await browser.newPage();
+        await page.setViewport({width: 768, height: 512});
 
-    console.log('Waiting for page to load fully');
-    await page.waitForSelector('#finished_loading', {timeout: 5000});
+        console.log(`Navigating to ${process.argv[2]}`);
+        await page.goto(process.argv[2]);
 
-    console.log('Waiting for animations to complete');
-    await delay(500);
+        console.log('Waiting for page to load fully');
+        await page.waitForSelector('#finished_loading', {timeout: 5000});
 
-    console.log('Taking screenshot');
-    await page.screenshot({path: process.argv[3]});
+        console.log('Waiting for animations to complete');
+        await delay(500);
 
-    await browser.close();
-    let time = new Date().getTime() - startTime;
-    console.log(`Finished in ${time}ms!`);
+        console.log('Taking screenshot');
+        await page.screenshot({path: process.argv[3]});
+    } finally {
+        await browser.close();
+        let time = new Date().getTime() - startTime;
+        console.log(`Finished in ${time}ms!`);
+    }
 })();
