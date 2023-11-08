@@ -468,11 +468,15 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 /** @var NpcEnemyForces $npcEnemyForces */
                 $npcEnemyForces = $enemyForcesByNpcIds->get($enemy->npc->id);
 
-                $importStringPulls->addEnemyForces(
-                    $importStringPulls->isRouteTeeming() ?
-                        $npcEnemyForces->enemy_forces_teeming :
-                        $npcEnemyForces->enemy_forces
-                );
+                if ($npcEnemyForces !== null) {
+                    $importStringPulls->addEnemyForces(
+                        $importStringPulls->isRouteTeeming() ?
+                            $npcEnemyForces->enemy_forces_teeming :
+                            $npcEnemyForces->enemy_forces
+                    );
+                } else {
+                    logger()->warning(sprintf('Unable to find enemy forces for npc %d!', $enemy->npc->id));
+                }
             }
 
             // <editor-fold desc="Prideful">
