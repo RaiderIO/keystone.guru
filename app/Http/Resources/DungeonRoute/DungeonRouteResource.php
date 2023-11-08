@@ -30,7 +30,7 @@ class DungeonRouteResource extends JsonResource
     public function toArray($request)
     {
         $thumbnailUrls = [];
-        foreach ($this->dungeon->floors as $floor) {
+        foreach ($this->dungeon->floors()->where('facade', 0)->get() as $floor) {
             $thumbnailUrls[] = $this->getThumbnailUrl($floor);
         }
 
@@ -50,8 +50,8 @@ class DungeonRouteResource extends JsonResource
                 'view'       => route('dungeonroute.view', $dungeonRouteUrlParams),
                 'edit'       => route('dungeonroute.edit', $dungeonRouteUrlParams),
                 'embed'      => route('dungeonroute.embed', $dungeonRouteUrlParams),
-                'thumbnails' => $thumbnailUrls
-            ]
+                'thumbnails' => $thumbnailUrls,
+            ],
         ];
     }
 }
