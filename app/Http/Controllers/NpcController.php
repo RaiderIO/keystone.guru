@@ -116,11 +116,9 @@ class NpcController extends Controller
                 NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
 
                 $changes = $npc->getChanges();
-                if (isset($changes['dungeon_id'])) {
-                    // Fetch the existing enemy forces for the most recent mapping so we can propagate that to the
-                    // new dungeon
-                    $npc->load(['enemyForces']);
-                    $existingEnemyForces = $npc->enemyForces->enemy_forces;
+                // If we changed the dungeon our enemy forces no longer match up with the mapping version, so get rid of them
+                // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
+                if (isset($changes['dungeon_id']) && $changes['dungeon_id'] !== -1) {
                     // Get rid of all existing enemy forces
                     $npc->npcEnemyForces()->delete();
                 }

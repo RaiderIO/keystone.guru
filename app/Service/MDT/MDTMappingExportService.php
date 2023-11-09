@@ -209,15 +209,18 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
-            /** @var NpcEnemyForces $npcEnemyForces */
+            /** @var NpcEnemyForces|null $npcEnemyForces */
             $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->first();
 
-            $enemyForces = $npcEnemyForces->enemy_forces;
-            // These counts are different per mapping version so we need to correct it for MDT here
-            if ($npc->isShrouded()) {
-                $enemyForces = $mappingVersion->enemy_forces_shrouded;
-            } else if ($npc->isShroudedZulGamux()) {
-                $enemyForces = $mappingVersion->enemy_forces_shrouded_zul_gamux;
+            $enemyForces = 0;
+            if ($npcEnemyForces !== null) {
+                $enemyForces = $npcEnemyForces->enemy_forces;
+                // These counts are different per mapping version so we need to correct it for MDT here
+                if ($npc->isShrouded()) {
+                    $enemyForces = $mappingVersion->enemy_forces_shrouded;
+                } else if ($npc->isShroudedZulGamux()) {
+                    $enemyForces = $mappingVersion->enemy_forces_shrouded_zul_gamux;
+                }
             }
 
             $dungeonEnemy = array_merge([

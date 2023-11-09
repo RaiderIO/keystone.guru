@@ -459,10 +459,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
             foreach ($this->npcs as $npc) {
                 /** @var $npc Npc */
                 if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                    /** @var NpcEnemyForces $npcEnemyForces */
+                    /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
 
-                    $npcs[$npc->id] = ($npcEnemyForces->enemy_forces ?? -1) >= 0;
+                    $npcs[$npc->id] = (optional($npcEnemyForces)->enemy_forces ?? -1) >= 0;
                 }
             }
         } catch (Exception $ex) {
