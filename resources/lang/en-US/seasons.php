@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'name' => ':expansion S:season',
+    'name' => 'Season :season',
 ];

@@ -18,36 +18,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5798,
-                "mapping_version_id": 98,
-                "npc_id": 94960,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4531,
-                "mapping_version_id": 82,
-                "npc_id": 94960,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4129,
-                "mapping_version_id": 73,
-                "npc_id": 94960,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 432,
-                "mapping_version_id": 7,
-                "npc_id": 94960,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 95674,
@@ -68,36 +39,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5799,
-                "mapping_version_id": 98,
-                "npc_id": 95674,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4532,
-                "mapping_version_id": 82,
-                "npc_id": 95674,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4130,
-                "mapping_version_id": 73,
-                "npc_id": 95674,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 433,
-                "mapping_version_id": 7,
-                "npc_id": 95674,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 95675,
@@ -118,36 +60,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5800,
-                "mapping_version_id": 98,
-                "npc_id": 95675,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4533,
-                "mapping_version_id": 82,
-                "npc_id": 95675,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4131,
-                "mapping_version_id": 73,
-                "npc_id": 95675,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 434,
-                "mapping_version_id": 7,
-                "npc_id": 95675,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 95676,
@@ -168,36 +81,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5801,
-                "mapping_version_id": 98,
-                "npc_id": 95676,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4534,
-                "mapping_version_id": 82,
-                "npc_id": 95676,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4132,
-                "mapping_version_id": 73,
-                "npc_id": 95676,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 435,
-                "mapping_version_id": 7,
-                "npc_id": 95676,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 95832,
@@ -268,36 +152,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5803,
-                "mapping_version_id": 98,
-                "npc_id": 95833,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4536,
-                "mapping_version_id": 82,
-                "npc_id": 95833,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4134,
-                "mapping_version_id": 73,
-                "npc_id": 95833,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 437,
-                "mapping_version_id": 7,
-                "npc_id": 95833,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 95834,
@@ -1318,36 +1173,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5824,
-                "mapping_version_id": 98,
-                "npc_id": 99828,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4557,
-                "mapping_version_id": 82,
-                "npc_id": 99828,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4155,
-                "mapping_version_id": 73,
-                "npc_id": 99828,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 458,
-                "mapping_version_id": 7,
-                "npc_id": 99828,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 99868,
@@ -1368,36 +1194,7 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 5825,
-                "mapping_version_id": 98,
-                "npc_id": 99868,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4558,
-                "mapping_version_id": 82,
-                "npc_id": 99868,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 4156,
-                "mapping_version_id": 73,
-                "npc_id": 99868,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 459,
-                "mapping_version_id": 7,
-                "npc_id": 99868,
-                "enemy_forces": 0,
-                "enemy_forces_teeming": null
-            }
-        ]
+        "npc_enemy_forces": []
     },
     {
         "id": 99891,

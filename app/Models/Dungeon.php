@@ -775,8 +775,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                         function (Builder $builder) use ($mappingVersion) {
                             return $builder
                                 ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
-                                ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id)
-                                ->where('npc_enemy_forces.enemy_forces', '>', 0);
+                                ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id);
                         })
                     ->groupBy('enemies.npc_id');
     }
@@ -811,14 +810,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getInUseNpcs(): Collection
     {
         return Npc::select('npcs.*')
-                  ->join('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
+                  ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
                   ->where(function (Builder $builder) {
                       return $builder->where('npcs.dungeon_id', $this->id)
                                      ->orWhere('npcs.dungeon_id', -1);
                   })
                   ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
                   ->where(function (Builder $builder) {
-                      $builder->where('npc_enemy_forces.enemy_forces', '>', 0)
+                      $builder->whereNotNull('npc_enemy_forces.enemy_forces')
                               ->orWhereIn('npcs.classification_id', [
                                   NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
                                   NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
