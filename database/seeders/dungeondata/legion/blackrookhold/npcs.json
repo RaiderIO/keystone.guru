@@ -41,6 +41,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15035,
+                "mapping_version_id": 265,
+                "npc_id": 98243,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14945,
                 "mapping_version_id": 262,
                 "npc_id": 98243,
@@ -76,6 +83,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15037,
+                "mapping_version_id": 265,
+                "npc_id": 98275,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14947,
                 "mapping_version_id": 262,
@@ -113,6 +127,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15038,
+                "mapping_version_id": 265,
+                "npc_id": 98280,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14948,
                 "mapping_version_id": 262,
                 "npc_id": 98280,
@@ -147,7 +168,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15026,
+                "mapping_version_id": 265,
+                "npc_id": 98362,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98366,
@@ -169,6 +198,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15028,
+                "mapping_version_id": 265,
+                "npc_id": 98366,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14938,
                 "mapping_version_id": 262,
@@ -206,6 +242,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15027,
+                "mapping_version_id": 265,
+                "npc_id": 98368,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14937,
                 "mapping_version_id": 262,
                 "npc_id": 98368,
@@ -229,7 +272,7 @@
         "npc_class_id": 3,
         "display_id": 65787,
         "name": "Ghostly Councilor",
-        "base_health": 988005,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -241,6 +284,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15029,
+                "mapping_version_id": 265,
+                "npc_id": 98370,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14939,
                 "mapping_version_id": 262,
@@ -278,6 +328,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15031,
+                "mapping_version_id": 265,
+                "npc_id": 98521,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14941,
                 "mapping_version_id": 262,
                 "npc_id": 98521,
@@ -301,7 +358,7 @@
         "npc_class_id": 1,
         "display_id": 65833,
         "name": "Lady Velandras Ravencrest",
-        "base_health": 1565000,
+        "base_health": 2371212,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -313,6 +370,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15030,
+                "mapping_version_id": 265,
+                "npc_id": 98538,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14940,
                 "mapping_version_id": 262,
@@ -337,7 +401,7 @@
         "npc_class_id": 1,
         "display_id": 65837,
         "name": "Amalgam of Souls",
-        "base_health": 6904734,
+        "base_health": 6911641,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -348,7 +412,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15032,
+                "mapping_version_id": 265,
+                "npc_id": 98542,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98637,
@@ -392,6 +464,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15033,
+                "mapping_version_id": 265,
+                "npc_id": 98677,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14943,
                 "mapping_version_id": 262,
                 "npc_id": 98677,
@@ -427,6 +506,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15034,
+                "mapping_version_id": 265,
+                "npc_id": 98681,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14944,
                 "mapping_version_id": 262,
@@ -464,6 +550,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15036,
+                "mapping_version_id": 265,
+                "npc_id": 98691,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14946,
                 "mapping_version_id": 262,
                 "npc_id": 98691,
@@ -487,7 +580,7 @@
         "npc_class_id": 1,
         "display_id": 65951,
         "name": "Illysanna Ravencrest",
-        "base_health": 6115622,
+        "base_health": 6516690,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -498,7 +591,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15042,
+                "mapping_version_id": 265,
+                "npc_id": 98696,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98706,
@@ -520,6 +621,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15041,
+                "mapping_version_id": 265,
+                "npc_id": 98706,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14951,
                 "mapping_version_id": 262,
@@ -557,6 +665,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15044,
+                "mapping_version_id": 265,
+                "npc_id": 98792,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14954,
                 "mapping_version_id": 262,
                 "npc_id": 98792,
@@ -592,6 +707,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15045,
+                "mapping_version_id": 265,
+                "npc_id": 98810,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14955,
                 "mapping_version_id": 262,
@@ -629,6 +751,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15046,
+                "mapping_version_id": 265,
+                "npc_id": 98813,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14956,
                 "mapping_version_id": 262,
                 "npc_id": 98813,
@@ -665,6 +794,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15043,
+                "mapping_version_id": 265,
+                "npc_id": 98900,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14953,
                 "mapping_version_id": 262,
                 "npc_id": 98900,
@@ -688,7 +824,7 @@
         "npc_class_id": 1,
         "display_id": 65304,
         "name": "Smashspite the Hateful",
-        "base_health": 6904734,
+        "base_health": 6911641,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -699,7 +835,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15048,
+                "mapping_version_id": 265,
+                "npc_id": 98949,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98965,
@@ -709,7 +853,7 @@
         "npc_class_id": 1,
         "display_id": 66853,
         "name": "Kur'talos Ravencrest",
-        "base_health": 2367337,
+        "base_health": 2369705,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -720,7 +864,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15051,
+                "mapping_version_id": 265,
+                "npc_id": 98965,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 98970,
@@ -730,7 +882,7 @@
         "npc_class_id": 1,
         "display_id": 66281,
         "name": "Dantalionax",
-        "base_health": 17755031,
+        "base_health": 17772791,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -741,7 +893,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15052,
+                "mapping_version_id": 265,
+                "npc_id": 98970,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 99426,
@@ -912,7 +1072,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15053,
+                "mapping_version_id": 265,
+                "npc_id": 101008,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 101054,
@@ -956,6 +1124,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15039,
+                "mapping_version_id": 265,
+                "npc_id": 101549,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14949,
                 "mapping_version_id": 262,
                 "npc_id": 101549,
@@ -991,6 +1166,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15040,
+                "mapping_version_id": 265,
+                "npc_id": 101839,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14950,
                 "mapping_version_id": 262,
@@ -1028,6 +1210,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15050,
+                "mapping_version_id": 265,
+                "npc_id": 102094,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 14960,
                 "mapping_version_id": 262,
                 "npc_id": 102094,
@@ -1063,6 +1252,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15049,
+                "mapping_version_id": 265,
+                "npc_id": 102095,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14959,
                 "mapping_version_id": 262,
@@ -1120,6 +1316,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15047,
+                "mapping_version_id": 265,
+                "npc_id": 102788,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 14957,
                 "mapping_version_id": 262,
