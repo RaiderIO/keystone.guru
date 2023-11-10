@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 78188,
         "name": "Rezan",
-        "base_health": 5379465,
+        "base_health": 6916035,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -18,7 +18,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15090,
+                "mapping_version_id": 267,
+                "npc_id": 122963,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 122965,
@@ -28,7 +36,7 @@
         "npc_class_id": 1,
         "display_id": 79453,
         "name": "Vol'kaal",
-        "base_health": 4918368,
+        "base_health": 6220477,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -39,7 +47,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15087,
+                "mapping_version_id": 267,
+                "npc_id": 122965,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 122967,
@@ -49,7 +65,7 @@
         "npc_class_id": 1,
         "display_id": 80293,
         "name": "Priestess Alun'za",
-        "base_health": 6916455,
+        "base_health": 8892045,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -60,7 +76,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15081,
+                "mapping_version_id": 267,
+                "npc_id": 122967,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 122968,
@@ -70,7 +94,7 @@
         "npc_class_id": 1,
         "display_id": 79568,
         "name": "Yazma",
-        "base_health": 5994261,
+        "base_health": 7899018,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -81,7 +105,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15094,
+                "mapping_version_id": 267,
+                "npc_id": 122968,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 122969,
@@ -91,7 +123,7 @@
         "npc_class_id": 2,
         "display_id": 80622,
         "name": "Zanchuli Witch-Doctor",
-        "base_health": 768495,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -103,6 +135,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15085,
+                "mapping_version_id": 267,
+                "npc_id": 122969,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 887,
                 "mapping_version_id": 14,
@@ -120,7 +159,7 @@
         "npc_class_id": 1,
         "display_id": 84712,
         "name": "Shadowblade Stalker",
-        "base_health": 768495,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -132,6 +171,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15082,
+                "mapping_version_id": 267,
+                "npc_id": 122970,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 888,
                 "mapping_version_id": 14,
@@ -149,7 +195,7 @@
         "npc_class_id": 1,
         "display_id": 81325,
         "name": "Dazar'ai Juggernaut",
-        "base_health": 883769,
+        "base_health": 1136206,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -161,6 +207,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15076,
+                "mapping_version_id": 267,
+                "npc_id": 122971,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 889,
                 "mapping_version_id": 14,
@@ -178,7 +231,7 @@
         "npc_class_id": 1,
         "display_id": 81336,
         "name": "Dazar'ai Augur",
-        "base_health": 768495,
+        "base_health": 889205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -190,6 +243,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15078,
+                "mapping_version_id": 267,
+                "npc_id": 122972,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 890,
                 "mapping_version_id": 14,
@@ -207,7 +267,7 @@
         "npc_class_id": 1,
         "display_id": 81330,
         "name": "Dazar'ai Confessor",
-        "base_health": 768495,
+        "base_health": 790404,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -219,6 +279,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15077,
+                "mapping_version_id": 267,
+                "npc_id": 122973,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 891,
                 "mapping_version_id": 14,
@@ -236,11 +303,11 @@
         "npc_class_id": 1,
         "display_id": 80338,
         "name": "Dazar'ai Colossus",
-        "base_health": 1306442,
+        "base_health": 1679609,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -248,6 +315,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15079,
+                "mapping_version_id": 267,
+                "npc_id": 122984,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 892,
                 "mapping_version_id": 14,
@@ -265,7 +339,7 @@
         "npc_class_id": 1,
         "display_id": 82388,
         "name": "Reanimation Totem",
-        "base_health": 153699,
+        "base_health": 197601,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -276,7 +350,15 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npcspells": [],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 15084,
+                "mapping_version_id": 267,
+                "npc_id": 127315,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 127757,
@@ -286,7 +368,7 @@
         "npc_class_id": 1,
         "display_id": 80376,
         "name": "Reanimated Honor Guard",
-        "base_health": 845345,
+        "base_health": 1185606,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -298,6 +380,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15083,
+                "mapping_version_id": 267,
+                "npc_id": 127757,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 894,
                 "mapping_version_id": 14,
@@ -315,7 +404,7 @@
         "npc_class_id": 1,
         "display_id": 81326,
         "name": "Dazar'ai Honor Guard",
-        "base_health": 768495,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -327,6 +416,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15075,
+                "mapping_version_id": 267,
+                "npc_id": 127799,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 895,
                 "mapping_version_id": 14,
@@ -344,7 +440,7 @@
         "npc_class_id": 1,
         "display_id": 80904,
         "name": "Shieldbearer of Zul",
-        "base_health": 760810,
+        "base_health": 1086806,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -356,6 +452,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15086,
+                "mapping_version_id": 267,
+                "npc_id": 127879,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 896,
                 "mapping_version_id": 14,
@@ -373,7 +476,7 @@
         "npc_class_id": 1,
         "display_id": 76913,
         "name": "Feasting Skyscreamer",
-        "base_health": 753125,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -385,6 +488,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15089,
+                "mapping_version_id": 267,
+                "npc_id": 128434,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 897,
                 "mapping_version_id": 14,
@@ -402,7 +512,7 @@
         "npc_class_id": 1,
         "display_id": 81323,
         "name": "Toxic Saurid",
-        "base_health": 153699,
+        "base_health": 197601,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -414,6 +524,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15088,
+                "mapping_version_id": 267,
+                "npc_id": 128435,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 898,
                 "mapping_version_id": 14,
@@ -431,7 +548,7 @@
         "npc_class_id": 1,
         "display_id": 47659,
         "name": "T'lonja",
-        "base_health": 1536990,
+        "base_health": 1976010,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -443,6 +560,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15092,
+                "mapping_version_id": 267,
+                "npc_id": 128455,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 899,
                 "mapping_version_id": 14,
@@ -460,7 +584,7 @@
         "npc_class_id": 1,
         "display_id": 76483,
         "name": "Monzumi",
-        "base_health": 1567730,
+        "base_health": 2015530,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -479,6 +603,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15093,
+                "mapping_version_id": 267,
+                "npc_id": 129552,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 900,
                 "mapping_version_id": 14,
                 "npc_id": 129552,
@@ -495,7 +626,7 @@
         "npc_class_id": 1,
         "display_id": 80709,
         "name": "Dinomancer Kish'o",
-        "base_health": 1844388,
+        "base_health": 2371212,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -507,6 +638,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15091,
+                "mapping_version_id": 267,
+                "npc_id": 129553,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 901,
                 "mapping_version_id": 14,
@@ -524,7 +662,7 @@
         "npc_class_id": 1,
         "display_id": 82238,
         "name": "Gilded Priestess",
-        "base_health": 768495,
+        "base_health": 988005,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -536,6 +674,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15080,
+                "mapping_version_id": 267,
+                "npc_id": 132126,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 902,
                 "mapping_version_id": 14,
