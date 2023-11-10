@@ -10595,7 +10595,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 2191,
                 "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.millennias_threshold",
-                "default": 1,
+                "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -10609,19 +10609,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 880,
+                        "id": 898,
                         "floor1_id": 259,
                         "floor2_id": 262,
                         "direction": "up"
                     },
                     {
-                        "id": 881,
+                        "id": 899,
                         "floor1_id": 259,
                         "floor2_id": 264,
                         "direction": "up"
                     },
                     {
-                        "id": 882,
+                        "id": 900,
                         "floor1_id": 259,
                         "floor2_id": 266,
                         "direction": "down"
@@ -10712,7 +10712,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 2195,
                 "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.floors.infinite_conflux",
-                "default": 0,
+                "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -10726,13 +10726,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 876,
+                        "id": 901,
                         "floor1_id": 262,
                         "floor2_id": 259,
                         "direction": "down"
                     },
                     {
-                        "id": 877,
+                        "id": 902,
                         "floor1_id": 262,
                         "floor2_id": 266,
                         "direction": "down"
