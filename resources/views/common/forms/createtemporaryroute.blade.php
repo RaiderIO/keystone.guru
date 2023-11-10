@@ -15,7 +15,7 @@ $dungeonSelectId      = 'dungeon_id_select_temporary';
 {{ Form::open(['route' => 'dungeonroute.temporary.savenew']) }}
 <div class="container">
     @if( !isset($model) )
-        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false])
+        @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true])
     @endif
 
     <div class="form-group">

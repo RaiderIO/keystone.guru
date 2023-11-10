@@ -8,13 +8,14 @@
  * @var $currentSeason \App\Models\Season
  * @var $nextSeason \App\Models\Season|null
  */
-$id             = $id ?? 'dungeon_id_select';
-$name           = $name ?? 'dungeon_id';
-$label          = $label ?? __('views/common.dungeon.select.dungeon');
-$required       = $required ?? true;
-$showAll        = !isset($showAll) || $showAll;
-$showSeasons    = isset($showSeasons) && $showSeasons && $currentUserGameVersion->has_seasons;
-$showExpansions = isset($showExpansions) && $showExpansions;
+$id                   = $id ?? 'dungeon_id_select';
+$name                 = $name ?? 'dungeon_id';
+$label                = $label ?? __('views/common.dungeon.select.dungeon');
+$required             = $required ?? true;
+$showAll              = !isset($showAll) || $showAll;
+$showSeasons          = isset($showSeasons) && $showSeasons && $currentUserGameVersion->has_seasons;
+$allowSeasonSelection = isset($allowSeasonSelection) && $allowSeasonSelection && $currentUserGameVersion->has_seasons;
+$showExpansions       = isset($showExpansions) && $showExpansions;
 // Show all dungeons if we're debugging
 $activeOnly        = $activeOnly ?? true; // !config('app.debug');
 $showSiegeWarning  = $showSiegeWarning ?? false;
@@ -24,7 +25,7 @@ $dungeonsSelect    = [];
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
-    if ($selected === null && $showSeasons) {
+    if ($selected === null && $allowSeasonSelection) {
         $selected = sprintf('season-%d', ($nextSeason ?? $currentSeason)->id);
     }
     // Build a list of seasons that we use to make selections of
@@ -35,7 +36,7 @@ if (!isset($dungeons)) {
     $seasons[] = $currentSeason;
 
     // Show a selector to only show all dungeons in a specific season
-    if ($showSeasons) {
+    if ($allowSeasonSelection) {
         $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [];
         foreach ($seasons as $season) {
             $dungeonsSelect[__('views/common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] = $season->name;
@@ -92,7 +93,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
                 return $collection->filter(function (\App\Models\Dungeon $dungeon) use ($currentUserGameVersion) {
                     return $dungeon->game_version_id === $currentUserGameVersion->id;
                 });
-        });
+            });
 
         // Only if there's something to display for this expansion
         if ($dungeonsOfExpansionFiltered->isNotEmpty()) {

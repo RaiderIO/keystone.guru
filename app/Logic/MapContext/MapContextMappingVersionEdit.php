@@ -4,22 +4,27 @@
 namespace App\Logic\MapContext;
 
 use App\Models\Dungeon;
+use Illuminate\Support\Collection;
 
 /**
  * Class MapContextMappingVersionEdit
  * @package App\Logic\MapContext
- * @author Wouter
- * @since 28/08/2023
+ * @author  Wouter
+ * @since   28/08/2023
  *
  * @property Dungeon $context
  */
 class MapContextMappingVersionEdit extends MapContextMappingVersion
 {
+    public function getFloors(): Collection
+    {
+        return $this->context->floors;
+    }
+
     public function getMapFacadeStyle(): string
     {
         return 'both';
     }
-
 
     public function getType(): string
     {

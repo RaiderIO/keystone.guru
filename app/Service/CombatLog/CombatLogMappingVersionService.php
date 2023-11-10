@@ -73,7 +73,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
                 // Ensure we know the dungeon and verify it
                 if ($parsedEvent instanceof ChallengeModeStart) {
-                    $dungeon = Dungeon::where('map_id', $parsedEvent->getInstanceID())->firstOrFail();
+                    $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
                 }
 
                 return $dungeon;

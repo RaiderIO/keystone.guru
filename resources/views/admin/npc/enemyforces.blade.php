@@ -26,17 +26,18 @@
     </thead>
 
     <tbody>
-    @foreach ($npc->npcEnemyForces()->with(['mappingVersion'])->get() as $npcEnemyForce)
+    @foreach ($npc->npcEnemyForces()->with(['mappingVersion'])->get() as $npcEnemyForces)
+        <?php /** @var $npcEnemyForces \App\Models\Npc\NpcEnemyForces */?>
         <tr>
-            <td>{{ $npcEnemyForce->id }}</td>
-            <td>{{ $npcEnemyForce->mappingVersion->getPrettyName() }}</td>
-            <td>{{ $npcEnemyForce->enemy_forces }}</td>
+            <td>{{ $npcEnemyForces->id }}</td>
+            <td>{{ $npcEnemyForces->mappingVersion->getPrettyName() }}</td>
+            <td>{{ $npcEnemyForces->enemy_forces }}</td>
             <td>
-                @if($npcEnemyForce->mappingVersion->merged)
+                @if($npcEnemyForces->mappingVersion->merged)
                     {{ __('views/admin.npcenemyforces.mapping_version_read_only') }}
                 @else
                     <a class="btn btn-info"
-                       href="{{ route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForce]) }}">
+                       href="{{ route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.npcenemyforces.edit_enemy_forces') }}
                     </a>
                 @endif

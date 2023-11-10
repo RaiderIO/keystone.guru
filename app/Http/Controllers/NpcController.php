@@ -28,7 +28,9 @@ class NpcController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
+     *
      * @param Request $request
+     *
      * @return bool
      */
     private function isSaveAsNew(Request $request)
@@ -39,17 +41,20 @@ class NpcController extends Controller
     /**
      * @param NpcFormRequest $request
      * @param Npc|null       $npc
+     *
      * @return array|mixed
      * @throws Exception
      */
     public function store(NpcFormRequest $request, Npc $npc = null)
     {
-        $oldId = null;
+        $oldId        = null;
+        $oldDungeonId = null;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
         } else {
-            $oldId = $npc->id;
+            $oldId        = $npc->id;
+            $oldDungeonId = $npc->dungeon_id;
         }
 
         $npcBefore = clone $npc;
@@ -116,13 +121,23 @@ class NpcController extends Controller
                 NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
 
                 $changes = $npc->getChanges();
-                if (isset($changes['dungeon_id'])) {
-                    // Fetch the existing enemy forces for the most recent mapping so we can propagate that to the
-                    // new dungeon
-                    $npc->load(['enemyForces']);
-                    $existingEnemyForces = $npc->enemyForces->enemy_forces;
-                    // Get rid of all existing enemy forces
-                    $npc->npcEnemyForces()->delete();
+
+                // If we changed the dungeon our enemy forces no longer match up with the mapping version, so get rid of them
+                // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
+                if (isset($changes['dungeon_id']) && $changes['dungeon_id'] !== -1) {
+                    // Change all existing enemy forces for all older mapping versions
+                    $currentDungeonMappingVersionId = Dungeon::findOrFail($oldDungeonId)->getCurrentMappingVersion()->id;
+
+                    $npc->npcEnemyForces()
+                        ->where('mapping_version_id', '!=', $currentDungeonMappingVersionId)
+                        ->delete();
+
+                    // Update the latest mapping version enemy forces to the new latest mapping version
+                    $npc->npcEnemyForces()
+                        ->where('mapping_version_id', $currentDungeonMappingVersionId)
+                        ->update([
+                            'mapping_version_id' => Dungeon::findOrFail($changes['dungeon_id'])->getCurrentMappingVersion()->id,
+                        ]);
                 }
             }
 
@@ -194,11 +209,12 @@ class NpcController extends Controller
                         // Halls of Valor => [npcs]
                         $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
 
-                        return [$dungeonName => $value->pluck('name', 'id')
-                            ->map(function ($value, $key) {
-                                // Make sure the value is formatted as 'Hymdal (123456)'
-                                return sprintf('%s (%s)', $value, $key);
-                            }),
+                        return [
+                            $dungeonName => $value->pluck('name', 'id')
+                                ->map(function ($value, $key) {
+                                    // Make sure the value is formatted as 'Hymdal (123456)'
+                                    return sprintf('%s (%s)', $value, $key);
+                                }),
                         ];
                     })
                     ->toArray(),
@@ -209,6 +225,7 @@ class NpcController extends Controller
      * @param Request             $request
      * @param NpcServiceInterface $npcService
      * @param Npc                 $npc
+     *
      * @return Factory|View
      */
     public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
@@ -225,9 +242,11 @@ class NpcController extends Controller
 
     /**
      * Override to give the type hint which is required.
+     *
      * @param NpcFormRequest      $request
      * @param NpcServiceInterface $npcService
      * @param Npc                 $npc
+     *
      * @return Factory|RedirectResponse|View
      * @throws Exception
      */
@@ -249,6 +268,7 @@ class NpcController extends Controller
 
     /**
      * @param NpcFormRequest $request
+     *
      * @return RedirectResponse
      * @throws Exception
      */

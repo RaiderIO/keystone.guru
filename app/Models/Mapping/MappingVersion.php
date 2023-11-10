@@ -218,11 +218,11 @@ class MappingVersion extends Model
     public function getPrettyName(): string
     {
         return sprintf('%s Version %d (%s%d, %s)',
-                       __($this->dungeon->name),
-                       $this->version,
-                       $this->merged ? 'readonly, ' : '',
-                       $this->id,
-                       $this->created_at
+            __($this->dungeon->name),
+            $this->version,
+            $this->merged ? 'readonly, ' : '',
+            $this->id,
+            $this->created_at
         );
     }
 
@@ -261,9 +261,9 @@ class MappingVersion extends Model
 
         /** @var FloorUnion|null $floorUnion */
         $floorUnion = $this->floorUnions()
-                           ->where('target_floor_id', $floorId)
-                           ->with(['floor', 'targetFloor'])
-                           ->first();
+            ->where('target_floor_id', $floorId)
+            ->with(['floor', 'targetFloor'])
+            ->first();
 
         $this->cachedFloorUnionForFloor->put($floorId, $floorUnion);
 
@@ -281,10 +281,10 @@ class MappingVersion extends Model
     {
         /** @var Collection|Enemy[] $enemies */
         $enemies = $this->enemies()
-                        ->with(['floor'])
-                        ->without(['npc'])
-                        ->get()
-                        ->makeHidden(['enemyactiveauras']);
+            ->with(['floor'])
+            ->without(['npc'])
+            ->get()
+            ->makeHidden(['enemyactiveauras']);
 
         if ($useFacade) {
             foreach ($enemies as $enemy) {
@@ -387,7 +387,23 @@ class MappingVersion extends Model
      */
     public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        return $this->mapIcons;
+        /** @var Collection|MapIcon[] $mapIcons */
+        $mapIcons = $this->mapIcons()
+            ->with(['floor'])
+            ->get();
+
+        if ($useFacade) {
+            foreach ($mapIcons as $mapIcon) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this,
+                    $mapIcon->getLatLng()
+                );
+
+                $mapIcon->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $mapIcons;
     }
 
     /**
@@ -398,25 +414,24 @@ class MappingVersion extends Model
      */
     public function mapContextDungeonFloorSwitchMarkers(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        return $this->dungeonFloorSwitchMarkers;
+        /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+        $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
+            ->whereNull('source_floor_id')
+            ->with('floor')
+            ->get();
 
-//        $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
-//                                          ->whereNull('source_floor_id')
-//                                          ->with('floor')
-//                                          ->get();
-//
-//        if ($useFacade) {
-//            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-//                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-//                    $this,
-//                    $dungeonFloorSwitchMarker->getLatLng()
-//                );
-//
-//                $dungeonFloorSwitchMarker->setLatLng($convertedLatLng);
-//            }
-//        }
-//
-//        return $dungeonFloorSwitchMarkers;
+        if ($useFacade) {
+            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this,
+                    $dungeonFloorSwitchMarker->getLatLng()
+                );
+
+                $dungeonFloorSwitchMarker->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $dungeonFloorSwitchMarkers;
     }
 
     /**
@@ -427,7 +442,20 @@ class MappingVersion extends Model
      */
     public function mapContextMountableAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        return $this->mountableAreas;
+        /** @var Collection|MountableArea[] $mountableAreas */
+        $mountableAreas = $this->mountableAreas()->with('floor')->get();
+
+        if ($useFacade) {
+            $mountableAreas = $mountableAreas->map(function (MountableArea $mountableArea) use ($coordinatesService) {
+                $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea, $mountableArea->floor);
+                $mountableArea->setRelation('floor', $newFloor);
+                $mountableArea->floor_id = $newFloor->id;
+
+                return $mountableArea;
+            });
+        }
+
+        return $mountableAreas;
     }
 
     /**
@@ -475,24 +503,24 @@ class MappingVersion extends Model
 
             // Update the existing fields of the old mapping version to the new version
             $newMappingVersion->update([
-                                           'enemy_forces_required'           => $previousMappingVersion->enemy_forces_required,
-                                           'enemy_forces_required_teeming'   => $previousMappingVersion->enemy_forces_required_teeming,
-                                           'enemy_forces_shrouded'           => $previousMappingVersion->enemy_forces_shrouded,
-                                           'enemy_forces_shrouded_zul_gamux' => $previousMappingVersion->enemy_forces_shrouded_zul_gamux,
-                                           'timer_max_seconds'               => $previousMappingVersion->timer_max_seconds,
-                                       ]);
+                'enemy_forces_required'           => $previousMappingVersion->enemy_forces_required,
+                'enemy_forces_required_teeming'   => $previousMappingVersion->enemy_forces_required_teeming,
+                'enemy_forces_shrouded'           => $previousMappingVersion->enemy_forces_shrouded,
+                'enemy_forces_shrouded_zul_gamux' => $previousMappingVersion->enemy_forces_shrouded_zul_gamux,
+                'timer_max_seconds'               => $previousMappingVersion->timer_max_seconds,
+            ]);
 
             $previousMappingVersion->load([
-                                              'dungeonFloorSwitchMarkers',
-                                              'enemies',
-                                              'enemyPacks',
-                                              'enemyPatrols',
-                                              'mapIcons',
-                                              'mountableAreas',
-                                              'floorUnions',
-                                              'floorUnionAreas',
-                                              'npcEnemyForces',
-                                          ]);
+                'dungeonFloorSwitchMarkers',
+                'enemies',
+                'enemyPacks',
+                'enemyPatrols',
+                'mapIcons',
+                'mountableAreas',
+                'floorUnions',
+                'floorUnionAreas',
+                'npcEnemyForces',
+            ]);
 
             /** @var Collection|MappingModelInterface[] $previousMapping */
             $previousMapping = collect()
@@ -507,16 +535,16 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->npcEnemyForces);
 
             $idMapping = collect([
-                                     DungeonFloorSwitchMarker::class => collect(),
-                                     Enemy::class                    => collect(),
-                                     EnemyPack::class                => collect(),
-                                     EnemyPatrol::class              => collect(),
-                                     MapIcon::class                  => collect(),
-                                     MountableArea::class            => collect(),
-                                     FloorUnion::class               => collect(),
-                                     FloorUnionArea::class           => collect(),
-                                     NpcEnemyForces::class           => collect(),
-                                 ]);
+                DungeonFloorSwitchMarker::class => collect(),
+                Enemy::class                    => collect(),
+                EnemyPack::class                => collect(),
+                EnemyPatrol::class              => collect(),
+                MapIcon::class                  => collect(),
+                MountableArea::class            => collect(),
+                FloorUnion::class               => collect(),
+                FloorUnionArea::class           => collect(),
+                NpcEnemyForces::class           => collect(),
+            ]);
 
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
@@ -524,9 +552,9 @@ class MappingVersion extends Model
                 $newModel = $model->cloneForNewMappingVersion($newMappingVersion);
 
                 $idMapping->get(get_class($model))->push([
-                                                             'oldModel' => $model,
-                                                             'newModel' => $newModel,
-                                                         ]);
+                    'oldModel' => $model,
+                    'newModel' => $newModel,
+                ]);
             }
 
             // Change enemy packs of new enemies
@@ -551,8 +579,8 @@ class MappingVersion extends Model
                         /** @var array{oldModel: EnemyPatrol, newModel: EnemyPatrol} $enemyPatrolRelationCoupling */
                         if ($enemyPatrolRelationCoupling['oldModel']->id === $oldEnemyPatrolId) {
                             $enemyRelationCoupling['newModel']->update([
-                                                                           'enemy_patrol_id' => $enemyPatrolRelationCoupling['newModel']->id,
-                                                                       ]);
+                                'enemy_patrol_id' => $enemyPatrolRelationCoupling['newModel']->id,
+                            ]);
                             break;
                         }
                     }
@@ -569,8 +597,8 @@ class MappingVersion extends Model
                     /** @var array{oldModel: FloorUnion, newModel: FloorUnion} $floorUnionRelationCoupling */
                     if ($floorUnionRelationCoupling['oldModel']->id === $oldFloorUnionId) {
                         $floorUnionAreaRelationCoupling['newModel']->update([
-                                                                                'floor_union_id' => $floorUnionRelationCoupling['newModel']->id,
-                                                                            ]);
+                            'floor_union_id' => $floorUnionRelationCoupling['newModel']->id,
+                        ]);
                         break;
                     }
                 }

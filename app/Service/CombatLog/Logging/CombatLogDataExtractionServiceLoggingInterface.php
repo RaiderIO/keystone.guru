@@ -9,6 +9,8 @@ interface CombatLogDataExtractionServiceLoggingInterface
 
     public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, string $affixGroup): void;
 
+    public function extractDataSetZoneFailedChallengeModeActive(): void;
+
     public function extractDataSetZone(string $dungeonName): void;
 
     public function extractDataAddedNewFloorConnection(int $previousFloorId, int $currentFloorId);

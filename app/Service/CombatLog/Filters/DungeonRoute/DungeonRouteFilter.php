@@ -48,7 +48,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
             );
         } else if ($combatLogEvent instanceof ChallengeModeStart) {
             try {
-                $dungeon = Dungeon::where('map_id', $combatLogEvent->getInstanceID())->firstOrFail();
+                $dungeon = Dungeon::where('challenge_mode_id', $combatLogEvent->getChallengeModeID())->firstOrFail();
             } catch (Exception $exception) {
                 throw new DungeonNotSupportedException(
                     sprintf('Dungeon with instance ID %d not found', $combatLogEvent->getInstanceID())

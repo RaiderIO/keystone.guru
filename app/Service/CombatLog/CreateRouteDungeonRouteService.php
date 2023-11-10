@@ -126,6 +126,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 $challengeModeEndEvent->getSuccess(),
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $challengeModeStartEvent->getInstanceID(),
+                $challengeModeStartEvent->getChallengeModeID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
                 $challengeModeStartEvent->getAffixIDs()
             );
@@ -234,9 +235,11 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             /** @var Floor $floor */
             $floor = $floorByUiMapId->get($npc->coord->uiMapId);
 
-            if ($floor === null && !in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
-                $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
-                $invalidUiMapIds[] = $npc->coord->uiMapId;
+            if ($floor === null) {
+                if (!in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
+                    $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
+                    $invalidUiMapIds[] = $npc->coord->uiMapId;
+                }
                 continue;
             }
 

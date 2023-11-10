@@ -35,7 +35,7 @@ use Illuminate\Support\Collection;
  * @property NpcClassification                   $classification
  * @property NpcType                             $type
  * @property NpcClass                            $class
- * @property NpcEnemyForces                      $enemyForces
+ * @property NpcEnemyForces|null                 $enemyForces
  *
  * @property NpcEnemyForces[]|Collection         $npcEnemyForces
  * @property Enemy[]|Collection                  $enemies
@@ -164,6 +164,34 @@ class Npc extends CacheModel implements MappingModelInterface
     public function enemyForces(): HasOne
     {
         return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
+    }
+
+    /**
+     * @param int                 $enemyForces
+     * @param MappingVersion|null $mappingVersion
+     * @return NpcEnemyForces
+     */
+    public function setEnemyForces(int $enemyForces, ?MappingVersion $mappingVersion = null): NpcEnemyForces
+    {
+        if ($this->dungeon_id === -1 && $mappingVersion === null) {
+            throw new \InvalidArgumentException('Unable to set enemy forces for global npc without a mapping version!');
+        }
+
+        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion)->first();
+
+        if ($npcEnemyForces === null) {
+            $npcEnemyForces = NpcEnemyForces::create([
+                'mapping_version_id'   => ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id,
+                'npc_id'               => $this->id,
+                'enemy_forces'         => $enemyForces,
+            ]);
+        } else {
+            $npcEnemyForces->update([
+                'enemy_forces'         => $enemyForces,
+            ]);
+        }
+
+        return $npcEnemyForces;
     }
 
     /**

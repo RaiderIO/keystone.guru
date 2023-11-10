@@ -16,6 +16,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -54,11 +55,17 @@ abstract class MapContext
 
     public abstract function getSeasonalIndex(): int;
 
+    public abstract function getFloors(): Collection;
+
     public abstract function getEnemies(): array;
 
     public abstract function getEchoChannelName(): string;
 
-    public abstract function getMapFacadeStyle(): string;
+    public function getMapFacadeStyle(): string
+    {
+        return $_COOKIE['map_facade_style'] ?? 'facade';
+    }
+
 
     /**
      * @return Model
@@ -85,7 +92,7 @@ abstract class MapContext
                 /** @var Dungeon $dungeon */
                 $dungeon = $this->floor->dungeon()->without(['floors', 'mapicons', 'enemypacks'])->first();
                 // Filter out floors that we do not need
-                $dungeon->setRelation('floors', $dungeon->floorsForMapFacade($useFacade)->get());
+                $dungeon->setRelation('floors', $this->getFloors());
 
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
                     'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),

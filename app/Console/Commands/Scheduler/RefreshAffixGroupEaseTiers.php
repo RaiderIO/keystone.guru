@@ -7,6 +7,7 @@ use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\Dungeon;
 use App\Models\SubcreationEaseTierPull;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\Subcreation\Exceptions\InvalidResponseException;
 use App\Service\Subcreation\SubcreationApiServiceInterface;
 use Carbon\Carbon;
 use DateTimeZone;
@@ -43,13 +44,23 @@ class RefreshAffixGroupEaseTiers extends Command
      * Execute the console command.
      *
      * @param SubcreationApiServiceInterface $subcreationApiService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface         $seasonService
      * @return int
      * @throws Exception
      */
     public function handle(SubcreationApiServiceInterface $subcreationApiService, SeasonServiceInterface $seasonService)
     {
-        $tierLists = $subcreationApiService->getDungeonEaseTierListOverall();
+        try {
+            $tierLists = $subcreationApiService->getDungeonEaseTierListOverall();
+        } catch (InvalidResponseException $exception) {
+            $this->error(sprintf('Invalid response: %s', $exception->getMessage()));
+            return -1;
+        }
+
+        if (!isset($tierLists['last_updated']) || !isset($tierLists['current_affixes']) || !isset($tierLists['source_url']) || !isset($tierLists['tier_lists'])) {
+            $this->error(sprintf('Invalid response: %s', json_encode($tierLists)));
+            return -1;
+        }
 
         $lastUpdatedAt    = Carbon::createFromFormat('Y-m-d G:i:s.uP', $tierLists['last_updated']);
         $lastEaseTierPull = SubcreationEaseTierPull::latest()->first();
@@ -117,7 +128,7 @@ class RefreshAffixGroupEaseTiers extends Command
 
     /**
      * @param SeasonServiceInterface $seasonService
-     * @param string $affixString
+     * @param string                 $affixString
      * @return int|null
      */
     private function getAffixGroupByString(SeasonServiceInterface $seasonService, string $affixString): ?int

@@ -72,7 +72,11 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     private function initDungeonRoute(): DungeonRoute
     {
         try {
-            $dungeon = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
+            if( $this->createRouteBody->challengeMode->challengeModeId !== null ) {
+                $dungeon = Dungeon::where('challenge_mode_id', $this->createRouteBody->challengeMode->challengeModeId)->firstOrFail();
+            } else {
+                $dungeon = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
+            }
         } catch (Exception $exception) {
             throw new DungeonNotSupportedException(
                 sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
