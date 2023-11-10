@@ -271,6 +271,24 @@ class MapContext extends Signalable {
     }
 
     /**
+     * Get the default floor
+     * @returns {*}|bool
+     */
+    getDefaultFloor() {
+        let result = this._options.dungeon.floors[0];
+
+        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
+            let floor = this._options.dungeon.floors[i];
+            if (floor.default) {
+                result = floor;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      *
      * @returns {{}}
      */

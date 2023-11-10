@@ -65,10 +65,6 @@ class PullWorkBench extends Signalable {
     editPull(killZoneId) {
         console.assert(this instanceof PullWorkBench, 'this is not a PullWorkBench', this);
 
-        let self = this;
-
-        console.log(`Wants to edit ${killZoneId}`);
-
         // Depress a toggle button
         let oldKillZoneId = null;
         if (this.killZone !== null) {
@@ -198,8 +194,6 @@ class PullWorkBench extends Signalable {
         console.assert(this instanceof PullWorkBench, 'this is not a PullWorkBench', this);
 
         if (this.colorPicker !== null) {
-            console.log(this.colorPicker);
-
             // SetColor is slow, check if we really need to set it
             let oldColor = '#' + this.colorPicker.getColor().toHEXA().join('');
             if (oldColor !== this.killZone.color) {
@@ -245,14 +239,14 @@ class PullWorkBench extends Signalable {
 
                 self.killZone.unregister('object:deleted', '123123');
 
-                $(self).find('i').addClass(trashIcon).removeClass(loadingIcon);
+                $self.find('i').addClass(trashIcon).removeClass(loadingIcon);
                 self.$workbench.hide();
 
             });
             self.killZone.register('object:changed', '123123', function () {
                 if (!self.killZone.synced) {
                     // Failed to delete
-                    $(self).find('i').addClass(trashIcon).removeClass(loadingIcon)
+                    $self.find('i').addClass(trashIcon).removeClass(loadingIcon)
                 }
 
                 self.killZone.unregister('object:changed', '123123');
