@@ -139,5 +139,9 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
         refreshTooltips();
     });
 </script>
+
+@if(!$adFree && $showAds)
+    @include('common.thirdparty.adfooter')
+@endif
 </body>
 </html>
