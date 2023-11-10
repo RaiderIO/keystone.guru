@@ -26,7 +26,7 @@ $dungeonsSelect    = [];
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
     if ($selected === null && $allowSeasonSelection) {
-        $selected = sprintf('season-%d', ($nextSeason ?? $currentSeason)->id);
+        $selected = sprintf('season-%d', $currentSeason->id);
     }
     // Build a list of seasons that we use to make selections of
     $seasons = [];
