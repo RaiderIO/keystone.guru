@@ -34,7 +34,6 @@ $GLOBALS['playwireBTFCount'] = 0;
     @endif
 
 @elseif( $type === 'header_middle' || $type === 'footer' )
-    <script async src="//cdn.intergient.com/ramp_core.js"></script>
     @php($GLOBALS['playwireBTFCount']++)
 
     @if( $isMobile )
