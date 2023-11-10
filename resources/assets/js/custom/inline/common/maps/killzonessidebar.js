@@ -79,7 +79,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility() && getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS;
 
         if (showFloorSwitches && this.rowElements.length === 0) {
-            this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
+            this._addFloorSwitch(killZone, getState().getMapContext().getDefaultFloor(), true);
         }
 
         /** @type KillZoneMapObjectGroup */
@@ -186,7 +186,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];
                 if (i === 0) {
-                    this._addFloorSwitch(killZone, getState().getMapContext().getDungeon().floors[0], true);
+                    this._addFloorSwitch(killZone, getState().getMapContext().getDefaultFloor(), true);
                 } else {
                     // Don't insert a floor switch if we happen to have an empty pull
                     killZoneFloorIds = killZone.getFloorIds();
