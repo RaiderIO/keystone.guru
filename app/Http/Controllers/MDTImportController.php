@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MDT\ImportStringFormRequest;
-use App\Logic\MDT\Exception\InvalidMDTString;
+use App\Logic\MDT\Exception\InvalidMDTStringException;
+use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Models\MDTImport;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
@@ -32,18 +33,20 @@ class MDTImportController extends Controller
         ImportStringFormRequest         $request,
         MDTImportStringServiceInterface $mdtImportStringService,
         SeasonServiceInterface          $seasonService
-    )
-    {
+    ) {
         $validated = $request->validated();
         $string    = $validated['import_string'];
 
         try {
-            $warnings     = new Collection();
+            $warnings = new Collection();
+
             return $mdtImportStringService
                 ->setEncodedString($string)
                 ->getDetails($warnings);
-        } catch (InvalidMDTString $ex) {
-            return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+        } catch (MDTStringParseException $ex) {
+            return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+        } catch (InvalidMDTStringException $ex) {
+            return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
             // Different message based on our deployment settings
             if (config('app.debug')) {
@@ -58,10 +61,11 @@ class MDTImportController extends Controller
             }
 
             Log::error($ex->getMessage());
-            return abort(400, $message);
+
+            return abort(StatusCode::BAD_REQUEST, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
+                return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
             }
             Log::error($error->getMessage());
 
@@ -70,7 +74,7 @@ class MDTImportController extends Controller
     }
 
     /**
-     * @param ImportStringFormRequest $request
+     * @param ImportStringFormRequest         $request
      * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return Factory|View|void
      * @throws Throwable
@@ -102,8 +106,10 @@ class MDTImportController extends Controller
                     'dungeon_route_id' => $dungeonRoute->id,
                     'import_string'    => $string,
                 ]);
-            } catch (InvalidMDTString $ex) {
-                return abort(400, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+            } catch (MDTStringParseException $ex) {
+                return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+            } catch (InvalidMDTStringException $ex) {
+                return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {
                 // We're not interested if the string was 100% not an MDT string - it will never work then
                 if (isValidBase64($string)) {
@@ -116,11 +122,11 @@ class MDTImportController extends Controller
                 } else {
                     Log::error($ex->getMessage());
 
-                    return abort(400, sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage()));
+                    return abort(StatusCode::BAD_REQUEST, sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage()));
                 }
             } catch (Throwable $error) {
                 if ($error->getMessage() === "Class 'Lua' not found") {
-                    return abort(500, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
+                    return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
                 }
 
                 throw $error;

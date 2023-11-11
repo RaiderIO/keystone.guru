@@ -6,7 +6,8 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
-use App\Logic\MDT\Exception\InvalidMDTString;
+use App\Logic\MDT\Exception\InvalidMDTStringException;
+use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Logic\Structs\LatLng;
 use App\Logic\Utils\MathUtils;
 use App\Models\Affix;
@@ -794,17 +795,22 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @param Collection $warnings
      *
      * @return ImportStringDetails
-     * @throws InvalidMDTString
+     * @throws InvalidMDTStringException
      * @throws \Exception
      */
     public function getDetails(Collection $warnings): ImportStringDetails
     {
         $decoded = $this->decode($this->encodedString);
+
+        if ($decoded === null) {
+            throw new MDTStringParseException('Unable to decode MDT import string');
+        }
+
         // Check if it's valid
         $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
         if (!$isValid) {
-            throw new InvalidMDTString('Unable to validate MDT import string in Lua');
+            throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
         }
 
         $warnings = collect();
@@ -859,17 +865,23 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @param  $importAsThisWeek bool True to replace the imported affixes with this week's affixes instead
      *
      * @return DungeonRoute DungeonRoute if the route could be constructed
-     * @throws InvalidMDTString
+     * @throws InvalidMDTStringException
+     * @throws MDTStringParseException
      * @throws Exception
      */
     public function getDungeonRoute(Collection $warnings, bool $sandbox = false, bool $save = false, bool $importAsThisWeek = false): DungeonRoute
     {
         $decoded = $this->decode($this->encodedString);
+
+        if ($decoded === null) {
+            throw new MDTStringParseException('Unable to decode MDT import string');
+        }
+
         // Check if it's valid
         $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
         if (!$isValid) {
-            throw new InvalidMDTString('Unable to validate MDT import string in Lua');
+            throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
         }
 
         $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
