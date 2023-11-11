@@ -23,6 +23,7 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
@@ -580,7 +581,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseObjects(ImportStringObjects $importStringObjects): ImportStringObjects
     {
-        $floors = $importStringObjects->getDungeon()->floors;
+        $mappingVersion = $importStringObjects->getDungeon()->getCurrentMappingVersion();
+
+        $floors = $importStringObjects->getDungeon()->floorsForMapFacade(
+            in_array($importStringObjects->getDungeon()->id, Dungeon::USES_FACADE)
+        )->get();
 
         foreach ($importStringObjects->getMdtObjects() as $objectIndex => $object) {
             try {
@@ -643,12 +648,12 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // If it's a line
                 // MethodDungeonTools.lua:2529
                 if (isset($object['l'])) {
-                    $this->parseObjectLine($importStringObjects, $floor, $details, $object['l']);
+                    $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $object['l']);
                 }
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
                 else if (isset($object['n']) && $object['n']) {
-                    $this->parseObjectComment($importStringObjects, $floor, $details);
+                    $this->parseObjectComment($importStringObjects, $mappingVersion, $floor, $details);
                 }
                 // Triangles (t = triangle)
                 // MethodDungeonTools.lua:2554
@@ -666,27 +671,48 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     /**
      * @param ImportStringObjects $importStringObjects
+     * @param MappingVersion      $mappingVersion
      * @param Floor               $floor
      * @param array               $details
      * @param array               $line
      *
      * @return void
      */
-    private function parseObjectLine(ImportStringObjects $importStringObjects, Floor $floor, array $details, array $line): void
+    private function parseObjectLine(
+        ImportStringObjects $importStringObjects,
+        MappingVersion      $mappingVersion,
+        Floor               $floor,
+        array               $details,
+        array               $line): void
     {
         $isFreeDrawn = isset($details[6]) && $details[6];
 
-        $vertices  = [];
-        $lineCount = count($line);
+        $vertices      = [];
+        $lineCount     = count($line);
+        $dominantFloor = null;
         for ($i = 0; $i < $lineCount; $i += 2) {
-            $vertices[] = Conversion::convertMDTCoordinateToLatLng(
+            $latLng = Conversion::convertMDTCoordinateToLatLng(
                 ['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])],
                 $floor
-            )->toArray();
+            );
+
+            if ($floor->facade) {
+                // @TODO force passing of the dominant floor to force convert a facade location to a certain floor,
+                // instead of using the floor union areas to determine which floor it should go on?
+                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
+                    $mappingVersion,
+                    $latLng
+                );
+
+                // Attempt to set the dominant floor, or fall back to what was set before
+                $dominantFloor = $dominantFloor ?? $latLng->getFloor();
+            }
+
+            $vertices[] = $latLng->toArray();
         }
 
         $lineOrPathAttribute = [
-            'floor_id' => $floor->id,
+            'floor_id' => ($dominantFloor ?? $floor)->id,
             'polyline' => [
                 // Make sure there is a pound sign in front of the value at all times, but never double up should
                 // MDT decide to suddenly place it here
@@ -708,14 +734,26 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     /**
      * @param ImportStringObjects $importStringObjects
+     * @param MappingVersion      $mappingVersion
      * @param Floor               $floor
      * @param array               $details
      *
      * @return void
      */
-    private function parseObjectComment(ImportStringObjects $importStringObjects, Floor $floor, array $details): void
+    private function parseObjectComment(
+        ImportStringObjects $importStringObjects,
+        MappingVersion      $mappingVersion,
+        Floor               $floor,
+        array               $details): void
     {
         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]], $floor);
+
+        if ($floor->facade) {
+            $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
+                $mappingVersion,
+                $latLng
+            );
+        }
 
         $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
 
@@ -775,7 +813,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         $importStringObjects->getMapIcons()->push(array_merge([
             'mapping_version_id' => null,
-            'floor_id'           => $floor->id,
+            'floor_id'           => $latLng->getFloor()->id,
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
             'comment'            => $details[4],
         ], $latLng->toArray()));
