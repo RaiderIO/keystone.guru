@@ -7,7 +7,7 @@ use App\Http\Controllers\Traits\ChangesMapping;
 use App\Jobs\RefreshEnemyForces;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
-use App\Logic\MDT\Exception\InvalidMDTString;
+use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -431,7 +431,7 @@ class AdminToolsController extends Controller
             $dungeonRoute->makeVisible(['affixes', 'killZones']);
 
             dd($dungeonRoute);
-        } catch (InvalidMDTString $ex) {
+        } catch (InvalidMDTStringException $ex) {
             return abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
 
