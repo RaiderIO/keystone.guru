@@ -66,7 +66,10 @@ class MapContextLiveSession extends MapContext
     {
         $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->context);
 
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties($this->context->dungeonroute), [
+        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties(
+            $this->coordinatesService,
+            $this->context->dungeonroute
+        ), [
             'liveSessionPublicKey' => $this->context->public_key,
             'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
             'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),

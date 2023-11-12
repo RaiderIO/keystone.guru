@@ -6,13 +6,21 @@ use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 
 /**
- * @property float $lat
- * @property float $lng
+ * @property float|null $lat
+ * @property float|null $lng
  *
- * @property Floor $floor
+ * @property Floor|null $floor
  */
 trait HasLatLng
 {
+    /**
+     * @return bool
+     */
+    public function hasValidLatLng(): bool
+    {
+        return $this->lat !== null && $this->lng !== null && $this->floor !== null;
+    }
+
     /**
      * @return LatLng
      */
