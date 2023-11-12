@@ -118,5 +118,35 @@
         "direction": null,
         "lat": -154.25,
         "lng": 65.12
+    },
+    {
+        "id": 943,
+        "mapping_version_id": 272,
+        "floor_id": 62,
+        "source_floor_id": null,
+        "target_floor_id": 60,
+        "direction": null,
+        "lat": -35.76,
+        "lng": 291
+    },
+    {
+        "id": 944,
+        "mapping_version_id": 272,
+        "floor_id": 62,
+        "source_floor_id": null,
+        "target_floor_id": 63,
+        "direction": null,
+        "lat": -158.38,
+        "lng": 193.12
+    },
+    {
+        "id": 945,
+        "mapping_version_id": 272,
+        "floor_id": 62,
+        "source_floor_id": null,
+        "target_floor_id": 60,
+        "direction": null,
+        "lat": -154.25,
+        "lng": 65.12
     }
 ]
