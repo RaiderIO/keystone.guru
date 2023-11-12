@@ -690,6 +690,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $vertices      = [];
         $lineCount     = count($line);
         $dominantFloor = null;
+
         for ($i = 0; $i < $lineCount; $i += 2) {
             $latLng = Conversion::convertMDTCoordinateToLatLng(
                 ['x' => doubleval($line[$i]), 'y' => doubleval($line[$i + 1])],
@@ -697,11 +698,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             );
 
             if ($floor->facade) {
-                // @TODO force passing of the dominant floor to force convert a facade location to a certain floor,
-                // instead of using the floor union areas to determine which floor it should go on?
                 $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
                     $mappingVersion,
-                    $latLng
+                    $latLng,
+                    $dominantFloor
                 );
 
                 // Attempt to set the dominant floor, or fall back to what was set before

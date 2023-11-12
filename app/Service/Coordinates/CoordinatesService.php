@@ -78,16 +78,17 @@ class CoordinatesService implements CoordinatesServiceInterface
     }
 
     /**
+     *
      * @param MappingVersion $mappingVersion
      * @param LatLng         $latLng
-     *
+     * @param Floor|null     $forceFloor
      * @return LatLng
      */
-    public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng
+    public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng
     {
-        $targetFloor = $latLng->getFloor();
+        $sourceFloor = $latLng->getFloor();
 
-        if ($targetFloor === null) {
+        if ($sourceFloor === null) {
             throw new \InvalidArgumentException('No floor set for latlng!');
         }
 
@@ -97,30 +98,48 @@ class CoordinatesService implements CoordinatesServiceInterface
         // If it has unions, check if the lat/lng is inside the union floor area
         // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
         // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
-        $floorUnions = $mappingVersion->getFloorUnionsOnFloor($targetFloor->id);
+        $floorUnions = $mappingVersion->getFloorUnionsOnFloor($sourceFloor->id);
 
         foreach ($floorUnions as $floorUnion) {
             /** @var FloorUnion $floorUnion */
-            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
-                if ($floorUnionArea->containsPoint($latLng)) {
-                    // Ok this lat lng is inside a floor union area - this means we must use it's attached floor union's target floor
-                    $result->setFloor($floorUnion->targetFloor);
 
-                    // 1. Rotate the point according to the floor union's rotation
-                    $result->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
+            // We must find the floor union we should perform our translation on
+            $targetFloor = null;
 
-                    // Move the enemy according to the floor union's latlng + size
-                    // 2. Scale the point from the current floor map to the new floor map
-                    $result->scale(
-                        $floorUnion->getLatLng(),
-                        $floorUnion->size,
-                        self::getMapCenterLatLng($floorUnion->targetFloor),
-                        self::MAP_SIZE
-                    );
-
-                    // The point is now on the new map plane
+            // If we're forcing the translation on a certain floor, check if this floor union matches that forced floor
+            if ($floorUnion->target_floor_id === optional($forceFloor)->id) {
+                $targetFloor = $forceFloor;
+            } else {
+                // Otherwise, check if the floor union area contains the target point, then we use this floor union's
+                // target floor
+                foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                    if ($floorUnionArea->containsPoint($latLng)) {
+                        $targetFloor = $floorUnion->targetFloor;
+                        break;
+                    }
                 }
             }
+
+            // Did we find the target floor, either through forced floor or through the floor union area?
+            if ($targetFloor !== null) {
+                $result->setFloor($targetFloor);
+
+                // 1. Rotate the point according to the floor union's rotation
+                $result->rotate($floorUnion->getLatLng(), $floorUnion->rotation);
+
+                // Move the point according to the floor union's latlng + size
+                // 2. Scale the point from the current floor map to the new floor map
+                $result->scale(
+                    $floorUnion->getLatLng(),
+                    $floorUnion->size,
+                    self::getMapCenterLatLng($floorUnion->targetFloor),
+                    self::MAP_SIZE
+                );
+
+                // The point is now on the new map plane
+                break;
+            }
+
         }
 
         return $result;

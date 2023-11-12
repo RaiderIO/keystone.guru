@@ -1,40 +1,42 @@
 <?php
-$mapFacadeStyleChecked = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
-$mapNumberStyleChecked = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
-$mapUnkilledEnemyOpacity = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
+$mapFacadeStyleChecked            = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
+$mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
+$mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $mapUnkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
-$mapEnemyAggressivenessBorder = $_COOKIE['map_enemy_aggressiveness_border'] ?? 0;
-$mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
+$mapEnemyAggressivenessBorder     = $_COOKIE['map_enemy_aggressiveness_border'] ?? 0;
+$mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 ?>
 <div class="draw_settings_tools container">
 
     <!-- Map facade style -->
-{{--    <div class="form-group">--}}
-{{--        <div class="row">--}}
-{{--            <div class="col">--}}
-{{--                <label for="map_settings_map_facade_style">--}}
-{{--                    {{ __('views/common.forms.mapsettings.map_facade_style') }}--}}
-{{--                    <i class="fas fa-info-circle" data-toggle="tooltip"--}}
-{{--                       title="{{ __('views/common.forms.mapsettings.map_facade_style_title') }}"></i>--}}
-{{--                </label>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="row">--}}
-{{--            <div class="col">--}}
-{{--                <input id="map_settings_map_facade_style" type="checkbox"--}}
-{{--                       {{ $mapFacadeStyleChecked ? 'checked' : '' }}--}}
-{{--                       data-toggle="toggle" data-width="200px" data-height="20px"--}}
-{{--                       data-onstyle="primary" data-offstyle="primary"--}}
-{{--                       data-on="{{ __('views/common.forms.mapsettings.map_facade_style_facade_option') }}"--}}
-{{--                       data-off="{{ __('views/common.forms.mapsettings.map_facade_style_split_floors_option') }}">--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--        <div class="row">--}}
-{{--            <div class="col">--}}
-{{--                {{ __('views/common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    @if(\Auth::user()->hasRole('admin'))
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <label for="map_settings_map_facade_style">
+                        {{ __('views/common.forms.mapsettings.map_facade_style') }}
+                        <i class="fas fa-info-circle" data-toggle="tooltip"
+                           title="{{ __('views/common.forms.mapsettings.map_facade_style_title') }}"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input id="map_settings_map_facade_style" type="checkbox"
+                           {{ $mapFacadeStyleChecked ? 'checked' : '' }}
+                           data-toggle="toggle" data-width="200px" data-height="20px"
+                           data-onstyle="primary" data-offstyle="primary"
+                           data-on="{{ __('views/common.forms.mapsettings.map_facade_style_facade_option') }}"
+                           data-off="{{ __('views/common.forms.mapsettings.map_facade_style_split_floors_option') }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ __('views/common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}
+                </div>
+            </div>
+        </div>
+    @endif
 
     <h4>{{ __('views/common.forms.mapsettings.enemies') }}</h4>
 
@@ -170,7 +172,7 @@ $mapEnemyDangerousBorder = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             </div>
             <div class="row">
                 <div class="col line_weight_selection">
-                    <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+                        <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
                     {!! Form::select('edit_route_freedraw_options_weight', [1, 2, 3, 4, 5],
                         $_COOKIE['polyline_default_weight'] ?? 0,
                         ['id' => 'edit_route_freedraw_options_weight', 'class' => 'form-control selectpicker']) !!}
