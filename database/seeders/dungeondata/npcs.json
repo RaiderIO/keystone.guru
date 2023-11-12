@@ -5766,7 +5766,7 @@
         "npc_class_id": 1,
         "display_id": 93213,
         "name": "Timestream Anomaly",
-        "base_health": 1263833,
+        "base_health": 1185606,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -5778,6 +5778,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15248,
+                "mapping_version_id": 273,
+                "npc_id": 199749,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15166,
                 "mapping_version_id": 270,
@@ -5816,7 +5823,7 @@
         "npc_class_id": 1,
         "display_id": 88582,
         "name": "Temporal Deviation",
-        "base_health": 217221,
+        "base_health": 217361,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -5828,6 +5835,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15250,
+                "mapping_version_id": 273,
+                "npc_id": 206063,
+                "enemy_forces": 0,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15164,
                 "mapping_version_id": 270,
@@ -5852,7 +5866,7 @@
         "npc_class_id": 1,
         "display_id": 41677,
         "name": "Temporal Fusion",
-        "base_health": 622043,
+        "base_health": 622443,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -5864,6 +5878,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15249,
+                "mapping_version_id": 273,
+                "npc_id": 206068,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15163,
                 "mapping_version_id": 270,
