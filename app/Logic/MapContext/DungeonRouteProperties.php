@@ -56,7 +56,7 @@ trait DungeonRouteProperties
      */
     private function getDungeonRouteProperties(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute): array
     {
-        $mapFacadeStyle = $this->getMapFacadeStyle();
+        $useFacade = $this->getMapFacadeStyle() === 'facade';
 
         return [
             'publicKey'               => $dungeonRoute->public_key,
@@ -76,10 +76,10 @@ trait DungeonRouteProperties
             ]),
 
             // Relations
-            'killZones'                => $dungeonRoute->mapContextKillZones($coordinatesService, $mapFacadeStyle),
-            'mapIcons'                 => $dungeonRoute->mapContextMapIcons($coordinatesService, $mapFacadeStyle),
-            'paths'                    => $dungeonRoute->mapContextPaths($coordinatesService, $mapFacadeStyle),
-            'brushlines'               => $dungeonRoute->mapContextBrushlines($coordinatesService, $mapFacadeStyle),
+            'killZones'                => $dungeonRoute->mapContextKillZones($coordinatesService, $useFacade),
+            'mapIcons'                 => $dungeonRoute->mapContextMapIcons($coordinatesService, $useFacade),
+            'paths'                    => $dungeonRoute->mapContextPaths($coordinatesService, $useFacade),
+            'brushlines'               => $dungeonRoute->mapContextBrushlines($coordinatesService, $useFacade),
             'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) {
                 return [
