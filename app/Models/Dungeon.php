@@ -29,6 +29,7 @@ use Mockery\Exception;
  * @property string                                  $slug                        The url friendly slug of the dungeon.
  * @property string                                  $key                         Shorthand key of the dungeon
  * @property boolean                                 $speedrun_enabled            True if this dungeon has a speedrun enabled, false if it does not.
+ * @property boolean                                 $facade_enabled              True if this dungeon uses facades, false if it does not.
  * @property boolean                                 $active                      True if this dungeon is active, false if it is not.
  *
  * @property Expansion                               $expansion
@@ -74,6 +75,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'game_version_id',
         'active',
         'speedrun_enabled',
+        'facade_enabled',
         'zone_id',
         'map_id',
         'challenge_mode_id',
@@ -420,15 +422,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         ],
     ];
 
-    // @TODO Revamp this
-    const USES_FACADE = [
-        105, // self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL
-        106, // self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE
-        103, // self::DUNGEON_THRONE_OF_THE_TIDES
-        2,   // self::DUNGEON_BLACK_ROOK_HOLD
-        23,  // self::DUNGEON_WAYCREST_MANOR
-    ];
-
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string
@@ -530,20 +523,22 @@ class Dungeon extends CacheModel implements MappingModelInterface
         // Otherwise, return all non-facade floors
 
         return $this->hasMany(Floor::class)
-                    ->where(function (Builder $builder) use ($useFacade) {
-                        $builder->when(!$useFacade, function (Builder $builder) use ($useFacade) {
-                            $builder->where('facade', 0);
-                        })->when($useFacade, function (Builder $builder) use ($useFacade) {
-                            $builder->where(function (Builder $builder) use ($useFacade) {
-                                $builder->whereIn('dungeon_id', self::USES_FACADE)
-                                        ->where('facade', $useFacade);
-                            })->orWhere(function (Builder $builder) use ($useFacade) {
-                                $builder->whereNotIn('dungeon_id', self::USES_FACADE)
-                                        ->where('facade', 0);
-                            });
-                        });
-                    })
-                    ->orderBy('index');
+            ->select('floors.*')
+            ->join('dungeons', 'floors.dungeon_id', 'dungeons.id')
+            ->where(function (Builder $builder) use ($useFacade) {
+                $builder->when(!$useFacade, function (Builder $builder) use ($useFacade) {
+                    $builder->where('facade', 0);
+                })->when($useFacade, function (Builder $builder) use ($useFacade) {
+                    $builder->where(function (Builder $builder) use ($useFacade) {
+                        $builder->where('facade_enabled', true)
+                            ->where('facade', $useFacade);
+                    })->orWhere(function (Builder $builder) use ($useFacade) {
+                        $builder->where('facade_enabled', false)
+                            ->where('facade', 0);
+                    });
+                });
+            })
+            ->orderBy('index');
     }
 
     /**
@@ -562,9 +557,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany(Npc::class)
-                    ->when($includeGlobalNpcs, function (Builder $builder) {
-                        $builder->orWhere('dungeon_id', -1);
-                    });
+            ->when($includeGlobalNpcs, function (Builder $builder) {
+                $builder->orWhere('dungeon_id', -1);
+            });
     }
 
     /**
@@ -597,10 +592,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
-                    ->where(function (Builder $builder) {
-                        return $builder
-                            ->whereNull('dungeon_route_id');
-                    });
+            ->where(function (Builder $builder) {
+                return $builder
+                    ->whereNull('dungeon_route_id');
+            });
     }
 
     /**
@@ -625,7 +620,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs10Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
-                    ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
     /**
@@ -634,7 +629,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function dungeonSpeedrunRequiredNpcs25Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
-                    ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
     }
 
     /**
@@ -766,18 +761,18 @@ class Dungeon extends CacheModel implements MappingModelInterface
     {
         return $this->npcs(false)
             // Ensure that there's at least one enemy by having this join
-                    ->join('enemies', 'enemies.npc_id', 'npcs.id')
-                    ->where('enemies.mapping_version_id', $mappingVersion->id)
-                    ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-                    ->where('npc_type_id', '!=', NpcType::CRITTER)
-                    ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
-                    ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
-                        function (Builder $builder) use ($mappingVersion) {
-                            return $builder
-                                ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
-                                ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id);
-                        })
-                    ->groupBy('enemies.npc_id');
+            ->join('enemies', 'enemies.npc_id', 'npcs.id')
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+            ->where('npc_type_id', '!=', NpcType::CRITTER)
+            ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
+            ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
+                function (Builder $builder) use ($mappingVersion) {
+                    return $builder
+                        ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
+                        ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id);
+                })
+            ->groupBy('enemies.npc_id');
     }
 
     /**
@@ -810,39 +805,39 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getInUseNpcs(): Collection
     {
         return Npc::select('npcs.*')
-                  ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
-                  ->where(function (Builder $builder) {
-                      return $builder->where('npcs.dungeon_id', $this->id)
-                                     ->orWhere('npcs.dungeon_id', -1);
-                  })
-                  ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
-                  ->where(function (Builder $builder) {
-                      $builder->whereNotNull('npc_enemy_forces.enemy_forces')
-                              ->orWhereIn('npcs.classification_id', [
-                                  NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                                  NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                                  NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
-                              ])
-                              ->orWhereIn('npcs.id', [
-                                  // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
-                                  // They're in the mapping because they're dangerous af
-                                  101437,
-                                  // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
-                                  // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
-                                  190407,
-                                  // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
-                                  194273,
-                                  // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
-                                  194745,
-                                  // Wild Lashers give 0 enemy forces but are in the mapping regardless
-                                  191243,
-                                  // Wither Slashers give 0 enemy forces but are in the mapping regardless
-                                  194469,
-                                  // Gutstabbers give 0 enemy forces but are in the mapping regardless
-                                  197857,
-                              ]);
-                  })
-                  ->get();
+            ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
+            ->where(function (Builder $builder) {
+                return $builder->where('npcs.dungeon_id', $this->id)
+                    ->orWhere('npcs.dungeon_id', -1);
+            })
+            ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
+            ->where(function (Builder $builder) {
+                $builder->whereNotNull('npc_enemy_forces.enemy_forces')
+                    ->orWhereIn('npcs.classification_id', [
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+                    ])
+                    ->orWhereIn('npcs.id', [
+                        // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
+                        // They're in the mapping because they're dangerous af
+                        101437,
+                        // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                        // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
+                        190407,
+                        // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                        194273,
+                        // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
+                        194745,
+                        // Wild Lashers give 0 enemy forces but are in the mapping regardless
+                        191243,
+                        // Wither Slashers give 0 enemy forces but are in the mapping regardless
+                        194469,
+                        // Gutstabbers give 0 enemy forces but are in the mapping regardless
+                        197857,
+                    ]);
+            })
+            ->get();
     }
 
 
@@ -852,12 +847,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getInUseNpcIds(): Collection
     {
         return $this->getInUseNpcs()
-                    ->pluck('id')
+            ->pluck('id')
             // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so
             // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert
             // into Witherlings which ARE on the mapping. Without this exception, they wouldn't turn up and the
             // Witherlings would never get mapped properly
-                    ->push(194373);
+            ->push(194373);
     }
 
     /**
