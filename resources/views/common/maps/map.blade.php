@@ -43,7 +43,7 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
-$useFacade                        = ($_COOKIE['map_facade_style'] ?? 'facade') === 'facade';
+$useFacade                        = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
 
 // Allow echo to be overridden
 $echo           = $echo ?? Auth::check() && !$sandboxMode;
