@@ -216,18 +216,18 @@ if ($isAdmin) {
 </div>
 @if(!$noUI)
 
-    @if(!$adFree && $showAds)
-        @if($isMobile)
-            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])
-        @endif
-    @endif
+{{--    @if(!$adFree && $showAds)--}}
+{{--        @if($isMobile)--}}
+{{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])--}}
+{{--        @endif--}}
+{{--    @endif--}}
     <footer class="fixed-bottom container p-0" style="width: 728px">
         <div id="snackbar_container">
 
         </div>
-        @if(!$adFree && $showAds)
-            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])
-        @endif
+{{--        @if(!$adFree && $showAds)--}}
+{{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])--}}
+{{--        @endif--}}
     </footer>
 
         <?php
@@ -235,17 +235,17 @@ if ($isAdmin) {
         So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
         have to fight for height in the sidebar. This will only make it worse, so don't render this ad
         */ ?>
-    @if(!$adFree && $showAds)
-        @if( $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore )
-            <footer class="fixed-bottom container p-0 m-0 map_ad_unit_sidebar_right">
-                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])
-            </footer>
-        @elseif(!$dungeon->speedrun_enabled)
-            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">
-                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])
-            </footer>
-        @endif
-    @endif
+{{--    @if(!$adFree && $showAds)--}}
+{{--        @if( $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore )--}}
+{{--            <footer class="fixed-bottom container p-0 m-0 map_ad_unit_sidebar_right">--}}
+{{--                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
+{{--            </footer>--}}
+{{--        @elseif(!$dungeon->speedrun_enabled)--}}
+{{--            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">--}}
+{{--                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
+{{--            </footer>--}}
+{{--        @endif--}}
+{{--    @endif--}}
 
 
 

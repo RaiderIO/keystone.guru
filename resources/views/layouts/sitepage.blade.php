@@ -112,12 +112,6 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
 
             @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
-            @if( !$adFree && $showAds && !$isMobile)
-                <div align="center" class="my-4">
-                    @include('common.thirdparty.adunit', ['id' => 'site_top_header', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-                </div>
-            @endif
-
             @hasSection('header-title')
                 <div class="row my-4">
                     @hasSection('header-addition')
@@ -138,12 +132,6 @@ $breadcrumbsParams = $breadcrumbsParams ?? [];
             @include('common.general.messages')
 
             @yield('content')
-
-            @if( !$adFree && $showAds )
-                <div align="center" class="mt-4">
-                    @include('common.thirdparty.adunit', ['id' => 'site_bottom_header', 'type' => 'footer'])
-                </div>
-            @endif
         </div>
     @endif
 
