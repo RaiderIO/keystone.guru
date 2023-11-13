@@ -51,6 +51,9 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             <ul class="light-slider {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($activeFloors as $floor)
+                        @if($floor->facade)
+                            @continue
+                        @endif
                         <li>
                             <img class="thumbnail"
                                  src="{{ $dungeonroute->getThumbnailUrl($floor) }}"/>

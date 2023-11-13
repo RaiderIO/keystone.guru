@@ -63,9 +63,8 @@ abstract class MapContext
 
     public function getMapFacadeStyle(): string
     {
-        return $_COOKIE['map_facade_style'] ?? 'facade';
+        return $_COOKIE['map_facade_style'] ?? 'split_floors';
     }
-
 
     /**
      * @return Model

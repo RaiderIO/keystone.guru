@@ -37,7 +37,9 @@
                 'brushline',
                 'path',
                 'killzone',
-                'killzonepath'
+                'killzonepath',
+                'floorunion',
+                'floorunionarea'
             ],
         ])
     </div>

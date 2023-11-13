@@ -56,7 +56,11 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                     'publish' => false,
                 ]
             ],
-            'hiddenMapObjectGroups' => [],
+            'hiddenMapObjectGroups' => [
+                'mountablearea',
+                'floorunion',
+                'floorunionarea',
+            ],
         ])
     </div>
 @endsection

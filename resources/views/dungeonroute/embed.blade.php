@@ -60,6 +60,8 @@ if (count($affixes) == 0) {
             'hiddenMapObjectGroups' => [
                 'enemypack',
                 'mountablearea',
+                'floorunion',
+                'floorunionarea',
             ],
             'show' => [
                 'header' => false,

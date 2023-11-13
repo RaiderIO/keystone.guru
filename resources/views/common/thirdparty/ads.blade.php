@@ -1,6 +1,6 @@
-@if(config('app.type') === 'live')
-    @include('common.thirdparty.nitropay.nitropay')
+@if(config('app.type') === 'live' || config('app.type') === 'staging')
+    {{--@include('common.thirdparty.nitropay.nitropay')--}}
     {{--@include('common.thirdparty.adsense')--}}
-@else
     @include('common.thirdparty.playwire.playwire')
+@else
 @endif

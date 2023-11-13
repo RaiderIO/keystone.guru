@@ -584,7 +584,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $mappingVersion = $importStringObjects->getDungeon()->getCurrentMappingVersion();
 
         $floors = $importStringObjects->getDungeon()->floorsForMapFacade(
-            in_array($importStringObjects->getDungeon()->id, Dungeon::USES_FACADE)
+            $importStringObjects->getDungeon()->facade_enabled
         )->get();
 
         foreach ($importStringObjects->getMdtObjects() as $objectIndex => $object) {

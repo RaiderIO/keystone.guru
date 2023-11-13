@@ -62,14 +62,22 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $currentObjectIndex = 1;
         foreach ($this->dungeonRoute->mapicons()->with(['floor'])->get() as $mapIcon) {
             /** @var MapIcon $mapIcon */
-            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($mapIcon->getLatLng());
+            $latLng = $mapIcon->getLatLng();
+            if ($this->dungeonRoute->dungeon->facade_enabled) {
+                $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this->dungeonRoute->mappingVersion,
+                    $latLng
+                );
+            }
+
+            $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
 
             $result[$currentObjectIndex++] = [
                 'n' => true,
                 'd' => [
                     1 => $mdtCoordinates['x'],
                     2 => $mdtCoordinates['y'],
-                    3 => $mapIcon->floor->mdt_sub_level ?? $mapIcon->floor->index,
+                    3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
                     5 => $mapIcon->comment ?? __(optional($mapIcon->mapicontype)->name) ?? '',
                 ],
@@ -103,7 +111,18 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $vertexIndex            = 1;
             $verticesLatLngs        = $line->polyline->getDecodedLatLngs($line->floor);
             $previousMdtCoordinates = null;
+
             foreach ($verticesLatLngs as $vertexLatLng) {
+                if ($this->dungeonRoute->dungeon->facade_enabled) {
+                    $vertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                        $this->dungeonRoute->mappingVersion,
+                        $vertexLatLng
+                    );
+
+                    // The floor of the line should be updated too
+                    $mdtLine['d'][3] = $vertexLatLng->getFloor()->mdt_sub_level ?? $vertexLatLng->getFloor()->index;
+                }
+
                 $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($vertexLatLng);
 
                 if ($previousMdtCoordinates !== null) {
@@ -128,6 +147,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             $floor  = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
+
+            if( $this->dungeonRoute->dungeon->facade_enabled ) {
+                $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this->dungeonRoute->mappingVersion,
+                    $latLng
+                );
+            }
 
             $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
 

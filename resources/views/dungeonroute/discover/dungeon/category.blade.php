@@ -8,7 +8,7 @@ $title      = $title ?? sprintf('%s routes', __($dungeon->name));
 $affixgroup = $affixgroup ?? null;
 ?>
 @extends('layouts.sitepage', [
-    'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'breadcrumbsParams' => [$dungeon],
     'title' => $title

@@ -11,6 +11,10 @@
         if (row.has_thumbnail) {
             for (let index in row.dungeon.floors) {
                 let floor = row.dungeon.floors[index];
+                console.log(floor);
+                if (floor.facade) {
+                    continue;
+                }
                 items.push({
                     src: `/images/route_thumbnails/${row.public_key}_${floor.index}.png`
                 });

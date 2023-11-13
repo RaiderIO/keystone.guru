@@ -41,6 +41,12 @@ $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
                 {!! Form::checkbox('speedrun_enabled', 1, isset($dungeon) ? $dungeon->speedrun_enabled : 0, ['class' => 'form-control left_checkbox']) !!}
                 @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
             </div>
+
+            <div class="col {{ $errors->has('facade_enabled') ? ' has-error' : '' }}">
+                {!! Form::label('facade_enabled', __('views/admin.dungeon.edit.facade_enabled')) !!}
+                {!! Form::checkbox('facade_enabled', 1, isset($dungeon) ? $dungeon->facade_enabled : 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'facade_enabled'])
+            </div>
         </div>
 
         <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">

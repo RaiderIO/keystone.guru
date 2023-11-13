@@ -9,6 +9,7 @@ return [
             'header_edit'       => 'Edit dungeon',
             'active'            => 'Active',
             'speedrun_enabled'  => 'Speedrun enabled',
+            'facade_enabled'    => 'Facade enabled',
             'id'                => 'ID',
             'game_version_id'   => 'Game version ID',
             'zone_id'           => 'Zone ID',

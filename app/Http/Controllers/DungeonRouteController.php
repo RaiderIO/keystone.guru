@@ -92,8 +92,7 @@ class DungeonRouteController extends Controller
         DungeonRoute               $dungeonroute,
         string                     $title,
         string                     $floorIndex
-    )
-    {
+    ) {
         $this->authorize('view', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
@@ -139,6 +138,15 @@ class DungeonRouteController extends Controller
                 'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.view.floor', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                    'floorindex'   => $floor->index,
+                ]);
+            }
+
             return view('dungeonroute.view', [
                 'dungeon'        => $dungeonroute->dungeon,
                 'dungeonroute'   => $dungeonroute,
@@ -237,6 +245,15 @@ class DungeonRouteController extends Controller
                 'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.present.floor', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                    'floorindex'   => $floor->index,
+                ]);
+            }
+
             return view('dungeonroute.present', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -265,8 +282,7 @@ class DungeonRouteController extends Controller
         DungeonRoute               $dungeonroute,
         string                     $title,
         string                     $floorIndex
-    )
-    {
+    ) {
         $this->authorize('preview', [$dungeonroute, $request->get('secret', '') ?? '']);
 
         if (!is_numeric($floorIndex)) {
@@ -285,6 +301,7 @@ class DungeonRouteController extends Controller
 
         /** @var FLoor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+
         return view('dungeonroute.preview', [
             'dungeonroute' => $dungeonroute,
             'floorId'      => $floor->id,
@@ -490,6 +507,15 @@ class DungeonRouteController extends Controller
                 'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.edit.floor', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                    'floorindex'   => $floor->index,
+                ]);
+            }
+
             return view('dungeonroute.edit', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
