@@ -7,9 +7,6 @@ ARG uid
 # Add nodejs
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 
-# Install handlebars
-RUN npm i -g handlebars
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -24,6 +21,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     default-mysql-client  \
     wget
+
+# Install handlebars
+RUN npm i -g handlebars
 
 # Required for puppeteer to work
 RUN apt-get install -y libxdamage-dev \
@@ -74,6 +74,9 @@ RUN apt-get update && apt-get install -y libssl-dev && \
 # Install cli weakauras parser
 RUN /root/.cargo/bin/cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git && \
     ln -s ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
+
+# Give the www-data user rights to execute cli weakauras parser as sudo
+RUN echo "www-data ALL=NOPASSWD: /usr/bin/cli_weakauras_parser" >> /etc/sudoers
 
 # Install actual LUA language
 RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \

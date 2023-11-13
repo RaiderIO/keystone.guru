@@ -37,6 +37,7 @@ use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -449,8 +450,7 @@ class AjaxDungeonRouteController extends Controller
         ExpansionServiceInterface  $expansionService,
         ThumbnailServiceInterface  $thumbnailService,
         DungeonRoute               $dungeonRoute = null
-    )
-    {
+    ) {
         $this->authorize('edit', $dungeonRoute);
 
         if ($dungeonRoute === null) {
@@ -568,8 +568,7 @@ class AjaxDungeonRouteController extends Controller
         Request                   $request,
         DungeonRoute              $dungeonRoute,
         string                    $seasonalType
-    )
-    {
+    ) {
         $this->authorize('migrate', $dungeonRoute);
 
         $dungeonRoute->migrateToSeasonalType($expansionService, $seasonalType);
@@ -598,6 +597,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         DungeonRoute::dropCaches($dungeonRoute->id);
+
         return ['new_rating' => $dungeonRoute->updateRating()];
     }
 
@@ -621,6 +621,7 @@ class AjaxDungeonRouteController extends Controller
 
         $dungeonRoute->unsetRelation('ratings');
         DungeonRoute::dropCaches($dungeonRoute->id);
+
         return ['new_rating' => $dungeonRoute->updateRating()];
     }
 
@@ -802,12 +803,13 @@ class AjaxDungeonRouteController extends Controller
 
     /**
      * @param APIDungeonRouteDataFormRequest $request
+     * @param CoordinatesServiceInterface    $coordinatesService
      * @return Collection
      */
-    public function getDungeonRoutesData(APIDungeonRouteDataFormRequest $request): Collection
+    public function getDungeonRoutesData(APIDungeonRouteDataFormRequest $request, CoordinatesServiceInterface $coordinatesService): Collection
     {
         $publicKeys = $request->validated()['public_keys'];
 
-        return $this->getDungeonRoutesProperties($publicKeys);
+        return $this->getDungeonRoutesProperties($coordinatesService, $publicKeys);
     }
 }

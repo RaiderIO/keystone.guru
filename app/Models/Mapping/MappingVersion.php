@@ -229,7 +229,7 @@ class MappingVersion extends Model
     /**
      * @param int $floorId
      *
-     * @return Collection
+     * @return Collection|FloorUnion[]
      */
     public function getFloorUnionsOnFloor(int $floorId): Collection
     {
@@ -301,6 +301,8 @@ class MappingVersion extends Model
     }
 
     /**
+     * @todo duplicated function in DungeonRoute.php
+     *
      * @param CoordinatesServiceInterface $coordinatesService
      * @param ConvertsVerticesInterface   $hasVertices
      * @param Floor                       $floor

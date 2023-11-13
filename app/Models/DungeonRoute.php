@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
+use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
@@ -18,6 +20,7 @@ use App\Models\Traits\HasMetrics;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
@@ -230,7 +233,7 @@ class DungeonRoute extends Model
      */
     public function brushlines(): HasMany
     {
-        return $this->hasMany(Brushline::class);
+        return $this->hasMany(Brushline::class)->orderBy('id');
     }
 
     /**
@@ -238,7 +241,7 @@ class DungeonRoute extends Model
      */
     public function paths(): HasMany
     {
-        return $this->hasMany(Path::class);
+        return $this->hasMany(Path::class)->orderBy('id');
     }
 
     /**
@@ -451,6 +454,143 @@ class DungeonRoute extends Model
     public function tagspersonal(): HasMany
     {
         return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
+    }
+
+    /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param ConvertsVerticesInterface   $hasVertices
+     * @param Floor                       $floor
+     *
+     * @return Floor
+     */
+    private function convertVerticesForFacade(
+        CoordinatesServiceInterface $coordinatesService,
+        ConvertsVerticesInterface   $hasVertices,
+        Floor                       $floor
+    ): Floor {
+        $convertedLatLngs = collect();
+
+        foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {
+            $convertedLatLngs->push($coordinatesService->convertMapLocationToFacadeMapLocation(
+                $this->mappingVersion,
+                $latLng
+            ));
+        }
+
+        $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
+
+        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(function (LatLng $latLng) {
+            return $latLng->toArray();
+        }));
+
+        return $newFloor;
+    }
+
+    /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param bool                        $useFacade
+     *
+     * @return Collection
+     */
+    public function mapContextKillZones(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    {
+        /** @var Collection|KillZone[] $killZones */
+        $killZones = $this->killZones()
+            ->with(['floor'])
+            ->get();
+
+        if ($useFacade) {
+            foreach ($killZones as $killZone) {
+                // If no kill zone was set, skip the conversion step
+                if (!$killZone->hasValidLatLng()) {
+                    continue;
+                }
+
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this->mappingVersion,
+                    $killZone->getLatLng()
+                );
+
+                $killZone->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $killZones;
+    }
+
+    /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param bool                        $useFacade
+     *
+     * @return Collection
+     */
+    public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    {
+        /** @var Collection|MapIcon[] $mapIcons */
+        $mapIcons = $this->mapicons()
+            ->with(['floor'])
+            ->get();
+
+        if ($useFacade) {
+            foreach ($mapIcons as $mapIcon) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this->mappingVersion,
+                    $mapIcon->getLatLng()
+                );
+
+                $mapIcon->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $mapIcons;
+    }
+
+    /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param bool                        $useFacade
+     *
+     * @return Collection
+     */
+    public function mapContextBrushlines(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    {
+        /** @var Collection|Brushline[] $brushlines */
+        $brushlines = $this->brushlines()->with(['floor'])->get();
+
+        if ($useFacade) {
+            $brushlines = $brushlines->map(function (Brushline $brushline) use ($coordinatesService) {
+                $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
+                $brushline->setRelation('floor', $newFloor);
+                $brushline->floor_id = $newFloor->id;
+
+                return $brushline;
+            });
+        }
+
+        return $brushlines;
+    }
+
+    /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param bool                        $useFacade
+     *
+     * @return Collection
+     */
+    public function mapContextPaths(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    {
+        /** @var Collection|Brushline[] $paths */
+        $paths = $this->paths()->with(['floor'])->get();
+
+        if ($useFacade) {
+            $paths = $paths->map(function (Path $path) use ($coordinatesService) {
+                $newFloor = $this->convertVerticesForFacade($coordinatesService, $path->polyline, $path->floor);
+                $path->setRelation('floor', $newFloor);
+                $path->floor_id = $newFloor->id;
+
+                return $path;
+            });
+        }
+
+        return $paths;
     }
 
     /**
@@ -728,8 +868,7 @@ class DungeonRoute extends Model
         DungeonRouteTemporaryFormRequest $request,
         SeasonServiceInterface           $seasonService,
         ExpansionServiceInterface        $expansionService
-    ): bool
-    {
+    ): bool {
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
@@ -779,8 +918,7 @@ class DungeonRoute extends Model
         SeasonServiceInterface    $seasonService,
         ExpansionServiceInterface $expansionService,
         ThumbnailServiceInterface $thumbnailService
-    ): bool
-    {
+    ): bool {
         $result = false;
 
         // Overwrite the author_id if it's not been set yet
@@ -935,7 +1073,7 @@ class DungeonRoute extends Model
 
                 // Reload the affixes relation
                 $this->load('affixes');
-            } elseif ($new) {
+            } else if ($new) {
                 $this->ensureAffixGroup($seasonService, $expansionService);
             }
 
@@ -1057,7 +1195,7 @@ class DungeonRoute extends Model
                         $killZoneEnemy->save();
                     }
                 } // Make sure all polylines are copied over
-                elseif (isset($model->polyline_id)) {
+                else if (isset($model->polyline_id)) {
                     // It's not technically a brushline, but all other polyline using structs have the same auto complete
                     // Save a new polyline
                     /** @var Brushline $model */
@@ -1354,16 +1492,16 @@ class DungeonRoute extends Model
                     $this->clone_of
                 ),
             ]);
-        } elseif ($this->demo) {
+        } else if ($this->demo) {
             if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_BFA) {
                 $subTitle = __('models.dungeonroute.permission_dratnos');
-            } elseif ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
+            } else if ($this->dungeon->expansion->shortname === Expansion::EXPANSION_SHADOWLANDS) {
                 $subTitle = __('models.dungeonroute.permission_petko');
             } else {
                 // You made this? I made this.jpg
                 $subTitle = '';
             }
-        } elseif ($this->isSandbox()) {
+        } else if ($this->isSandbox()) {
             $subTitle = __('models.dungeonroute.subtitle_temporary_route');
         } else {
             $subTitle = sprintf(__('models.dungeonroute.subtitle_author'), $this->author->name);
@@ -1376,7 +1514,7 @@ class DungeonRoute extends Model
      * @param Floor $floor
      * @return string
      */
-    public function getThumbnailUrl(Floor $floor) : string
+    public function getThumbnailUrl(Floor $floor): string
     {
         return url(sprintf('/images/route_thumbnails/%s_%s.png', $this->public_key, $floor->index));
     }

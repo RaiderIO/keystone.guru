@@ -6,6 +6,7 @@ namespace App\Logic\MapContext;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -27,7 +28,7 @@ trait DungeonRouteProperties
      * @param array $publicKeys
      * @return Collection
      */
-    private function getDungeonRoutesProperties(array $publicKeys): Collection
+    private function getDungeonRoutesProperties(CoordinatesServiceInterface $coordinatesService, array $publicKeys): Collection
     {
         $result = collect();
 
@@ -42,18 +43,21 @@ trait DungeonRouteProperties
         ])->whereIn('public_key', $publicKeys)->get();
 
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $result->put($dungeonRoute->public_key, $this->getDungeonRouteProperties($dungeonRoute));
+            $result->put($dungeonRoute->public_key, $this->getDungeonRouteProperties($coordinatesService, $dungeonRoute));
         }
 
         return $result;
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param DungeonRoute                $dungeonRoute
      * @return array
      */
-    private function getDungeonRouteProperties(DungeonRoute $dungeonRoute): array
+    private function getDungeonRouteProperties(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute): array
     {
+        $useFacade = $this->getMapFacadeStyle() === 'facade';
+
         return [
             'publicKey'               => $dungeonRoute->public_key,
             'teamId'                  => $dungeonRoute->team_id,
@@ -72,10 +76,10 @@ trait DungeonRouteProperties
             ]),
 
             // Relations
-            'killZones'                => $dungeonRoute->killZones,
-            'mapIcons'                 => $dungeonRoute->mapicons,
-            'paths'                    => $dungeonRoute->paths,
-            'brushlines'               => $dungeonRoute->brushlines,
+            'killZones'                => $dungeonRoute->mapContextKillZones($coordinatesService, $useFacade),
+            'mapIcons'                 => $dungeonRoute->mapContextMapIcons($coordinatesService, $useFacade),
+            'paths'                    => $dungeonRoute->mapContextPaths($coordinatesService, $useFacade),
+            'brushlines'               => $dungeonRoute->mapContextBrushlines($coordinatesService, $useFacade),
             'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(function (DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) {
                 return [
