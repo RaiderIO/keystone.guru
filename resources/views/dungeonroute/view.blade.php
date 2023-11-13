@@ -55,7 +55,11 @@ $dungeon = $dungeonroute->dungeon;
                     'publish' => false,
                 ]
             ],
-            'hiddenMapObjectGroups' => [],
+            'hiddenMapObjectGroups' => [
+                'mountablearea',
+                'floorunion',
+                'floorunionarea',
+            ],
         ])
     </div>
 @endsection

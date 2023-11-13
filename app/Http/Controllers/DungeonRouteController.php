@@ -138,6 +138,15 @@ class DungeonRouteController extends Controller
                 'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.view.floor', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                    'floorindex'   => $floor->index,
+                ]);
+            }
+
             return view('dungeonroute.view', [
                 'dungeon'        => $dungeonroute->dungeon,
                 'dungeonroute'   => $dungeonroute,
@@ -236,6 +245,15 @@ class DungeonRouteController extends Controller
                 'floorindex'   => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.present.floor', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                    'floorindex'   => $floor->index,
+                ]);
+            }
+
             return view('dungeonroute.present', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
