@@ -358,10 +358,23 @@ class Floor extends CacheModel implements MappingModelInterface
     {
         $useFacade = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
 
-        // @TODO prevent navigation to facade floor when NOT in facade mode
-        return $builder->where(function (Builder $builder) use ($floorIndex) {
-            $builder->where('facade', 1)
-                ->orWhere('index', $floorIndex);
+        // Facade should be FORCED to use floor index 1
+        if ($useFacade && $floorIndex > 1) {
+            $floorIndex = 1;
+        }
+
+        // Either grab the facade floor, or grab the requested floor _as long as it's not the facade floor_, otherwise return the default floor
+        return $builder->where(function (Builder $builder) use ($useFacade, $floorIndex) {
+            return $builder->when($useFacade, function (Builder $builder) {
+                return $builder->where('facade', 1);
+            })->when(!$useFacade, function (Builder $builder) use ($floorIndex) {
+                return $builder->where('facade', 0)
+                    ->where(function (Builder $builder) use ($floorIndex) {
+                        // Either try to resolve the actual floor, or revert to the default if not found
+                        $builder->where('index', $floorIndex)
+                            ->orWhere('default', 1);
+                    });
+            });
         })->orderByDesc($useFacade ? 'facade' : 'default')
             ->limit(1);
     }
