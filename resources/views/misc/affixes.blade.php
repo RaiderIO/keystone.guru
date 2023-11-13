@@ -1,5 +1,5 @@
 @extends('layouts.sitepage', [
-    'rootClass' => 'discover col-xl-10 offset-xl-1',
+    'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'showLegalModal' => false,
     'title' => __('views/misc.affixes.title')
@@ -20,6 +20,8 @@ $now = \Carbon\Carbon::now();
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
+
     <div class="discover_panel">
         <div class="card">
             <div class="card-body">
