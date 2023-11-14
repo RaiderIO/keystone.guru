@@ -300,7 +300,10 @@ class DungeonRouteController extends Controller
         }
 
         /** @var FLoor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->where('index', $floorIndex)
+            ->where('facade', 0)
+            ->first();
 
         return view('dungeonroute.preview', [
             'dungeonroute' => $dungeonroute,
