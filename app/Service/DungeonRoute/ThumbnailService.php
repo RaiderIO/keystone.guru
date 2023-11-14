@@ -82,10 +82,13 @@ class ThumbnailService implements ThumbnailServiceInterface
                     Log::channel('scheduler')->info('Removing previous image..');
                     // Cleanup
                     if (file_exists($tmpFile)) {
-                        unlink($tmpFile);
+                        if (unlink($tmpFile)) {
+                            Log::channel('scheduler')->info('Success');
+                        } else {
+                            Log::channel('scheduler')->warning('Failure!');
+                        }
                     }
                     // unlink($tmpScaledFile);
-                    Log::channel('scheduler')->info('Done');
                 }
             }
         }

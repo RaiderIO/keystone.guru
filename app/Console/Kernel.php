@@ -205,7 +205,7 @@ class Kernel extends ConsoleKernel
         }
 
         // Ensure redis remains healthy
-        $schedule->command('redis:clearidlekeys', ['seconds' => 3600])->everyFiveMinutes();
+        $schedule->command('redis:clearidlekeys', ['seconds' => 3600 * 12])->hourly();
 
         // Aggregate all metrics so they're nice and snappy to load
         $schedule->command('metric:aggregate')->everyFiveMinutes();

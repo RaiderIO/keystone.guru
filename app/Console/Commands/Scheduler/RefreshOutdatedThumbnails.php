@@ -66,10 +66,10 @@ class RefreshOutdatedThumbnails extends Command
             })
             // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
             ->orderBy('published_state_id', 'desc')
-            // Oldest first
-            ->orderBy('id')
+            // Newest first
+            ->orderBy('id', 'desc')
             // Limit the amount of routes at a time, do not overflow the queue since we cannot process more anyway
-            ->limit(1000)
+            ->limit(100)
             ->get();
 
         Log::channel('scheduler')->debug(sprintf('Scheduling %s routes for thumbnail generation', $routes->count()));
