@@ -34,7 +34,7 @@ use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\Metric\Aggregate;
-use App\Console\Commands\NitroPay\SyncAdsTxt;
+use App\Console\Commands\AdProvider\SyncAdsTxt;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
@@ -66,11 +66,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        CreateGithubRelease::class,
-        CreateGithubReleaseTicket::class,
-        CreateGithubReleasePullRequest::class,
-        StartSupervisor::class,
-        StopSupervisor::class,
+
+        // AdProvider
+        SyncAdsTxt::class,
 
         // Cache
         RedisClearIdleKeys::class,
@@ -99,6 +97,11 @@ class Kernel extends ConsoleKernel
         EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
 
+        // Github
+        CreateGithubRelease::class,
+        CreateGithubReleaseTicket::class,
+        CreateGithubReleasePullRequest::class,
+
         // Handlebars
         HandlebarsRefresh::class,
 
@@ -123,9 +126,6 @@ class Kernel extends ConsoleKernel
         // Metric
         Aggregate::class,
 
-        // NitroPay
-        SyncAdsTxt::class,
-
         // Patreon
         RefreshMembershipStatus::class,
 
@@ -144,6 +144,10 @@ class Kernel extends ConsoleKernel
         RefreshAffixGroupEaseTiers::class,
         RefreshOutdatedThumbnails::class,
         Telemetry::class,
+
+        // Supervisor
+        StartSupervisor::class,
+        StopSupervisor::class,
 
         // Test
         Random::class,
@@ -210,8 +214,8 @@ class Kernel extends ConsoleKernel
         // Aggregate all metrics so they're nice and snappy to load
         $schedule->command('metric:aggregate')->everyFiveMinutes();
 
-        // NitroPay
-        $schedule->command('nitropay:syncadstxt')->everyFifteenMinutes();
+        // Sync ads.txt
+        $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }
