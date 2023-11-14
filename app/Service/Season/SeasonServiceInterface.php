@@ -17,7 +17,7 @@ interface SeasonServiceInterface
 
     function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null);
 
-    function getCurrentSeason(?Expansion $expansion = null): ?Season;
+    function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 
     function getNextSeasonOfExpansion(?Expansion $expansion = null): ?Season;
 

@@ -188,6 +188,16 @@ class Expansion extends CacheModel
     }
 
     /**
+     * Returns if we should display individual dungeon images
+     * @return bool
+     */
+    public function showDiscoverRoutesCardDungeonImage(): bool
+    {
+        // So far we only have dungeon wallpapers for Shadowlands :(
+        return !in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
+    }
+
+    /**
      * Saves an expansion with the data from a Request.
      *
      * @param Request $request
