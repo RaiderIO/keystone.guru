@@ -41,34 +41,37 @@ class EnemyVisualManager extends Signalable {
         // code is handled in this class.
         // This code allows mouse over of enemy patrols to highlight the enemies that the patrol is attached to.
         let enemyPatrolMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
-        enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
-            /** @type EnemyPatrol addedEnemyPatrol */
-            let addedEnemyPatrol = objectAddEvent.data.object;
-            if (addedEnemyPatrol.id > 0) {
-                let mouseOverFn = function (e) {
-                    if (addedEnemyPatrol.enemies.length > 0) {
-                        addedEnemyPatrol.enemies[0].visual.forceMouseOver();
+        // May be null when rendering thumbnails
+        if (enemyPatrolMapObjectGroup instanceof EnemyPatrolMapObjectGroup) {
+            enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
+                /** @type EnemyPatrol addedEnemyPatrol */
+                let addedEnemyPatrol = objectAddEvent.data.object;
+                if (addedEnemyPatrol.id > 0) {
+                    let mouseOverFn = function (e) {
+                        if (addedEnemyPatrol.enemies.length > 0) {
+                            addedEnemyPatrol.enemies[0].visual.forceMouseOver();
+                        }
                     }
+
+                    let mouseOutFn = function (e) {
+                        if (addedEnemyPatrol.enemies.length > 0) {
+                            addedEnemyPatrol.enemies[0].visual.forceMouseOut();
+                        }
+                    };
+
+                    addedEnemyPatrol.layer.on('mouseover', mouseOverFn);
+                    addedEnemyPatrol.layer.on('mouseout', mouseOutFn);
+
+                    // If decorator gets added, register functions to it as well
+                    addedEnemyPatrol.register('object:decoratorchanged', self, function (e) {
+                        if (e.data.decorator !== null) {
+                            e.data.decorator.on('mouseover', mouseOverFn);
+                            e.data.decorator.on('mouseout', mouseOutFn);
+                        }
+                    });
                 }
-
-                let mouseOutFn = function (e) {
-                    if (addedEnemyPatrol.enemies.length > 0) {
-                        addedEnemyPatrol.enemies[0].visual.forceMouseOut();
-                    }
-                };
-
-                addedEnemyPatrol.layer.on('mouseover', mouseOverFn);
-                addedEnemyPatrol.layer.on('mouseout', mouseOutFn);
-
-                // If decorator gets added, register functions to it as well
-                addedEnemyPatrol.register('object:decoratorchanged', self, function (e) {
-                    if (e.data.decorator !== null) {
-                        e.data.decorator.on('mouseover', mouseOverFn);
-                        e.data.decorator.on('mouseout', mouseOutFn);
-                    }
-                });
-            }
-        });
+            });
+        }
 
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));

@@ -68,6 +68,8 @@ class RefreshOutdatedThumbnails extends Command
             ->orderBy('published_state_id', 'desc')
             // Oldest first
             ->orderBy('id')
+            // Limit the amount of routes at a time, do not overflow the queue since we cannot process more anyway
+            ->limit(1000)
             ->get();
 
         Log::channel('scheduler')->debug(sprintf('Scheduling %s routes for thumbnail generation', $routes->count()));

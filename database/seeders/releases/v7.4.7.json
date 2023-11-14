@@ -1,0 +1,28 @@
+{
+    "id": 212,
+    "release_changelog_id": 219,
+    "version": "v7.4.7",
+    "title": "Route thumbnail generation is working again",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-11-14T10:27:48+00:00",
+    "updated_at": "2023-11-14T10:27:48+00:00",
+    "changelog": {
+        "id": 219,
+        "release_id": 212,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 219,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2093,
+                "change": "Route thumbnail generation now works again.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}
