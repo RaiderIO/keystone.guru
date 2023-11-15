@@ -26,7 +26,6 @@ class RefreshEnemyForces implements ShouldQueue
      */
     public function __construct(int $dungeonRouteId)
     {
-        $this->queue          = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
         $this->dungeonRouteId = $dungeonRouteId;
     }
 

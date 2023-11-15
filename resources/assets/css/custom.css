@@ -156,15 +156,23 @@ ul.light-slider {
         overflow: hidden;
     }
 
-    .discover .card_dungeonroute .description,
-    .discover .card_dungeonroute .description .col {
+    .discover .card_dungeonroute .description_row,
+    .discover .card_dungeonroute .description_row .col {
         max-height: 80px;
+        max-width: 532px;
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1800px) {
+    .discover .card_dungeonroute .description_row .col {
+        display: flex !important;
     }
 }
 
 /** Prevent descriptions from taking on a huge height if people enter only */
 @media (max-width: 1200px) {
-    .discover .card_dungeonroute .description {
+    .discover .card_dungeonroute .description_row {
         max-height: 250px;
     }
 }

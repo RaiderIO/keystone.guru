@@ -36,7 +36,7 @@ return [
         ],
         'scheduler'      => [
             'driver'   => 'stack',
-            'channels' => ['scheduler_file'],
+            'channels' => ['scheduler_file', 'discord'],
         ],
         'single'         => [
             'driver' => 'single',

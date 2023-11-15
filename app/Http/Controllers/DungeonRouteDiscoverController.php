@@ -38,8 +38,8 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param string $seasonIndex
+     * @param Expansion                $expansion
+     * @param string                   $seasonIndex
      * @param DiscoverServiceInterface $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
@@ -49,8 +49,7 @@ class DungeonRouteDiscoverController extends Controller
         Expansion                $expansion,
         string                   $seasonIndex,
         DiscoverServiceInterface $discoverService
-    )
-    {
+    ) {
         $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
 
         // Redirect to the current expansion
@@ -91,8 +90,8 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param string $seasonIndex
+     * @param Expansion                $expansion
+     * @param string                   $seasonIndex
      * @param DiscoverServiceInterface $discoverService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
@@ -101,8 +100,7 @@ class DungeonRouteDiscoverController extends Controller
         Expansion                $expansion,
         string                   $seasonIndex,
         DiscoverServiceInterface $discoverService
-    )
-    {
+    ) {
         $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
 
         // Redirect to the current expansion
@@ -128,11 +126,11 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param string $seasonIndex
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param string                    $seasonIndex
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface    $seasonService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
      */
@@ -171,11 +169,11 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param Dungeon $dungeon
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param Dungeon                   $dungeon
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface    $seasonService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
      */
@@ -214,8 +212,8 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param string $seasonIndex
+     * @param Expansion                $expansion
+     * @param string                   $seasonIndex
      * @param DiscoverServiceInterface $discoverService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
@@ -250,9 +248,9 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
+     * @param Expansion                 $expansion
      * @param ExpansionServiceInterface $expansionService
-     * @param DiscoverServiceInterface $discoverService
+     * @param DiscoverServiceInterface  $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
      */
@@ -290,13 +288,14 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param Dungeon $dungeon
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param Dungeon                   $dungeon
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface    $seasonService
      * @return Factory
      * @throws AuthorizationException
+     * @throws \Exception
      */
     public function discoverdungeon(
         Expansion                 $expansion,
@@ -310,18 +309,31 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $discoverService = $discoverService->withExpansion($expansion)->withLimit(config('keystoneguru.discover.limits.overview'));
+        $discoverService = $discoverService
+            ->withExpansion($expansion)
+            ->withLimit(config('keystoneguru.discover.limits.overview'));
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
-        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
+        $currentSeason = $seasonService->getCurrentSeason();
+
+        if ($currentSeason->hasDungeon($dungeon)) {
+            $currentAffixGroup = $currentSeason->getCurrentAffixGroupInRegion($userRegion);
+            $nextAffixGroup    = $currentSeason->getNextAffixGroupInRegion($userRegion);
+
+            $discoverService = $discoverService->withSeason($currentSeason);
+        } else {
+            $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
+            $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
+        }
 
         return view('dungeonroute.discover.dungeon.overview', [
-            'breadcrumbs'   => 'dungeonroutes.discoverdungeon',
-            'expansion'     => $expansion,
-            'dungeon'       => $dungeon,
-            'dungeonroutes' => [
+            'breadcrumbs'       => 'dungeonroutes.discoverdungeon',
+            'expansion'         => $expansion,
+            'dungeon'           => $dungeon,
+            'currentAffixGroup' => $currentAffixGroup,
+            'nextAffixGroup'    => $nextAffixGroup,
+            'dungeonroutes'     => [
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
                 'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
                 'new'      => $discoverService->newByDungeon($dungeon),
@@ -331,7 +343,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
+     * @param Expansion                $expansion
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
@@ -350,8 +362,8 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
      * @return Factory
      * @throws AuthorizationException
@@ -376,8 +388,8 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
      * @return Factory
      * @throws AuthorizationException
@@ -402,7 +414,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
+     * @param Expansion                $expansion
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
@@ -425,8 +437,8 @@ class DungeonRouteDiscoverController extends Controller
 
 
     /**
-     * @param Expansion $expansion
-     * @param Dungeon $dungeon
+     * @param Expansion                $expansion
+     * @param Dungeon                  $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
@@ -450,13 +462,14 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion $expansion
-     * @param Dungeon $dungeon
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param Dungeon                   $dungeon
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface    $seasonService
      * @return Factory
      * @throws AuthorizationException
+     * @throws \Exception
      */
     public function discoverdungeonthisweek(
         Expansion                 $expansion,
@@ -470,7 +483,16 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
+        $userRegion    = GameServerRegion::getUserOrDefaultRegion();
+        $currentSeason = $seasonService->getCurrentSeason(null, $userRegion);
+
+        if ($currentSeason->hasDungeon($dungeon)) {
+            $currentAffixGroup = $currentSeason->getCurrentAffixGroupInRegion($userRegion);
+
+            $discoverService = $discoverService->withSeason($currentSeason);
+        } else {
+            $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
+        }
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
@@ -478,22 +500,23 @@ class DungeonRouteDiscoverController extends Controller
             'category'      => 'thisweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.this_week_affixes'), __($dungeon->name)),
             'dungeon'       => $dungeon,
-            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
+            'dungeonroutes' => $currentAffixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
-                ->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
-            'affixgroup'    => $affixGroup,
+                ->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
+            'affixgroup'    => $currentAffixGroup,
         ]);
     }
 
     /**
-     * @param Expansion $expansion
-     * @param Dungeon $dungeon
-     * @param DiscoverServiceInterface $discoverService
+     * @param Expansion                 $expansion
+     * @param Dungeon                   $dungeon
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface    $seasonService
      * @return Factory
      * @throws AuthorizationException
+     * @throws \Exception
      */
     public function discoverdungeonnextweek(
         Expansion                 $expansion,
@@ -507,7 +530,16 @@ class DungeonRouteDiscoverController extends Controller
         $this->authorize('view', $expansion);
         $this->authorize('view', $dungeon);
 
-        $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
+        $userRegion    = GameServerRegion::getUserOrDefaultRegion();
+        $currentSeason = $seasonService->getCurrentSeason(null, $userRegion);
+
+        if ($currentSeason->hasDungeon($dungeon)) {
+            $nextAffixGroup = $currentSeason->getNextAffixGroupInRegion($userRegion);
+
+            $discoverService = $discoverService->withSeason($currentSeason);
+        } else {
+            $nextAffixGroup = $expansionService->getNextAffixGroup($expansion, $userRegion);
+        }
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
@@ -515,17 +547,17 @@ class DungeonRouteDiscoverController extends Controller
             'category'      => 'nextweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.next_week_affixes'), __($dungeon->name)),
             'dungeon'       => $dungeon,
-            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
+            'dungeonroutes' => $nextAffixGroup === null ? collect() : $discoverService
                 ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
-                ->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
-            'affixgroup'    => $affixGroup,
+                ->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
+            'affixgroup'    => $nextAffixGroup,
         ]);
     }
 
     /**
-     * @param Expansion $expansion
-     * @param Dungeon $dungeon
+     * @param Expansion                $expansion
+     * @param Dungeon                  $dungeon
      * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
@@ -555,10 +587,10 @@ class DungeonRouteDiscoverController extends Controller
      *
      * This function will correct this mistake and apply the correct expansion + season.
      *
-     * @param Expansion $originalExpansion
-     * @param Dungeon $dungeon
+     * @param Expansion                $originalExpansion
+     * @param Dungeon                  $dungeon
      * @param DiscoverServiceInterface $discoverService
-     * @param SeasonServiceInterface $seasonService
+     * @param SeasonServiceInterface   $seasonService
      * @return Expansion
      */
     private function applyCorrectedExpansion(

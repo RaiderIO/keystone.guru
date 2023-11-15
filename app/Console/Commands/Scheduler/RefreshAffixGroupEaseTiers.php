@@ -16,6 +16,12 @@ use Illuminate\Console\Command;
 
 class RefreshAffixGroupEaseTiers extends Command
 {
+    private const DUNGEON_NAME_MAPPING = [
+        'Dawn of the Infinite: Galakrond\'s Fall' => 'DOTI: Galakrond\'s Fall',
+        'Dawn of the Infinite: Murozond\'s Rise'  => 'DOTI: Murozond\'s Rise',
+        'The Everbloom'                           => 'Everbloom',
+    ];
+
     /**
      * The name and signature of the console command.
      *
@@ -54,11 +60,13 @@ class RefreshAffixGroupEaseTiers extends Command
             $tierLists = $subcreationApiService->getDungeonEaseTierListOverall();
         } catch (InvalidResponseException $exception) {
             $this->error(sprintf('Invalid response: %s', $exception->getMessage()));
+
             return -1;
         }
 
         if (!isset($tierLists['last_updated']) || !isset($tierLists['current_affixes']) || !isset($tierLists['source_url']) || !isset($tierLists['tier_lists'])) {
             $this->error(sprintf('Invalid response: %s', json_encode($tierLists)));
+
             return -1;
         }
 
@@ -90,7 +98,9 @@ class RefreshAffixGroupEaseTiers extends Command
                             // If found
                             $dungeon = $dungeonList->first(function (Dungeon $dungeon) use ($dungeonName) {
                                 // Translate the name of the dungeon to English (from a key), and then match it
-                                return __($dungeon->name, [], 'en-US') === $dungeonName;
+                                $ksgDungeonName = __($dungeon->name, [], 'en-US');
+
+                                return (self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName) === $dungeonName;
                             });
 
                             if ($dungeon instanceof Dungeon) {

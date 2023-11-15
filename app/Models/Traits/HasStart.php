@@ -21,8 +21,7 @@ trait HasStart
         $userRegion = $region === null ? GameServerRegion::getUserOrDefaultRegion() : null;
 
         $start->startOfWeek();
-        // -1, offset 1 means monday, which we're already at
-        $start->addDays(($region ?? $userRegion)->reset_day_offset - 1);
+        $start->addDays(($region ?? $userRegion)->reset_day_offset);
         $start->addHours(($region ?? $userRegion)->reset_hours_offset);
         $start->setTimezone(optional($region)->timezone ?? $this->getUserTimezone());
 

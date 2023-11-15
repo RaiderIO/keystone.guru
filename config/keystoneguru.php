@@ -61,7 +61,7 @@ return [
         ],
     ],
 
-    'echo'                               => [
+    'echo'                                       => [
         'url'    => env('LARAVEL_ECHO_SERVER_URL'),
         'port'   => env('LARAVEL_ECHO_SERVER_PORT'),
         'client' => [
@@ -114,13 +114,13 @@ return [
     ],
 
     /** The minimum size for enemies for floors if none was set */
-    'min_enemy_size_default'             => 12,
+    'min_enemy_size_default'                     => 12,
 
     /** The maximum size for enemies for floors if none was set */
-    'max_enemy_size_default'             => 26,
+    'max_enemy_size_default'                     => 26,
 
     /** When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up */
-    'enemy_engagement_max_range_default' => 150,
+    'enemy_engagement_max_range_default'         => 150,
 
     /** The range after which we start considering patrols too */
     'enemy_engagement_max_range_patrols_default' => 50,
@@ -129,30 +129,30 @@ return [
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something
      */
-    'mapping_commit_after_change_hours'  => 1,
+    'mapping_commit_after_change_hours'          => 1,
 
     /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
-    'party_size'                         => 5,
+    'party_size'                                 => 5,
 
     /**
      * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
      */
-    'dungeonroute_difficulty'            => ['Casual', 'Dedicated', 'Hardcore'],
+    'dungeonroute_difficulty'                    => ['Casual', 'Dedicated', 'Hardcore'],
 
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
-    'registered_user_dungeonroute_limit' => 999,
+    'registered_user_dungeonroute_limit'         => 999,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins'           => 30,
+    'view_time_threshold_mins'                   => 30,
 
     'thumbnail'                           => [
         /**
@@ -174,6 +174,11 @@ return [
          * The amount of hours where a thumbnail refresh must be in the queue for before it is re-queued
          */
         'refresh_requeue_hours' => 12,
+
+        /**
+         * The maximum attempts a thumbnail generation can take before it is failed and not queued again
+         */
+        'max_attempts'          => 3,
     ],
 
     /**
@@ -332,5 +337,10 @@ return [
 
     'nitro_pay' => [
         'user_id' => env('NITRO_PAY_USER_ID'),
-    ]
+    ],
+
+    'playwire' => [
+        'param_1' => env('PLAYWIRE_PARAM_1'),
+        'param_2' => env('PLAYWIRE_PARAM_2'),
+    ],
 ];

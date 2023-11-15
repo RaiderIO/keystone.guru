@@ -15,10 +15,11 @@ interface ThumbnailServiceInterface
 
     /**
      * @param DungeonRoute $dungeonRoute
-     * @param int $floorIndex
+     * @param int          $floorIndex
+     * @param int          $attempts
      * @return void
      */
-    function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex): void;
+    function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts): void;
 
     /**
      * @param DungeonRoute $dungeonRoute

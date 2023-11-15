@@ -19,7 +19,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex): void
+    public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts = 0): void
     {
         // 1. Headless chrome saves file in a temp location
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
@@ -82,10 +82,13 @@ class ThumbnailService implements ThumbnailServiceInterface
                     Log::channel('scheduler')->info('Removing previous image..');
                     // Cleanup
                     if (file_exists($tmpFile)) {
-                        unlink($tmpFile);
+                        if (unlink($tmpFile)) {
+                            Log::channel('scheduler')->info('Success');
+                        } else {
+                            Log::channel('scheduler')->warning('Failure!');
+                        }
                     }
                     // unlink($tmpScaledFile);
-                    Log::channel('scheduler')->info('Done');
                 }
             }
         }
@@ -93,7 +96,13 @@ class ThumbnailService implements ThumbnailServiceInterface
         // Log any errors that may have occurred
         $errors = $process->getErrorOutput();
         if (!empty($errors)) {
-            Log::channel('scheduler')->error($errors);
+            Log::channel('scheduler')->error($errors, [
+                'dungeonRoute' => $dungeonRoute->public_key,
+                'floor'        => $floorIndex,
+            ]);
+
+            // If there were errors, try again
+            ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floorIndex, ++$attempts);
         }
     }
 

@@ -62,8 +62,8 @@ use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Service\Metric\MetricService;
 use App\Service\Metric\MetricServiceInterface;
-use App\Service\NitroPay\NitroPayService;
-use App\Service\NitroPay\NitroPayServiceInterface;
+use App\Service\AdProvider\AdProviderService;
+use App\Service\AdProvider\AdProviderServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -171,7 +171,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
-        $this->app->bind(NitroPayServiceInterface::class, NitroPayService::class);
+        $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
     }
 

@@ -24,7 +24,7 @@ class GameServerRegionsSeeder extends Seeder
                 'short'              => GameServerRegion::AMERICAS,
                 'name'               => 'gameserverregions.us',
                 'timezone'           => 'America/Los_Angeles',
-                'reset_day_offset'   => 2,
+                'reset_day_offset'   => 1,
                 'reset_hours_offset' => 15,
             ]),
             // http://wowreset.com/
@@ -32,7 +32,7 @@ class GameServerRegionsSeeder extends Seeder
                 'short'              => GameServerRegion::EUROPE,
                 'name'               => 'gameserverregions.eu',
                 'timezone'           => 'Europe/London',
-                'reset_day_offset'   => 3,
+                'reset_day_offset'   => 2,
                 'reset_hours_offset' => 7,
             ]),
             // Copy paste from America, I couldn't find info for these regions
@@ -40,14 +40,14 @@ class GameServerRegionsSeeder extends Seeder
                 'short'              => GameServerRegion::CHINA,
                 'name'               => 'gameserverregions.cn',
                 'timezone'           => 'Asia/Shanghai',
-                'reset_day_offset'   => 2,
+                'reset_day_offset'   => 1,
                 'reset_hours_offset' => 15,
             ]),
             new GameServerRegion([
                 'short'              => GameServerRegion::TAIWAN,
                 'name'               => 'gameserverregions.tw',
                 'timezone'           => 'Asia/Taipei',
-                'reset_day_offset'   => 2,
+                'reset_day_offset'   => 1,
                 'reset_hours_offset' => 15,
             ]),
             // https://www.reddit.com/r/wow/comments/9sbujc/korean_wow_user_back_brought_some_korean_wow/e8ntkck/?context=3
@@ -55,7 +55,7 @@ class GameServerRegionsSeeder extends Seeder
                 'short'              => GameServerRegion::KOREA,
                 'name'               => 'gameserverregions.kr',
                 'timezone'           => 'Asia/Seoul',
-                'reset_day_offset'   => 3,
+                'reset_day_offset'   => 2,
                 'reset_hours_offset' => 23,
             ]),
         ];

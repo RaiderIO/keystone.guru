@@ -31,7 +31,7 @@
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
         'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
+        'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
 
     @include('dungeonroute.discover.panel', [
@@ -42,7 +42,7 @@
         'affixgroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['thisweek'],
         'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
+        'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
 
     @if( !$adFree && !$isMobile)
@@ -59,7 +59,7 @@
         'affixgroup' => $nextAffixGroup,
         'dungeonroutes' => $dungeonroutes['nextweek'],
         'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
+        'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
@@ -68,7 +68,7 @@
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
         'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => $expansion->shortname === \App\Models\Expansion::EXPANSION_LEGION,
+        'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
 
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])

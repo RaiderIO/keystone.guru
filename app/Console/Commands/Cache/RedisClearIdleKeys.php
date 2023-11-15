@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Cache;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class RedisClearIdleKeys extends Command
@@ -29,7 +30,7 @@ class RedisClearIdleKeys extends Command
     {
         $seconds = (int)$this->argument('seconds');
 
-        $this->info(sprintf('Clearing idle keys in redis that haven\'t been accessed in %d seconds', $seconds));
+        Log::channel('scheduler')->info(sprintf('Clearing idle keys in redis that haven\'t been accessed in %d seconds', $seconds));
         $i                = 0;
         $nextKey          = 0;
         $deletedKeysCount = 0;
@@ -41,6 +42,14 @@ class RedisClearIdleKeys extends Command
 
             $toDelete = [];
             foreach ($result[1] as $redisKey) {
+                // Just to get an insight in what is stored here
+                if ($i < 100) {
+                    Log::channel('scheduler')->debug(sprintf('%d: %s (next: %d)', $i, $redisKey, $nextKey));
+                }
+
+//                if (strlen($redisKey) === 40 || Str::endsWith($redisKey, 'forever_ref')) {
+//                }
+
                 $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
                 if ($idleTime > $seconds) {
                     $toDelete[] = $redisKey;
@@ -54,18 +63,18 @@ class RedisClearIdleKeys extends Command
                 if (Redis::command('DEL', $toDelete) === $count) {
                     $deletedKeysCount += $count;
                 } else {
-                    $this->warn(sprintf('Failed to delete %d keys', $count));
+                    Log::channel('scheduler')->warning(sprintf('Failed to delete %d keys', $count));
                 }
             }
 
             $i++;
             if ($i % 1000 === 0) {
-                $this->info(sprintf('Scan count %d... (deleted %d keys)', $i, $deletedKeysCount));
+                Log::channel('scheduler')->info(sprintf('Scan count %d... (deleted %d keys)', $i, $deletedKeysCount));
                 $deletedKeysCount = 0;
             }
         } while ($nextKey > 0);
 
-        $this->info(sprintf('Finished (deleted %d keys)', $deletedKeysCount));
+        Log::channel('scheduler')->info(sprintf('Finished (deleted %d keys)', $deletedKeysCount));
 
         return 0;
     }

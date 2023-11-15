@@ -130,16 +130,17 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @param Expansion|null $expansion The expansion you want the current season for - or null to get it for the current expansion.
+     * @param Expansion|null        $expansion The expansion you want the current season for - or null to get it for the current expansion.
+     * @param GameServerRegion|null $region
      * @return Season|null The season that's currently active, or null if none is active at this time.
      */
-    public function getCurrentSeason(?Expansion $expansion = null): ?Season
+    public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
         if ($expansion === null) {
             $expansion = $this->expansionService->getCurrentExpansion();
         }
 
-        return $this->getSeasonAt($this->getUserNow(), GameServerRegion::getUserOrDefaultRegion(), $expansion);
+        return $this->getSeasonAt($this->getUserNow(), $region ?? GameServerRegion::getUserOrDefaultRegion(), $expansion);
     }
 
     /**

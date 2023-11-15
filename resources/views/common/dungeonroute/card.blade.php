@@ -126,8 +126,8 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     </div>
                 @endif
             </div>
-            <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description">
-                <div class="col">
+            <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
+                <div class="col d-flex d-xl-none">
                     {{
                         empty($dungeonroute->description) ? __('views/common.dungeonroute.card.no_description') : $dungeonroute->description
                     }}
