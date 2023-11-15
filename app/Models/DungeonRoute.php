@@ -1617,8 +1617,6 @@ class DungeonRoute extends Model
                 @unlink(sprintf('%s/%s_%s.png', $publicPath, $dungeonRoute->public_key, $floor->index));
             }
 
-            $dungeonRoute->load(['brushlines', 'paths', 'killzones', 'livesessions']);
-
             // Dungeonroute settings
             $dungeonRoute->affixgroups()->delete();
             $dungeonRoute->routeattributesraw()->delete();
