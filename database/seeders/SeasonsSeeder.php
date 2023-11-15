@@ -173,7 +173,7 @@ class SeasonsSeeder extends Seeder
                 'start'                   => '2023-11-13 00:00:00',
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
-                'start_affix_group_index' => 4,
+                'start_affix_group_index' => 1,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [
