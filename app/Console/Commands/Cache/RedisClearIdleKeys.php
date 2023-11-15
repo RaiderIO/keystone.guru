@@ -42,6 +42,14 @@ class RedisClearIdleKeys extends Command
 
             $toDelete = [];
             foreach ($result[1] as $redisKey) {
+                // Just to get an insight in what is stored here
+                if ($i < 100) {
+                    Log::channel('scheduler')->debug(sprintf('%d: %s (next: %d)', $i, $redisKey, $nextKey));
+                }
+
+//                if (strlen($redisKey) === 40 || Str::endsWith($redisKey, 'forever_ref')) {
+//                }
+
                 $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
                 if ($idleTime > $seconds) {
                     $toDelete[] = $redisKey;
