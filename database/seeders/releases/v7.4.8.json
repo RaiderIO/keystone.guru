@@ -1,0 +1,50 @@
+{
+    "id": 213,
+    "release_changelog_id": 220,
+    "version": "v7.4.8",
+    "title": "",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-11-15T09:27:56+00:00",
+    "updated_at": "2023-11-15T09:27:56+00:00",
+    "changelog": {
+        "id": 220,
+        "release_id": 213,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 220,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2119,
+                "change": "Updated S3 affixes (hotfixed).",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 220,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2116,
+                "change": "Fixed too long descriptions for routes messing up the layout of the route discovery pages.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 220,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2093,
+                "change": "Many tweaks and updates to route thumbnail generation (v2).",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}
