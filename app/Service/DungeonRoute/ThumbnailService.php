@@ -96,7 +96,10 @@ class ThumbnailService implements ThumbnailServiceInterface
         // Log any errors that may have occurred
         $errors = $process->getErrorOutput();
         if (!empty($errors)) {
-            Log::channel('scheduler')->error($errors);
+            Log::channel('scheduler')->error($errors, [
+                'dungeonRoute' => $dungeonRoute->public_key,
+                'floor'        => $floorIndex,
+            ]);
 
             // If there were errors, try again
             ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floorIndex, ++$attempts);
