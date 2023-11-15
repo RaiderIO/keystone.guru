@@ -4,6 +4,7 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -46,7 +47,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     function ensureExpansion(): DiscoverServiceInterface
     {
         if ($this->expansion === null) {
-            $this->expansion = $this->expansionService->getCurrentExpansion();
+            $this->expansion = $this->expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
         return $this;

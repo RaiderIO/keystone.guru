@@ -7,6 +7,7 @@ use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
 use App\Models\DungeonRouteAffixGroup;
+use App\Models\GameServerRegion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,7 +42,8 @@ class DiscoverService extends BaseDiscoverService
 
         // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
         $currentSeasonAffixGroups = optional($this->season)->affixgroups ??
-            optional($this->expansionService->getCurrentSeason($this->expansion))->affixgroups ??
+            // This can cause issues when we're in between seasons between different regions, but a minor issue
+            optional($this->expansionService->getCurrentSeason($this->expansion, GameServerRegion::getUserOrDefaultRegion()))->affixgroups ??
             collect();
 
         return DungeonRoute::query()

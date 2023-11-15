@@ -1239,6 +1239,8 @@ class DungeonRoute extends Model
             }
         }
 
+        $gameServerRegion = GameServerRegion::getUserOrDefaultRegion();
+
         // Remove all affixes of the route
         $this->affixgroups()->delete();
 
@@ -1254,7 +1256,7 @@ class DungeonRoute extends Model
 
             if ($seasonOfSeasonalType !== null) {
                 try {
-                    $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion(GameServerRegion::getUserOrDefaultRegion());
+                    $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion($gameServerRegion);
                 } catch (Exception $e) {
                     // It's okay - we can recover in the next IF
                     logger()->error('Unable to find current affixgroup for seasonal type', [
@@ -1267,9 +1269,9 @@ class DungeonRoute extends Model
 
         if ($currentAffixGroup === null) {
             // Backup - grab the current affix group of the expansion
-            $currentAffixGroup = $expansionService->getCurrentAffixGroup($this->dungeon->expansion, GameServerRegion::getUserOrDefaultRegion())
+            $currentAffixGroup = $expansionService->getCurrentAffixGroup($this->dungeon->expansion, $gameServerRegion)
                 // Last ditch attempt
-                ?? $expansionService->getCurrentAffixGroup($expansionService->getCurrentExpansion(), GameServerRegion::getUserOrDefaultRegion());
+                ?? $expansionService->getCurrentAffixGroup($expansionService->getCurrentExpansion($gameServerRegion), $gameServerRegion);
         }
 
         if ($currentAffixGroup !== null) {
@@ -1574,7 +1576,9 @@ class DungeonRoute extends Model
                 //                    'dungeon'      => $this->dungeon->name,
                 //                ]);
 
-                $activeSeason = $seasonService->getCurrentSeason($expansionService->getCurrentExpansion());
+                $activeSeason = $seasonService->getCurrentSeason(
+                    $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+                );
             }
 
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required

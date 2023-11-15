@@ -30,25 +30,27 @@ class SeasonService implements SeasonServiceInterface
     /** @var ExpansionService */
     private ExpansionService $expansionService;
 
-    /** @var Season */
+    /** @var Season|null */
     private ?Season $firstSeasonCache = null;
 
     public function __construct(
         ExpansionServiceInterface $expansionService
-    )
-    {
+    ) {
         $this->expansionService = $expansionService;
         $this->seasonCache      = collect();
         $this->firstSeasonCache = null;
     }
 
     /**
-     * @param Expansion|null $expansion
+     * @param Expansion|null        $expansion
+     * @param GameServerRegion|null $region
      * @return Collection|Season[]
      */
-    public function getSeasons(?Expansion $expansion = null): Collection
+    public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {
-        $expansion = $expansion ?? $this->expansionService->getCurrentExpansion();
+        $expansion = $expansion ?? $this->expansionService->getCurrentExpansion(
+            $region ?? GameServerRegion::getUserOrDefaultRegion()
+        );
 
         if ($this->seasonCache->empty()) {
             $this->seasonCache = Season::selectRaw('seasons.*')
@@ -76,16 +78,18 @@ class SeasonService implements SeasonServiceInterface
                 ->limit(1)
                 ->first();
         }
+
         return $this->firstSeasonCache;
     }
 
     /**
-     * @param Season $season
+     * @param Season                $season
+     * @param GameServerRegion|null $region
      * @return Season|null
      */
-    public function getNextSeason(Season $season): ?Season
+    public function getNextSeason(Season $season, ?GameServerRegion $region): ?Season
     {
-        $seasons = $this->getSeasons($season->expansion);
+        $seasons = $this->getSeasons($season->expansion, $region);
 
         foreach ($seasons as $seasonCandidate) {
             if ($seasonCandidate->start->isAfter($season->start)) {
@@ -98,16 +102,14 @@ class SeasonService implements SeasonServiceInterface
 
     /**
      * Get the season that was active at a specific date.
-     * @param Carbon $date
+     * @param Carbon           $date
      * @param GameServerRegion $region
-     * @param Expansion|null $expansion
+     * @param Expansion|null   $expansion
      * @return Season|null
      */
     public function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?Season
     {
-        if ($expansion === null) {
-            $expansion = $this->expansionService->getCurrentExpansion();
-        }
+        $expansion = $expansion ?? $this->expansionService->getCurrentExpansion($region);
 
         /** @var Season $season */
         $season = Season::whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
@@ -117,14 +119,6 @@ class SeasonService implements SeasonServiceInterface
             ->orderBy('start', 'desc')
             ->limit(1)
             ->first();
-
-//        if ($season === null) {
-//            logger()->error('Season is null for date', [
-//                'date'      => $date,
-//                'expansion' => $expansion->shortname,
-//                'trace'     => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
-//            ]);
-//        }
 
         return $season;
     }
@@ -136,24 +130,23 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        if ($expansion === null) {
-            $expansion = $this->expansionService->getCurrentExpansion();
-        }
+        $region    = $region ?? GameServerRegion::getUserOrDefaultRegion();
+        $expansion = $expansion ?? $this->expansionService->getCurrentExpansion($region);
 
-        return $this->getSeasonAt($this->getUserNow(), $region ?? GameServerRegion::getUserOrDefaultRegion(), $expansion);
+        return $this->getSeasonAt(Carbon::now(), $region, $expansion);
     }
 
     /**
-     * @param Expansion|null $expansion
+     * @param Expansion|null        $expansion
+     * @param GameServerRegion|null $region
      * @return Season|null
      */
-    function getNextSeasonOfExpansion(?Expansion $expansion = null): ?Season
+    function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        if ($expansion === null) {
-            $expansion = $this->expansionService->getCurrentExpansion();
-        }
+        $region    = $region ?? GameServerRegion::getUserOrDefaultRegion();
+        $expansion = $expansion ?? $this->expansionService->getCurrentExpansion($region);
 
-        return $expansion->nextSeason;
+        return $expansion->nextSeason($region);
     }
 
     /**
@@ -161,9 +154,9 @@ class SeasonService implements SeasonServiceInterface
      * We can calculate where exactly we are in the current iteration, we just don't know the affix group that represents
      * that index, that's up to the current season.
      *
-     * @param Carbon $date
+     * @param Carbon           $date
      * @param GameServerRegion $region
-     * @param Expansion|null $expansion
+     * @param Expansion|null   $expansion
      * @return int
      * @throws Exception
      */
@@ -210,7 +203,7 @@ class SeasonService implements SeasonServiceInterface
 
 
         // Ensure that we cannot go beyond the start of the first season - there's nothing before that
-        $beginDate           = $this->getUserNow()->addWeeks($iterationOffset * $affixesToDisplay)->maximum($firstSeasonStart);
+        $beginDate           = Carbon::now()->addWeeks($iterationOffset * $affixesToDisplay)->maximum($firstSeasonStart);
         $weeksSinceBeginning = $currentSeason->getWeeksSinceStartAt($beginDate);
 
         /** @var CacheServiceInterface $cacheService */

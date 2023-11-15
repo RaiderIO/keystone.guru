@@ -16,43 +16,56 @@ class ExpansionService implements ExpansionServiceInterface
     /**
      * @inheritDoc
      */
-    public function getExpansionAt(Carbon $carbon): ?Expansion
+    public function getExpansionAt(Carbon $carbon, GameServerRegion $gameServerRegion): ?Expansion
     {
-        return Expansion::where('released_at', '<', $carbon->toDateTimeString())
-            ->orderBy('released_at', 'desc')
+        /** @var Expansion|null $expansion */
+        $expansion = Expansion::whereRaw('DATE_ADD(DATE_ADD(`released_at`, INTERVAL ? day), INTERVAL ? hour) < ?',
+            [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, $carbon]
+        )->orderBy('released_at', 'desc')
             ->first();
+
+        return $expansion;
     }
 
     /**
      * @inheritDoc
      */
-    public function getCurrentExpansion(): Expansion
+    public function getCurrentExpansion(GameServerRegion $gameServerRegion): Expansion
     {
-        return $this->getExpansionAt(Carbon::now());
+        return $this->getExpansionAt(Carbon::now(), $gameServerRegion);
     }
 
     /**
+     * @param GameServerRegion $gameServerRegion
      * @return Expansion|null
      */
-    public function getNextExpansion(): ?Expansion
+    public function getNextExpansion(GameServerRegion $gameServerRegion): ?Expansion
     {
-        return $this->getExpansionAt(Carbon::now()->addWeeks(4));
+        return $this->getExpansionAt(Carbon::now()->addWeeks(4), $gameServerRegion);
     }
 
     /**
      * @inheritDoc
      */
-    public function getData(Expansion $expansion): ExpansionData
+    public function getData(Expansion $expansion, GameServerRegion $gameServerRegion): ExpansionData
     {
-        return new ExpansionData($this, $expansion);
+        return new ExpansionData($this, $expansion, $gameServerRegion);
     }
 
     /**
      * @inheritDoc
      */
-    public function getCurrentSeason(Expansion $expansion): ?Season
+    public function getCurrentSeason(Expansion $expansion, GameServerRegion $gameServerRegion): ?Season
     {
-        return $expansion->currentSeason;
+        return $expansion->currentSeason($gameServerRegion);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNextSeason(Expansion $expansion, GameServerRegion $gameServerRegion): ?Season
+    {
+        return $expansion->nextSeason($gameServerRegion);
     }
 
     /**
@@ -69,7 +82,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
     {
-        return optional($this->getCurrentSeason($expansion))->getCurrentAffixGroupInRegion($gameServerRegion);
+        return optional($this->getCurrentSeason($expansion, $gameServerRegion))->getCurrentAffixGroupInRegion($gameServerRegion);
     }
 
     /**
@@ -78,15 +91,16 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getNextAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
     {
-        return optional($this->getCurrentSeason($expansion))->getNextAffixGroupInRegion($gameServerRegion);
+        return optional($this->getCurrentSeason($expansion, $gameServerRegion))->getNextAffixGroupInRegion($gameServerRegion);
     }
 
     /**
      * @inheritDoc
      */
-    public function getCurrentSeasonAffixGroups(Expansion $expansion): Collection
+    public function getCurrentSeasonAffixGroups(Expansion $expansion, GameServerRegion $gameServerRegion): Collection
     {
-        $currentSeason = $this->getCurrentSeason($expansion);
+        $currentSeason = $this->getCurrentSeason($expansion, $gameServerRegion);
+
         return $currentSeason !== null ? $currentSeason->affixgroups()
             ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
             ->get() : collect();

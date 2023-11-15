@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DungeonRoute;
+use App\Models\GameServerRegion;
 use App\Models\Release;
 use App\Models\Season;
 use App\Service\DungeonRoute\CoverageServiceInterface;
@@ -165,7 +166,7 @@ class SiteController extends Controller
         TimewalkingEventServiceInterface $timewalkingEventService
     )
     {
-        $currentExpansion = $expansionService->getCurrentExpansion();
+        $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,

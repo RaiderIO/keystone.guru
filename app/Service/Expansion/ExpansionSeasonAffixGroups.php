@@ -13,34 +13,24 @@ class ExpansionSeasonAffixGroups
     /** @var Collection|Affix[] */
     private Collection $featuredAffixes;
 
-    /** @var Collection */
-    private Collection $currentAffixGroups;
+    private ?AffixGroup $currentAffixGroup;
 
-    /** @var Collection */
-    private Collection $nextAffixGroups;
+    private ?AffixGroup $nextAffixGroup;
 
     /** @var Collection */
     private Collection $allAffixGroups;
 
-
     /**
      * @param ExpansionServiceInterface $expansionService
-     * @param Expansion $expansion
-     * @param ExpansionSeason $expansionSeason
+     * @param Expansion                 $expansion
+     * @param GameServerRegion          $gameServerRegion
+     * @param ExpansionSeason           $expansionSeason
      */
-    public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, ExpansionSeason $expansionSeason)
+    public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion, ExpansionSeason $expansionSeason)
     {
-        $allRegions = GameServerRegion::all();
-
-        $this->featuredAffixes = optional($expansionSeason->getSeason())->getFeaturedAffixes() ?? collect();
-
-        $this->currentAffixGroups = $allRegions->mapWithKeys(function (GameServerRegion $region) use ($expansionService, $expansion) {
-            return [$region->short => $expansionService->getCurrentAffixGroup($expansion, $region)];
-        });
-
-        $this->nextAffixGroups = $allRegions->mapWithKeys(function (GameServerRegion $region) use ($expansionService, $expansion) {
-            return [$region->short => $expansionService->getNextAffixGroup($expansion, $region)];
-        });
+        $this->featuredAffixes   = optional($expansionSeason->getSeason())->getFeaturedAffixes() ?? collect();
+        $this->currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $gameServerRegion);
+        $this->nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
 
         if ($expansionSeason->getSeason() !== null) {
             $this->allAffixGroups = $expansionSeason->getSeason()->affixgroups()
@@ -60,37 +50,19 @@ class ExpansionSeasonAffixGroups
     }
 
     /**
-     * @param GameServerRegion $gameServerRegion
      * @return AffixGroup|null
      */
-    public function getCurrentAffixGroup(GameServerRegion $gameServerRegion): ?AffixGroup
+    public function getCurrentAffixGroup(): ?AffixGroup
     {
-        return $this->currentAffixGroups->get($gameServerRegion->short);
+        return $this->currentAffixGroup;
     }
 
     /**
-     * @param GameServerRegion $gameServerRegion
      * @return AffixGroup|null
      */
-    public function getNextAffixGroup(GameServerRegion $gameServerRegion): ?AffixGroup
+    public function getNextAffixGroup(): ?AffixGroup
     {
-        return $this->nextAffixGroups->get($gameServerRegion->short);
-    }
-
-    /**
-     * @return Collection|AffixGroup[]
-     */
-    public function getCurrentAffixGroups(): Collection
-    {
-        return $this->currentAffixGroups;
-    }
-
-    /**
-     * @return Collection|AffixGroup[]
-     */
-    public function getNextAffixGroups(): Collection
-    {
-        return $this->nextAffixGroups;
+        return $this->nextAffixGroup;
     }
 
     /**
