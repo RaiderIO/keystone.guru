@@ -19,7 +19,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex): void
+    public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts = 0): void
     {
         // 1. Headless chrome saves file in a temp location
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
@@ -97,6 +97,9 @@ class ThumbnailService implements ThumbnailServiceInterface
         $errors = $process->getErrorOutput();
         if (!empty($errors)) {
             Log::channel('scheduler')->error($errors);
+
+            // If there were errors, try again
+            ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floorIndex, ++$attempts);
         }
     }
 

@@ -174,6 +174,11 @@ return [
          * The amount of hours where a thumbnail refresh must be in the queue for before it is re-queued
          */
         'refresh_requeue_hours' => 12,
+
+        /**
+         * The maximum attempts a thumbnail generation can take before it is failed and not queued again
+         */
+        'max_attempts'          => 3,
     ],
 
     /**
