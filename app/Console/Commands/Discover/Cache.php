@@ -50,7 +50,7 @@ class Cache extends Command
         $discoverService = $discoverService->withCache(false);
 
         // Refresh caches for all categories
-        foreach (Expansion::with(['dungeons', 'currentSeason'])->active()->get() as $expansion) {
+        foreach (Expansion::with(['dungeons'])->active()->get() as $expansion) {
             /** @var Expansion $expansion */
             $this->info(sprintf('- %s', $expansion->shortname));
 
