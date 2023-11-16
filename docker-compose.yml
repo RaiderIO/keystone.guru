@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     image: keystone.guru
     container_name: keystone.guru-app
-    depends_on: 
+    depends_on:
       - db
       - db-combatlog
       - redis
@@ -53,7 +53,7 @@ services:
       - ./docker-compose/mysql:/var/lib/mysql
     networks:
       - keystone.guru
-  
+
   db-combatlog:
     image: mysql:5.7
     container_name: keystone.guru-db-combatlog
@@ -94,7 +94,7 @@ services:
     image: redis:alpine
     container_name: keystone.guru-redis
     ports:
-     - "6379:6379"
+     - "6380:6380"
     volumes:
      - ./docker-compose/redis-data:/var/lib/redis
     networks:

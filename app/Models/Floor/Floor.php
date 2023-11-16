@@ -366,7 +366,8 @@ class Floor extends CacheModel implements MappingModelInterface
         // Either grab the facade floor, or grab the requested floor _as long as it's not the facade floor_, otherwise return the default floor
         return $builder->where(function (Builder $builder) use ($useFacade, $floorIndex) {
             return $builder->when($useFacade, function (Builder $builder) {
-                return $builder->where('facade', 1);
+                return $builder->where('facade', 1)
+                    ->orWhere('default', 1);
             })->when(!$useFacade, function (Builder $builder) use ($floorIndex) {
                 return $builder->where('facade', 0)
                     ->where(function (Builder $builder) use ($floorIndex) {
