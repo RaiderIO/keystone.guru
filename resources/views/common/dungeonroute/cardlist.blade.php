@@ -29,7 +29,7 @@ $renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collect
         <?php for ($j = 0; $j < $cols; $j++) {
         $dungeonroute = $collection->get(($i * $cols) + $j);
         ?>
-        <div class="col-xl">
+        <div class="col-xl-{{ 12 / $cols }}">
             @if($dungeonroute !== null)
                 @include('common.dungeonroute.card', [
                     'dungeonroute' => $dungeonroute,

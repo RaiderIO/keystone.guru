@@ -21,7 +21,7 @@ class DevDiscoverService extends BaseDiscoverService
     {
         $this->ensureExpansion();
 
-        return DungeonRoute::query()->limit(10)
+        return DungeonRoute::query()->limit(12)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
             ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon'])

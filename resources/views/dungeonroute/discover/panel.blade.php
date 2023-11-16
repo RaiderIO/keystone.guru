@@ -1,14 +1,14 @@
 <?php
 /**
- * @var $expansion \App\Models\Expansion
- * @var $title string
- * @var $cols int
- * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $expansion         \App\Models\Expansion
+ * @var $title             string
+ * @var $cols              int
+ * @var $dungeonroutes     \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  */
 
 $dungeon          = $dungeon ?? null;
-$cols             = $cols ?? 2;
+$cols             = $cols ?? 3;
 $showMore         = $showMore ?? false;
 $loadMore         = $loadMore ?? false;
 $showDungeonImage = $showDungeonImage ?? false;
