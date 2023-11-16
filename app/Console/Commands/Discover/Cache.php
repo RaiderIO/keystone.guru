@@ -4,6 +4,7 @@ namespace App\Console\Commands\Discover;
 
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use Illuminate\Console\Command;
@@ -49,7 +50,7 @@ class Cache extends Command
         $discoverService = $discoverService->withCache(false);
 
         // Refresh caches for all categories
-        foreach (Expansion::with(['dungeons', 'currentSeason'])->active()->get() as $expansion) {
+        foreach (Expansion::with(['dungeons'])->active()->get() as $expansion) {
             /** @var Expansion $expansion */
             $this->info(sprintf('- %s', $expansion->shortname));
 
@@ -60,7 +61,8 @@ class Cache extends Command
             $discoverService->popularGroupedByDungeon();
             $discoverService->popularUsers();
 
-            $currentSeason = $expansionService->getCurrentSeason($expansion);
+            // In theory this can lead to cache misses when we're in the process of switching seasons, but I'll take it
+            $currentSeason = $expansionService->getCurrentSeason($expansion, GameServerRegion::getUserOrDefaultRegion());
 
             foreach ($expansion->dungeons()->active()->get() as $dungeon) {
                 /** @var Dungeon $dungeon */

@@ -3,6 +3,7 @@
 namespace App\Console\Commands\View;
 
 use App\Logic\Utils\Stopwatch;
+use App\Models\GameServerRegion;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Console\Command;
 
@@ -48,7 +49,11 @@ class Cache extends Command
             Stopwatch::start('cache');
 
             // This caches the data that is used in all views
-            $viewService->getCache(false);
+            $viewService->getGlobalViewVariables(false);
+
+            foreach (GameServerRegion::all() as $gameServerRegion) {
+                $viewService->getGameServerRegionViewVariables($gameServerRegion, false);
+            }
 
             $this->info(sprintf('Successfully cached in %sms', Stopwatch::elapsed('cache')));
         }

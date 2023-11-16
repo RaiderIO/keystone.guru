@@ -29,8 +29,6 @@ use Illuminate\Support\Collection;
  *
  * @property Collection|Dungeon[]  $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
- * @property Season|null           $currentSeason
- * @property Season|null           $nextSeason
  *
  * @mixin Eloquent
  */
@@ -107,34 +105,40 @@ class Expansion extends CacheModel
     }
 
     /**
-     * @return HasOne
+     * @param GameServerRegion $gameServerRegion
+     * @return Season|null
      */
-    public function currentSeason(): HasOne
+    public function currentSeason(GameServerRegion $gameServerRegion): ?Season
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
-        return $this->hasOne(Season::class)
+        /** @var Season|null $season */
+        $season = $this->hasOne(Season::class)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
-                [$region->reset_day_offset, $region->reset_hours_offset, $this->getUserNow()]
+                [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
             )
             ->orderBy('start', 'desc')
-            ->limit(1);
+            ->limit(1)
+            ->first();
+
+        return $season;
     }
 
     /**
-     * @return HasOne
+     * @param GameServerRegion $gameServerRegion
+     * @return Season|null
      */
-    public function nextSeason(): HasOne
+    public function nextSeason(GameServerRegion $gameServerRegion): ?Season
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
-        return $this->hasOne(Season::class)
+        /** @var Season|null $season */
+        $season =  $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
-                [$region->reset_day_offset, $region->reset_hours_offset, $this->getUserNow()]
+                [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
             )
             ->orderBy('start')
-            ->limit(1);
+            ->limit(1)
+            ->first();
+
+        return $season;
     }
 
     /**

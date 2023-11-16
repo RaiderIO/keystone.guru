@@ -34,7 +34,9 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discover(ExpansionService $expansionService)
     {
-        return redirect()->route('dungeonroutes.expansion', ['expansion' => $expansionService->getCurrentExpansion()]);
+        return redirect()->route('dungeonroutes.expansion', [
+            'expansion' => $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+        ]);
     }
 
     /**

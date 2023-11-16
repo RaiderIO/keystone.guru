@@ -191,6 +191,7 @@ if ($isAdmin) {
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
         @include('common.maps.controls.pulls', [
+            'showAds' => $showAds && !$adFree,
             'edit' => $edit,
             'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
             'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,

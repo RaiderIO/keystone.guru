@@ -4,6 +4,7 @@ namespace App\Service\Expansion;
 
 use App\Models\Affix;
 use App\Models\Expansion;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 
 class ExpansionSeason
@@ -28,11 +29,12 @@ class ExpansionSeason
 
     /**
      * @param ExpansionServiceInterface $expansionService
-     * @param Expansion $expansion
+     * @param Expansion                 $expansion
+     * @param GameServerRegion          $gameServerRegion
      */
-    public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion)
+    public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion)
     {
-        $this->season = $expansionService->getCurrentSeason($expansion);
+        $this->season = $expansionService->getCurrentSeason($expansion, $gameServerRegion);
 
         if ($this->season !== null) {
             $this->isAwakened  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id;
@@ -41,7 +43,7 @@ class ExpansionSeason
             $this->isInfernal  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_INFERNAL)->first()->id;
         }
 
-        $this->affixGroups = new ExpansionSeasonAffixGroups($expansionService, $expansion, $this);
+        $this->affixGroups = new ExpansionSeasonAffixGroups($expansionService, $expansion, $gameServerRegion, $this);
     }
 
     /**

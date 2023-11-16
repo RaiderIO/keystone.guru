@@ -11,17 +11,17 @@ use Illuminate\Support\Collection;
 
 interface SeasonServiceInterface
 {
-    function getSeasons(?Expansion $expansion = null): Collection;
+    public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection;
 
-    function getFirstSeason(): Season;
+    public function getFirstSeason(): Season;
 
-    function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null);
+    public function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null);
 
-    function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
+    public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 
-    function getNextSeasonOfExpansion(?Expansion $expansion = null): ?Season;
+    public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 
-    function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int;
+    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int;
 
-    function getDisplayedAffixGroups(int $iterationOffset): Collection;
+    public function getDisplayedAffixGroups(int $iterationOffset): Collection;
 }

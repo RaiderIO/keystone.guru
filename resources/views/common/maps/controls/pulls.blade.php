@@ -1,18 +1,22 @@
 <?php
-/** @var bool $edit */
-/** @var \App\Models\DungeonRoute $model */
-/** @var \App\Models\Dungeon $dungeon */
-/** @var bool $embed */
-/** @var string $embedStyle */
-/** @var bool $isMobile */
-/** @var integer $defaultState */
-/** @var bool $hideOnMove */
-/** @var bool $showAllEnabled */
+/**
+ * @var bool                     $showAds
+ * @var bool                     $edit
+ * @var \App\Models\DungeonRoute $model
+ * @var \App\Models\Dungeon      $dungeon
+ * @var bool                     $embed
+ * @var string                   $embedStyle
+ * @var bool                     $isMobile
+ * @var integer                  $defaultState
+ * @var bool                     $hideOnMove
+ * @var bool                     $showAllEnabled
+ */
 
 // By default, show it if we're not mobile, but allow overrides
 $defaultState           = $defaultState ?? (int)!$isMobile;
 $shouldShowPullsSidebar = $defaultState === 1;
 $hideOnMove             = $hideOnMove ?? $isMobile;
+$showAds                = $showAds ?? true;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'defaultState' => $defaultState,
@@ -34,11 +38,12 @@ $hideOnMove             = $hideOnMove ?? $isMobile;
 ]])
 
 <nav id="pulls_sidebar"
-     class="route_sidebar top right row no-gutters map_fade_out ad_loaded
+     class="route_sidebar top right row no-gutters map_fade_out
              {{ $embed ? 'embed' : '' }}
              {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
      {{ $shouldShowPullsSidebar ? 'active' : '' }}
+     {{ $showAds ? 'ad_loaded' : '' }}
          ">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
         <div id="pulls_sidebar_trigger" class="handle">

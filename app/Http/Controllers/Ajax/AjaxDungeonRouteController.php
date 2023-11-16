@@ -231,7 +231,7 @@ class AjaxDungeonRouteController extends Controller
         } else if ($request->has('season')) {
             $season = Season::find($request->get('season'));
         } else {
-            $expansion = $expansionService->getCurrentExpansion();
+            $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
         $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon', 'mappingVersion'])
@@ -374,7 +374,7 @@ class AjaxDungeonRouteController extends Controller
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
         } else {
-            $expansion = $expansionService->getCurrentExpansion();
+            $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
         // Apply an offset and a limit by default for all subsequent queries

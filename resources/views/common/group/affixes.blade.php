@@ -7,7 +7,7 @@
 /** @var $expansionsData \Illuminate\Support\Collection|\App\Service\Expansion\ExpansionData[] */
 /** @var $allAffixGroups \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
 /** @var $allExpansions \Illuminate\Support\Collection */
-/** @var $currentAffixes array */
+/** @var $currentAffixes \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
 /** @var $dungeonExpansions array */
 /** @var $currentSeason \Illuminate\Support\Collection|\App\Models\Season */
 /** @var $nextSeason \Illuminate\Support\Collection|\App\Models\Season|null */
@@ -20,7 +20,7 @@ if (isset($dungeonroute)) {
     $defaultExpansionKey = $dungeonroute->dungeon->expansion->shortname;
 } // Fill it by default with the current week's affix group for the current user
 else if (empty($defaultSelected)) {
-    $defaultSelected = array_values($currentAffixes);
+    $defaultSelected = $currentAffixes->pluck(['id'])->values();
 }
 
 $teemingSelector = $teemingSelector ?? null;

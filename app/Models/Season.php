@@ -133,7 +133,7 @@ class Season extends CacheModel
      */
     public function getAffixGroupIterations(): int
     {
-        return $this->getAffixGroupIterationsAt($this->getUserNow());
+        return $this->getAffixGroupIterationsAt(Carbon::now());
     }
 
     /**
@@ -160,7 +160,7 @@ class Season extends CacheModel
     public function getCurrentAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
     {
         try {
-            $result = $this->getAffixGroupAt(Carbon::now($region->timezone), $region);
+            $result = $this->getAffixGroupAt(Carbon::now(), $region);
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
@@ -181,7 +181,7 @@ class Season extends CacheModel
     public function getNextAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
     {
         try {
-            $result = $this->getAffixGroupAt(Carbon::now($region->timezone)->addWeek(), $region);
+            $result = $this->getAffixGroupAt(Carbon::now()->addWeek(), $region);
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
@@ -201,7 +201,7 @@ class Season extends CacheModel
     public function getCurrentAffixGroup(): ?AffixGroup
     {
         try {
-            $result = $this->getAffixGroupAt($this->getUserNow(), GameServerRegion::getUserOrDefaultRegion());
+            $result = $this->getAffixGroupAt(Carbon::now(), GameServerRegion::getUserOrDefaultRegion());
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
@@ -220,7 +220,7 @@ class Season extends CacheModel
     public function getNextAffixGroup(): ?AffixGroup
     {
         try {
-            $result = $this->getAffixGroupAt($this->getUserNow()->addDays(7), GameServerRegion::getUserOrDefaultRegion());
+            $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), GameServerRegion::getUserOrDefaultRegion());
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
