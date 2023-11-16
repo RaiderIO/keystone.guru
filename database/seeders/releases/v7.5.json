@@ -1,0 +1,28 @@
+{
+    "id": 214,
+    "release_changelog_id": 221,
+    "version": "v7.5",
+    "title": "Reworked game region handling",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-11-16T13:09:54+00:00",
+    "updated_at": "2023-11-16T13:09:54+00:00",
+    "changelog": {
+        "id": 221,
+        "release_id": 214,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 221,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2124,
+                "change": "What the site thinks is the current season\/expansion is now always decided upon based on the game region you selected in your profile. It will no longer sometimes show incorrect seasons based on your region.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            }
+        ]
+    }
+}
