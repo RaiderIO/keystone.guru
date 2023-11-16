@@ -16,6 +16,7 @@
 /resouces/assets/js/precompile.js
 /storage/*.key
 /storage/debugbar/*.json
+/storage/framework/maintenance.php
 /vendor
 /version
 /.idea
