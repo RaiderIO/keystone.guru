@@ -74,9 +74,9 @@ class Expansion extends CacheModel
     private Collection $currentSeasonCache;
     private Collection $nextSeasonCache;
 
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
-        parent::__construct();
+        parent::__construct($attributes);
 
         $this->currentSeasonCache = collect();
         $this->nextSeasonCache    = collect();
