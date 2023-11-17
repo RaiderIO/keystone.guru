@@ -1,2 +1,2 @@
-{{--@include('common.dungeonroute.cardhorizontal')--}}
-@include('common.dungeonroute.cardvertical')
+@include('common.dungeonroute.cardhorizontal')
+{{--@include('common.dungeonroute.cardvertical')--}}

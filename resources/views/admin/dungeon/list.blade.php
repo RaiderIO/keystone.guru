@@ -52,7 +52,7 @@
         @foreach ($models as $dungeon)
                 <?php
                 /** @var $dungeon \App\Models\Dungeon */
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->currentMappingVersion;
                 ?>
             <tr>
                 @if($dungeon->active)

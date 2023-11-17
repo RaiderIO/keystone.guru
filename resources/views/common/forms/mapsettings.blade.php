@@ -1,5 +1,5 @@
 <?php
-$mapFacadeStyleChecked            = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
+$mapFacadeStyleChecked            = \App\User::getCurrentUserMapFacadeStyle() === \App\User::MAP_FACADE_STYLE_FACADE;
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
 $mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $mapUnkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
@@ -9,8 +9,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 <div class="draw_settings_tools container">
 
     <!-- Map facade style -->
-    @auth()
-        @if(\Auth::user()->hasRole('admin'))
+{{--    @auth()--}}
+{{--        @if(\Auth::user()->hasRole('admin'))--}}
             <div class="form-group">
                 <div class="row">
                     <div class="col">
@@ -37,8 +37,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                     </div>
                 </div>
             </div>
-        @endif
-    @endauth
+{{--        @endif--}}
+{{--    @endauth--}}
 
     <h4>{{ __('views/common.forms.mapsettings.enemies') }}</h4>
 

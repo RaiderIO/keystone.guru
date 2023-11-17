@@ -577,6 +577,11 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::post('/member/{user}/adfree', [AjaxTeamController::class, 'addAdFreeGiveaway']);
                 Route::delete('/member/{user}/adfree', [AjaxTeamController::class, 'removeAdFreeGiveaway']);
             });
+
+            // User
+            Route::group(['prefix' => 'user/{publicKey}'], function () {
+                Route::put('/', [AjaxUserController::class, 'store']);
+            });
         });
     });
 

@@ -234,7 +234,7 @@ class AjaxDungeonRouteController extends Controller
             $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
-        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon', 'mappingVersion'])
+        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
             ->when($expansion !== null, function (Builder $builder) use ($expansion) {
@@ -348,6 +348,7 @@ class AjaxDungeonRouteController extends Controller
                 'dungeonroutes'     => $result,
                 'showAffixes'       => true,
                 'showDungeonImage'  => true,
+                'orientation'       => 'horizontal',
             ])->render();
         }
     }

@@ -71,6 +71,18 @@ class Expansion extends CacheModel
         self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
     ];
 
+    private Collection $currentSeasonCache;
+    private Collection $nextSeasonCache;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->currentSeasonCache = collect();
+        $this->nextSeasonCache    = collect();
+    }
+
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      * @return string
@@ -110,6 +122,10 @@ class Expansion extends CacheModel
      */
     public function currentSeason(GameServerRegion $gameServerRegion): ?Season
     {
+        if ($this->currentSeasonCache->has($gameServerRegion->short)) {
+            return $this->currentSeasonCache->get($gameServerRegion->short);
+        }
+
         /** @var Season|null $season */
         $season = $this->hasOne(Season::class)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
@@ -118,6 +134,8 @@ class Expansion extends CacheModel
             ->orderBy('start', 'desc')
             ->limit(1)
             ->first();
+
+        $this->currentSeasonCache->put($gameServerRegion->short, $season);
 
         return $season;
     }
@@ -128,8 +146,12 @@ class Expansion extends CacheModel
      */
     public function nextSeason(GameServerRegion $gameServerRegion): ?Season
     {
+        if ($this->nextSeasonCache->has($gameServerRegion->short)) {
+            return $this->nextSeasonCache->get($gameServerRegion->short);
+        }
+
         /** @var Season|null $season */
-        $season =  $this->hasOne(Season::class)
+        $season = $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
                 [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
@@ -137,6 +159,8 @@ class Expansion extends CacheModel
             ->orderBy('start')
             ->limit(1)
             ->first();
+
+        $this->nextSeasonCache->put($gameServerRegion->short, $season);
 
         return $season;
     }

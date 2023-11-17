@@ -97,6 +97,8 @@ class MappingVersion extends Model
     /** @var Collection */
     private Collection $cachedFloorUnionForFloor;
 
+    private ?int $isLatestForDungeonCache = null;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -209,7 +211,13 @@ class MappingVersion extends Model
      */
     public function isLatestForDungeon(): bool
     {
-        return $this->dungeon->getCurrentMappingVersion()->version === $this->version;
+        if ($this->isLatestForDungeonCache === null) {
+            $this->isLatestForDungeonCache = MappingVersion::query()
+                    ->where('dungeon_id', $this->dungeon_id)
+                    ->max('id') === $this->id;
+        }
+
+        return $this->isLatestForDungeonCache;
     }
 
     /**
@@ -301,20 +309,19 @@ class MappingVersion extends Model
     }
 
     /**
-     * @todo duplicated function in DungeonRoute.php
-     *
      * @param CoordinatesServiceInterface $coordinatesService
      * @param ConvertsVerticesInterface   $hasVertices
      * @param Floor                       $floor
      *
      * @return Floor
+     * @todo duplicated function in DungeonRoute.php
+     *
      */
     private function convertVerticesForFacade(
         CoordinatesServiceInterface $coordinatesService,
         ConvertsVerticesInterface   $hasVertices,
         Floor                       $floor
-    ): Floor
-    {
+    ): Floor {
         $convertedLatLngs = collect();
 
         foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {

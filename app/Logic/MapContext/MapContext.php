@@ -14,6 +14,7 @@ use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -40,8 +41,7 @@ abstract class MapContext
         Model                       $context,
         Floor                       $floor,
         MappingVersion              $mappingVersion
-    )
-    {
+    ) {
         $this->cacheService       = $cacheService;
         $this->coordinatesService = $coordinatesService;
         $this->context            = $context;
@@ -63,7 +63,7 @@ abstract class MapContext
 
     public function getMapFacadeStyle(): string
     {
-        return $_COOKIE['map_facade_style'] ?? 'split_floors';
+        return User::getCurrentUserMapFacadeStyle();
     }
 
     /**
@@ -94,7 +94,7 @@ abstract class MapContext
                 $dungeon->setRelation('floors', $this->getFloors());
 
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
-                    'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion(),
+                    'latestMappingVersion'      => $this->floor->dungeon->currentMappingVersion,
                     'npcs'                      => $this->floor->dungeon->npcs()->with([
                         'spells',
                         // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only

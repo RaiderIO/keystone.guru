@@ -96,7 +96,7 @@ class MappingVersionSeeder extends Seeder
             ->chunk(100, function (Collection $dungeonRoutes) use ($count) {
                 /** @var Collection|DungeonRoute[] $dungeonRoutes */
                 foreach ($dungeonRoutes as $dungeonRoute) {
-                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->getCurrentMappingVersion()->id;
+                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->currentMappingVersion->id;
                     $dungeonRoute->save();
                 }
 

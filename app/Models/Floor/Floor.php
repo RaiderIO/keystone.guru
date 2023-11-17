@@ -16,6 +16,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int                                     $id
@@ -138,7 +140,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
     }
 
     /**
@@ -149,7 +151,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
     }
 
     /**
@@ -160,7 +162,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
     }
 
     /**
@@ -171,7 +173,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mapicons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
     }
 
     /**
@@ -182,7 +184,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
     }
 
     /**
@@ -193,7 +195,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
     }
 
     /**
@@ -356,7 +358,7 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public function scopeIndexOrFacade(Builder $builder, int $floorIndex): Builder
     {
-        $useFacade = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
+        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 
         // Facade should be FORCED to use floor index 1
         if ($useFacade && $floorIndex > 1) {
@@ -387,7 +389,7 @@ class Floor extends CacheModel implements MappingModelInterface
      */
     public function scopeDefaultOrFacade(Builder $builder): Builder
     {
-        $useFacade = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
+        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 
         return $builder->where(function (Builder $builder) {
             $builder->where('facade', 1)

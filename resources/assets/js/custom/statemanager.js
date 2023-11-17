@@ -50,13 +50,13 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         console.assert(mapContext instanceof Object, 'mapContext is not an Object', mapContext);
 
-        if (mapContext.type === 'dungeonroute') {
+        if (mapContext.type === MAP_CONTEXT_TYPE_DUNGEON_ROUTE) {
             this._mapContext = new MapContextDungeonRoute(mapContext);
-        } else if (mapContext.type === 'livesession') {
+        } else if (mapContext.type === MAP_CONTEXT_TYPE_LIVE_SESSION) {
             this._mapContext = new MapContextLiveSession(mapContext);
-        } else if (mapContext.type === 'mappingVersionEdit') {
+        } else if (mapContext.type === MAP_CONTEXT_TYPE_MAPPING_VERSION_EDIT) {
             this._mapContext = new MapContextMappingVersionEdit(mapContext);
-        } else if (mapContext.type === 'dungeonExplore') {
+        } else if (mapContext.type === MAP_CONTEXT_TYPE_DUNGEON_EXPLORE) {
             this._mapContext = new MapContextDungeonExplore(mapContext);
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
@@ -119,6 +119,7 @@ class StateManager extends Signalable {
         this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
+        this.setMapFacadeStyle(this._map.options.mapFacadeStyle);
         this.setFloorId(this.getMapContext().getFloorId());
 
         // Change defaults based on the hash if necessary

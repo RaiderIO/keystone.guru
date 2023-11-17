@@ -873,7 +873,7 @@ class DungeonRoute extends Model
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
         $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
+        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->currentMappingVersion->id;
 
         $this->faction_id     = 1;
         $this->difficulty     = 1;
@@ -931,7 +931,7 @@ class DungeonRoute extends Model
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
         // Cannot assign $this->dungeon lest ->save() method crashes
         $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
-        $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
+        $this->mapping_version_id = $dungeon->currentMappingVersion->id;
         $teamIdFromRequest        = (int)$request->get('team_id', $this->team_id);
         $this->team_id            = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 

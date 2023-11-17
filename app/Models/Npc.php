@@ -181,7 +181,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
         if ($npcEnemyForces === null) {
             $npcEnemyForces = NpcEnemyForces::create([
-                'mapping_version_id' => ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id,
+                'mapping_version_id' => ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id,
                 'npc_id'             => $this->id,
                 'enemy_forces'       => $enemyForces,
             ]);

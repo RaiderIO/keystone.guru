@@ -41,7 +41,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
-    $activeFloors = $dungeonroute->dungeon->floors()->active()->get();
+    $activeFloors = $dungeonroute->dungeon->activeFloors;
     $owlClass     = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
 
     ob_start(); ?>
@@ -71,7 +71,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                          style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
                     @endif
                 >
-                    <div class="row no-gutters p-2 header">
+                    <div class="row no-gutters pt-2 px-2 header">
                         <div class="col">
                             <h4 class="mb-0 title">
                                 <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
@@ -130,7 +130,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                         <div class="col">
                             {{
-                                empty($dungeonroute->description) ? __('views/common.dungeonroute.card.no_description') : $dungeonroute->description
+                                trim($dungeonroute->description)
                             }}
                         </div>
                     </div>
@@ -141,12 +141,15 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             @else
                                 <span class="text-success"> <i class="fas fa-check-circle"></i> </span>
                             @endif
-                            {{ sprintf(
-                                '%s/%s (%s%%)',
-                                $dungeonroute->enemy_forces,
-                                $dungeonroute->mappingVersion->enemy_forces_required,
-                                $enemyForcesPercentage
-                                ) }}
+{{--                            <span class="d-none d-xl-block">--}}
+{{--                                {{ sprintf(--}}
+{{--                                    '%s/%s (%s%%)',--}}
+{{--                                    $dungeonroute->enemy_forces,--}}
+{{--                                    $dungeonroute->mappingVersion->enemy_forces_required,--}}
+{{--                                    $enemyForcesPercentage--}}
+{{--                                    ) }}--}}
+{{--                            </span>--}}
+                            {{ sprintf('%s%%', $enemyForcesPercentage) }}
                         </div>
                         <div class="col-8">
                             @if( $dungeonroute->level_min !== config('keystoneguru.keystone.levels.min') && $dungeonroute->level_max !== config('keystoneguru.keystone.levels.max'))

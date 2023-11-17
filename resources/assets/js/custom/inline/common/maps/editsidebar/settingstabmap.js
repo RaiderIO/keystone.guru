@@ -53,6 +53,26 @@ class SettingsTabMap extends SettingsTab {
         // Add a class to make it display properly
         $(`.view_dungeonroute_details_row .pickr .pcr-button`).addClass('h-100 w-100');
 
+        // Map facade style
+
+
+        $('#map_settings_map_facade_style').bind('change', function () {
+            let newMapFacadeStyle = $(this).is(':checked') ? MAP_FACADE_STYLE_FACADE : MAP_FACADE_STYLE_SPLIT_FLOORS;
+            getState().setMapFacadeStyle(newMapFacadeStyle);
+
+            let user = getState().getUser();
+            if (user !== null)
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/user/${user.public_key}`,
+                    dataType: 'json',
+                    data: {
+                        map_facade_style: newMapFacadeStyle,
+                        _method: 'PATCH'
+                    }
+                });
+        });
+
 
         // Unkilled enemy opacity
         $('#map_settings_unkilled_enemy_opacity').bind('change', function () {

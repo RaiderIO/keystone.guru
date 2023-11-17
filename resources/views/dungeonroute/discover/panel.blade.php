@@ -8,7 +8,7 @@
  */
 
 $dungeon          = $dungeon ?? null;
-$cols             = $cols ?? 3;
+$cols             = $cols ?? 4;
 $showMore         = $showMore ?? false;
 $loadMore         = $loadMore ?? false;
 $showDungeonImage = $showDungeonImage ?? false;

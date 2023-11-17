@@ -50,7 +50,7 @@ class ExportMapping extends Command
                 continue;
             }
 
-            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            $currentMappingVersion = $dungeon->currentMappingVersion;
             if ($currentMappingVersion === null) {
                 $this->comment(sprintf('Skipping %s, no current mapping version found', __($dungeon->name)));
                 continue;

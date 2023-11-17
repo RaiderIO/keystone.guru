@@ -10,6 +10,7 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Team;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -34,14 +35,19 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param MapIconFormRequest $request
-     * @param ?DungeonRoute $dungeonRoute
-     * @param MapIcon|null $mapIcon
+     * @param MapIconFormRequest          $request
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param ?DungeonRoute               $dungeonRoute
+     * @param MapIcon|null                $mapIcon
      * @return MapIcon|Model
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function store(MapIconFormRequest $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon = null): MapIcon
+    public function store(
+        MapIconFormRequest          $request,
+        CoordinatesServiceInterface $coordinatesService,
+        ?DungeonRoute               $dungeonRoute,
+        MapIcon                     $mapIcon = null): MapIcon
     {
         $dungeonRoute                  = optional($mapIcon)->dungeonRoute ?? $dungeonRoute;
         $validated                     = $request->validated();
@@ -104,9 +110,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request           $request
      * @param DungeonRoute|null $dungeonRoute
-     * @param MapIcon $mapIcon
+     * @param MapIcon           $mapIcon
      * @return array|ResponseFactory|Response
      * @throws Exception
      */
@@ -151,7 +157,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
     /**
      * @param MapIconFormRequest $request
-     * @param MapIcon|null $mapIcon
+     * @param MapIcon|null       $mapIcon
      * @return MapIcon
      * @throws AuthorizationException
      * @throws Throwable
