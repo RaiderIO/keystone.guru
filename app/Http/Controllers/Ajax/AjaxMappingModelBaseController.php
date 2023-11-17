@@ -62,6 +62,8 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
+                    $model->load(['floor', 'floor.dungeon']);
+
                     broadcast(new ModelChangedEvent($model->floor->dungeon, Auth::getUser(), $model));
                 }
 

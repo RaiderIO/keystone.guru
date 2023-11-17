@@ -100,6 +100,7 @@ class User extends Authenticatable
         'name',
         'email',
         'echo_color',
+        'map_facade_style',
         'password',
         'legal_agreed',
         'legal_agreed_ms',

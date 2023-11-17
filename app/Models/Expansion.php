@@ -78,7 +78,7 @@ class Expansion extends CacheModel
     {
         $this->currentSeasonCache = collect();
         $this->nextSeasonCache    = collect();
-        
+
         parent::__construct($attributes);
     }
 
