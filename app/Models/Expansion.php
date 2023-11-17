@@ -71,16 +71,8 @@ class Expansion extends CacheModel
         self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
     ];
 
-    private Collection $currentSeasonCache;
-    private Collection $nextSeasonCache;
-
-    public function __construct(array $attributes = [])
-    {
-        $this->currentSeasonCache = collect();
-        $this->nextSeasonCache    = collect();
-
-        parent::__construct($attributes);
-    }
+    private ?Collection $currentSeasonCache = null;
+    private ?Collection $nextSeasonCache    = null;
 
 
     /**
@@ -122,6 +114,10 @@ class Expansion extends CacheModel
      */
     public function currentSeason(GameServerRegion $gameServerRegion): ?Season
     {
+        if ($this->currentSeasonCache === null) {
+            $this->currentSeasonCache = collect();
+        }
+
         if ($this->currentSeasonCache->has($gameServerRegion->short)) {
             return $this->currentSeasonCache->get($gameServerRegion->short);
         }
@@ -146,6 +142,10 @@ class Expansion extends CacheModel
      */
     public function nextSeason(GameServerRegion $gameServerRegion): ?Season
     {
+        if ($this->nextSeasonCache === null) {
+            $this->nextSeasonCache = collect();
+        }
+
         if ($this->nextSeasonCache->has($gameServerRegion->short)) {
             return $this->nextSeasonCache->get($gameServerRegion->short);
         }

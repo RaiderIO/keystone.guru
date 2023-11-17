@@ -91,22 +91,10 @@ class MappingVersion extends Model
 
     public $timestamps = true;
 
-    /** @var Collection */
-    private Collection $cachedFloorUnionsOnFloor;
-
-    /** @var Collection */
-    private Collection $cachedFloorUnionForFloor;
+    private ?Collection $cachedFloorUnionsOnFloor = null;
+    private ?Collection $cachedFloorUnionForFloor = null;
 
     private ?int $isLatestForDungeonCache = null;
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->cachedFloorUnionsOnFloor = collect();
-        $this->cachedFloorUnionForFloor = collect();
-    }
-
 
     /**
      * @return bool
@@ -241,6 +229,10 @@ class MappingVersion extends Model
      */
     public function getFloorUnionsOnFloor(int $floorId): Collection
     {
+        if ($this->cachedFloorUnionsOnFloor === null) {
+            $this->cachedFloorUnionsOnFloor = collect();
+        }
+
         if ($this->cachedFloorUnionsOnFloor->has($floorId)) {
             return $this->cachedFloorUnionsOnFloor->get($floorId);
         }
@@ -263,6 +255,10 @@ class MappingVersion extends Model
      */
     public function getFloorUnionForFloor(int $floorId): ?FloorUnion
     {
+        if ($this->cachedFloorUnionForFloor === null) {
+            $this->cachedFloorUnionForFloor = collect();
+        }
+
         if ($this->cachedFloorUnionForFloor->has($floorId)) {
             return $this->cachedFloorUnionForFloor->get($floorId);
         }
