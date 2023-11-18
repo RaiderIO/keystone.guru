@@ -12,7 +12,7 @@
 <?php
 /**
  * @var $models \App\Models\Dungeon
- * @var $floor \App\Models\Floor\Floor
+ * @var $floor  \App\Models\Floor\Floor
  */
 ?>
 
@@ -51,7 +51,7 @@
         <tbody>
         @foreach ($models as $dungeon)
                 <?php
-                /** @var $dungeon \App\Models\Dungeon */
+                /** @var \App\Models\Dungeon|null $dungeon */
                 $mappingVersion = $dungeon->currentMappingVersion;
                 ?>
             <tr>

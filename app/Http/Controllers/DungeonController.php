@@ -134,7 +134,8 @@ class DungeonController extends Controller
     public function list()
     {
         return view('admin.dungeon.list', [
-            'models' => Dungeon::select('dungeons.*')
+            'models' => Dungeon::with(['currentMappingVersion'])
+                ->select('dungeons.*')
                 ->join('expansions', 'expansions.id', 'dungeons.expansion_id')
                 ->orderByDesc('expansions.released_at')
                 ->orderBy('dungeons.name')

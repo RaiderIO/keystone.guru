@@ -10,6 +10,7 @@ use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute;
 use App\Models\Polyline;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -23,14 +24,19 @@ class AjaxBrushlineController extends Controller
     use SavesPolylines;
 
     /**
-     * @param APIBrushlineFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Brushline|null $brushline
+     * @param APIBrushlineFormRequest     $request
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param DungeonRoute                $dungeonRoute
+     * @param Brushline|null              $brushline
      * @return Brushline
      * @throws AuthorizationException
      */
-    function store(APIBrushlineFormRequest $request, DungeonRoute $dungeonRoute, ?Brushline $brushline = null)
-    {
+    function store(
+        APIBrushlineFormRequest     $request,
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        ?Brushline                  $brushline = null
+    ) {
         $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
@@ -54,11 +60,20 @@ class AjaxBrushlineController extends Controller
         try {
             if ($success) {
                 // Create a new polyline and save it
-                $polyline = $this->savePolyline(Polyline::findOrNew($brushline->polyline_id), $brushline, $validated['polyline']);
+                $changedFloor = null;
+                $polyline     = $this->savePolyline(
+                    $coordinatesService,
+                    $dungeonRoute->mappingVersion,
+                    Polyline::findOrNew($brushline->polyline_id),
+                    $brushline,
+                    $validated['polyline'],
+                    $changedFloor
+                );
 
                 // Couple the path to the polyline
                 $brushline->update([
                     'polyline_id' => $polyline->id,
+                    'floor_id'    => optional($changedFloor)->id ?? $brushline->floor_id,
                 ]);
 
                 // Load the polyline so it can be echoed back to the user
@@ -84,9 +99,9 @@ class AjaxBrushlineController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
-     * @param Brushline $brushline
+     * @param Brushline    $brushline
      * @return Response|ResponseFactory
      * @throws AuthorizationException
      */
