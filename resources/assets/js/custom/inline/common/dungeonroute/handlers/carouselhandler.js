@@ -10,7 +10,7 @@ class CarouselHandler {
         $(function () {
             let baseSettings = {
                 item: 1,
-                autoWidth: true,
+                autoWidth: false,
                 // slideMove: 1, // slidemove will be 1 if loop is true
                 slideMargin: 0,
 
