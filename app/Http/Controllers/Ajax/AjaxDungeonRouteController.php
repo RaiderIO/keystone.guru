@@ -85,7 +85,8 @@ class AjaxDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with(['dungeon', 'affixes', 'author', 'routeattributes', 'ratings', 'metricAggregations', $tagsRelationshipName])
+        $routes = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'dungeon', 'affixes',
+                                      'author', 'routeattributes', 'ratings', 'metricAggregations', $tagsRelationshipName])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
@@ -234,7 +235,8 @@ class AjaxDungeonRouteController extends Controller
             $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
-        $query = DungeonRoute::with(['author', 'affixes', 'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
+        $query = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'author', 'affixes',
+                                     'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
             ->when($expansion !== null, function (Builder $builder) use ($expansion) {
