@@ -85,7 +85,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
             $this->options->battle_shout,
             $this->options->mystic_touch,
             $this->options->chaos_brand,
-            $this->options->dungeonroute->dungeon->timer_max_seconds,
+            $this->options->dungeonroute->mappingVersion->timer_max_seconds,
             $this->options->dungeonroute->title,
             $this->options->shrouded_bounty_type === SimulationCraftRaidEventsOptions::SHROUDED_BOUNTY_TYPE_NONE ?
                 '' : sprintf('keystone_bounty=%s', $this->options->shrouded_bounty_type),
