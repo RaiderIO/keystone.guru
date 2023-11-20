@@ -89,7 +89,10 @@ abstract class MapContext
                 $useFacade = $mapFacadeStyle === 'facade';
 
                 /** @var Dungeon $dungeon */
-                $dungeon = $this->floor->dungeon()->without(['floors', 'mapicons', 'enemypacks'])->first();
+                $dungeon = $this->floor->dungeon()
+                    ->with(['dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
+                    ->without(['floors', 'mapicons', 'enemypacks'])
+                    ->first();
                 // Filter out floors that we do not need
                 $dungeon->setRelation('floors', $this->getFloors());
 

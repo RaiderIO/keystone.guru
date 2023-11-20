@@ -88,7 +88,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with       = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $with       = ['expansion', 'gameVersion', 'floors'];
     public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
