@@ -205,6 +205,22 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return array The setup as used in the front-end.
+     */
+    public function getSetupAttribute(): array
+    {
+        // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes
+        $this->load(['faction', 'specializations', 'classes', 'races']);
+
+        return [
+            'faction'         => $this->faction,
+            'specializations' => $this->specializations,
+            'classes'         => $this->classes,
+            'races'           => $this->races,
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getTitleSlug(): string
@@ -772,19 +788,6 @@ class DungeonRoute extends Model
     {
         return max(0,
             $this->enemy_forces - ($this->teeming ? $this->mappingVersion->enemy_forces_required_teeming : $this->mappingVersion->enemy_forces_required));
-    }
-
-    /**
-     * @return array The setup as used in the front-end.
-     */
-    public function getSetupAttribute(): array
-    {
-        return [
-            'faction'         => $this->faction,
-            'specializations' => $this->specializations,
-            'classes'         => $this->classes,
-            'races'           => $this->races,
-        ];
     }
 
     /**
