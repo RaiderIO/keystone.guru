@@ -240,8 +240,8 @@
         "lng": 309.92
     },
     {
-        "id": 997,
-        "mapping_version_id": 276,
+        "id": 1125,
+        "mapping_version_id": 287,
         "floor_id": 265,
         "source_floor_id": 253,
         "target_floor_id": 254,
@@ -250,8 +250,8 @@
         "lng": 170.38
     },
     {
-        "id": 998,
-        "mapping_version_id": 276,
+        "id": 1126,
+        "mapping_version_id": 287,
         "floor_id": 265,
         "source_floor_id": 254,
         "target_floor_id": 253,
@@ -260,8 +260,8 @@
         "lng": 229.59
     },
     {
-        "id": 999,
-        "mapping_version_id": 276,
+        "id": 1127,
+        "mapping_version_id": 287,
         "floor_id": 265,
         "source_floor_id": 255,
         "target_floor_id": 254,
@@ -270,8 +270,8 @@
         "lng": 27.87
     },
     {
-        "id": 1000,
-        "mapping_version_id": 276,
+        "id": 1128,
+        "mapping_version_id": 287,
         "floor_id": 265,
         "source_floor_id": 255,
         "target_floor_id": 257,
@@ -280,8 +280,8 @@
         "lng": 130.8
     },
     {
-        "id": 1001,
-        "mapping_version_id": 276,
+        "id": 1129,
+        "mapping_version_id": 287,
         "floor_id": 265,
         "source_floor_id": 257,
         "target_floor_id": 255,
@@ -290,68 +290,8 @@
         "lng": 216.56
     },
     {
-        "id": 1002,
-        "mapping_version_id": 276,
-        "floor_id": 265,
-        "source_floor_id": 254,
-        "target_floor_id": 255,
-        "direction": "right",
-        "lat": -65.32,
-        "lng": 309.92
-    },
-    {
-        "id": 1065,
-        "mapping_version_id": 282,
-        "floor_id": 265,
-        "source_floor_id": 253,
-        "target_floor_id": 254,
-        "direction": "right",
-        "lat": -59.71,
-        "lng": 170.38
-    },
-    {
-        "id": 1066,
-        "mapping_version_id": 282,
-        "floor_id": 265,
-        "source_floor_id": 254,
-        "target_floor_id": 253,
-        "direction": "left",
-        "lat": -64.82,
-        "lng": 229.59
-    },
-    {
-        "id": 1067,
-        "mapping_version_id": 282,
-        "floor_id": 265,
-        "source_floor_id": 255,
-        "target_floor_id": 254,
-        "direction": "left",
-        "lat": -178.13,
-        "lng": 27.87
-    },
-    {
-        "id": 1068,
-        "mapping_version_id": 282,
-        "floor_id": 265,
-        "source_floor_id": 255,
-        "target_floor_id": 257,
-        "direction": "right",
-        "lat": -179.95,
-        "lng": 130.8
-    },
-    {
-        "id": 1069,
-        "mapping_version_id": 282,
-        "floor_id": 265,
-        "source_floor_id": 257,
-        "target_floor_id": 255,
-        "direction": "left",
-        "lat": -106.39,
-        "lng": 216.56
-    },
-    {
-        "id": 1070,
-        "mapping_version_id": 282,
+        "id": 1130,
+        "mapping_version_id": 287,
         "floor_id": 265,
         "source_floor_id": 254,
         "target_floor_id": 255,
