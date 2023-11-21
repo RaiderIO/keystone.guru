@@ -69,9 +69,9 @@
         "kill_priority": null
     },
     {
-        "id": 43890,
-        "mapping_version_id": 276,
-        "enemy_pack_id": 8398,
+        "id": 45061,
+        "mapping_version_id": 287,
+        "enemy_pack_id": 8708,
         "enemy_patrol_id": null,
         "npc_id": 206214,
         "floor_id": 255,
