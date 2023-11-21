@@ -88,6 +88,7 @@ const MAP_OBJECT_GROUP_NAMES = [
 // Map
 const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
 const MAP_FACADE_STYLE_FACADE = 'facade';
+const MAP_FACADE_STYLE_BOTH = 'both';
 
 // Map context
 const MAP_CONTEXT_TYPE_DUNGEON_ROUTE = 'dungeonroute';

@@ -5,6 +5,7 @@ namespace App\Models\Floor;
 use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class FloorUnionArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
     use HasVertices;
+    use CloneForNewMappingVersionNoRelations;
 
     public $timestamps = false;
 
@@ -88,24 +90,5 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
-    }
-
-    /**
-     * @param MappingVersion             $mappingVersion
-     * @param MappingModelInterface|null $newParent
-     *
-     * @return FloorUnionArea
-     */
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): FloorUnionArea
-    {
-        /** @var FloorUnionArea|MappingModelInterface $clonedFloorUnionArea */
-        $clonedFloorUnionArea                     = clone $this;
-        $clonedFloorUnionArea->exists             = false;
-        $clonedFloorUnionArea->id                 = null;
-        $clonedFloorUnionArea->mapping_version_id = $mappingVersion->id;
-        $clonedFloorUnionArea->floor_union_id     = $newParent->id;
-        $clonedFloorUnionArea->save();
-
-        return $clonedFloorUnionArea;
     }
 }
