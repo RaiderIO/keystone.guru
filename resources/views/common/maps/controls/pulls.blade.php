@@ -12,7 +12,8 @@
  * @var bool                     $showAllEnabled
  */
 // By default, show it if we're not mobile, but allow overrides
-$defaultState           = $defaultState ?? ($isMobile ? 0 : (int)$_COOKIE['pulls_sidebar_state'] ?? 1);
+$pullsSidebarState      = (int)($_COOKIE['pulls_sidebar_state'] ?? 1)
+$defaultState           = $defaultState ?? ($isMobile ? 0 : $pullsSidebarState);
 $shouldShowPullsSidebar = $defaultState === 1;
 $hideOnMove             = $hideOnMove ?? $isMobile;
 $showAds                = $showAds ?? true;
