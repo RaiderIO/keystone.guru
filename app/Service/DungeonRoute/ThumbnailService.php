@@ -21,6 +21,12 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts = 0): void
     {
+        if (app()->isDownForMaintenance()) {
+            Log::channel('scheduler')->info('Not generating thumbnail - app is down for maintenance');
+
+            return;
+        }
+
         // 1. Headless chrome saves file in a temp location
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
         // 3. Moved to public folder
