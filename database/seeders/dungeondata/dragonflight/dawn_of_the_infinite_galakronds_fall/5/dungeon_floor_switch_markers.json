@@ -30,8 +30,8 @@
         "lng": 125
     },
     {
-        "id": 996,
-        "mapping_version_id": 275,
+        "id": 1008,
+        "mapping_version_id": 276,
         "floor_id": 257,
         "source_floor_id": null,
         "target_floor_id": 255,
