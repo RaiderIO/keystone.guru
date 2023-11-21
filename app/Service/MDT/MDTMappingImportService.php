@@ -214,8 +214,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @param MappingVersion $newMappingVersion
      * @param MDTDungeon     $mdtDungeon
      * @param Dungeon        $dungeon
+     * @param bool           $forceImport
      * @return Collection|Enemy
-     * @throws InvalidArgumentException
      */
     private function importEnemies(
         Mappingversion $currentMappingVersion,

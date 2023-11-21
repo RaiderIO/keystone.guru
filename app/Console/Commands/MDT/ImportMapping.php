@@ -52,6 +52,7 @@ class ImportMapping extends Command
             // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
             foreach ($season->dungeons as $dungeon) {
                 try {
+                    $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
                     $dungeon->setRelation('npcs', $dungeon->npcs()->get());
                     $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
                 } catch (\Exception $exception) {
@@ -62,6 +63,8 @@ class ImportMapping extends Command
             // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
             /** @var Dungeon $dungeon */
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
+            
+            $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
             $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
