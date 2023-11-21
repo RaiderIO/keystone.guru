@@ -302,7 +302,8 @@ abstract class DungeonRouteBuilder
                 );
 
                 // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
-                if ($closestEnemy->getDistanceBetweenEnemies() > $this->currentFloor->enemy_engagement_max_range_patrols) {
+                if ($closestEnemy->getDistanceBetweenEnemies() >
+                    ($this->currentFloor->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'))) {
                     $this->findClosestEnemyAndDistanceFromList(
                         $filteredEnemies,
                         $activePullEnemy,
@@ -318,7 +319,8 @@ abstract class DungeonRouteBuilder
                         $closestEnemy->getDistanceBetweenEnemies(),
                         $closestEnemy->getDistanceBetweenLastPullAndEnemy()
                     );
-                } else if ($closestEnemy->getDistanceBetweenEnemies() > $this->currentFloor->enemy_engagement_max_range) {
+                } else if ($closestEnemy->getDistanceBetweenEnemies() >
+                    ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
                     if ($closestEnemy->getEnemy()->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                         $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
                     } else {
