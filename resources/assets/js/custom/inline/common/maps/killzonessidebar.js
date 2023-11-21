@@ -441,10 +441,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Setup new pull button
         $(this.options.newKillZoneSelector).unbind('click').bind('click', this._newPullClicked.bind(this));
 
-        $(this.options.mapSettingsMapFacadeStyleSelector).bind('change', function() {
-            getState().setMapFacadeStyle($(this).is(':checked') ? MAP_FACADE_STYLE_FACADE : MAP_FACADE_STYLE_SPLIT_FLOORS);
-        });
-
         $(this.options.killZonesPullsSettingsMapNumberStyleSelector).bind('change', function () {
             getState().setMapNumberStyle($(this).is(':checked') ? NUMBER_STYLE_PERCENTAGE : NUMBER_STYLE_ENEMY_FORCES);
         });

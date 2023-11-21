@@ -91,20 +91,10 @@ class MappingVersion extends Model
 
     public $timestamps = true;
 
-    /** @var Collection */
-    private Collection $cachedFloorUnionsOnFloor;
+    private ?Collection $cachedFloorUnionsOnFloor = null;
+    private ?Collection $cachedFloorUnionForFloor = null;
 
-    /** @var Collection */
-    private Collection $cachedFloorUnionForFloor;
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->cachedFloorUnionsOnFloor = collect();
-        $this->cachedFloorUnionForFloor = collect();
-    }
-
+    private ?int $isLatestForDungeonCache = null;
 
     /**
      * @return bool
@@ -209,7 +199,13 @@ class MappingVersion extends Model
      */
     public function isLatestForDungeon(): bool
     {
-        return $this->dungeon->getCurrentMappingVersion()->version === $this->version;
+        if ($this->isLatestForDungeonCache === null) {
+            $this->isLatestForDungeonCache = MappingVersion::query()
+                    ->where('dungeon_id', $this->dungeon_id)
+                    ->max('id') === $this->id;
+        }
+
+        return $this->isLatestForDungeonCache;
     }
 
     /**
@@ -233,6 +229,10 @@ class MappingVersion extends Model
      */
     public function getFloorUnionsOnFloor(int $floorId): Collection
     {
+        if ($this->cachedFloorUnionsOnFloor === null) {
+            $this->cachedFloorUnionsOnFloor = collect();
+        }
+
         if ($this->cachedFloorUnionsOnFloor->has($floorId)) {
             return $this->cachedFloorUnionsOnFloor->get($floorId);
         }
@@ -255,6 +255,10 @@ class MappingVersion extends Model
      */
     public function getFloorUnionForFloor(int $floorId): ?FloorUnion
     {
+        if ($this->cachedFloorUnionForFloor === null) {
+            $this->cachedFloorUnionForFloor = collect();
+        }
+
         if ($this->cachedFloorUnionForFloor->has($floorId)) {
             return $this->cachedFloorUnionForFloor->get($floorId);
         }
@@ -301,20 +305,19 @@ class MappingVersion extends Model
     }
 
     /**
-     * @todo duplicated function in DungeonRoute.php
-     *
      * @param CoordinatesServiceInterface $coordinatesService
      * @param ConvertsVerticesInterface   $hasVertices
      * @param Floor                       $floor
      *
      * @return Floor
+     * @todo duplicated function in DungeonRoute.php
+     *
      */
     private function convertVerticesForFacade(
         CoordinatesServiceInterface $coordinatesService,
         ConvertsVerticesInterface   $hasVertices,
         Floor                       $floor
-    ): Floor
-    {
+    ): Floor {
         $convertedLatLngs = collect();
 
         foreach ($hasVertices->getDecodedLatLngs($floor) as $latLng) {

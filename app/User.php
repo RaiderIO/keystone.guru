@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
@@ -31,7 +32,6 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property int                       $game_server_region_id
  * @property int                       $patreon_user_link_id
  * @property int                       $game_version_id
- * @property string                    $timezone
  * @property string                    $name
  * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string                    $email
@@ -39,12 +39,14 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string                    $theme
  * @property string                    $echo_color
  * @property boolean                   $echo_anonymous
+ * @property boolean                   $changed_username
+ * @property string                    $timezone
+ * @property string                    $map_facade_style
  * @property string                    $password
  * @property string                    $raw_patreon_response_data
  * @property boolean                   $legal_agreed
  * @property int                       $legal_agreed_ms
  * @property boolean                   $analytics_cookie_opt_out
- * @property boolean                   $changed_username
  *
  * @property PatreonUserLink           $patreonUserLink
  * @property GameServerRegion          $gameServerRegion
@@ -68,6 +70,16 @@ class User extends Authenticatable
     use Notifiable;
     use GeneratesPublicKey;
 
+    public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
+    public const MAP_FACADE_STYLE_FACADE       = 'facade';
+
+    public const MAP_FACADE_STYLE_ALL = [
+        self::MAP_FACADE_STYLE_SPLIT_FLOORS,
+        self::MAP_FACADE_STYLE_FACADE,
+    ];
+
+    public const DEFAULT_MAP_FACADE_STYLE = 'split_floors';
+
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
      */
@@ -88,6 +100,7 @@ class User extends Authenticatable
         'name',
         'email',
         'echo_color',
+        'map_facade_style',
         'password',
         'legal_agreed',
         'legal_agreed_ms',
@@ -282,7 +295,7 @@ class User extends Authenticatable
     public function getRemainingRouteCount(): int
     {
         return (int)max(0,
-                        config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
+            config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
 
@@ -330,6 +343,14 @@ class User extends Authenticatable
         ]);
     }
 
+    /**
+     * @return string
+     */
+    public static function getCurrentUserMapFacadeStyle(): string
+    {
+        return optional(Auth::user())->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -364,6 +385,7 @@ class User extends Authenticatable
                     logger()->error($exception->getMessage());
                 }
             }
+
             return true;
         });
     }

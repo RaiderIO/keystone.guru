@@ -14,7 +14,7 @@ ob_start();
                         gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusTwoSeconds()),
                         gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusThreeSeconds()))
                         }}">
-            {{ gmdate('i:s', $dungeonroute->dungeon->timer_max_seconds) }}
+            {{ gmdate('i:s', $dungeonroute->mappingVersion->timer_max_seconds) }}
         </div>
     </div>
 

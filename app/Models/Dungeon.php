@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -34,9 +35,11 @@ use Mockery\Exception;
  *
  * @property Expansion                               $expansion
  * @property GameVersion                             $gameVersion
+ * @property MappingVersion                          $currentMappingVersion
  *
  * @property Collection|MappingVersion[]             $mappingVersions
  * @property Collection|Floor[]                      $floors
+ * @property Collection|Floor[]                      $activeFloors
  * @property Collection|DungeonRoute[]               $dungeonRoutes
  * @property Collection|Npc[]                        $npcs
  *
@@ -85,7 +88,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with       = ['expansion', 'gameVersion', 'floors', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'];
+    public $with       = ['expansion', 'gameVersion', 'floors'];
     public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
 
@@ -504,11 +507,30 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
+     * @return HasOne
+     */
+    public function currentMappingVersion(): HasOne
+    {
+        return $this->hasOne(MappingVersion::class)
+            ->without(['dungeon'])
+            ->orderByDesc('mapping_versions.version')
+            ->limit(1);
+    }
+
+    /**
      * @return HasMany
      */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function activeFloors(): HasMany
+    {
+        return $this->floors()->active();
     }
 
     /**
@@ -669,17 +691,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return MappingVersion|null
-     */
-    public function getCurrentMappingVersion(): ?MappingVersion
-    {
-        /** @var MappingVersion $mappingVersion */
-        $mappingVersion = $this->mappingVersions()->limit(1)->first();
-
-        return $mappingVersion;
-    }
-
-    /**
      * @return MapIcon|null
      */
     public function getDungeonStart(): ?MapIcon
@@ -810,7 +821,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                 return $builder->where('npcs.dungeon_id', $this->id)
                     ->orWhere('npcs.dungeon_id', -1);
             })
-            ->where('npc_enemy_forces.mapping_version_id', $this->getCurrentMappingVersion()->id)
+            ->where('npc_enemy_forces.mapping_version_id', $this->currentMappingVersion->id)
             ->where(function (Builder $builder) {
                 $builder->whereNotNull('npc_enemy_forces.enemy_forces')
                     ->orWhereIn('npcs.classification_id', [

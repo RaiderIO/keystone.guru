@@ -126,7 +126,7 @@ class NpcController extends Controller
                 // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
                 if (isset($changes['dungeon_id']) && $changes['dungeon_id'] !== -1) {
                     // Change all existing enemy forces for all older mapping versions
-                    $currentDungeonMappingVersionId = Dungeon::findOrFail($oldDungeonId)->getCurrentMappingVersion()->id;
+                    $currentDungeonMappingVersionId = Dungeon::findOrFail($oldDungeonId)->currentMappingVersion->id;
 
                     $npc->npcEnemyForces()
                         ->where('mapping_version_id', '!=', $currentDungeonMappingVersionId)
@@ -136,7 +136,7 @@ class NpcController extends Controller
                     $npc->npcEnemyForces()
                         ->where('mapping_version_id', $currentDungeonMappingVersionId)
                         ->update([
-                            'mapping_version_id' => Dungeon::findOrFail($changes['dungeon_id'])->getCurrentMappingVersion()->id,
+                            'mapping_version_id' => Dungeon::findOrFail($changes['dungeon_id'])->currentMappingVersion->id,
                         ]);
                 }
             }

@@ -25,45 +25,30 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param Request    $request
-     * @param Dungeon    $dungeon
-     * @param Floor|null $floor
+     * @param FloorFormRequest $request
+     * @param Dungeon          $dungeon
+     * @param Floor|null       $floor
      *
      * @return Floor
      * @throws Exception
      */
-    public function store(Request $request, Dungeon $dungeon, Floor $floor = null)
+    public function store(FloorFormRequest $request, Dungeon $dungeon, Floor $floor = null)
     {
         $beforeFloor = $floor === null ? null : clone $floor;
 
+        $validated = $request->validated();
+
         if ($floor === null) {
-            $floor = new Floor();
-            // May not be set when editing
-            $floor->dungeon_id = $dungeon->id;
+            $floor   = Floor::create(array_merge([
+                'dungeon_id' => $dungeon->id,
+            ], $validated));
+            $success = $floor instanceof Floor;
+        } else {
+            $success = $floor->update($validated);
         }
 
-        $floor->index          = $request->get('index');
-        $floor->mdt_sub_level  = $request->get('mdt_sub_level');
-        $floor->ui_map_id      = $request->get('ui_map_id');
-        $floor->name           = $request->get('name');
-        $floor->default        = $request->get('default', false);
-        $floor->facade         = $request->get('facade', false);
-        $defaultMinEnemySize   = config('keystoneguru.min_enemy_size_default');
-        $floor->min_enemy_size = $request->get('min_enemy_size', $defaultMinEnemySize);
-        $floor->min_enemy_size = empty($floor->min_enemy_size) ? null : $floor->min_enemy_size;
-
-        $defaultMaxEnemySize   = config('keystoneguru.max_enemy_size_default');
-        $floor->max_enemy_size = $request->get('max_enemy_size', $defaultMaxEnemySize);
-        $floor->max_enemy_size = empty($floor->max_enemy_size) ? null : $floor->max_enemy_size;
-
-        $floor->enemy_engagement_max_range         = $request->get('enemy_engagement_max_range') ?? 150;
-        $floor->enemy_engagement_max_range_patrols = $request->get('enemy_engagement_max_range_patrols') ?? 50;
-
-        $floor->percentage_display_zoom = $request->get('percentage_display_zoom');
-        $floor->active                  = $request->get('active') ?? 0;
-
         // Update or insert it
-        if ($floor->save()) {
+        if ($success) {
             // Delete all directly connected floors
             $floor->floorcouplings()->delete();
 

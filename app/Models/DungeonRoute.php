@@ -205,6 +205,22 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @return array The setup as used in the front-end.
+     */
+    public function getSetupAttribute(): array
+    {
+        // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes
+        $this->load(['faction', 'specializations', 'classes', 'races']);
+
+        return [
+            'faction'         => $this->faction,
+            'specializations' => $this->specializations,
+            'classes'         => $this->classes,
+            'races'           => $this->races,
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getTitleSlug(): string
@@ -775,22 +791,6 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return array The setup as used in the front-end.
-     */
-    public function getSetupAttribute(): array
-    {
-        // Temp test to fix a bug "Attempted to lazy load [faction] on model [App\Models\DungeonRoute] but lazy loading is disabled."
-        $this->load(['faction', 'specializations', 'classes', 'races']);
-
-        return [
-            'faction'         => $this->faction,
-            'specializations' => $this->specializations,
-            'classes'         => $this->classes,
-            'races'           => $this->races,
-        ];
-    }
-
-    /**
      * @param User|null $user
      *
      * @return bool
@@ -873,7 +873,7 @@ class DungeonRoute extends Model
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
         $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->getCurrentMappingVersion()->id;
+        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->currentMappingVersion->id;
 
         $this->faction_id     = 1;
         $this->difficulty     = 1;
@@ -931,7 +931,7 @@ class DungeonRoute extends Model
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
         // Cannot assign $this->dungeon lest ->save() method crashes
         $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
-        $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
+        $this->mapping_version_id = $dungeon->currentMappingVersion->id;
         $teamIdFromRequest        = (int)$request->get('team_id', $this->team_id);
         $this->team_id            = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 

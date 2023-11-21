@@ -35,7 +35,7 @@ class DungeonRouteDiscoverController extends Controller
     public function discover(ExpansionService $expansionService)
     {
         return redirect()->route('dungeonroutes.expansion', [
-            'expansion' => $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+            'expansion' => $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion()),
         ]);
     }
 
@@ -447,17 +447,16 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeonpopular(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
-        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon->expansion);
         $this->authorize('view', $dungeon);
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
-            'expansion'     => $expansion,
+            'expansion'     => $dungeon->expansion,
             'category'      => 'popular',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.popular'), __($dungeon->name)),
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
-                ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeon($dungeon),
         ]);
@@ -482,7 +481,7 @@ class DungeonRouteDiscoverController extends Controller
     {
         $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
 
-        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon->expansion);
         $this->authorize('view', $dungeon);
 
         $userRegion    = GameServerRegion::getUserOrDefaultRegion();
@@ -498,12 +497,11 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.thisweek',
-            'expansion'     => $expansion,
+            'expansion'     => $dungeon->expansion,
             'category'      => 'thisweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.this_week_affixes'), __($dungeon->name)),
             'dungeon'       => $dungeon,
             'dungeonroutes' => $currentAffixGroup === null ? collect() : $discoverService
-                ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
             'affixgroup'    => $currentAffixGroup,
@@ -529,7 +527,7 @@ class DungeonRouteDiscoverController extends Controller
     {
         $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
 
-        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon->expansion);
         $this->authorize('view', $dungeon);
 
         $userRegion    = GameServerRegion::getUserOrDefaultRegion();
@@ -545,12 +543,11 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.nextweek',
-            'expansion'     => $expansion,
+            'expansion'     => $dungeon->expansion,
             'category'      => 'nextweek',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.next_week_affixes'), __($dungeon->name)),
             'dungeon'       => $dungeon,
             'dungeonroutes' => $nextAffixGroup === null ? collect() : $discoverService
-                ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
             'affixgroup'    => $nextAffixGroup,
@@ -566,17 +563,16 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverdungeonnew(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService)
     {
-        $this->authorize('view', $expansion);
+        $this->authorize('view', $dungeon->expansion);
         $this->authorize('view', $dungeon);
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',
-            'expansion'     => $expansion,
+            'expansion'     => $dungeon->expansion,
             'category'      => 'new',
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.new'), __($dungeon->name)),
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
-                ->withExpansion($expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->newByDungeon($dungeon),
         ]);

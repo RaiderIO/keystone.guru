@@ -3,14 +3,14 @@ class CarouselHandler {
 
     }
 
-    refreshCarousel(prefix = '') {
+    refreshCarousel(prefix = '', settingsOverride = {}) {
 
         // Only perform this when the page is actually fully loaded - otherwise space calculations go wrong
         // and owl carousel completely flips and breaks pages.
         $(function () {
             let baseSettings = {
                 item: 1,
-                // autoWidth: true,
+                autoWidth: false,
                 // slideMove: 1, // slidemove will be 1 if loop is true
                 slideMargin: 0,
 
@@ -104,9 +104,11 @@ class CarouselHandler {
             // });
             // $(`${prefix} .light-slider.multiple`).each(function(item){
             //     $(this).lightSlider($.extend({}, baseSettings, {loop: true}));
-            // });
-            $(`${prefix} .light-slider.single`).lightSlider(baseSettings);
-            $(`${prefix} .light-slider.multiple`).lightSlider($.extend({}, baseSettings, {loop: true}));
+            // });`
+            let settings = $.extend({}, baseSettings, settingsOverride);
+
+            $(`${prefix} .light-slider.single`).lightSlider(settings);
+            $(`${prefix} .light-slider.multiple`).lightSlider($.extend({}, settings, {loop: true}));
         });
     }
 }

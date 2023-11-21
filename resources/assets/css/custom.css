@@ -65,14 +65,16 @@
 ul.light-slider {
     list-style: none outside none;
     padding-left: 0;
-    margin-bottom:0;
+    margin-bottom: 0;
 }
+
 .light-slider li {
     display: block;
     float: left;
     margin-right: 6px;
-    cursor:pointer;
+    cursor: pointer;
 }
+
 .light-slider img {
     display: block;
     height: auto;
@@ -82,13 +84,46 @@ ul.light-slider {
 /** Light Slider */
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */
-    .card_dungeonroute .single,
-    .card_dungeonroute .light-slider-container,
-    .card_dungeonroute .multiple,
-    .card_dungeonroute img.thumbnail,
-    .card_dungeonroute img.dungeon {
+    .card_dungeonroute.horizontal .single,
+    .card_dungeonroute.horizontal .light-slider-container,
+    .card_dungeonroute.horizontal .multiple,
+    .card_dungeonroute.horizontal img.thumbnail,
+    .card_dungeonroute.horizontal img.dungeon {
         width: 288px;
         height: 192px;
+    }
+
+
+    .card_dungeonroute.vertical img.thumbnail,
+    .card_dungeonroute.vertical img.dungeon {
+        width: 100%;
+    }
+
+    .card_dungeonroute.vertical .title {
+        height: 2rem;
+        overflow: hidden;
+    }
+
+    .card_dungeonroute.vertical .description_row {
+        height: 6rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .card_dungeonroute.vertical .description_row::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .card_dungeonroute.vertical .description_row::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #e7e7e7;
+        border: 1px solid #cacaca;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    }
+
+    .card_dungeonroute.vertical .description_row::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #363636;
     }
 }
 
@@ -135,29 +170,29 @@ ul.light-slider {
     z-index: 1;
 }
 
-.discover .card_dungeonroute .description {
+.discover .card_dungeonroute.horizontal .description {
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
-.discover .card_dungeonroute.dungeon_image .header,
-.discover .card_dungeonroute.dungeon_image .description,
-.discover .card_dungeonroute.dungeon_image .enemy_forces {
+.discover .card_dungeonroute.horizontal.dungeon_image .header,
+.discover .card_dungeonroute.horizontal.dungeon_image .description,
+.discover .card_dungeonroute.horizontal.dungeon_image .enemy_forces {
     text-shadow: #000 1px 1px;
 }
 
 @media (min-width: 1200px) {
-    .discover .card_dungeonroute,
-    .discover .card_dungeonroute .col {
+    .discover .card_dungeonroute.horizontal,
+    .discover .card_dungeonroute.horizontal .col {
         max-height: 192px;
     }
 
-    .discover .card_dungeonroute .header {
+    .discover .card_dungeonroute.horizontal .header {
         overflow: hidden;
     }
 
-    .discover .card_dungeonroute .description_row,
-    .discover .card_dungeonroute .description_row .col {
+    .discover .card_dungeonroute.horizontal .description_row,
+    .discover .card_dungeonroute.horizontal .description_row .col {
         max-height: 80px;
         max-width: 532px;
         overflow: hidden;
@@ -165,14 +200,14 @@ ul.light-slider {
 }
 
 @media (min-width: 1800px) {
-    .discover .card_dungeonroute .description_row .col {
+    .discover .card_dungeonroute.horizontal .description_row .col {
         display: flex !important;
     }
 }
 
 /** Prevent descriptions from taking on a huge height if people enter only */
 @media (max-width: 1200px) {
-    .discover .card_dungeonroute .description_row {
+    .discover .card_dungeonroute.horizontal .description_row {
         max-height: 250px;
     }
 }

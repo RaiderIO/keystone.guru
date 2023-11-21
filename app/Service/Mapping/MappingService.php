@@ -75,7 +75,7 @@ class MappingService implements MappingServiceInterface
      */
     public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
     {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->currentMappingVersion;
 
         return MappingVersion::create([
             'dungeon_id'       => $dungeon->id,
@@ -91,7 +91,7 @@ class MappingService implements MappingServiceInterface
      */
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
     {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->currentMappingVersion;
 
         $newMappingVersionVersion = (optional($currentMappingVersion)->version ?? 0) + 1;
 
@@ -130,7 +130,7 @@ class MappingService implements MappingServiceInterface
      */
     public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
     {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->currentMappingVersion;
 
         $wasRecentlyChanged = $this->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id);
 

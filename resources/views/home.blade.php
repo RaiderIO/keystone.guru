@@ -249,50 +249,52 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
         </div>
     </section>
 
-    <section class="map1 cid-soU5dLgjOI" id="map1-k" style="position: relative;">
+    @if($demoRoutes->isNotEmpty())
+        <section class="map1 cid-soU5dLgjOI" id="map1-k" style="position: relative;">
 
 
-        <div class="mbr-section-head mb-4">
-            <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                <strong>{{ __('views/home.live_demo') }}</strong>
-            </h3>
-        </div>
-
-        <div class="align-center container mb-4">
-            <div class="row justify-content-center no-gutters">
-                <div class="col-xl-4">
-                    @include('common.dungeon.select', [
-                        'id'          => $dungeonSelectId,
-                        'label'       => false,
-                        'dungeons'    => $demoRouteDungeons,
-                        'showAll'     => false,
-                        'showSeasons' => true,
-                        'required'    => false
-                    ])
-                </div>
+            <div class="mbr-section-head mb-4">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
+                    <strong>{{ __('views/home.live_demo') }}</strong>
+                </h3>
             </div>
-        </div>
 
-        <div class="demo-map" style="position: relative;">
-            <div class="demo-loader text-center h-100" style="display: none;">
-                <div class="row h-100 justify-content-center align-items-center no-gutters">
-                    <div class="col">
-                        <h2 style="opacity: 1;">
-                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/home.loading') }}
-                        </h2>
+            <div class="align-center container mb-4">
+                <div class="row justify-content-center no-gutters">
+                    <div class="col-xl-4">
+                        @include('common.dungeon.select', [
+                            'id'          => $dungeonSelectId,
+                            'label'       => false,
+                            'dungeons'    => $demoRouteDungeons,
+                            'showAll'     => false,
+                            'showSeasons' => true,
+                            'required'    => false
+                        ])
                     </div>
                 </div>
             </div>
 
-            <iframe id="{{ $demoRoutesIFrameId }}"
-                    frameborder="0"
-                    loading="lazy"
-                    class="lazyload"
-                    style="border:0; top: 0; left: 0; position: absolute;"
-                    data-src="{{ route('dungeonroute.view', ['dungeon' => $demoRoutes->first()->dungeon, 'dungeonroute' => $demoRoutes->first(), 'title' => $demoRoutes->first()->title]) }}"
-                    allowfullscreen=""></iframe>
-        </div>
-    </section>
+            <div class="demo-map" style="position: relative;">
+                <div class="demo-loader text-center h-100" style="display: none;">
+                    <div class="row h-100 justify-content-center align-items-center no-gutters">
+                        <div class="col">
+                            <h2 style="opacity: 1;">
+                                <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/home.loading') }}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <iframe id="{{ $demoRoutesIFrameId }}"
+                        frameborder="0"
+                        loading="lazy"
+                        class="lazyload"
+                        style="border:0; top: 0; left: 0; position: absolute;"
+                        data-src="{{ route('dungeonroute.view', ['dungeon' => $demoRoutes->first()->dungeon, 'dungeonroute' => $demoRoutes->first(), 'title' => $demoRoutes->first()->title]) }}"
+                        allowfullscreen=""></iframe>
+            </div>
+        </section>
+    @endif
 
     <!-- Fade into solid -->
     <section class="gradient-bottom-container">

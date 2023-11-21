@@ -19,7 +19,7 @@
 $user               = Auth::user();
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
-$embedStyle         = isset($embedStyle) ? $embedStyle : '';
+$embedStyle         = $embedStyle ?? '';
 $edit               = isset($edit) && $edit;
 $mapClasses         = $mapClasses ?? '';
 $dungeonroute       = $dungeonroute ?? null;
@@ -43,7 +43,8 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
-$useFacade                        = ($_COOKIE['map_facade_style'] ?? 'split_floors') === 'facade';
+$mapFacadeStyle                   = \App\User::getCurrentUserMapFacadeStyle();
+$useFacade                        = $mapFacadeStyle === \App\User::MAP_FACADE_STYLE_FACADE;
 
 // Allow echo to be overridden
 $echo           = $echo ?? Auth::check() && !$sandboxMode;
@@ -93,6 +94,7 @@ if ($isAdmin) {
     'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
     'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
     'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
+    'mapFacadeStyle' => $mapFacadeStyle,
     'noUI' => $noUI,
     'showControls' => $show['controls'],
     'gestureHandling' => $gestureHandling,
@@ -111,8 +113,8 @@ if ($isAdmin) {
 
     @include('common.general.statemanager', [
         'echo' => $echo,
-        'patreonBenefits' => Auth::check() ? $user->getPatreonBenefits() : collect(),
-        'userData' => $user,
+        'patreonBenefits' => optional($user)->getPatreonBenefits() ?? collect(),
+        'userData' => optional($user)->makeVisible('map_facade_style'),
         'mapContext' => $mapContext->getProperties(),
     ])
     <script>
@@ -130,9 +132,9 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                <a class="map_faction_display_control map_controls_custom" href="#"
-                   data-faction="{{ strtolower($faction->key) }}"
+                    @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                        <a class="map_faction_display_control map_controls_custom" href="#"
+                           data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
@@ -140,10 +142,10 @@ if ($isAdmin) {
                                  data-toggle="tooltip" title="{{ __($faction->name) }}"/>
                         </a>
 
-            @endforeach
+                    @endforeach
+                </div>
+                <ul class="leaflet-draw-actions"></ul>
             </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
 
 
         </script>
@@ -217,18 +219,18 @@ if ($isAdmin) {
 </div>
 @if(!$noUI)
 
-{{--    @if(!$adFree && $showAds)--}}
-{{--        @if($isMobile)--}}
-{{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])--}}
-{{--        @endif--}}
-{{--    @endif--}}
+    {{--    @if(!$adFree && $showAds)--}}
+    {{--        @if($isMobile)--}}
+    {{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])--}}
+    {{--        @endif--}}
+    {{--    @endif--}}
     <footer class="fixed-bottom container p-0" style="width: 728px">
         <div id="snackbar_container">
 
         </div>
-{{--        @if(!$adFree && $showAds)--}}
-{{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])--}}
-{{--        @endif--}}
+        {{--        @if(!$adFree && $showAds)--}}
+        {{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer', 'class' => 'map_ad_background', 'map' => true])--}}
+        {{--        @endif--}}
     </footer>
 
         <?php
@@ -236,17 +238,17 @@ if ($isAdmin) {
         So speedrun dungeons are such low traffic that this doesn't really matter anyways. But those routes already
         have to fight for height in the sidebar. This will only make it worse, so don't render this ad
         */ ?>
-{{--    @if(!$adFree && $showAds)--}}
-{{--        @if( $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore )--}}
-{{--            <footer class="fixed-bottom container p-0 m-0 map_ad_unit_sidebar_right">--}}
-{{--                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
-{{--            </footer>--}}
-{{--        @elseif(!$dungeon->speedrun_enabled)--}}
-{{--            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">--}}
-{{--                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
-{{--            </footer>--}}
-{{--        @endif--}}
-{{--    @endif--}}
+    {{--    @if(!$adFree && $showAds)--}}
+    {{--        @if( $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore )--}}
+    {{--            <footer class="fixed-bottom container p-0 m-0 map_ad_unit_sidebar_right">--}}
+    {{--                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
+    {{--            </footer>--}}
+    {{--        @elseif(!$dungeon->speedrun_enabled)--}}
+    {{--            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">--}}
+    {{--                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
+    {{--            </footer>--}}
+    {{--        @endif--}}
+    {{--    @endif--}}
 
 
 

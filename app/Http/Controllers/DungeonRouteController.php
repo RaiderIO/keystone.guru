@@ -694,7 +694,7 @@ class DungeonRouteController extends Controller
 
         // Store it
         $dungeonroute->update([
-            'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeonroute->dungeon->currentMappingVersion->id,
             'updated_at'         => Carbon::now()->toDateTimeString(),
         ]);
 

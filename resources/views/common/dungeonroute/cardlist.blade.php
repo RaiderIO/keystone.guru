@@ -1,20 +1,22 @@
 <?php
-/** @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection */
-/** @var $affixgroup \App\Models\AffixGroup\AffixGroup|null */
-/** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
-/** @var $__env array */
-
-
+/**
+ * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $affixgroup \App\Models\AffixGroup\AffixGroup|null
+ * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var $__env array
+ * @var $orientation string
+ */
 $cols             = $cols ?? 1;
 $showDungeonImage = $showDungeonImage ?? false;
 $affixgroup       = $affixgroup ?? null;
 $cache            = $cache ?? true;
+$orientation      = $orientation ?? 'vertical';
 
 $i = 0;
 
 // @formatter:off
 $renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collection, string $header = null)
-    use($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $__env) {
+    use($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env) {
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
     <div class="row no-gutters mt-2">
@@ -29,9 +31,9 @@ $renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collect
         <?php for ($j = 0; $j < $cols; $j++) {
         $dungeonroute = $collection->get(($i * $cols) + $j);
         ?>
-        <div class="col-xl">
+        <div class="col-xl-{{ 12 / $cols }}">
             @if($dungeonroute !== null)
-                @include('common.dungeonroute.card', [
+                @include($orientation === 'horizontal' ? 'common.dungeonroute.cardhorizontal' : 'common.dungeonroute.cardvertical', [
                     'dungeonroute' => $dungeonroute,
                     'currentAffixGroup' => $currentAffixGroup,
                     'tierAffixGroup' => $affixgroup,

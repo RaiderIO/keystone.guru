@@ -10,6 +10,7 @@ use App\Http\Requests\Path\APIPathFormRequest;
 use App\Models\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -23,13 +24,18 @@ class AjaxPathController extends Controller
     use SavesPolylines;
 
     /**
-     * @param APIPathFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Path|null $path
+     * @param APIPathFormRequest          $request
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param DungeonRoute                $dungeonRoute
+     * @param Path|null                   $path
      * @return Path
      * @throws AuthorizationException
      */
-    function store(APIPathFormRequest $request, DungeonRoute $dungeonRoute, ?Path $path = null)
+    function store(
+        APIPathFormRequest          $request,
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        ?Path                       $path = null)
     {
         $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
 
@@ -54,11 +60,20 @@ class AjaxPathController extends Controller
         try {
             if ($success) {
                 // Create a new polyline and save it
-                $polyline = $this->savePolyline(Polyline::findOrNew($path->polyline_id), $path, $validated['polyline']);
+                $changedFloor = null;
+                $polyline     = $this->savePolyline(
+                    $coordinatesService,
+                    $dungeonRoute->mappingVersion,
+                    Polyline::findOrNew($path->polyline_id),
+                    $path,
+                    $validated['polyline'],
+                    $changedFloor
+                );
 
                 // Couple the path to the polyline
                 $path->update([
                     'polyline_id' => $polyline->id,
+                    'floor_id'    => optional($changedFloor)->id ?? $path->floor_id,
                 ]);
 
                 // Load the polyline so it can be echoed back to the user
@@ -82,13 +97,14 @@ class AjaxPathController extends Controller
         } catch (Exception $ex) {
             $result = response('Not found', Http::NOT_FOUND);
         }
+
         return $result;
     }
 
     /**
-     * @param Request $request
+     * @param Request      $request
      * @param DungeonRoute $dungeonRoute
-     * @param Path $path
+     * @param Path         $path
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */

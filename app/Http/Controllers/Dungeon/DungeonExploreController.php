@@ -77,7 +77,7 @@ class DungeonExploreController extends Controller
                 'dungeon'    => $dungeon,
                 'floor'      => $floor,
                 'title'      => __($dungeon->name),
-                'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->getCurrentMappingVersion())
+                'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion)
             ]);
         }
     }

@@ -42,7 +42,7 @@ class DungeonRouteResource extends JsonResource
             'title'                 => $this->title,
             'pulls'                 => $this->killZones->count(),
             'enemy_forces'          => $this->enemy_forces,
-            'enemy_forces_required' => $this->dungeon->getCurrentMappingVersion()->enemy_forces_required,
+            'enemy_forces_required' => $this->dungeon->currentMappingVersion->enemy_forces_required,
             'expires_at'            => $this->expires_at,
             'author'                => new UserResource($this->author),
             'affix_groups'          => new AffixGroupCollectionResource($this->affixes),

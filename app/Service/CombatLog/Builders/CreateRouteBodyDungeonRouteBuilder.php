@@ -82,7 +82,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
             );
         }
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->currentMappingVersion;
 
         $dungeonRoute = DungeonRoute::create([
             'public_key'         => DungeonRoute::generateRandomPublicKey(),

@@ -58,7 +58,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     {
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->currentMappingVersion;
         if ($forceImport || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion->mdt_mapping_hash, $latestMdtMappingHash);
 

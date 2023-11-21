@@ -30,6 +30,7 @@ $affixgroup = $affixgroup ?? null;
         'currentAffixGroup' => $currentAffixGroup,
         'affixgroup' => $affixgroup,
         'dungeonroutes' => $dungeonroutes,
+        'showDungeonImage' => true,
         'loadMore' => $dungeonroutes->count() >= config('keystoneguru.discover.limits.category'),
     ])
 

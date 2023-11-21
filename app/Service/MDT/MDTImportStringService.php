@@ -581,7 +581,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     private function parseObjects(ImportStringObjects $importStringObjects): ImportStringObjects
     {
-        $mappingVersion = $importStringObjects->getDungeon()->getCurrentMappingVersion();
+        $mappingVersion = $importStringObjects->getDungeon()->currentMappingVersion;
 
         $floors = $importStringObjects->getDungeon()->floorsForMapFacade(
             $importStringObjects->getDungeon()->facade_enabled
@@ -861,7 +861,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
             $warnings,
             $dungeon,
-            $dungeon->getCurrentMappingVersion(),
+            $dungeon->currentMappingVersion,
             optional($affixGroup)->hasAffix(Affix::AFFIX_TEEMING) ?? false,
             null,
             $decoded['value']['pulls']
@@ -923,7 +923,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         }
 
         $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->currentMappingVersion;
 
         // Create a dungeon route
         $dungeonRoute = DungeonRoute::create([

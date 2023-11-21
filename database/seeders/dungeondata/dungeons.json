@@ -2334,7 +2334,7 @@
                 "id": 64,
                 "index": 5,
                 "mdt_sub_level": null,
-                "ui_map_id": 1019,
+                "ui_map_id": 1029,
                 "name": "dungeons.bfa.waycrest_manor.floors.the_rupture",
                 "default": 0,
                 "facade": 0,
@@ -2350,7 +2350,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 575,
+                        "id": 903,
                         "floor1_id": 64,
                         "floor2_id": 63,
                         "direction": "up"

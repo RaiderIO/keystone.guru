@@ -194,7 +194,7 @@ class DungeonrouteTable extends InlineCode {
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
 
-            self.carouselHandler.refreshCarousel();
+            self.carouselHandler.refreshCarousel('', {autoWidth: false});
         });
 
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {
