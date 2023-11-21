@@ -3231,7 +3231,7 @@
         "mdt_mapping_hash": "da56947483ab2c5b528fff82d2bafe71",
         "created_at": "2023-11-03T09:17:58.000000Z",
         "updated_at": "2023-11-03T09:17:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 260,
@@ -3245,7 +3245,7 @@
         "mdt_mapping_hash": null,
         "created_at": "2023-11-03T09:17:58.000000Z",
         "updated_at": "2023-11-03T09:17:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 261,
@@ -3259,7 +3259,7 @@
         "mdt_mapping_hash": null,
         "created_at": "2023-11-03T09:17:58.000000Z",
         "updated_at": "2023-11-03T09:17:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 262,
@@ -3273,7 +3273,7 @@
         "mdt_mapping_hash": "42cfaf44cdfa4748217796b070237cd1",
         "created_at": "2023-11-03T11:10:46.000000Z",
         "updated_at": "2023-11-03T11:10:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 263,
@@ -3287,7 +3287,7 @@
         "mdt_mapping_hash": "2d59f6f14750f0ef85d0fd3152dcb0af",
         "created_at": "2023-11-03T12:59:19.000000Z",
         "updated_at": "2023-11-03T12:59:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 264,
@@ -3301,7 +3301,7 @@
         "mdt_mapping_hash": "a4f438519558a24c8b72bf3a36e80b38",
         "created_at": "2023-11-10T20:45:38.000000Z",
         "updated_at": "2023-11-20T12:58:10.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 265,
@@ -3315,7 +3315,7 @@
         "mdt_mapping_hash": "cf40af434ee4889edb551d0e37e38af5",
         "created_at": "2023-11-10T20:45:40.000000Z",
         "updated_at": "2023-11-20T12:58:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 266,
@@ -3329,7 +3329,7 @@
         "mdt_mapping_hash": "68f61a6779479cd201f1390d06207e03",
         "created_at": "2023-11-10T20:45:42.000000Z",
         "updated_at": "2023-11-20T12:59:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 267,
@@ -3343,7 +3343,7 @@
         "mdt_mapping_hash": "59105803bd0ab566ea1d6815eafb5e10",
         "created_at": "2023-11-10T20:45:44.000000Z",
         "updated_at": "2023-11-10T20:45:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 268,
@@ -3357,7 +3357,7 @@
         "mdt_mapping_hash": "8602861b04509feac19e3ea57b4d1232",
         "created_at": "2023-11-10T20:45:46.000000Z",
         "updated_at": "2023-11-10T20:45:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 269,
@@ -3371,7 +3371,7 @@
         "mdt_mapping_hash": "3058f194a3822e06060398b7d594a3ba",
         "created_at": "2023-11-10T20:45:48.000000Z",
         "updated_at": "2023-11-10T20:45:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 270,
@@ -3385,7 +3385,7 @@
         "mdt_mapping_hash": "87fabbcc1de7850e77bf2cf7c1046132",
         "created_at": "2023-11-10T20:45:50.000000Z",
         "updated_at": "2023-11-20T12:55:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 271,
@@ -3399,7 +3399,7 @@
         "mdt_mapping_hash": "9987f90688db010a9c0b11690c5730da",
         "created_at": "2023-11-12T21:19:29.000000Z",
         "updated_at": "2023-11-20T12:57:25.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 272,
@@ -3413,7 +3413,7 @@
         "mdt_mapping_hash": "4f550668259a7d45059bea2fc26aff15",
         "created_at": "2023-11-12T21:19:31.000000Z",
         "updated_at": "2023-11-20T13:00:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 273,
@@ -3427,7 +3427,7 @@
         "mdt_mapping_hash": "f6f071ee1012ac1e9746f147a4507e45",
         "created_at": "2023-11-12T21:19:33.000000Z",
         "updated_at": "2023-11-20T12:54:59.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 274,
