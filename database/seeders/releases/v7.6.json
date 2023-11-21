@@ -14,6 +14,28 @@
         "changes": [
             {
                 "release_changelog_id": 222,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2116,
+                "change": "Redesigned route discovery pages. Should fix issues with the layout when someone has put a long description for a route.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 222,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2132,
+                "change": "In the route discovery pages, various links for dungeons that are _not_ part of the current expansion, but _are_ part of the current season now show results as intended.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 222,
                 "release_changelog_category_id": 3,
                 "ticket_id": 2085,
                 "change": "Combined floors are now available.",

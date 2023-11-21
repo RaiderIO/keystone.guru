@@ -25,9 +25,9 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param Request    $request
-     * @param Dungeon    $dungeon
-     * @param Floor|null $floor
+     * @param FloorFormRequest $request
+     * @param Dungeon          $dungeon
+     * @param Floor|null       $floor
      *
      * @return Floor
      * @throws Exception
@@ -40,7 +40,7 @@ class FloorController extends Controller
 
         if ($floor === null) {
             $floor   = Floor::create(array_merge([
-                'dungeon_id' => $dungeon->id
+                'dungeon_id' => $dungeon->id,
             ], $validated));
             $success = $floor instanceof Floor;
         } else {
