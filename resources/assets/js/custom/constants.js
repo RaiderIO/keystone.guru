@@ -572,6 +572,8 @@ let c = {
             mousePollFrequencyMs: 100,
             // How often to send the mouse frequency, in milliseconds
             mouseSendFrequencyMs: 500,
+            // The amount of users before an overflow is initiated
+            userOverflowCount: 5
         }
     }
 };
