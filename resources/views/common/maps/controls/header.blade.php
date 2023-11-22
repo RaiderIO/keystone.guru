@@ -84,9 +84,9 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 @endisset
                 <li class="nav-item h-100">
                     <div class="row no-gutters">
-                        <div id="route_title" class="col">
+                        <div id="route_title" class="col my-1">
                             <div class="row no-gutters">
-                                <div class="col-auto">
+                                <div class="col">
                                     <h5 class="mb-0 mr-2">
                                         @isset($dungeonroute)
                                             {{ $dungeonroute->title }}
@@ -111,28 +111,29 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                                 {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
                                             </h5>
                                         </div>
-                                        <div class="col">
-
-                                        </div>
                                     @endisset
                                 @endauth
                             </div>
                         </div>
                     </div>
                     @if(!($mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore))
-                        <div class="row no-gutters">
-                            <div class="col">
-                                @if(isset($dungeonroute) && $dungeonroute->team instanceof \App\Models\Team)
-                                    <span class="text-primary">
-                                        @if($dungeonroute->team->isUserMember(Auth::user()))
-                                            <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
-                                                <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                            </a>
-                                        @else
+                        @if(isset($dungeonroute) && $dungeonroute->team instanceof \App\Models\Team)
+                            <div class="row no-gutters">
+                                <div class="col">
+                                <span class="text-primary">
+                                    @if($dungeonroute->team->isUserMember(Auth::user()))
+                                        <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
                                             <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                        @endif
-                                    </span>
-                                @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
+                                        </a>
+                                    @else
+                                        <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
+                                    @endif
+                                </span>
+                                </div>
+                            </div>
+                        @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
+                            <div class="row no-gutters">
+                                <div class="col">
                                     <span data-toggle="tooltip"
                                           title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
                                             <span class="text-warning">
@@ -140,11 +141,9 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                                             </span>
                                         {{ __('views/common.maps.map.new_mapping_version_header_title') }}
                                     </span>
-                                @else
-                                    &nbsp;
-                                @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endif
                 </li>
             </ul>
