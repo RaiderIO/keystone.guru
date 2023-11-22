@@ -35,9 +35,38 @@ class Sidebar {
             refreshTooltips();
         });
 
-        if (this.options.defaultState === 1) {
-            this.showSidebar();
+        // If we don't have a default state set, restore the state from a cookie
+        if (typeof this.options.defaultState === 'undefined' || this.options.defaultState === null) {
+            if (this._getCookieValue()) {
+                this.showSidebar()
+            } else {
+                this.hideSidebar();
+            }
         }
+        // A default state overrides the cookie preferences
+        else if (this.options.defaultState === 1) {
+            // But if we forcibly show the sidebar, do not save it in the cookie but remember the previous value instead
+            this.showSidebar(true);
+        }
+    }
+
+    /**
+     *
+     * @returns {*}
+     * @private
+     */
+    _getCookieValue() {
+        return Cookies.get(this.options.stateCookie) ?? this.options.defaultState ?? 1;
+    }
+
+    /**
+     *
+     * @param {Boolean} value
+     * @private
+     */
+    _setCookie(value) {
+        // Save the state
+        Cookies.set(this.options.stateCookie, value ? 1 : 0);
     }
 
     /**
@@ -58,12 +87,14 @@ class Sidebar {
         } else {
             $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
         }
+
+        this._setCookie(false);
     }
 
     /**
      * Shows the sidebar.
      */
-    showSidebar() {
+    showSidebar(ignoreCookie = false) {
         let $sidebar = $(this.options.sidebarSelector);
         let $sidebarToggle = $(this.options.sidebarToggleSelector);
 
@@ -77,6 +108,10 @@ class Sidebar {
             $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');
         } else {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
+        }
+
+        if (!ignoreCookie) {
+            this._setCookie(true);
         }
     }
 

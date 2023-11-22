@@ -235,6 +235,14 @@
         </tr>
         <tr>
             <td>
+                pulls_sidebar_state
+            </td>
+            <td>
+                Remembers if you've hidden the pulls sidebar or not.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 pulls_sidebar_floor_switch_visibility
             </td>
             <td>

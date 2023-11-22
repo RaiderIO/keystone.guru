@@ -170,21 +170,23 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 try {
                     if ($newlyCreated ? $npc->save() : $npc->update()) {
-                        if ($newlyCreated) {
-                            // For new NPCs go back and create enemy forces for all historical mapping versions
-                            $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
+                        if ($mdtNpc->getCount() > 0) {
+                            if ($newlyCreated) {
+                                // For new NPCs go back and create enemy forces for all historical mapping versions
+                                $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
 
-                            $this->log->importNpcsSaveNewNpc($npc->id);
-                        } else {
-                            // Create new enemy forces for this NPC for this new mapping version
-                            NpcEnemyForces::create([
-                                'mapping_version_id'   => $newMappingVersion->id,
-                                'npc_id'               => $npc->id,
-                                'enemy_forces'         => $mdtNpc->getCount(),
-                                'enemy_forces_teeming' => null,
-                            ]);
+                                $this->log->importNpcsSaveNewNpc($npc->id);
+                            } else {
+                                // Create new enemy forces for this NPC for this new mapping version
+                                NpcEnemyForces::create([
+                                    'mapping_version_id'   => $newMappingVersion->id,
+                                    'npc_id'               => $npc->id,
+                                    'enemy_forces'         => $mdtNpc->getCount(),
+                                    'enemy_forces_teeming' => null,
+                                ]);
 
-                            $this->log->importNpcsUpdateExistingNpc($npc->id);
+                                $this->log->importNpcsUpdateExistingNpc($npc->id);
+                            }
                         }
 
                         // If shrouded (zul'gamux) update the mapping version to account for that
@@ -214,8 +216,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @param MappingVersion $newMappingVersion
      * @param MDTDungeon     $mdtDungeon
      * @param Dungeon        $dungeon
+     * @param bool           $forceImport
      * @return Collection|Enemy
-     * @throws InvalidArgumentException
      */
     private function importEnemies(
         Mappingversion $currentMappingVersion,
@@ -261,7 +263,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     // We ignore MDT's position - we want to keep agency in the location we place enemies still
                     // since we value VERY MUCH the enemy location being accurate to where they are in-game
                     if (!$forceImport) {
-                        $fields = array_merge($fields, ['lat', 'lng']);
+                        $fields = array_merge($fields, ['floor_id', 'lat', 'lng']);
                     }
 
                     $updatedFields = [];
@@ -313,13 +315,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 ->get();
 
             // Conserve the enemy_pack_id
-            $enemiesWithGroups = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
-            $enemyPacks        = $enemiesWithGroups->groupBy('enemy_pack_id');
+            $mdtEnemiesWithGroups = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
+            $mdtEnemyPacks        = $mdtEnemiesWithGroups->groupBy('enemy_pack_id');
 
             // Save enemy packs
-            foreach ($enemyPacks as $groupIndex => $enemiesWithGroupsByEnemyPack) {
-                /** @var $enemiesWithGroupsByEnemyPack Collection|Enemy[] */
-                $enemiesWithGroupsByEnemyPack = $enemiesWithGroupsByEnemyPack
+            foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
+                /** @var $mdtEnemiesWithGroupsByEnemyPack Collection|Enemy[] */
+                $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
                     ->filter(function (Enemy $enemy) {
                         return $enemy->teeming === null;
                     })
@@ -334,7 +336,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // We do not re-import the lat/lng from MDT - we allow ourselves to adjust the lat/lng, so we must
                 // fetch the adjusted lat/lng by matching enemies with what we actually saved
                 // 1. Get a list of unique keys which we must look for in the real enemy list
-                $enemiesWithGroupsByEnemyPackUniqueIds = $enemiesWithGroupsByEnemyPack->map(function (Enemy $enemy) {
+                $enemiesWithGroupsByEnemyPackUniqueIds = $mdtEnemiesWithGroupsByEnemyPack->map(function (Enemy $enemy) {
                     return $enemy->getUniqueKey();
                 });
                 // 2. Find the enemies that were saved in the database by key
@@ -344,7 +346,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $enemyPack = EnemyPack::create([
                     'mapping_version_id' => $newMappingVersion->id,
-                    'floor_id'           => $enemiesWithGroupsByEnemyPack->first()->floor_id,
+                    'floor_id'           => $boundingBoxEnemies->first()->floor_id,
                     'group'              => $groupIndex,
                     'teeming'            => null,
                     'faction'            => Faction::FACTION_ANY,
@@ -355,13 +357,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 if ($enemyPack === null) {
                     throw new Exception('Unable to save enemy pack!');
                 }
-                $this->log->importEnemyPacksSaveNewEnemyPackOK($enemyPack->id, $enemiesWithGroupsByEnemyPack->count());
+                $this->log->importEnemyPacksSaveNewEnemyPackOK($enemyPack->id, $mdtEnemiesWithGroupsByEnemyPack->count());
 
                 try {
                     $this->log->importEnemyPacksCoupleEnemyToPackStart($enemyPack->id);
 //                logger()->channel('stderr')->info(sprintf('- Enemy Pack %d OK (%d enemies)', $enemyPack->id, $enemiesWithGroupsByEnemyPack->count()));
 
-                    foreach ($enemiesWithGroupsByEnemyPack as $enemyWithGroup) {
+                    foreach ($mdtEnemiesWithGroupsByEnemyPack as $enemyWithGroup) {
                         // In the list of enemies that we saved to the database, find the enemy that still had the group intact.
                         // Write the saved enemy's enemy pack back to the database
                         $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $enemyWithGroup->npc_id, $enemyWithGroup->mdt_id);
