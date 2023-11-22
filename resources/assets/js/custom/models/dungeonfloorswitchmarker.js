@@ -213,6 +213,12 @@ class DungeonFloorSwitchMarker extends Icon {
         return result;
     }
 
+    shouldBeVisible() {
+        return super.shouldBeVisible() &&
+            (getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS || getState().getMapFacadeStyle() === MAP_FACADE_STYLE_BOTH)
+            ;
+    }
+
     /**
      * @inheritDoc
      */

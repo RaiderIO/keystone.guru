@@ -327,17 +327,19 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         $result = true;
 
-        $this->load('dungeon');
-        // Create new enemy forces for this enemy for each relevant mapping version
-        // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
-        $mappingVersions = optional($this->dungeon)->mappingVersions ?? MappingVersion::all();
-        foreach ($mappingVersions as $mappingVersion) {
-            $result = $result && NpcEnemyForces::create([
-                    'npc_id'               => $this->id,
-                    'mapping_version_id'   => $mappingVersion->id,
-                    'enemy_forces'         => $existingEnemyForces ?? 0,
-                    'enemy_forces_teeming' => null,
-                ]);
+        if ($existingEnemyForces > 0) {
+            $this->load('dungeon');
+            // Create new enemy forces for this enemy for each relevant mapping version
+            // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
+            $mappingVersions = optional($this->dungeon)->mappingVersions ?? MappingVersion::all();
+            foreach ($mappingVersions as $mappingVersion) {
+                $result = $result && NpcEnemyForces::create([
+                        'npc_id'               => $this->id,
+                        'mapping_version_id'   => $mappingVersion->id,
+                        'enemy_forces'         => $existingEnemyForces ?? 0,
+                        'enemy_forces_teeming' => null,
+                    ]);
+            }
         }
 
         return $result;

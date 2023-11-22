@@ -106,7 +106,7 @@ class MappingService implements MappingServiceInterface
 
         $newMappingVersion = MappingVersion::find($id);
 
-        // Copy all map icons over from the previous mapping version - this allows us to keep adding icons regardless of
+        // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
         // MDT mapping
         if ($currentMappingVersion !== null) {
             foreach ($currentMappingVersion->mapIcons as $mapIcon) {
@@ -119,6 +119,10 @@ class MappingService implements MappingServiceInterface
 
             foreach ($currentMappingVersion->floorUnions as $floorUnion) {
                 $floorUnion->cloneForNewMappingVersion($newMappingVersion);
+            }
+
+            foreach ($currentMappingVersion->floorUnionAreas as $floorUnionArea) {
+                $floorUnionArea->cloneForNewMappingVersion($newMappingVersion);
             }
         }
 

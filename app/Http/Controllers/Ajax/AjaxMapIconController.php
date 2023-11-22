@@ -175,15 +175,16 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param MapIconFormRequest $request
-     * @param MapIcon|null       $mapIcon
+     * @param MapIconFormRequest          $request
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param MapIcon|null                $mapIcon
      * @return MapIcon
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function adminStore(MapIconFormRequest $request, MapIcon $mapIcon = null): MapIcon
+    public function adminStore(MapIconFormRequest $request, CoordinatesServiceInterface $coordinatesService, MapIcon $mapIcon = null): MapIcon
     {
-        return $this->store($request, null, $mapIcon);
+        return $this->store($request, $coordinatesService, null, $mapIcon);
     }
 
 
