@@ -14,7 +14,7 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
 
     /**
      * @param string|null $mdtMappingHash
-     * @param string $latestMdtMappingHash
+     * @param string      $latestMdtMappingHash
      * @return void
      */
     public function importMappingVersionFromMDTMappingChanged(?string $mdtMappingHash, string $latestMdtMappingHash): void
@@ -147,6 +147,15 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
      * @param string $uniqueKey
      * @return void
      */
+    public function importEnemiesSkipIgnoredByNpcEnemy(string $uniqueKey): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param string $uniqueKey
+     * @return void
+     */
     public function importEnemiesSkipTeemingEnemy(string $uniqueKey): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -154,7 +163,7 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
 
     /**
      * @param string $uniqueKey
-     * @param array $updatedFields
+     * @param array  $updatedFields
      * @return void
      */
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void
