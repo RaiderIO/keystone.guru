@@ -28,6 +28,12 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
+    /** @var array Ignore these enemies when their NPC ID is in this list */
+    private const IGNORE_ENEMY_NPC_IDS = [
+        // Black Rook Hold, Troubled Soul
+        98362,
+    ];
+
     private CacheServiceInterface $cacheService;
 
     private CoordinatesServiceInterface $coordinatesService;
@@ -237,6 +243,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
             foreach ($enemies as $enemy) {
+                if (in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS)) {
+                    $this->log->importEnemiesSkipIgnoredByNpcEnemy($enemy->getUniqueKey());
+                    continue;
+                }
+
                 // Skip teeming enemies for now - this affix was removed ages ago
                 if ($enemy->teeming !== null) {
                     $this->log->importEnemiesSkipTeemingEnemy($enemy->getUniqueKey());
