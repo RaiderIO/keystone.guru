@@ -245,9 +245,13 @@ let c = {
     },
     map: {
         settings: {
+            // Context menu when right clicking stuff
+            contextmenu: true,
+            zoomControl: false,
             minZoom: 1,
             maxZoom: 5,
-            zoomSnap: 0.2
+            zoomSnap: 0.2,
+            boxZoom: false
         },
         admin: {
             mapobject: {

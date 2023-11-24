@@ -171,9 +171,6 @@ class DungeonMap extends Signalable {
             // drawControl: true,
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
             crs: L.CRS.Simple,
-            // Context menu when right clicking stuff
-            contextmenu: true,
-            zoomControl: false,
             gestureHandling: this.options.gestureHandling
         }, c.map.settings));
         // Make sure we can place things in the center of the map
