@@ -28,5 +28,15 @@
         "direction": null,
         "lat": -220.9,
         "lng": 243.86
+    },
+    {
+        "id": 1137,
+        "mapping_version_id": 288,
+        "floor_id": 2,
+        "source_floor_id": null,
+        "target_floor_id": 3,
+        "direction": null,
+        "lat": -220.9,
+        "lng": 243.86
     }
 ]

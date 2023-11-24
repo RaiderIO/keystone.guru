@@ -28,6 +28,12 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
+    /** @var array Ignore these enemies when their NPC ID is in this list */
+    private const IGNORE_ENEMY_NPC_IDS = [
+        // Black Rook Hold, Troubled Soul
+        98362,
+    ];
+
     private CacheServiceInterface $cacheService;
 
     private CoordinatesServiceInterface $coordinatesService;
@@ -237,6 +243,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
             foreach ($enemies as $enemy) {
+                if (in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS)) {
+                    $this->log->importEnemiesSkipIgnoredByNpcEnemy($enemy->getUniqueKey());
+                    continue;
+                }
+
                 // Skip teeming enemies for now - this affix was removed ages ago
                 if ($enemy->teeming !== null) {
                     $this->log->importEnemiesSkipTeemingEnemy($enemy->getUniqueKey());
@@ -323,12 +334,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 /** @var $mdtEnemiesWithGroupsByEnemyPack Collection|Enemy[] */
                 $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
                     ->filter(function (Enemy $enemy) {
-                        return $enemy->teeming === null;
+                        return $enemy->teeming === null && !in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS);
                     })
                     ->keyBy('id');
 
-                // Enemies without a group - don't import that group
-                if (is_null($groupIndex) || $groupIndex === -1) {
+                // Enemies without a group - don't import that group, or no enemies assigned to the group
+                if (is_null($groupIndex) || $groupIndex === -1 || $mdtEnemiesWithGroupsByEnemyPack->isEmpty()) {
                     continue;
                 }
 
@@ -344,9 +355,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     return $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false;
                 });
 
+                /** @var Enemy $firstEnemy */
+                $firstEnemy = ($boundingBoxEnemies->first() ?? $mdtEnemiesWithGroupsByEnemyPack->first());
+
                 $enemyPack = EnemyPack::create([
                     'mapping_version_id' => $newMappingVersion->id,
-                    'floor_id'           => $boundingBoxEnemies->first()->floor_id,
+                    'floor_id'           => $firstEnemy->floor_id,
                     'group'              => $groupIndex,
                     'teeming'            => null,
                     'faction'            => Faction::FACTION_ANY,
@@ -361,7 +375,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 try {
                     $this->log->importEnemyPacksCoupleEnemyToPackStart($enemyPack->id);
-//                logger()->channel('stderr')->info(sprintf('- Enemy Pack %d OK (%d enemies)', $enemyPack->id, $enemiesWithGroupsByEnemyPack->count()));
 
                     foreach ($mdtEnemiesWithGroupsByEnemyPack as $enemyWithGroup) {
                         // In the list of enemies that we saved to the database, find the enemy that still had the group intact.
@@ -370,7 +383,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                         if ($savedEnemy->update(['enemy_pack_id' => $enemyPack->id])) {
                             $this->log->importEnemyPacksCoupleEnemyToEnemyPack($savedEnemy->id);
-//                        logger()->channel('stderr')->info(sprintf('-- Enemy %d -> Enemy Pack %d OK', $savedEnemy->id, $enemyPack->id));
                         } else {
                             throw new Exception('Unable to update enemy with enemy pack!');
                         }

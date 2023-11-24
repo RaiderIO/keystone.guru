@@ -605,6 +605,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                  * 5 = color
                  * 6 = drawlayer
                  * 7 = smooth
+                 *
+                 * Triangle
+                 * 1 = rotation (rad)
                  */
                 // Fix a strange issue where 6 would sometimes not be set - and then the array may look like this:
                 /** d: {
@@ -645,9 +648,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     continue;
                 }
 
+                // Triangles (t = triangle)
+                // MethodDungeonTools.lua:2554
+                if (isset($object['t']) && $object['t']) {
+                    $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $object['l'], $object['t'][0]);
+                }
                 // If it's a line
                 // MethodDungeonTools.lua:2529
-                if (isset($object['l'])) {
+                else if (isset($object['l'])) {
                     $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $object['l']);
                 }
                 // Map comment (n = note)
@@ -655,11 +663,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 else if (isset($object['n']) && $object['n']) {
                     $this->parseObjectComment($importStringObjects, $mappingVersion, $floor, $details);
                 }
-                // Triangles (t = triangle)
-                // MethodDungeonTools.lua:2554
-                // else if (isset($object['t']) && $object['t']) {
-
-                // }
 
             } catch (ImportWarning $warning) {
                 $importStringObjects->getWarnings()->push($warning);
@@ -667,6 +670,61 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         }
 
         return $importStringObjects;
+    }
+
+    /**
+     * @param ImportStringObjects $importStringObjects
+     * @param MappingVersion      $mappingVersion
+     * @param Floor               $floor
+     * @param array               $details
+     * @param array               $line
+     * @param float               $rotationRad
+     * @return void
+     */
+    private function parseObjectTriangle(
+        ImportStringObjects $importStringObjects,
+        MappingVersion      $mappingVersion,
+        Floor               $floor,
+        array               $details,
+        array               $line,
+        float               $rotationRad): void
+    {
+        // Don't parse as paths, but as free-drawn instead
+        $details[6] = true;
+
+        // Create the main line
+        $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $line);
+
+        // Second to last and last point
+        $lastPoint    = [
+            $line[count($line) - 2],
+            last($line),
+        ];
+        $lastPoint[0] = (float)$lastPoint[0];
+        $lastPoint[1] = (float)$lastPoint[1];
+
+
+        $lastPointLatLng = new LatLng($lastPoint[0], $lastPoint[1], $floor);
+        // Create the left part of the arrow
+        $leftPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() + 5, $floor))->rotate(
+            $lastPointLatLng,
+            rad2deg($rotationRad)
+        );
+
+        $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
+            $lastPoint,
+            [$leftPartLatLng->getLat(), $leftPartLatLng->getLng()]
+        ));
+
+        // Create the right part of the arrow
+        $rightPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() - 5, $floor))->rotate(
+            $lastPointLatLng,
+            rad2deg($rotationRad)
+        );
+        $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
+            $lastPoint,
+            [$rightPartLatLng->getLat(), $rightPartLatLng->getLng()],
+        ));
     }
 
     /**
@@ -711,13 +769,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $vertices[] = $latLng->toArray();
         }
 
+        // Between 1 and 5
+        $weight = min(5, max(1, (int)$details[0]));
+
         $lineOrPathAttribute = [
             'floor_id' => ($dominantFloor ?? $floor)->id,
             'polyline' => [
                 // Make sure there is a pound sign in front of the value at all times, but never double up should
                 // MDT decide to suddenly place it here
                 'color'         => (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4],
-                'weight'        => (int)$details[0],
+                'weight'        => $weight,
                 'vertices_json' => json_encode($vertices),
                 // To be set later
                 // 'model_id' => ?,
