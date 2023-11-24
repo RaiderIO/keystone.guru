@@ -21,6 +21,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float      $lng
  * @property string     $direction
  *
+ * @property string     $floorCouplingDirection
+ * @property float      $ingameX
+ * @property float      $ingameY
+ *
  * @property Floor      $floor
  * @property Floor|null $sourceFloor
  * @property Floor      $targetFloor
@@ -32,7 +36,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
 
-    protected $appends  = ['floorCouplingDirection'];
+    protected $appends  = ['floorCouplingDirection', 'ingameX', 'ingameY'];
     protected $hidden   = ['floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
     protected $fillable = [
         'id',
@@ -55,17 +59,44 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
 
     public $timestamps = false;
 
+    private string $floorCouplingDirection = 'unknown';
+
+    /** @var float Future Laravel-me, please find a better solution for this Q.Q */
+    private float $ingameX = 0;
+    private float $ingameY = 0;
+
     /**
      * @return string
      */
     public function getFloorCouplingDirectionAttribute(): string
     {
+        // Prevent double setting
+        if ($this->floorCouplingDirection !== 'unknown') {
+            return $this->floorCouplingDirection;
+        }
+
         /** @var FloorCoupling|null $floorCoupling */
         $floorCoupling = FloorCoupling::where('floor1_id', $this->source_floor_id ?? $this->floor_id)
             ->where('floor2_id', $this->target_floor_id)
             ->first();
 
-        return $floorCoupling === null ? 'unknown' : $floorCoupling->direction;
+        return $this->floorCouplingDirection = ($floorCoupling === null ? 'unknown' : $floorCoupling->direction);
+    }
+
+    /**
+     * @return float
+     */
+    public function getIngameXAttribute(): float
+    {
+        return $this->ingameX;
+    }
+
+    /**
+     * @return float
+     */
+    public function getIngameYAttribute(): float
+    {
+        return $this->ingameY;
     }
 
     /**
@@ -123,5 +154,27 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
         }
 
         return $result;
+    }
+
+    /**
+     * @param float $ingameX
+     * @return DungeonFloorSwitchMarker
+     */
+    public function setIngameX(float $ingameX): DungeonFloorSwitchMarker
+    {
+        $this->ingameX = $ingameX;
+
+        return $this;
+    }
+
+    /**
+     * @param float $ingameY
+     * @return DungeonFloorSwitchMarker
+     */
+    public function setIngameY(float $ingameY): DungeonFloorSwitchMarker
+    {
+        $this->ingameY = $ingameY;
+
+        return $this;
     }
 }

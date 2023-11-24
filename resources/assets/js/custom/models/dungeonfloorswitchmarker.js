@@ -151,6 +151,16 @@ class DungeonFloorSwitchMarker extends Icon {
                     self.direction = value;
                 },
                 default: null
+            }),
+            new Attribute({
+                name: 'ingameX',
+                type: 'float',
+                edit: false,
+            }),
+            new Attribute({
+                name: 'ingameY',
+                type: 'float',
+                edit: false,
             })
         ]);
     }
