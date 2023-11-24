@@ -250,8 +250,10 @@ let c = {
             zoomControl: false,
             minZoom: 1,
             maxZoom: 5,
-            zoomSnap: 0.2,
-            boxZoom: false
+            zoomSnap: 0.1,
+            boxZoom: false,
+            wheelDebounceTime: 100,
+            wheelPxPerZoomLevel: 400
         },
         admin: {
             mapobject: {

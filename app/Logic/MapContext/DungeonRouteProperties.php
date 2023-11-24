@@ -25,7 +25,8 @@ trait DungeonRouteProperties
     }
 
     /**
-     * @param array $publicKeys
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param array                       $publicKeys
      * @return Collection
      */
     private function getDungeonRoutesProperties(CoordinatesServiceInterface $coordinatesService, array $publicKeys): Collection
