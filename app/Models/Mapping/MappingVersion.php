@@ -427,6 +427,9 @@ class MappingVersion extends Model
 
         if ($useFacade) {
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                // Load the direction first prior to changing the floor_id, otherwise the direction is messed up
+                $dungeonFloorSwitchMarker->setAttribute('direction', $dungeonFloorSwitchMarker->getFloorCouplingDirectionAttribute());
+
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
                     $dungeonFloorSwitchMarker->getLatLng()

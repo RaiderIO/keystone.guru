@@ -60,7 +60,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
      */
     public function getFloorCouplingDirectionAttribute(): string
     {
-        /** @var FloorCoupling $floorCoupling */
+        /** @var FloorCoupling|null $floorCoupling */
         $floorCoupling = FloorCoupling::where('floor1_id', $this->source_floor_id ?? $this->floor_id)
             ->where('floor2_id', $this->target_floor_id)
             ->first();

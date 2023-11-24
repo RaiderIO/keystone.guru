@@ -213,12 +213,6 @@ class DungeonFloorSwitchMarker extends Icon {
         return result;
     }
 
-    shouldBeVisible() {
-        return super.shouldBeVisible() &&
-            (getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS || getState().getMapFacadeStyle() === MAP_FACADE_STYLE_BOTH)
-            ;
-    }
-
     /**
      * @inheritDoc
      */
@@ -280,6 +274,10 @@ class DungeonFloorSwitchMarker extends Icon {
         } else {
             return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
         }
+    }
+
+    isEditable() {
+        return super.isEditable() && getState().getMapContext() instanceof MapContextMappingVersionEdit;
     }
 
     toString() {
