@@ -7,7 +7,9 @@
         "target_floor_id": 211,
         "direction": null,
         "lat": -101.11,
-        "lng": 202.38
+        "lng": 202.38,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 655,
@@ -17,7 +19,9 @@
         "target_floor_id": 208,
         "direction": null,
         "lat": -129.44,
-        "lng": 204.61
+        "lng": 204.61,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 660,
@@ -27,7 +31,9 @@
         "target_floor_id": 209,
         "direction": null,
         "lat": -187.21,
-        "lng": 192.15
+        "lng": 192.15,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 661,
@@ -37,7 +43,9 @@
         "target_floor_id": 211,
         "direction": null,
         "lat": -166.26,
-        "lng": 175.49
+        "lng": 175.49,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 668,
@@ -47,7 +55,9 @@
         "target_floor_id": 213,
         "direction": null,
         "lat": -144.02,
-        "lng": 198.51
+        "lng": 198.51,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 697,
@@ -57,7 +67,9 @@
         "target_floor_id": 211,
         "direction": null,
         "lat": -101.11,
-        "lng": 202.38
+        "lng": 202.38,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 698,
@@ -67,7 +79,9 @@
         "target_floor_id": 208,
         "direction": null,
         "lat": -129.44,
-        "lng": 204.61
+        "lng": 204.61,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 703,
@@ -77,7 +91,9 @@
         "target_floor_id": 209,
         "direction": null,
         "lat": -187.21,
-        "lng": 192.15
+        "lng": 192.15,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 704,
@@ -87,7 +103,9 @@
         "target_floor_id": 211,
         "direction": null,
         "lat": -166.26,
-        "lng": 175.49
+        "lng": 175.49,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 711,
@@ -97,6 +115,8 @@
         "target_floor_id": 213,
         "direction": null,
         "lat": -144.02,
-        "lng": 198.51
+        "lng": 198.51,
+        "ingameX": 0,
+        "ingameY": 0
     }
 ]

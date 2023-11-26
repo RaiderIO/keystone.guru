@@ -7,7 +7,9 @@
         "target_floor_id": 202,
         "direction": null,
         "lat": -212.63,
-        "lng": 238.86
+        "lng": 238.86,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 567,
@@ -17,6 +19,8 @@
         "target_floor_id": 202,
         "direction": null,
         "lat": -212.63,
-        "lng": 238.86
+        "lng": 238.86,
+        "ingameX": 0,
+        "ingameY": 0
     }
 ]

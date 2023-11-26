@@ -7,7 +7,9 @@
         "target_floor_id": 17,
         "direction": null,
         "lat": -189.38,
-        "lng": 150.88
+        "lng": 150.88,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 3,
@@ -17,7 +19,9 @@
         "target_floor_id": 18,
         "direction": null,
         "lat": -188.13,
-        "lng": 184
+        "lng": 184,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 263,
@@ -27,7 +31,9 @@
         "target_floor_id": 18,
         "direction": null,
         "lat": -199,
-        "lng": 184
+        "lng": 184,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 264,
@@ -37,7 +43,9 @@
         "target_floor_id": 17,
         "direction": null,
         "lat": -189,
-        "lng": 150
+        "lng": 150,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 285,
@@ -47,7 +55,9 @@
         "target_floor_id": 18,
         "direction": null,
         "lat": -199,
-        "lng": 184
+        "lng": 184,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 286,
@@ -57,7 +67,9 @@
         "target_floor_id": 17,
         "direction": null,
         "lat": -189,
-        "lng": 150
+        "lng": 150,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 337,
@@ -67,7 +79,9 @@
         "target_floor_id": 18,
         "direction": null,
         "lat": -190.27,
-        "lng": 183.64
+        "lng": 183.64,
+        "ingameX": 0,
+        "ingameY": 0
     },
     {
         "id": 338,
@@ -77,6 +91,8 @@
         "target_floor_id": 17,
         "direction": null,
         "lat": -189,
-        "lng": 150
+        "lng": 150,
+        "ingameX": 0,
+        "ingameY": 0
     }
 ]
