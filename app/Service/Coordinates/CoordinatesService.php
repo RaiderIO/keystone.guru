@@ -28,6 +28,7 @@ class CoordinatesService implements CoordinatesServiceInterface
      * @param LatLng $latLng
      *
      * @return IngameXY
+     * @see mapcontext.js
      */
     public function calculateIngameLocationForMapLocation(LatLng $latLng): IngameXY
     {

@@ -290,6 +290,39 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @param latLng {L.latLng}
+     * @param floor {{}|Number}
+     * @returns {{}}
+     */
+    getIngameXY(latLng, floor) {
+        if (typeof floor === 'number') {
+            let foundFloor = this.getFloorById(floor);
+
+            if (typeof foundFloor !== 'object') {
+                console.error(`Unable to convert ingame xy, cannot find floor for id ${floor}`);
+            } else {
+                floor = foundFloor;
+            }
+        }
+
+        let MAP_MAX_LAT = -256;
+        let MAP_MAX_LNG = 384;
+
+        let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
+        let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
+
+        // Invert the lat/lngs
+        let factorLat = ((MAP_MAX_LAT - latLng.lat) / MAP_MAX_LAT);
+        let factorLng = ((MAP_MAX_LNG - latLng.lng) / MAP_MAX_LNG);
+
+        return [
+            (ingameMapSizeX * factorLng) + floor.ingame_min_x,
+            (ingameMapSizeY * factorLat) + floor.ingame_min_y
+        ];
+    }
+
+    /**
+     *
      * @returns {{}}
      */
     getDungeon() {

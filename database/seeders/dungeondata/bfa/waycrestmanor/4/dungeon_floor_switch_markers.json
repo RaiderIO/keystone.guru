@@ -5,6 +5,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -130.76,
         "lng": 130.5
@@ -15,6 +16,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 64,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -71.51,
         "lng": 265.75
@@ -25,6 +27,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -130.76,
         "lng": 130.5
@@ -35,6 +38,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 64,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -71.51,
         "lng": 265.75
@@ -45,6 +49,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -130.76,
         "lng": 130.5
@@ -55,6 +60,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 64,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -71.51,
         "lng": 265.75
@@ -65,6 +71,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -130.76,
         "lng": 130.5
@@ -75,6 +82,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 64,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -71.51,
         "lng": 265.75
@@ -85,6 +93,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -130.76,
         "lng": 130.5
@@ -95,6 +104,7 @@
         "floor_id": 63,
         "source_floor_id": null,
         "target_floor_id": 64,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -71.51,
         "lng": 265.75
