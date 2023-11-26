@@ -250,7 +250,7 @@ let c = {
             zoomControl: false,
             minZoom: 1,
             maxZoom: 5,
-            zoomSnap: 0.1,
+            zoomSnap: 0,
             boxZoom: false,
             wheelDebounceTime: 100,
             wheelPxPerZoomLevel: 400
@@ -436,7 +436,7 @@ let c = {
         dungeonfloorswitchmarker: {
             floorUnionConnectionPolylineOptions: {
                 color: '#006b77',
-                weight: 5,
+                weight: 3,
             }
         },
         path: {

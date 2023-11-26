@@ -49,6 +49,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
 /**
  * @property {Number|null} source_floor_id
  * @property {Number} target_floor_id
+ * @property {Number|null} linked_dungeon_floor_switch_marker_id
  * @property {String} floorCouplingDirection
  * @property {String|null} direction
  */
@@ -118,6 +119,11 @@ class DungeonFloorSwitchMarker extends Icon {
                 default: null
             }),
             new Attribute({
+                name: 'linked_dungeon_floor_switch_marker_id',
+                type: 'int',
+                default: -1
+            }),
+            new Attribute({
                 name: 'floorCouplingDirection',
                 type: 'string',
                 edit: false,
@@ -156,11 +162,13 @@ class DungeonFloorSwitchMarker extends Icon {
                 name: 'ingameX',
                 type: 'float',
                 edit: false,
+                save: false
             }),
             new Attribute({
                 name: 'ingameY',
                 type: 'float',
                 edit: false,
+                save: false
             })
         ]);
     }
@@ -203,18 +211,12 @@ class DungeonFloorSwitchMarker extends Icon {
 
         /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
         let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-        // @TODO Hacky fix to disable floor connections in Waycrest Manor - it's bugged there, see #2084
-        if (this.floor_id !== 269 && this.source_floor_id !== null && this.target_floor_id !== null) {
-            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(
-                this.target_floor_id,
-                this.source_floor_id,
-                this.layer.getLatLng(),
-                true
-            );
+        if (this.linked_dungeon_floor_switch_marker_id !== null) {
+            let linkedDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
 
-            if (closestDungeonFloorSwitchMarker !== null) {
+            if (linkedDungeonFloorSwitchMarker !== null) {
                 result = L.polyline(
-                    [this.layer.getLatLng(), closestDungeonFloorSwitchMarker.layer.getLatLng()],
+                    [this.layer.getLatLng(), linkedDungeonFloorSwitchMarker.layer.getLatLng()],
                     c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions
                 );
             }
