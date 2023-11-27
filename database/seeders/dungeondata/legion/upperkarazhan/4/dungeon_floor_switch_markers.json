@@ -8,9 +8,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -42.44,
-        "lng": 81.83,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 81.83
     },
     {
         "id": 189,
@@ -21,8 +19,6 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -149.52,
-        "lng": 281.3,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 281.3
     }
 ]

@@ -8,9 +8,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127.22,
-        "lng": 107.19,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 107.19
     },
     {
         "id": 371,
@@ -21,9 +19,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127.22,
-        "lng": 107.19,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 107.19
     },
     {
         "id": 374,
@@ -34,9 +30,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 173.74,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 173.74
     },
     {
         "id": 389,
@@ -47,9 +41,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 173,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 173
     },
     {
         "id": 390,
@@ -60,9 +52,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 107,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 107
     },
     {
         "id": 409,
@@ -73,9 +63,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 173,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 173
     },
     {
         "id": 410,
@@ -86,9 +74,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 107,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 107
     },
     {
         "id": 419,
@@ -99,9 +85,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 173,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 173
     },
     {
         "id": 420,
@@ -112,9 +96,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 107,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 107
     },
     {
         "id": 433,
@@ -125,9 +107,7 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 107,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 107
     },
     {
         "id": 434,
@@ -138,8 +118,6 @@
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -127,
-        "lng": 173,
-        "ingameX": 0,
-        "ingameY": 0
+        "lng": 173
     }
 ]
