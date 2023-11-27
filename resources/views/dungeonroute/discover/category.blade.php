@@ -20,7 +20,6 @@ $affixgroup = $affixgroup ?? null;
 
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
-        'cols' => 2,
         'category' => $category,
         'title' => $title,
         'dungeonroutes' => $dungeonroutes,
