@@ -34,16 +34,18 @@
         'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
 
-    @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
-        'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
-        'link' => route('dungeonroutes.discoverdungeon.thisweek', ['expansion' => $expansion, 'dungeon' => $dungeon]),
-        'currentAffixGroup' => $currentAffixGroup,
-        'affixgroup' => $currentAffixGroup,
-        'dungeonroutes' => $dungeonroutes['thisweek'],
-        'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
-    ])
+    @if($dungeon->gameVersion->has_seasons)
+        @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
+            'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
+            'link' => route('dungeonroutes.discoverdungeon.thisweek', ['expansion' => $expansion, 'dungeon' => $dungeon]),
+            'currentAffixGroup' => $currentAffixGroup,
+            'affixgroup' => $currentAffixGroup,
+            'dungeonroutes' => $dungeonroutes['thisweek'],
+            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
+            'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
+        ])
+    @endif
 
     @if( !$adFree && !$isMobile)
         <div align="center" class="mt-4">
@@ -51,16 +53,19 @@
         </div>
     @endif
 
-    @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
-        'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
-        'link' => route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $expansion, 'dungeon' => $dungeon]),
-        'currentAffixGroup' => $currentAffixGroup,
-        'affixgroup' => $nextAffixGroup,
-        'dungeonroutes' => $dungeonroutes['nextweek'],
-        'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
-        'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
-    ])
+    @if($dungeon->gameVersion->has_seasons)
+        @include('dungeonroute.discover.panel', [
+            'expansion' => $expansion,
+            'title' => __('views/dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
+            'link' => route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $expansion, 'dungeon' => $dungeon]),
+            'currentAffixGroup' => $currentAffixGroup,
+            'affixgroup' => $nextAffixGroup,
+            'dungeonroutes' => $dungeonroutes['nextweek'],
+            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
+            'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
+        ])
+    @endif
+
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.dungeon.overview.newly_published_routes'),

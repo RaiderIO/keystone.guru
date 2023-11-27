@@ -213,7 +213,7 @@ return [
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [
-            'count' => 20,
+            'count' => 12,
         ],
         'service'  => [
             /** Redis prefix */
