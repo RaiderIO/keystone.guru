@@ -24,6 +24,7 @@
             'dungeon' => $dungeon,
             'floor' => $floor,
             'edit' => false,
+            'echo' => false,
             'mapContext' => $mapContext,
             'show' => [
                 'header' => true,
