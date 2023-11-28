@@ -34,6 +34,12 @@
         'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
 
+    @if( !$adFree && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
+
     @if($dungeon->gameVersion->has_seasons)
         @include('dungeonroute.discover.panel', [
             'expansion' => $expansion,
@@ -66,6 +72,12 @@
         ])
     @endif
 
+    @if( !$adFree && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
+
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
         'title' => __('views/dungeonroute.discover.dungeon.overview.newly_published_routes'),
@@ -75,6 +87,12 @@
         'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $expansion->showDiscoverRoutesCardDungeonImage(),
     ])
+
+    @if( !$adFree && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
 
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
         @include('common.modal.userreport.dungeonroute')
