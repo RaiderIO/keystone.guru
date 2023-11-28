@@ -15,7 +15,7 @@
  */
 
 $region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
-$now = \Carbon\Carbon::now();
+$now    = \Carbon\Carbon::now();
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
@@ -51,7 +51,7 @@ $now = \Carbon\Carbon::now();
                     </thead>
                     <tbody>
                     <?php
-                    $affixGroups = $seasonService->getDisplayedAffixGroups($offset);
+                    $affixGroups     = $seasonService->getDisplayedAffixGroups($offset);
                     $affixGroupIndex = 0;
                     // @formatter:off
                     foreach($affixGroups as $index => $arr){
@@ -95,7 +95,7 @@ $now = \Carbon\Carbon::now();
                     }
                     // @formatter:on
 
-                                ?>
+                    ?>
                     </tbody>
                 </table>
                 <div class="row mt-2">
@@ -132,6 +132,12 @@ $now = \Carbon\Carbon::now();
     </div>
 
     <div class="discover">
+        @if( !$adFree && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_affixes', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
+
         @include('dungeonroute.discover.panel', [
             'expansion' => $expansion,
             'title' => __('views/misc.affixes.popular_routes_by_current_affixes'),
@@ -142,6 +148,12 @@ $now = \Carbon\Carbon::now();
             'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
             'showDungeonImage' => true,
         ])
+
+        @if( !$adFree && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_affixes', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
 
         <?php /* The next week's affix group is current for that week */ ?>
         @include('dungeonroute.discover.panel', [
@@ -154,6 +166,12 @@ $now = \Carbon\Carbon::now();
             'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
             'showDungeonImage' => true,
         ])
+
+        @if( !$adFree && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_affixes', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
     </div>
 
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
