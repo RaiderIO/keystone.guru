@@ -565,7 +565,7 @@ class MapObject extends Signalable {
 
     /**
      * Rebuild the decorators for this route (directional arrows etc).
-     * @private
+     * @protected
      */
     _rebuildDecorator() {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);

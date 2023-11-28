@@ -436,7 +436,11 @@ let c = {
         dungeonfloorswitchmarker: {
             floorUnionConnectionPolylineOptions: {
                 color: '#006b77',
+                opacity: 0.1,
                 weight: 3,
+            },
+            floorUnionConnectionPolylineMouseoverOptions: {
+                opacity: 1
             }
         },
         path: {

@@ -60,6 +60,8 @@ class DungeonFloorSwitchMarker extends Icon {
 
         let self = this;
 
+        this.mouseOver = false;
+
         this.label = 'DungeonFloorSwitchMarker';
         // Listen for floor changes
         getState().register('floorid:changed', this, function () {
@@ -209,15 +211,21 @@ class DungeonFloorSwitchMarker extends Icon {
     _getDecorator() {
         let result = null;
 
-        /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
-        let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-        if (this.linked_dungeon_floor_switch_marker_id !== null) {
+        if (getState().getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE && this.linked_dungeon_floor_switch_marker_id !== null) {
+            /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
+            let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
             let linkedDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
 
             if (linkedDungeonFloorSwitchMarker !== null) {
+                let options = c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions;
+
+                if (this.mouseOver) {
+                    options = $.extend({}, options, c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineMouseoverOptions);
+                }
+
                 result = L.polyline(
                     [this.layer.getLatLng(), linkedDungeonFloorSwitchMarker.layer.getLatLng()],
-                    c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions
+                    options
                 );
             }
         }
@@ -241,6 +249,12 @@ class DungeonFloorSwitchMarker extends Icon {
             if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS && self.target_floor_id !== null) {
                 state.setFloorId(self.target_floor_id);
             }
+        }).on('mouseover', function () {
+            self.mouseOver = true;
+            self._rebuildDecorator();
+        }).on('mouseout', function () {
+            self.mouseOver = false;
+            self._rebuildDecorator();
         });
     }
 
