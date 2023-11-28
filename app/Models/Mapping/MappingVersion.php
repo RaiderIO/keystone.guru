@@ -430,7 +430,7 @@ class MappingVersion extends Model
                 // Load some attributes prior to changing the floor_id, otherwise they get messed up
                 $dungeonFloorSwitchMarker->setAttribute('source_floor_id', $dungeonFloorSwitchMarker->floor_id);
                 $dungeonFloorSwitchMarker->setAttribute('floorCouplingDirection', $dungeonFloorSwitchMarker->getFloorCouplingDirectionAttribute());
-                $ingameXY = $coordinatesService->calculateIngameLocationForMapLocation($dungeonFloorSwitchMarker->getLatLng());
+//                $ingameXY = $coordinatesService->calculateIngameLocationForMapLocation($dungeonFloorSwitchMarker->getLatLng());
 
 //                $dungeonFloorSwitchMarker->setIngameX($ingameXY->getX());
 //                $dungeonFloorSwitchMarker->setIngameY($ingameXY->getY());
