@@ -2,7 +2,11 @@
     window.ramp = window.ramp || {};
     window.ramp.que = window.ramp.que || [];
 </script>
-<script async src="//cdn.intergient.com/1022828/74632/ramp_config.js"></script>
+<script async src="{{
+    sprintf('//cdn.intergient.com/%s/%s/ramp_config.js',
+        config('keystoneguru.playwire.param_1'),
+        config('keystoneguru.playwire.param_2')
+    ) }}"></script>
 <script>
     window._pwGA4PageviewId = ''.concat(Date.now());
     window.dataLayer = window.dataLayer || [];
