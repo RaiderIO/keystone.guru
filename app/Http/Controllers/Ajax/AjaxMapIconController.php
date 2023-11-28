@@ -93,8 +93,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
             // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
             if (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
+                $mapIcon->load('mappingVersion');
+
                 $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                    $dungeonRoute->mappingVersion,
+                    optional($dungeonRoute)->mappingVersion ?? $mapIcon->mappingVersion,
                     $mapIcon->getLatLng()
                 );
 

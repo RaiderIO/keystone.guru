@@ -69,11 +69,16 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     ];
     protected $appends  = ['linked_awakened_obelisk_id', 'is_admin'];
     protected $casts    = [
-        'floor_id'          => 'integer',
-        'map_icon_type_id'  => 'integer',
-        'lat'               => 'float',
-        'lng'               => 'float',
-        'permanent_tooltip' => 'integer',
+        'mapping_version_id'         => 'integer',
+        'floor_id'                   => 'integer',
+        'dungeon_route_id'           => 'integer',
+        'team_id'                    => 'integer',
+        'map_icon_type_id'           => 'integer',
+        'lat'                        => 'float',
+        'lng'                        => 'float',
+        'permanent_tooltip'          => 'integer',
+        'seasonal_index'             => 'integer',
+        'linked_awakened_obelisk_id' => 'integer',
     ];
 
     protected $with = ['mapicontype', 'linkedawakenedobelisks'];
@@ -101,6 +106,14 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
     {
         // Need the foreign key for some reason
         return $this->belongsTo(MapIconType::class, 'map_icon_type_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
     }
 
     /**
