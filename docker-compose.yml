@@ -18,6 +18,24 @@ services:
     networks:
       - keystone.guru
 
+  horizon:
+    build:
+      context: docker-compose/app
+      dockerfile: Dockerfile
+    image: keystone.guru
+    container_name: keystone.guru-horizon
+    depends_on:
+      - db
+      - db-combatlog
+      - redis
+    restart: no
+    working_dir: /var/www/
+    entrypoint: /usr/local/bin/php artisan horizon
+    volumes:
+      - ./:/var/www
+    networks:
+      - keystone.guru
+
   laravel-echo-server:
     build:
       context: docker-compose/laravel-echo-server
@@ -95,9 +113,9 @@ services:
     container_name: keystone.guru-redis
     command: --port 6380
     ports:
-     - "6380:6380"
+      - "6380:6380"
     volumes:
-     - ./docker-compose/redis-data:/var/lib/redis
+      - ./docker-compose/redis-data:/var/lib/redis
     networks:
       - keystone.guru
 

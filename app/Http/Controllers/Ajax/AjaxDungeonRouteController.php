@@ -402,17 +402,21 @@ class AjaxDungeonRouteController extends Controller
                 }
                 break;
             case 'thisweek':
-                if ($dungeon instanceof Dungeon) {
-                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
-                } else {
-                    $result = $discoverService->popularByAffixGroup($affixGroup = $currentAffixGroup);
+                if ($currentAffixGroup !== null) {
+                    if ($dungeon instanceof Dungeon) {
+                        $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
+                    } else {
+                        $result = $discoverService->popularByAffixGroup($affixGroup = $currentAffixGroup);
+                    }
                 }
                 break;
             case 'nextweek':
-                if ($dungeon instanceof Dungeon) {
-                    $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
-                } else {
-                    $result = $discoverService->popularByAffixGroup($affixGroup = $expansionService->getNextAffixGroup($expansion, $region));
+                if ($currentAffixGroup !== null) {
+                    if ($dungeon instanceof Dungeon) {
+                        $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
+                    } else {
+                        $result = $discoverService->popularByAffixGroup($affixGroup = $expansionService->getNextAffixGroup($expansion, $region));
+                    }
                 }
                 break;
             case 'new':
@@ -433,7 +437,7 @@ class AjaxDungeonRouteController extends Controller
                 'affixgroup'        => $affixGroup,
                 'showAffixes'       => true,
                 'showDungeonImage'  => $dungeon === null,
-                'cols'              => 2,
+                'cols'              => 4,
             ])->render();
         }
     }

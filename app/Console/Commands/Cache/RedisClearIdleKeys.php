@@ -20,7 +20,7 @@ class RedisClearIdleKeys extends Command
      *
      * @var string
      */
-    protected $description = 'Clears all idle keys in redis that have not been accessed in a specific time in seconds';
+    protected $description = 'Clears all idle keys in redis for Laravel Model Cache that have not been accessed in a specific time in seconds';
 
     /**
      * Execute the console command.
@@ -29,6 +29,13 @@ class RedisClearIdleKeys extends Command
     public function handle(): int
     {
         $seconds = (int)$this->argument('seconds');
+
+        // Only keys starting with this prefix may be cleaned up by this task, ex.
+        // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
+        // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
+        $keyWhitelistRegex = [
+            sprintf('/keystoneguru-%s-cache:.{40}(?::.{40})*/', config('app.type')),
+        ];
 
         Log::channel('scheduler')->info(sprintf('Clearing idle keys in redis that haven\'t been accessed in %d seconds', $seconds));
         $i                = 0;
@@ -42,17 +49,16 @@ class RedisClearIdleKeys extends Command
 
             $toDelete = [];
             foreach ($result[1] as $redisKey) {
-                // Just to get an insight in what is stored here
-                if ($i < 100) {
-                    Log::channel('scheduler')->debug(sprintf('%d: %s (next: %d)', $i, $redisKey, $nextKey));
-                }
+                $output = [];
+                foreach ($keyWhitelistRegex as $regex) {
+                    if (preg_match($regex, $redisKey, $output) !== false) {
+                        $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
+                        if ($idleTime > $seconds) {
+                            $toDelete[] = $redisKey;
+                        }
 
-//                if (strlen($redisKey) === 40 || Str::endsWith($redisKey, 'forever_ref')) {
-//                }
-
-                $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
-                if ($idleTime > $seconds) {
-                    $toDelete[] = $redisKey;
+                        break;
+                    }
                 }
             }
 

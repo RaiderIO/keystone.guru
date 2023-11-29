@@ -47,22 +47,27 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col">
-        <div class="{{ $owlClass }} light-slider-container">
-            <ul class="light-slider {{ $owlClass }}">
-                @if( $dungeonroute->has_thumbnail )
-                    @foreach($activeFloors as $floor)
-                        @if($floor->facade)
-                            @continue
+        <div class="row">
+            <div class="col">
+                <div class="{{ $owlClass }} light-slider-container">
+                    <ul class="light-slider {{ $owlClass }}">
+                        @if( $dungeonroute->has_thumbnail )
+                            @foreach($activeFloors as $floor)
+                                @if($floor->facade)
+                                    @continue
+                                @endif
+                                <li>
+                                    <img class="thumbnail"
+                                         src="{{ $dungeonroute->getThumbnailUrl($floor) }}"
+                                        style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"/>
+                                </li>
+                            @endforeach
+                        @else
+                            <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"/>
                         @endif
-                        <li>
-                            <img class="thumbnail"
-                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"/>
-                        </li>
-                    @endforeach
-                @else
-                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"/>
-                @endif
-            </ul>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col">

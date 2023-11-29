@@ -107,8 +107,8 @@ class CarouselHandler {
             // });`
             let settings = $.extend({}, baseSettings, settingsOverride);
 
-            $(`${prefix} .light-slider.single`).lightSlider(settings);
-            $(`${prefix} .light-slider.multiple`).lightSlider($.extend({}, settings, {loop: true}));
+            $(`${prefix} .light-slider.single`).lightSlider(settings).find('img').show();
+            $(`${prefix} .light-slider.multiple`).lightSlider($.extend({}, settings, {loop: true})).find('img').show();
         });
     }
 }

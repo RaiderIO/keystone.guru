@@ -49,6 +49,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
 /**
  * @property {Number|null} source_floor_id
  * @property {Number} target_floor_id
+ * @property {Number|null} linked_dungeon_floor_switch_marker_id
  * @property {String} floorCouplingDirection
  * @property {String|null} direction
  */
@@ -58,6 +59,8 @@ class DungeonFloorSwitchMarker extends Icon {
         super(map, layer, {name: 'dungeonfloorswitchmarker', hasRouteModelBinding: true});
 
         let self = this;
+
+        this.mouseOver = false;
 
         this.label = 'DungeonFloorSwitchMarker';
         // Listen for floor changes
@@ -118,6 +121,11 @@ class DungeonFloorSwitchMarker extends Icon {
                 default: null
             }),
             new Attribute({
+                name: 'linked_dungeon_floor_switch_marker_id',
+                type: 'int',
+                default: -1
+            }),
+            new Attribute({
                 name: 'floorCouplingDirection',
                 type: 'string',
                 edit: false,
@@ -151,6 +159,18 @@ class DungeonFloorSwitchMarker extends Icon {
                     self.direction = value;
                 },
                 default: null
+            }),
+            new Attribute({
+                name: 'ingameX',
+                type: 'float',
+                edit: false,
+                save: false
+            }),
+            new Attribute({
+                name: 'ingameY',
+                type: 'float',
+                edit: false,
+                save: false
             })
         ]);
     }
@@ -191,32 +211,26 @@ class DungeonFloorSwitchMarker extends Icon {
     _getDecorator() {
         let result = null;
 
-        /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
-        let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
-        // @TODO Hacky fix to disable floor connections in Waycrest Manor - it's bugged there, see #2084
-        if (this.floor_id !== 269 && this.source_floor_id !== null && this.target_floor_id !== null) {
-            let closestDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.getClosestMarker(
-                this.target_floor_id,
-                this.source_floor_id,
-                this.layer.getLatLng(),
-                true
-            );
+        if (getState().getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE && this.linked_dungeon_floor_switch_marker_id !== null) {
+            /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
+            let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+            let linkedDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
 
-            if (closestDungeonFloorSwitchMarker !== null) {
+            if (linkedDungeonFloorSwitchMarker !== null) {
+                let options = c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions;
+
+                if (this.mouseOver) {
+                    options = $.extend({}, options, c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineMouseoverOptions);
+                }
+
                 result = L.polyline(
-                    [this.layer.getLatLng(), closestDungeonFloorSwitchMarker.layer.getLatLng()],
-                    c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions
+                    [this.layer.getLatLng(), linkedDungeonFloorSwitchMarker.layer.getLatLng()],
+                    options
                 );
             }
         }
 
         return result;
-    }
-
-    shouldBeVisible() {
-        return super.shouldBeVisible() &&
-            (getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS || getState().getMapFacadeStyle() === MAP_FACADE_STYLE_BOTH)
-            ;
     }
 
     /**
@@ -235,6 +249,12 @@ class DungeonFloorSwitchMarker extends Icon {
             if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS && self.target_floor_id !== null) {
                 state.setFloorId(self.target_floor_id);
             }
+        }).on('mouseover', function () {
+            self.mouseOver = true;
+            self._rebuildDecorator();
+        }).on('mouseout', function () {
+            self.mouseOver = false;
+            self._rebuildDecorator();
         });
     }
 
@@ -280,6 +300,10 @@ class DungeonFloorSwitchMarker extends Icon {
         } else {
             return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
         }
+    }
+
+    isEditable() {
+        return super.isEditable() && getState().getMapContext() instanceof MapContextMappingVersionEdit;
     }
 
     toString() {

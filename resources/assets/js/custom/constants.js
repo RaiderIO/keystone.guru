@@ -245,9 +245,15 @@ let c = {
     },
     map: {
         settings: {
+            // Context menu when right clicking stuff
+            contextmenu: true,
+            zoomControl: false,
             minZoom: 1,
             maxZoom: 5,
-            zoomSnap: 0.2
+            zoomSnap: 0,
+            boxZoom: false,
+            wheelDebounceTime: 100,
+            wheelPxPerZoomLevel: 400
         },
         admin: {
             mapobject: {
@@ -430,7 +436,11 @@ let c = {
         dungeonfloorswitchmarker: {
             floorUnionConnectionPolylineOptions: {
                 color: '#006b77',
-                weight: 5,
+                opacity: 0.1,
+                weight: 3,
+            },
+            floorUnionConnectionPolylineMouseoverOptions: {
+                opacity: 1
             }
         },
         path: {
@@ -572,6 +582,8 @@ let c = {
             mousePollFrequencyMs: 100,
             // How often to send the mouse frequency, in milliseconds
             mouseSendFrequencyMs: 500,
+            // The amount of users before an overflow is initiated
+            userOverflowCount: 5
         }
     }
 };

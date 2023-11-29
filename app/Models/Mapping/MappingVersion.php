@@ -427,6 +427,14 @@ class MappingVersion extends Model
 
         if ($useFacade) {
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                // Load some attributes prior to changing the floor_id, otherwise they get messed up
+                $dungeonFloorSwitchMarker->setAttribute('source_floor_id', $dungeonFloorSwitchMarker->floor_id);
+                $dungeonFloorSwitchMarker->setAttribute('floorCouplingDirection', $dungeonFloorSwitchMarker->getFloorCouplingDirectionAttribute());
+//                $ingameXY = $coordinatesService->calculateIngameLocationForMapLocation($dungeonFloorSwitchMarker->getLatLng());
+
+//                $dungeonFloorSwitchMarker->setIngameX($ingameXY->getX());
+//                $dungeonFloorSwitchMarker->setIngameY($ingameXY->getY());
+
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
                     $dungeonFloorSwitchMarker->getLatLng()

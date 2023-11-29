@@ -35,7 +35,9 @@ class DungeonExploreController extends Controller
     public function viewDungeon(Request $request, Dungeon $dungeon)
     {
         /** @var Floor $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->where('default', true)->first();
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
+            ->defaultOrFacade()
+            ->first();
 
         return redirect()->route('dungeon.explore.view.floor', [
             'dungeon'    => $dungeon,
@@ -62,22 +64,33 @@ class DungeonExploreController extends Controller
         }
 
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeon->id)
+            ->indexOrFacade($floorIndex)
+            ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->where('default', true)->first();
+            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
+                ->defaultOrFacade()
+                ->first();
 
             return redirect()->route('dungeon.explore.view.floor', [
                 'dungeon'    => $dungeon,
                 'floorIndex' => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeon.explore.view.floor', [
+                    'dungeon'    => $dungeon,
+                    'floorIndex' => $floor->index,
+                ]);
+            }
+
             return view('dungeon.explore.view', [
                 'dungeon'    => $dungeon,
                 'floor'      => $floor,
                 'title'      => __($dungeon->name),
-                'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion)
+                'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
             ]);
         }
     }

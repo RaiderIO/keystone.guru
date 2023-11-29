@@ -1177,7 +1177,7 @@ class DungeonRoute extends Model
             foreach ($relation as $model) {
                 // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
                 if ($model instanceof KillZone) {
-                    $model->load(['killzoneenemies']);
+                    $model->load(['killZoneEnemies']);
                 }
 
                 /** @var $model Model */

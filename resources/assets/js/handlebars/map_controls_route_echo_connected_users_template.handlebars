@@ -56,4 +56,20 @@
             </div>
         </li>
     {{/each}}
+    {{#if hasUsersOverflow}}
+        <li class="list-group-item p-0 m-0 ml-1">
+            <div class="dropdown">
+                <button class="btn btn-secondary" type="button" id="edit_route_echo_members_overflow_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="edit_route_echo_members_overflow_dropdown">
+                    {{#each usersOverflow}}
+                    <a class="dropdown-item" href="{{url}}" target="_blank">
+                        <i class="fas fa-user"></i> {{initials}}
+                    </a>
+                    {{/each}}
+                </div>
+            </div>
+        </li>
+    {{/if}}
 </ul>

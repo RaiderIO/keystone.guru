@@ -46,7 +46,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 
     ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
-    <div class="col-xl-auto">
+    <div class="col-xl-auto w-100">
         <div class="{{ $owlClass }} light-slider-container">
             <ul class="light-slider {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
@@ -56,7 +56,8 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         @endif
                         <li>
                             <img class="thumbnail"
-                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"/>
+                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"
+                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"/>
                         </li>
                     @endforeach
                 @else

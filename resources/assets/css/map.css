@@ -365,6 +365,7 @@ html, body, #map, #app, .wrapper {
 #pulls_sidebar.embed.regular .pulls_container:not(.has_speedrun) {
     max-height: calc(100vh - 107px);
 }
+
 #pulls_sidebar.embed.compact .pulls_container:not(.has_speedrun) {
     max-height: calc(100vh - 54px);
 }

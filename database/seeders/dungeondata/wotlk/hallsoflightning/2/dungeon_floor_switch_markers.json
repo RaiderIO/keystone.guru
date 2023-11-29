@@ -5,6 +5,7 @@
         "floor_id": 118,
         "source_floor_id": null,
         "target_floor_id": 117,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -52.5,
         "lng": 222.25

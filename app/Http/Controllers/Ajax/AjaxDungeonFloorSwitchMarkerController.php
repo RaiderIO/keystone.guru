@@ -32,17 +32,7 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
      */
     public function store(DungeonFloorSwitchMarkerFormRequest $request, DungeonFloorSwitchMarker $dungeonFloorSwitchMarker = null): DungeonFloorSwitchMarker
     {
-        $validated = $request->validated();
-
-        if ((int)$validated['source_floor_id'] === -1) {
-            $validated['source_floor_id'] = null;
-        }
-
-        if ((int)$validated['direction'] === -1) {
-            $validated['direction'] = null;
-        }
-
-        return $this->storeModel($validated, DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
+        return $this->storeModel($request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }
 
     /**

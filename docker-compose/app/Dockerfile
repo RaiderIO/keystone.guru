@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     wget
 
 # Install handlebars
-RUN npm i -g handlebars
+RUN npm i -g handlebars puppeteer
 
 # Required for puppeteer to work
 RUN apt-get install -y libxdamage-dev \
@@ -98,6 +98,11 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     make && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
+
+# Setup files/folders
+COPY etc/crontab /etc/crontab
+
+COPY var/ /var/
 
 # Set working directory
 WORKDIR /var/www

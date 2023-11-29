@@ -5,6 +5,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 178,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -214.16,
         "lng": 199.23
@@ -15,6 +16,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 181,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -51.3,
         "lng": 163.45
@@ -25,6 +27,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 181,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -50.72,
         "lng": 233.97
@@ -35,6 +38,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 182,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -137,
         "lng": 198.81
@@ -45,6 +49,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 179,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -239.62,
         "lng": 294.35
@@ -55,6 +60,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 178,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -214.16,
         "lng": 199.23
@@ -65,6 +71,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 181,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -51.3,
         "lng": 163.45
@@ -75,6 +82,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 181,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -50.72,
         "lng": 233.97
@@ -85,6 +93,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 182,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -137,
         "lng": 198.81
@@ -95,6 +104,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 179,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -239.62,
         "lng": 294.35
@@ -105,6 +115,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 179,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -137.2,
         "lng": 333.84
@@ -115,6 +126,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 178,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -214.16,
         "lng": 199.23
@@ -125,6 +137,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 181,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -51.3,
         "lng": 163.45
@@ -135,6 +148,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 181,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -50.72,
         "lng": 233.97
@@ -145,6 +159,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 182,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -137,
         "lng": 198.81
@@ -155,6 +170,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 179,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -239.62,
         "lng": 294.35
@@ -165,6 +181,7 @@
         "floor_id": 180,
         "source_floor_id": null,
         "target_floor_id": 179,
+        "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
         "lat": -137.2,
         "lng": 333.84
