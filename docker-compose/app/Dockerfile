@@ -99,6 +99,11 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
 
+# Setup files/folders
+COPY etc/crontab /etc/crontab
+
+COPY var/ /var/
+
 # Set working directory
 WORKDIR /var/www
 
