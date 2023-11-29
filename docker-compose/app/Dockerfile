@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     wget
 
 # Install handlebars
-RUN npm i -g handlebars
+RUN npm i -g handlebars puppeteer
 
 # Required for puppeteer to work
 RUN apt-get install -y libxdamage-dev \
