@@ -56,7 +56,8 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         @endif
                         <li>
                             <img class="thumbnail"
-                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"/>
+                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"
+                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"/>
                         </li>
                     @endforeach
                 @else
