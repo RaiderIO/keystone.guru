@@ -38,4 +38,9 @@ class AdminDungeonFloorSwitchMarker extends DungeonFloorSwitchMarker {
             return `Unknown target`;
         }
     }
+
+
+    _getDecorator() {
+        return null;
+    }
 }
