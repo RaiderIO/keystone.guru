@@ -41,7 +41,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
-    $activeFloors = $dungeonroute->dungeon->activeFloors;
+    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade(true)->get();
     $owlClass     = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
 
     ob_start(); ?>

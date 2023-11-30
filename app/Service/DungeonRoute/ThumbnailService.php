@@ -117,7 +117,7 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): void
     {
-        foreach ($dungeonRoute->dungeon->floors()->where('facade', 0)->get() as $floor) {
+        foreach ($dungeonRoute->dungeon->floorsForMapFacade(true)->active()->get() as $floor) {
             /** @var Floor $floor */
             // Set it for processing in a queue
             ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floor->index);
@@ -151,7 +151,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool
+    public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool
     {
         // If the dungeons don't match then this doesn't make sense
         if (!$sourceDungeonRoute->has_thumbnail || $sourceDungeonRoute->dungeon_id !== $targetDungeonRoute->dungeon_id) {
