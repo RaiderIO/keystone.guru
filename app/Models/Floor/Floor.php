@@ -351,14 +351,14 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param Builder $builder
-     * @param int     $floorIndex
-     *
+     * @param Builder     $builder
+     * @param int         $floorIndex
+     * @param string|null $mapFacadeStyle
      * @return Builder
      */
-    public function scopeIndexOrFacade(Builder $builder, int $floorIndex): Builder
+    public function scopeIndexOrFacade(Builder $builder, int $floorIndex, string $mapFacadeStyle = null): Builder
     {
-        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $useFacade = ($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE;
 
         // Facade should be FORCED to use floor index 1
         if ($useFacade && $floorIndex > 1) {
