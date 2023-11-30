@@ -11,7 +11,7 @@
         if (row.has_thumbnail) {
             for (let index in row.dungeon.floors) {
                 let floor = row.dungeon.floors[index];
-                if (!floor.active || floor.facade) {
+                if (!floor.active || ((row.dungeon.facade_enabled && !floor.facade) || (!row.dungeon.facade_enabled && floor.facade))) {
                     continue;
                 }
 
