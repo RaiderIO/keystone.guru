@@ -33,6 +33,9 @@ RUN apt-get install -y libxdamage-dev \
                 libxss-dev \
                 libasound2
 
+# Have puppeteer download chromium (this really should be done when puppeteer is installed from npm..)
+RUN node /usr/lib/node_modules/puppeteer/install.mjs
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
