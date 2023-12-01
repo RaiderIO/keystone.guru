@@ -35,6 +35,8 @@ services:
       - ./:/var/www
     networks:
       - keystone.guru
+    environment:
+      - "APP_URL=http://nginx"
 
   laravel-echo-server:
     build:
