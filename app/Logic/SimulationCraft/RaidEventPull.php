@@ -4,7 +4,6 @@ namespace App\Logic\SimulationCraft;
 
 use App\Logic\SimulationCraft\Models\MountableAreaIntersection;
 use App\Logic\Structs\LatLng;
-use App\Logic\Utils\MathUtils;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
@@ -112,7 +111,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $pointAIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngA);
         $pointBIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngB);
 
-        $ingameDistanceToPointB = MathUtils::distanceBetweenPoints(
+        $ingameDistanceToPointB = $this->coordinatesService->distanceBetweenPoints(
                 $pointAIngameCoordinates->getX(), $pointBIngameCoordinates->getX(),
                 $pointAIngameCoordinates->getY(), $pointBIngameCoordinates->getY()
             ) - $this->options->ranged_pull_compensation_yards;
@@ -171,6 +170,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(LatLng $latLngA, LatLng $latLngB): float
     {
         $previousKillFloorClosestDungeonFloorSwitchMarker = $latLngA->getFloor()->findClosestFloorSwitchMarker(
+            $this->coordinatesService,
             $latLngA,
             $latLngB->getFloor()->id
         );
@@ -222,11 +222,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $allMountableAreaIntersections = collect();
         foreach ($latLngA->getFloor()->mountableareas as $mountableArea) {
             // Determine from which mountable area the location started
-            if ($startMountableArea === null && $mountableArea->contains($latLngA)) {
+            if ($startMountableArea === null && $mountableArea->contains($this->coordinatesService, $latLngA)) {
                 $startMountableArea = $mountableArea;
             }
 
             $intersections = $mountableArea->getIntersections(
+                $this->coordinatesService,
                 $latLngA,
                 $latLngB
             );
@@ -263,13 +264,13 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         /** @var MountableAreaIntersection[]|Collection $allMountableAreaIntersections */
         $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
             function (MountableAreaIntersection $foundIntersection) use ($latLngA) {
-                return MathUtils::distanceBetweenPoints(
+                return $this->coordinatesService->distanceBetweenPoints(
                     $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
                     $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
                 );
             })->values();
 
-        $totalDistance = MathUtils::distanceBetweenPoints(
+        $totalDistance = $this->coordinatesService->distanceBetweenPoints(
             $latLngA->getLng(), $latLngB->getLng(),
             $latLngA->getLat(), $latLngB->getLat(),
         );
@@ -285,9 +286,9 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
         $factorsAndSpeeds = [];
         foreach ($allMountableAreaIntersections as $index => $mountableAreaIntersection) {
-            $distanceBetweenLatLngs = MathUtils::distanceBetweenPoints(
-                $previousLatLng->getLng(), $mountableAreaIntersection->getLng(),
-                $previousLatLng->getLat(), $mountableAreaIntersection->getLat(),
+            $distanceBetweenLatLngs = $this->coordinatesService->distanceBetweenPoints(
+                $previousLatLng->getLng(), $mountableAreaIntersection->getLatLng()->getLng(),
+                $previousLatLng->getLat(), $mountableAreaIntersection->getLatLng()->getLat(),
             );
 
             // Add the distance to the appropriate totalDistance variable
@@ -317,7 +318,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             /** @var MountableAreaIntersection $lastMountableAreaIntersection */
             $lastMountableAreaIntersection = $allMountableAreaIntersections->last();
 
-            $distanceToPack = MathUtils::distanceBetweenPoints(
+            $distanceToPack = $this->coordinatesService->distanceBetweenPoints(
                 $latLngB->getLng(), $lastMountableAreaIntersection->getLatLng()->getLng(),
                 $latLngB->getLat(), $lastMountableAreaIntersection->getLatLng()->getLat(),
             );

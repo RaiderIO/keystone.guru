@@ -5,7 +5,6 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
-use App\Logic\Utils\MathUtils;
 use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
@@ -448,7 +447,7 @@ abstract class DungeonRouteBuilder
 
         // Always use the floor that the enemy itself is on, not $this->currentFloor
         $enemyXY                = $this->coordinatesService->calculateIngameLocationForMapLocation($enemyLatLng);
-        $distanceBetweenEnemies = MathUtils::distanceBetweenPoints(
+        $distanceBetweenEnemies = $this->coordinatesService->distanceBetweenPoints(
             $enemyXY->getX(),
             $targetIngameXY->getX(),
             $enemyXY->getY(),
@@ -464,7 +463,7 @@ abstract class DungeonRouteBuilder
             $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?
                 null : $this->coordinatesService->calculateIngameLocationForMapLocation($previousPullLatLng);
 
-            $distanceBetweenPreviousPullAndEnemy = min($previousPullIngameXY === null ? 0 : MathUtils::distanceBetweenPoints(
+            $distanceBetweenPreviousPullAndEnemy = min($previousPullIngameXY === null ? 0 : $this->coordinatesService->distanceBetweenPoints(
                 $enemyXY->getX(),
                 $previousPullIngameXY->getX(),
                 $enemyXY->getY(),
