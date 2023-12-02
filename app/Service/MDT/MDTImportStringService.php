@@ -9,7 +9,6 @@ use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Logic\Structs\LatLng;
-use App\Logic\Utils\MathUtils;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Brushline;
@@ -824,7 +823,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
                     new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng, $floor)
                 );
-                if (MathUtils::distanceBetweenPoints(
+                if ($this->coordinatesService->distanceBetweenPoints(
                         $enemyIngameXY->getX(), $ingameXY->getX(),
                         $enemyIngameXY->getY(), $ingameXY->getY()
                     ) < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS) {
