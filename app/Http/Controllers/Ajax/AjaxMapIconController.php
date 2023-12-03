@@ -61,8 +61,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 throw new Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
-        else if (!$dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $dungeonRoute);
+        else {
+            if (!$dungeonRoute->isSandbox()) {
+                $this->authorize('edit', $dungeonRoute);
+            }
+            $this->authorize('addMapIcon', $dungeonRoute);
         }
 
         $mapIconTypeId = $validated['map_icon_type_id'];

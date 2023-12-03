@@ -114,7 +114,7 @@ class CoordinatesService implements CoordinatesServiceInterface
                 // Otherwise, check if the floor union area contains the target point, then we use this floor union's
                 // target floor
                 foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
-                    if ($floorUnionArea->containsPoint($latLng)) {
+                    if ($floorUnionArea->containsPoint($this, $latLng)) {
                         $targetFloor = $floorUnion->targetFloor;
                         break;
                     }

@@ -40,6 +40,7 @@ class AjaxBrushlineController extends Controller
         $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
+        $this->authorize('addBrushline', $dungeonRoute);
 
         $validated = $request->validated();
 

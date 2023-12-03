@@ -47,7 +47,6 @@ class DungeonRouteFormRequest extends FormRequest
             'team_id'                   => [Rule::in(
                 array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [null, -1])
             )],
-            // 'difficulty' => ['required', Rule::in(config('keystoneguru.dungeonroute_difficulty'))],
             'teeming'                   => 'nullable|int',
             'template'                  => 'nullable|int',
 
