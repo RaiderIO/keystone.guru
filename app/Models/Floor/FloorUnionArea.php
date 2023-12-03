@@ -10,6 +10,7 @@ use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -75,16 +76,17 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
     }
 
     /**
-     * @param LatLng $latLng
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param LatLng                      $latLng
      * @return bool
      */
-    public function containsPoint(LatLng $latLng): bool
+    public function containsPoint(CoordinatesServiceInterface $coordinatesService, LatLng $latLng): bool
     {
         if (!is_array($this->cachedVertices)) {
             $this->cachedVertices = json_decode($this->vertices_json, true);
         }
 
-        return polygonContainsPoint($latLng->toArray(), $this->cachedVertices);
+        return $coordinatesService->polygonContainsPoint($latLng, $this->cachedVertices);
     }
 
     public function getDungeonId(): ?int

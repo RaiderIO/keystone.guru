@@ -50,6 +50,8 @@ class AjaxKillZoneController extends Controller
             $this->authorize('edit', $killZone->dungeonRoute);
         }
 
+        $this->authorize('addKillZone', $dungeonroute);
+
         if (!$killZone->exists) {
             $killZone = KillZone::create($data);
             $success  = $killZone instanceof KillZone;

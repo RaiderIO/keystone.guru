@@ -40,6 +40,7 @@ class AjaxPathController extends Controller
         $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
+        $this->authorize('addPath', $dungeonRoute);
 
         $validated = $request->validated();
 
