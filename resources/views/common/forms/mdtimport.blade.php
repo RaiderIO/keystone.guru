@@ -82,6 +82,12 @@
     </div>
 </div>
 
+<div class="form-group">
+    <div class="mdt_string_errors">
+
+    </div>
+</div>
+
 <div class="form-group import_as_this_week_container" style="display: none;">
     <label for="import_as_this_week">
         {{ __('views/common.forms.mdtimport.import_as_this_week') }}
