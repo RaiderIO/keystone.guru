@@ -561,7 +561,7 @@ class DungeonRouteController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->where('index', $floorIndex)
+            ->indexOrFacade($floorIndex)
             ->first();
 
         $style                 = $request->get('style', 'regular');
