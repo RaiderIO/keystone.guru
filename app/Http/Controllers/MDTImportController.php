@@ -8,10 +8,8 @@ use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Models\MDTImport;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
-use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -24,25 +22,24 @@ class MDTImportController extends Controller
      * Returns some details about the passed string.
      * @param ImportStringFormRequest         $request
      * @param MDTImportStringServiceInterface $mdtImportStringService
-     * @param SeasonServiceInterface          $seasonService
      *
      * @return ImportStringDetails|never-returns
      * @throws \Throwable
      */
     public function details(
         ImportStringFormRequest         $request,
-        MDTImportStringServiceInterface $mdtImportStringService,
-        SeasonServiceInterface          $seasonService
+        MDTImportStringServiceInterface $mdtImportStringService
     ) {
         $validated = $request->validated();
         $string    = $validated['import_string'];
 
         try {
-            $warnings = new Collection();
+            $warnings = collect();
+            $errors   = collect();
 
             return $mdtImportStringService
                 ->setEncodedString($string)
-                ->getDetails($warnings);
+                ->getDetails($warnings, $errors);
         } catch (MDTStringParseException $ex) {
             return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
         } catch (InvalidMDTStringException $ex) {
@@ -93,7 +90,7 @@ class MDTImportController extends Controller
             try {
                 $dungeonRoute = $mdtImportStringService
                     ->setEncodedString($string)
-                    ->getDungeonRoute(collect(), $sandbox, true, $validated['import_as_this_week'] ?? false);
+                    ->getDungeonRoute(collect(), collect(), $sandbox, true, $validated['import_as_this_week'] ?? false);
 
                 // Ensure team_id is set
                 if (!$sandbox) {

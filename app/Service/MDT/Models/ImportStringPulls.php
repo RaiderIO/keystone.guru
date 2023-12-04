@@ -2,40 +2,46 @@
 
 namespace App\Service\MDT\Models;
 
+use App\Logic\MDT\Exception\ImportError;
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 class ImportStringPulls
 {
-    private Collection $warnings;
-    private Dungeon $dungeon;
+    private Collection     $warnings;
+    private Collection     $errors;
+    private Dungeon        $dungeon;
     private MappingVersion $mappingVersion;
-    private bool $isRouteTeeming;
-    private ?int $seasonalIndex;
-    private array $mdtPulls;
+    private bool           $isRouteTeeming;
+    private ?int           $seasonalIndex;
+    private array          $mdtPulls;
 
     private int $enemyForces = 0;
 
     private Collection $killZoneAttributes;
 
     /**
-     * @param Collection $warnings
-     * @param Dungeon $dungeon
+     * @param Collection     $warnings
+     * @param Collection     $errors
+     * @param Dungeon        $dungeon
      * @param MappingVersion $mappingVersion
-     * @param bool $isRouteTeeming
-     * @param int|null $seasonalIndex
-     * @param array $mdtPulls
+     * @param bool           $isRouteTeeming
+     * @param int|null       $seasonalIndex
+     * @param array          $mdtPulls
      */
     public function __construct(
         Collection     $warnings,
+        Collection     $errors,
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         bool           $isRouteTeeming,
-        ?int            $seasonalIndex,
+        ?int           $seasonalIndex,
         array          $mdtPulls)
     {
         $this->warnings       = $warnings;
+        $this->errors         = $errors;
         $this->dungeon        = $dungeon;
         $this->mappingVersion = $mappingVersion;
         $this->isRouteTeeming = $isRouteTeeming;
@@ -46,11 +52,19 @@ class ImportStringPulls
     }
 
     /**
-     * @return Collection
+     * @return Collection|ImportWarning[]
      */
     public function getWarnings(): Collection
     {
         return $this->warnings;
+    }
+
+    /**
+     * @return Collection|ImportError[]
+     */
+    public function getErrors(): Collection
+    {
+        return $this->errors;
     }
 
     /**

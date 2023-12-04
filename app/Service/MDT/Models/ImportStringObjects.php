@@ -2,28 +2,33 @@
 
 namespace App\Service\MDT\Models;
 
+use App\Logic\MDT\Exception\ImportError;
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
 use Illuminate\Support\Collection;
 
 class ImportStringObjects
 {
     private Collection $warnings;
-    private Dungeon $dungeon;
+    private Collection $errors;
+    private Dungeon    $dungeon;
     private Collection $killZoneAttributes;
-    private array $mdtObjects;
+    private array      $mdtObjects;
     private Collection $lines;
     private Collection $paths;
     private Collection $mapIcons;
 
     /**
      * @param Collection $warnings
-     * @param Dungeon $dungeon
+     * @param Collection $errors
+     * @param Dungeon    $dungeon
      * @param Collection $killZoneAttributes
-     * @param array $mdtObjects
+     * @param array      $mdtObjects
      */
-    public function __construct(Collection $warnings, Dungeon $dungeon, Collection $killZoneAttributes, array $mdtObjects)
+    public function __construct(Collection $warnings, Collection $errors, Dungeon $dungeon, Collection $killZoneAttributes, array $mdtObjects)
     {
         $this->warnings           = $warnings;
+        $this->errors             = $errors;
         $this->dungeon            = $dungeon;
         $this->killZoneAttributes = $killZoneAttributes;
         $this->mdtObjects         = $mdtObjects;
@@ -34,11 +39,19 @@ class ImportStringObjects
     }
 
     /**
-     * @return Collection
+     * @return Collection|ImportWarning[]
      */
     public function getWarnings(): Collection
     {
         return $this->warnings;
+    }
+
+    /**
+     * @return Collection|ImportError[]
+     */
+    public function getErrors(): Collection
+    {
+        return $this->errors;
     }
 
     /**
