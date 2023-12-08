@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 /** * Class MDTImportStringService
@@ -1035,6 +1036,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $mappingVersion = $dungeon->currentMappingVersion;
 
         // Create a dungeon route
+        $titleSlug = Str::slug($decoded['text']);
         $dungeonRoute = DungeonRoute::create([
             'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
@@ -1046,7 +1048,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Needs to be explicit otherwise redirect to edit will not have this value
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'teeming'            => boolval($decoded['value']['teeming']),
-            'title'              => empty($decoded['text']) ? 'No title' : $decoded['text'],
+            'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en-US') : $titleSlug,
             'difficulty'         => 'Casual',
             'level_min'          => $decoded['difficulty'] ?? 2,
             'level_max'          => $decoded['difficulty'] ?? 2,
