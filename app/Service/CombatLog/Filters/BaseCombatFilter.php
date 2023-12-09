@@ -31,12 +31,15 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         // Brackenhide Hollow: Decatriarch Wratheye is defeated at 5%
         186121 => 0.05,
+
+        // DOTI: Galakrond's Fall: Iridikron gets zapped at 85%
+        198933 => 0.85,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */
     private const SUMMONED_NPC_ID_WHITELIST = [
         // Vexamus, Algeth'ar Academy is a boss that gets summoned
-        194181
+        194181,
     ];
 
     /** @var Collection|BaseResultEvent[] */
@@ -59,14 +62,14 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
     public function __construct(Collection $resultEvents)
     {
-        $this->resultEvents = $resultEvents;
-        $this->validNpcIds = collect();
+        $this->resultEvents           = $resultEvents;
+        $this->validNpcIds            = collect();
         $this->accurateEnemySightings = collect();
-        $this->summonedEnemies = collect();
-        $this->killedEnemies = collect();
+        $this->summonedEnemies        = collect();
+        $this->killedEnemies          = collect();
 
         /** @var BaseCombatFilterLoggingInterface $log */
-        $log = App::make(BaseCombatFilterLoggingInterface::class);
+        $log       = App::make(BaseCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -80,7 +83,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int $lineNr
+     * @param int       $lineNr
      *
      * @return bool
      */

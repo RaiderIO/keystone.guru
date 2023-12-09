@@ -63,6 +63,6 @@ class FactionsSeeder extends Seeder
     private function rollback()
     {
         DB::table('factions')->truncate();
-        DB::table('files')->where('model_class', '=', 'App\Models\Faction')->delete();
+        DB::table('files')->where('model_class', Faction::class)->delete();
     }
 }

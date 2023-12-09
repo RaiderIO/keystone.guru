@@ -19,7 +19,6 @@ class RefreshAffixGroupEaseTiers extends Command
     private const DUNGEON_NAME_MAPPING = [
         'Dawn of the Infinite: Galakrond\'s Fall' => 'DOTI: Galakrond\'s Fall',
         'Dawn of the Infinite: Murozond\'s Rise'  => 'DOTI: Murozond\'s Rise',
-        'The Everbloom'                           => 'Everbloom',
     ];
 
     /**
@@ -122,11 +121,11 @@ class RefreshAffixGroupEaseTiers extends Command
 
                     $this->info(sprintf('-- Saved %s ease tiers', $saved));
                 } else {
-                    $this->error(sprintf('-- Unable to find Affixgroup for affixes %s', $affixString));
+                    $this->error(sprintf('-- Unable to find AffixGroup for affixes %s', $affixString));
                 }
             }
         } else {
-            $this->warn('Cannot update the subcreation ease tier tiers - the data has not updated yet');
+            $this->warn('Cannot update the Subcreation ease tier tiers - the data has not updated yet');
         }
 
         // Clear model cache so that it will be refreshed upon next request
