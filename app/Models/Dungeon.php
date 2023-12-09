@@ -821,32 +821,34 @@ class Dungeon extends CacheModel implements MappingModelInterface
                 return $builder->where('npcs.dungeon_id', $this->id)
                     ->orWhere('npcs.dungeon_id', -1);
             })
-            ->where('npc_enemy_forces.mapping_version_id', $this->currentMappingVersion->id)
             ->where(function (Builder $builder) {
-                $builder->whereNotNull('npc_enemy_forces.enemy_forces')
-                    ->orWhereIn('npcs.classification_id', [
-                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                        NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
-                    ])
-                    ->orWhereIn('npcs.id', [
-                        // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
-                        // They're in the mapping because they're dangerous af
-                        101437,
-                        // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
-                        // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
-                        190407,
-                        // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
-                        194273,
-                        // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
-                        194745,
-                        // Wild Lashers give 0 enemy forces but are in the mapping regardless
-                        191243,
-                        // Wither Slashers give 0 enemy forces but are in the mapping regardless
-                        194469,
-                        // Gutstabbers give 0 enemy forces but are in the mapping regardless
-                        197857,
-                    ]);
+                $builder->where(function (Builder $builder) {
+                    // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
+                    // or for other exceptions listed below
+                    $builder->where('npc_enemy_forces.mapping_version_id', $this->currentMappingVersion->id)
+                        ->whereNotNull('npc_enemy_forces.enemy_forces');
+                })->orWhereIn('npcs.classification_id', [
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+                ])->orWhereIn('npcs.id', [
+                    // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
+                    // They're in the mapping because they're dangerous af
+                    101437,
+                    // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                    // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
+                    190407,
+                    // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                    194273,
+                    // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
+                    194745,
+                    // Wild Lashers give 0 enemy forces but are in the mapping regardless
+                    191243,
+                    // Wither Slashers give 0 enemy forces but are in the mapping regardless
+                    194469,
+                    // Gutstabbers give 0 enemy forces but are in the mapping regardless
+                    197857,
+                ]);
             })
             ->get();
     }

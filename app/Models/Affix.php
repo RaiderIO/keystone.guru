@@ -51,7 +51,7 @@ class Affix extends CacheModel
     const AFFIX_ENTANGLING  = 'Entangling';
     const AFFIX_INCORPOREAL = 'Incorporeal';
 
-    const ALL_AFFIXES = [
+    const ALL = [
         self::AFFIX_BOLSTERING,
         self::AFFIX_BURSTING,
         self::AFFIX_EXPLOSIVE,

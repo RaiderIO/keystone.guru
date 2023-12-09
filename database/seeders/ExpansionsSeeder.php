@@ -98,6 +98,6 @@ class ExpansionsSeeder extends Seeder
     private function rollback()
     {
         DB::table('expansions')->truncate();
-        DB::table('files')->where('model_class', 'App\Models\Expansion')->delete();
+        DB::table('files')->where('model_class', Expansion::class)->delete();
     }
 }

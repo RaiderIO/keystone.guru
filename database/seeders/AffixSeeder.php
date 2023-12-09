@@ -216,16 +216,16 @@ class AffixSeeder extends Seeder
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SANGUINE]],
             ['season_id' => 11, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING]],
 
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_AFFLICTED, Affix::AFFIX_BOLSTERING], 'confirmed' => false],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_AFFLICTED, Affix::AFFIX_BOLSTERING]],
             ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_INCORPOREAL, Affix::AFFIX_SANGUINE]],
             ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BURSTING]],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SPITEFUL], 'confirmed' => false],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_STORMING, Affix::AFFIX_RAGING], 'confirmed' => false],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BOLSTERING], 'confirmed' => false],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_INCORPOREAL, Affix::AFFIX_SPITEFUL], 'confirmed' => false],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_AFFLICTED, Affix::AFFIX_RAGING], 'confirmed' => false],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SANGUINE], 'confirmed' => false],
-            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING], 'confirmed' => false],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SPITEFUL]],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_STORMING, Affix::AFFIX_RAGING]],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BOLSTERING]],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_INCORPOREAL, Affix::AFFIX_SPITEFUL]],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_AFFLICTED, Affix::AFFIX_RAGING]],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SANGUINE]],
+            ['season_id' => 12, 'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT), 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING]],
 
         ];
 
