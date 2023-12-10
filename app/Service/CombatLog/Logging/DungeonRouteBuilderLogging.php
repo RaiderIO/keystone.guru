@@ -149,6 +149,21 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
     /**
+     * @param int   $id
+     * @param float $distanceBetweenEnemies
+     * @param float $distanceBetweenLastPullAndEnemy
+     * @param int   $floorId
+     *
+     * @return void
+     */
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $floorId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
+
+    /**
      * @param int|null $enemyId
      * @param float    $distanceBetweenEnemies
      * @param float    $distanceBetweenLastPullAndEnemy

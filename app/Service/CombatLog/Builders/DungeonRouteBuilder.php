@@ -23,6 +23,10 @@ use Illuminate\Support\Collection;
 
 abstract class DungeonRouteBuilder
 {
+    private const DUNGEON_ENEMY_FLOOR_CHECK_ENABLED = [
+//        Dungeon::DUNGEON_WAYCREST_MANOR
+    ];
+
     protected const NPC_ID_MAPPING = [
         // Brackenhide Gnolls transform into Witherlings after engaging them
         194373 => 187238,
@@ -254,38 +258,26 @@ abstract class DungeonRouteBuilder
 
                 // Floor checks are a nice idea but in practice they don't work because Blizzard does not take floors
                 // as seriously as we do. For just about every dungeon there are enemies on the wrong floors after which
-                // I have to exclude them in the below check, but every dungeon has these issues so we simply cannot do this.
+                // I have to exclude them in the below check, but every dungeon has these issues, so we simply cannot do this.
                 // Annoying, but that's what it is.
-//                if (!in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_DISABLED) &&
-//                    $availableEnemy->floor_id !== $this->currentFloor->id) {
-//                    return false;
-//                }
+                if (in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) &&
+                    $availableEnemy->floor_id !== $this->currentFloor->id) {
+                    return false;
+                }
 
                 return true;
             });
 
-            // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
-            // Therefore, these enemies should be in combat with us regardless
-            /** @var Collection|Enemy[] $preferredEnemiesInEngagedGroups */
-            $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(function (Enemy $availableEnemy) use ($preferredGroups) {
-                if ($availableEnemy->enemy_pack_id === null) {
-                    return false;
-                }
+            $this->findClosestEnemyInPreferredGroups(
+                $preferredGroups,
+                $filteredEnemies,
+                $activePullEnemy,
+                $previousPullLatLng,
+                $closestEnemy
+            );
 
-                return $preferredGroups->has($availableEnemy->enemyPack->group);
-            });
-
-            if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
-                $this->findClosestEnemyAndDistanceFromList(
-                    $preferredEnemiesInEngagedGroups,
-                    $activePullEnemy,
-                    $previousPullLatLng,
-                    $closestEnemy
-                );
-            }
-
-            // If we found an enemy in one of our preferred packs, we must not continue searching
             if ($closestEnemy->getEnemy() !== null) {
+                // If we found an enemy in one of our preferred packs, we must not continue searching
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
                     $closestEnemy->getEnemy()->id,
                     $closestEnemy->getDistanceBetweenEnemies(),
@@ -293,45 +285,29 @@ abstract class DungeonRouteBuilder
                     $closestEnemy->getEnemy()->enemyPack->group
                 );
             } else {
-                $this->findClosestEnemyAndDistanceFromList(
+                $this->findClosestEnemyInPreferredFloor(
                     $filteredEnemies,
                     $activePullEnemy,
                     $previousPullLatLng,
                     $closestEnemy
                 );
+            }
 
-                // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
-                if ($closestEnemy->getDistanceBetweenEnemies() >
-                    ($this->currentFloor->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'))) {
-                    $this->findClosestEnemyAndDistanceFromList(
-                        $filteredEnemies,
-                        $activePullEnemy,
-                        $previousPullLatLng,
-                        $closestEnemy,
-                        true
-                    );
-                }
-
-                if ($closestEnemy->getEnemy() === null) {
-                    $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                        optional($closestEnemy)->id,
-                        $closestEnemy->getDistanceBetweenEnemies(),
-                        $closestEnemy->getDistanceBetweenLastPullAndEnemy()
-                    );
-                } else if ($closestEnemy->getDistanceBetweenEnemies() >
-                    ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-                    if ($closestEnemy->getEnemy()->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                        $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
-                    } else {
-                        $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
-                            $closestEnemy->getEnemy()->id,
-                            $closestEnemy->getDistanceBetweenEnemies(),
-                            $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
-                            $this->currentFloor->enemy_engagement_max_range
-                        );
-                        $closestEnemy = null;
-                    }
-                }
+            if ($closestEnemy->getEnemy() !== null) {
+                // If we found an enemy on our preferred floor, we must not continue searching
+                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(
+                    $closestEnemy->getEnemy()->id,
+                    $closestEnemy->getDistanceBetweenEnemies(),
+                    $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
+                    $closestEnemy->getEnemy()->floor_id
+                );
+            } else {
+                $this->findClosestEnemyInAllFilteredEnemies(
+                    $filteredEnemies,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy
+                );
             }
 
             if ($closestEnemy->getEnemy() !== null) {
@@ -348,6 +324,133 @@ abstract class DungeonRouteBuilder
         }
 
         return $closestEnemy->getEnemy();
+    }
+
+    /**
+     * If we're looking for the closest enemy for an active pull, check if we can find a matching enemy in an already
+     * engaged pack.
+     *
+     * @param Collection      $preferredGroups
+     * @param Collection      $filteredEnemies
+     * @param ActivePullEnemy $activePullEnemy
+     * @param LatLng|null     $previousPullLatLng
+     * @param ClosestEnemy    $closestEnemy
+     * @return void
+     */
+    private function findClosestEnemyInPreferredGroups(
+        Collection      $preferredGroups,
+        Collection      $filteredEnemies,
+        ActivePullEnemy $activePullEnemy,
+        ?LatLng         $previousPullLatLng,
+        ClosestEnemy    $closestEnemy
+    ): void {
+        // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
+        // Therefore, these enemies should be in combat with us regardless
+        /** @var Collection|Enemy[] $preferredEnemiesInEngagedGroups */
+        $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(function (Enemy $availableEnemy) use ($preferredGroups) {
+            if ($availableEnemy->enemy_pack_id === null) {
+                return false;
+            }
+
+            return $preferredGroups->has($availableEnemy->enemyPack->group);
+        });
+
+        if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
+            $this->findClosestEnemyAndDistanceFromList(
+                $preferredEnemiesInEngagedGroups,
+                $activePullEnemy,
+                $previousPullLatLng,
+                $closestEnemy
+            );
+        }
+    }
+
+    /**
+     * Check if we can find an enemy on our preferred floor first. If we cannot find it, only then consider enemies
+     * on other floors.
+     *
+     * @param Collection      $filteredEnemies
+     * @param ActivePullEnemy $activePullEnemy
+     * @param LatLng|null     $previousPullLatLng
+     * @param ClosestEnemy    $closestEnemy
+     * @return void
+     */
+    private function findClosestEnemyInPreferredFloor(
+        Collection      $filteredEnemies,
+        ActivePullEnemy $activePullEnemy,
+        ?LatLng         $previousPullLatLng,
+        ClosestEnemy    $closestEnemy
+    ): void {
+        /** @var Collection|Enemy[] $preferredEnemiesOnCurrentFloor */
+        $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(function (Enemy $availableEnemy) {
+            return $availableEnemy->floor_id == $this->currentFloor->id;
+        });
+
+        if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
+            $this->findClosestEnemyAndDistanceFromList(
+                $preferredEnemiesOnCurrentFloor,
+                $activePullEnemy,
+                $previousPullLatLng,
+                $closestEnemy
+            );
+        }
+    }
+
+    /**
+     * If we cannot find an enemy with any other criteria, just consider them all instead.
+     *
+     * @param Collection      $filteredEnemies
+     * @param ActivePullEnemy $activePullEnemy
+     * @param LatLng|null     $previousPullLatLng
+     * @param ClosestEnemy    $closestEnemy
+     * @return void
+     */
+    private function findClosestEnemyInAllFilteredEnemies(
+        Collection      $filteredEnemies,
+        ActivePullEnemy $activePullEnemy,
+        ?LatLng         $previousPullLatLng,
+        ClosestEnemy    $closestEnemy)
+    {
+        $this->findClosestEnemyAndDistanceFromList(
+            $filteredEnemies,
+            $activePullEnemy,
+            $previousPullLatLng,
+            $closestEnemy
+        );
+
+        // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
+        if ($closestEnemy->getDistanceBetweenEnemies() >
+            ($this->currentFloor->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'))) {
+            $this->findClosestEnemyAndDistanceFromList(
+                $filteredEnemies,
+                $activePullEnemy,
+                $previousPullLatLng,
+                $closestEnemy,
+                true
+            );
+        }
+
+        if ($closestEnemy->getEnemy() === null) {
+            $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
+                optional($closestEnemy)->id,
+                $closestEnemy->getDistanceBetweenEnemies(),
+                $closestEnemy->getDistanceBetweenLastPullAndEnemy()
+            );
+        } else if ($closestEnemy->getDistanceBetweenEnemies() >
+            ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
+            if ($closestEnemy->getEnemy()->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
+            } else {
+                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
+                    $closestEnemy->getEnemy()->id,
+                    $closestEnemy->getDistanceBetweenEnemies(),
+                    $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
+                    $this->currentFloor->enemy_engagement_max_range
+                );
+
+                $closestEnemy->setEnemy(null);
+            }
+        }
     }
 
     /**
