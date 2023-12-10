@@ -24,7 +24,7 @@ class APIKillZoneMassFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'killzones'         => sprintf('array:id,color,index|max:%d', config('keystoneguru.dungeon_route_limits.kill_zones')),
+            'killzones'         => sprintf('nullable|array|max:%d', config('keystoneguru.dungeon_route_limits.kill_zones')),
             'killzones.*.id'    => 'int',
             'killzones.*.color' => [
                 'required',
