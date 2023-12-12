@@ -180,19 +180,20 @@ class MDTDungeon
                             if (!isset($npcClones[$npcId])) {
                                 $npcClones[$npcId] = [];
                             }
-                            // Gets funky here. There's instances where MDT has defined an NPC with the same NPC_ID twice
-                            // This fucks with the assignment below this if, because it'll overwrite the NPCs there.
-                            // We don't want this; instead append it at the end of the current array at the proper index
-                            // We calculate that at the hand of the current index in the second array ($cloneCount).
-                            if (isset($npcClones[$npcId][$floor->id][$mdtCloneIndex])) {
-                                $mdtCloneIndex += (count($npcClones[$npcId][$floor->id]) - $cloneCount);
-                            }
 
                             // Place the enemy on the correct floor
                             $latLng = Conversion::convertMDTCoordinateToLatLng($clone, $floor);
                             $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng);
 
                             $clone = array_merge($clone, $latLng->toArray());
+
+                            // Gets funky here. There's instances where MDT has defined an NPC with the same NPC_ID twice
+                            // This fucks with the assignment below this if, because it'll overwrite the NPCs there.
+                            // We don't want this; instead append it at the end of the current array at the proper index
+                            // We calculate that at the hand of the current index in the second array ($cloneCount).
+                            if (isset($npcClones[$npcId][$latLng->getFloor()->id][$mdtCloneIndex])) {
+                                $mdtCloneIndex += (count($npcClones[$npcId][$latLng->getFloor()->id]) - $cloneCount);
+                            }
 
                             // Append this clone to the array
                             $npcClones[$npcId][$latLng->getFloor()->id][$mdtCloneIndex] = $clone;
