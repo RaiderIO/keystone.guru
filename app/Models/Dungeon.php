@@ -714,9 +714,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function getFacadeFloor(): ?Floor
     {
-        return $this->floors->filter(function (Floor $floor) {
+        return $this->floors->first(function (Floor $floor) {
             return $floor->facade;
-        })->first();
+        });
     }
 
     /**

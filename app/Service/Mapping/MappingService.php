@@ -4,6 +4,7 @@
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
@@ -118,12 +119,15 @@ class MappingService implements MappingServiceInterface
             }
 
             foreach ($currentMappingVersion->floorUnions as $floorUnion) {
-                $floorUnion->cloneForNewMappingVersion($newMappingVersion);
+                /** @var FloorUnion $newFloorUnion */
+                $newFloorUnion = $floorUnion->cloneForNewMappingVersion($newMappingVersion);
+                foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                    $floorUnionArea->cloneForNewMappingVersion($newMappingVersion, $newFloorUnion);
+                }
             }
 
-            foreach ($currentMappingVersion->floorUnionAreas as $floorUnionArea) {
-                $floorUnionArea->cloneForNewMappingVersion($newMappingVersion);
-            }
+            // Load the newly generated relationships
+            $newMappingVersion->load(['mapIcons', 'mountableAreas', 'floorUnions', 'floorUnionAreas']);
         }
 
         return $newMappingVersion;

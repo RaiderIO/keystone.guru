@@ -12,6 +12,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -30,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class FloorUnionArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
     use HasVertices;
-    use CloneForNewMappingVersionNoRelations;
 
     public $timestamps = false;
 
@@ -92,5 +92,23 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
+    }
+
+
+    /**
+     * @param MappingVersion             $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     * @return Model
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    {
+        $clone                     = clone $this;
+        $clone->exists             = false;
+        $clone->id                 = null;
+        $clone->mapping_version_id = $mappingVersion->id;
+        $clone->floor_union_id     = optional($newParent)->id;
+        $clone->save();
+
+        return $clone;
     }
 }
