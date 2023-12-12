@@ -22,11 +22,11 @@
       "type": "package",
       "package": {
         "name": "nnoggie/mythicdungeontools",
-        "version": "4.2.0.7",
+        "version": "4.3.1.5",
         "source": {
           "url": "https://github.com/Wotuu/MythicDungeonTools.git",
           "type": "git",
-          "reference": "34bbdddaf1dd277995aad922b166fc4d081263a0"
+          "reference": "5932ff647e79706f065fd6ace1cfd7bf32e15239"
         }
       }
     }
@@ -56,7 +56,7 @@
     "laravel/ui": "^3.0",
     "laravelcollective/html": "6.3.*",
     "marvinlabs/laravel-discord-logger": "^1.1",
-    "nnoggie/mythicdungeontools": "4.2.0.7",
+    "nnoggie/mythicdungeontools": "4.3.1.5",
     "paquettg/php-html-parser": "^3.0",
     "patreon/patreon": "^1.0.0",
     "phlak/semver": "^4.0",
