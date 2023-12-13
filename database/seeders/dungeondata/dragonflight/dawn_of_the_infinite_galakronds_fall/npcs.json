@@ -8,7 +8,7 @@
         "display_id": 113502,
         "name": "Iridikron",
         "base_health": 118579424,
-        "health_percentage": null,
+        "health_percentage": 15,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
