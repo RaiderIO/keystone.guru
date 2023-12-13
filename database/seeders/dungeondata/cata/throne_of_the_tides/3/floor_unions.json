@@ -40,6 +40,16 @@
         "rotation": 60
     },
     {
+        "id": 150,
+        "mapping_version_id": 292,
+        "floor_id": 267,
+        "target_floor_id": 248,
+        "lat": -164.17,
+        "lng": 130.21,
+        "size": 260,
+        "rotation": 60
+    },
+    {
         "id": 24,
         "mapping_version_id": 255,
         "floor_id": 267,
@@ -72,6 +82,16 @@
     {
         "id": 142,
         "mapping_version_id": 290,
+        "floor_id": 267,
+        "target_floor_id": 249,
+        "lat": -96.22,
+        "lng": 244.59,
+        "size": 240,
+        "rotation": 59
+    },
+    {
+        "id": 151,
+        "mapping_version_id": 292,
         "floor_id": 267,
         "target_floor_id": 249,
         "lat": -96.22,

@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 113502,
         "name": "Iridikron",
-        "base_health": 78913932,
+        "base_health": 118579424,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -28,7 +28,7 @@
         "npc_class_id": 1,
         "display_id": 111556,
         "name": "Chronikar",
-        "base_health": 5928030,
+        "base_health": 8893457,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -49,7 +49,7 @@
         "npc_class_id": 1,
         "display_id": 113190,
         "name": "Manifested Timeways",
-        "base_health": 6916035,
+        "base_health": 10375700,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -70,7 +70,7 @@
         "npc_class_id": 1,
         "display_id": 112066,
         "name": "Blight of Galakrond",
-        "base_health": 9880050,
+        "base_health": 14822428,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -91,7 +91,7 @@
         "npc_class_id": 1,
         "display_id": 113421,
         "name": "Dazhak",
-        "base_health": 9880050,
+        "base_health": 14822428,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -112,7 +112,7 @@
         "npc_class_id": 1,
         "display_id": 113420,
         "name": "Loszkeleth",
-        "base_health": 9864242,
+        "base_health": 14822428,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -133,7 +133,7 @@
         "npc_class_id": 1,
         "display_id": 112232,
         "name": "Ahnzon",
-        "base_health": 9880050,
+        "base_health": 14822428,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -154,7 +154,7 @@
         "npc_class_id": 1,
         "display_id": 112234,
         "name": "Chromie",
-        "base_health": 10703387,
+        "base_health": 19254625,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -175,7 +175,7 @@
         "npc_class_id": 1,
         "display_id": 95785,
         "name": "Blight Chunk",
-        "base_health": 296402,
+        "base_health": 444338,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -187,6 +187,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15767,
+                "mapping_version_id": 298,
+                "npc_id": 204536,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15560,
                 "mapping_version_id": 287,
@@ -232,7 +239,7 @@
         "npc_class_id": 1,
         "display_id": 73034,
         "name": "Iridikron's Creation",
-        "base_health": 139968,
+        "base_health": 123427,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -253,7 +260,7 @@
         "npc_class_id": 1,
         "display_id": 112575,
         "name": "Infinite Chronoweaver",
-        "base_health": 988005,
+        "base_health": 1481125,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -265,6 +272,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15759,
+                "mapping_version_id": 298,
+                "npc_id": 205384,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15549,
                 "mapping_version_id": 287,
@@ -310,7 +324,7 @@
         "npc_class_id": 1,
         "display_id": 112579,
         "name": "Infinite Timeslicer",
-        "base_health": 988005,
+        "base_health": 1481125,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -322,6 +336,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15758,
+                "mapping_version_id": 298,
+                "npc_id": 205408,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15548,
                 "mapping_version_id": 287,
@@ -367,7 +388,7 @@
         "npc_class_id": 1,
         "display_id": 112577,
         "name": "Epoch Ripper",
-        "base_health": 1383207,
+        "base_health": 2073575,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -379,6 +400,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15760,
+                "mapping_version_id": 298,
+                "npc_id": 205435,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15550,
                 "mapping_version_id": 287,
@@ -424,7 +452,7 @@
         "npc_class_id": 1,
         "display_id": 73034,
         "name": "Iridikron's Creation",
-        "base_health": 988005,
+        "base_health": 1481125,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -436,6 +464,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15769,
+                "mapping_version_id": 298,
+                "npc_id": 205691,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15566,
                 "mapping_version_id": 287,
@@ -481,7 +516,7 @@
         "npc_class_id": 1,
         "display_id": 112683,
         "name": "Risen Dragon",
-        "base_health": 1976010,
+        "base_health": 2962250,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -493,6 +528,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15768,
+                "mapping_version_id": 298,
+                "npc_id": 205804,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15561,
                 "mapping_version_id": 287,
@@ -538,7 +580,7 @@
         "npc_class_id": 1,
         "display_id": 113072,
         "name": "Coalesced Moment",
-        "base_health": 671843,
+        "base_health": 1007165,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -550,6 +592,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15763,
+                "mapping_version_id": 298,
+                "npc_id": 206064,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15555,
                 "mapping_version_id": 287,
@@ -595,7 +644,7 @@
         "npc_class_id": 1,
         "display_id": 78855,
         "name": "Timestream Leech",
-        "base_health": 790404,
+        "base_health": 1184900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -607,6 +656,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15764,
+                "mapping_version_id": 298,
+                "npc_id": 206066,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15556,
                 "mapping_version_id": 287,
@@ -652,7 +708,7 @@
         "npc_class_id": 1,
         "display_id": 113073,
         "name": "Coalesced Time",
-        "base_health": 1482008,
+        "base_health": 2221688,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -664,6 +720,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15765,
+                "mapping_version_id": 298,
+                "npc_id": 206140,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15557,
                 "mapping_version_id": 287,
@@ -709,7 +772,7 @@
         "npc_class_id": 1,
         "display_id": 113582,
         "name": "Infinite Infiltrator",
-        "base_health": 2964015,
+        "base_health": 3776869,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -721,6 +784,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15766,
+                "mapping_version_id": 298,
+                "npc_id": 206214,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15559,
                 "mapping_version_id": 287,

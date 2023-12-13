@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 64535,
         "name": "Crazed Razorbeak",
-        "base_health": 1284407,
+        "base_health": 1925463,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -19,6 +19,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15704,
+                "mapping_version_id": 295,
+                "npc_id": 95766,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15059,
                 "mapping_version_id": 266,
@@ -50,7 +57,7 @@
         "npc_class_id": 1,
         "display_id": 64536,
         "name": "Mindshattered Screecher",
-        "base_health": 592803,
+        "base_health": 888675,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -62,6 +69,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15701,
+                "mapping_version_id": 295,
+                "npc_id": 95769,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15056,
                 "mapping_version_id": 266,
@@ -93,7 +107,7 @@
         "npc_class_id": 1,
         "display_id": 64539,
         "name": "Dreadsoul Ruiner",
-        "base_health": 711365,
+        "base_health": 1066410,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -105,6 +119,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15703,
+                "mapping_version_id": 295,
+                "npc_id": 95771,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15058,
                 "mapping_version_id": 266,
@@ -136,7 +157,7 @@
         "npc_class_id": 1,
         "display_id": 64385,
         "name": "Frenzied Nightclaw",
-        "base_health": 790404,
+        "base_health": 1184900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -148,6 +169,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15699,
+                "mapping_version_id": 295,
+                "npc_id": 95772,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15054,
                 "mapping_version_id": 266,
@@ -179,7 +207,7 @@
         "npc_class_id": 1,
         "display_id": 66633,
         "name": "Festerhide Grizzly",
-        "base_health": 1976010,
+        "base_health": 2962250,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -191,6 +219,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15702,
+                "mapping_version_id": 295,
+                "npc_id": 95779,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15057,
                 "mapping_version_id": 266,
@@ -222,7 +257,7 @@
         "npc_class_id": 1,
         "display_id": 69815,
         "name": "Archdruid Glaidalis",
-        "base_health": 6906548,
+        "base_health": 10375700,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -243,7 +278,7 @@
         "npc_class_id": 1,
         "display_id": 71688,
         "name": "Shade of Xavius",
-        "base_health": 7893197,
+        "base_health": 11857942,
         "health_percentage": null,
         "aggressiveness": "neutral",
         "dangerous": 1,
@@ -264,7 +299,7 @@
         "npc_class_id": 1,
         "display_id": 71675,
         "name": "Dresaron",
-        "base_health": 5312729,
+        "base_health": 10375700,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -285,7 +320,7 @@
         "npc_class_id": 1,
         "display_id": 69689,
         "name": "Rotheart Dryad",
-        "base_health": 790404,
+        "base_health": 1184900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -297,6 +332,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15705,
+                "mapping_version_id": 295,
+                "npc_id": 99358,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15060,
                 "mapping_version_id": 266,
@@ -328,7 +370,7 @@
         "npc_class_id": 1,
         "display_id": 69688,
         "name": "Rotheart Keeper",
-        "base_health": 1086806,
+        "base_health": 1629238,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -340,6 +382,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15707,
+                "mapping_version_id": 295,
+                "npc_id": 99359,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15062,
                 "mapping_version_id": 266,
@@ -371,7 +420,7 @@
         "npc_class_id": 1,
         "display_id": 69687,
         "name": "Vilethorn Blossom",
-        "base_health": 889205,
+        "base_health": 1333013,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -383,6 +432,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15706,
+                "mapping_version_id": 295,
+                "npc_id": 99360,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15061,
                 "mapping_version_id": 266,
@@ -435,7 +491,7 @@
         "npc_class_id": 1,
         "display_id": 66740,
         "name": "Taintheart Stalker",
-        "base_health": 790405,
+        "base_health": 1184900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -447,6 +503,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15712,
+                "mapping_version_id": 295,
+                "npc_id": 99365,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15067,
                 "mapping_version_id": 266,
@@ -478,7 +541,7 @@
         "npc_class_id": 1,
         "display_id": 66131,
         "name": "Taintheart Summoner",
-        "base_health": 869446,
+        "base_health": 1303390,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -490,6 +553,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15711,
+                "mapping_version_id": 295,
+                "npc_id": 99366,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15066,
                 "mapping_version_id": 266,
@@ -542,7 +612,7 @@
         "npc_class_id": 1,
         "display_id": 61828,
         "name": "Tormented Bloodseeker",
-        "base_health": 741004,
+        "base_health": 1110844,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -554,6 +624,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15715,
+                "mapping_version_id": 295,
+                "npc_id": 100526,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15070,
                 "mapping_version_id": 266,
@@ -585,7 +662,7 @@
         "npc_class_id": 1,
         "display_id": 12190,
         "name": "Dreadfire Imp",
-        "base_health": 592803,
+        "base_health": 888675,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -597,6 +674,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15713,
+                "mapping_version_id": 295,
+                "npc_id": 100527,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15068,
                 "mapping_version_id": 266,
@@ -628,7 +712,7 @@
         "npc_class_id": 1,
         "display_id": 47926,
         "name": "Hatespawn Slime",
-        "base_health": 148201,
+        "base_health": 222169,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -640,6 +724,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15709,
+                "mapping_version_id": 295,
+                "npc_id": 100529,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15064,
                 "mapping_version_id": 266,
@@ -671,7 +762,7 @@
         "npc_class_id": 1,
         "display_id": 29278,
         "name": "Bloodtainted Fury",
-        "base_health": 1284407,
+        "base_health": 1925463,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -683,6 +774,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15710,
+                "mapping_version_id": 295,
+                "npc_id": 100531,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15065,
                 "mapping_version_id": 266,
@@ -735,7 +833,7 @@
         "npc_class_id": 1,
         "display_id": 64486,
         "name": "Taintheart Deadeye",
-        "base_health": 711365,
+        "base_health": 1066410,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -747,6 +845,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15714,
+                "mapping_version_id": 295,
+                "npc_id": 100539,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15069,
                 "mapping_version_id": 266,
@@ -904,7 +1009,7 @@
         "npc_class_id": 1,
         "display_id": 67296,
         "name": "Dreadsoul Poisoner",
-        "base_health": 711365,
+        "base_health": 1184900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -916,6 +1021,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15700,
+                "mapping_version_id": 295,
+                "npc_id": 101679,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15055,
                 "mapping_version_id": 266,
@@ -968,7 +1080,7 @@
         "npc_class_id": 1,
         "display_id": 71636,
         "name": "Nightmare Dweller",
-        "base_health": 988005,
+        "base_health": 1481125,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -980,6 +1092,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15708,
+                "mapping_version_id": 295,
+                "npc_id": 101991,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15063,
                 "mapping_version_id": 266,
@@ -1053,7 +1172,7 @@
         "npc_class_id": 1,
         "display_id": 68127,
         "name": "Oakheart",
-        "base_health": 6906548,
+        "base_health": 10375700,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
