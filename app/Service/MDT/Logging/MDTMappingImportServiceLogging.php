@@ -338,6 +338,22 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
     }
 
     /**
+     * @return void
+     */
+    public function importDungeonFloorSwitchMarkersRestoreFromPreviousMappingVersion(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    /**
+     * @return void
+     */
+    public function importDungeonFloorSwitchMarkersImportFromMDT(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    /**
      * @param int $dungeonFloorSwitchMarkerId
      * @param int $floorId
      * @param int $targetFloorId
