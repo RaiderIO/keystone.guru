@@ -517,10 +517,10 @@ let c = {
                     let isPreviousColorDark = typeof previousPullColor === 'undefined' || previousPullColor === null ? false : isColorDark(previousPullColor);
                     let color = null;
 
-                    // Generate colors until a color
+                    // Generate colors until a valid color pops up
                     do {
                         color = randomColor();
-                    } while (isColorDark(color) === isPreviousColorDark);
+                    } while (isColorDark(color) === isPreviousColorDark || ['orange', 'brown', 'vermillion'].includes(hex2name(color)));
 
                     return color;
                 }, //Cookies.get('polyline_default_color'),

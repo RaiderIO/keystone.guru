@@ -131,7 +131,7 @@ abstract class DungeonRouteBuilder
 
             $killZone = KillZone::create([
                 'dungeon_route_id' => $this->dungeonRoute->id,
-                'color'            => randomHexColor(),
+                'color'            => randomHexColorNoMapColors(),
                 'index'            => $this->killZoneIndex,
             ]);
 

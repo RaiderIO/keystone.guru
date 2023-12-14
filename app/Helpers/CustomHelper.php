@@ -24,14 +24,6 @@ function isAlertDismissed(string $id): bool
 }
 
 /**
- * @return string A random hex color.
- */
-function randomHexColor(): string
-{
-    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-}
-
-/**
  * Get the initials from a name
  * @param $name string
  * @return string
