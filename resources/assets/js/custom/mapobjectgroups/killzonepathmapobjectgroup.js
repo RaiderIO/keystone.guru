@@ -116,7 +116,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
             // Only if the indices are next to each other
             if (previousKillZone instanceof KillZone) {
-                let polylineColor = pickHexFromHandlers([[0, '#ff0000'], [100, '#00ff00']],
+                let polylineColor = pickHexFromHandlers([[0, '#ff0000'], [50, '#0000BB'], [100, '#00ff00']],
                     ((i + dungeonStartOffset)) / (sortedObjects.length + dungeonStartOffset) * 100
                 );
 
