@@ -156,6 +156,18 @@ const NPC_TYPE_MECHANICAL = 9;
 const NPC_TYPE_UNDEAD = 10;
 const NPC_TYPE_UNCATEGORIZED = 11;
 
+// Seasonal types
+let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
+let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
+let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
+let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
+let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
+let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
+let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
+let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
+let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
+let ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
+
 // Expansions
 const EXPANSION_CLASSIC = 'classic';
 const EXPANSION_TBC = 'tbc';
