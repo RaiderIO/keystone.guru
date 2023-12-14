@@ -1036,7 +1036,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $mappingVersion = $dungeon->currentMappingVersion;
 
         // Create a dungeon route
-        $titleSlug = Str::slug($decoded['text']);
+        $titleSlug    = Str::slug($decoded['text']);
         $dungeonRoute = DungeonRoute::create([
             'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
@@ -1129,7 +1129,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         foreach ($importStringPulls->getKillZoneAttributes() as $killZoneAttributes) {
             $killZones[]                                   = [
                 'dungeon_route_id' => $dungeonRoute->id,
-                'color'            => $killZoneAttributes['color'] ?? randomHexColor(),
+                'color'            => $killZoneAttributes['color'] ?? randomHexColorNoMapColors(),
                 'description'      => $killZoneAttributes['description'] ?? null,
                 'index'            => $killZoneAttributes['index'],
             ];
