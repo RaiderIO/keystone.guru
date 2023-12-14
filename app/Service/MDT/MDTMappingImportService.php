@@ -434,8 +434,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $vertices = [];
                     foreach ($mdtNpcClone['patrol'] as $xy) {
-                        $latLng = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
-                        $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
+                        $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
+                        $latLng     = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
                         $vertices[] = $latLng->toArray();
                     }
 
@@ -512,36 +512,59 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importDungeonFloorSwitchMarkersStart();
             $mdtMapPOIs = $mdtDungeon->getMDTMapPOIs();
 
-            foreach ($mdtMapPOIs as $mdtMapPOI) {
-                if ($mdtMapPOI->getType() !== MDTMapPOI::TYPE_MAP_LINK) {
-                    continue;
-                }
+            // So because of the linked_floor_switch_id we cannot re-import dungeon floor switches
+            // We cannot for sure map the floor switches between different versions to one another
+            // We could use coordinates but if they change it's iffy.
+            // They also don't change between mapping versions, it's not really something Blizzard _can_ change
+            //
+            if ($currentMappingVersion->dungeonFloorSwitchMarkers->isNotEmpty() || $mdtMapPOIs->isEmpty()) {
+                $this->log->importDungeonFloorSwitchMarkersRestoreFromPreviousMappingVersion();
 
-                $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+                // Recover them from the previous mapping version
+                $dungeonFloorSwitchMarkerIdMapping = [];
+                $newDungeonFloorSwitchMarkers      = [];
 
-                $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $mdtMapPOI->getX(), 'y' => $mdtMapPOI->getY()], $floor);
-                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
-
-                $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
-                    'mapping_version_id' => $newMappingVersion->id,
-                    'floor_id'           => $floor->id,
-                    'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
-                ], $latLng->toArray()));
-                if ($dungeonFloorSwitchMarker !== null) {
-                    $this->log->importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(
-                        $dungeonFloorSwitchMarker->id,
-                        $dungeonFloorSwitchMarker->floor_id,
-                        $dungeonFloorSwitchMarker->target_floor_id,
-                    );
-                } else {
-                    throw new Exception(sprintf('Unable to save dungeon floor switch marker!'));
-                }
-            }
-
-            // If MDT didn't contain any MapPOIs try to recover them from the previous mapping version
-            if ($mdtMapPOIs->isEmpty()) {
                 foreach ($currentMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-                    $dungeonFloorSwitchMarker->cloneForNewMappingVersion($newMappingVersion);
+                    /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
+                    $newDungeonFloorSwitchMarker                                      = $dungeonFloorSwitchMarker->cloneForNewMappingVersion($newMappingVersion);
+                    $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
+                    $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
+                }
+
+                // Restore the links between the floor switches
+                foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
+                    $newDungeonFloorSwitchMarker->update([
+                        'linked_dungeon_floor_switch_marker_id' =>
+                            $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+                    ]);
+                }
+
+            } else {
+                $this->log->importDungeonFloorSwitchMarkersImportFromMDT();
+                foreach ($mdtMapPOIs as $mdtMapPOI) {
+                    if ($mdtMapPOI->getType() !== MDTMapPOI::TYPE_MAP_LINK) {
+                        continue;
+                    }
+
+                    $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+
+                    $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $mdtMapPOI->getX(), 'y' => $mdtMapPOI->getY()], $floor);
+                    $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
+
+                    $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
+                        'mapping_version_id' => $newMappingVersion->id,
+                        'floor_id'           => $floor->id,
+                        'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
+                    ], $latLng->toArray()));
+                    if ($dungeonFloorSwitchMarker !== null) {
+                        $this->log->importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(
+                            $dungeonFloorSwitchMarker->id,
+                            $dungeonFloorSwitchMarker->floor_id,
+                            $dungeonFloorSwitchMarker->target_floor_id,
+                        );
+                    } else {
+                        throw new Exception(sprintf('Unable to save dungeon floor switch marker!'));
+                    }
                 }
             }
         } finally {
@@ -569,7 +592,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
     {
-        // @TODO does this need to take into account floor unions?
         $activeFloors = $dungeon->floors()->active()->get();
 
         // First check for mdt_sub_level, if that isn't found just match on our own index

@@ -81,6 +81,10 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importDungeonFloorSwitchMarkersStart(): void;
 
+    public function importDungeonFloorSwitchMarkersRestoreFromPreviousMappingVersion(): void;
+
+    public function importDungeonFloorSwitchMarkersImportFromMDT(): void;
+
     public function importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void;
 
     public function importDungeonFloorSwitchMarkersEnd(): void;
