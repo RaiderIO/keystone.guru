@@ -1223,7 +1223,7 @@ class DungeonRoute extends Model
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killZones as $killZone) {
             // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
-            $killZone->load(['killzoneenemies']);
+            $killZone->load(['killZoneEnemies']);
 
             foreach ($killZone->killZoneEnemies as $kzEnemy) {
                 if ($kzEnemy->enemy === null || in_array($kzEnemy->enemy->seasonal_type, [
@@ -1250,9 +1250,7 @@ class DungeonRoute extends Model
         $seasonalTypeAffix = Affix::getAffixBySeasonalType($seasonalType);
         if ($seasonalTypeAffix !== null) {
             /** @var Season $seasonOfSeasonalType */
-            $seasonOfSeasonalType = Season::where('seasonal_affix_id',
-                Affix::where('key', $seasonalTypeAffix)->first()->id
-            )->first();
+            $seasonOfSeasonalType = Season::where('seasonal_affix_id', Affix::ALL[$seasonalTypeAffix])->first();
 
             if ($seasonOfSeasonalType !== null) {
                 try {

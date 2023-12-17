@@ -37,10 +37,10 @@ class ExpansionSeason
         $this->season = $expansionService->getCurrentSeason($expansion, $gameServerRegion);
 
         if ($this->season !== null) {
-            $this->isAwakened  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_AWAKENED)->first()->id;
-            $this->isPrideful  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_PRIDEFUL)->first()->id;
-            $this->isTormented = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_TORMENTED)->first()->id;
-            $this->isInfernal  = $this->season->seasonal_affix_id === Affix::where('key', Affix::AFFIX_INFERNAL)->first()->id;
+            $this->isAwakened  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_AWAKENED];
+            $this->isPrideful  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_PRIDEFUL];
+            $this->isTormented = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_TORMENTED];
+            $this->isInfernal  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_INFERNAL];
         }
 
         $this->affixGroups = new ExpansionSeasonAffixGroups($expansionService, $expansion, $gameServerRegion, $this);
