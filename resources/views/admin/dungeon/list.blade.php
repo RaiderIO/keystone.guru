@@ -52,7 +52,8 @@
         @foreach ($models as $dungeon)
                 <?php
                 /** @var \App\Models\Dungeon|null $dungeon */
-                $mappingVersion = $dungeon->currentMappingVersion;
+                /** @var \App\Models\Mapping\MappingVersion $mappingVersion */
+                $mappingVersion = $dungeon->mappingVersions->first();
                 ?>
             <tr>
                 @if($dungeon->active)
@@ -79,7 +80,7 @@
                          style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>
-                <td>{{ optional($mappingVersion)->enemy_forces_required }}</td>
+                <td>{{ optional($mappingVersion)->enemy_forces_required }} </td>
                 <td>{{ optional($mappingVersion)->enemy_forces_required_teeming }}</td>
                 <td data-order="{{optional($mappingVersion)->timer_max_seconds}}">{{ gmdate('i:s', optional($mappingVersion)->timer_max_seconds) }}</td>
                 <td>
