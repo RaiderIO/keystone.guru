@@ -20,9 +20,16 @@ return [
             ],
             'import_string' => [
                 'category'                                             => [
-                    'pull'   => 'Pull %d',
-                    'object' => 'Object %d',
+                    'awakened_obelisks' => 'Awakened Obelisks',
+                    'pulls'             => 'Pulls',
+                    'notes'             => 'Notes',
+                    'pull'              => 'Pull %d',
+                    'object'            => 'Object %d',
                 ],
+                'limit_reached_pulls'                                  => 'Unable to import route: more than the max of :limit pulls.',
+                'limit_reached_brushlines'                             => 'Unable to import route: more than the max of :limit lines.',
+                'limit_reached_paths'                                  => 'Unable to import route: more than the max of :limit paths.',
+                'limit_reached_notes'                                  => 'Unable to import route: more than the max of :limit notes.',
                 'unable_to_find_floor_for_object'                      => 'Unable to find Keystone.guru floor that matches MDT floor ID %d.',
                 'unable_to_find_floor_for_object_details'              => 'This indicates that MDT has a floor that Keystone.guru does not have.',
                 'unable_to_find_mdt_enemy_for_clone_index'             => 'Unable to find MDT enemy for clone index %s and npc index %s.',

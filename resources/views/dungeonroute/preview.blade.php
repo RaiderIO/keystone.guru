@@ -42,7 +42,9 @@ $dungeon->load('floors');
         'hiddenMapObjectGroups' => [
             'enemypatrol',
             'enemypack',
-            'mountablearea'
+            'mountablearea',
+            'floorunion',
+            'floorunionarea'
         ],
     ])
 @endsection

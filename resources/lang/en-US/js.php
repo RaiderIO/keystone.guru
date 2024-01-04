@@ -214,6 +214,7 @@ return [
 
     // Home page
     'import_notes_label'                                             => 'Import notes',
+    'import_errors_label'                                            => 'Import errors',
     'warnings_label'                                                 => 'Warnings',
     'category_label'                                                 => 'Category',
     'message_label'                                                  => 'Message',

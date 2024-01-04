@@ -114,7 +114,7 @@ class CoordinatesService implements CoordinatesServiceInterface
                 // Otherwise, check if the floor union area contains the target point, then we use this floor union's
                 // target floor
                 foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
-                    if ($floorUnionArea->containsPoint($latLng)) {
+                    if ($floorUnionArea->containsPoint($this, $latLng)) {
                         $targetFloor = $floorUnion->targetFloor;
                         break;
                     }
@@ -192,6 +192,103 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $result;
     }
 
+
+    /**
+     * @param float $x1
+     * @param float $x2
+     * @param float $y1
+     * @param float $y2
+     * @return float
+     */
+    public function distanceBetweenPoints(float $x1, float $x2, float $y1, float $y2): float
+    {
+        // Pythagoras theorem: a^2+b^2=c^2
+        return sqrt(
+            pow($x1 - $x2, 2) +
+            pow($y1 - $y2, 2)
+        );
+    }
+
+
+    /**
+     * @param LatLng $latLngA1
+     * @param LatLng $latLngA2
+     * @param LatLng $latLngB1
+     * @param LatLng $latLngB2
+     * @return array{lng: float, lat: float}|null
+     */
+    public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng
+    {
+        // Line AB represented as a1lng + b1lat = c1
+        $a1 = $latLngA2->getLat() - $latLngA1->getLat();
+        $b1 = $latLngA1->getLng() - $latLngA2->getLng();
+        $c1 = $a1 * ($latLngA1->getLng()) + $b1 * ($latLngA1->getLat());
+
+        // Line CD represented as a2lng + b2lat = c2
+        $a2 = $latLngB2->getLat() - $latLngB1->getLat();
+        $b2 = $latLngB1->getLng() - $latLngB2->getLng();
+        $c2 = $a2 * ($latLngB1->getLng()) + $b2 * ($latLngB1->getLat());
+
+        $determinant = $a1 * $b2 - $a2 * $b1;
+
+        if ($determinant == 0) {
+            // The lines are parallel and will never intersect
+            return null;
+        } else {
+            $lng = ($b2 * $c1 - $b1 * $c2) / $determinant;
+            $lat = ($a1 * $c2 - $a2 * $c1) / $determinant;
+
+            $l1Length = $this->distanceBetweenPoints($latLngA1->getLng(), $latLngA2->getLng(), $latLngA1->getLat(), $latLngA2->getLat());
+            // If the distance to the found point is greater than the length of EITHER of the lines, it's not a correct intersection!
+            // This means that the intersection occurred in the extended line past the points of $p1 and $p2. We don't want them.
+            if ($l1Length < $this->distanceBetweenPoints($latLngA1->getLng(), $lng, $latLngA1->getLat(), $lat) ||
+                $l1Length < $this->distanceBetweenPoints($latLngA2->getLng(), $lng, $latLngA2->getLat(), $lat)
+            ) {
+                return null;
+            }
+
+            $l2Length = $this->distanceBetweenPoints($latLngB1->getLng(), $latLngB2->getLng(), $latLngB1->getLat(), $latLngB2->getLat());
+            if ($l2Length < $this->distanceBetweenPoints($latLngB1->getLng(), $lng, $latLngB1->getLat(), $lat) ||
+                $l2Length < $this->distanceBetweenPoints($latLngB2->getLng(), $lng, $latLngB2->getLat(), $lat)
+            ) {
+                return null;
+            }
+
+            return LatLng::fromArray(['lat' => $lat, 'lng' => $lng]);
+        }
+    }
+
+    /**
+     * @param LatLng $latLng
+     * @param array  $polygon
+     * @return bool
+     */
+    public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
+    {
+        if ($polygon[0] != $polygon[count($polygon) - 1]) {
+            $polygon[] = $polygon[0];
+        }
+        $j        = 0;
+        $oddNodes = false;
+        $lat      = $latLng->getLat();
+        $lng      = $latLng->getLng();
+        $n        = count($polygon);
+        for ($i = 0; $i < $n; $i++) {
+            $j++;
+            if ($j == $n) {
+                $j = 0;
+            }
+            if ((($polygon[$i]['lng'] < $lng) && ($polygon[$j]['lng'] >= $lng)) || (($polygon[$j]['lng'] < $lng) && ($polygon[$i]['lng'] >=
+                        $lng))) {
+                if ($polygon[$i]['lat'] + ($lng - $polygon[$i]['lng']) / ($polygon[$j]['lng'] - $polygon[$i]['lng']) * ($polygon[$j]['lat'] -
+                        $polygon[$i]['lat']) < $lat) {
+                    $oddNodes = !$oddNodes;
+                }
+            }
+        }
+
+        return $oddNodes;
+    }
 
     /**
      * @param Floor|null $floor

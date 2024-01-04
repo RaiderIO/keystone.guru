@@ -423,6 +423,8 @@ return [
         'routeadminsettings' => [
             'title'                             => 'Admin settings',
             'dungeon_route_info'                => 'Route info',
+            'links'                             => 'Links',
+            'edit_mapping_version'              => 'Edit mapping version',
             'combatlog_info'                    => 'Combatlog info',
             'challenge_mode_run'                => 'Challenge Mode Run',
             'challenge_mode_run_data'           => 'Challenge Mode Run Data',

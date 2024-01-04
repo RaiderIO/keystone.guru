@@ -3,7 +3,6 @@
 namespace App\Models\Floor;
 
 use App\Logic\Structs\LatLng;
-use App\Logic\Utils\MathUtils;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
@@ -16,6 +15,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -351,14 +351,14 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param Builder $builder
-     * @param int     $floorIndex
-     *
+     * @param Builder     $builder
+     * @param int         $floorIndex
+     * @param string|null $mapFacadeStyle
      * @return Builder
      */
-    public function scopeIndexOrFacade(Builder $builder, int $floorIndex): Builder
+    public function scopeIndexOrFacade(Builder $builder, int $floorIndex, string $mapFacadeStyle = null): Builder
     {
-        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $useFacade = ($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE;
 
         // Facade should be FORCED to use floor index 1
         if ($useFacade && $floorIndex > 1) {
@@ -399,12 +399,16 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param LatLng $latLng
-     * @param int    $targetFloorId
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param LatLng                      $latLng
+     * @param int                         $targetFloorId
      *
      * @return DungeonFloorSwitchMarker|null
      */
-    public function findClosestFloorSwitchMarker(LatLng $latLng, int $targetFloorId): ?DungeonFloorSwitchMarker
+    public function findClosestFloorSwitchMarker(
+        CoordinatesServiceInterface $coordinatesService,
+        LatLng                      $latLng,
+        int                         $targetFloorId): ?DungeonFloorSwitchMarker
     {
         $result = null;
 
@@ -415,9 +419,11 @@ class Floor extends CacheModel implements MappingModelInterface
             // Find the closest floors switch marker with the same target floor
             $distanceToClosestFloorSwitchMarker = 99999999999;
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-                $distanceToFloorSwitchMarker = MathUtils::distanceBetweenPoints(
+                $distanceToFloorSwitchMarker = $coordinatesService->distanceBetweenPoints(
                     $latLng->getLng(), $dungeonFloorSwitchMarker->lng,
-                    $latLng->getLat(), $dungeonFloorSwitchMarker->lat);
+                    $latLng->getLat(), $dungeonFloorSwitchMarker->lat
+                );
+
                 if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
                     $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
                     $result                             = $dungeonFloorSwitchMarker;

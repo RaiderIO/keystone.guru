@@ -28,6 +28,7 @@ class LayoutsApp extends InlineCode {
         this.$loader = this.$root.find('.import_mdt_string_loader');
         this.$details = this.$root.find('.import_mdt_string_details');
         this.$warnings = this.$root.find('.mdt_string_warnings');
+        this.$errors = this.$root.find('.mdt_string_errors');
         this.$importAsThisWeekContainer = this.$root.find('.import_as_this_week_container');
         this.$importAsThisWeek = this.$root.find('.import_as_this_week');
         this.$importString = this.$root.find('.import_string');
@@ -178,8 +179,12 @@ class LayoutsApp extends InlineCode {
 
                 // Inject the warnings, if there are any
                 if (responseData.warnings.length > 0) {
-                    (new MdtStringWarnings(responseData.warnings))
+                    (new MdtStringNoticesWarnings(responseData.warnings))
                         .render(self.$warnings);
+                }
+                if (responseData.errors.length > 0) {
+                    (new MdtStringNoticesErrors(responseData.errors))
+                        .render(self.$errors);
                 }
 
                 // If the route did not contain this week's affixes, offer to import it as such anyways
@@ -195,7 +200,7 @@ class LayoutsApp extends InlineCode {
                 refreshTooltips();
 
                 self.$importString.val(self.$importStringTextArea.val());
-                self.$submitBtn.prop('disabled', false);
+                self.$submitBtn.prop('disabled', responseData.errors.length > 0);
 
                 self.$resetBtn.show();
             }, error: function (xhr, textStatus, errorThrown) {
@@ -214,6 +219,7 @@ class LayoutsApp extends InlineCode {
 
         this.$details.html('');
         this.$warnings.html('');
+        this.$errors.html('');
 
         this.$submitBtn.prop('disabled', true);
     }

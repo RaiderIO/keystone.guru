@@ -138,9 +138,14 @@ return [
     'party_size'                                 => 5,
 
     /**
-     * Some playful names for difficulties. I didn't want to offend anyone (looking at you non-casuals).
+     * Limits on the relationships that a DungeonRoute can have to ensure performance.
      */
-    'dungeonroute_difficulty'                    => ['Casual', 'Dedicated', 'Hardcore'],
+    'dungeon_route_limits'                       => [
+        'kill_zones' => 50,
+        'brushlines' => 50,
+        'paths'      => 50,
+        'map_icons'  => 50,
+    ],
 
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).

@@ -98,6 +98,7 @@ let scripts = [
     // Home page only
     'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
+    'resources/assets/js/custom/colorutil.js',
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
 

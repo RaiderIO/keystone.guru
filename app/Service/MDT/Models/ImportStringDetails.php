@@ -2,16 +2,19 @@
 
 namespace App\Service\MDT\Models;
 
+use App\Logic\MDT\Exception\ImportError;
 use App\Logic\MDT\Exception\ImportWarning;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
 class ImportStringDetails implements Arrayable
 {
-    /** @var Collection|ImportWarning */
+    /** @var Collection|ImportWarning[] */
     private Collection $warnings;
+
+    /** @var Collection|ImportError[] */
+    private Collection $errors;
 
     private Dungeon $dungeon;
 
@@ -36,29 +39,32 @@ class ImportStringDetails implements Arrayable
 
     /**
      * @param ImportWarning|Collection $warnings
-     * @param Dungeon $dungeon
-     * @param Collection|string[] $affixes
-     * @param bool $hasThisWeeksAffixGroup
-     * @param int $pulls
-     * @param int $paths
-     * @param int $lines
-     * @param int $notes
-     * @param int $enemyForces
-     * @param int $enemyForcesMax
+     * @param Collection               $errors
+     * @param Dungeon                  $dungeon
+     * @param Collection|string[]      $affixes
+     * @param bool                     $hasThisWeeksAffixGroup
+     * @param int                      $pulls
+     * @param int                      $paths
+     * @param int                      $lines
+     * @param int                      $notes
+     * @param int                      $enemyForces
+     * @param int                      $enemyForcesMax
      */
     public function __construct(
         Collection $warnings,
-        Dungeon $dungeon,
+        Collection $errors,
+        Dungeon    $dungeon,
         Collection $affixes,
-        bool $hasThisWeeksAffixGroup,
-        int $pulls,
-        int $paths,
-        int $lines,
-        int $notes,
-        int $enemyForces,
-        int $enemyForcesMax)
+        bool       $hasThisWeeksAffixGroup,
+        int        $pulls,
+        int        $paths,
+        int        $lines,
+        int        $notes,
+        int        $enemyForces,
+        int        $enemyForcesMax)
     {
         $this->warnings               = $warnings;
+        $this->errors                 = $errors;
         $this->dungeon                = $dungeon;
         $this->affixes                = $affixes;
         $this->hasThisWeeksAffixGroup = $hasThisWeeksAffixGroup;
@@ -71,11 +77,19 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @return Collection
+     * @return Collection|ImportWarning[]
      */
     public function getWarnings(): Collection
     {
         return $this->warnings;
+    }
+
+    /**
+     * @return Collection|ImportError[]
+     */
+    public function getErrors(): Collection
+    {
+        return $this->errors;
     }
 
     /**
@@ -157,6 +171,7 @@ class ImportStringDetails implements Arrayable
     public function setFaction(string $faction): ImportStringDetails
     {
         $this->faction = $faction;
+
         return $this;
     }
 
@@ -177,6 +192,7 @@ class ImportStringDetails implements Arrayable
             'enemy_forces'               => $this->enemyForces,
             'enemy_forces_max'           => $this->enemyForcesMax,
             'warnings'                   => $this->warnings,
+            'errors'                     => $this->errors,
         ];
     }
 }

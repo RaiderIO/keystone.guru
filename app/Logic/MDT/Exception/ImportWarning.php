@@ -9,6 +9,7 @@
 namespace App\Logic\MDT\Exception;
 
 
+use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -16,25 +17,25 @@ use Illuminate\Contracts\Support\Arrayable;
  * @author Wouter
  * @since 05/01/2019
  */
-class ImportWarning extends \Exception implements Arrayable
+class ImportWarning extends Exception implements Arrayable
 {
-    private $_category;
-    private $_data;
+    private string $category;
+    private array  $data;
 
-    function __construct($category, $message, $data = [])
+    function __construct(string $category, string $message, array $data = [])
     {
         parent::__construct($message);
 
-        $this->_category = $category;
-        $this->_data     = $data;
+        $this->category = $category;
+        $this->data     = $data;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getCategory()
+    public function getCategory(): string
     {
-        return $this->_category;
+        return $this->category;
     }
 
     /**
@@ -42,7 +43,7 @@ class ImportWarning extends \Exception implements Arrayable
      */
     public function getData(): array
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -52,9 +53,9 @@ class ImportWarning extends \Exception implements Arrayable
     public function toArray(): array
     {
         return [
-            'category' => $this->_category,
+            'category' => $this->category,
             'message'  => $this->getMessage(),
-            'data'     => $this->_data,
+            'data'     => $this->data,
         ];
     }
 }

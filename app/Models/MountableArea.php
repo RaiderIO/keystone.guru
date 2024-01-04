@@ -9,17 +9,18 @@ use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\HasVertices;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $mapping_version_id
- * @property int $floor_id
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
  * @property int|null $speed
- * @property string $vertices_json
+ * @property string   $vertices_json
  *
- * @property Floor $floor
+ * @property Floor    $floor
  *
  * @mixin Eloquent
  */
@@ -29,7 +30,7 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     use HasVertices;
 
     public $timestamps = false;
-    public $fillable = [
+    public $fillable   = [
         'mapping_version_id',
         'floor_id',
         'speed',
@@ -49,20 +50,22 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     }
 
     /**
-     * @param LatLng $latLng
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param LatLng                      $latLng
      * @return bool
      */
-    public function contains(LatLng $latLng): bool
+    public function contains(CoordinatesServiceInterface $coordinatesService, LatLng $latLng): bool
     {
-        return polygonContainsPoint($latLng->toArray(), json_decode($this->vertices_json, true));
+        return $coordinatesService->polygonContainsPoint($latLng, json_decode($this->vertices_json, true));
     }
 
     /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param LatLng                      $latLngA
+     * @param LatLng                      $latLngB
      * @return array{array{lat: float, lng: float}}
      */
-    public function getIntersections(LatLng $latLngA, LatLng $latLngB): array
+    public function getIntersections(CoordinatesServiceInterface $coordinatesService, LatLng $latLngA, LatLng $latLngB): array
     {
         $vertices = json_decode($this->vertices_json, true);
 
@@ -71,9 +74,11 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
             // Loop back around if needed
             $nextVertex = $vertices[$vertexIndex + 1] ?? $vertices[0];
             // Calculate the intersection between the line and the line of the vertex
-            $intersection = intersection(
-                $latLngA->toArray(), $latLngB->toArray(),
-                $vertex, $nextVertex
+            $intersection = $coordinatesService->intersection(
+                $latLngA,
+                $latLngB,
+                LatLng::fromArray($vertex),
+                LatLng::fromArray($nextVertex)
             );
 
             if ($intersection !== null) {

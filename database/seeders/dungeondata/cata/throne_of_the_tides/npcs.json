@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 37370,
         "name": "Naz'jar Invader",
-        "base_health": 790404,
+        "base_health": 1184900,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -19,6 +19,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15653,
+                "mapping_version_id": 292,
+                "npc_id": 39616,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15615,
                 "mapping_version_id": 290,
@@ -71,7 +78,7 @@
         "npc_class_id": 1,
         "display_id": 32311,
         "name": "Deep Murloc Drudge",
-        "base_health": 296402,
+        "base_health": 444338,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -83,6 +90,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15658,
+                "mapping_version_id": 292,
+                "npc_id": 39960,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15616,
                 "mapping_version_id": 290,
@@ -114,7 +128,7 @@
         "npc_class_id": 1,
         "display_id": 32568,
         "name": "Naz'jar Sentinel",
-        "base_health": 1580808,
+        "base_health": 2369800,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -126,6 +140,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15656,
+                "mapping_version_id": 292,
+                "npc_id": 40577,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15617,
                 "mapping_version_id": 290,
@@ -199,7 +220,7 @@
         "npc_class_id": 1,
         "display_id": 34342,
         "name": "Lady Naz'jar",
-        "base_health": 5425333,
+        "base_health": 8152336,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -220,7 +241,7 @@
         "npc_class_id": 1,
         "display_id": 32348,
         "name": "Naz'jar Honor Guard",
-        "base_health": 494002,
+        "base_health": 888675,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -241,7 +262,7 @@
         "npc_class_id": 1,
         "display_id": 91648,
         "name": "Naz'jar Tempest Witch",
-        "base_health": 889205,
+        "base_health": 1333013,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -253,6 +274,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15659,
+                "mapping_version_id": 292,
+                "npc_id": 40634,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15618,
                 "mapping_version_id": 290,
@@ -284,7 +312,7 @@
         "npc_class_id": 1,
         "display_id": 33792,
         "name": "Commander Ulthok",
-        "base_health": 6904969,
+        "base_health": 10375700,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -305,7 +333,7 @@
         "npc_class_id": 1,
         "display_id": 32259,
         "name": "Mindbender Ghur'sha",
-        "base_health": 6214473,
+        "base_health": 9338130,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -347,7 +375,7 @@
         "npc_class_id": 1,
         "display_id": 30408,
         "name": "Erunak Stonespeaker",
-        "base_health": 6214473,
+        "base_health": 9338130,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -368,7 +396,7 @@
         "npc_class_id": 1,
         "display_id": 33845,
         "name": "Unstable Corruption",
-        "base_health": 197601,
+        "base_health": 296225,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -389,7 +417,7 @@
         "npc_class_id": 1,
         "display_id": 33846,
         "name": "Tainted Sentry",
-        "base_health": 1580808,
+        "base_health": 2369800,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -401,6 +429,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15665,
+                "mapping_version_id": 292,
+                "npc_id": 40925,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15619,
                 "mapping_version_id": 290,
@@ -432,7 +467,7 @@
         "npc_class_id": 1,
         "display_id": 31982,
         "name": "Gilgoblin Hunter",
-        "base_health": 691604,
+        "base_health": 1036788,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -444,6 +479,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15664,
+                "mapping_version_id": 292,
+                "npc_id": 40935,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15620,
                 "mapping_version_id": 290,
@@ -475,7 +517,7 @@
         "npc_class_id": 1,
         "display_id": 31674,
         "name": "Faceless Watcher",
-        "base_health": 1580808,
+        "base_health": 2369800,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -487,6 +529,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15660,
+                "mapping_version_id": 292,
+                "npc_id": 40936,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15621,
                 "mapping_version_id": 290,
@@ -518,7 +567,7 @@
         "npc_class_id": 1,
         "display_id": 32121,
         "name": "Gilgoblin Aquamage",
-        "base_health": 543403,
+        "base_health": 592450,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -530,6 +579,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15663,
+                "mapping_version_id": 292,
+                "npc_id": 40943,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15622,
                 "mapping_version_id": 290,
@@ -561,7 +617,7 @@
         "npc_class_id": 1,
         "display_id": 37387,
         "name": "Naz'jar Oracle",
-        "base_health": 889205,
+        "base_health": 1333013,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -573,6 +629,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15655,
+                "mapping_version_id": 292,
+                "npc_id": 41096,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15623,
                 "mapping_version_id": 290,
@@ -625,7 +688,7 @@
         "npc_class_id": 1,
         "display_id": 37388,
         "name": "Naz'jar Frost Witch",
-        "base_health": 411669,
+        "base_health": 740563,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -646,7 +709,7 @@
         "npc_class_id": 1,
         "display_id": 34135,
         "name": "Ozumat",
-        "base_health": 39456965,
+        "base_health": 59289712,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -898,7 +961,7 @@
         "npc_class_id": 1,
         "display_id": 91794,
         "name": "Naz'jar Ravager",
-        "base_health": 2766414,
+        "base_health": 4147150,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -910,6 +973,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15657,
+                "mapping_version_id": 292,
+                "npc_id": 212673,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15624,
                 "mapping_version_id": 290,
@@ -948,7 +1018,7 @@
         "npc_class_id": 1,
         "display_id": 103357,
         "name": "Vicious Snap Dragon",
-        "base_health": 592803,
+        "base_health": 740563,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -960,6 +1030,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15654,
+                "mapping_version_id": 292,
+                "npc_id": 212681,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15625,
                 "mapping_version_id": 290,
@@ -998,7 +1075,7 @@
         "npc_class_id": 1,
         "display_id": 90742,
         "name": "Faceless Seer",
-        "base_health": 988005,
+        "base_health": 1481125,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1010,6 +1087,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15662,
+                "mapping_version_id": 292,
+                "npc_id": 212775,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15626,
                 "mapping_version_id": 290,
@@ -1048,7 +1132,7 @@
         "npc_class_id": 1,
         "display_id": 31994,
         "name": "Minion of Ghur'sha",
-        "base_health": 592803,
+        "base_health": 888675,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1060,6 +1144,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15661,
+                "mapping_version_id": 292,
+                "npc_id": 212778,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15627,
                 "mapping_version_id": 290,
@@ -1098,7 +1189,7 @@
         "npc_class_id": 1,
         "display_id": 33012,
         "name": "Bubbling Ooze",
-        "base_health": 8233374,
+        "base_health": 14811250,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1119,7 +1210,7 @@
         "npc_class_id": 1,
         "display_id": 31539,
         "name": "Deep Sea Murloc",
-        "base_health": 98801,
+        "base_health": 177735,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1140,7 +1231,7 @@
         "npc_class_id": 1,
         "display_id": 91695,
         "name": "Ink of Ozumat",
-        "base_health": 6904969,
+        "base_health": 10375700,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1161,7 +1252,7 @@
         "npc_class_id": 1,
         "display_id": 102373,
         "name": "Splotch",
-        "base_health": 115268,
+        "base_health": 207357,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1182,7 +1273,7 @@
         "npc_class_id": 1,
         "display_id": 91837,
         "name": "Sludge",
-        "base_health": 164668,
+        "base_health": 296225,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1203,7 +1294,7 @@
         "npc_class_id": 1,
         "display_id": 19071,
         "name": "Stormflurry Totem",
-        "base_health": 51459,
+        "base_health": 217813,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,

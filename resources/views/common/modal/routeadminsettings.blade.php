@@ -24,7 +24,21 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
 <div class="tab-content">
     <div id="route-info" class="tab-pane fade show active mt-3"
          role="tabpanel" aria-labelledby="dungeon_route_info_tab">
-        @dump($dungeonRoute)
+        <div class="form-group">
+            <h5>
+                {{ __('views/common.modal.routeadminsettings.links') }}
+            </h5>
+            <a href="{{ route('admin.floor.edit.mapping', [
+                'dungeon' => $dungeonRoute->dungeon,
+                'floor' => $dungeonRoute->dungeon->floors->first(),
+                'mapping_version' => $dungeonRoute->mapping_version_id
+            ]) }}">
+                {{ __('views/common.modal.routeadminsettings.edit_mapping_version') }}
+            </a>
+        </div>
+        <div class="form-group">
+            @dump($dungeonRoute)
+        </div>
     </div>
     <div id="combatlog-info" class="tab-pane fade mt-3" role="tabpanel"
          aria-labelledby="combatlog_info_tab">
@@ -43,8 +57,8 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
                 {{ __('views/common.modal.routeadminsettings.challenge_mode_run_data') }}
             </h5>
             @if(optional($challengeModeRun)->challengeModeRunData !== null)
-            @include('common.general.modeltable', ['model' => $challengeModeRun->challengeModeRunData, 'exclude' => ['post_body']])
-            {{ Form::textarea('post_body', json_encode(json_decode($challengeModeRun->challengeModeRunData->post_body), JSON_PRETTY_PRINT), ['class' => 'form-control w-100', 'readonly' => 'readonly']) }}
+                @include('common.general.modeltable', ['model' => $challengeModeRun->challengeModeRunData, 'exclude' => ['post_body']])
+                {{ Form::textarea('post_body', json_encode(json_decode($challengeModeRun->challengeModeRunData->post_body), JSON_PRETTY_PRINT), ['class' => 'form-control w-100', 'readonly' => 'readonly']) }}
             @else
                 {{ __('views/common.modal.routeadminsettings.route_not_created_through_api') }}
             @endif

@@ -156,12 +156,12 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param array      $latLng
-     * @param Floor|null $floor
+     * @param array{lat: float, lng: float} $latLng
+     * @param Floor|null                    $floor
      *
      * @return LatLng
      */
-    public static function fromArray(array $latLng, ?Floor $floor): LatLng
+    public static function fromArray(array $latLng, ?Floor $floor = null): LatLng
     {
         return new LatLng($latLng['lat'], $latLng['lng'], $floor);
     }

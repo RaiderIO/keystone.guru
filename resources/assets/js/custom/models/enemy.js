@@ -24,17 +24,6 @@ L.Draw.Enemy = L.Draw.Marker.extend({
     }
 });
 
-let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
-let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
-let ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
-let ENEMY_SEASONAL_TYPE_PRIDEFUL = 'prideful';
-let ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
-let ENEMY_SEASONAL_TYPE_ENCRYPTED = 'encrypted';
-let ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
-let ENEMY_SEASONAL_TYPE_SHROUDED = 'shrouded';
-let ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
-let ENEMY_SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
-
 /**
  * @property {Number} floor_id
  * @property {Number} enemy_pack_id
@@ -484,7 +473,7 @@ class Enemy extends VersionableMapObject {
                     (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
             });
 
-            if( mapContext.getGameVersion().key === GAME_VERSION_RETAIL ) {
+            if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
                 result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
                 result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
                 result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});

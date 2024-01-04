@@ -41,7 +41,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
-    $activeFloors = $dungeonroute->dungeon->activeFloors;
+    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade(true)->get();
     $owlClass     = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
 
     ob_start(); ?>
@@ -53,9 +53,6 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     <ul class="light-slider {{ $owlClass }}">
                         @if( $dungeonroute->has_thumbnail )
                             @foreach($activeFloors as $floor)
-                                @if($floor->facade)
-                                    @continue
-                                @endif
                                 <li>
                                     <img class="thumbnail"
                                          src="{{ $dungeonroute->getThumbnailUrl($floor) }}"
@@ -125,7 +122,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             </div>
                             <div class="col-auto px-1">
                                 @if($tierAffixGroup !== null)
-                                    <h4 class="font-weight-bold px-1">
+                                    <h4 class="font-weight-bold px-1 m-0">
                                         @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
                                     </h4>
                                 @endif

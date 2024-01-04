@@ -230,7 +230,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 }
 
                 // For this enemy, kill this clone
-                $pull[$mdtNpcIndex][$enemyIndex++] = $enemy->mdt_id;
+                $pull[$mdtNpcIndex][] = $enemy->mdt_id;
                 $enemiesAdded++;
             }
 

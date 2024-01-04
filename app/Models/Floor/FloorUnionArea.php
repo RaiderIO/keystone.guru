@@ -10,7 +10,9 @@ use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -29,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class FloorUnionArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
     use HasVertices;
-    use CloneForNewMappingVersionNoRelations;
 
     public $timestamps = false;
 
@@ -75,20 +76,39 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
     }
 
     /**
-     * @param LatLng $latLng
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param LatLng                      $latLng
      * @return bool
      */
-    public function containsPoint(LatLng $latLng): bool
+    public function containsPoint(CoordinatesServiceInterface $coordinatesService, LatLng $latLng): bool
     {
         if (!is_array($this->cachedVertices)) {
             $this->cachedVertices = json_decode($this->vertices_json, true);
         }
 
-        return polygonContainsPoint($latLng->toArray(), $this->cachedVertices);
+        return $coordinatesService->polygonContainsPoint($latLng, $this->cachedVertices);
     }
 
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
+    }
+
+
+    /**
+     * @param MappingVersion             $mappingVersion
+     * @param MappingModelInterface|null $newParent
+     * @return Model
+     */
+    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
+    {
+        $clone                     = clone $this;
+        $clone->exists             = false;
+        $clone->id                 = null;
+        $clone->mapping_version_id = $mappingVersion->id;
+        $clone->floor_union_id     = optional($newParent)->id;
+        $clone->save();
+
+        return $clone;
     }
 }

@@ -40,7 +40,8 @@
                 'killzone',
                 'killzonepath',
                 'floorunion',
-                'floorunionarea'
+                'floorunionarea',
+                'mountablearea'
             ],
         ])
     </div>

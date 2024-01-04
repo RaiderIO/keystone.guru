@@ -16,4 +16,8 @@ interface CoordinatesServiceInterface
     public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng;
 
     public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng;
+
+    public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng;
+
+    public function polygonContainsPoint(LatLng $latLng, array $polygon): bool;
 }

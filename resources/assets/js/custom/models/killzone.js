@@ -680,21 +680,25 @@ class KillZone extends MapObject {
 
         // If there are other floors with enemies AND enemies on this floor..
         if (otherFloorsWithEnemies.length > 0 && latLngs.length > 0) {
-            console.warn(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
+            console.info(`Pull ${this.index} has enemies on other floors`, otherFloorsWithEnemies);
             let floorSwitchMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
             if (_.size(floorSwitchMapObjectGroup.objects) > 0) {
                 $.each(otherFloorsWithEnemies, function (i, floorId) {
                     // Build a list of eligible floor switchers to the floor ID we want (there may be multiple!)
                     // In the case of Waycrest, we want to select the closest floor switch marker, not the 1st index which
-                    // may be really far away
+                    // may be really far away. We also only want floor switches that are on _our_ floor.
                     let floorSwitchMarkerCandidates = [];
                     $.each(floorSwitchMapObjectGroup.objects, function (j, floorSwitchMapObject) {
-                        if (floorSwitchMapObject.target_floor_id === floorId) {
+                        if (floorSwitchMapObject.floor_id === currentFloorId &&
+                            floorSwitchMapObject.target_floor_id === floorId) {
                             floorSwitchMarkerCandidates.push(floorSwitchMapObject);
                         }
                     });
 
-                    console.assert(floorSwitchMarkerCandidates.length > 0, 'floorSwitchMarkerCandidates.length is <= 0', self);
+                    if( floorSwitchMarkerCandidates.length === 0 ) {
+                        console.info(`Could not find a floor switch marker from floor_id ${currentFloorId} -> target_floor_id ${floorId}`);
+                        return false;
+                    }
 
                     // Calculate a rough center of our bounds
                     let ourCenterLatLng = latLngs.length === 1 ? latLngs[0] : getCenteroid(latLngs);
@@ -1171,7 +1175,7 @@ class KillZone extends MapObject {
                         pull_color: this.color,
                         spells: this.spells,
                     });
-                    
+
                     this.enemiesLayer.bindTooltip(spellTemplate(data), {
                         direction: this.indexLabelDirection,
                         className: 'leaflet-tooltip-killzone-index',

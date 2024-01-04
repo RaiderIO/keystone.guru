@@ -460,5 +460,82 @@
         "direction": null,
         "lat": -65.38,
         "lng": 233
+    },
+    {
+        "id": 1242,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 61,
+        "linked_dungeon_floor_switch_marker_id": 1256,
+        "direction": null,
+        "lat": -167.13,
+        "lng": 132
+    },
+    {
+        "id": 1243,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 61,
+        "linked_dungeon_floor_switch_marker_id": 1257,
+        "direction": null,
+        "lat": -190.75,
+        "lng": 131.94
+    },
+    {
+        "id": 1244,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 61,
+        "linked_dungeon_floor_switch_marker_id": 1258,
+        "direction": null,
+        "lat": -157.25,
+        "lng": 197.88
+    },
+    {
+        "id": 1245,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 61,
+        "linked_dungeon_floor_switch_marker_id": 1255,
+        "direction": null,
+        "lat": -116,
+        "lng": 152.62
+    },
+    {
+        "id": 1246,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": 1254,
+        "direction": null,
+        "lat": -104.75,
+        "lng": 152.88
+    },
+    {
+        "id": 1248,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 61,
+        "linked_dungeon_floor_switch_marker_id": 1259,
+        "direction": null,
+        "lat": -152.88,
+        "lng": 304.75
+    },
+    {
+        "id": 1249,
+        "mapping_version_id": 297,
+        "floor_id": 60,
+        "source_floor_id": null,
+        "target_floor_id": 62,
+        "linked_dungeon_floor_switch_marker_id": 1252,
+        "direction": null,
+        "lat": -65.38,
+        "lng": 233
     }
 ]

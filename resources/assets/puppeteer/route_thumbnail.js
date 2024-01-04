@@ -22,6 +22,23 @@ function delay(timeout) {
 
     try {
         const page = await browser.newPage();
+        // Output console to stdout
+        // page
+        //     .on('console', message =>
+        //         console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+        //     .on('pageerror', ({message}) => console.log(message))
+        //     .on('response', response =>
+        //         console.log(`${response.status()} ${response.url()}`))
+        //     .on('requestfailed', request =>
+        //         console.log(`${request.failure().errorText} ${request.url()}`));
+
+        // Force facade for thumbnails
+        await page.setCookie({
+            name: 'map_facade_style',
+            value: 'facade',
+            domain: new URL(process.argv[2]).hostname
+        });
+
         await page.setViewport({width: 768, height: 512});
 
         console.log(`Navigating to ${process.argv[2]}`);
