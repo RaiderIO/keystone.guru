@@ -48,7 +48,9 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      */
     public function handle()
     {
-        Log::channel('scheduler')->info(sprintf('Started processing %s:%s', $this->dungeonRoute->public_key, $this->floorIndex));
+        Log::channel('scheduler')->info(
+            sprintf('Started processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)
+        );
 
         if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
             $this->thumbnailService->refreshThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
@@ -56,6 +58,8 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
             Log::channel('scheduler')->warning(sprintf('Not refreshing thumbnail - max attempts of %d reached', $this->attempts));
         }
 
-        Log::channel('scheduler')->info(sprintf('Finished processing %s:%s', $this->dungeonRoute->public_key, $this->floorIndex));
+        Log::channel('scheduler')->info(
+            sprintf('Finished processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)
+        );
     }
 }

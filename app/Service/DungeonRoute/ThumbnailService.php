@@ -85,13 +85,12 @@ class ThumbnailService implements ThumbnailServiceInterface
                     // Log::channel('scheduler')->info('Compressing image..');
                     // $this->compressPng($tmpScaledFile, $target);
                 } finally {
-                    Log::channel('scheduler')->info('Removing previous image..');
                     // Cleanup
                     if (file_exists($tmpFile)) {
                         if (unlink($tmpFile)) {
-                            Log::channel('scheduler')->info('Success');
+                            Log::channel('scheduler')->info('Removing tmp file success..');
                         } else {
-                            Log::channel('scheduler')->warning('Failure!');
+                            Log::channel('scheduler')->warning('Removing tmp file failure!');
                         }
                     }
                     // unlink($tmpScaledFile);
@@ -115,12 +114,15 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): void
+    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool
     {
+        $result = false;
+
         foreach ($dungeonRoute->dungeon->floorsForMapFacade(true)->active()->get() as $floor) {
             /** @var Floor $floor */
             // Set it for processing in a queue
             ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floor->index);
+            $result = true;
         }
 
         // Temporarily disable timestamps since we don't want this action to update the updated_at
@@ -130,6 +132,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         // Re-enable them
         $dungeonRoute->timestamps = true;
+
+        return $result;
     }
 
     /**
@@ -178,6 +182,20 @@ class ThumbnailService implements ThumbnailServiceInterface
                     'exception' => $exception,
                 ]);
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @return bool
+     */
+    public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool
+    {
+        $result = true;
+        foreach ($dungeonRoute->dungeon->floors()->active()->get() as $floor) {
+            $result = $result && file_exists($dungeonRoute->getThumbnailPath($floor));
         }
 
         return $result;

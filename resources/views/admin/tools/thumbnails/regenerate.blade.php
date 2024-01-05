@@ -8,6 +8,10 @@
         @include('common.dungeon.select', ['activeOnly' => false])
     </div>
     <div class="form-group">
+        {!! Form::label('truesight', __('views/admin.tools.thumbnails.regenerate.only_missing')) !!}
+        {!! Form::checkbox('only_missing', 1, false, ['class' => 'form-control left_checkbox']) !!}
+    </div>
+    <div class="form-group">
         {!! Form::submit(__('views/admin.tools.thumbnails.regenerate.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}
         <div class="col-md">
 

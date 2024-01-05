@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\DungeonRoute;
-use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,13 +33,12 @@ class RefreshEnemyForces implements ShouldQueue
      */
     public function handle()
     {
-        Log::channel('scheduler')->info(sprintf('Started processing %s', $this->dungeonRouteId));
-
         $dungeonRoute = DungeonRoute::find($this->dungeonRouteId);
         if ($dungeonRoute) {
+            Log::channel('scheduler')->info(
+                sprintf('Refreshing enemy forces for route %s (%d)', $dungeonRoute->public_key, $this->dungeonRouteId)
+            );
             $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
         }
-
-        Log::channel('scheduler')->info(sprintf('Finished processing %s', $this->dungeonRouteId));
     }
 }

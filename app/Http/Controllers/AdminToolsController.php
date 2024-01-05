@@ -359,28 +359,44 @@ class AdminToolsController extends Controller
      * @param Request          $request
      * @param ThumbnailService $thumbnailService
      *
-     * @return void
+     * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function thumbnailsregeneratesubmit(Request $request, ThumbnailService $thumbnailService)
     {
         set_time_limit(3600);
 
-        $dungeonId = (int)$request->get('dungeon_id');
+        $dungeonId   = (int)$request->get('dungeon_id');
+        $onlyMissing = (int)$request->get('only_missing');
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->with('dungeon')
             ->when($dungeonId !== -1, function (Builder $builder) use ($dungeonId) {
                 return $builder->where('dungeon_id', $dungeonId);
-            });
+            })
+            ->orderByDesc('created_at');
 
-        $count         = 0;
+        $successCount  = 0;
+        $failureCount  = 0;
         $dungeonRoutes = $builder->get();
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $thumbnailService->queueThumbnailRefresh($dungeonRoute);
-            $count++;
+            $shouldRefresh = !$onlyMissing || !$thumbnailService->hasThumbnailsGenerated($dungeonRoute);
+
+            if ($shouldRefresh) {
+                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute)) {
+                    $successCount++;
+                } else {
+                    $failureCount++;
+                }
+            }
         }
 
-        dd(sprintf('Dispatched %d jobs for %d routes', $count, $dungeonRoutes->count()));
+        Session::flash('status', __('controller.admintools.flash.thumbnail_regenerate_result', [
+            'success' => $successCount,
+            'total'   => $successCount + $failureCount,
+            'failed'  => $failureCount,
+        ]));
+
+        return view('admin.tools.thumbnails.regenerate');
     }
 
 
@@ -427,7 +443,7 @@ class AdminToolsController extends Controller
         try {
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
-                ->getDungeonRoute(new Collection(), false, false);
+                ->getDungeonRoute(collect(), collect());
             $dungeonRoute->makeVisible(['affixes', 'killZones']);
 
             dd($dungeonRoute);

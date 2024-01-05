@@ -18,6 +18,7 @@ return [
             'mdt_invalid_category'                => 'Invalid category',
         ],
         'flash' => [
+            'thumbnail_regenerate_result' => 'Dispatched :success jobs for :total routes. :failed failed.',
             'caches_dropped_successfully' => 'Caches dropped successfully',
             'releases_exported'           => 'Releases exported',
             'exception'                   => [
