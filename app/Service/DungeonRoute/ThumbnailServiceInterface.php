@@ -9,9 +9,9 @@ interface ThumbnailServiceInterface
 {
     /**
      * @param DungeonRoute $dungeonRoute
-     * @return void
+     * @return bool
      */
-    function queueThumbnailRefresh(DungeonRoute $dungeonRoute): void;
+    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool;
 
     /**
      * @param DungeonRoute $dungeonRoute
@@ -19,26 +19,32 @@ interface ThumbnailServiceInterface
      * @param int          $attempts
      * @return void
      */
-    function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts): void;
+    public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts): void;
 
     /**
      * @param DungeonRoute $dungeonRoute
-     * @param int $floorIndex
+     * @param int          $floorIndex
      * @return string
      */
-    function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string;
+    public function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string;
 
     /**
      * @param DungeonRoute $dungeonRoute
-     * @param int $floorIndex
+     * @param int          $floorIndex
      * @return string
      */
-    function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex): string;
+    public function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex): string;
 
     /**
      * @param DungeonRoute $sourceDungeonRoute
      * @param DungeonRoute $targetDungeonRoute
      * @return void
      */
-    function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool;
+    public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool;
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @return bool
+     */
+    public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool;
 }

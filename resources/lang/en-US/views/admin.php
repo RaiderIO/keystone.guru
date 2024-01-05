@@ -423,9 +423,10 @@ return [
         ],
         'thumbnails'   => [
             'regenerate' => [
-                'title'  => 'Mass regenerate thumbnails',
-                'header' => 'Mass regenerate thumbnails',
-                'submit' => 'Submit',
+                'title'        => 'Mass regenerate thumbnails',
+                'header'       => 'Mass regenerate thumbnails',
+                'only_missing' => 'Only queue routes with missing thumbnails',
+                'submit'       => 'Submit',
             ],
         ],
         'wowtools'     => [

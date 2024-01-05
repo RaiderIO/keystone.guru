@@ -1520,6 +1520,17 @@ class DungeonRoute extends Model
     }
 
     /**
+     * @param Floor $floor
+     * @return string
+     */
+    public function getThumbnailPath(Floor $floor): string
+    {
+        $publicPath = public_path('images/route_thumbnails/');
+
+        return sprintf('%s/%s_%s.png', $publicPath, $this->public_key, $floor->index);
+    }
+
+    /**
      * @param int $source
      *
      * @return bool
@@ -1613,10 +1624,9 @@ class DungeonRoute extends Model
         // Delete route properly if it gets deleted
         static::deleting(function (DungeonRoute $dungeonRoute) {
             // Delete thumbnails
-            $publicPath = public_path('images/route_thumbnails/');
             foreach ($dungeonRoute->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
-                @unlink(sprintf('%s/%s_%s.png', $publicPath, $dungeonRoute->public_key, $floor->index));
+                @unlink($dungeonRoute->getThumbnailPath($floor));
             }
 
             // Dungeonroute settings
