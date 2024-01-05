@@ -1,0 +1,28 @@
+{
+    "id": 219,
+    "release_changelog_id": 226,
+    "version": "v7.8.1",
+    "title": "",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2024-01-05T22:08:24+00:00",
+    "updated_at": "2024-01-05T22:08:24+00:00",
+    "changelog": {
+        "id": 226,
+        "release_id": 219,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 226,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2172,
+                "change": "Admin pages change to help fix thumbnails not being generated properly for routes with combined floors",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}
