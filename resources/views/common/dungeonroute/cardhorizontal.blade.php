@@ -41,12 +41,12 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
-    $activeFloors = $dungeonroute->dungeon->floors()->active()->get();
+    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade(true)->get();
     $owlClass = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
 
     ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
-    <div class="col-xl-auto w-100">
+    <div class="col-xl-auto">
         <div class="{{ $owlClass }} light-slider-container">
             <ul class="light-slider {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
