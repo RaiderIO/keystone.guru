@@ -15,6 +15,7 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
 

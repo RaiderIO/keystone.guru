@@ -73,6 +73,7 @@
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.5",
+    "deployer/deployer": "^7.3",
     "filp/whoops": "^2.0",
     "mockery/mockery": "^1.0",
     "phpunit/phpunit": "^9.0"
