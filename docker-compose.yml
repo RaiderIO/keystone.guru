@@ -103,6 +103,7 @@ services:
       # It complains about php-fpm not being there if this is not running first
       - app
       - laravel-echo-server
+      - php-deployer
     ports:
       - "8008:80"
     volumes:
@@ -121,6 +122,29 @@ services:
       - ./docker-compose/redis-data:/var/lib/redis
     networks:
       - keystone.guru
+
+  php-deployer:
+    build:
+      context: docker-compose/php-deployer
+      dockerfile: Dockerfile
+    image: keystone.guru-php-deployer
+    container_name: keystone.guru-php-deployer
+    depends_on:
+      - db
+      - db-combatlog
+      - redis
+    restart: no
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - keystone.guru
+    secrets:
+      - deployer_ssh_key
+
+secrets:
+  deployer_ssh_key:
+    file: ~/.ssh/php-deployer
 
 networks:
   keystone.guru:
