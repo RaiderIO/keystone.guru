@@ -13,7 +13,7 @@ add('writable_dirs', []);
 // Hosts
 host('<server ip address>')
     ->set('remote_user', 'deployer')
-    ->set('deploy_path', '~/keystone.guru');
+    ->set('deploy_path', '/var/www/html/keystone.guru.deployer');
 
 // Hooks
 after('deploy:failed', 'deploy:unlock');

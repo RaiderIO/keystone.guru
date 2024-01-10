@@ -14,9 +14,11 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m user
 RUN mkdir -p /home/user/.ssh && ln -s /run/secrets/deployer_ssh_key /home/user/.ssh/id_rsa
 RUN chown -R user:user /home/user/.ssh
-RUN echo "Host *\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/id_rsa\n\t" >> /home/user/.ssh/config
 
 USER user
+
+RUN echo "Host *\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/id_rsa\n\t" >> /home/user/.ssh/config
+
 
 # Set working directory
 WORKDIR /var/www
