@@ -21,6 +21,18 @@
     {
       "type": "package",
       "package": {
+        "name": "wotuu/keystone.guru.deployer",
+        "version": "0.1",
+        "source": {
+          "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
+          "type": "git",
+          "reference": "6e1b48afacf943ff5a26207dc9c9af0b1847bd1d"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
         "name": "nnoggie/mythicdungeontools",
         "version": "4.3.1.5",
         "source": {
@@ -76,7 +88,8 @@
     "deployer/deployer": "^7.3",
     "filp/whoops": "^2.0",
     "mockery/mockery": "^1.0",
-    "phpunit/phpunit": "^9.0"
+    "phpunit/phpunit": "^9.0",
+    "wotuu/keystone.guru.deployer": "0.1"
   },
   "autoload": {
     "classmap": [

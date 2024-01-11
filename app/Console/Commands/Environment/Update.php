@@ -44,7 +44,7 @@ class Update extends Command
     /**
      * @var string
      */
-    protected $signature = 'environment:update {environment}';
+    protected $signature = 'environment:update';
 
     /**
      * Execute the console command.
@@ -53,7 +53,7 @@ class Update extends Command
      */
     public function handle()
     {
-        $environment = $this->argument('environment');
+        $environment = config('app_type');
 
         $this->info(sprintf('Updating Keystone.guru %s environment', $environment));
 
