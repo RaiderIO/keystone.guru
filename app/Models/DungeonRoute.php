@@ -573,13 +573,17 @@ class DungeonRoute extends Model
         $brushlines = $this->brushlines()->with(['floor'])->get();
 
         if ($useFacade) {
-            $brushlines = $brushlines->map(function (Brushline $brushline) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
-                $brushline->setRelation('floor', $newFloor);
-                $brushline->floor_id = $newFloor->id;
+            $brushlines = $brushlines
+                // #2177 Sometimes brushlines don't have a polyline
+                ->filter(function (Brushline $brushline) {
+                    return $brushline->polyline !== null;
+                })->map(function (Brushline $brushline) use ($coordinatesService) {
+                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
+                    $brushline->setRelation('floor', $newFloor);
+                    $brushline->floor_id = $newFloor->id;
 
-                return $brushline;
-            });
+                    return $brushline;
+                });
         }
 
         return $brushlines;
@@ -597,13 +601,18 @@ class DungeonRoute extends Model
         $paths = $this->paths()->with(['floor'])->get();
 
         if ($useFacade) {
-            $paths = $paths->map(function (Path $path) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $path->polyline, $path->floor);
-                $path->setRelation('floor', $newFloor);
-                $path->floor_id = $newFloor->id;
+            $paths = $paths
+                // #2177 Sometimes paths don't have a polyline
+                ->filter(function (Path $path) {
+                    return $path->polyline !== null;
+                })
+                ->map(function (Path $path) use ($coordinatesService) {
+                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $path->polyline, $path->floor);
+                    $path->setRelation('floor', $newFloor);
+                    $path->floor_id = $newFloor->id;
 
-                return $path;
-            });
+                    return $path;
+                });
         }
 
         return $paths;
