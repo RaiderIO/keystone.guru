@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property string $model_class
+ * @property string           $model_class
  *
  * @property Collection|Tag[] $tags
  *
@@ -32,7 +32,7 @@ trait HasTags
     }
 
     /**
-     * @param int $tagCategoryId
+     * @param int    $tagCategoryId
      * @param string $name
      * @return bool
      */

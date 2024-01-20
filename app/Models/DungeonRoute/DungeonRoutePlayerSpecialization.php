@@ -9,19 +9,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $character_class_specialization_id
- * @property int $index
+ * @property int          $id
+ * @property int          $dungeon_route_id
+ * @property int          $character_class_specialization_id
+ * @property int          $index
+ *
+ * @property DungeonRoute $dungeonRoute
  *
  * @mixin Eloquent
  */
 class DungeonRoutePlayerSpecialization extends Model
 {
-    public $hidden = ['id'];
+    public    $hidden   = ['id'];
     protected $fillable = [
         'character_class_specialization_id',
-        'dungeon_route_id'
+        'dungeon_route_id',
     ];
 
     public $timestamps = false;
@@ -29,9 +31,9 @@ class DungeonRoutePlayerSpecialization extends Model
     /**
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
-        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     /**

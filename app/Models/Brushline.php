@@ -16,26 +16,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $floor_id
- * @property int $polyline_id
- * @property string $updated_at
- * @property string $created_at
+ * @property int          $id
+ * @property int          $dungeon_route_id
+ * @property int          $floor_id
+ * @property int          $polyline_id
+ * @property string       $updated_at
+ * @property string       $created_at
  *
  * @property DungeonRoute $dungeonRoute
- * @property Polyline $polyline
- * @property Floor $floor
+ * @property Polyline     $polyline
+ * @property Floor        $floor
  *
  * @mixin Eloquent
  */
 class Brushline extends Model
 {
-    public $visible = ['id', 'floor_id', 'polyline'];
+    public $visible  = ['id', 'floor_id', 'polyline'];
     public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
-    public $with = ['polyline'];
-
-    public $timestamps = true;
+    public $with     = ['polyline'];
 
     /**
      * Get the dungeon route that this brushline is attached to.
