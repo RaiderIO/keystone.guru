@@ -9,8 +9,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * @property int $id
- * @property int $model_id
+ * @property int    $id
+ * @property int    $model_id
  * @property string $model_class
  * @property string $disk
  * @property string $path

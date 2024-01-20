@@ -14,17 +14,17 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property int $tag_category_id
- * @property int $model_id
- * @property string $model_class
- * @property string $name
+ * @property int         $id
+ * @property int         $user_id
+ * @property int         $tag_category_id
+ * @property int         $model_id
+ * @property string      $model_class
+ * @property string      $name
  * @property string|null $color
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon      $updated_at
+ * @property Carbon      $created_at
  *
- * @property TagCategory $tagcategory
+ * @property TagCategory $tagCategory
  *
  * @method Builder unique(?int $tagCategoryId)
  *
@@ -39,13 +39,13 @@ class Tag extends Model
     /**
      * @return BelongsTo
      */
-    public function tagcategory(): BelongsTo
+    public function tagCategory(): BelongsTo
     {
-        return $this->belongsTo(TagCategory::class, 'tag_category_id');
+        return $this->belongsTo(TagCategory::class);
     }
 
     /**
-     * @param Builder $query
+     * @param Builder  $query
      * @param int|null $categoryId
      * @return Builder
      */
@@ -64,7 +64,7 @@ class Tag extends Model
     public function getUsage(): Collection
     {
         $result = new Collection();
-        switch ($this->tagcategory->name) {
+        switch ($this->tagCategory->name) {
             case TagCategory::DUNGEON_ROUTE_PERSONAL:
             case TagCategory::DUNGEON_ROUTE_TEAM:
                 // Find all routes that match the name of this tag
@@ -82,7 +82,7 @@ class Tag extends Model
 
     /**
      * @param TagFormRequest $request
-     * @param int $tagCategoryId
+     * @param int            $tagCategoryId
      * @return Tag
      */
     public static function saveFromRequest(TagFormRequest $request, int $tagCategoryId): Tag
