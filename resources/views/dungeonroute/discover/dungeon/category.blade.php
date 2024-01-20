@@ -2,7 +2,7 @@
 /**
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $dungeon \App\Models\Dungeon
- * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
  */
 $title      = $title ?? sprintf('%s routes', __($dungeon->name));
 $affixgroup = $affixgroup ?? null;

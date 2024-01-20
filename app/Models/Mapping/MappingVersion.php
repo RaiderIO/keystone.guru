@@ -5,7 +5,7 @@ namespace App\Models\Mapping;
 use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;

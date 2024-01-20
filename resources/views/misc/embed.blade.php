@@ -1,5 +1,5 @@
 <?php
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute\DungeonRoute $model */
 /** @var array $parameters */
 
 $showStyle = 'regular';
@@ -20,7 +20,7 @@ $showStyle = 'regular';
                     )) }}"
                         style="width: 800px; height: 600px; border: none;"></iframe>
             @elseif($showStyle === 'compact')
-            <iframe src="{{ route('dungeonroute.embed', [
+                <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
                         'title' => \Illuminate\Support\Str::slug($model->title),
@@ -34,9 +34,9 @@ $showStyle = 'regular';
                         'showEnemyForces' => 0,
                         'showAffixes' => 0,
                     ]) }}"
-                    style="width: 800px; height: 600px; border: none;"></iframe>
+                        style="width: 800px; height: 600px; border: none;"></iframe>
             @elseif($showStyle === 'regular')
-            <iframe src="{{ route('dungeonroute.embed', [
+                <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
                         'title' => \Illuminate\Support\Str::slug($model->title),
@@ -51,7 +51,7 @@ $showStyle = 'regular';
                         'showAffixes' => 1,
                         'showTitle' => 1,
                     ]) }}"
-                    style="width: 800px; height: 600px; border: none;"></iframe>
+                        style="width: 800px; height: 600px; border: none;"></iframe>
             @endif
         </div>
     </div>

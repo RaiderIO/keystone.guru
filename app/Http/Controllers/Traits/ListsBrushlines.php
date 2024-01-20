@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\Brushline;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;

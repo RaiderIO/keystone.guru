@@ -2,7 +2,7 @@
 
 <?php
 /** @var $cacheService \App\Service\Cache\CacheServiceInterface */
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
 /** @var $tierAffixGroup \App\Models\AffixGroup\AffixGroup|null */
 /** @var $__env array */
@@ -67,7 +67,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
-            @endif
+             @endif
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">

@@ -8,7 +8,7 @@
 
 namespace App\Logic\Scheduler;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 

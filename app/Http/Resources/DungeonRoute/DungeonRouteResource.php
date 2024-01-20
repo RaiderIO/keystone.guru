@@ -4,7 +4,7 @@ namespace App\Http\Resources\DungeonRoute;
 
 use App\Http\Resources\AffixGroup\AffixGroupCollectionResource;
 use App\Http\Resources\UserResource;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

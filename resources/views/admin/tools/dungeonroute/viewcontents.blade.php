@@ -1,5 +1,5 @@
 <?php
-/** @var \App\Models\DungeonRoute $dungeonroute */
+/** @var \App\Models\DungeonRoute\DungeonRoute $dungeonroute */
 ?>
 @extends('layouts.sitepage', [
     'showAds' => false,

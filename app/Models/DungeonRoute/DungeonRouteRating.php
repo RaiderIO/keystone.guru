@@ -2,7 +2,6 @@
 
 namespace App\Models\DungeonRoute;
 
-use App\Models\DungeonRoute;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;

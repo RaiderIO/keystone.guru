@@ -2,7 +2,7 @@
 
 namespace App\Service\MDT;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 
 interface MDTExportStringServiceInterface

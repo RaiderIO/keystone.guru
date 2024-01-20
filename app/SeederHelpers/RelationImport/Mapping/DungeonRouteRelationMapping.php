@@ -4,7 +4,7 @@
 namespace App\SeederHelpers\RelationImport\Mapping;
 
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRouteAffixGroupRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRouteAttributesRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRouteBrushlinesRelationParser;

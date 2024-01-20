@@ -2,7 +2,6 @@
 
 namespace App\Models\DungeonRoute;
 
-use App\Models\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\RaidMarker;
 use Eloquent;

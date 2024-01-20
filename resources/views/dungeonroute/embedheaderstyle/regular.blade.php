@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonRoute \App\Models\DungeonRoute */
+/** @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $dungeon \App\Models\Dungeon */
 /** @var $floor \App\Models\Floor\Floor */
 /** @var $embedOptions array */

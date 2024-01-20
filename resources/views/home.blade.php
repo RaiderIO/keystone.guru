@@ -1,5 +1,5 @@
 <?php
-/** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute[] */
+/** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute\DungeonRoute[] */
 /** @var $demoRouteDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
 /** @var $demoRouteMapping array */
 /** @var $userCount int */

@@ -6,13 +6,13 @@
 /** @var $allRouteAttributes \Illuminate\Support\Collection|\App\Models\RouteAttribute[] */
 /** This is the template for the Affix Selection when using it in a dropdown */
 
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute\DungeonRoute $model */
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
 
 /** @var App\Models\Team|null $team */
-$team = $team ?? null;
+$team      = $team ?? null;
 $favorites = $favorites ?? false;
 
 /** @var string $view */
@@ -24,7 +24,7 @@ if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } else if (Auth::check()) {
     $tagCategoryId = \App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL];
-    $searchTags  = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
+    $searchTags    = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
 } else {
     $searchTags = collect();
 }

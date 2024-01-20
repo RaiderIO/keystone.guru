@@ -9,7 +9,7 @@ use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeRequest;
 use App\Jobs\RefreshEnemyForces;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;

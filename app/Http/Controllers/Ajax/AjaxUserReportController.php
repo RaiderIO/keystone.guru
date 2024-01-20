@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 
 use App\Http\Requests\UserReportFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\UserReport;
 use Illuminate\Database\Eloquent\Model;

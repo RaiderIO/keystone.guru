@@ -3,7 +3,6 @@
 namespace App\Models\DungeonRoute;
 
 use App\Models\CharacterClass;
-use App\Models\DungeonRoute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

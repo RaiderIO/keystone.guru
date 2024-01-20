@@ -1,5 +1,5 @@
 <?php
-/** @var \App\Models\Dungeonroute $dungeonroute */
+/** @var \App\Models\DungeonRoute\Dungeonroute $dungeonroute */
 ob_start();
 ?>
 <div id="map_dungeon_route_info_popover_container">

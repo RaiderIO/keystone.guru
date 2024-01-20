@@ -3,7 +3,7 @@
 namespace App\Models\Tags;
 
 use App\Http\Requests\Tag\TagFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Traits\HasGenericModelRelation;
 use Carbon\Carbon;
 use Eloquent;

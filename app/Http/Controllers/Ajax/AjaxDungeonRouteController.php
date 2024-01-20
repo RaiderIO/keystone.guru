@@ -27,7 +27,7 @@ use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MapContext\DungeonRouteProperties;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Expansion;
