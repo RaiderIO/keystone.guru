@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Output\ConsoleOutput;

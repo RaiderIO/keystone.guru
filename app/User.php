@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Email\CustomPasswordResetEmail;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Patreon\PatreonAdFreeGiveaway;

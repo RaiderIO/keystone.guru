@@ -2,7 +2,7 @@
 /**
  * @var $category string
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
  */
 $affixgroup = $affixgroup ?? null;
 ?>

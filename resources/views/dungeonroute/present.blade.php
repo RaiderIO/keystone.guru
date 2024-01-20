@@ -7,7 +7,7 @@
     'showAds' => false,
 ])
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $floor \App\Models\Floor\Floor */
 
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');

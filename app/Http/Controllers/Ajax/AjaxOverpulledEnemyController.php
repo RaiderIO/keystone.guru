@@ -6,7 +6,7 @@ use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
 use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession;

@@ -1,25 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
-use App\Models\AffixGroup\AffixGroup;
-use Eloquent;
+use App\Models\CharacterClass;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
  * @property int $dungeon_route_id
- * @property int $affix_group_id
+ * @property int $character_class_id
+ * @property int $index
  *
- * @mixin Eloquent
+ * @mixin \Eloquent
  */
-class DungeonRouteAffixGroup extends Model
+class DungeonRoutePlayerClass extends Model
 {
+
     public $hidden = ['id'];
-    public $fillable = [
+    protected $fillable = [
+        'character_class_id',
         'dungeon_route_id',
-        'affix_group_id',
     ];
 
     public $timestamps = false;
@@ -35,8 +36,8 @@ class DungeonRouteAffixGroup extends Model
     /**
      * @return BelongsTo
      */
-    public function affixgroup(): BelongsTo
+    public function characterclass(): BelongsTo
     {
-        return $this->belongsTo(AffixGroup::class);
+        return $this->belongsTo(CharacterClass::class);
     }
 }

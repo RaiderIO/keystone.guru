@@ -3,7 +3,7 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 
 interface ThumbnailServiceInterface
 {

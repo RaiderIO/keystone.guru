@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tag\APITagFormRequest;
 use App\Http\Requests\Tag\APITagUpdateFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\HasTags;

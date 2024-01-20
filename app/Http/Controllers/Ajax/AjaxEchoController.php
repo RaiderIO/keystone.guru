@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Http\Request;
 
 class AjaxEchoController extends Controller

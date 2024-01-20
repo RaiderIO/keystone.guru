@@ -8,7 +8,7 @@
     'analytics' => false
 ])
 <?php
-/** @var \App\Models\DungeonRoute $dungeonroute */
+/** @var \App\Models\DungeonRoute\DungeonRoute $dungeonroute */
 /** @var int $floorId */
 
 /** @var \App\Models\Dungeon $dungeon */

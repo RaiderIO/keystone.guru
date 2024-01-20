@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;

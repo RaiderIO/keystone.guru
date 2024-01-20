@@ -2,7 +2,7 @@
 
 namespace App\Service\MDT;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\MDT\Models\ImportStringDetails;
 use Illuminate\Support\Collection;
 

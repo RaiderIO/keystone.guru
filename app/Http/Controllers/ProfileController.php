@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UserColorChangedEvent;
 use App\Http\Requests\Tag\TagFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;

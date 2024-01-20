@@ -1,6 +1,6 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $defaultSelected array */
 /** @var $dungeonSelector string|null */
 /** @var $affixes \Illuminate\Support\Collection */

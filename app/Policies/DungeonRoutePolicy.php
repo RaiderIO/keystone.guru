@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

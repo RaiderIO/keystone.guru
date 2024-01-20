@@ -7,7 +7,7 @@ use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Logic\MapContext\MapContextLiveSession;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;

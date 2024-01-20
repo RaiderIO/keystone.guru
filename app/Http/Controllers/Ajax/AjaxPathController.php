@@ -7,7 +7,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Requests\Path\APIPathFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;

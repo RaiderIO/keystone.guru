@@ -8,7 +8,7 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;

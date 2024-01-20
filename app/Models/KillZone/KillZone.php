@@ -4,7 +4,7 @@ namespace App\Models\KillZone;
 
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Spell;

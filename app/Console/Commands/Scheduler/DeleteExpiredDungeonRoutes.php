@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Scheduler;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;

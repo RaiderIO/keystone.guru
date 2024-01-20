@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\TagCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;

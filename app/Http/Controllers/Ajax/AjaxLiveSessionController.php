@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Events\LiveSession\StopEvent;
 use App\Http\Controllers\Controller;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;

@@ -5,7 +5,7 @@
  * @var $mapContext \App\Logic\MapContext\MapContext
  * @var $dungeon \App\Models\Dungeon
  * @var $floor \App\Models\Floor\Floor
- * @var $dungeonroute \App\Models\DungeonRoute|null
+ * @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null
  * @var $livesession \App\Models\LiveSession|null
  * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
  * @var $edit bool

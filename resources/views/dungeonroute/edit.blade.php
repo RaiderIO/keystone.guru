@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $floor \App\Models\Floor\Floor */
 $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 

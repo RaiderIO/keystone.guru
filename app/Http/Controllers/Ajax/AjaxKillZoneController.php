@@ -9,7 +9,7 @@ use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Jobs\RefreshEnemyForces;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;

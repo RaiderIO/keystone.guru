@@ -1,26 +1,32 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
+use App\Models\CharacterRace;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
  * @property int $dungeon_route_id
- * @property int $character_class_specialization_id
+ * @property int $character_race_id
  * @property int $index
+ *
+ * @property DungeonRoute $dungeonroute
+ * @property CharacterRace $characterrace
+ * @property Collection|DungeonRoutePlayerRace[] $races
  *
  * @mixin Eloquent
  */
-class DungeonRoutePlayerSpecialization extends Model
+class DungeonRoutePlayerRace extends Model
 {
     public $hidden = ['id'];
     protected $fillable = [
-        'character_class_specialization_id',
-        'dungeon_route_id'
+        'dungeon_route_id',
+        'character_race_id',
     ];
 
     public $timestamps = false;
@@ -36,16 +42,16 @@ class DungeonRoutePlayerSpecialization extends Model
     /**
      * @return BelongsTo
      */
-    public function characterclassspecialization(): BelongsTo
+    public function characterrace(): BelongsTo
     {
-        return $this->belongsTo(CharacterClassSpecialization::class);
+        return $this->belongsTo(CharacterRace::class);
     }
 
     /**
      * @return BelongsToMany
      */
-    public function specializations(): BelongsToMany
+    public function races(): BelongsToMany
     {
-        return $this->belongsToMany(DungeonRoutePlayerSpecialization::class, 'dungeon_route_player_specializations');
+        return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');
     }
 }
