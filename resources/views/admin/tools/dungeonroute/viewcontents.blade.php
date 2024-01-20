@@ -16,7 +16,7 @@
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseDungeonroute"
                             aria-expanded="false"
                             aria-controls="collapseDungeonroute">
-                        {{ $dungeonroute->title }}
+                        "{{ $dungeonroute->title }}"
                     </button>
                 </h5>
             </div>
