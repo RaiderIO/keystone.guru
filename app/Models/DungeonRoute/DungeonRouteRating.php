@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
-use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,18 +11,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $dungeon_route_id
- * @property int $affix_group_id
+ * @property int $user_id
+ * @property int $rating
+ * @property DungeonRoute $dungeonroute
+ * @property User $user
  *
  * @mixin Eloquent
  */
-class DungeonRouteAffixGroup extends Model
+class DungeonRouteRating extends Model
 {
-    public $hidden = ['id'];
-    public $fillable = [
-        'dungeon_route_id',
-        'affix_group_id',
-    ];
-
+    public $fillable = ['dungeon_route_id', 'user_id'];
     public $timestamps = false;
 
     /**
@@ -35,8 +34,8 @@ class DungeonRouteAffixGroup extends Model
     /**
      * @return BelongsTo
      */
-    public function affixgroup(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(AffixGroup::class);
+        return $this->belongsTo(User::class);
     }
 }

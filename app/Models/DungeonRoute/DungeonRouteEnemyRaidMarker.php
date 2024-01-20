@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
+use App\Models\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\RaidMarker;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

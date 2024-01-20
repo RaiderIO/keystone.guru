@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoutePlayerClass;
+use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\Traits\HasIconFile;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;

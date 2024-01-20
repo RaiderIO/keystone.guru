@@ -5,7 +5,7 @@ namespace App\Logic\MapContext;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute;
-use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 

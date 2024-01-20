@@ -15,7 +15,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use App\Models\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;

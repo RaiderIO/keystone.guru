@@ -3,7 +3,7 @@
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\DungeonRoute;
-use App\Models\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 
 class DungeonRouteAffixGroupRelationParser implements RelationParserInterface
 {

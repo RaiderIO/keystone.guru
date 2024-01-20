@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
-use App\User;
+use App\Models\CharacterRace;
+use App\Models\DungeonRoute;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

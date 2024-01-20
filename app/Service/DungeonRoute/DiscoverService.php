@@ -6,7 +6,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use App\Models\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\GameServerRegion;
 use App\Models\PublishedState;
 use App\Models\Season;

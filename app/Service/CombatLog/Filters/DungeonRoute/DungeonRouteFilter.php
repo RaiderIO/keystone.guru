@@ -8,7 +8,7 @@ use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute;
-use App\Models\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Faction;
 use App\Models\PublishedState;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;

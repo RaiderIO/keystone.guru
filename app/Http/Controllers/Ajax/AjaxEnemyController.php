@@ -6,7 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute;
-use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
 use App\Models\RaidMarker;

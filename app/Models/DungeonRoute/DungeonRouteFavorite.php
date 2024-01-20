@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
+use App\Models\DungeonRoute;
+use App\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
  * @property int $dungeon_route_id
- * @property int $character_class_id
- * @property int $index
+ * @property int $user_id
  *
- * @mixin \Eloquent
+ * @property DungeonRoute $dungeonroute
+ * @property User $user
+ *
+ * @mixin Eloquent
  */
-class DungeonRoutePlayerClass extends Model
+class DungeonRouteFavorite extends Model
 {
-
-    public $hidden = ['id'];
-    protected $fillable = [
-        'character_class_id',
-        'dungeon_route_id',
-    ];
-
+    public $fillable = ['dungeon_route_id', 'user_id'];
     public $timestamps = false;
 
     /**
@@ -35,8 +34,8 @@ class DungeonRoutePlayerClass extends Model
     /**
      * @return BelongsTo
      */
-    public function characterclass(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(CharacterClass::class);
+        return $this->belongsTo(User::class);
     }
 }
