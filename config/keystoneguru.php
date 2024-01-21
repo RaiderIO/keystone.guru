@@ -348,4 +348,17 @@ return [
         'param_1' => env('PLAYWIRE_PARAM_1'),
         'param_2' => env('PLAYWIRE_PARAM_2'),
     ],
+
+    'api' => [
+        'dungeon_route' => [
+            'thumbnail' => [
+                'default_width'                     => 384,
+                'default_height'                    => 256,
+                'default_quality'                   => 90,
+                /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
+                'estimated_generation_time_seconds' => 10,
+                'expiration_time_seconds'           => 86400,
+            ],
+        ],
+    ],
 ];
