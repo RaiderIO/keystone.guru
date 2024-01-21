@@ -53,7 +53,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         );
 
         if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
-            $this->thumbnailService->refreshThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
+            $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
         } else {
             Log::channel('scheduler')->warning(sprintf('Not refreshing thumbnail - max attempts of %d reached', $this->attempts));
         }
