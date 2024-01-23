@@ -17,21 +17,24 @@ interface ThumbnailServiceInterface
 
     /**
      * @param DungeonRoute $dungeonRoute
+     * @param int|null     $width
+     * @param int|null     $height
+     * @param int|null     $quality
      * @return Collection|DungeonRouteThumbnailJob[]
      */
-    public function queueThumbnailRefreshForAPI(DungeonRoute $dungeonRoute): Collection;
+    public function queueThumbnailRefreshForApi(DungeonRoute $dungeonRoute, ?int $width = null, ?int $height = null, ?int $quality = null): Collection;
 
     /**
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
      * @param int          $attempts
-     * @return void
+     * @return bool
      */
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts
-    ): void;
+    ): bool;
 
     /**
      * @param DungeonRoute $dungeonRoute
@@ -40,16 +43,16 @@ interface ThumbnailServiceInterface
      * @param int|null     $width
      * @param int|null     $height
      * @param int|null     $quality
-     * @return void
+     * @return bool
      */
-    public function createCustomThumbnail(
+    public function createThumbnailCustom(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts,
         ?int         $width = null,
         ?int         $height = null,
         ?int         $quality = null
-    ): void;
+    ): bool;
 
     /**
      * @param DungeonRoute $dungeonRoute

@@ -4,7 +4,9 @@
 namespace App\Service\DungeonRoute;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Jobs\ProcessRouteFloorThumbnailCustom;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\Floor\Floor;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -25,9 +27,9 @@ class ThumbnailService implements ThumbnailServiceInterface
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
-        int          $attempts = 0): void
+        int          $attempts = 0): bool
     {
-        $this->doCreateThumbnail(
+        return $this->doCreateThumbnail(
             $dungeonRoute,
             $floorIndex,
             public_path(self::THUMBNAIL_FOLDER_PATH),
@@ -37,13 +39,18 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    public function createCustomThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts, ?int $width = null, ?int $height = null, ?int $quality = null): void
+    public function createThumbnailCustom(
+        DungeonRoute $dungeonRoute,
+        int          $floorIndex,
+        int          $attempts,
+        ?int         $width = null,
+        ?int         $height = null,
+        ?int         $quality = null): bool
     {
-        $this->doCreateThumbnail(
+        return $this->doCreateThumbnail(
             $dungeonRoute,
             $floorIndex,
             public_path(self::THUMBNAIL_CUSTOM_FOLDER_PATH),
-            $attempts,
             $width,
             $height,
             $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality')
@@ -54,25 +61,23 @@ class ThumbnailService implements ThumbnailServiceInterface
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
      * @param string       $targetFolder
-     * @param int          $attempts
      * @param int|null     $width
      * @param int|null     $height
      * @param int|null     $quality
-     * @return void
+     * @return bool
      */
     private function doCreateThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         string       $targetFolder,
-        int          $attempts = 0,
         ?int         $width = null,
         ?int         $height = null,
-        ?int         $quality = null): void
+        ?int         $quality = null): bool
     {
         if (app()->isDownForMaintenance()) {
             Log::channel('scheduler')->info('Not generating thumbnail - app is down for maintenance');
 
-            return;
+            return false;
         }
 
         $width  = $width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_width');
@@ -159,9 +164,10 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'floor'        => $floorIndex,
             ]);
 
-            // If there were errors, try again
-            ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floorIndex, ++$attempts);
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -192,9 +198,33 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    public function queueThumbnailRefreshForAPI(DungeonRoute $dungeonRoute): Collection
+    public function queueThumbnailRefreshForApi(DungeonRoute $dungeonRoute, ?int $width = null, ?int $height = null, ?int $quality = null): Collection
     {
-        // TODO: Implement queueThumbnailRefreshForAPI() method.
+        $result = collect();
+
+        // Generate thumbnails for _all_ floors
+        foreach ($dungeonRoute->dungeon->floors as $floor) {
+            /** @var Floor $floor */
+
+            $dungeonRouteThumbnailJob = DungeonRouteThumbnailJob::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $floor->index,
+                'status'           => DungeonRouteThumbnailJob::STATUS_QUEUED,
+                'width'            => $width,
+                'height'           => $height,
+                'quality'          => $quality,
+            ]);
+
+            $dungeonRouteThumbnailJob->setRelation('dungeonRoute', $dungeonRoute);
+            $dungeonRouteThumbnailJob->setRelation('floor', $floor);
+
+            // Set it for processing in a queue
+            ProcessRouteFloorThumbnailCustom::dispatch($this, $dungeonRouteThumbnailJob, $dungeonRoute, $floor->index, $width, $height, $quality);
+
+            $result->push($dungeonRouteThumbnailJob);
+        }
+
+        return $result;
     }
 
 

@@ -16,15 +16,15 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /** @var ThumbnailServiceInterface */
-    private ThumbnailServiceInterface $thumbnailService;
+    protected ThumbnailServiceInterface $thumbnailService;
 
     /** @var DungeonRoute $dungeonRoute */
-    private DungeonRoute $dungeonRoute;
+    protected DungeonRoute $dungeonRoute;
 
     /** @var int $floorIndex */
-    private int $floorIndex;
+    protected int $floorIndex;
 
-    private int $attempts;
+    protected int $attempts;
 
     /**
      * Create a new job instance.
@@ -53,13 +53,20 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         );
 
         if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
-            $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
+            $result = $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
+
+            if (!$result) {
+                Log::channel('scheduler')->warning(sprintf('Error refreshing thumbnail, attempt %d', $this->attempts));
+
+                // If there were errors, try again
+                ProcessRouteFloorThumbnail::dispatch($this, $this->dungeonRoute, $this->floorIndex, ++$this->attempts);
+            } else {
+                Log::channel('scheduler')->info(
+                    sprintf('Finished processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)
+                );
+            }
         } else {
             Log::channel('scheduler')->warning(sprintf('Not refreshing thumbnail - max attempts of %d reached', $this->attempts));
         }
-
-        Log::channel('scheduler')->info(
-            sprintf('Finished processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)
-        );
     }
 }
