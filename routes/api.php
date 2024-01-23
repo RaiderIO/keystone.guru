@@ -20,7 +20,9 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::group(['prefix' => 'route'], function () {
-        Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.combatlog.route.list');
+        Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.route.list');
+
+        Route::post('/{dungeonRoute}/thumbnail', [APIDungeonRouteController::class, 'createThumbnails'])->name('api.v1.route.thumbnail.create');
     });
 
     // Static data

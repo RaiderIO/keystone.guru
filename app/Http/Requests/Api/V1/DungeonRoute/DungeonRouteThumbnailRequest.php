@@ -27,9 +27,9 @@ class DungeonRouteThumbnailRequest extends APIFormRequest
     {
         return [
             'public_key' => Rule::exists('dungeon_routes', 'public_key')->where('user_id', Auth::id()),
-            'width'      => 'nullable|int',
-            'height'     => 'nullable|int',
-            'quality'    => 'nullable|int',
+            'width'      => 'nullable|int|min:0|max:1920',
+            'height'     => 'nullable|int|min:0|max:1080',
+            'quality'    => 'nullable|int|min:0|max:100',
         ];
     }
 }

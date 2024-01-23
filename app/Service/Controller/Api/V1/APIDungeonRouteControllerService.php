@@ -21,20 +21,14 @@ class APIDungeonRouteControllerService implements APIDungeonRouteControllerServi
     }
 
     /**
-     * @param string   $publicKey
-     * @param int|null $width
-     * @param int|null $height
-     * @param int|null $quality
+     * @param DungeonRoute $dungeonRoute
+     * @param int|null     $width
+     * @param int|null     $height
+     * @param int|null     $quality
      * @return Collection|DungeonRouteThumbnailJob[]
      */
-    public function createThumbnails(string $publicKey, ?int $width = null, ?int $height = null, ?int $quality = null): Collection
+    public function createThumbnails(DungeonRoute $dungeonRoute, ?int $width = null, ?int $height = null, ?int $quality = null): Collection
     {
-        $result = collect();
-
-        $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->firstOrFail();
-
-        $this->thumbnailService->queueThumbnailRefresh($dungeonRoute);
-
-        return $result;
+        return $this->thumbnailService->queueThumbnailRefreshForApi($dungeonRoute, $width, $height, $quality);
     }
 }
