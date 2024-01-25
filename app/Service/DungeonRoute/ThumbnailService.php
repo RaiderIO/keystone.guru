@@ -17,9 +17,9 @@ use Symfony\Component\Process\Process;
 
 class ThumbnailService implements ThumbnailServiceInterface
 {
-    const THUMBNAIL_FOLDER_PATH = 'images/route_thumbnails/';
+    const THUMBNAIL_FOLDER_PATH = '/images/route_thumbnails';
 
-    const THUMBNAIL_CUSTOM_FOLDER_PATH = 'images/route_thumbnails_custom/';
+    const THUMBNAIL_CUSTOM_FOLDER_PATH = '/images/route_thumbnails_custom';
 
     /**
      * @inheritDoc
@@ -32,7 +32,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         return $this->doCreateThumbnail(
             $dungeonRoute,
             $floorIndex,
-            public_path(self::THUMBNAIL_FOLDER_PATH),
+            self::THUMBNAIL_FOLDER_PATH,
         );
     }
 
@@ -45,14 +45,16 @@ class ThumbnailService implements ThumbnailServiceInterface
         int          $attempts,
         ?int         $width = null,
         ?int         $height = null,
+        ?int         $zoomLevel = null,
         ?int         $quality = null): bool
     {
         return $this->doCreateThumbnail(
             $dungeonRoute,
             $floorIndex,
-            public_path(self::THUMBNAIL_CUSTOM_FOLDER_PATH),
+            self::THUMBNAIL_CUSTOM_FOLDER_PATH,
             $width,
             $height,
+            $zoomLevel,
             $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality')
         );
     }
@@ -63,6 +65,7 @@ class ThumbnailService implements ThumbnailServiceInterface
      * @param string       $targetFolder
      * @param int|null     $width
      * @param int|null     $height
+     * @param int|null     $zoomLevel
      * @param int|null     $quality
      * @return bool
      */
@@ -72,6 +75,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         string       $targetFolder,
         ?int         $width = null,
         ?int         $height = null,
+        ?int         $zoomLevel = null,
         ?int         $quality = null): bool
     {
         if (app()->isDownForMaintenance()) {
@@ -80,8 +84,9 @@ class ThumbnailService implements ThumbnailServiceInterface
             return false;
         }
 
-        $width  = $width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_width');
-        $height = $height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_height');
+        $width     = $width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_width');
+        $height    = $height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_height');
+        $zoomLevel = $zoomLevel ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
         // @TODO #2183
         $extension = $quality === null ? 'png' : 'jpg';
 
@@ -107,9 +112,12 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'title'        => $dungeonRoute->getTitleSlug(),
                 'floorindex'   => $floorIndex,
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
+                'zoomLevel'    => $zoomLevel,
             ]),
             // Second argument; where to save the resulting image
             $tmpFile,
+            $width,
+            $height,
         ]);
 
         Log::channel('scheduler')->info($process->getCommandLine());
@@ -134,7 +142,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
                     // Rescale it
                     Log::channel('scheduler')->info(sprintf('Scaling and moving image from %s to %s', $tmpFile, $target));
-                    Image::make($tmpFile)->resize($width, $height)->save($target, $quality);
+                    Image::configure(['driver' => 'imagick'])->make($tmpFile)->resize($width, $height)->save($target, $quality);
 
                     Log::channel('scheduler')->info(
                         sprintf('Check if %s exists: %s', $target, var_export(file_exists($target), true))
@@ -198,7 +206,12 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @inheritDoc
      */
-    public function queueThumbnailRefreshForApi(DungeonRoute $dungeonRoute, ?int $width = null, ?int $height = null, ?int $quality = null): Collection
+    public function queueThumbnailRefreshForApi(
+        DungeonRoute $dungeonRoute,
+        ?int         $width = null,
+        ?int         $height = null,
+        ?int         $zoomLevel = null,
+        ?int         $quality = null): Collection
     {
         $result = collect();
 
@@ -212,6 +225,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'status'           => DungeonRouteThumbnailJob::STATUS_QUEUED,
                 'width'            => $width,
                 'height'           => $height,
+                'zoom_level'       => $zoomLevel,
                 'quality'          => $quality,
             ]);
 
@@ -219,7 +233,17 @@ class ThumbnailService implements ThumbnailServiceInterface
             $dungeonRouteThumbnailJob->setRelation('floor', $floor);
 
             // Set it for processing in a queue
-            ProcessRouteFloorThumbnailCustom::dispatch($this, $dungeonRouteThumbnailJob, $dungeonRoute, $floor->index, $width, $height, $quality);
+            ProcessRouteFloorThumbnailCustom::dispatch(
+                $this,
+                $dungeonRouteThumbnailJob,
+                $dungeonRoute,
+                $floor->index,
+                0,
+                $width,
+                $height,
+                $zoomLevel,
+                $quality
+            );
 
             $result->push($dungeonRouteThumbnailJob);
         }

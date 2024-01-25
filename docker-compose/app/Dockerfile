@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libmagickwand-dev \
     nodejs \
     sudo \
     libzip-dev \
@@ -22,8 +23,8 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client  \
     wget
 
-# Install handlebars
-RUN npm i -g handlebars puppeteer
+# Install global packages
+RUN npm i -g handlebars puppeteer@19.9.0
 
 # Required for puppeteer to work
 RUN apt-get install -y libxdamage-dev \
@@ -34,12 +35,13 @@ RUN apt-get install -y libxdamage-dev \
                 libasound2
 
 # Have puppeteer download chromium (this really should be done when puppeteer is installed from npm..)
-RUN node /usr/lib/node_modules/puppeteer/install.mjs
+RUN node /usr/lib/node_modules/puppeteer/install.js
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
+RUN pecl install imagick && docker-php-ext-enable imagick
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer

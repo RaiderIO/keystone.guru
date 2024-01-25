@@ -51,6 +51,7 @@ class APIDungeonRouteController extends Controller
                 $dungeonRoute,
                 $validated['width'],
                 $validated['height'],
+                $validated['zoomLevel'],
                 $validated['quality']
             )
         );

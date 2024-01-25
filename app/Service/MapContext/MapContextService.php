@@ -38,16 +38,17 @@ class MapContextService implements MapContextServiceInterface
     /**
      * @param DungeonRoute $dungeonRoute
      * @param Floor        $floor
-     *
+     * @param string|null  $mapFacadeStyle
      * @return MapContextDungeonRoute
      */
-    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor): MapContextDungeonRoute
+    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, string $mapFacadeStyle = null): MapContextDungeonRoute
     {
         return new MapContextDungeonRoute(
             $this->cacheService,
             $this->coordinatesService,
             $dungeonRoute,
-            $floor
+            $floor,
+            $mapFacadeStyle
         );
     }
 
