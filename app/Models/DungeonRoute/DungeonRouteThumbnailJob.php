@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string       $status
  * @property int          $width
  * @property int          $height
+ * @property float        $zoom_level
  * @property int          $quality
  *
  * @property DungeonRoute $dungeonRoute
@@ -38,6 +39,7 @@ class DungeonRouteThumbnailJob extends Model
         'status',
         'width',
         'height',
+        'zoom_level',
         'quality',
         'created_at',
         'updated_at',

@@ -38,6 +38,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
             'status'               => $this->status,
             'width'                => $this->width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_width'),
             'height'               => $this->height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_height'),
+            'zoom_level'           => $this->zoom_level ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level'),
             'quality'              => $this->quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality'),
             'queue_size'           => $queueSize,
             'estimated_completion' => $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
