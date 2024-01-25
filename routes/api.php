@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\APICombatLogController;
 use App\Http\Controllers\Api\V1\APIDungeonController;
 use App\Http\Controllers\Api\V1\APIDungeonRouteController;
+use App\Http\Controllers\Api\V1\APIDungeonRouteThumbnailJobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::post('/{dungeonRoute}/thumbnail', [APIDungeonRouteController::class, 'createThumbnails'])->name('api.v1.route.thumbnail.create');
     });
+
+    Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', [APIDungeonRouteThumbnailJobController::class, 'get'])->name('api.v1.thumbnailjob.get');
 
     // Static data
     Route::group(['prefix' => 'dungeon'], function () {

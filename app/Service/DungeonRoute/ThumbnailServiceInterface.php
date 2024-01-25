@@ -64,23 +64,6 @@ interface ThumbnailServiceInterface
     ): bool;
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @param string       $extension
-     * @return string
-     */
-    public function getFileName(DungeonRoute $dungeonRoute, int $floorIndex, string $extension): string;
-
-    /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @param string       $targetFolder
-     * @param string       $extension
-     * @return string
-     */
-    public function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder, string $extension): string;
-
-    /**
      * @param DungeonRoute $sourceDungeonRoute
      * @param DungeonRoute $targetDungeonRoute
      * @return void
