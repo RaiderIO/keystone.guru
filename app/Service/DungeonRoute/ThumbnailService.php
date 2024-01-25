@@ -95,10 +95,10 @@ class ThumbnailService implements ThumbnailServiceInterface
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
         // 3. Moved to public folder
 
-        $filename = $this->getFilename($dungeonRoute, $floorIndex, $extension);
+        $filename = self::getFilename($dungeonRoute, $floorIndex, $extension);
 
         $tmpFile = sprintf('/tmp/%s', $filename);
-        $target  = $this->getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder, $extension);
+        $target  = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder, $extension);
 
         // puppeteer chromium-browser
         $process = new Process([
@@ -251,21 +251,27 @@ class ThumbnailService implements ThumbnailServiceInterface
         return $result;
     }
 
-
     /**
-     * @inheritDoc
+     * @param DungeonRoute $dungeonRoute
+     * @param int          $floorIndex
+     * @param string       $extension
+     * @return string
      */
-    public function getFileName(DungeonRoute $dungeonRoute, int $floorIndex, string $extension): string
+    public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex, string $extension): string
     {
         return sprintf('%s_%s.%s', $dungeonRoute->public_key, $floorIndex, $extension);
     }
 
     /**
-     * @inheritDoc
+     * @param DungeonRoute $dungeonRoute
+     * @param int          $floorIndex
+     * @param string       $targetFolder
+     * @param string       $extension
+     * @return string
      */
-    public function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder, string $extension): string
+    public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder, string $extension): string
     {
-        return public_path(sprintf('%s/%s', $targetFolder, $this->getFilename($dungeonRoute, $floorIndex, $extension)));
+        return public_path(sprintf('%s/%s', $targetFolder, self::getFilename($dungeonRoute, $floorIndex, $extension)));
     }
 
     /**

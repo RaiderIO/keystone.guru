@@ -9,7 +9,6 @@ use App\Http\Resources\DungeonRoute\DungeonRouteCollectionResource;
 use App\Http\Resources\DungeonRoute\DungeonRouteThumbnailJobCollectionResource;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Controller\Api\V1\APIDungeonRouteControllerServiceInterface;
-use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 

@@ -31,6 +31,8 @@ class DungeonRouteThumbnailJobResource extends JsonResource
     {
         $queueSize = Queue::size(sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env')));
 
+        $isCompleted = $this->status === DungeonRouteThumbnailJob::STATUS_COMPLETED;
+
         return [
             'id'                   => $this->id,
             'public_key'           => $this->dungeonRoute->public_key,
@@ -41,10 +43,18 @@ class DungeonRouteThumbnailJobResource extends JsonResource
             'zoom_level'           => $this->zoom_level ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level'),
             'quality'              => $this->quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality'),
             'queue_size'           => $queueSize,
-            'estimated_completion' => $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
+            'estimated_completion' => $isCompleted ? null : $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
             'expires_at'           => $this->created_at->addSeconds(config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')),
             'links'                => [
-//                'result' => $this->status === self::STATUS_COMPLETED ? public_path(ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH),
+                'result' => $isCompleted
+                    ? url(
+                        sprintf(
+                            '%s/%s',
+                            ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH,
+                            ThumbnailService::getFilename($this->dungeonRoute, $this->floor->index, 'jpg')
+                        )
+                    )
+                    : null,
             ],
         ];
     }
