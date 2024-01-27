@@ -1474,34 +1474,34 @@ class DungeonRoute extends Model
 
     /**
      * Returns a single affix group from the list of affix groups attached to this dungeon route and returns the most relevant
-     * one based on what the current affix is. By default will return the first affix group.
+     * one based on what the current affix is. By default, will return the first affix group.
      *
      * @return AffixGroup|null
+     * @throws Exception
      */
     public function getMostRelevantAffixGroup(): ?AffixGroup
     {
-        $seasonService = App::make(SeasonService::class);
+        /** @var AffixGroup|null $result */
+        $result = null;
 
-        return $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+        if ($this->affixes->isNotEmpty()) {
+            $result = $this->affixes->first();
 
-        //        $result = null;
-        //
-        //        if ($this->affixgroups->isNotEmpty()) {
-        //            $result = $this->affixgroups->first;
-        //
-        //            /** @var SeasonService $seasonService */
-        //            $seasonService     = App::make(SeasonService::class);
-        //            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
-        //
-        //            foreach ($this->affixgroups as $affixgroup) {
-        //                if ($affixgroup->id === $currentAffixGroup->id) {
-        //                    $result = $affixgroup;
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //
-        //        return $result;
+            /** @var SeasonService $seasonService */
+            $seasonService     = App::make(SeasonServiceInterface::class);
+            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+
+            if ($currentAffixGroup !== null) {
+                foreach ($this->affixes as $affixGroup) {
+                    if ($affixGroup->id === $currentAffixGroup->id) {
+                        $result = $affixGroup;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
