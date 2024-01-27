@@ -3,6 +3,7 @@
 namespace App\Models\DungeonRoute;
 
 use App\Models\Floor\Floor;
+use App\Service\DungeonRoute\ThumbnailService;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -64,5 +65,25 @@ class DungeonRouteThumbnailJob extends Model
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function expire(): bool
+    {
+        // Always try to delete the image, but always return OK if it wasn't successful (there may not be an image then).
+        $result = @unlink(
+                ThumbnailService::getTargetFilePath(
+                    $this->dungeonRoute,
+                    $this->floor->index,
+                    ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH,
+                    'jpg'
+                )
+            ) || $this->status !== self::STATUS_COMPLETED;
+
+        $this->update(['status' => self::STATUS_EXPIRED]);
+
+        return $result;
     }
 }

@@ -221,7 +221,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             $dungeonRouteThumbnailJob = DungeonRouteThumbnailJob::create([
                 'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $floor->index,
+                'floor_id'         => $floor->id,
                 'status'           => DungeonRouteThumbnailJob::STATUS_QUEUED,
                 'width'            => $width,
                 'height'           => $height,
