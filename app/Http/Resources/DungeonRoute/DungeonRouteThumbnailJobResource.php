@@ -46,6 +46,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
             'estimated_completion' => $isCompleted ? null : $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
             'expires_at'           => $this->created_at->addSeconds(config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')),
             'links'                => [
+                'status' => route('api.v1.thumbnailjob.get', ['dungeonRouteThumbnailJob' => $this]),
                 'result' => $isCompleted
                     ? url(
                         sprintf(

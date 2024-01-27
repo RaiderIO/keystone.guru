@@ -33,10 +33,12 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         @endif
         @if($embedOptions['show']['affixes'])
             <div class="col-md-auto px-1 d-md-flex d-none">
-                    <?php
-                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                    ?>
-                @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
+                <?php
+                $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                ?>
+                @if($mostRelevantAffixGroup !== null)
+                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
+                @endif
             </div>
         @endif
         <?php // Fills up any remaining space space ?>
