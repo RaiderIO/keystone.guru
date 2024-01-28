@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\DungeonRoute\DungeonRouteListRequest;
 use App\Http\Requests\Api\V1\DungeonRoute\DungeonRouteThumbnailRequest;
 use App\Http\Resources\DungeonRoute\DungeonRouteCollectionResource;
-use App\Http\Resources\DungeonRoute\DungeonRouteThumbnailJobCollectionResource;
+use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobCollectionResource;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Controller\Api\V1\APIDungeonRouteControllerServiceInterface;
 use Auth;
@@ -15,6 +15,13 @@ use Illuminate\Database\Eloquent\Builder;
 class APIDungeonRouteController extends Controller
 {
     /**
+     * @OA\Get(
+     *     path="/api/v1/route",
+     *     summary="Get a list of routes",
+     *     tags={"Route"},
+     *     @OA\Response(response=200, description="Successful operation")
+     * )
+     *
      * @param DungeonRouteListRequest $request
      * @return DungeonRouteCollectionResource
      */
@@ -33,6 +40,27 @@ class APIDungeonRouteController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/api/v1/route/{route}/thumbnail",
+     *     summary="Create a new thumbnail for a route you can view",
+     *     tags={"Route"},
+     *     @OA\Parameter(
+     *         description="Public key of the route you want to generate a thumbnail for",
+     *         in="path",
+     *         name="route",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *          description="Pet object that needs to be added to the store",
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailRequest")
+     *      ),
+     *     @OA\Response(response=200, description="Successful operation")
+     * )
+     *
      * @param DungeonRouteThumbnailRequest              $request
      * @param APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService
      * @param DungeonRoute                              $dungeonRoute
@@ -50,7 +78,7 @@ class APIDungeonRouteController extends Controller
                 $dungeonRoute,
                 $validated['width'],
                 $validated['height'],
-                $validated['zoomLevel'],
+                $validated['zoom_level'],
                 $validated['quality']
             )
         );

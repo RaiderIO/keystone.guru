@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\DungeonRoute;
+namespace App\Http\Resources\DungeonRouteThumbnailJob;
 
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Contracts\Support\Arrayable;
