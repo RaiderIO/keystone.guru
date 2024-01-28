@@ -28,7 +28,7 @@ class DungeonRouteThumbnailRequest extends APIFormRequest
         return [
             'width'      => 'nullable|int|min:192|max:1620',
             'height'     => 'nullable|int|min:128|max:1080',
-            'zoomLevel'  => 'nullable|numeric|min:1|max:5',
+            'zoom_level' => 'nullable|numeric|min:1|max:5',
             'quality'    => 'nullable|int|min:1|max:100',
         ];
     }
