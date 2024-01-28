@@ -25,6 +25,7 @@ class ReleaseChangelogCategory extends CacheModel
     public const LIVE_SESSION_CHANGES     = 'live_session_changes';
     public const SIMULATION_CRAFT_CHANGES = 'simulation_craft_changes';
     public const AUTO_ROUTE_CHANGES       = 'auto_route_changes';
+    public const API_CHANGES              = 'api_changes';
 
     public const ALL = [
         self::GENERAL_CHANGES          => 1,
@@ -38,6 +39,7 @@ class ReleaseChangelogCategory extends CacheModel
         self::LIVE_SESSION_CHANGES     => 9,
         self::SIMULATION_CRAFT_CHANGES => 10,
         self::AUTO_ROUTE_CHANGES       => 11,
+        self::API_CHANGES              => 12,
     ];
 
     public    $table      = 'release_changelog_categories';

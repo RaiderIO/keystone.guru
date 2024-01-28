@@ -3638,5 +3638,61 @@
         "created_at": "2023-12-13T21:13:15.000000Z",
         "updated_at": "2023-12-13T21:13:15.000000Z",
         "merged": false
+    },
+    {
+        "id": 300,
+        "dungeon_id": 103,
+        "version": 7,
+        "enemy_forces_required": 430,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "ab66bac6f4f80efa2d6fa1672ae13e35",
+        "created_at": "2024-01-28T13:07:04.000000Z",
+        "updated_at": "2024-01-28T13:07:04.000000Z",
+        "merged": false
+    },
+    {
+        "id": 301,
+        "dungeon_id": 5,
+        "version": 5,
+        "enemy_forces_required": 273,
+        "enemy_forces_required_teeming": 336,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "bd5c4bb6bdd3462d0c8c5fbd06a46e09",
+        "created_at": "2024-01-28T13:07:07.000000Z",
+        "updated_at": "2024-01-28T13:07:07.000000Z",
+        "merged": false
+    },
+    {
+        "id": 302,
+        "dungeon_id": 105,
+        "version": 9,
+        "enemy_forces_required": 300,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "599e2f4c82b233216afeedcbe7c293ef",
+        "created_at": "2024-01-28T13:07:09.000000Z",
+        "updated_at": "2024-01-28T13:07:09.000000Z",
+        "merged": false
+    },
+    {
+        "id": 303,
+        "dungeon_id": 106,
+        "version": 7,
+        "enemy_forces_required": 335,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "d8a78ad873f07b9d22bc39535ff0eefb",
+        "created_at": "2024-01-28T13:07:10.000000Z",
+        "updated_at": "2024-01-28T13:07:10.000000Z",
+        "merged": false
     }
 ]
