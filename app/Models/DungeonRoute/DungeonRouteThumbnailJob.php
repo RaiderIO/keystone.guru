@@ -77,8 +77,7 @@ class DungeonRouteThumbnailJob extends Model
                 ThumbnailService::getTargetFilePath(
                     $this->dungeonRoute,
                     $this->floor->index,
-                    ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH,
-                    'jpg'
+                    ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH
                 )
             ) || $this->status !== self::STATUS_COMPLETED;
 
