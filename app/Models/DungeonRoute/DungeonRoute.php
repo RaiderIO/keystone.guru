@@ -40,6 +40,7 @@ use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
@@ -166,7 +167,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'has_thumbnail', 'has_team', 'published'];
+    protected $appends = ['setup', 'has_thumbnail', 'png_thumbnails', 'has_team', 'published'];
 
     protected $hidden = [
         'id',
@@ -711,6 +712,17 @@ class DungeonRoute extends Model
     public function getHasThumbnailAttribute(): bool
     {
         return Carbon::createFromTimeString($this->thumbnail_updated_at)->diffInYears(Carbon::now()) === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPngThumbnailsAttribute(): bool
+    {
+        // A bit of a hack but it works, it's complicated otherwise
+        return Carbon::createFromTimeString($this->thumbnail_updated_at)->isBefore(
+            Carbon::createFromDate(2024, 01, 29)
+        );
     }
 
     /**
@@ -1539,23 +1551,31 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @param Floor $floor
+     * @param int $floorIndex
      * @return string
      */
-    public function getThumbnailUrl(Floor $floor): string
+    public function getThumbnailUrl(int $floorIndex): string
     {
-        return url(sprintf('/images/route_thumbnails/%s_%s.png', $this->public_key, $floor->index));
+        return url($this->getThumbnailPath($floorIndex));
     }
 
     /**
-     * @param Floor $floor
+     * @param int $floorIndex
      * @return string
      */
-    public function getThumbnailPath(Floor $floor): string
+    public function getThumbnailPath(int $floorIndex): string
     {
-        $publicPath = public_path('images/route_thumbnails/');
+        $path = sprintf('%s/%s_%s.jpg', public_path(ThumbnailService::THUMBNAIL_FOLDER_PATH), $this->public_key, $floorIndex);
 
-        return sprintf('%s/%s_%s.png', $publicPath, $this->public_key, $floor->index);
+        // If we don't have a .jpg file, check if we should use .png instead
+        $pngPath = str_replace('.jpg', '.png', $path);
+
+        dd($path, $pngPath);
+        if (!file_exists($path) && file_exists($pngPath)) {
+            $path = $pngPath;
+        }
+
+        return $path;
     }
 
     /**
@@ -1654,7 +1674,7 @@ class DungeonRoute extends Model
             // Delete thumbnails
             foreach ($dungeonRoute->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
-                @unlink($dungeonRoute->getThumbnailPath($floor));
+                @unlink($dungeonRoute->getThumbnailPath($floor->index));
             }
 
             // Dungeonroute settings

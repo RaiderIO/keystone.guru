@@ -87,18 +87,16 @@ class ThumbnailService implements ThumbnailServiceInterface
         $width     = $width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_width');
         $height    = $height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_height');
         $zoomLevel = $zoomLevel ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
-        // @TODO #2183
-        $extension = $quality === null ? 'png' : 'jpg';
 
 
         // 1. Headless chrome saves file in a temp location
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
         // 3. Moved to public folder
 
-        $filename = self::getFilename($dungeonRoute, $floorIndex, $extension);
+        $filename = self::getFilename($dungeonRoute, $floorIndex);
 
         $tmpFile = sprintf('/tmp/%s', $filename);
-        $target  = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder, $extension);
+        $target  = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
 
         // puppeteer chromium-browser
         $process = new Process([
@@ -143,6 +141,11 @@ class ThumbnailService implements ThumbnailServiceInterface
                     // Rescale it
                     Log::channel('scheduler')->info(sprintf('Scaling and moving image from %s to %s', $tmpFile, $target));
                     Image::configure(['driver' => 'imagick'])->make($tmpFile)->resize($width, $height)->save($target, $quality);
+
+                    // Remove any old .png file that may be there
+                    if (unlink(str_replace('.jpg', '.png', $target))) {
+                        Log::channel('scheduler')->info('Removed old .png file');
+                    }
 
                     Log::channel('scheduler')->info(
                         sprintf('Check if %s exists: %s', $target, var_export(file_exists($target), true))
@@ -254,24 +257,22 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
-     * @param string       $extension
      * @return string
      */
-    public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex, string $extension): string
+    public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
-        return sprintf('%s_%s.%s', $dungeonRoute->public_key, $floorIndex, $extension);
+        return sprintf('%s_%s.jpg', $dungeonRoute->public_key, $floorIndex);
     }
 
     /**
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
      * @param string       $targetFolder
-     * @param string       $extension
      * @return string
      */
-    public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder, string $extension): string
+    public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder): string
     {
-        return public_path(sprintf('%s/%s', $targetFolder, self::getFilename($dungeonRoute, $floorIndex, $extension)));
+        return public_path(sprintf('%s/%s', $targetFolder, self::getFilename($dungeonRoute, $floorIndex)));
     }
 
     /**
@@ -288,8 +289,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         // Copy over all thumbnails
         foreach ($sourceDungeonRoute->dungeon->floors()->where('facade', 0)->get() as $floor) {
-            $sourcePath = $this->getTargetFilePath($sourceDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH, 'png');
-            $targetPath = $this->getTargetFilePath($targetDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH, 'png');
+            $sourcePath = $this->getTargetFilePath($sourceDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
+            $targetPath = $this->getTargetFilePath($targetDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
 
             if (!File::exists($sourcePath) || !File::exists($targetPath)) {
                 continue;
@@ -317,7 +318,8 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = true;
         foreach ($dungeonRoute->dungeon->floors()->active()->get() as $floor) {
-            $result = $result && file_exists($dungeonRoute->getThumbnailPath($floor));
+            /** @var Floor $floor */
+            $result = $result && file_exists($dungeonRoute->getThumbnailPath($floor->index));
         }
 
         return $result;
