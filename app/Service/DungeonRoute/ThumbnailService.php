@@ -143,7 +143,8 @@ class ThumbnailService implements ThumbnailServiceInterface
                     Image::configure(['driver' => 'imagick'])->make($tmpFile)->resize($width, $height)->save($target, $quality);
 
                     // Remove any old .png file that may be there
-                    if (unlink(str_replace('.jpg', '.png', $target))) {
+                    $oldPngFilePath = str_replace('.jpg', '.png', $target);
+                    if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
                         Log::channel('scheduler')->info('Removed old .png file');
                     }
 
