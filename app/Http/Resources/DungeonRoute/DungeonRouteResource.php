@@ -31,7 +31,7 @@ class DungeonRouteResource extends JsonResource
     {
         $thumbnailUrls = [];
         foreach ($this->dungeon->floors()->where('facade', 0)->get() as $floor) {
-            $thumbnailUrls[] = $this->getThumbnailUrl($floor);
+            $thumbnailUrls[] = $this->getThumbnailUrl($floor->index);
         }
 
         $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];

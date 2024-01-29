@@ -83,4 +83,11 @@ class RouteThumbnailJobResponseModel
      * @var string
      */
     public string $expires_at;
+
+    /**
+     * @OA\Property(ref="#/components/schemas/RouteThumbnailJobLinks")
+     *
+     * @var RouteThumbnailJobLinksResponseModel
+     */
+    public RouteThumbnailJobLinksResponseModel $links;
 }
