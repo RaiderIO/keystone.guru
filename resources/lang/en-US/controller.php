@@ -115,6 +115,7 @@ return [
     'mdtimport'                   => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
+            'mdt_string_parsing_failed'             => 'MDT string parsing failed due to an internal server error.',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',

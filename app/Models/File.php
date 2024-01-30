@@ -112,7 +112,7 @@ class File extends Model
         $disk = config('app.env') === 'local' ? 'public_uploads' : 'public';
 
         // Ensure the path exists
-        $storageDir = Storage::disk($disk)->getAdapter()->getPathPrefix() . '/' . $dir;
+        $storageDir = Storage::disk($disk)->getAdapter()->getPathPrefix() . $dir;
         if (!is_dir($storageDir)) {
             mkdir($storageDir, 755, true);
         }
