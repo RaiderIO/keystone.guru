@@ -1570,7 +1570,6 @@ class DungeonRoute extends Model
         // If we don't have a .jpg file, check if we should use .png instead
         $pngPath = str_replace('.jpg', '.png', $path);
 
-        dd($path, $pngPath);
         if (!file_exists($path) && file_exists($pngPath)) {
             $path = $pngPath;
         }
