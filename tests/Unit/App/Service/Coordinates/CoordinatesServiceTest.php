@@ -6,7 +6,7 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Service\Coordinates\CoordinatesService;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
 class CoordinatesServiceTest extends PublicTestCase

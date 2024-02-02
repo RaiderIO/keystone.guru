@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Tests\TestCases;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use Tests\TestCase;
 
 class PublicTestCase extends TestCase
 {

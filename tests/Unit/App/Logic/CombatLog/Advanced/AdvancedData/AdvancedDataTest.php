@@ -6,7 +6,7 @@ use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 
 class AdvancedDataTest extends PublicTestCase
 {

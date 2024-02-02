@@ -5,7 +5,7 @@ namespace Tests\Unit\Fixtures;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 
 class LoggingFixtures
 {

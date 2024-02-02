@@ -5,7 +5,7 @@ namespace Tests\Unit\App\Logic\Structs;
 use App\Logic\Structs\LatLng;
 use App\Service\Coordinates\CoordinatesService;
 use PHPUnit\Framework\Assert;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 
 class LatLngTest extends PublicTestCase
 {

@@ -228,7 +228,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $viewService, $gameVersionService, $expansionService,
             &$isUserAdmin, &$adFree, &$userOrDefaultRegion, &$currentUserGameVersion, &$currentExpansion
         ) {
-//            dd('test');
             // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
             if ($isUserAdmin === null) {
                 $isUserAdmin = Auth::check() && Auth::getUser()->hasRole('admin');

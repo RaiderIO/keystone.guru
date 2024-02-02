@@ -419,19 +419,19 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::get('refresh-csrf', [AjaxSiteController::class, 'refreshCsrf'])->name('api.refresh_csrf');
 
         Route::group(['prefix' => 'tag'], function () {
-            Route::get('/', [AjaxTagController::class, 'all'])->name('api.tag.all');
-            Route::get('/{category}', [AjaxTagController::class, 'list'])->name('api.tag.list');
-            Route::post('/', [AjaxTagController::class, 'store'])->name('api.tag.create');
-            Route::delete('/{tag}', [AjaxTagController::class, 'delete'])->name('api.tag.delete');
+            Route::get('/', [AjaxTagController::class, 'all'])->name('ajax.tag.all');
+            Route::get('/{category}', [AjaxTagController::class, 'list'])->name('ajax.tag.list');
+            Route::post('/', [AjaxTagController::class, 'store'])->name('ajax.tag.create');
+            Route::delete('/{tag}', [AjaxTagController::class, 'delete'])->name('ajax.tag.delete');
             // Profile
-            Route::put('/{tag}/all', [AjaxTagController::class, 'updateAll'])->name('api.tag.updateall');
-            Route::delete('/{tag}/all', [AjaxTagController::class, 'deleteAll'])->name('api.tag.deleteall');
+            Route::put('/{tag}/all', [AjaxTagController::class, 'updateAll'])->name('ajax.tag.updateall');
+            Route::delete('/{tag}/all', [AjaxTagController::class, 'deleteAll'])->name('ajax.tag.deleteall');
         });
 
         Route::get('/{publickey}/data', [AjaxDungeonRouteController::class, 'data']);
 
-        Route::post('userreport/dungeonroute/{dungeonroute}', [AjaxUserReportController::class, 'dungeonrouteStore'])->name('userreport.dungeonroute');
-        Route::post('userreport/enemy/{enemy}', [AjaxUserReportController::class, 'enemyStore'])->name('userreport.enemy');
+        Route::post('userreport/dungeonroute/{dungeonroute}', [AjaxUserReportController::class, 'dungeonrouteStore'])->name('ajax.userreport.dungeonroute');
+        Route::post('userreport/enemy/{enemy}', [AjaxUserReportController::class, 'enemyStore'])->name('ajax.userreport.enemy');
 
         Route::get('/routes', [AjaxDungeonRouteController::class, 'list']);
         Route::get('/search', [AjaxDungeonRouteController::class, 'htmlsearch']);
@@ -443,8 +443,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
         // Metrics
         Route::group(['prefix' => 'metric'], function () {
-            Route::post('/', [AjaxMetricController::class, 'store'])->name('api.metric.store');
-            Route::post('/route/{dungeonRoute}', [AjaxMetricController::class, 'storeDungeonRoute'])->name('api.metric.store.dungeonroute');
+            Route::post('/', [AjaxMetricController::class, 'store'])->name('ajax.metric.store');
+            Route::post('/route/{dungeonRoute}', [AjaxMetricController::class, 'storeDungeonRoute'])->name('ajax.metric.store.dungeonroute');
         });
 
         // Must be an admin to perform these actions
@@ -505,9 +505,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::group(['prefix' => '{dungeonRoute}'], function () {
 
 
-            Route::post('/brushline', [AjaxBrushlineController::class, 'store']);
-            Route::put('/brushline/{brushline}', [AjaxBrushlineController::class, 'store']);
-            Route::delete('/brushline/{brushline}', [AjaxBrushlineController::class, 'delete']);
+            Route::post('/brushline', [AjaxBrushlineController::class, 'store'])->name('ajax.dungeonroute.brushline.create');
+            Route::put('/brushline/{brushline}', [AjaxBrushlineController::class, 'store'])->name('ajax.dungeonroute.brushline.update');
+            Route::delete('/brushline/{brushline}', [AjaxBrushlineController::class, 'delete'])->name('ajax.dungeonroute.brushline.delete');
 
             Route::put('/killzone/mass', [AjaxKillZoneController::class, 'storeAll']);
             Route::post('/killzone', [AjaxKillZoneController::class, 'store']);
