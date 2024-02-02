@@ -88,12 +88,15 @@ class CoordinatesService implements CoordinatesServiceInterface
     public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng
     {
         $sourceFloor = $latLng->getFloor();
-
         if ($sourceFloor === null) {
             throw new \InvalidArgumentException('No floor set for latlng!');
         }
 
         $result = clone $latLng;
+        // Nothing to do if facade is not enabled - the coordinates are the same always
+        if (!$mappingVersion->dungeon->facade_enabled) {
+            return $result;
+        }
 
         // Check if this floor has unions.
         // If it has unions, check if the lat/lng is inside the union floor area

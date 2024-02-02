@@ -3,7 +3,7 @@
 namespace Tests\Unit\Fixtures;
 
 use App\Models\Season;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 
 class ModelFixtures
 {

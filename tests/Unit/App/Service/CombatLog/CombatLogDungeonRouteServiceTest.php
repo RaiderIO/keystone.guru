@@ -2,8 +2,7 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
-use PHPUnit\Framework\Assert;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
