@@ -50,6 +50,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -84,8 +85,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property boolean                                  $teeming
  * @property boolean                                  $demo
  *
- * @property array                                    $setup
- * @property boolean                                  $has_thumbnail
+ * @property array                                    $setup Attribute
+ * @property boolean                                  $has_thumbnail Attribute
  *
  * @property string                                   $pull_gradient
  * @property boolean                                  $pull_gradient_apply_always
@@ -157,6 +158,7 @@ class DungeonRoute extends Model
     use HasTags;
     use HasMetrics;
     use GeneratesPublicKey;
+    use HasFactory;
 
     public const PAGE_VIEW_SOURCE_VIEW_ROUTE    = 1;
     public const PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
