@@ -20,13 +20,14 @@ class DungeonRouteFactory extends Factory
      */
     public function definition(): array
     {
-        $allDungeons = collect(Dungeon::ALL)->flatten();
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::with('currentMappingVersion')->inRandomOrder()->first();
 
         return [
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'author_id'          => 1,
-            'dungeon_id'         => $allDungeons->search($allDungeons->random()),
-            'mapping_version_id' => $this->faker->numberBetween(),
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->currentMappingVersion->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'team_id'            => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],

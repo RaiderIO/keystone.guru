@@ -7,6 +7,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
+use App\Http\Requests\Brushline\APIBrushlineUpdateFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Polyline;
@@ -31,6 +32,7 @@ class AjaxBrushlineController extends Controller
      * @param Brushline|null              $brushline
      * @return Brushline
      * @throws AuthorizationException
+     * @throws \Throwable
      */
     function store(
         APIBrushlineFormRequest     $request,
@@ -45,7 +47,7 @@ class AjaxBrushlineController extends Controller
 
         $validated = $request->validated();
 
-        $result    = null;
+        $result = null;
 
         DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
             if ($brushline === null) {
@@ -62,7 +64,7 @@ class AjaxBrushlineController extends Controller
                 ]);
             }
 
-            try {
+//            try {
                 if ($success) {
                     // Create a new polyline and save it
                     $changedFloor = null;
@@ -96,9 +98,9 @@ class AjaxBrushlineController extends Controller
                 }
 
                 $result = $brushline;
-            } catch (Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
-            }
+//            } catch (Exception $ex) {
+//                $result = response('Not found', Http::NOT_FOUND);
+//            }
         });
 
         return $result;
