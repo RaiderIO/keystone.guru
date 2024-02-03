@@ -26,9 +26,8 @@ class APIBrushlineFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                      => 'nullable|int',
-            'floor_id'                => ['nullable', Rule::exists(Floor::class, 'id')],
-            'polyline'                => 'array',
+            'floor_id'                => ['required', Rule::exists(Floor::class, 'id')],
+            'polyline'                => 'required|array',
             'polyline.color'          => [
                 'nullable',
                 'string',
