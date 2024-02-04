@@ -10,6 +10,7 @@ use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Http\Requests\Brushline\APIBrushlineUpdateFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -30,7 +31,7 @@ class AjaxBrushlineController extends Controller
      * @param CoordinatesServiceInterface $coordinatesService
      * @param DungeonRoute                $dungeonRoute
      * @param Brushline|null              $brushline
-     * @return Brushline
+     * @return Brushline|Response
      * @throws AuthorizationException
      * @throws \Throwable
      */
@@ -46,6 +47,10 @@ class AjaxBrushlineController extends Controller
         $this->authorize('addBrushline', $dungeonRoute);
 
         $validated = $request->validated();
+
+        if (Floor::findOrFail($validated['floor_id'])->dungeon_id !== $dungeonRoute->dungeon_id) {
+            return response(__('controller.brushline.error.floor_not_found_in_dungeon'), 422);
+        }
 
         $result = null;
 
@@ -64,7 +69,7 @@ class AjaxBrushlineController extends Controller
                 ]);
             }
 
-//            try {
+            try {
                 if ($success) {
                     // Create a new polyline and save it
                     $changedFloor = null;
@@ -98,9 +103,9 @@ class AjaxBrushlineController extends Controller
                 }
 
                 $result = $brushline;
-//            } catch (Exception $ex) {
-//                $result = response('Not found', Http::NOT_FOUND);
-//            }
+            } catch (Exception $ex) {
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+            }
         });
 
         return $result;
