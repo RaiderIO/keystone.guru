@@ -4,8 +4,18 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class DungeonRouteLevelRule implements Rule
+class JsonStringCountRule implements Rule
 {
+    private int $count;
+
+    /**
+     * @param int $count
+     */
+    public function __construct(int $count)
+    {
+        $this->count = $count;
+    }
+
     /**
      * Determine if the validation rule passes.
      *
@@ -15,9 +25,9 @@ class DungeonRouteLevelRule implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $explode = explode(';', $value);
+        $decoded = json_decode($value, true);
 
-        return count($explode) === 2 && is_numeric($explode[0]) && is_numeric($explode[1]);
+        return is_array($decoded) && count($decoded) >= $this->count;
     }
 
     /**
@@ -27,6 +37,6 @@ class DungeonRouteLevelRule implements Rule
      */
     public function message(): string
     {
-        return __('rules.dungeon_route_level_rule.message');
+        return __('rules.json_string_count_rule.message', ['count' => $this->count]);
     }
 }

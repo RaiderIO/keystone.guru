@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Brushline;
 
 use App\Models\Floor\Floor;
+use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,6 +18,11 @@ class APIBrushlineFormRequest extends FormRequest
     {
         return true;
     }
+
+    protected function prepareForValidation()
+    {
+    }
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -43,6 +49,7 @@ class APIBrushlineFormRequest extends FormRequest
             ],
             'polyline.vertices_json'  => [
                 'string',
+                new JsonStringCountRule(2),
             ],
         ];
     }

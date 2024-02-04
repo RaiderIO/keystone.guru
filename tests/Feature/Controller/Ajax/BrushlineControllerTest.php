@@ -40,7 +40,6 @@ class BrushlineControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
     }
 
-
     /**
      * @test
      * @group Controller
@@ -59,5 +58,57 @@ class BrushlineControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertStatus(StatusCode::FOUND);
         $response->assertSessionHasErrors(['floor_id', 'polyline']);
+    }
+
+
+    /**
+     * @test
+     * @group Controller
+     *
+     * @return void
+     */
+    public function store_givenBrushlineWithValidButNotMatchingFloorId_shouldReturnError(): void
+    {
+        // Arrange
+        $validIds  = $this->dungeonRoute->dungeon->floors->pluck('id');
+        $allFloors = Floor::all()->keyBy('id');
+
+        $randomInvalidId    = $allFloors->pluck('id')->diff($validIds)->random();
+        $randomInvalidFloor = $allFloors->get($randomInvalidId);
+        $polyline           = PolylineFixtures::createPolyline($randomInvalidFloor);
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomInvalidFloor->id,
+            'polyline' => $polyline,
+        ]);
+
+        // Assert
+        $response->assertStatus(422);
+    }
+
+    /**
+     * @test
+     * @group Controller
+     *
+     * @return void
+     */
+    public function store_givenBrushlineEmptyVertexCount_shouldReturnError(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors->random();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor, collect());
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+
+        // Assert
+        $response->assertStatus(StatusCode::FOUND);
+        $response->assertSessionHasErrors(['polyline.vertices_json']);
     }
 }

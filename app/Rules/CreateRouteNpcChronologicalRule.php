@@ -47,6 +47,6 @@ class CreateRouteNpcChronologicalRule implements Rule
      */
     public function message(): string
     {
-        return sprintf('Npc(s) %s diedAt must be before engagedAt!', implode(', ', $this->failedNpcIndices));
+        return __('rules.create_route_npc_chronological_rule.message', ['npcs' => implode(', ', $this->failedNpcIndices)]);
     }
 }
