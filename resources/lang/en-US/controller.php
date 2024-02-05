@@ -37,10 +37,11 @@ return [
             'unable_to_save_report'        => 'Unable to save report',
         ],
     ],
-    'brushline' => [
+    'brushline'                   => [
         'error' => [
             'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
-        ]
+            'unable_to_save'             => 'Unable to save Brushline',
+        ],
     ],
     'dungeon'                     => [
         'flash' => [
@@ -88,10 +89,10 @@ return [
             'expansion_created'        => 'Expansion created',
         ],
     ],
-    'generic' => [
+    'generic'                     => [
         'error' => [
             'not_found' => 'Not found',
-        ]
+        ],
     ],
     'oauthlogin'                  => [
         'flash' => [

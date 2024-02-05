@@ -99,7 +99,7 @@ class AjaxBrushlineController extends Controller
                     // Touch the route so that the thumbnail gets updated
                     $dungeonRoute->touch();
                 } else {
-                    throw new \Exception('Unable to save brushline!');
+                    throw new \Exception(__('controller.generic.error.unable_to_save'));
                 }
 
                 $result = $brushline;
@@ -136,10 +136,10 @@ class AjaxBrushlineController extends Controller
 
                 $result = response()->noContent();
             } else {
-                $result = response('Unable to save Brushline', Http::INTERNAL_SERVER_ERROR);
+                $result = response(__('controller.generic.error.unable_to_save'), Http::INTERNAL_SERVER_ERROR);
             }
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
