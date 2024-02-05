@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\GameServerRegion;
 use App\Role;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -82,7 +83,7 @@ class RegisterController extends Controller
             'name'                  => $data['name'],
             'email'                 => $data['email'],
             'echo_color'            => randomHexColor(),
-            'game_server_region_id' => $data['region'],
+            'game_server_region_id' => $data['region'] ?? GameServerRegion::DEFAULT_REGION,
             'password'              => bcrypt($data['password']),
             'legal_agreed'          => $data['legal_agreed'],
             'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
