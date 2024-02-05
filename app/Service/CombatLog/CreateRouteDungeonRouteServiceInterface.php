@@ -2,10 +2,8 @@
 
 namespace App\Service\CombatLog;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
-use App\Service\CombatLog\ResultEvents\BaseResultEvent;
-use Illuminate\Support\Collection;
 
 interface CreateRouteDungeonRouteServiceInterface
 {

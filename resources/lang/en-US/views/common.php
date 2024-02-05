@@ -205,10 +205,13 @@ return [
     ],
     'layout'       => [
         'footer'  => [
-            'about'               => 'About',
+            'developer'           => 'Developer',
+            'api_documentation'   => 'API documentation',
+            'keystone_guru'       => 'Keystone.guru',
             'changelog'           => 'Changelog',
             'changelog_new'       => 'NEW',
             'credits'             => 'Credits',
+            'about'               => 'About',
             'external'            => 'External',
             'patreon'             => 'Patreon',
             'discord'             => 'Discord',

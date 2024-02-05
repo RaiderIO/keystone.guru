@@ -15,7 +15,7 @@ class MigrateNpcsToNpcEnemyForcesTable extends Migration
     public function up()
     {
         // Don't do anything - this should already be done and the result committed to repository
-        if (config('app.env') === 'production') {
+        if (config('app.env') !== 'mapping') {
             return;
         }
 
@@ -43,7 +43,7 @@ class MigrateNpcsToNpcEnemyForcesTable extends Migration
     public function down()
     {
         // Don't do anything - this should already be done and the result committed to repository
-        if (config('app.env') === 'production') {
+        if (config('app.env') !== 'mapping') {
             return;
         }
 

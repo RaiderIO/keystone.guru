@@ -301,7 +301,7 @@ return [
             ],
             'viewcontents'    => [
                 'title'  => 'View contents for :dungeonRouteTitle',
-                'header' => 'View contents for %s',
+                'header' => 'View contents for :dungeonRouteTitle',
             ],
             'mappingversions' => [
                 'title'                             => 'View mapping version usage',

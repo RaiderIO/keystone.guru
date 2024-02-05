@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoutePlayerClass;
+use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\Traits\HasIconFile;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,14 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $key
- * @property string $name
- * @property string $color
+ * @property int                                       $id
+ * @property string                                    $key
+ * @property string                                    $name
+ * @property string                                    $color
  *
  * @property Collection|CharacterClassSpecialization[] $specializations
- * @property Collection|DungeonRoutePlayerClass[] $dungeonrouteplayerclasses
- * @property Collection|DungeonRoutePlayerRace[] $dungeonrouteplayerraces
+ * @property Collection|DungeonRoutePlayerClass[]      $dungeonrouteplayerclasses
+ * @property Collection|DungeonRoutePlayerRace[]       $dungeonrouteplayerraces
  *
  * @mixin Eloquent
  */
@@ -25,8 +27,8 @@ class CharacterClass extends CacheModel
     use HasIconFile;
 
     public $timestamps = false;
-    public $hidden = ['icon_file_id', 'pivot'];
-    public $fillable = ['key', 'name', 'color'];
+    public $hidden     = ['icon_file_id', 'pivot'];
+    public $fillable   = ['key', 'name', 'color'];
 
     public const CHARACTER_CLASS_WARRIOR      = 'warrior';
     public const CHARACTER_CLASS_HUNTER       = 'hunter';

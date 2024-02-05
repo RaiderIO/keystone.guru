@@ -2,7 +2,7 @@
 
 namespace App\Models\Enemies;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Traits\HasLatLng;

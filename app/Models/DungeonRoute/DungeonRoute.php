@@ -1,26 +1,46 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
 use App\Logic\Structs\LatLng;
+use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\Brushline;
+use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\Dungeon;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
+use App\Models\Enemy;
+use App\Models\Expansion;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\LiveSession;
+use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
+use App\Models\MDTImport;
+use App\Models\PageView;
+use App\Models\Path;
+use App\Models\PublishedState;
+use App\Models\RouteAttribute;
+use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasMetrics;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
@@ -30,6 +50,7 @@ use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -64,8 +85,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property boolean                                  $teeming
  * @property boolean                                  $demo
  *
- * @property array                                    $setup
- * @property boolean                                  $has_thumbnail
+ * @property array                                    $setup Attribute
+ * @property boolean                                  $has_thumbnail Attribute
  *
  * @property string                                   $pull_gradient
  * @property boolean                                  $pull_gradient_apply_always
@@ -137,6 +158,7 @@ class DungeonRoute extends Model
     use HasTags;
     use HasMetrics;
     use GeneratesPublicKey;
+    use HasFactory;
 
     public const PAGE_VIEW_SOURCE_VIEW_ROUTE    = 1;
     public const PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
@@ -147,7 +169,7 @@ class DungeonRoute extends Model
      *
      * @var array
      */
-    protected $appends = ['setup', 'has_thumbnail', 'has_team', 'published'];
+    protected $appends = ['setup', 'has_thumbnail', 'png_thumbnails', 'has_team', 'published'];
 
     protected $hidden = [
         'id',
@@ -573,13 +595,17 @@ class DungeonRoute extends Model
         $brushlines = $this->brushlines()->with(['floor'])->get();
 
         if ($useFacade) {
-            $brushlines = $brushlines->map(function (Brushline $brushline) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
-                $brushline->setRelation('floor', $newFloor);
-                $brushline->floor_id = $newFloor->id;
+            $brushlines = $brushlines
+                // #2177 Sometimes brushlines don't have a polyline
+                ->filter(function (Brushline $brushline) {
+                    return $brushline->polyline !== null;
+                })->map(function (Brushline $brushline) use ($coordinatesService) {
+                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
+                    $brushline->setRelation('floor', $newFloor);
+                    $brushline->floor_id = $newFloor->id;
 
-                return $brushline;
-            });
+                    return $brushline;
+                });
         }
 
         return $brushlines;
@@ -597,13 +623,18 @@ class DungeonRoute extends Model
         $paths = $this->paths()->with(['floor'])->get();
 
         if ($useFacade) {
-            $paths = $paths->map(function (Path $path) use ($coordinatesService) {
-                $newFloor = $this->convertVerticesForFacade($coordinatesService, $path->polyline, $path->floor);
-                $path->setRelation('floor', $newFloor);
-                $path->floor_id = $newFloor->id;
+            $paths = $paths
+                // #2177 Sometimes paths don't have a polyline
+                ->filter(function (Path $path) {
+                    return $path->polyline !== null;
+                })
+                ->map(function (Path $path) use ($coordinatesService) {
+                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $path->polyline, $path->floor);
+                    $path->setRelation('floor', $newFloor);
+                    $path->floor_id = $newFloor->id;
 
-                return $path;
-            });
+                    return $path;
+                });
         }
 
         return $paths;
@@ -683,6 +714,17 @@ class DungeonRoute extends Model
     public function getHasThumbnailAttribute(): bool
     {
         return Carbon::createFromTimeString($this->thumbnail_updated_at)->diffInYears(Carbon::now()) === 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPngThumbnailsAttribute(): bool
+    {
+        // A bit of a hack but it works, it's complicated otherwise
+        return Carbon::createFromTimeString($this->thumbnail_updated_at)->isBefore(
+            Carbon::createFromDate(2024, 01, 29)
+        );
     }
 
     /**
@@ -1446,34 +1488,34 @@ class DungeonRoute extends Model
 
     /**
      * Returns a single affix group from the list of affix groups attached to this dungeon route and returns the most relevant
-     * one based on what the current affix is. By default will return the first affix group.
+     * one based on what the current affix is. By default, will return the first affix group.
      *
      * @return AffixGroup|null
+     * @throws Exception
      */
     public function getMostRelevantAffixGroup(): ?AffixGroup
     {
-        $seasonService = App::make(SeasonService::class);
+        /** @var AffixGroup|null $result */
+        $result = null;
 
-        return $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+        if ($this->affixes->isNotEmpty()) {
+            $result = $this->affixes->first();
 
-        //        $result = null;
-        //
-        //        if ($this->affixgroups->isNotEmpty()) {
-        //            $result = $this->affixgroups->first;
-        //
-        //            /** @var SeasonService $seasonService */
-        //            $seasonService     = App::make(SeasonService::class);
-        //            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
-        //
-        //            foreach ($this->affixgroups as $affixgroup) {
-        //                if ($affixgroup->id === $currentAffixGroup->id) {
-        //                    $result = $affixgroup;
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //
-        //        return $result;
+            /** @var SeasonService $seasonService */
+            $seasonService     = App::make(SeasonServiceInterface::class);
+            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+
+            if ($currentAffixGroup !== null) {
+                foreach ($this->affixes as $affixGroup) {
+                    if ($affixGroup->id === $currentAffixGroup->id) {
+                        $result = $affixGroup;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -1511,23 +1553,30 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @param Floor $floor
+     * @param int $floorIndex
      * @return string
      */
-    public function getThumbnailUrl(Floor $floor): string
+    public function getThumbnailUrl(int $floorIndex): string
     {
-        return url(sprintf('/images/route_thumbnails/%s_%s.png', $this->public_key, $floor->index));
+        return url($this->getThumbnailPath($floorIndex));
     }
 
     /**
-     * @param Floor $floor
+     * @param int $floorIndex
      * @return string
      */
-    public function getThumbnailPath(Floor $floor): string
+    public function getThumbnailPath(int $floorIndex): string
     {
-        $publicPath = public_path('images/route_thumbnails/');
+        $path = sprintf('%s/%s_%s.jpg', public_path(ThumbnailService::THUMBNAIL_FOLDER_PATH), $this->public_key, $floorIndex);
 
-        return sprintf('%s/%s_%s.png', $publicPath, $this->public_key, $floor->index);
+        // If we don't have a .jpg file, check if we should use .png instead
+        $pngPath = str_replace('.jpg', '.png', $path);
+
+        if (!file_exists($path) && file_exists($pngPath)) {
+            $path = $pngPath;
+        }
+
+        return $path;
     }
 
     /**
@@ -1626,7 +1675,7 @@ class DungeonRoute extends Model
             // Delete thumbnails
             foreach ($dungeonRoute->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
-                @unlink($dungeonRoute->getThumbnailPath($floor));
+                @unlink($dungeonRoute->getThumbnailPath($floor->index));
             }
 
             // Dungeonroute settings

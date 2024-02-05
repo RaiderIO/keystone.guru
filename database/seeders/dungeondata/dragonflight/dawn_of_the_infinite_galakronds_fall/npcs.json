@@ -8,7 +8,7 @@
         "display_id": 113502,
         "name": "Iridikron",
         "base_health": 118579424,
-        "health_percentage": 15,
+        "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -188,6 +188,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15834,
+                "mapping_version_id": 302,
+                "npc_id": 204536,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 15767,
                 "mapping_version_id": 298,
                 "npc_id": 204536,
@@ -273,6 +280,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15826,
+                "mapping_version_id": 302,
+                "npc_id": 205384,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 15759,
                 "mapping_version_id": 298,
                 "npc_id": 205384,
@@ -336,6 +350,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15825,
+                "mapping_version_id": 302,
+                "npc_id": 205408,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15758,
                 "mapping_version_id": 298,
@@ -401,6 +422,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15827,
+                "mapping_version_id": 302,
+                "npc_id": 205435,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 15760,
                 "mapping_version_id": 298,
                 "npc_id": 205435,
@@ -464,6 +492,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15836,
+                "mapping_version_id": 302,
+                "npc_id": 205691,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15769,
                 "mapping_version_id": 298,
@@ -529,6 +564,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15835,
+                "mapping_version_id": 302,
+                "npc_id": 205804,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 15768,
                 "mapping_version_id": 298,
                 "npc_id": 205804,
@@ -592,6 +634,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15830,
+                "mapping_version_id": 302,
+                "npc_id": 206064,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15763,
                 "mapping_version_id": 298,
@@ -657,6 +706,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15831,
+                "mapping_version_id": 302,
+                "npc_id": 206066,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 15764,
                 "mapping_version_id": 298,
                 "npc_id": 206066,
@@ -721,6 +777,13 @@
         "npcspells": [],
         "npc_enemy_forces": [
             {
+                "id": 15832,
+                "mapping_version_id": 302,
+                "npc_id": 206140,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 15765,
                 "mapping_version_id": 298,
                 "npc_id": 206140,
@@ -784,6 +847,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 15833,
+                "mapping_version_id": 302,
+                "npc_id": 206214,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15766,
                 "mapping_version_id": 298,

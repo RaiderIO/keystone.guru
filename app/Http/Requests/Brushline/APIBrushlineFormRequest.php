@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Brushline;
 
 use App\Models\Floor\Floor;
+use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,6 +19,11 @@ class APIBrushlineFormRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,9 +32,8 @@ class APIBrushlineFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                      => 'nullable|int',
-            'floor_id'                => ['nullable', Rule::exists(Floor::class, 'id')],
-            'polyline'                => 'array',
+            'floor_id'                => ['required', Rule::exists(Floor::class, 'id')],
+            'polyline'                => 'required|array',
             'polyline.color'          => [
                 'nullable',
                 'string',
@@ -44,6 +49,7 @@ class APIBrushlineFormRequest extends FormRequest
             ],
             'polyline.vertices_json'  => [
                 'string',
+                new JsonStringCountRule(2),
             ],
         ];
     }

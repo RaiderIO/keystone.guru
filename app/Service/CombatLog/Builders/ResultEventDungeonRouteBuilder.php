@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;

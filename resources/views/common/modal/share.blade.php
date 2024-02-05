@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonroute App\Models\DungeonRoute|null */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
 
 $show          = $show ?? [];
 $showLink      = $show['link'] ?? true;

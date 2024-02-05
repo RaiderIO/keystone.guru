@@ -49,6 +49,7 @@ use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
+use App\Console\Commands\Thumbnail\DeleteExpiredJobs;
 use App\Console\Commands\View\Cache;
 use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
@@ -149,6 +150,9 @@ class Kernel extends ConsoleKernel
         StartSupervisor::class,
         StopSupervisor::class,
 
+        // Thumbnail
+        DeleteExpiredJobs::class,
+
         // Test
         Random::class,
 
@@ -216,6 +220,9 @@ class Kernel extends ConsoleKernel
 
         // Sync ads.txt
         $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
+
+        // Cleanup the generated custom thumbnails
+        $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
         Log::channel('scheduler')->debug('Finished scheduler');
     }

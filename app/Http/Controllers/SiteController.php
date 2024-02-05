@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\Release;
 use App\Models\Season;

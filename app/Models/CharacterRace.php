@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,11 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $key
- * @property string $name
- * @property int $faction_id
- * @property Faction $faction
+ * @property int        $id
+ * @property string     $key
+ * @property string     $name
+ * @property int        $faction_id
+ * @property Faction    $faction
  * @property Collection $classes
  * @property Collection $specializations
  *
@@ -22,8 +23,8 @@ use Illuminate\Support\Collection;
 class CharacterRace extends CacheModel
 {
     public $timestamps = false;
-    public $hidden = ['icon_file_id', 'pivot'];
-    public $fillable = ['key', 'name'];
+    public $hidden     = ['icon_file_id', 'pivot'];
+    public $fillable   = ['key', 'name'];
 
     /**
      * @return BelongsToMany
@@ -52,7 +53,7 @@ class CharacterRace extends CacheModel
     /**
      * @return HasMany
      */
-    public function dungeonrouteplayerrace(): HasMany
+    public function dungeonRoutePlayerRace(): HasMany
     {
         return $this->hasMany(DungeonRoutePlayerRace::class);
     }

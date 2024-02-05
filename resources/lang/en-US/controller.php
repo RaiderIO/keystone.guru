@@ -37,6 +37,12 @@ return [
             'unable_to_save_report'        => 'Unable to save report',
         ],
     ],
+    'brushline'                   => [
+        'error' => [
+            'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
+            'unable_to_save'             => 'Unable to save Brushline',
+        ],
+    ],
     'dungeon'                     => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
@@ -83,6 +89,11 @@ return [
             'expansion_created'        => 'Expansion created',
         ],
     ],
+    'generic'                     => [
+        'error' => [
+            'not_found' => 'Not found',
+        ],
+    ],
     'oauthlogin'                  => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
@@ -115,6 +126,7 @@ return [
     'mdtimport'                   => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
+            'mdt_string_parsing_failed'             => 'MDT string parsing failed due to an internal server error.',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',

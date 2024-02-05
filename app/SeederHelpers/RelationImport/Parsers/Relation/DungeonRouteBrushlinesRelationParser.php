@@ -3,7 +3,7 @@
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\Brushline;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Polyline;
 
 class DungeonRouteBrushlinesRelationParser implements RelationParserInterface

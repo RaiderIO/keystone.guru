@@ -16,10 +16,13 @@ class GameVersionService implements GameVersionServiceInterface
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void
     {
         optional($user)->update(['game_version_id' => $gameVersion->id]);
-        
-        // Set the new cookie
-        $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
-        setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', null, true, false);
+
+        // Unit tests and artisan commands don't like this
+        if (!app()->runningInConsole()) {
+            // Set the new cookie
+            $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
+            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', null, true, false);
+        }
     }
 
 

@@ -5,6 +5,8 @@ const puppeteer = require('puppeteer');
 // 1: script path
 // 2: target web page
 // 3: resulting screenshot location
+// 4: viewport width
+// 5: viewport height
 function delay(timeout) {
     return new Promise((resolve) => {
         setTimeout(resolve, timeout);
@@ -39,7 +41,7 @@ function delay(timeout) {
             domain: new URL(process.argv[2]).hostname
         });
 
-        await page.setViewport({width: 768, height: 512});
+        await page.setViewport({width: Math.max(process.argv[4] ?? 0, 768), height: Math.max(process.argv[5] ?? 0, 512)});
 
         console.log(`Navigating to ${process.argv[2]}`);
         await page.goto(process.argv[2]);

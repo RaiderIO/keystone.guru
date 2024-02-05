@@ -2,8 +2,8 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\DungeonRoute;
-use App\Models\DungeonRoutePlayerSpecialization;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 
 class DungeonRoutePlayerSpecializationRelationParser implements RelationParserInterface
 {

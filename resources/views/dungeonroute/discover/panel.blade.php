@@ -3,7 +3,7 @@
  * @var $expansion         \App\Models\Expansion
  * @var $title             string
  * @var $cols              int
- * @var $dungeonroutes     \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $dungeonroutes     \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  */
 

@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources\Dungeon;
 
-use App\Http\Resources\DungeonRoute\DungeonRouteResource;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;

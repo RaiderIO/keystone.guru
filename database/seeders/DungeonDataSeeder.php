@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Logic\Utils\Stopwatch;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\EnemyPatrol;
 use App\Models\Expansion;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;

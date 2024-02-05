@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Metric\APIDungeonRouteMetricFormRequest;
 use App\Http\Requests\Metric\APIMetricFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Metric\MetricServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;

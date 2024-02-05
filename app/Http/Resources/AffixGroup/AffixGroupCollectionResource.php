@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources\AffixGroup;
 
-use App\Http\Resources\DungeonRoute\DungeonRouteResource;
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\DungeonRoute;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;

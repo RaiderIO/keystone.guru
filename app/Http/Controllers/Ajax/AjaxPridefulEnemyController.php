@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use Exception;

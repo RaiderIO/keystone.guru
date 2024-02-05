@@ -1,7 +1,7 @@
 <?php
 /** @var boolean $isAdmin */
 /** @var \Illuminate\Support\Collection $floors */
-/** @var \App\Models\DungeonRoute|null $dungeonroute */
+/** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
 ?>
 <nav class="route_sidebar left row no-gutters map_fade_out top presenter {{ $isMobile ? 'mobile' : '' }}">
     <div class="col pt-4 pl-4">
@@ -15,7 +15,8 @@
                     ?>
 
                 @foreach($affixGroup->affixes as $affix)
-                    <img src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($affix->key))) }}" alt="{{ __($affix->name) }}" style="border-radius: 4px;"/>
+                    <img src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($affix->key))) }}"
+                         alt="{{ __($affix->name) }}" style="border-radius: 4px;"/>
                 @endforeach
             @endif
         </h2>

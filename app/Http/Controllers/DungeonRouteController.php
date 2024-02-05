@@ -9,13 +9,14 @@ use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeRequest;
 use App\Jobs\RefreshEnemyForces;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use App\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -271,7 +272,6 @@ class DungeonRouteController extends Controller
      * @param DungeonRoute               $dungeonroute
      * @param string                     $title
      * @param string                     $floorIndex
-     *
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
@@ -289,6 +289,8 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
+        $zoomLevel = $request->get('zoomLevel');
+
         $titleSlug = $dungeonroute->getTitleSlug();
         if (!isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.preview', [
@@ -296,6 +298,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'title'        => $titleSlug,
                 'floorindex'   => $floorIndex,
+                'zoomLevel'    => $zoomLevel,
             ]);
         }
 
@@ -305,10 +308,14 @@ class DungeonRouteController extends Controller
             ->where('index', $floorIndex)
             ->first();
 
+        $mapFacadeStyle = $floor->facade ? User::MAP_FACADE_STYLE_FACADE : User::MAP_FACADE_STYLE_SPLIT_FLOORS;
+
         return view('dungeonroute.preview', [
-            'dungeonroute' => $dungeonroute,
-            'floorId'      => $floor->id,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+            'dungeonroute'   => $dungeonroute,
+            'floorId'        => $floor->id,
+            'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor, $mapFacadeStyle),
+            'defaultZoom'    => $zoomLevel,
+            'mapFacadeStyle' => $mapFacadeStyle,
         ]);
     }
 

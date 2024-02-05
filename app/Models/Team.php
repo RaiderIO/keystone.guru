@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;

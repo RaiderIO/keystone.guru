@@ -1,15 +1,15 @@
 <?php
 /**
- * @var bool                     $showAds
- * @var bool                     $edit
- * @var \App\Models\DungeonRoute $model
- * @var \App\Models\Dungeon      $dungeon
- * @var bool                     $embed
- * @var string                   $embedStyle
- * @var bool                     $isMobile
- * @var integer                  $defaultState
- * @var bool                     $hideOnMove
- * @var bool                     $showAllEnabled
+ * @var bool                                  $showAds
+ * @var bool                                  $edit
+ * @var \App\Models\DungeonRoute\DungeonRoute $model
+ * @var \App\Models\Dungeon                   $dungeon
+ * @var bool                                  $embed
+ * @var string                                $embedStyle
+ * @var bool                                  $isMobile
+ * @var integer                               $defaultState
+ * @var bool                                  $hideOnMove
+ * @var bool                                  $showAllEnabled
  */
 // By default, show it if we're not mobile, but allow overrides
 $pullsSidebarState      = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);

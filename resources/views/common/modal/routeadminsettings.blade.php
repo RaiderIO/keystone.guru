@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonRoute App\Models\DungeonRoute|null */
+/** @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute|null */
 $challengeModeRun = $dungeonRoute->getChallengeModeRun();
 ?>
 <h3 class="card-title">{{ __('views/common.modal.routeadminsettings.title') }}</h3>

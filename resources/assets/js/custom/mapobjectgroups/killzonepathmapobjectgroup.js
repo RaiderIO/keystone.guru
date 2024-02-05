@@ -82,12 +82,10 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         // Only on the default floor!
         // if (currentFloor.default === 1) {
-        let usesMapFacade = getState().getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE;
         for (let key in mapIconMapObjectGroup.objects) {
             let mapIcon = mapIconMapObjectGroup.objects[key];
 
-            if (((usesMapFacade && currentFloor.facade) || (!usesMapFacade && !currentFloor.facade)) &&
-                mapIcon.floor_id === currentFloorId &&
+            if (mapIcon.floor_id === currentFloorId &&
                 mapIcon.map_icon_type_id === MAP_ICON_TYPE_DUNGEON_START_ID
             ) {
                 dungeonStartOffset++;

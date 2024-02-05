@@ -2,7 +2,7 @@
 
 <?php
 /** @var $cacheService \App\Service\Cache\CacheServiceInterface */
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
 /** @var $tierAffixGroup \App\Models\AffixGroup\AffixGroup|null */
 /** @var $__env array */
@@ -41,19 +41,19 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
-    $activeFloors = $dungeonroute->dungeon->floors()->active()->get();
+    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade(true)->get();
     $owlClass = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
 
     ob_start(); ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
-    <div class="col-xl-auto w-100">
+    <div class="col-xl-auto">
         <div class="{{ $owlClass }} light-slider-container">
             <ul class="light-slider {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($activeFloors as $floor)
                         <li>
                             <img class="thumbnail"
-                                 src="{{ $dungeonroute->getThumbnailUrl($floor) }}"
+                                 src="{{ $dungeonroute->getThumbnailUrl($floor->index) }}"
                                  style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"/>
                         </li>
                     @endforeach
@@ -67,7 +67,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
-            @endif
+             @endif
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">

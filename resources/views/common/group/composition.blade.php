@@ -1,5 +1,5 @@
 <?php
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute\DungeonRoute $model */
 /** @var $specializations \Illuminate\Support\Collection|\App\Models\CharacterClassSpecialization[] */
 /** @var $classes \Illuminate\Support\Collection|\App\Models\CharacterClass[] */
 /** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
@@ -21,7 +21,7 @@ $factions = $factions ?? $allFactions;
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->key) }}                                  {
+        .{{ strtolower($faction->key) }} {
             color: {{ $faction->color }};
             font-weight: bold;
         }

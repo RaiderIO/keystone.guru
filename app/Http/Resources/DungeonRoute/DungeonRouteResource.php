@@ -4,7 +4,7 @@ namespace App\Http\Resources\DungeonRoute;
 
 use App\Http\Resources\AffixGroup\AffixGroupCollectionResource;
 use App\Http\Resources\UserResource;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,7 +31,7 @@ class DungeonRouteResource extends JsonResource
     {
         $thumbnailUrls = [];
         foreach ($this->dungeon->floors()->where('facade', 0)->get() as $floor) {
-            $thumbnailUrls[] = $this->getThumbnailUrl($floor);
+            $thumbnailUrls[] = $this->getThumbnailUrl($floor->index);
         }
 
         $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];

@@ -5,7 +5,7 @@ namespace App\Service\DungeonRoute;
 
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

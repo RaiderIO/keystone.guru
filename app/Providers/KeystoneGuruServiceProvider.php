@@ -194,15 +194,17 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         GameVersionServiceInterface        $gameVersionService
     ) {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
-        if (app()->runningInConsole()) {
-            return;
-        }
+        if (!app()->runningUnitTests()) {
+            if (app()->runningInConsole()) {
+                return;
+            }
 
-        session_set_cookie_params([
-            'secure'   => true,
-            'httponly' => false,
-            'samesite' => 'None',
-        ]);
+            session_set_cookie_params([
+                'secure'   => true,
+                'httponly' => false,
+                'samesite' => 'None',
+            ]);
+        }
 
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();

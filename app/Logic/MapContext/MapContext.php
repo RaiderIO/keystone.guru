@@ -35,18 +35,22 @@ abstract class MapContext
 
     protected MappingVersion $mappingVersion;
 
+    protected ?string $mapFacadeStyle = null;
+
     function __construct(
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         Floor                       $floor,
-        MappingVersion              $mappingVersion
+        MappingVersion              $mappingVersion,
+        ?string                      $mapFacadeStyle = null
     ) {
         $this->cacheService       = $cacheService;
         $this->coordinatesService = $coordinatesService;
         $this->context            = $context;
         $this->floor              = $floor;
         $this->mappingVersion     = $mappingVersion;
+        $this->mapFacadeStyle     = $mapFacadeStyle;
     }
 
     public abstract function getType(): string;
@@ -63,7 +67,7 @@ abstract class MapContext
 
     public function getMapFacadeStyle(): string
     {
-        return User::getCurrentUserMapFacadeStyle();
+        return $this->mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle();
     }
 
     /**

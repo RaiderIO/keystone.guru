@@ -18,7 +18,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 
 class ServiceFixtures
 {

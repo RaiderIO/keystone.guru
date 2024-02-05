@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

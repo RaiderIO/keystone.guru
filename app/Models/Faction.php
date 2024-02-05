@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Traits\HasIconFile;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;

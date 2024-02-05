@@ -3,7 +3,7 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -24,10 +24,10 @@ class MapContextDungeonRoute extends MapContext
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        Floor                       $floor
-    )
-    {
-        parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $floor, $dungeonRoute->mappingVersion);
+        Floor                       $floor,
+        ?string                     $mapFacadeStyle = null
+    ) {
+        parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $floor, $dungeonRoute->mappingVersion, $mapFacadeStyle);
     }
 
     public function getType(): string

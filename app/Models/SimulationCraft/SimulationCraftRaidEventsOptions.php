@@ -3,7 +3,7 @@
 namespace App\Models\SimulationCraft;
 
 use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\GeneratesPublicKey;
 use App\User;

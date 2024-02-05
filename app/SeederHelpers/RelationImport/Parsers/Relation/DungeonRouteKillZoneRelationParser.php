@@ -2,7 +2,7 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;

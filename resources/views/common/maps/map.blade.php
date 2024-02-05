@@ -1,19 +1,20 @@
 <?php
 /**
- * @var \App\User                          $user
- * @var \App\Logic\MapContext\MapContext   $mapContext
- * @var \App\Models\Dungeon                $dungeon
- * @var \App\Models\Floor\Floor            $floor
- * @var \App\Models\Mapping\MappingVersion $mappingVersion
- * @var \App\Models\DungeonRoute|null      $dungeonroute
- * @var \App\Models\LiveSession|null       $livesession
- * @var bool|null                          $admin
- * @var bool|null                          $embed
- * @var string|null                        $embedStyle
- * @var bool|null                          $edit
- * @var array                              $show
- * @var bool                               $adFree
- * @var string|null                        $mapBackgroundColor
+ * @var \App\User                                  $user
+ * @var \App\Logic\MapContext\MapContext           $mapContext
+ * @var \App\Models\Dungeon                        $dungeon
+ * @var \App\Models\Floor\Floor                    $floor
+ * @var \App\Models\Mapping\MappingVersion         $mappingVersion
+ * @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute
+ * @var \App\Models\LiveSession|null               $livesession
+ * @var bool|null                                  $admin
+ * @var bool|null                                  $embed
+ * @var string|null                                $embedStyle
+ * @var bool|null                                  $edit
+ * @var array                                      $show
+ * @var bool                                       $adFree
+ * @var string|null                                $mapBackgroundColor
+ * @var string|null                                $mapFacadeStyle
  */
 
 $user               = Auth::user();
@@ -43,7 +44,7 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
-$mapFacadeStyle                   = \App\User::getCurrentUserMapFacadeStyle();
+$mapFacadeStyle                   = $mapFacadeStyle ?? \App\User::getCurrentUserMapFacadeStyle();
 $useFacade                        = $mapFacadeStyle === \App\User::MAP_FACADE_STYLE_FACADE;
 
 // Allow echo to be overridden

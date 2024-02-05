@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;

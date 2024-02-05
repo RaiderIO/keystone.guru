@@ -7,8 +7,10 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
+use App\Http\Requests\Brushline\APIBrushlineUpdateFormRequest;
 use App\Models\Brushline;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -17,6 +19,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
 class AjaxBrushlineController extends Controller
@@ -28,8 +31,9 @@ class AjaxBrushlineController extends Controller
      * @param CoordinatesServiceInterface $coordinatesService
      * @param DungeonRoute                $dungeonRoute
      * @param Brushline|null              $brushline
-     * @return Brushline
+     * @return Brushline|Response
      * @throws AuthorizationException
+     * @throws \Throwable
      */
     function store(
         APIBrushlineFormRequest     $request,
@@ -44,57 +48,65 @@ class AjaxBrushlineController extends Controller
 
         $validated = $request->validated();
 
-        if ($brushline === null) {
-            $brushline = Brushline::create([
-                'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $validated['floor_id'],
-                'polyline_id'      => -1,
-            ]);
-            $success   = $brushline instanceof Brushline;
-        } else {
-            $success = $brushline->update([
-                'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $validated['floor_id'],
-            ]);
+        if (Floor::findOrFail($validated['floor_id'])->dungeon_id !== $dungeonRoute->dungeon_id) {
+            return response(__('controller.brushline.error.floor_not_found_in_dungeon'), 422);
         }
 
-        try {
-            if ($success) {
-                // Create a new polyline and save it
-                $changedFloor = null;
-                $polyline     = $this->savePolyline(
-                    $coordinatesService,
-                    $dungeonRoute->mappingVersion,
-                    Polyline::findOrNew($brushline->polyline_id),
-                    $brushline,
-                    $validated['polyline'],
-                    $changedFloor
-                );
+        $result = null;
 
-                // Couple the path to the polyline
-                $brushline->update([
-                    'polyline_id' => $polyline->id,
-                    'floor_id'    => optional($changedFloor)->id ?? $brushline->floor_id,
+        DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
+            if ($brushline === null) {
+                $brushline = Brushline::create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'floor_id'         => $validated['floor_id'],
+                    'polyline_id'      => -1,
                 ]);
-
-                // Load the polyline so it can be echoed back to the user
-                $brushline->load(['polyline']);
-
-                // Something's updated; broadcast it
-                if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $brushline));
-                }
-
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                $success   = $brushline instanceof Brushline;
             } else {
-                throw new \Exception('Unable to save brushline!');
+                $success = $brushline->update([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'floor_id'         => $validated['floor_id'],
+                ]);
             }
 
-            $result = $brushline;
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
+            try {
+                if ($success) {
+                    // Create a new polyline and save it
+                    $changedFloor = null;
+                    $polyline     = $this->savePolyline(
+                        $coordinatesService,
+                        $dungeonRoute->mappingVersion,
+                        Polyline::findOrNew($brushline->polyline_id),
+                        $brushline,
+                        $validated['polyline'],
+                        $changedFloor
+                    );
+
+                    // Couple the path to the polyline
+                    $brushline->update([
+                        'polyline_id' => $polyline->id,
+                        'floor_id'    => optional($changedFloor)->id ?? $brushline->floor_id,
+                    ]);
+
+                    // Load the polyline, so it can be echoed back to the user
+                    $brushline->load(['polyline']);
+
+                    // Something's updated; broadcast it
+                    if (Auth::check()) {
+                        broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $brushline));
+                    }
+
+                    // Touch the route so that the thumbnail gets updated
+                    $dungeonRoute->touch();
+                } else {
+                    throw new \Exception(__('controller.generic.error.unable_to_save'));
+                }
+
+                $result = $brushline;
+            } catch (Exception $ex) {
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+            }
+        });
 
         return $result;
     }
@@ -124,10 +136,10 @@ class AjaxBrushlineController extends Controller
 
                 $result = response()->noContent();
             } else {
-                $result = response('Unable to save Brushline', Http::INTERNAL_SERVER_ERROR);
+                $result = response(__('controller.generic.error.unable_to_save'), Http::INTERNAL_SERVER_ERROR);
             }
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

@@ -6,7 +6,7 @@
  * @param $v
  * @return float[]|int[]
  */
-function hsv2rgb($h, $s, $v)
+function hsv2rgb($h, $s, $v): array
 {
     $f = function ($n, $k = null) use ($h, $s, $v) {
         if ($k === null) {
@@ -25,7 +25,7 @@ function hsv2rgb($h, $s, $v)
  * @param $b
  * @return array
  */
-function rgb2hsv($r, $g, $b)
+function rgb2hsv($r, $g, $b): array
 {
     $v = max($r, $g, $b);
     $n = $v - min($r, $g, $b);
@@ -47,7 +47,7 @@ $GLOBALS['clrLkp'] = [
  * @return array|float[]|int[]
  * @throws Exception
  */
-function hex2rgb($hex)
+function hex2rgb($hex): array
 {
     $parts = str_split(substr($hex, 1), 2);
     if (!$parts || count($parts) < 3) {
@@ -81,6 +81,7 @@ function hsv2name($h, $s, $v)
 /**
  * @param $hex
  * @return mixed
+ * @throws Exception
  */
 function hex2name($hex)
 {

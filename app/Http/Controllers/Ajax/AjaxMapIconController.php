@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingModelInterface;

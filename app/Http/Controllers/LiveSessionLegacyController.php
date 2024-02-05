@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

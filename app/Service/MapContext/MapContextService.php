@@ -7,7 +7,7 @@ use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Logic\MapContext\MapContextLiveSession;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
@@ -38,16 +38,17 @@ class MapContextService implements MapContextServiceInterface
     /**
      * @param DungeonRoute $dungeonRoute
      * @param Floor        $floor
-     *
+     * @param string|null  $mapFacadeStyle
      * @return MapContextDungeonRoute
      */
-    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor): MapContextDungeonRoute
+    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, string $mapFacadeStyle = null): MapContextDungeonRoute
     {
         return new MapContextDungeonRoute(
             $this->cacheService,
             $this->coordinatesService,
             $dungeonRoute,
-            $floor
+            $floor,
+            $mapFacadeStyle
         );
     }
 

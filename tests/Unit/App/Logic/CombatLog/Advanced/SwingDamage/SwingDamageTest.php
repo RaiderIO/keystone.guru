@@ -9,7 +9,7 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
-use Tests\PublicTestCase;
+use Tests\TestCases\PublicTestCase;
 
 class SwingDamageTest extends PublicTestCase
 {
