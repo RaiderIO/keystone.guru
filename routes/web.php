@@ -522,9 +522,9 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::post('/pridefulenemy/{enemy}', [AjaxPridefulEnemyController::class, 'store']);
             Route::delete('/pridefulenemy/{enemy}', [AjaxPridefulEnemyController::class, 'delete']);
 
-            Route::post('/path', [AjaxPathController::class, 'store']);
-            Route::put('/path/{path}', [AjaxPathController::class, 'store']);
-            Route::delete('/path/{path}', [AjaxPathController::class, 'delete']);
+            Route::post('/path', [AjaxPathController::class, 'store'])->name('ajax.dungeonroute.path.create');
+            Route::put('/path/{path}', [AjaxPathController::class, 'store'])->name('ajax.dungeonroute.path.update');
+            Route::delete('/path/{path}', [AjaxPathController::class, 'delete'])->name('ajax.dungeonroute.path.delete');
 
             Route::post('/raidmarker/{enemy}', [AjaxEnemyController::class, 'setRaidMarker']);
 

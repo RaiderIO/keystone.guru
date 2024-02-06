@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Path;
 
 use App\Models\Floor\Floor;
+use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,9 +27,8 @@ class APIPathFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                         => 'nullable|int',
-            'floor_id'                   => ['nullable', Rule::exists(Floor::class, 'id')],
-            'polyline'                   => 'array',
+            'floor_id'                   => ['required', Rule::exists(Floor::class, 'id')],
+            'polyline'                   => 'required|array',
             'polyline.color'             => [
                 'nullable',
                 'string',
@@ -43,7 +43,8 @@ class APIPathFormRequest extends FormRequest
                 'int',
             ],
             'polyline.vertices_json'     => [
-                'string',
+                'json',
+                new JsonStringCountRule(2),
             ],
             'linked_awakened_obelisk_id' => 'nullable|int',
         ];

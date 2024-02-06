@@ -6,7 +6,9 @@ use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
+use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Path\APIPathFormRequest;
+use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
@@ -16,19 +18,21 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class AjaxPathController extends Controller
 {
     use SavesPolylines;
+    use ValidatesFloorId;
 
     /**
      * @param APIPathFormRequest          $request
      * @param CoordinatesServiceInterface $coordinatesService
      * @param DungeonRoute                $dungeonRoute
      * @param Path|null                   $path
-     * @return Path
+     * @return Brushline|Response
      * @throws AuthorizationException
      */
     function store(
@@ -44,60 +48,67 @@ class AjaxPathController extends Controller
 
         $validated = $request->validated();
 
-        if ($path === null) {
-            $path    = Path::create([
-                'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $validated['floor_id'],
-                'polyline_id'      => -1,
-            ]);
-            $success = $path instanceof Path;
-        } else {
-            $success = $path->update([
-                'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $validated['floor_id'],
-            ]);
+        $result = $this->validateFloorId($validated['floor_id'], $dungeonRoute->dungeon_id);
+        if ($result !== null) {
+            return $result;
         }
 
-        try {
-            if ($success) {
-                // Create a new polyline and save it
-                $changedFloor = null;
-                $polyline     = $this->savePolyline(
-                    $coordinatesService,
-                    $dungeonRoute->mappingVersion,
-                    Polyline::findOrNew($path->polyline_id),
-                    $path,
-                    $validated['polyline'],
-                    $changedFloor
-                );
-
-                // Couple the path to the polyline
-                $path->update([
-                    'polyline_id' => $polyline->id,
-                    'floor_id'    => optional($changedFloor)->id ?? $path->floor_id,
+        DB::transaction(function () use ($coordinatesService, $path, $dungeonRoute, $validated, &$result) {
+            if ($path === null) {
+                $path    = Path::create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'floor_id'         => $validated['floor_id'],
+                    'polyline_id'      => -1,
                 ]);
-
-                // Load the polyline so it can be echoed back to the user
-                $path->load(['polyline']);
-
-                // Set or unset the linked awakened obelisks now that we have an ID
-                $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
-
-                // Something's updated; broadcast it
-                if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
-                }
-
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                $success = $path instanceof Path;
             } else {
-                throw new \Exception('Unable to save path!');
+                $success = $path->update([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'floor_id'         => $validated['floor_id'],
+                ]);
             }
 
-            $result = $path;
-        } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
-        }
+            try {
+                if ($success) {
+                    // Create a new polyline and save it
+                    $changedFloor = null;
+                    $polyline     = $this->savePolyline(
+                        $coordinatesService,
+                        $dungeonRoute->mappingVersion,
+                        Polyline::findOrNew($path->polyline_id),
+                        $path,
+                        $validated['polyline'],
+                        $changedFloor
+                    );
+
+                    // Couple the path to the polyline
+                    $path->update([
+                        'polyline_id' => $polyline->id,
+                        'floor_id'    => optional($changedFloor)->id ?? $path->floor_id,
+                    ]);
+
+                    // Load the polyline so it can be echoed back to the user
+                    $path->load(['polyline']);
+
+                    // Set or unset the linked awakened obelisks now that we have an ID
+                    $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id'] ?? null);
+
+                    // Something's updated; broadcast it
+                    if (Auth::check()) {
+                        broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
+                    }
+
+                    // Touch the route so that the thumbnail gets updated
+                    $dungeonRoute->touch();
+                } else {
+                    throw new \Exception(__('controller.path.error.unable_to_save_path'));
+                }
+
+                $result = $path;
+            } catch (Exception $ex) {
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+            }
+        });
 
         return $result;
     }
@@ -127,10 +138,10 @@ class AjaxPathController extends Controller
 
                 $result = response()->noContent();
             } else {
-                $result = response('Unable to delete Path', Http::INTERNAL_SERVER_ERROR);
+                $result = response(__('controller.path.error.unable_to_delete_path'), Http::INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

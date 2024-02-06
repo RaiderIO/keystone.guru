@@ -7,6 +7,7 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
+use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -39,7 +40,10 @@ class EnemyPatrolFormRequest extends FormRequest
             'polyline.color'          => 'string',
             'polyline.color_animated' => 'nullable|string',
             'polyline.weight'         => 'int',
-            'polyline.vertices_json'  => 'json',
+            'polyline.vertices_json'  => [
+                'json',
+                new JsonStringCountRule(2),
+            ]
         ];
     }
 }
