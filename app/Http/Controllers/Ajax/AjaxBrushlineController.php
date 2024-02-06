@@ -6,6 +6,7 @@ use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
+use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Http\Requests\Brushline\APIBrushlineUpdateFormRequest;
 use App\Models\Brushline;
@@ -25,6 +26,7 @@ use Teapot\StatusCode\Http;
 class AjaxBrushlineController extends Controller
 {
     use SavesPolylines;
+    use ValidatesFloorId;
 
     /**
      * @param APIBrushlineFormRequest     $request
@@ -48,11 +50,10 @@ class AjaxBrushlineController extends Controller
 
         $validated = $request->validated();
 
-        if (Floor::findOrFail($validated['floor_id'])->dungeon_id !== $dungeonRoute->dungeon_id) {
-            return response(__('controller.brushline.error.floor_not_found_in_dungeon'), 422);
+        $result = $this->validateFloorId($validated['floor_id'], $dungeonRoute->dungeon_id);
+        if ($result !== null) {
+            return $result;
         }
-
-        $result = null;
 
         DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
             if ($brushline === null) {
@@ -99,7 +100,7 @@ class AjaxBrushlineController extends Controller
                     // Touch the route so that the thumbnail gets updated
                     $dungeonRoute->touch();
                 } else {
-                    throw new \Exception(__('controller.generic.error.unable_to_save'));
+                    throw new \Exception(__('controller.brushline.error.unable_to_save_brushline'));
                 }
 
                 $result = $brushline;
@@ -136,7 +137,7 @@ class AjaxBrushlineController extends Controller
 
                 $result = response()->noContent();
             } else {
-                $result = response(__('controller.generic.error.unable_to_save'), Http::INTERNAL_SERVER_ERROR);
+                $result = response(__('controller.brushline.error.unable_to_delete_brushline'), Http::INTERNAL_SERVER_ERROR);
             }
         } catch (Exception $ex) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

@@ -48,7 +48,7 @@ class APIBrushlineFormRequest extends FormRequest
                 'int',
             ],
             'polyline.vertices_json'  => [
-                'string',
+                'json',
                 new JsonStringCountRule(2),
             ],
         ];
