@@ -43,8 +43,10 @@ class ThumbnailService implements ThumbnailServiceInterface
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts,
-        ?int         $width = null,
-        ?int         $height = null,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
         ?int         $quality = null): bool
     {
@@ -52,8 +54,10 @@ class ThumbnailService implements ThumbnailServiceInterface
             $dungeonRoute,
             $floorIndex,
             self::THUMBNAIL_CUSTOM_FOLDER_PATH,
-            $width,
-            $height,
+            $viewportWidth,
+            $viewportHeight,
+            $imageWidth,
+            $imageHeight,
             $zoomLevel,
             $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality')
         );
@@ -63,8 +67,10 @@ class ThumbnailService implements ThumbnailServiceInterface
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
      * @param string       $targetFolder
-     * @param int|null     $width
-     * @param int|null     $height
+     * @param int|null     $viewportWidth
+     * @param int|null     $viewportHeight
+     * @param int|null     $imageWidth
+     * @param int|null     $imageHeight
      * @param int|null     $zoomLevel
      * @param int|null     $quality
      * @return bool
@@ -73,8 +79,10 @@ class ThumbnailService implements ThumbnailServiceInterface
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         string       $targetFolder,
-        ?int         $width = null,
-        ?int         $height = null,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
         ?int         $quality = null): bool
     {
@@ -84,9 +92,11 @@ class ThumbnailService implements ThumbnailServiceInterface
             return false;
         }
 
-        $width     = $width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_width');
-        $height    = $height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_height');
-        $zoomLevel = $zoomLevel ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
+        $viewportWidth  = $viewportWidth ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
+        $viewportHeight = $viewportHeight ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
+        $imageWidth     = $imageWidth ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
+        $imageHeight    = $imageHeight ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
+        $zoomLevel      = $zoomLevel ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
 
 
         // 1. Headless chrome saves file in a temp location
@@ -114,8 +124,8 @@ class ThumbnailService implements ThumbnailServiceInterface
             ]),
             // Second argument; where to save the resulting image
             $tmpFile,
-            $width,
-            $height,
+            $viewportWidth,
+            $viewportHeight,
         ]);
 
         Log::channel('scheduler')->info($process->getCommandLine());
@@ -140,7 +150,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
                     // Rescale it
                     Log::channel('scheduler')->info(sprintf('Scaling and moving image from %s to %s', $tmpFile, $target));
-                    Image::configure(['driver' => 'imagick'])->make($tmpFile)->resize($width, $height)->save($target, $quality);
+                    Image::configure(['driver' => 'imagick'])->make($tmpFile)->resize($imageWidth, $imageHeight)->save($target, $quality);
 
                     // Remove any old .png file that may be there
                     $oldPngFilePath = str_replace('.jpg', '.png', $target);
@@ -212,8 +222,10 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,
-        ?int         $width = null,
-        ?int         $height = null,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
         ?int         $quality = null): Collection
     {
@@ -227,8 +239,10 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
                 'status'           => DungeonRouteThumbnailJob::STATUS_QUEUED,
-                'width'            => $width,
-                'height'           => $height,
+                'viewport_width'   => $viewportWidth,
+                'viewport_height'  => $viewportHeight,
+                'image_width'      => $imageWidth,
+                'image_height'     => $imageHeight,
                 'zoom_level'       => $zoomLevel,
                 'quality'          => $quality,
             ]);
@@ -241,12 +255,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $this,
                 $dungeonRouteThumbnailJob,
                 $dungeonRoute,
-                $floor->index,
-                0,
-                $width,
-                $height,
-                $zoomLevel,
-                $quality
+                $floor->index
             );
 
             $result->push($dungeonRouteThumbnailJob);

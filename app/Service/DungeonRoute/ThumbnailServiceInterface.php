@@ -17,16 +17,20 @@ interface ThumbnailServiceInterface
 
     /**
      * @param DungeonRoute $dungeonRoute
-     * @param int|null     $width
-     * @param int|null     $height
+     * @param int|null     $viewportWidth
+     * @param int|null     $viewportHeight
+     * @param int|null     $imageWidth
+     * @param int|null     $imageHeight
      * @param int|null     $zoomLevel
      * @param int|null     $quality
      * @return Collection|DungeonRouteThumbnailJob[]
      */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,
-        ?int         $width = null,
-        ?int         $height = null,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
         ?int         $quality = null
     ): Collection;
@@ -47,8 +51,10 @@ interface ThumbnailServiceInterface
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
      * @param int          $attempts
-     * @param int|null     $width
-     * @param int|null     $height
+     * @param int|null     $viewportWidth
+     * @param int|null     $viewportHeight
+     * @param int|null     $imageWidth
+     * @param int|null     $imageHeight
      * @param int|null     $zoomLevel
      * @param int|null     $quality
      * @return bool
@@ -57,8 +63,10 @@ interface ThumbnailServiceInterface
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts,
-        ?int         $width = null,
-        ?int         $height = null,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
         ?int         $quality = null
     ): bool;

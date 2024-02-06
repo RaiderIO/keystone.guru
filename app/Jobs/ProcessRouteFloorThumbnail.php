@@ -15,13 +15,10 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var ThumbnailServiceInterface */
     protected ThumbnailServiceInterface $thumbnailService;
 
-    /** @var DungeonRoute $dungeonRoute */
     protected DungeonRoute $dungeonRoute;
 
-    /** @var int $floorIndex */
     protected int $floorIndex;
 
     protected int $attempts;

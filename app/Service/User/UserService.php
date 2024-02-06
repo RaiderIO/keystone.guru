@@ -15,7 +15,7 @@ class UserService implements UserServiceInterface
      *
      * @return bool
      */
-    public function longAsUserFromAuthenticationHeader(Request $request): bool
+    public function loginAsUserFromAuthenticationHeader(Request $request): bool
     {
         if (!$request->hasHeader('Authorization')) {
             return false;
