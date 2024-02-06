@@ -723,7 +723,7 @@ class DungeonRoute extends Model
     {
         // A bit of a hack but it works, it's complicated otherwise
         return Carbon::createFromTimeString($this->thumbnail_updated_at)->isBefore(
-            Carbon::createFromDate(2024, 01, 29)
+            Carbon::createFromDate(2024, 02, 05)->setTime(21, 13)
         );
     }
 
@@ -1528,9 +1528,11 @@ class DungeonRoute extends Model
         // Only add the 'clone of' when the user cloned it from someone else as a form of credit
         if (isset($model->clone_of) && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
             $subTitle = __('models.dungeonroute.subtitle_clone_of', [
+                // Can't use %s for the href since PhpStorm then complains >.>
                 'routeLink' => sprintf(
-                    ' <a href="%s">%s</a>',
-                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of, 'dungeon' => $this->dungeon, 'title' => $this->title]),
+                    ' <a href="' .
+                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of, 'dungeon' => $this->dungeon, 'title' => $this->title]) .
+                    '">%s</a>',
                     $this->clone_of
                 ),
             ]);
@@ -1558,25 +1560,38 @@ class DungeonRoute extends Model
      */
     public function getThumbnailUrl(int $floorIndex): string
     {
-        return url($this->getThumbnailPath($floorIndex));
+        return url($this->getRelativeThumbnailPath($floorIndex));
     }
 
     /**
      * @param int $floorIndex
      * @return string
      */
-    public function getThumbnailPath(int $floorIndex): string
+    public function getRelativeThumbnailPath(int $floorIndex): string
     {
-        $path = sprintf('%s/%s_%s.jpg', public_path(ThumbnailService::THUMBNAIL_FOLDER_PATH), $this->public_key, $floorIndex);
+        $relativePath    = sprintf('%s/%s_%s.jpg', ThumbnailService::THUMBNAIL_FOLDER_PATH, $this->public_key, $floorIndex);
+        $relativePathPng = str_replace('.jpg', '.png', $relativePath);
 
+        $publicPath = public_path($relativePath);
         // If we don't have a .jpg file, check if we should use .png instead
-        $pngPath = str_replace('.jpg', '.png', $path);
 
-        if (!file_exists($path) && file_exists($pngPath)) {
-            $path = $pngPath;
+        if (!file_exists($publicPath)) {
+            $publicPathPng = str_replace('.jpg', '.png', $publicPath);
+            if (file_exists($publicPathPng)) {
+                $relativePath = $relativePathPng;
+            }
         }
 
-        return $path;
+        return $relativePath;
+    }
+
+    /**
+     * @param int $floorIndex
+     * @return string
+     */
+    public function getAbsoluteThumbnailPath(int $floorIndex): string
+    {
+        return public_path($this->getRelativeThumbnailPath($floorIndex));
     }
 
     /**
@@ -1675,7 +1690,7 @@ class DungeonRoute extends Model
             // Delete thumbnails
             foreach ($dungeonRoute->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
-                @unlink($dungeonRoute->getThumbnailPath($floor->index));
+                @unlink($dungeonRoute->getAbsoluteThumbnailPath($floor->index));
             }
 
             // Dungeonroute settings

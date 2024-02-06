@@ -320,7 +320,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         $result = true;
         foreach ($dungeonRoute->dungeon->floors()->active()->get() as $floor) {
             /** @var Floor $floor */
-            $result = $result && file_exists($dungeonRoute->getThumbnailPath($floor->index));
+            $result = $result && file_exists($dungeonRoute->getAbsoluteThumbnailPath($floor->index));
         }
 
         return $result;
