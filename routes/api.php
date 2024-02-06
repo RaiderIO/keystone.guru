@@ -24,9 +24,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.route.list');
 
         Route::post('/{dungeonRoute}/thumbnail', [APIDungeonRouteController::class, 'createThumbnails'])->name('api.v1.route.thumbnail.create');
-    });
 
-    Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', [APIDungeonRouteThumbnailJobController::class, 'get'])->name('api.v1.thumbnailjob.get');
+        Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', [APIDungeonRouteThumbnailJobController::class, 'get'])->name('api.v1.thumbnailjob.get');
+    });
 
     // Static data
     Route::group(['prefix' => 'dungeon'], function () {
