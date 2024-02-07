@@ -18,7 +18,7 @@ use Throwable;
  * @property string $title
  * @property boolean $silent
  * @property boolean $spotlight
- * 
+ *
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
@@ -44,9 +44,9 @@ class Release extends CacheModel
     protected $appends = ['github_body', 'discord_body', 'reddit_body'];
 
     /**
-     * @return Release|Model
+     * @return Release|null
      */
-    private function _getPreviousRelease()
+    private function getPreviousRelease(): ?Release
     {
         return Release::where('id', '<', $this->id)->orderBy('id', 'desc')->first();
     }
@@ -71,7 +71,7 @@ class Release extends CacheModel
      * @return string
      * @throws Throwable
      */
-    public function getGithubBodyAttribute()
+    public function getGithubBodyAttribute(): string
     {
         return trim(view('app.release.github', ['model' => $this])->render());
     }
@@ -200,7 +200,7 @@ class Release extends CacheModel
      */
     public function isMajorUpgrade(): bool
     {
-        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
+        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
     }
 
     /**
@@ -210,7 +210,7 @@ class Release extends CacheModel
      */
     public function isMinorUpgrade(): bool
     {
-        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
+        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
     }
 
     /**
@@ -220,6 +220,6 @@ class Release extends CacheModel
      */
     public function isBugfixUpgrade(): bool
     {
-        return $this->id === 1 || $this->_getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
     }
 }
