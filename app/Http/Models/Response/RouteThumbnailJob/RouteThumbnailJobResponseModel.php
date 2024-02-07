@@ -40,14 +40,28 @@ class RouteThumbnailJobResponseModel
      *
      * @var int
      */
-    public int $width;
+    public int $viewport_width;
 
     /**
      * @OA\Property(example="600")
      *
      * @var int
      */
-    public int $height;
+    public int $viewport_height;
+
+    /**
+     * @OA\Property(example="900")
+     *
+     * @var int
+     */
+    public int $image_width;
+
+    /**
+     * @OA\Property(example="600")
+     *
+     * @var int
+     */
+    public int $image_height;
 
     /**
      * @OA\Property(example="2.2")
