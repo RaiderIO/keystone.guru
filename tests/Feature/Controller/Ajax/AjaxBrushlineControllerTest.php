@@ -7,7 +7,7 @@ use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 use Tests\Feature\Fixtures\PolylineFixtures;
 
-class BrushlineControllerTest extends DungeonRouteTestBase
+class AjaxBrushlineControllerTest extends DungeonRouteTestBase
 {
     /**
      * @test

@@ -14,8 +14,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int          $dungeon_route_id
  * @property int          $floor_id
  * @property string       $status
- * @property int          $width
- * @property int          $height
+ * @property int|null     $viewport_width
+ * @property int|null     $viewport_height
+ * @property int|null     $image_width
+ * @property int|null     $image_height
  * @property float        $zoom_level
  * @property int          $quality
  *
@@ -38,8 +40,10 @@ class DungeonRouteThumbnailJob extends Model
         'dungeon_route_id',
         'floor_id',
         'status',
-        'width',
-        'height',
+        'viewport_width',
+        'viewport_height',
+        'image_width',
+        'image_height',
         'zoom_level',
         'quality',
         'created_at',

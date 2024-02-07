@@ -39,8 +39,8 @@ return [
     ],
     'brushline'                   => [
         'error' => [
-            'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
-            'unable_to_save'             => 'Unable to save Brushline',
+            'unable_to_save_brushline'   => 'Unable to save line',
+            'unable_to_delete_brushline' => 'Unable to delete line',
         ],
     ],
     'dungeon'                     => [
@@ -91,7 +91,8 @@ return [
     ],
     'generic'                     => [
         'error' => [
-            'not_found' => 'Not found',
+            'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
+            'not_found'                  => 'Not found',
         ],
     ],
     'oauthlogin'                  => [
@@ -132,6 +133,12 @@ return [
             'invalid_mdt_string'                    => 'Invalid MDT string',
             'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
+        ],
+    ],
+    'path'                        => [
+        'error' => [
+            'unable_to_save_path'   => 'Unable to save path',
+            'unable_to_delete_path' => 'Unable to delete path',
         ],
     ],
     'patreon'                     => [

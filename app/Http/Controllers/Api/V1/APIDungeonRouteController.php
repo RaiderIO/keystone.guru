@@ -76,8 +76,10 @@ class APIDungeonRouteController extends Controller
         return new DungeonRouteThumbnailJobCollectionResource(
             $apiDungeonRouteControllerService->createThumbnails(
                 $dungeonRoute,
-                $validated['width'],
-                $validated['height'],
+                $validated['viewport_width'],
+                $validated['viewport_height'],
+                $validated['image_width'],
+                $validated['image_height'],
                 $validated['zoom_level'],
                 $validated['quality']
             )

@@ -9,12 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
 {
-
     private DungeonRouteThumbnailJob $dungeonRouteThumbnailJob;
-    private ?int                     $width;
-    private ?int                     $height;
-    private ?int                     $zoomLevel;
-    private ?int                     $quality;
 
     /**
      * Create a new job instance.
@@ -24,30 +19,18 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
      * @param DungeonRoute              $dungeonRoute
      * @param int                       $floorIndex
      * @param int                       $attempts
-     * @param int|null                  $width
-     * @param int|null                  $height
-     * @param int|null                  $zoomLevel
-     * @param int|null                  $quality
      */
     public function __construct(
         ThumbnailServiceInterface $thumbnailService,
         DungeonRouteThumbnailJob  $dungeonRouteThumbnailJob,
         DungeonRoute              $dungeonRoute,
         int                       $floorIndex,
-        int                       $attempts = 0,
-        ?int                      $width = null,
-        ?int                      $height = null,
-        ?int                      $zoomLevel = null,
-        ?int                      $quality = null
+        int                       $attempts = 0
     ) {
         parent::__construct($thumbnailService, $dungeonRoute, $floorIndex, $attempts);
 
         $this->queue                    = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
         $this->dungeonRouteThumbnailJob = $dungeonRouteThumbnailJob;
-        $this->width                    = $width;
-        $this->height                   = $height;
-        $this->zoomLevel                = $zoomLevel;
-        $this->quality                  = $quality;
     }
 
     /**
@@ -57,14 +40,16 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
     {
         Log::channel('scheduler')->info(
             sprintf(
-                'Started processing custom thumbnail %s:%s (%d, %d, %d, %d, %d)',
+                'Started processing custom thumbnail %s:%s (%d, %d, %d, %d, %d, %d, %d)',
                 $this->dungeonRoute->public_key,
                 $this->floorIndex,
                 $this->dungeonRoute->id,
-                $this->width ?? -1,
-                $this->height ?? -1,
-                $this->zoomLevel ?? -1,
-                $this->quality ?? -1
+                $this->dungeonRouteThumbnailJob->viewport_width ?? -1,
+                $this->dungeonRouteThumbnailJob->viewport_height ?? -1,
+                $this->dungeonRouteThumbnailJob->image_width ?? -1,
+                $this->dungeonRouteThumbnailJob->image_height ?? -1,
+                $this->dungeonRouteThumbnailJob->zoom_level ?? -1,
+                $this->dungeonRouteThumbnailJob->quality ?? -1
             )
         );
 
@@ -73,10 +58,12 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
                 $this->dungeonRoute,
                 $this->floorIndex,
                 $this->attempts,
-                $this->width,
-                $this->height,
-                $this->zoomLevel,
-                $this->quality
+                $this->dungeonRouteThumbnailJob->viewport_width,
+                $this->dungeonRouteThumbnailJob->viewport_height,
+                $this->dungeonRouteThumbnailJob->image_width,
+                $this->dungeonRouteThumbnailJob->image_height,
+                $this->dungeonRouteThumbnailJob->zoom_level,
+                $this->dungeonRouteThumbnailJob->quality
             );
 
             if (!$result) {
@@ -88,11 +75,7 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
                     $this->dungeonRouteThumbnailJob,
                     $this->dungeonRoute,
                     $this->floorIndex,
-                    ++$this->attempts,
-                    $this->width,
-                    $this->height,
-                    $this->zoomLevel,
-                    $this->quality
+                    ++$this->attempts
                 );
             } else {
                 Log::channel('scheduler')->info(
