@@ -1,0 +1,39 @@
+{
+    "id": 221,
+    "release_changelog_id": 228,
+    "version": "v7.10",
+    "title": "Thumbnail generation now supports setting the viewport",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-02-07T08:54:15+00:00",
+    "updated_at": "2024-02-07T08:54:15+00:00",
+    "changelog": {
+        "id": 228,
+        "release_id": 221,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 228,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2194,
+                "change": "[Hotfixed] Fixed thumbnails not showing up in various overview pages.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 228,
+                "release_changelog_category_id": 12,
+                "ticket_id": 2195,
+                "change": "Thumbnails are now generated correctly once again. To properly fix this the route thumbnail API can now pass viewport width\/height separate from image width\/height.",
+                "category": {
+                    "id": 12,
+                    "key": "api_changes",
+                    "name": "releasechangelogcategories.api_changes"
+                }
+            }
+        ]
+    }
+}
