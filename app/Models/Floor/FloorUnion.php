@@ -52,7 +52,7 @@ class FloorUnion extends CacheModel implements MappingModelInterface, MappingMod
         'floorUnionAreas',
     ];
 
-    protected $hidden = ['floor'];
+    protected $hidden = ['mappingVersion', 'floor'];
 
     protected $casts = [
         'mapping_version_id' => 'integer',

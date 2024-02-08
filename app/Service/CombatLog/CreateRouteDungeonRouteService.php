@@ -10,7 +10,7 @@ use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\EnemyPosition;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;

@@ -37,6 +37,12 @@ return [
             'unable_to_save_report'        => 'Unable to save report',
         ],
     ],
+    'brushline'                   => [
+        'error' => [
+            'unable_to_save_brushline'   => 'Unable to save line',
+            'unable_to_delete_brushline' => 'Unable to delete line',
+        ],
+    ],
     'dungeon'                     => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
@@ -83,6 +89,12 @@ return [
             'expansion_created'        => 'Expansion created',
         ],
     ],
+    'generic'                     => [
+        'error' => [
+            'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
+            'not_found'                  => 'Not found',
+        ],
+    ],
     'oauthlogin'                  => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
@@ -115,11 +127,18 @@ return [
     'mdtimport'                   => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
+            'mdt_string_parsing_failed'             => 'MDT string parsing failed due to an internal server error.',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',
             'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
+        ],
+    ],
+    'path'                        => [
+        'error' => [
+            'unable_to_save_path'   => 'Unable to save path',
+            'unable_to_delete_path' => 'Unable to delete path',
         ],
     ],
     'patreon'                     => [

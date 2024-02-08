@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Events\LiveSession\StopEvent;
 use App\Http\Controllers\Controller;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -41,7 +41,7 @@ class AjaxLiveSessionController extends Controller
             }
 
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

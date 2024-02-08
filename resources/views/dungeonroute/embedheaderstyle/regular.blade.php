@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonRoute \App\Models\DungeonRoute */
+/** @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $dungeon \App\Models\Dungeon */
 /** @var $floor \App\Models\Floor\Floor */
 /** @var $embedOptions array */
@@ -54,10 +54,12 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         </div>
         <div class="col-md-auto px-1 d-md-flex d-none">
             @if($embedOptions['show']['affixes'])
-                    <?php
-                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                    ?>
-                @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
+                <?php
+                $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                ?>
+                @if($mostRelevantAffixGroup !== null)
+                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
+                @endif
             @endif
         </div>
         <div class="col">

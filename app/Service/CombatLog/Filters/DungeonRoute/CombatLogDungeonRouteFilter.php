@@ -2,7 +2,7 @@
 
 namespace App\Service\CombatLog\Filters\DungeonRoute;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Filters\BaseCombatLogFilter;
 
 class CombatLogDungeonRouteFilter extends BaseCombatLogFilter

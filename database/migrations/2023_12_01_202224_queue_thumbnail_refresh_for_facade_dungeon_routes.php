@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;

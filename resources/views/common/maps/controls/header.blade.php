@@ -5,7 +5,7 @@
  * @var $mapContext \App\Logic\MapContext\MapContext
  * @var $dungeon \App\Models\Dungeon
  * @var $floor \App\Models\Floor\Floor
- * @var $dungeonroute \App\Models\DungeonRoute|null
+ * @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null
  * @var $livesession \App\Models\LiveSession|null
  * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
  * @var $edit bool
@@ -175,26 +175,21 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 @endauth
 
                 @isset($dungeonroute)
-                    @auth
-                        @if($isUserAdmin)
-                                <?php $challengeModeRun = $dungeonroute->getChallengeModeRun(); ?>
-                            @if( $challengeModeRun !== null )
-                                <li class="nav-item mr-2">
-                                    <div class="d-flex h-100">
-                                        <div class="row justify-content-center align-self-center">
-                                            <div class="col">
-                                                <button id="edit_route_admin_settings_button"
-                                                        class="btn btn-info btn-sm" data-toggle="modal"
-                                                        data-target="#edit_route_admin_settings_modal">
-                                                    <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
-                                                </button>
-                                            </div>
-                                        </div>
+                    @if($isUserAdmin)
+                        <li class="nav-item mr-2">
+                            <div class="d-flex h-100">
+                                <div class="row justify-content-center align-self-center">
+                                    <div class="col">
+                                        <button id="edit_route_admin_settings_button"
+                                                class="btn btn-info btn-sm" data-toggle="modal"
+                                                data-target="#edit_route_admin_settings_modal">
+                                            <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
+                                        </button>
                                     </div>
-                                </li>
-                            @endisset
-                        @endif
-                    @endauth
+                                </div>
+                            </div>
+                        </li>
+                    @endif
 
                     <li class="nav-item mr-2">
                         <div class="d-flex h-100">
@@ -324,7 +319,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 <select>
                     @for($i = 1; $i <= 10; $i++)
                         <option
-                                value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                            value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
                             {{ $i }}
                         </option>
                     @endfor

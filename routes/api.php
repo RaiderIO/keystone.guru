@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\APICombatLogController;
 use App\Http\Controllers\Api\V1\APIDungeonController;
 use App\Http\Controllers\Api\V1\APIDungeonRouteController;
+use App\Http\Controllers\Api\V1\APIDungeonRouteThumbnailJobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,11 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::group(['prefix' => 'route'], function () {
-        Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.combatlog.route.list');
+        Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.route.list');
+
+        Route::post('/{dungeonRoute}/thumbnail', [APIDungeonRouteController::class, 'createThumbnails'])->name('api.v1.route.thumbnail.create');
+
+        Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', [APIDungeonRouteThumbnailJobController::class, 'get'])->name('api.v1.thumbnailjob.get');
     });
 
     // Static data

@@ -95,7 +95,7 @@ class Update extends Command
         // User permissions are funky for local environments - tell git to ignore them
         if ($environment === 'local') {
             $this->shell([
-                'git config --global --add safe.directory /var/www'
+                'git config --global --add safe.directory /var/www',
             ]);
         }
 
@@ -121,7 +121,10 @@ class Update extends Command
         RefreshDiscoverCache::dispatch();
         $this->call('keystoneguru:view', ['operation' => 'cache']);
 
-        // Bit of a nasty hack to fix permission issues
+        // Regenerate API docs
+        $this->call('l5-swagger:generate');
+
+        // A bit of a nasty hack to fix permission issues
         $this->shell(sprintf('chown www-data:www-data -R %s', base_path('storage')));
         $this->shell(sprintf('chown www-data:www-data -R %s', base_path('bootstrap/cache')));
 

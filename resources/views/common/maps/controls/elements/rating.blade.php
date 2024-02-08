@@ -1,5 +1,5 @@
 <?php
-/** @var \App\Models\Dungeonroute $dungeonroute */
+/** @var \App\Models\DungeonRoute\Dungeonroute $dungeonroute */
 $currentUserRating = $dungeonroute->getRatingByCurrentUser();
 ?>
 <!-- Rating -->

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use Exception;
@@ -77,7 +77,7 @@ class AjaxPridefulEnemyController extends Controller
 
             $result = response()->noContent();
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

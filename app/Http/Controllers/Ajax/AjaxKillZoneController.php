@@ -9,7 +9,7 @@ use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Jobs\RefreshEnemyForces;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
@@ -149,7 +149,7 @@ class AjaxKillZoneController extends Controller
 
             $result = $this->saveKillZone($dungeonRoute, $data);
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
@@ -261,7 +261,7 @@ class AjaxKillZoneController extends Controller
             }
 
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
@@ -304,7 +304,7 @@ class AjaxKillZoneController extends Controller
 
                 $result = ['enemy_forces' => $dungeonRoute->enemy_forces];
             } catch (\Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         } else {
             $result = response('You must confirm before deleting all pulls', Http::BAD_REQUEST);

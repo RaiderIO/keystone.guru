@@ -7,7 +7,7 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\Structs\IngameXY;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\EnemyPosition;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -22,11 +22,11 @@ use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartR
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
-use App\Service\Season\SeasonServiceInterface;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {

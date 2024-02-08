@@ -5,8 +5,7 @@ namespace Tests\Unit\App\Service\Season;
 use App\Models\Season;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Tests\PublicTestCase;
-use Tests\Unit\Fixtures\ServiceFixtures;
+use Tests\TestCases\PublicTestCase;
 
 class SeasonServiceTest extends PublicTestCase
 {

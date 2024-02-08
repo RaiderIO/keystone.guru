@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\User;
@@ -36,8 +37,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param MapIconFormRequest          $request
      * @param CoordinatesServiceInterface $coordinatesService
+     * @param MapIconFormRequest          $request
+     * @param MappingVersion|null         $mappingVersion
      * @param ?DungeonRoute               $dungeonRoute
      * @param MapIcon|null                $mapIcon
      * @return MapIcon|Model
@@ -45,8 +47,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        MapIconFormRequest          $request,
         CoordinatesServiceInterface $coordinatesService,
+        MapIconFormRequest          $request,
+        ?MappingVersion             $mappingVersion,
         ?DungeonRoute               $dungeonRoute,
         MapIcon                     $mapIcon = null): MapIcon
     {
@@ -62,24 +65,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             }
         } // We're editing a map comment for the user, carry on
         else {
-            if (!$dungeonRoute->isSandbox()) {
-                $this->authorize('edit', $dungeonRoute);
-            }
+            $this->authorize('edit', $dungeonRoute);
             $this->authorize('addMapIcon', $dungeonRoute);
         }
 
-        $mapIconTypeId = $validated['map_icon_type_id'];
-        if ($mapIconTypeId !== null) {
-            /** @var MapIconType $mapIconType */
-            $mapIconType = MapIconType::where('id', $mapIconTypeId)->first();
-
-            // Only allow admins to save admin_only icons
-            if ($mapIconType === null || $mapIconType->admin_only && !$isUserAdmin) {
-                throw new Exception('Unable to save map icon!');
-            }
-        }
-
-        return $this->storeModel($validated, MapIcon::class, $mapIcon, function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
+        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $updateAttributes = [];
 
@@ -173,23 +163,28 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 $result = ['result' => 'error'];
             }
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
     }
 
     /**
-     * @param MapIconFormRequest          $request
      * @param CoordinatesServiceInterface $coordinatesService
-     * @param MapIcon|null                $mapIcon
+     * @param MapIconFormRequest $request
+     * @param MappingVersion $mappingVersion
+     * @param MapIcon|null $mapIcon
      * @return MapIcon
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function adminStore(MapIconFormRequest $request, CoordinatesServiceInterface $coordinatesService, MapIcon $mapIcon = null): MapIcon
+    public function adminStore(
+        CoordinatesServiceInterface $coordinatesService,
+        MapIconFormRequest          $request,
+        MappingVersion              $mappingVersion,
+        MapIcon                     $mapIcon = null): MapIcon
     {
-        return $this->store($request, $coordinatesService, null, $mapIcon);
+        return $this->store($coordinatesService, $request, $mappingVersion, null, $mapIcon);
     }
 
 

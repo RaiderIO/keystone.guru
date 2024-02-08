@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -15,7 +16,9 @@ class FixIncorrectTitlesInDungeonRoutesTable extends Migration
     public function up()
     {
         $output = new ConsoleOutput();
-        DungeonRoute::chunk(100, function (Collection $dungeonRoutes) use ($output) {
+        DungeonRoute::with(['dungeon' => function (BelongsTo $query) {
+            $query->without('gameVersion');
+        }])->chunk(100, function (Collection $dungeonRoutes) use ($output) {
             /** @var Collection|DungeonRoute[] $dungeonRoutes */
             foreach ($dungeonRoutes as $dungeonRoute) {
                 if (empty($dungeonRoute->title) || empty($dungeonRoute->getTitleSlug())) {

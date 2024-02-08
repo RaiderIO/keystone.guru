@@ -24,7 +24,7 @@ class FactionSelectionRequiredRule implements Rule
      * @param ParameterBag $request
      * @return void
      */
-    public function __construct($request)
+    public function __construct(ParameterBag $request)
     {
         $this->request = $request;
     }
@@ -33,10 +33,10 @@ class FactionSelectionRequiredRule implements Rule
      * Determine if the validation rule passes.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         $dungeonId = $this->request->get('dungeon_id');
         $factionId = $this->request->get('faction_id');
@@ -46,7 +46,7 @@ class FactionSelectionRequiredRule implements Rule
         $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
         if (in_array(intval($dungeonId), $factionSelectionRequired->pluck('id')->toArray())) {
-            $result        = in_array(intval($factionId), [Faction::ALL[Faction::FACTION_ALLIANCE], Faction::ALL[Faction::FACTION_HORDE]]);
+            $result = in_array(intval($factionId), [Faction::ALL[Faction::FACTION_ALLIANCE], Faction::ALL[Faction::FACTION_HORDE]]);
         }
 
         return $result;
@@ -57,7 +57,7 @@ class FactionSelectionRequiredRule implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return __('rules.faction_selection_required_rule.message');
     }

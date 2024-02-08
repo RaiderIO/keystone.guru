@@ -1,0 +1,50 @@
+{
+    "id": 220,
+    "release_changelog_id": 227,
+    "version": "v7.9",
+    "title": "Added API to generate custom thumbnails for routes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-01-28T13:14:16+00:00",
+    "updated_at": "2024-01-28T13:14:16+00:00",
+    "changelog": {
+        "id": 227,
+        "release_id": 220,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 227,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2178,
+                "change": "[Hotfixed] Fixed crash when trying to load a route with a bugged drawn line or path (element was created, but had no attached line).",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 227,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2185,
+                "change": "[Hotfixed] Viewing an embedded route no longer always shows you the current affixes, even if the affix list for that route does not contain the current affixes.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            },
+            {
+                "release_changelog_id": 227,
+                "release_changelog_category_id": 12,
+                "ticket_id": 2180,
+                "change": "Added the ability to generate custom thumbnails for any route you can personally view.",
+                "category": {
+                    "id": 12,
+                    "key": "api_changes",
+                    "name": "releasechangelogcategories.api_changes"
+                }
+            }
+        ]
+    }
+}

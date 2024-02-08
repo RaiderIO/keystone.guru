@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $dungeonroutes \App\Models\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
  * @var $affixgroup \App\Models\AffixGroup\AffixGroup|null
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $__env array

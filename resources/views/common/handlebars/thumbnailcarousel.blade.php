@@ -15,9 +15,15 @@
                     continue;
                 }
 
-                items.push({
-                    src: `/images/route_thumbnails/${row.public_key}_${floor.index}.png`
-                });
+                if (row.png_thumbnails) {
+                    items.push({
+                        src: `/images/route_thumbnails/${row.public_key}_${floor.index}.png`
+                    });
+                } else {
+                    items.push({
+                        src: `/images/route_thumbnails/${row.public_key}_${floor.index}.jpg`
+                    });
+                }
             }
         } else {
             items.push({

@@ -1,6 +1,6 @@
 <?php
 
-/** @var \App\Models\DungeonRoute|null $dungeonroute */
+/** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
 /** @var \App\Models\Dungeon[]|\Illuminate\Support\Collection $allSpeedrunDungeons */
 /** @var string $dungeonSelectId */
 

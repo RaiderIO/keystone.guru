@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $edit bool */
 ?>
 <ul class="nav nav-tabs" role="tablist">

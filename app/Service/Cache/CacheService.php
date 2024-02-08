@@ -4,7 +4,7 @@
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;

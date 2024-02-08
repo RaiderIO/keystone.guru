@@ -6,7 +6,7 @@ use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
 use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession;
@@ -107,7 +107,7 @@ class AjaxOverpulledEnemyController extends Controller
                 $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

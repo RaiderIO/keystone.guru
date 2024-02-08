@@ -1,124 +1,126 @@
 {
-  "name": "laravel/laravel",
-  "description": "The Laravel Framework.",
-  "keywords": [
-    "framework",
-    "laravel"
-  ],
-  "license": "MIT",
-  "type": "project",
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/Wotuu/laravel-influxdb"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/Wotuu/laravel4-datatables-package"
-    },
-    {
-      "type": "package",
-      "package": {
-        "name": "wotuu/keystone.guru.deployer",
-        "version": "0.1",
-        "source": {
-          "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
-          "type": "git",
-          "reference": "6e1b48afacf943ff5a26207dc9c9af0b1847bd1d"
+    "name": "laravel/laravel",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/laravel-influxdb"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/laravel4-datatables-package"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "wotuu/keystone.guru.deployer",
+                "version": "0.1",
+                "source": {
+                    "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
+                    "type": "git",
+                    "reference": "6e1b48afacf943ff5a26207dc9c9af0b1847bd1d"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "nnoggie/mythicdungeontools",
+                "version": "4.3.3.5",
+                "source": {
+                    "url": "https://github.com/Wotuu/MythicDungeonTools.git",
+                    "type": "git",
+                    "reference": "90ca82cff5abf838775bd7b8ceb02c489faefe31"
+                }
+            }
         }
-      }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-lua": "*",
+        "ext-zip": "*",
+        "akaunting/laravel-language": "^1.0",
+        "barryvdh/laravel-ide-helper": "^2.4",
+        "beyondcode/laravel-server-timing": "^1.2",
+        "darkaonline/l5-swagger": "^8.5",
+        "diglactic/laravel-breadcrumbs": "^7.1",
+        "fzaninotto/faker": "~1.4",
+        "genealabs/laravel-model-caching": "^0.11.1",
+        "geoip2/geoip2": "~2.0",
+        "graham-campbell/github": "^9.8",
+        "intervention/image": "^2.5",
+        "jenssegers/agent": "^2.6",
+        "laravel-frontend-presets/argon": "^1.0",
+        "laravel/framework": "^8.0",
+        "laravel/horizon": "^5.0",
+        "laravel/socialite": "^5.0",
+        "laravel/telescope": "^4.4",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^3.0",
+        "laravelcollective/html": "6.3.*",
+        "marvinlabs/laravel-discord-logger": "^1.1",
+        "nnoggie/mythicdungeontools": "4.3.3.5",
+        "paquettg/php-html-parser": "^3.0",
+        "patreon/patreon": "^1.0.0",
+        "phlak/semver": "^4.0",
+        "php-http/guzzle6-adapter": "^2.0",
+        "predis/predis": "^1.1",
+        "santigarcor/laratrust": "^7.1",
+        "shrikeh/teapot": "^2.3",
+        "socialiteproviders/battlenet": "^4.1.0",
+        "socialiteproviders/discord": "^4.1.0",
+        "spatie/url": "^1.3",
+        "tray-labs/laravel-influxdb": "dev-master#e0dbca679f297ed5e4d791c429de03704ca2422b",
+        "tremby/laravel-git-version": "^1.1",
+        "yajra/laravel-datatables-oracle": "~9.0",
+        "zircote/swagger-php": "^4.8"
     },
-    {
-      "type": "package",
-      "package": {
-        "name": "nnoggie/mythicdungeontools",
-        "version": "4.3.1.5",
-        "source": {
-          "url": "https://github.com/Wotuu/MythicDungeonTools.git",
-          "type": "git",
-          "reference": "5932ff647e79706f065fd6ace1cfd7bf32e15239"
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.5",
+        "deployer/deployer": "^7.3",
+        "filp/whoops": "^2.0",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^9.0",
+        "wotuu/keystone.guru.deployer": "0.1"
+    },
+    "autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Tests\\": "tests/"
         }
-      }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "php artisan key:generate"
+        ],
+        "post-install-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postInstall"
+        ],
+        "post-update-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     }
-  ],
-  "require": {
-    "php": ">=7.4",
-    "ext-curl": "*",
-    "ext-json": "*",
-    "ext-lua": "*",
-    "ext-zip": "*",
-    "akaunting/laravel-language": "^1.0",
-    "barryvdh/laravel-ide-helper": "^2.4",
-    "beyondcode/laravel-server-timing": "^1.2",
-    "diglactic/laravel-breadcrumbs": "^7.1",
-    "fzaninotto/faker": "~1.4",
-    "genealabs/laravel-model-caching": "^0.11.1",
-    "geoip2/geoip2": "~2.0",
-    "graham-campbell/github": "^9.8",
-    "intervention/image": "^2.5",
-    "jenssegers/agent": "^2.6",
-    "laravel-frontend-presets/argon": "^1.0",
-    "laravel/framework": "^8.0",
-    "laravel/horizon": "^5.0",
-    "laravel/socialite": "^5.0",
-    "laravel/telescope": "^4.4",
-    "laravel/tinker": "^2.0",
-    "laravel/ui": "^3.0",
-    "laravelcollective/html": "6.3.*",
-    "marvinlabs/laravel-discord-logger": "^1.1",
-    "nnoggie/mythicdungeontools": "4.3.1.5",
-    "paquettg/php-html-parser": "^3.0",
-    "patreon/patreon": "^1.0.0",
-    "phlak/semver": "^4.0",
-    "php-http/guzzle6-adapter": "^2.0",
-    "predis/predis": "^1.1",
-    "santigarcor/laratrust": "^7.1",
-    "shrikeh/teapot": "^2.3",
-    "socialiteproviders/battlenet": "^4.1.0",
-    "socialiteproviders/discord": "^4.1.0",
-    "spatie/url": "^1.3",
-    "tray-labs/laravel-influxdb": "dev-master#e0dbca679f297ed5e4d791c429de03704ca2422b",
-    "tremby/laravel-git-version": "^1.1",
-    "yajra/laravel-datatables-oracle": "~9.0"
-  },
-  "require-dev": {
-    "barryvdh/laravel-debugbar": "^3.5",
-    "deployer/deployer": "^7.3",
-    "filp/whoops": "^2.0",
-    "mockery/mockery": "^1.0",
-    "phpunit/phpunit": "^9.0",
-    "wotuu/keystone.guru.deployer": "0.1"
-  },
-  "autoload": {
-    "classmap": [
-      "database"
-    ],
-    "psr-4": {
-      "App\\": "app/",
-      "Tests\\": "tests/"
-    }
-  },
-  "scripts": {
-    "post-root-package-install": [
-      "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-    ],
-    "post-create-project-cmd": [
-      "php artisan key:generate"
-    ],
-    "post-install-cmd": [
-      "Illuminate\\Foundation\\ComposerScripts::postInstall"
-    ],
-    "post-update-cmd": [
-      "Illuminate\\Foundation\\ComposerScripts::postUpdate"
-    ]
-  },
-  "config": {
-    "preferred-install": "dist",
-    "sort-packages": true,
-    "allow-plugins": {
-      "composer/package-versions-deprecated": true
-    }
-  }
 }

@@ -2,8 +2,8 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\DungeonRoute;
-use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 
 class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterface
 {

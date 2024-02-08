@@ -5,7 +5,7 @@ namespace App\Models\Mapping;
 use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
@@ -19,6 +19,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\Carbon;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -55,6 +56,8 @@ use Illuminate\Support\Collection;
  */
 class MappingVersion extends Model
 {
+    use HasFactory;
+
     protected $visible = [
         'id',
         'dungeon_id',

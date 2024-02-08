@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\MountableArea\MountableAreaFormRequest;
+use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use DB;
 use Exception;
@@ -20,23 +20,26 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     /**
      * @param MountableAreaFormRequest $request
-     * @param MountableArea|null $mountableArea
+     * @param MountableArea|null       $mountableArea
      * @return MountableArea|Model
      * @throws Exception
      * @throws Throwable
      */
-    public function store(MountableAreaFormRequest $request, MountableArea $mountableArea = null): MountableArea
+    public function store(
+        MountableAreaFormRequest $request,
+        MappingVersion           $mappingVersion,
+        MountableArea            $mountableArea = null): MountableArea
     {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        return $this->storeModel($validated, MountableArea::class, $mountableArea);
+        return $this->storeModel($mappingVersion, $validated, MountableArea::class, $mountableArea);
     }
 
     /**
-     * @param Request $request
+     * @param Request       $request
      * @param MountableArea $mountableArea
      * @return Response|ResponseFactory
      * @throws Throwable
@@ -55,7 +58,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                 }
                 $result = response()->noContent();
             } catch (Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 
             return $result;

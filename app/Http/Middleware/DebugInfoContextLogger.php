@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Log;
-use Ramsey\Uuid\Uuid;
 
 class DebugInfoContextLogger
 {

@@ -8,7 +8,7 @@
     'cookieConsent' => false,
 ])
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $floor \App\Models\Floor\Floor */
 /** @var $embedOptions array */
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);

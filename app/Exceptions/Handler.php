@@ -7,10 +7,11 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Teapot\StatusCode;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,45 +35,67 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Throwable $exception
+     * @param Throwable $e
      * @return void
      * @throws Throwable
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $e)
     {
-        parent::report($exception);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param Request   $request
-     * @param Throwable $exception
+     * @param Throwable $e
      * @return mixed
      * @throws Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
-            return response()->json(['message' => sprintf('%s not found for %s', implode($exception->getIds()), $exception->getModel())], 404);
+        if ($request->isJson() || $this->isApiRequest($request)) {
+            if ($e instanceof ModelNotFoundException) {
+                return response()->json([
+                    'message' => __('exceptions.handler.api_model_not_found', [
+                        'ids'   => implode(', ', $e->getIds()),
+                        'model' => $e->getModel(),
+                    ]),
+                ], StatusCode::NOT_FOUND);
+            } else if ($e instanceof NotFoundHttpException) {
+                return response()->json(['message' => __('exceptions.handler.api_route_not_found')], StatusCode::NOT_FOUND);
+            } else if (!config('app.debug')) {
+                return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
+            }
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
+
+
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param Request $request
+     * @param Request                 $request
      * @param AuthenticationException $exception
      * @return mixed
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+        if ($request->isJson() || $this->isApiRequest($request)) {
+            return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 
         return redirect()->guest('login');
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    private function isApiRequest(Request $request): bool
+    {
+        return strpos($request->decodedPath(), 'api/') === 0;
     }
 }

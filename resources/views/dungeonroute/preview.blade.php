@@ -5,11 +5,15 @@
     'header' => false,
     'cookieConsent' => false,
     'title' => $dungeonroute->title,
-    'analytics' => false
+    'analytics' => false,
 ])
 <?php
-/** @var \App\Models\DungeonRoute $dungeonroute */
-/** @var int $floorId */
+/**
+ * @var \App\Models\DungeonRoute\DungeonRoute $dungeonroute
+ * @var int                                   $floorId
+ * @var float                                 $defaultZoom
+ * @var string                                $mapFacadeStyle
+ */
 
 /** @var \App\Models\Dungeon $dungeon */
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
@@ -35,7 +39,8 @@ $dungeon->load('floors');
         'edit' => false,
         'echo' => false,
         'noUI' => true,
-        'defaultZoom' => 1,
+        'defaultZoom' => $defaultZoom,
+        'mapFacadeStyle' => $mapFacadeStyle,
         'floorId' => $floorId,
         'showAttribution' => false,
         'zoomToContents' => false,
@@ -44,7 +49,7 @@ $dungeon->load('floors');
             'enemypack',
             'mountablearea',
             'floorunion',
-            'floorunionarea'
+            'floorunionarea',
         ],
     ])
 @endsection

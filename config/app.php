@@ -1,5 +1,10 @@
 <?php
 
+use App\Providers\ControllerServiceProvider;
+use App\Providers\HelperServiceProvider;
+use App\Providers\KeystoneGuruServiceProvider;
+use App\Providers\LoggingServiceProvider;
+
 return [
 
     /*
@@ -203,13 +208,14 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
-        App\Providers\HelperServiceProvider::class,
 
         /**
          * Keystone.guru Service Providers...
          */
-        App\Providers\KeystoneGuruServiceProvider::class,
-        App\Providers\LoggingServiceProvider::class,
+        HelperServiceProvider::class,
+        KeystoneGuruServiceProvider::class,
+        LoggingServiceProvider::class,
+        ControllerServiceProvider::class,
     ],
 
     /*

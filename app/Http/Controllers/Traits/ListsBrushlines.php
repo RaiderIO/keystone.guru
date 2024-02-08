@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\Brushline;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
@@ -31,7 +31,7 @@ trait ListsBrushlines
                 ->where('floor_id', $floorId)
                 ->get();
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

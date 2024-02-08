@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Service\Controller\Api\V1;
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Illuminate\Support\Collection;
+
+class APIDungeonRouteControllerService implements APIDungeonRouteControllerServiceInterface
+{
+
+    private ThumbnailServiceInterface $thumbnailService;
+
+    /**
+     * @param ThumbnailServiceInterface $thumbnailService
+     */
+    public function __construct(ThumbnailServiceInterface $thumbnailService)
+    {
+        $this->thumbnailService = $thumbnailService;
+    }
+
+    /**
+     * @param DungeonRoute $dungeonRoute
+     * @param int|null     $viewportWidth
+     * @param int|null     $viewportHeight
+     * @param int|null     $imageWidth
+     * @param int|null     $imageHeight
+     * @param int|null     $zoomLevel
+     * @param int|null     $quality
+     * @return Collection|DungeonRouteThumbnailJob[]
+     */
+    public function createThumbnails(DungeonRoute $dungeonRoute,
+                                     ?int         $viewportWidth = null,
+                                     ?int         $viewportHeight = null,
+                                     ?int         $imageWidth = null,
+                                     ?int         $imageHeight = null,
+                                     ?int         $zoomLevel = null,
+                                     ?int         $quality = null
+    ): Collection {
+        return $this->thumbnailService->queueThumbnailRefreshForApi(
+            $dungeonRoute,
+            $viewportWidth,
+            $viewportHeight,
+            $imageWidth,
+            $imageHeight,
+            $zoomLevel,
+            $quality
+        );
+    }
+}

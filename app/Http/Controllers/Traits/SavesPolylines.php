@@ -38,7 +38,7 @@ trait SavesPolylines
         ?Floor                      &$changedFloor
     ): Polyline {
         // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
-        if (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
+        if ($mappingVersion->dungeon->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
             $vertices     = json_decode($data['vertices_json'], true);
             $realVertices = [];
             foreach ($vertices as $vertex) {

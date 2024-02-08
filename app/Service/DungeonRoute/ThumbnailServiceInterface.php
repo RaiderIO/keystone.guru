@@ -3,7 +3,9 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
+use Illuminate\Support\Collection;
 
 interface ThumbnailServiceInterface
 {
@@ -15,25 +17,59 @@ interface ThumbnailServiceInterface
 
     /**
      * @param DungeonRoute $dungeonRoute
+     * @param int|null     $viewportWidth
+     * @param int|null     $viewportHeight
+     * @param int|null     $imageWidth
+     * @param int|null     $imageHeight
+     * @param int|null     $zoomLevel
+     * @param int|null     $quality
+     * @return Collection|DungeonRouteThumbnailJob[]
+     */
+    public function queueThumbnailRefreshForApi(
+        DungeonRoute $dungeonRoute,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
+        ?int         $zoomLevel = null,
+        ?int         $quality = null
+    ): Collection;
+
+    /**
+     * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
      * @param int          $attempts
-     * @return void
+     * @return bool
      */
-    public function refreshThumbnail(DungeonRoute $dungeonRoute, int $floorIndex, int $attempts): void;
+    public function createThumbnail(
+        DungeonRoute $dungeonRoute,
+        int          $floorIndex,
+        int          $attempts
+    ): bool;
 
     /**
      * @param DungeonRoute $dungeonRoute
      * @param int          $floorIndex
-     * @return string
+     * @param int          $attempts
+     * @param int|null     $viewportWidth
+     * @param int|null     $viewportHeight
+     * @param int|null     $imageWidth
+     * @param int|null     $imageHeight
+     * @param int|null     $zoomLevel
+     * @param int|null     $quality
+     * @return bool
      */
-    public function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string;
-
-    /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @return string
-     */
-    public function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex): string;
+    public function createThumbnailCustom(
+        DungeonRoute $dungeonRoute,
+        int          $floorIndex,
+        int          $attempts,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
+        ?int         $zoomLevel = null,
+        ?int         $quality = null
+    ): bool;
 
     /**
      * @param DungeonRoute $sourceDungeonRoute

@@ -6,7 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Brushline;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;

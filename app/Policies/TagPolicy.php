@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\User;
@@ -48,7 +48,7 @@ class TagPolicy
         $result = false;
 
         if ($tag->model_id !== null) {
-            switch ($tag->tagcategory->name) {
+            switch ($tag->tagCategory->name) {
                 case TagCategory::DUNGEON_ROUTE_PERSONAL:
                 case TagCategory::DUNGEON_ROUTE_TEAM:
                     /** @var DungeonRoute $dungeonRoute */

@@ -1,5 +1,5 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute */
+/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $allRouteAttributes \Illuminate\Support\Collection|\App\Models\RouteAttribute[] */
 
 $showNoAttributes = $showNoAttributes ?? false;
@@ -41,7 +41,7 @@ $showNoAttributes = $showNoAttributes ?? false;
             data-count-selected-text="{{__('views/common.dungeonroute.attributes.attributes_selected')}}">
         @foreach ($routeAttributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">
-                @foreach ($categoryAttributes as $attribute) {
+                @foreach ($categoryAttributes as $attribute)
                 <option value="{{ $attribute->id }}"
                     {{ in_array($attribute->id, $selectedIds) ? 'selected' : '' }}>
                     {{ $attribute->description }}

@@ -1,22 +1,27 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DungeonRoute;
 
+use App\Models\CharacterClass;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $character_class_id
- * @property int $index
+ * @property int            $id
+ * @property int            $dungeon_route_id
+ * @property int            $character_class_id
+ * @property int            $index
  *
- * @mixin \Eloquent
+ * @property DungeonRoute   $dungeonRoute
+ * @property CharacterClass $characterClass
+ *
+ * @mixin Eloquent
  */
 class DungeonRoutePlayerClass extends Model
 {
 
-    public $hidden = ['id'];
+    public    $hidden   = ['id'];
     protected $fillable = [
         'character_class_id',
         'dungeon_route_id',
@@ -27,7 +32,7 @@ class DungeonRoutePlayerClass extends Model
     /**
      * @return BelongsTo
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
@@ -35,7 +40,7 @@ class DungeonRoutePlayerClass extends Model
     /**
      * @return BelongsTo
      */
-    public function characterclass(): BelongsTo
+    public function characterClass(): BelongsTo
     {
         return $this->belongsTo(CharacterClass::class);
     }

@@ -11,7 +11,7 @@ interface UserServiceInterface
      *
      * @return bool
      */
-    public function longAsUserFromAuthenticationHeader(Request $request): bool;
+    public function loginAsUserFromAuthenticationHeader(Request $request): bool;
 
     /**
      * @param string $email

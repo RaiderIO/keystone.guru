@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use Artisan;
 use Carbon\Carbon;

@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests\MapIcon;
 
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
+use App\Rules\MapIconTypeRoleCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,7 +36,7 @@ class MapIconFormRequest extends FormRequest
             'floor_id'                   => ['required', Rule::exists(Floor::class, 'id')],
             'dungeon_route_id'           => ['nullable', Rule::exists(DungeonRoute::class, 'id')],
             'team_id'                    => ['nullable', Rule::exists(Team::class, 'id')],
-            'map_icon_type_id'           => ['nullable', Rule::exists(MapIconType::class, 'id')],
+            'map_icon_type_id'           => ['nullable', Rule::exists(MapIconType::class, 'id'), new MapIconTypeRoleCheckRule()],
             'linked_awakened_obelisk_id' => 'nullable|int',
             'lat'                        => 'numeric',
             'lng'                        => 'numeric',

@@ -9,6 +9,7 @@ mkdir /var/www/storage/app/public/imagecache &&
 php artisan storage:link
 php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider" &&
   php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider" &&
+  php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" &&
   php artisan vendor:publish --tag=language
 
 php artisan horizon:install &&

@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: cd /var/www/html/keystone.guru.testing/;
             php artisan readonly:enable &&
-            php artisan db:backup &&
+            php artisan db:backup;
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
             php artisan environment:updateprepare &&

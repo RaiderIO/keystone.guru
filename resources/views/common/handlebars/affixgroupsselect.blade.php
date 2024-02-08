@@ -3,7 +3,7 @@
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** This is the template for the Affix Selection when using it in a dropdown */
 
-/** @var \App\Models\DungeonRoute $model */
+/** @var \App\Models\DungeonRoute\DungeonRoute $model */
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }

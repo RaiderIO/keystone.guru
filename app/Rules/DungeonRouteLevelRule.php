@@ -3,37 +3,17 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class DungeonRouteLevelRule implements Rule
 {
     /**
-     * The request control provider instance.
-     *
-     * @var Request
-     */
-    public $request;
-
-    /**
-     * Create a new rule instance.
-     *
-     * @param ParameterBag $request
-     * @return void
-     */
-    public function __construct($request)
-    {
-        $this->request = $request;
-    }
-
-    /**
      * Determine if the validation rule passes.
      *
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         $explode = explode(';', $value);
 
@@ -45,7 +25,7 @@ class DungeonRouteLevelRule implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return __('rules.dungeon_route_level_rule.message');
     }

@@ -10,7 +10,7 @@ use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\DungeonRouteFilter;

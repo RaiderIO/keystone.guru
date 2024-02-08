@@ -5,7 +5,7 @@ namespace App\Console\Commands\Mapping;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;

@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
-use App\Models\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;

@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\Enemy\APIEnemyFormRequest;
-use App\Models\DungeonRoute;
-use App\Models\DungeonRouteEnemyRaidMarker;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
+use App\Models\Mapping\MappingVersion;
 use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -30,6 +31,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     /**
      * @param APIEnemyFormRequest         $request
      * @param CoordinatesServiceInterface $coordinatesService
+     * @param MappingVersion              $mappingVersion
      * @param Enemy|null                  $enemy
      *
      * @return Enemy|Model
@@ -38,12 +40,10 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     public function store(
         APIEnemyFormRequest         $request,
         CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
         Enemy                       $enemy = null
     ): Enemy {
         $validated = $request->validated();
-
-        $validated['vertices_json'] = json_encode($request->get('vertices'));
-        unset($validated['vertices']);
 
         $previousFloor = null;
         if ($enemy !== null) {
@@ -53,7 +53,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        return $this->storeModel($validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
 
             // Clear current active auras
@@ -115,7 +115,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             }
 
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
@@ -142,7 +142,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 }
                 $result = response()->noContent();
             } catch (Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 
             return $result;
