@@ -53,7 +53,7 @@ class Update extends Command
      */
     public function handle(): int
     {
-        $environment = config('app_type');
+        $environment = config('app.type');
 
         $this->info(sprintf('Updating Keystone.guru %s environment', $environment));
 

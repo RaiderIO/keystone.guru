@@ -28,7 +28,7 @@ class UpdatePrepare extends Command
      */
     public function handle(): int
     {
-        $environment = config('app_type');
+        $environment = config('app.type');
 
         if ($environment === 'local') {
             $this->shell([
