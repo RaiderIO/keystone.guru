@@ -31,7 +31,7 @@ trait ListsBrushlines
                 ->where('floor_id', $floorId)
                 ->get();
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

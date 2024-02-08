@@ -7,6 +7,7 @@ use App\Http\Controllers\Ajax\AjaxMappingModelBaseController;
 use App\Http\Requests\Floor\FloorUnionFormRequest;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -26,16 +27,16 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
 
     /**
      * @param FloorUnionFormRequest $request
+     * @param MappingVersion        $mappingVersion
      * @param FloorUnion|null       $floorUnion
      * @return FloorUnion|Model
-     * @throws Exception
      * @throws Throwable
      */
-    public function store(FloorUnionFormRequest $request, FloorUnion $floorUnion = null): FloorUnion
+    public function store(FloorUnionFormRequest $request, MappingVersion $mappingVersion, FloorUnion $floorUnion = null): FloorUnion
     {
         $validated = $request->validated();
 
-        return $this->storeModel($validated, FloorUnion::class, $floorUnion);
+        return $this->storeModel($mappingVersion, $validated, FloorUnion::class, $floorUnion);
     }
 
     /**
@@ -55,7 +56,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
                 }
                 $result = response()->noContent();
             } catch (Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 
             return $result;

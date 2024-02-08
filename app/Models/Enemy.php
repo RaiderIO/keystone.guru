@@ -85,7 +85,7 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'npc',
         //        'enemyactiveauras'
     ];
-    public    $hidden     = ['laravel_through_key'];
+    public    $hidden     = ['mappingVersion', 'floor', 'laravel_through_key'];
     public    $timestamps = false;
     protected $casts      = [
         'mapping_version_id' => 'integer',
@@ -161,17 +161,17 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     /**
      * @return BelongsTo
      */
-    public function enemyPack(): BelongsTo
+    public function mappingVersion(): BelongsTo
     {
-        return $this->belongsTo(EnemyPack::class);
+        return $this->belongsTo(MappingVersion::class);
     }
 
     /**
      * @return BelongsTo
      */
-    public function floor(): BelongsTo
+    public function enemyPack(): BelongsTo
     {
-        return $this->belongsTo(Floor::class);
+        return $this->belongsTo(EnemyPack::class);
     }
 
     /**
@@ -188,6 +188,14 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function floor(): BelongsTo
+    {
+        return $this->belongsTo(Floor::class);
     }
 
     /**

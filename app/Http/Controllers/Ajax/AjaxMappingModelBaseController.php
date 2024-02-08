@@ -7,6 +7,7 @@ use App\Events\Model\ModelChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use Closure;
 use DB;
 use Exception;
@@ -30,15 +31,18 @@ abstract class AjaxMappingModelBaseController extends Controller
     }
 
     /**
+     * @param MappingVersion|null        $mappingVersion
      * @param array                      $validated
      * @param string                     $modelClass
      * @param MappingModelInterface|null $model
      * @param Closure|null               $onSaveSuccess
      * @return Model
-     * @throws Exception|Throwable
+     * @throws Throwable
      */
-    protected function storeModel(array $validated, string $modelClass, MappingModelInterface $model = null, Closure $onSaveSuccess = null): Model
+    protected function storeModel(?MappingVersion $mappingVersion, array $validated, string $modelClass, MappingModelInterface $model = null, Closure $onSaveSuccess = null): Model
     {
+        $validated['mapping_version_id'] = optional($mappingVersion)->id;
+
         /** @var Model $modelClass */
         return DB::transaction(function () use ($validated, $modelClass, $model, $onSaveSuccess) {
             /** @var Model|null $beforeModel */

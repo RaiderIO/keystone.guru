@@ -41,7 +41,7 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
         'vertices_json',
     ];
 
-    protected $hidden = ['floor'];
+    protected $hidden = ['mappingVersion', 'floor'];
 
     protected $casts = [
         'mapping_version_id' => 'integer',

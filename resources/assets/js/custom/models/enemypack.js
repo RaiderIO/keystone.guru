@@ -22,7 +22,7 @@ L.Draw.EnemyPack = L.Draw.Polygon.extend({
  */
 class EnemyPack extends VersionableMapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'enemypack', hasRouteModelBinding: true});
+        super(map, layer, {name: 'enemypack', has_route_model_binding: true});
 
         this.group = null;
         this.label = 'Enemy pack';
@@ -78,11 +78,11 @@ class EnemyPack extends VersionableMapObject {
                 default: 'Enemy pack'
             }),
             new Attribute({
-                name: 'vertices',
-                type: 'array',
+                name: 'vertices_json',
+                type: 'string',
                 edit: false,
                 getter: function () {
-                    return self.getVertices();
+                    return JSON.stringify(self.getVertices());
                 }
             }),
             new Attribute({

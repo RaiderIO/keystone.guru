@@ -56,7 +56,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
 class DungeonFloorSwitchMarker extends Icon {
 
     constructor(map, layer) {
-        super(map, layer, {name: 'dungeonfloorswitchmarker', hasRouteModelBinding: true});
+        super(map, layer, {name: 'dungeonfloorswitchmarker', has_route_model_binding: true});
 
         let self = this;
 

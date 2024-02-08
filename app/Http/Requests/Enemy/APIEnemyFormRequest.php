@@ -33,7 +33,6 @@ class APIEnemyFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'mapping_version_id'            => ['required', Rule::exists(MappingVersion::class, 'id')],
             'floor_id'                      => ['required', Rule::exists(Floor::class, 'id')],
             'enemy_pack_id'                 => ['nullable', Rule::exists(EnemyPack::class, 'id')],
             'enemy_patrol_id'               => ['nullable', Rule::exists(EnemyPatrol::class, 'id')],

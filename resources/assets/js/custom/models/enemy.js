@@ -44,7 +44,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
  * @property L.Layer layer
  */
 class Enemy extends VersionableMapObject {
-    constructor(map, layer, options = {name: 'enemy', hasRouteModelBinding: true}) {
+    constructor(map, layer, options = {name: 'enemy', has_route_model_binding: true}) {
         super(map, layer, options);
 
         this.label = 'Enemy';

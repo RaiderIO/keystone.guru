@@ -6,6 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Ajax\AjaxMappingModelBaseController;
 use App\Http\Requests\Floor\FloorUnionAreaFormRequest;
 use App\Models\Floor\FloorUnionArea;
+use App\Models\Mapping\MappingVersion;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -20,20 +21,23 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
 {
     /**
      * @param FloorUnionAreaFormRequest $request
-     * @param FloorUnionArea|null       $floorUnionArea
+     * @param MappingVersion $mappingVersion
+     * @param FloorUnionArea|null $floorUnionArea
      *
      * @return FloorUnionArea|Model
-     * @throws Exception
      * @throws Throwable
      */
-    public function store(FloorUnionAreaFormRequest $request, FloorUnionArea $floorUnionArea = null): FloorUnionArea
-    {
+    public function store(
+        FloorUnionAreaFormRequest $request,
+        MappingVersion            $mappingVersion,
+        FloorUnionArea            $floorUnionArea = null
+    ): FloorUnionArea {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        return $this->storeModel($validated, FloorUnionArea::class, $floorUnionArea);
+        return $this->storeModel($mappingVersion, $validated, FloorUnionArea::class, $floorUnionArea);
     }
 
     /**
@@ -57,7 +61,7 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
                 }
                 $result = response()->noContent();
             } catch (Exception $ex) {
-                $result = response('Not found', Http::NOT_FOUND);
+                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 
             return $result;

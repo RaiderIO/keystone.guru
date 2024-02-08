@@ -7,6 +7,7 @@ use App\Models\Floor\FloorCoupling;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,7 +39,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
     use HasLatLng;
 
     protected $appends  = ['floorCouplingDirection']; // , 'ingameX', 'ingameY'
-    protected $hidden   = ['floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
+    protected $hidden   = ['mappingVersion', 'floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
     protected $fillable = [
         'id',
         'mapping_version_id',
@@ -101,6 +102,14 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
 //    {
 //        return $this->ingameY;
 //    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
+    }
 
     /**
      * @return BelongsTo

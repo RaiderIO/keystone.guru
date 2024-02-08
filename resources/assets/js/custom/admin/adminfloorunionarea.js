@@ -16,7 +16,7 @@ L.Draw.FloorUnionArea = L.Draw.Polygon.extend({
 
 class FloorUnionArea extends VersionableMapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'floorunionarea', hasRouteModelBinding: true});
+        super(map, layer, {name: 'floorunionarea', has_route_model_binding: true});
 
         this.color = null;
     }
