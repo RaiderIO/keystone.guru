@@ -3,9 +3,15 @@
  */
 class VersionableMapObject extends MapObject {
     constructor(map, layer, options) {
-        super(map, layer, options);
+        let existingRouteSuffix = typeof options.route_suffix !== 'undefined' ? options.route_suffix : options.name;
+        let mappingVersionId = getState().getMapContext().getMappingVersion().id;
 
-        this.mapping_version_id = getState().getMapContext().getMappingVersion().id;
+        let routeSuffix = typeof options.ignore_mapping_version_suffix !== 'undefined' && options.ignore_mapping_version_suffix ?
+            existingRouteSuffix : `mappingVersion/${mappingVersionId}/${existingRouteSuffix}`
+
+        super(map, layer, $.extend({}, options, {route_suffix: routeSuffix}));
+
+        this.mapping_version_id = mappingVersionId;
     }
 
 

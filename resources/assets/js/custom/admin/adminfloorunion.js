@@ -26,7 +26,7 @@ L.Draw.FloorUnion = L.Draw.Marker.extend({
  */
 class FloorUnion extends Icon {
     constructor(map, layer) {
-        super(map, layer, {name: 'floorunion', route_suffix: 'floorunion', hasRouteModelBinding: true});
+        super(map, layer, {name: 'floorunion', has_route_model_binding: true});
 
         this.label = 'FloorUnion';
         this.comment = '';

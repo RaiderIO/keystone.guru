@@ -14,7 +14,7 @@ L.Draw.EnemyPatrol = L.Draw.Polyline.extend({
 
 class EnemyPatrol extends Polyline {
     constructor(map, layer) {
-        super(map, layer, {name: 'enemypatrol', hasRouteModelBinding: true});
+        super(map, layer, {name: 'enemypatrol', has_route_model_binding: true});
 
         let self = this;
 

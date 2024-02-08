@@ -987,13 +987,13 @@ class MapObject extends Signalable {
 
         self.signal('save:beforesend');
 
-        let hasRouteModelBinding = this.options.hasOwnProperty('hasRouteModelBinding') ? this.options.hasRouteModelBinding : false;
+        let has_route_model_binding = this.options.hasOwnProperty('has_route_model_binding') ? this.options.has_route_model_binding : false;
 
         $.ajax({
-            type: self.id > 0 && hasRouteModelBinding ? 'PUT' : 'POST',
+            type: self.id > 0 && has_route_model_binding ? 'PUT' : 'POST',
             url: (this.options.hasOwnProperty('save_url') ? this.options.save_url :
                     `/ajax/${getState().getMapContext().getPublicKey()}/${this.options.route_suffix}`) +
-                (self.id > 0 && hasRouteModelBinding ? `/${self.id}` : ''),
+                (self.id > 0 && has_route_model_binding ? `/${self.id}` : ''),
             dataType: 'json',
             data: this.getSaveData(),
             beforeSend: function () {

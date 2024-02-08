@@ -6,6 +6,7 @@ use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -38,7 +39,10 @@ class EnemyPackFormRequest extends FormRequest
             'teeming'            => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],
             'faction'            => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
             'label'              => 'string',
-            'vertices'           => 'array',
+            'vertices_json'      => [
+                'json',
+                new JsonStringCountRule(2),
+            ],
         ];
     }
 }

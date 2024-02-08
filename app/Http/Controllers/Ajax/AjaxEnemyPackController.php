@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\EnemyPack\EnemyPackFormRequest;
 use App\Models\EnemyPack;
+use App\Models\Mapping\MappingVersion;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -17,23 +18,20 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
      * @param EnemyPackFormRequest $request
-     * @param EnemyPack|null $enemyPack
+     * @param MappingVersion       $mappingVersion
+     * @param EnemyPack|null       $enemyPack
      * @return EnemyPack|Model
-     * @throws Exception
      * @throws Throwable
      */
-    public function store(EnemyPackFormRequest $request, EnemyPack $enemyPack = null): EnemyPack
+    public function store(EnemyPackFormRequest $request, MappingVersion $mappingVersion, EnemyPack $enemyPack = null): EnemyPack
     {
         $validated = $request->validated();
 
-        $validated['vertices_json'] = json_encode($request->get('vertices'));
-        unset($validated['vertices']);
-
-        return $this->storeModel($validated, EnemyPack::class, $enemyPack);
+        return $this->storeModel($mappingVersion, $validated, EnemyPack::class, $enemyPack);
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param EnemyPack $enemyPack
      * @return Response
      * @throws Exception
