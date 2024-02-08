@@ -12,22 +12,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
- * @property int      $id
- * @property int      $mapping_version_id
- * @property int      $floor_id
- * @property int      $polyline_id
- * @property string   $teeming
- * @property string   $faction
+ * @property int            $id
+ * @property int            $mapping_version_id
+ * @property int            $floor_id
+ * @property int            $polyline_id
+ * @property string         $teeming
+ * @property string         $faction
  *
- * @property Floor    $floor
- * @property Polyline $polyline
+ * @property MappingVersion $mappingVersion
+ * @property Floor          $floor
+ * @property Polyline       $polyline
  *
  * @mixin Eloquent
  */
 class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
-    public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
-    protected $fillable = [
+    public    $visible    = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
+    protected $fillable   = [
         'id',
         'mapping_version_id',
         'floor_id',
@@ -35,14 +36,22 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
         'teeming',
         'faction',
     ];
-    public $with = ['polyline'];
-    public $timestamps = false;
+    public    $with       = ['polyline'];
+    public    $timestamps = false;
 
     protected $casts = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'polyline_id'        => 'integer',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
+    }
 
     /**
      * @return BelongsTo

@@ -30,10 +30,10 @@ abstract class AjaxMappingModelBaseController extends Controller
     }
 
     /**
-     * @param array $validated
-     * @param string $modelClass
+     * @param array                      $validated
+     * @param string                     $modelClass
      * @param MappingModelInterface|null $model
-     * @param Closure|null $onSaveSuccess
+     * @param Closure|null               $onSaveSuccess
      * @return Model
      * @throws Exception|Throwable
      */
@@ -52,6 +52,8 @@ abstract class AjaxMappingModelBaseController extends Controller
             }
 
             if ($success) {
+                $model->load(['mappingVersion', 'floor', 'floor.dungeon']);
+
                 if ($onSaveSuccess != null) {
                     $onSaveSuccess($model);
                 }
@@ -62,7 +64,6 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-                    $model->load(['floor', 'floor.dungeon']);
 
                     broadcast(new ModelChangedEvent($model->floor->dungeon, Auth::getUser(), $model));
                 }
