@@ -42,10 +42,11 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
 
     $activeFloors = $dungeonroute->dungeon->floorsForMapFacade(true)->get();
-    $owlClass = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
+    $owlClass     = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
 
     ob_start(); ?>
-<div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
+<div
+    class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
         <div class="{{ $owlClass }} light-slider-container">
             <ul class="light-slider {{ $owlClass }}">
@@ -67,7 +68,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
-             @endif
+            @endif
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
@@ -126,10 +127,11 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             </div>
             <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                 <div class="col d-flex d-xl-none">
-                    &nbsp;
-{{--                    {{--}}
-{{--                        empty($dungeonroute->description) ? __('views/common.dungeonroute.card.no_description') : $dungeonroute->description--}}
-{{--                    }}--}}
+                    @if(empty($dungeonroute->description))
+                        &nbsp;
+                    @else
+                        {{ $dungeonroute->description }}
+                    @endif
                 </div>
             </div>
             <div class="row no-gutters p-2 enemy_forces">
