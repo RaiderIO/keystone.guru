@@ -83,7 +83,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
         if (this.options.gameVersion.has_seasons) {
             this._selectSeason(this.options.nextSeason ?? this.options.currentSeason);
-            this._selectExpansion(this.options.currentExpansion);
+            this._selectExpansion(null);
         } else {
             // Select the first tab instead
             this._selectSeason(null);
@@ -112,6 +112,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
             $(`.filter_affix`).hide().filter(`.${expansion}`).show();
         }
+        console.warn('expansion: ', expansion);
         this.filters.expansion.setValue(expansion);
     }
 
