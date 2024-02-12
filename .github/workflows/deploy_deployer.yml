@@ -10,5 +10,10 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Deployer
+        uses: atymic/deployer-php-action@master
+        with:
+          ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
+          ssh-known-hosts: ${{ secrets.DEPLOYER_SSH_KNOWN_HOSTS }}
       - name: Deploy to Prod
         run: dep deploy deployer --branch=${{ github.ref }} -vvv
