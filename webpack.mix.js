@@ -1,13 +1,14 @@
 const mix = require('laravel-mix');
-const argv = require('yargs').argv;
 const {GitRevisionPlugin} = require('git-revision-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
 // npm run dev --env.version <version>
 let version;
 let gitRevisionPluginList = [];
-if (typeof argv.env !== 'undefined' && argv.env.hasOwnProperty('version') && typeof argv.env.version !== 'undefined') {
-    version = argv.env.version;
+if (typeof process.env.npm_config_output_version !== 'undefined' &&
+    process.env.hasOwnProperty('npm_config_output_version') &&
+    typeof process.env.npm_config_output_version !== 'undefined') {
+    version = process.env.npm_config_output_version;
 } else {
     let gitRevisionPlugin = new GitRevisionPlugin({
         versionCommand: 'rev-list HEAD -1'
@@ -73,13 +74,17 @@ mix.options({
 // npm run dev --env.full true
 // false if not defined, true if defined
 let full = false;
-if (typeof argv.env !== 'undefined' && argv.env.hasOwnProperty('full') && typeof argv.env.full !== 'undefined') {
-    full = argv.env.full;
+if (typeof process.env.npm_config_full !== 'undefined' &&
+    process.env.hasOwnProperty('npm_config_full') &&
+    typeof process.env.npm_config_full !== 'undefined') {
+    full = process.env.npm_config_full;
 }
 // npm run dev --env.images false
-let images = true;
-if (typeof argv.env !== 'undefined' && argv.env.hasOwnProperty('images') && typeof argv.env.images !== 'undefined') {
-    images = argv.env.images;
+let images = false;
+if (typeof process.env.npm_config_images !== 'undefined' &&
+    process.env.hasOwnProperty('npm_config_images') &&
+    typeof process.env.npm_config_images !== 'undefined') {
+    images = process.env.npm_config_images;
 }
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
