@@ -97,13 +97,12 @@ class Update extends Command
             $this->shell([
                 'git config --global --add safe.directory /var/www',
             ]);
-        }
 
-        $this->shell([
-            // Write current version to file
-            'git tag | sort -V | (tail -n 1) > version',
-            self::COMPILE[$environment] ? sprintf('npm run %s --env.full true', self::COMPILE_AS[$environment]) : null,
-        ]);
+            $this->shell([
+                // Write current version to file
+                'git rev-list HEAD -1 > version'
+            ]);
+        }
 
         $this->call('optimize:clear');
         if (self::OPTIMIZE[$environment]) {
