@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Production
+    name: Deploy to Deployer
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,5 +28,5 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
           ssh-known-hosts: ${{ secrets.DEPLOYER_SSH_KNOWN_HOSTS }}
-      - name: Deploy to Prod
+      - name: Deploy
         run: dep deploy deployer.keystone.guru --branch=${{ github.ref }} -vvv
