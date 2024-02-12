@@ -26,7 +26,7 @@
                 "source": {
                     "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
                     "type": "git",
-                    "reference": "e8ce8874124f9b9769baa6e87bc8fca7b5e6c1a1"
+                    "reference": "6c6929072d627e9e5b32714a21b084103596d234"
                 }
             }
         },
@@ -38,7 +38,7 @@
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "6c6929072d627e9e5b32714a21b084103596d234"
+                    "reference": "90ca82cff5abf838775bd7b8ceb02c489faefe31"
                 }
             }
         }
