@@ -17,7 +17,11 @@ jobs:
           php-version: 7.4
           extension-csv: mbstring, bcmath
       - name: Composer install
-        run: composer install --ignore-platform-req=ext-lua
+        uses: php-actions/composer@v6
+        with:
+          args: "--ignore-platform-req=ext-lua"
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.DEPLOYER_PAT }}"} }'
       - name: Setup Deployer
         uses: atymic/deployer-php-action@master
         with:
