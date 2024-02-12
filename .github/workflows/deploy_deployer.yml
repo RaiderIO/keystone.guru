@@ -24,9 +24,9 @@ jobs:
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.DEPLOYER_PAT }}"} }'
       - name: Setup Deployer
-        uses: atymic/deployer-php-action@master
+        uses: atymic/deployer-php-action@0.3.1
         with:
           ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
           ssh-known-hosts: ${{ secrets.DEPLOYER_SSH_KNOWN_HOSTS }}
       - name: Deploy
-        run: cat ~/.ssh/known_hosts && dep deploy deployer.keystone.guru --branch=${{ github.ref }} -vvv
+        run: dep deploy deployer.keystone.guru --branch=${{ github.ref }} -vvv
