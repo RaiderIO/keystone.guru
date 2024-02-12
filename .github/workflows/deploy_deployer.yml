@@ -14,10 +14,10 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@2.29.0
         with:
-          php-version: 7.3
+          php-version: 7.4
           extension-csv: mbstring, bcmath
       - name: Composer install
-        run: ls -ltra && composer install
+        run: composer install
       - name: Setup Deployer
         uses: atymic/deployer-php-action@master
         with:
