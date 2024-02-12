@@ -1,0 +1,14 @@
+# Dummy commits done: 0
+name: Deployer Deploy
+
+on:
+  push:
+    branches: 2175-php-deployer
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Prod
+        run: dep deploy deployer --branch=${{ github.ref }} -vvv
