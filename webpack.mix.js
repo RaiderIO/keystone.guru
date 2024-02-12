@@ -2,7 +2,19 @@ const mix = require('laravel-mix');
 const argv = require('yargs').argv;
 const {GitRevisionPlugin} = require('git-revision-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
-let gitRevisionPlugin = null; // Init in the config below
+
+// npm run dev --env.version <version>
+let version;
+let gitRevisionPluginList = [];
+if (typeof argv.env !== 'undefined' && argv.env.hasOwnProperty('version') && typeof argv.env.version !== 'undefined') {
+    version = argv.env.version;
+} else {
+    let gitRevisionPlugin = new GitRevisionPlugin({
+        versionCommand: 'rev-list HEAD -1'
+    });
+    gitRevisionPluginList.push(gitRevisionPlugin);
+    version = gitRevisionPlugin.version();
+}
 
 mix.options({
     // This dramatically speeds up the build process -  adding new .scss for the redesign greatly increased build times without this
@@ -30,19 +42,10 @@ mix.options({
         }]
     },
     plugins: [
-        // Use git version to output our files
-        gitRevisionPlugin = new GitRevisionPlugin({
-            versionCommand: 'rev-list HEAD -1'
-        }),
-
-        // // Compile handlebars
+        // Compile handlebars
         new WebpackShellPluginNext({
             onBuildStart: {
                 scripts: [
-                    // Update version file. Required by PHP version library to get the proper version
-                    // See https://stackoverflow.com/a/39611938/771270
-                    // This is now handled by ./compile.sh, it was either missing -l or saying it doesn't exist as an option
-                    // 'git tag | sort -V | (tail -n 1) > version',
                     // Compile handlebars
                     'handlebars ' + (mix.inProduction() ? '-m ' : '') +
                     'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'
@@ -52,7 +55,8 @@ mix.options({
             },
             onBuildEnd: []
         })
-    ]
+        // Use git version to output our files
+    ].concat(gitRevisionPluginList)
 });
 
 /*
@@ -69,20 +73,13 @@ mix.options({
 // npm run dev --env.full true
 // false if not defined, true if defined
 let full = false;
-if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
+if (typeof argv.env !== 'undefined' && argv.env.hasOwnProperty('full') && typeof argv.env.full !== 'undefined') {
     full = argv.env.full;
 }
 // npm run dev --env.images false
 let images = true;
-if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
+if (typeof argv.env !== 'undefined' && argv.env.hasOwnProperty('images') && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
-}
-// npm run dev --env.version <version>
-let version;
-if (typeof argv.env !== 'undefined' && typeof argv.env.version !== 'undefined') {
-    version = argv.env.version;
-} else {
-    version = gitRevisionPlugin.version();
 }
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
