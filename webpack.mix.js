@@ -77,6 +77,13 @@ let images = true;
 if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
     images = argv.env.images;
 }
+// npm run dev --env.version <version>
+let version;
+if (typeof argv.env !== 'undefined' && typeof argv.env.version !== 'undefined') {
+    version = argv.env.version;
+} else {
+    version = gitRevisionPlugin.version();
+}
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
 mix.copy('resources/assets/webfonts', 'public/webfonts');
@@ -259,23 +266,23 @@ let scripts = [
 // Output of files
 
 // Custom processing only
-mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom-' + gitRevisionPlugin.version() + '.css');
+mix.styles(['resources/assets/css/**/*.css'], `public/css/custom-${version}.css`);
 
 // Do not translate in development
 if (mix.inProduction()) {
-    mix.babel(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
+    mix.babel(scripts, `public/js/custom-${version}.js`);
 } else {
-    mix.scripts(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
+    mix.scripts(scripts, `public/js/custom-${version}.js`);
 }
 
-mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.version() + '.js')
-    .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/home.scss', 'public/css/home-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/custom/custom.scss', 'public/css/custom-compiled-' + gitRevisionPlugin.version() + '.css')
+mix.js('resources/assets/js/app.js', `public/js/app-${version}.js`)
+    .sass('resources/assets/sass/app.scss', `public/css/app-${version}.css`)
+    .sass('resources/assets/sass/theme/theme.scss', `public/css/theme-${version}.css`)
+    .sass('resources/assets/sass/home.scss', `public/css/home-${version}.css`)
+    .sass('resources/assets/sass/custom/custom.scss', `public/css/custom-compiled-${version}.css`)
     // Lib processing
-    // .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
-    .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');
+    // .styles(['resources/assets/lib/**/*.css'], `public/css/lib-${version}.css`)
+    .babel('resources/assets/lib/**/*.js', `public/js/lib-${version}.js`);
 
 mix.sourceMaps();
 
