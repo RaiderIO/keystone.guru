@@ -32,7 +32,7 @@ mix.options({
     plugins: [
         // Use git version to output our files
         gitRevisionPlugin = new GitRevisionPlugin({
-            versionCommand: 'tag | sort -V | (tail -n 1)'
+            versionCommand: 'rev-list HEAD -1'
         }),
 
         // // Compile handlebars
