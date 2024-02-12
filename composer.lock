@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6ef9489664bdbde5bf2d79082a8dee7",
+    "content-hash": "09c84551618d3d9c169bd86087eb34fd",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -12440,7 +12440,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
-                "reference": "f299d74396ea2c6fdbf266a670a7e0de0bc0a8b4"
+                "reference": "cac9a3a6766e549d0909e0a69a28d3fc9ae96616"
             },
             "type": "library"
         }
