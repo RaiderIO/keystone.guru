@@ -10,8 +10,9 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup PHP
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@2.29.0
         with:
           php-version: 7.3
           extension-csv: mbstring, bcmath
