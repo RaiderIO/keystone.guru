@@ -10,6 +10,13 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.3
+          extension-csv: mbstring, bcmath
+      - name: Composer install
+        run: composer install
       - name: Setup Deployer
         uses: atymic/deployer-php-action@master
         with:
