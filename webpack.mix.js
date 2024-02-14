@@ -15,6 +15,16 @@ if (typeof process.env.npm_config_output_version !== 'undefined' &&
     });
     gitRevisionPluginList.push(gitRevisionPlugin);
     version = gitRevisionPlugin.version();
+
+    // Write the version that's going to be used to file
+    const fs = require('node:fs');
+    fs.writeFile('version', version, err => {
+        if (err) {
+            console.error(err);
+        } else {
+            // file written successfully
+        }
+    });
 }
 
 mix.options({
