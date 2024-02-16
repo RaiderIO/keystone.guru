@@ -254,8 +254,8 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             $affixGroupId++;
         }
 
-        AffixGroup::insert($affixGroupAttributes);
-        AffixGroupCoupling::insert($affixGroupCouplingsAttributes);
+        AffixGroup::from(DatabaseSeeder::getTempTableName(AffixGroup::class))->insert($affixGroupAttributes);
+        AffixGroupCoupling::from(DatabaseSeeder::getTempTableName(AffixGroupCoupling::class))->insert($affixGroupCouplingsAttributes);
     }
 
     public static function getAffectedModelClasses(): array

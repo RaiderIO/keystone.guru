@@ -3,6 +3,7 @@
 namespace App\Models\GameVersion;
 
 use App\Models\CacheModel;
+use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +17,14 @@ use Illuminate\Support\Facades\Auth;
  */
 class GameVersion extends CacheModel
 {
+    use SeederModel;
+
     protected $fillable   = [
         'id',
         'key',
         'name',
         'description',
-        'has_seasons'
+        'has_seasons',
     ];
     public    $timestamps = false;
 
@@ -45,7 +48,6 @@ class GameVersion extends CacheModel
     {
         return 'key';
     }
-
 
     /**
      * @return GameVersion Gets the default game version.

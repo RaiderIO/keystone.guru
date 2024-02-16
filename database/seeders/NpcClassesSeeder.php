@@ -24,7 +24,7 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        NpcClass::insert($npcClassAttributes);
+        NpcClass::from(DatabaseSeeder::getTempTableName(NpcClass::class))->insert($npcClassAttributes);
     }
 
     public static function getAffectedModelClasses(): array

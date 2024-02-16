@@ -40,11 +40,11 @@ class RouteAttributesSeeder extends Seeder implements TableSeederInterface
             ],
         ];
 
-        RouteAttribute::insert($routeAttributeAttributes);
+        RouteAttribute::from(DatabaseSeeder::getTempTableName(RouteAttribute::class))->insert($routeAttributeAttributes);
     }
 
     public static function getAffectedModelClasses(): array
     {
-        return ['route_attributes'];
+        return [RouteAttribute::class];
     }
 }

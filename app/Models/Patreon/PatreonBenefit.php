@@ -2,6 +2,7 @@
 
 namespace App\Models\Patreon;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PatreonBenefit extends Model
 {
+    use SeederModel;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'id',
+        'name',
+        'key',
+    ];
+
+    protected $hidden = ['pivot'];
     public const AD_FREE                 = 'ad-free';
     public const UNLIMITED_DUNGEONROUTES = 'unlimited-dungeonroutes';
     public const UNLISTED_ROUTES         = 'unlisted-routes';
@@ -30,24 +42,4 @@ class PatreonBenefit extends Model
         self::ADVANCED_SIMULATION  => 5,
         self::AD_FREE_TEAM_MEMBERS => 6,
     ];
-
-    public $timestamps = false;
-
-    protected $fillable = [
-        'id',
-        'name',
-        'key',
-    ];
-
-    protected $hidden = ['pivot'];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
 }

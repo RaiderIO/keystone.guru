@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Support\Collection;
 
@@ -15,20 +16,12 @@ use Illuminate\Support\Collection;
  */
 class CharacterRaceClassCoupling extends CacheModel
 {
+    use SeederModel;
+
     public $timestamps = false;
 
     protected $fillable = [
         'character_race_id',
         'character_class_id',
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
 }

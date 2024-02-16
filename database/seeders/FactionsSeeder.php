@@ -42,7 +42,8 @@ class FactionsSeeder extends Seeder implements TableSeederInterface
         ];
 
         foreach ($factions as $faction) {
-            $faction->save();
+            /** @var $faction Faction */
+            $faction->setTable(DatabaseSeeder::getTempTableName(Faction::class))->save();
 
             // Translate faction name to English and convert it to lower case
             $iconName          = strtolower(str_replace(' ', '', $faction->key));

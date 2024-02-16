@@ -250,7 +250,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             $this->command->info(sprintf('- Saving %d %s', $models->count(), $class));
 
             $models->chunk(1000)->each(function (Collection $chunkedModels) use ($class) {
-                $class::insert($chunkedModels->toArray());
+                $class::from(DatabaseSeeder::getTempTableName($class))->insert($chunkedModels->toArray());
             });
         }
 
@@ -377,14 +377,16 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 $createdModel = $mapping->getClass()::findOrNew($modelData['id']);
                 // Apply, then save
                 $createdModel->setRawAttributes($modelData);
-                $createdModel->save();
+                $createdModel->setTable(DatabaseSeeder::getTempTableName($mapping->getClass()))->save();
                 $updatedModels++;
 
-            } // If we should do some post processing, create & save it now so that we can do just that
+            } // If we should do some post-processing, create & save it now so that we can do just that
             else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
-                $createdModel = $mapping->getClass()::create($modelData);
+                /** @var \Eloquent $mappingClass */
+                $mappingClass = $mapping->getClass();
+                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
                 $updatedModels++;
-            } // We don't need to do post processing, add it to the list to be saved
+            } // We don't need to do post-processing, add it to the list to be saved
             else {
                 $modelsToSave->push($modelData);
                 $updatedModels++;

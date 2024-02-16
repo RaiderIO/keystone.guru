@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
@@ -19,6 +20,7 @@ use Illuminate\Support\Collection;
  */
 class CharacterClassSpecialization extends CacheModel
 {
+    use SeederModel;
     use HasIconFile;
 
     public $timestamps = false;
@@ -31,15 +33,5 @@ class CharacterClassSpecialization extends CacheModel
     public function class(): BelongsTo
     {
         return $this->belongsTo(CharacterClass::class);
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
     }
 }

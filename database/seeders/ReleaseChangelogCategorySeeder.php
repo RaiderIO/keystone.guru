@@ -24,7 +24,7 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
                 'name' => sprintf('releasechangelogcategories.%s', $key),
             ];
         }
-        ReleaseChangelogCategory::insert($releaseChangelogCategoryAttributes);
+        ReleaseChangelogCategory::from(DatabaseSeeder::getTempTableName(ReleaseChangelogCategory::class))->insert($releaseChangelogCategoryAttributes);
     }
 
     public static function getAffectedModelClasses(): array

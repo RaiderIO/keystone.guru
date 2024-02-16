@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $name
+ * @property int              $id
+ * @property string           $name
  *
  * @property Collection|Npc[] $npcs
  *
@@ -16,8 +17,10 @@ use Illuminate\Support\Collection;
  */
 class NpcClass extends CacheModel
 {
-    protected $fillable = ['id', 'name'];
-    public $timestamps = false;
+    use SeederModel;
+
+    protected $fillable   = ['id', 'name'];
+    public    $timestamps = false;
 
     public const NPC_CLASS_MELEE         = 'melee';
     public const NPC_CLASS_RANGED        = 'ranged';

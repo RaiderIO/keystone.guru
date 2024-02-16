@@ -162,7 +162,7 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        MapIconType::insert($mapIconTypeAttributes);
+        MapIconType::from(DatabaseSeeder::getTempTableName(MapIconType::class))->insert($mapIconTypeAttributes);
     }
 
     public static function getAffectedModelClasses(): array

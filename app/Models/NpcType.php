@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -16,6 +17,8 @@ use Illuminate\Support\Collection;
  */
 class NpcType extends CacheModel
 {
+    use SeederModel;
+
     const ABERRATION    = 1;
     const BEAST         = 2;
     const CRITTER       = 3;
@@ -61,15 +64,5 @@ class NpcType extends CacheModel
     public function npcs(): HasMany
     {
         return $this->hasMany(Npc::class);
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
     }
 }

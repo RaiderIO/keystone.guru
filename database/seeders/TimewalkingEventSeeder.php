@@ -47,7 +47,7 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
             //            ],
         ];
 
-        TimewalkingEvent::insert($timewalkingEventsAttributes);
+        TimewalkingEvent::from(DatabaseSeeder::getTempTableName(TimewalkingEvent::class))->insert($timewalkingEventsAttributes);
     }
 
     public static function getAffectedModelClasses(): array

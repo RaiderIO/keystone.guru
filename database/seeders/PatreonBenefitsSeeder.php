@@ -14,8 +14,6 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding Patreon Benefits');
 
         $patreonBenefitAttributes = [];
@@ -27,12 +25,7 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        PatreonBenefit::insert($patreonBenefitAttributes);
-    }
-
-    private function rollback()
-    {
-        PatreonBenefit::truncate();
+        PatreonBenefit::from(DatabaseSeeder::getTempTableName(PatreonBenefit::class))->insert($patreonBenefitAttributes);
     }
 
     public static function getAffectedModelClasses(): array

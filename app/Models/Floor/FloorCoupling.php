@@ -3,6 +3,7 @@
 namespace App\Models\Floor;
 
 use App\Models\CacheModel;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
@@ -15,6 +16,8 @@ use Eloquent;
  */
 class FloorCoupling extends CacheModel
 {
+    use SeederModel;
+
     public const DIRECTION_NONE  = 'none';
     public const DIRECTION_UP    = 'up';
     public const DIRECTION_DOWN  = 'down';

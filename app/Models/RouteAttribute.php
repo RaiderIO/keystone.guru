@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class RouteAttribute extends Model
 {
+    use SeederModel;
+
     public const ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP        = 'rogue_shroud_skip';
     public const ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP        = 'warlock_gate_skip';
     public const ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP      = 'mage_slow_fall_skip';
@@ -32,14 +35,4 @@ class RouteAttribute extends Model
     public $timestamps = false;
 
     public $hidden = ['id', 'pivot'];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
 }

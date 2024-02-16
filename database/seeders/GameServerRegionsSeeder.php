@@ -58,7 +58,7 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             ],
         ];
 
-        GameServerRegion::insert($gameServerRegionAttributes);
+        GameServerRegion::from(DatabaseSeeder::getTempTableName(GameServerRegion::class))->insert($gameServerRegionAttributes);
     }
 
     /**

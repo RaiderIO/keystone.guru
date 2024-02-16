@@ -2,6 +2,7 @@
 
 namespace App\Models\Mapping;
 
+use App\Models\Traits\SeederModel;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MappingCommitLog extends Model
 {
+    use SeederModel;
+
     protected $fillable = [
         'id',
         'merged',

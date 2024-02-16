@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class NpcSpell extends CacheModel
 {
+    use SeederModel;
+
     public $timestamps = false;
 
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];

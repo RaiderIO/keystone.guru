@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -45,6 +46,8 @@ use Illuminate\Support\Collection;
  */
 class Npc extends CacheModel implements MappingModelInterface
 {
+    use SeederModel;
+
     public $incrementing = false;
     public $timestamps   = false;
 
@@ -346,9 +349,9 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
 
-    public static function boot()
+    public static function booted()
     {
-        parent::boot();
+        parent::booted();
 
         // Delete Npc properly if it gets deleted
         static::deleting(function (Npc $npc) {

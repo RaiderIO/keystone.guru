@@ -78,7 +78,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
             $expansion->name = $name;
             // Temp file
             $expansion->icon_file_id = -1;
-            $expansion->save();
+            $expansion->setTable(DatabaseSeeder::getTempTableName(Expansion::class))->save();
 
             $icon              = new File();
             $icon->model_id    = $expansion->id;
@@ -88,7 +88,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
             $icon->save();
 
             $expansion->icon_file_id = $icon->id;
-            $expansion->save();
+            $expansion->setTable(DatabaseSeeder::getTempTableName(Expansion::class))->save();
         }
     }
 

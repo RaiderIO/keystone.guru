@@ -24,7 +24,7 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        PublishedState::insert($publishedStateAttributes);
+        PublishedState::from(DatabaseSeeder::getTempTableName(PublishedState::class))->insert($publishedStateAttributes);
     }
 
     public static function getAffectedModelClasses(): array

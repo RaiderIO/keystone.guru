@@ -204,8 +204,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
             $seasonId++;
         }
 
-        Season::insert($seasonAttributes);
-        SeasonDungeon::insert($seasonDungeonAttributes);
+        Season::from(DatabaseSeeder::getTempTableName(Season::class))->insert($seasonAttributes);
+        SeasonDungeon::from(DatabaseSeeder::getTempTableName(SeasonDungeon::class))->insert($seasonDungeonAttributes);
     }
 
     public static function getAffectedModelClasses(): array

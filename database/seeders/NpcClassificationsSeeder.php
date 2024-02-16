@@ -45,7 +45,7 @@ class NpcClassificationsSeeder extends Seeder implements TableSeederInterface
             ],
         ];
 
-        NpcClassification::insert($npcClassificationAttributes);
+        NpcClassification::from(DatabaseSeeder::getTempTableName(NpcClassification::class))->insert($npcClassificationAttributes);
     }
 
     public static function getAffectedModelClasses(): array

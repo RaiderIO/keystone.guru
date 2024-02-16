@@ -64,9 +64,9 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
 
         $this->command->info(sprintf('Inserting %d releases..', count($releaseAttributes)));
 
-        $result = Release::insert($releaseAttributes) &&
-            ReleaseChangelog::insert($releaseChangeLogAttributes) &&
-            ReleaseChangelogChange::insert($releaseChangeLogChangesAttributes);
+        $result = Release::from(DatabaseSeeder::getTempTableName(Release::class))->insert($releaseAttributes) &&
+            ReleaseChangelog::from(DatabaseSeeder::getTempTableName(ReleaseChangelog::class))->insert($releaseChangeLogAttributes) &&
+            ReleaseChangelogChange::from(DatabaseSeeder::getTempTableName(ReleaseChangelogChange::class))->insert($releaseChangeLogChangesAttributes);
 
         if ($result) {
             $this->command->info(sprintf('Inserting %d releases OK', count($releaseAttributes)));

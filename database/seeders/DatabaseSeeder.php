@@ -2,14 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class DatabaseSeeder extends Seeder
 {
+    public static bool $running = false;
+
+    public const TEMP_TABLE_SUFFIX = '_temp';
+
     private const SEEDERS = [
         // Seeders which don't depend on anything else
         ExpansionsSeeder::class,
@@ -56,6 +62,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(CacheServiceInterface $cacheService)
     {
+        self::$running = true;
+
         $cacheService->dropCaches();
         // $this->call(UsersTableSeeder::class);
         // $this->call(LaratrustSeeder::class);
@@ -98,7 +106,6 @@ class DatabaseSeeder extends Seeder
                 } finally {
                     $cleanupFailed = false;
                     foreach ($affectedModelClasses as $affectedModelClass) {
-                        $this->command->info($affectedModelClass);
                         $cleanupFailed = !$cleanupFailed && !$this->cleanupTempTableForModel($affectedModelClass);
                     }
 
@@ -110,6 +117,8 @@ class DatabaseSeeder extends Seeder
                 }
             });
         }
+
+        self::$running = false;
     }
 
     /**
@@ -122,7 +131,7 @@ class DatabaseSeeder extends Seeder
         $instance = new $className();
 
         $tableNameOld = $instance->getTable();
-        $tableNameNew = sprintf('%s_temp', $tableNameOld);
+        $tableNameNew = sprintf('%s%s', $tableNameOld, self::TEMP_TABLE_SUFFIX);
 
         DB::table('files')->where('model_class', $className)->delete();
 
@@ -140,7 +149,7 @@ class DatabaseSeeder extends Seeder
         $instance = new $className();
 
         $tableNameOld = $instance->getTable();
-        $tableNameNew = sprintf('%s_temp', $tableNameOld);
+        $tableNameNew = sprintf('%s%s', $tableNameOld, self::TEMP_TABLE_SUFFIX);
 
         // Remove contents from old table, replace it with contents from new table
 //        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
@@ -160,8 +169,25 @@ class DatabaseSeeder extends Seeder
         /** @var Model $instance */
         $instance = new $className();
 
-        $tableNameNew = sprintf('%s_temp', $instance->getTable());
+        $tableNameNew = sprintf('%s%s', $instance->getTable(), self::TEMP_TABLE_SUFFIX);
 
         return DB::statement(sprintf('DROP TABLE %s;', $tableNameNew));
+    }
+
+    /**
+     * @param string $className
+     * @return string
+     */
+    public static function getTempTableName(string $className): string
+    {
+        $result = Str::snake(Str::pluralStudly(class_basename($className)));
+
+        // Only if we implement SeederModel - otherwise ignore it!
+        if (in_array(SeederModel::class, class_uses_recursive($className))) {
+            // See Model.php:getTable()
+            $result = sprintf('%s%s', $result, self::TEMP_TABLE_SUFFIX);
+        }
+
+        return $result;
     }
 }

@@ -171,7 +171,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
             }
         }
 
-        CharacterRaceClassCoupling::insert($raceClassCouplingAttributes);
+        CharacterRaceClassCoupling::from(DatabaseSeeder::getTempTableName(CharacterRaceClassCoupling::class))->insert($raceClassCouplingAttributes);
 
         $this->command->info('Adding known class/specialization combinations');
         // @formatter:off

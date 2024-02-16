@@ -30,7 +30,7 @@ class TagCategorySeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        TagCategory::insert($tagCategoryAttributes);
+        TagCategory::from(DatabaseSeeder::getTempTableName(TagCategory::class))->insert($tagCategoryAttributes);
     }
 
     public static function getAffectedModelClasses(): array

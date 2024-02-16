@@ -28,7 +28,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        GameVersion::insert($gameVersionAttributes);
+        GameVersion::from(DatabaseSeeder::getTempTableName(GameVersion::class))->insert($gameVersionAttributes);
     }
 
     public static function getAffectedModelClasses(): array

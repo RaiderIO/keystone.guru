@@ -22,7 +22,7 @@ class RaidMarkersSeeder extends Seeder implements TableSeederInterface
             ];
         }
 
-        RaidMarker::insert($raidMarkerAttributes);
+        RaidMarker::from(DatabaseSeeder::getTempTableName(RaidMarker::class))->insert($raidMarkerAttributes);
     }
 
     public static function getAffectedModelClasses(): array
