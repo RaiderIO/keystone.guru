@@ -62,4 +62,14 @@ class NpcType extends CacheModel
     {
         return $this->hasMany(Npc::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // This model may NOT be deleted, it's read only!
+        static::deleting(function ($someModel) {
+            return false;
+        });
+    }
 }

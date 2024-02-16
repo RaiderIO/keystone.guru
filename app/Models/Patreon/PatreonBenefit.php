@@ -6,9 +6,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property string $key
+ * @property int    $id
  * @property string $name
+ * @property string $key
  *
  * @mixin Eloquent
  * @todo Using CacheModel causes cache problems? People did not get their patreon rewards applied properly because of it?
@@ -34,7 +34,9 @@ class PatreonBenefit extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'key', 'name',
+        'id',
+        'name',
+        'key',
     ];
 
     protected $hidden = ['pivot'];

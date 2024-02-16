@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $name
- * @property string $shortname
- * @property string $color
+ * @property int              $id
+ * @property string           $name
+ * @property string           $key
+ * @property string           $color
  *
  * @property Collection|Npc[] $npcs
  *
@@ -18,8 +18,8 @@ use Illuminate\Support\Collection;
  */
 class NpcClassification extends CacheModel
 {
-    public $hidden = ['created_at', 'updated_at'];
-    protected $fillable = ['id', 'name', 'shortname', 'color'];
+    public    $hidden   = ['created_at', 'updated_at'];
+    protected $fillable = ['id', 'name', 'key', 'color'];
 
     const NPC_CLASSIFICATION_NORMAL     = 'normal';
     const NPC_CLASSIFICATION_ELITE      = 'elite';

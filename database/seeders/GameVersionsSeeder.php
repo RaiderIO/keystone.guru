@@ -2,21 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class GameVersionsSeeder extends Seeder
+class GameVersionsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
         $this->command->info('Adding known game versions');
 
         $gameVersionAttributes = [];
@@ -34,8 +31,8 @@ class GameVersionsSeeder extends Seeder
         GameVersion::insert($gameVersionAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('game_versions')->truncate();
+        return [GameVersion::class];
     }
 }

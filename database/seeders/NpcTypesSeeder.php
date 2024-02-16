@@ -4,31 +4,31 @@ namespace Database\Seeders;
 
 use App\Models\NpcType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class NpcTypesSeeder extends Seeder
+class NpcTypesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding known Npc types');
 
+        $npcTypeAttributes = [];
         foreach (NpcType::ALL as $npcTypeName => $id) {
-            (new NpcType([
+            $npcTypeAttributes[] = [
                 'id'   => $id,
                 'type' => $npcTypeName,
-            ]))->save();
+            ];
         }
+
+        NpcType::insert($npcTypeAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('npc_types')->truncate();
+        return [NpcType::class];
     }
 }

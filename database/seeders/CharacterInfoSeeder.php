@@ -11,17 +11,14 @@ use App\Models\File;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class CharacterInfoSeeder extends Seeder
+class CharacterInfoSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * @throws Exception
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding known races');
 
         $factionAllianceId = Faction::ALL[Faction::FACTION_ALLIANCE];
@@ -31,7 +28,7 @@ class CharacterInfoSeeder extends Seeder
             throw new Exception('Unable to find factions');
         }
 
-        // Do the name as key => value so we can easily fetch it later on
+        // Do the name as key => value, so we can easily fetch it later on
         $races = [
             'races.human'               => new CharacterRace(['key' => 'human', 'faction_id' => $factionAllianceId]),
             'races.dwarf'               => new CharacterRace(['key' => 'dwarf', 'faction_id' => $factionAllianceId]),
@@ -65,6 +62,7 @@ class CharacterInfoSeeder extends Seeder
         ];
 
         foreach ($races as $name => $race) {
+            /** @var CharacterRace $race */
             $race->name = $name;
             $race->save();
         }
@@ -152,24 +150,28 @@ class CharacterInfoSeeder extends Seeder
         ];
         // @formatter:on
 
+        $raceClassCouplingAttributes = [];
         foreach ($raceClassMatrix as $raceStr => $raceClasses) {
             $race = $races[$raceStr];
-            $i    = 0;
+            $i    = -1;
             foreach ($raceClasses as $raceClass) {
-                if ($raceClass === 'x') {
-                    $keys  = array_keys($classes);
-                    $class = $classes[$keys[$i]];
-
-                    $raceClassCoupling                     = new CharacterRaceClassCoupling();
-                    $raceClassCoupling->character_race_id  = $race->id;
-                    $raceClassCoupling->character_class_id = $class->id;
-
-                    $raceClassCoupling->save();
-                }
                 $i++;
+
+                if ($raceClass !== 'x') {
+                    continue;
+                }
+
+                $keys  = array_keys($classes);
+                $class = $classes[$keys[$i]];
+
+                $raceClassCouplingAttributes[] = [
+                    'character_race_id'  => $race->id,
+                    'character_class_id' => $class->id,
+                ];
             }
         }
 
+        CharacterRaceClassCoupling::insert($raceClassCouplingAttributes);
 
         $this->command->info('Adding known class/specialization combinations');
         // @formatter:off
@@ -265,13 +267,13 @@ class CharacterInfoSeeder extends Seeder
         }
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('character_races')->truncate();
-        DB::table('character_classes')->truncate();
-        DB::table('character_class_specializations')->truncate();
-        DB::table('character_race_class_couplings')->truncate();
-        DB::table('files')->where('model_class', CharacterClass::class)->delete();
-        DB::table('files')->where('model_class', CharacterClassSpecialization::class)->delete();
+        return [
+            CharacterRace::class,
+            CharacterClass::class,
+            CharacterClassSpecialization::class,
+            CharacterRaceClassCoupling::class,
+        ];
     }
 }

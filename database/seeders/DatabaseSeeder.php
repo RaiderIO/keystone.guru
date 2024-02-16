@@ -3,15 +3,56 @@
 namespace Database\Seeders;
 
 use App\Service\Cache\CacheServiceInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class DatabaseSeeder extends Seeder
 {
+    private const SEEDERS = [
+        // Seeders which don't depend on anything else
+        ExpansionsSeeder::class,
+        GameServerRegionsSeeder::class,
+        GameVersionsSeeder::class,
+        RouteAttributesSeeder::class,
+        PatreonBenefitsSeeder::class,
+        FactionsSeeder::class,
+        NpcClassificationsSeeder::class,
+        NpcClassesSeeder::class,
+        NpcTypesSeeder::class,
+        RaidMarkersSeeder::class,
+        ReleaseChangelogCategorySeeder::class,
+        ReleasesSeeder::class,
+        MapIconTypesSeeder::class,
+        TagCategorySeeder::class,
+        PublishedStatesSeeder::class,
+
+        // Depends on ExpansionsSeeder, SeasonsSeeder
+        AffixSeeder::class,
+
+        // Depends on SeasonsSeeder, AffixSeeder
+        TimewalkingEventSeeder::class,
+
+        //  Depends on Factions
+        CharacterInfoSeeder::class,
+
+        // Depends on Expansions
+        DungeonDataSeeder::class,
+
+        // Depends on DungeonDataSeeder
+        MappingVersionSeeder::class,
+
+        // Depends on ExpansionsSeeder, DungeonDataSeeder
+        SeasonsSeeder::class,
+    ];
+
     /**
      * Run the database seeds.
      *
      * @param CacheServiceInterface $cacheService
      * @return void
+     * @throws Throwable
      */
     public function run(CacheServiceInterface $cacheService)
     {
@@ -19,39 +60,108 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
         // $this->call(LaratrustSeeder::class);
 
-        // Seeders which don't depend on anything else
-        $this->call(GameServerRegionsSeeder::class);
-        $this->call(GameVersionsSeeder::class);
-        $this->call(ExpansionsSeeder::class);
-        $this->call(RouteAttributesSeeder::class);
-        $this->call(PatreonBenefitsSeeder::class);
-        $this->call(FactionsSeeder::class);
-        $this->call(NpcClassificationsSeeder::class);
-        $this->call(NpcClassesSeeder::class);
-        $this->call(NpcTypesSeeder::class);
-        $this->call(RaidMarkersSeeder::class);
-        $this->call(ReleaseChangelogCategorySeeder::class);
-        $this->call(ReleasesSeeder::class);
-        $this->call(MapIconTypesSeeder::class);
-        $this->call(TagCategorySeeder::class);
-        $this->call(PublishedStatesSeeder::class);
+        // 1. Prepare: Create a temporary table for all affected classes
+        // 2. Apply: Seed the data into it
+        // 2.1 During applying, seeder can do what it wants, it's all wrapped in a transaction
+        // 3. Cleanup: Remove existing table, rename temporary table
 
-        // Depends on ExpansionsSeeder, SeasonsSeeder
-        $this->call(AffixSeeder::class);
+        foreach (self::SEEDERS as $seederClass) {
+            // Wrap all seeder logic inside a transaction - that way the seeding is performed seamlessly, all or nothing
+            DB::transaction(function () use ($seederClass) {
+                try {
+                    $prepareFailed = false;
 
-        // Depends on SeasonsSeeder, AffixSeeder
-        $this->call(TimewalkingEventSeeder::class);
+                    /** @var TableSeederInterface $seederClass */
+                    $affectedModelClasses = $seederClass::getAffectedModelClasses();
+                    foreach ($affectedModelClasses as $affectedModel) {
+                        $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
+                    }
 
-        //  Depends on Factions
-        $this->call(CharacterInfoSeeder::class);
+                    if ($prepareFailed) {
+                        $this->command->error(sprintf('Preparing temp table for %s failed!', $seederClass));
 
-        // Depends on Expansions
-        $this->call(DungeonDataSeeder::class);
+                        return;
+                    }
 
-        // Depends on DungeonDataSeeder
-        $this->call(MappingVersionSeeder::class);
+                    $this->call($seederClass);
 
-        // Depends on ExpansionsSeeder, DungeonDataSeeder
-        $this->call(SeasonsSeeder::class);
+                    $applyFailed = false;
+                    foreach ($affectedModelClasses as $affectedModelClass) {
+                        $applyFailed = !$applyFailed && !$this->applyTempTableForModel($affectedModelClass);
+                    }
+
+                    if ($applyFailed) {
+                        $this->command->error(sprintf('Applying temp table for %s failed!', $seederClass));
+
+                        return;
+                    }
+                } finally {
+                    $cleanupFailed = false;
+                    foreach ($affectedModelClasses as $affectedModelClass) {
+                        $this->command->info($affectedModelClass);
+                        $cleanupFailed = !$cleanupFailed && !$this->cleanupTempTableForModel($affectedModelClass);
+                    }
+
+                    if ($cleanupFailed) {
+                        $this->command->error(sprintf('Cleaning up temp table for %s failed!', $seederClass));
+
+                        return;
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     */
+    private function prepareTempTableForModel(string $className): bool
+    {
+        /** @var Model $instance */
+        $instance = new $className();
+
+        $tableNameOld = $instance->getTable();
+        $tableNameNew = sprintf('%s_temp', $tableNameOld);
+
+        DB::table('files')->where('model_class', $className)->delete();
+
+        return DB::statement(sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld));
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     * @throws Throwable
+     */
+    private function applyTempTableForModel(string $className): bool
+    {
+        /** @var Model $instance */
+        $instance = new $className();
+
+        $tableNameOld = $instance->getTable();
+        $tableNameNew = sprintf('%s_temp', $tableNameOld);
+
+        // Remove contents from old table, replace it with contents from new table
+//        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
+        DB::table($tableNameOld)->truncate();
+        DB::table('files')->where('model_class', $className)->delete();
+
+        return DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s;', $tableNameOld, $tableNameNew));
+//        });
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     */
+    private function cleanupTempTableForModel(string $className): bool
+    {
+        /** @var Model $instance */
+        $instance = new $className();
+
+        $tableNameNew = sprintf('%s_temp', $instance->getTable());
+
+        return DB::statement(sprintf('DROP TABLE %s;', $tableNameNew));
     }
 }

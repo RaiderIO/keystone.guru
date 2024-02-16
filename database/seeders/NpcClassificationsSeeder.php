@@ -4,60 +4,52 @@ namespace Database\Seeders;
 
 use App\Models\NpcClassification;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class NpcClassificationsSeeder extends Seeder
+class NpcClassificationsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
         $this->command->info('Adding known Npc Classifications');
 
-        $npcClassifications = collect([
-            new NpcClassification([
-                'id'        => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
-                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_NORMAL),
-                'shortname' => NpcClassification::NPC_CLASSIFICATION_NORMAL,
-                'color'     => 'white',
-            ]),
-            new NpcClassification([
-                'id'        => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
-                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE),
-                'shortname' => NpcClassification::NPC_CLASSIFICATION_ELITE,
-                'color'     => 'yellow',
-            ]),
-            new NpcClassification([
-                'id'        => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_BOSS),
-                'shortname' => NpcClassification::NPC_CLASSIFICATION_BOSS,
-                'color'     => 'red',
-            ]),
-            new NpcClassification([
-                'id'        => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS),
-                'shortname' => NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS,
-                'color'     => 'red',
-            ]),
-            new NpcClassification([
-                'id'        => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
-                'name'      => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_RARE),
-                'shortname' => NpcClassification::NPC_CLASSIFICATION_RARE,
-                'color'     => 'red',
-            ]),
-        ]);
+        $npcClassificationAttributes = [
+            [
+                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_NORMAL),
+                'key'   => NpcClassification::NPC_CLASSIFICATION_NORMAL,
+                'color' => 'white',
+            ], [
+                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE),
+                'key'   => NpcClassification::NPC_CLASSIFICATION_ELITE,
+                'color' => 'yellow',
+            ], [
+                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_BOSS),
+                'key'   => NpcClassification::NPC_CLASSIFICATION_BOSS,
+                'color' => 'red',
+            ], [
+                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS),
+                'key'   => NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS,
+                'color' => 'red',
+            ], [
+                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_RARE),
+                'key'   => NpcClassification::NPC_CLASSIFICATION_RARE,
+                'color' => 'red',
+            ],
+        ];
 
-        foreach ($npcClassifications as $npcClassification) {
-            $npcClassification->save();
-        }
+        NpcClassification::insert($npcClassificationAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('npc_classifications')->truncate();
+        return [NpcClassification::class];
     }
 }

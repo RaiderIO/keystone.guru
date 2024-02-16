@@ -6,9 +6,8 @@ use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class TimewalkingEventSeeder extends Seeder
+class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
 {
     use FindsAffixes;
 
@@ -17,13 +16,11 @@ class TimewalkingEventSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding known timewalking events');
 
-        $timewalkingEventsData = [
+        $timewalkingEventsAttributes = [
             TimewalkingEvent::TIMEWALKING_EVENT_LEGION => [
                 'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first()->id,
                 'name'                 => 'timewalkingevent.legion.name',
@@ -50,16 +47,11 @@ class TimewalkingEventSeeder extends Seeder
             //            ],
         ];
 
-        foreach ($timewalkingEventsData as $timewalkingEvent) {
-            TimewalkingEvent::create($timewalkingEvent);
-        }
+        TimewalkingEvent::insert($timewalkingEventsAttributes);
     }
 
-    /**
-     *
-     */
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('timewalking_events')->truncate();
+        return [TimewalkingEvent::class];
     }
 }

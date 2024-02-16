@@ -4,53 +4,33 @@ namespace Database\Seeders;
 
 use App\Models\NpcClass;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class NpcClassesSeeder extends Seeder
+class NpcClassesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding known Npc classes');
 
-        $npcClasses = [
-            new NpcClass([
-                'name' => 'Melee',
-            ]), new NpcClass([
-                'name' => 'Ranged',
-            ]), new NpcClass([
-                'name' => 'Caster',
-            ]), new NpcClass([
-                'name' => 'Healer',
-            ]), new NpcClass([
-                'name' => 'Caster/Melee',
-            ]), new NpcClass([
-                'name' => 'Healer/Caster',
-            ]), new NpcClass([
-                'name' => 'Healer/Melee',
-            ]), new NpcClass([
-                'name' => 'Ranged/Caster',
-            ]), new NpcClass([
-                'name' => 'Ranged/Healer',
-            ]), new NpcClass([
-                'name' => 'Ranged/Melee',
-            ]),
-        ];
-
-
-        foreach ($npcClasses as $npcClass) {
-            $npcClass->save();
+        $npcClassAttributes = [];
+        foreach (NpcClass::ALL as $key) {
+            $npcClassAttributes[] = [
+                'key'  => $key,
+                'name' => sprintf('npcclasses.%s', $key),
+            ];
         }
+
+        NpcClass::insert($npcClassAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('npc_classes')->truncate();
+        return [
+            NpcClass::class,
+        ];
     }
 }

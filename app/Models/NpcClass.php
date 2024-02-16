@@ -23,12 +23,12 @@ class NpcClass extends CacheModel
     public const NPC_CLASS_RANGED        = 'ranged';
     public const NPC_CLASS_CASTER        = 'caster';
     public const NPC_CLASS_HEALER        = 'healer';
-    public const NPC_CLASS_CASTER_MELEE  = 'caster/melee';
-    public const NPC_CLASS_HEALER_CASTER = 'healer/caster';
-    public const NPC_CLASS_HEALER_MELEE  = 'healer/melee';
-    public const NPC_CLASS_RANGED_CASTER = 'ranged/caster';
-    public const NPC_CLASS_RANGED_HEALER = 'ranged/healer';
-    public const NPC_CLASS_RANGED_MELEE  = 'ranged/melee';
+    public const NPC_CLASS_CASTER_MELEE  = 'caster_melee';
+    public const NPC_CLASS_HEALER_CASTER = 'healer_caster';
+    public const NPC_CLASS_HEALER_MELEE  = 'healer_melee';
+    public const NPC_CLASS_RANGED_CASTER = 'ranged_caster';
+    public const NPC_CLASS_RANGED_HEALER = 'ranged_healer';
+    public const NPC_CLASS_RANGED_MELEE  = 'ranged_melee';
 
     public const ALL = [
         self::NPC_CLASS_MELEE         => 1,

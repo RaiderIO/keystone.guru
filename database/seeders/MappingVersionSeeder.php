@@ -17,14 +17,14 @@ use Illuminate\Support\Collection;
  * @author Wouter
  * @since 30/10/2022
  */
-class MappingVersionSeeder extends Seeder
+class MappingVersionSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Refresh the mapping versions so that we're sure we get the latest info
         Artisan::call('modelCache:clear', ['--model' => MappingVersion::class]);
@@ -104,5 +104,10 @@ class MappingVersionSeeder extends Seeder
 
                 $this->command->info(sprintf('- Processed %d dungeon routes...', $count));
             });
+    }
+
+    public static function getAffectedModelClasses(): array
+    {
+        return [];
     }
 }

@@ -34,7 +34,8 @@ class PublishedState extends CacheModel
     public $timestamps = false;
 
     protected $fillable = [
-        'id', 'name',
+        'id',
+        'name',
     ];
 
     protected $hidden = ['pivot'];

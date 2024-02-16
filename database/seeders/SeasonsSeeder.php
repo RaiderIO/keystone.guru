@@ -8,19 +8,16 @@ use App\Models\Season;
 use App\Models\SeasonDungeon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
-class SeasonsSeeder extends Seeder
+class SeasonsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding known Seasons');
 
         /** @var Collection|Expansion[] $expansions */
@@ -30,7 +27,7 @@ class SeasonsSeeder extends Seeder
 
         $dungeonsByExpansion = Dungeon::all()->groupBy('expansion_id', true);
 
-        $seasons = [
+        $seasonAttributes = [
             [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id'       => 6,
@@ -187,29 +184,35 @@ class SeasonsSeeder extends Seeder
                         Dungeon::DUNGEON_THRONE_OF_THE_TIDES,
                     ])->orderBy('expansions.released_at')
                     ->get(),
-            ]
+            ],
         ];
 
-
-        foreach ($seasons as $season) {
+        $seasonDungeonAttributes = [];
+        $seasonId                = 1;
+        foreach ($seasonAttributes as &$season) {
             /** @var Dungeon[] $dungeons */
             $dungeons = $season['dungeons'];
             unset($season['dungeons']);
 
-            $season = Season::create($season);
-
             foreach ($dungeons as $dungeon) {
-                SeasonDungeon::create([
-                    'season_id'  => $season->id,
+                $seasonDungeonAttributes[] = [
+                    'season_id'  => $seasonId,
                     'dungeon_id' => $dungeon->id,
-                ]);
+                ];
             }
+
+            $seasonId++;
         }
+
+        Season::insert($seasonAttributes);
+        SeasonDungeon::insert($seasonDungeonAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('seasons')->truncate();
-        DB::table('season_dungeons')->truncate();
+        return [
+            Season::class,
+            SeasonDungeon::class,
+        ];
     }
 }

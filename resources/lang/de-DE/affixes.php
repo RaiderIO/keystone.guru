@@ -113,5 +113,17 @@ return [
         'name'        => '@todo de: .thundering.name',
         'description' => '@todo de: .thundering.description',
     ],
+    'afflicted'              => [
+        'name'        => '@todo de-DE: .afflicted.name',
+        'description' => '@todo de-DE: .afflicted.description',
+    ],
+    'entangling'              => [
+        'name'        => '@todo de-DE: .entangling.name',
+        'description' => '@todo de-DE: .entangling.description',
+    ],
+    'incorporeal'              => [
+        'name'        => '@todo de-DE: .incorporeal.name',
+        'description' => '@todo de-DE: .incorporeal.description',
+    ],
     'seasonal_index_preset' => '@todo de: .seasonal_index_preset',
 ];

@@ -2,58 +2,49 @@
 
 namespace Database\Seeders;
 
+use App\Models\RouteAttribute;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class RouteAttributesSeeder extends Seeder
+class RouteAttributesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding route attributes');
 
-        $routeAttributesData = [
+        $routeAttributeAttributes = [
             [
-                'name'        => 'rogue-shroud-skip',
-                'description' => 'Rogue Shroud skip',
-                'category'    => 'class',
+                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP,
+                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP),
+                'category' => 'class',
             ], [
-                'name'        => 'warlock-gate-skip',
-                'description' => 'Warlock Gate skip',
-                'category'    => 'class',
+                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP,
+                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP),
+                'category' => 'class',
             ], [
-                'name'        => 'mage-slow-fall-skip',
-                'description' => 'Mage Slow Fall skip',
-                'category'    => 'class',
+                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP,
+                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP),
+                'category' => 'class',
             ], [
-                'name'        => 'invisibility-potion',
-                'description' => 'Invisibility Potion',
-                'category'    => 'item',
+                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP,
+                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP),
+                'category' => 'item',
             ], [
-                'name'        => 'death-skip',
-                'description' => 'Death skip',
-                'category'    => 'misc',
+                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_DEATH_SKIP,
+                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_DEATH_SKIP),
+                'category' => 'misc',
             ],
         ];
 
-        // Based on above data, insert into the database
-        foreach ($routeAttributesData as $attributeData) {
-            $attribute              = new \App\Models\RouteAttribute();
-            $attribute->category    = $attributeData['category'];
-            $attribute->name        = $attributeData['name'];
-            $attribute->description = $attributeData['description'];
-            $attribute->save();
-        }
+        RouteAttribute::insert($routeAttributeAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('route_attributes')->truncate();
+        return ['route_attributes'];
     }
 }

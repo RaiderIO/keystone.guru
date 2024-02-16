@@ -4,33 +4,31 @@ namespace Database\Seeders;
 
 use App\Models\ReleaseChangelogCategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class ReleaseChangelogCategorySeeder extends Seeder
+class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
         $this->command->info('Adding known release changelog categories');
 
-        $attributes = [];
+        $releaseChangelogCategoryAttributes = [];
         foreach (ReleaseChangelogCategory::ALL as $key => $id) {
-            $attributes[] = [
+            $releaseChangelogCategoryAttributes[] = [
                 'id'   => $id,
                 'key'  => $key,
                 'name' => sprintf('releasechangelogcategories.%s', $key),
             ];
         }
-        ReleaseChangelogCategory::insert($attributes);
+        ReleaseChangelogCategory::insert($releaseChangelogCategoryAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('release_changelog_categories')->truncate();
+        return [ReleaseChangelogCategory::class];
     }
 }

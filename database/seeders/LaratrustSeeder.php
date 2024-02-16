@@ -10,21 +10,21 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class LaratrustSeeder extends Seeder
+class LaratrustSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return  void
      */
-    public function run()
+    public function run(): void
     {
         if (config('app.type') !== 'local') {
             $this->command->error('You are not allowed to run this seeder on non-local development environments!');
 
             return;
         }
-        
+
         if (User::count() > 0) {
             $this->command->error('You are not allowed to run this seeder when there\'s already users!');
 
@@ -106,5 +106,10 @@ class LaratrustSeeder extends Seeder
             User::truncate();
         }
         Schema::enableForeignKeyConstraints();
+    }
+
+    public static function getAffectedModelClasses(): array
+    {
+        return [];
     }
 }

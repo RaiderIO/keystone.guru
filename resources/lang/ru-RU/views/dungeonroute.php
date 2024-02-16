@@ -85,5 +85,6 @@ return [
         'linkpreview_title'                       => '@todo ru: .view.linkpreview_title',
         'linkpreview_default_description'         => '@todo ru: .view.linkpreview_default_description',
         'linkpreview_default_description_sandbox' => '@todo ru: .view.linkpreview_default_description_sandbox',
+        'linkpreview_default_description_explore' => '@todo ru-RU: .view.linkpreview_default_description_explore'
     ],
 ];

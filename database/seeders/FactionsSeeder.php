@@ -5,18 +5,16 @@ namespace Database\Seeders;
 use App\Models\Faction;
 use App\Models\File;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class FactionsSeeder extends Seeder
+class FactionsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
         $this->command->info('Adding known factions');
 
         $factions = [
@@ -60,9 +58,8 @@ class FactionsSeeder extends Seeder
         }
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('factions')->truncate();
-        DB::table('files')->where('model_class', Faction::class)->delete();
+        return [Faction::class];
     }
 }

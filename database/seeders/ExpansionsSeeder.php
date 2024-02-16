@@ -6,19 +6,16 @@ use App\Models\Expansion;
 use App\Models\File;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class ExpansionsSeeder extends Seeder
+class ExpansionsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding known Expansions');
 
         $expansions = [
@@ -67,7 +64,7 @@ class ExpansionsSeeder extends Seeder
                 'shortname'   => Expansion::EXPANSION_WOD,
                 'color'       => '#875f03',
                 'released_at' => Carbon::make('2014-11-13 00:00:00'),
-            ]), 'expansions.dragonflight.name'                => new Expansion([
+            ]), 'expansions.dragonflight.name'       => new Expansion([
                 'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_DRAGONFLIGHT,
                 'color'       => '#b0a497',
@@ -95,9 +92,8 @@ class ExpansionsSeeder extends Seeder
         }
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('expansions')->truncate();
-        DB::table('files')->where('model_class', Expansion::class)->delete();
+        return [Expansion::class];
     }
 }

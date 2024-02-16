@@ -23,13 +23,14 @@ $showNoAttributes = $showNoAttributes ?? false;
     $routeAttributes = $allRouteAttributes->groupBy('category');
 
     if ($showNoAttributes) {
+        $routeAttributes['meta'] = new \Illuminate\Support\Collection(
         // Create a dummy attribute which users can tick on/off to include routes with no attributes.
-        $noAttributes              = new \App\Models\RouteAttribute();
-        $noAttributes->id          = -1;
-        $noAttributes->name        = 'no-attributes';
-        $noAttributes->description = 'No attributes';
-
-        $routeAttributes['meta'] = new \Illuminate\Support\Collection([$noAttributes]);
+            new \App\Models\RouteAttribute([
+                'id'   => -1,
+                'key'  => 'no_attributes',
+                'name' => 'routeattributes.no_attributes',
+            ])
+        );
     }
 
     /** @var \Illuminate\Support\Collection $routeAttributes */
@@ -42,10 +43,10 @@ $showNoAttributes = $showNoAttributes ?? false;
         @foreach ($routeAttributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">
                 @foreach ($categoryAttributes as $attribute)
-                <option value="{{ $attribute->id }}"
-                    {{ in_array($attribute->id, $selectedIds) ? 'selected' : '' }}>
-                    {{ $attribute->description }}
-                </option>
+                    <option value="{{ $attribute->id }}"
+                        {{ in_array($attribute->id, $selectedIds) ? 'selected' : '' }}>
+                        {{ __($attribute->name) }}
+                    </option>
                 @endforeach
             </optgroup>
         @endforeach

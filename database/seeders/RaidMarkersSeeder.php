@@ -4,29 +4,29 @@ namespace Database\Seeders;
 
 use App\Models\RaidMarker;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class RaidMarkersSeeder extends Seeder
+class RaidMarkersSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
+        $raidMarkerAttributes = [];
         foreach (RaidMarker::ALL as $raidMarkerName => $id) {
-            RaidMarker::create([
+            $raidMarkerAttributes[] = [
                 'id'   => $id,
                 'name' => $raidMarkerName,
-            ]);
+            ];
         }
+
+        RaidMarker::insert($raidMarkerAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('raid_markers')->truncate();
+        return [RaidMarker::class];
     }
 }

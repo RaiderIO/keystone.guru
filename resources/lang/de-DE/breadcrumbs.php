@@ -8,6 +8,10 @@ return [
         'routes'           => '@todo de: .home.routes',
         'routes_expansion' => '@todo de: .home.routes_expansion',
 
+        'dungeon' => [
+            'explore' => '@todo de-DE: .home.dungeon.explore'
+        ],
+
         'dungeonroutes' => [
             'search'            => '@todo de: .home.dungeonroutes.search',
             'popular'           => '@todo de: .home.dungeonroutes.popular',
@@ -15,8 +19,8 @@ return [
             'this_week_affixes' => '@todo de: .home.dungeonroutes.this_week_affixes',
             'new'               => '@todo de: .home.dungeonroutes.new',
 
-            'routes_season'            => '@todo de-DE: .home.dungeonroutes.routes_season',
-            'season' => [
+            'routes_season' => '@todo de-DE: .home.dungeonroutes.routes_season',
+            'season'        => [
                 'popular'           => '@todo de-DE: .home.dungeonroutes.season.popular',
                 'next_week_affixes' => '@todo de-DE: .home.dungeonroutes.season.next_week_affixes',
                 'this_week_affixes' => '@todo de-DE: .home.dungeonroutes.season.this_week_affixes',
@@ -81,6 +85,10 @@ return [
                 'npcs'     => '@todo de: .home.admin.npcs.npcs',
                 'new_npc'  => '@todo de: .home.admin.npcs.new_npc',
                 'edit_npc' => '@todo de: .home.admin.npcs.edit_npc',
+            ],
+
+            'npcenemyforces' => [
+                'edit_npc_enemy_forces' => '@todo de-DE: .home.admin.npcenemyforces.edit_npc_enemy_forces',
             ],
 
             'spells' => [

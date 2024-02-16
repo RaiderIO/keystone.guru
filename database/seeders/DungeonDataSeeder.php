@@ -3,9 +3,25 @@
 namespace Database\Seeders;
 
 use App\Logic\Utils\Stopwatch;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Expansion;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
+use App\Models\Floor\FloorUnion;
+use App\Models\Floor\FloorUnionArea;
+use App\Models\Mapping\MappingCommitLog;
+use App\Models\Mapping\MappingVersion;
+use App\Models\MountableArea;
+use App\Models\Npc;
+use App\Models\Npc\NpcEnemyForces;
+use App\Models\NpcBolsteringWhitelist;
+use App\Models\NpcSpell;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Spell;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
@@ -31,7 +47,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use SplFileInfo;
 
-class DungeonDataSeeder extends Seeder
+class DungeonDataSeeder extends Seeder implements TableSeederInterface
 {
     private const DUNGEON_DATA_DIR = 'seeders/dungeondata/';
 
@@ -74,7 +90,7 @@ class DungeonDataSeeder extends Seeder
      * @return void
      * @throws Exception
      */
-    public function run()
+    public function run(): void
     {
         // Just a base class
         $this->rollback();
@@ -242,9 +258,9 @@ class DungeonDataSeeder extends Seeder
     }
 
     /**
-     * @param string            $rootDir
-     * @param string            $filePath
-     * @param integer           $depth
+     * @param string  $rootDir
+     * @param string  $filePath
+     * @param integer $depth
      *
      * @throws Exception
      */
@@ -365,7 +381,7 @@ class DungeonDataSeeder extends Seeder
                 $updatedModels++;
 
             } // If we should do some post processing, create & save it now so that we can do just that
-            elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
+            else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 $createdModel = $mapping->getClass()::create($modelData);
                 $updatedModels++;
             } // We don't need to do post processing, add it to the list to be saved
@@ -431,31 +447,34 @@ class DungeonDataSeeder extends Seeder
                 $this->command->error(sprintf('%s: Exception deleting demo dungeonroute', $ex->getMessage()));
             }
         }
-
-        DB::table('mapping_versions')->truncate();
-        DB::table('mapping_commit_logs')->truncate();
-        DB::table('spells')->truncate();
-        DB::table('npcs')->truncate();
-        DB::table('npc_bolstering_whitelists')->truncate();
-        DB::table('npc_enemy_forces')->truncate();
-        DB::table('npc_spells')->truncate();
-        DB::table('enemies')->truncate();
-        DB::table('enemy_packs')->truncate();
-        DB::table('enemy_patrols')->truncate();
-        DB::table('dungeon_floor_switch_markers')->truncate();
-        DB::table('mountable_areas')->truncate();
-        DB::table('floor_unions')->truncate();
-        DB::table('floor_union_areas')->truncate();
-        DB::table('dungeon_speedrun_required_npcs')->truncate();
         // Delete all map icons that are always there
         DB::table('map_icons')->whereNull('dungeon_route_id')->whereNull('team_id')->delete();
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
+    }
 
-        // Truncating these before the above will cause some issues
-        // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset
-        // DB::table('dungeons')->truncate();
-        DB::table('floors')->truncate();
-        DB::table('floor_couplings')->truncate();
+    public static function getAffectedModelClasses(): array
+    {
+        return [
+            MappingVersion::class,
+            MappingCommitLog::class,
+            Spell::class,
+            Npc::class,
+            NpcBolsteringWhitelist::class,
+            NpcEnemyForces::class,
+            NpcSpell::class,
+            Enemy::class,
+            EnemyPack::class,
+            EnemyPatrol::class,
+            DungeonFloorSwitchMarker::class,
+            MountableArea::class,
+            FloorUnion::class,
+            FloorUnionArea::class,
+            DungeonSpeedrunRequiredNpc::class,
+            // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset
+            // Dungeon::class,
+            Floor::class,
+            FloorCoupling::class,
+        ];
     }
 }
