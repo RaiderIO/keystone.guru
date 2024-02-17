@@ -64,7 +64,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
 
         foreach ($affixes as $affix) {
             /** @var Affix $affix */
-            $affix->save();
+            $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
 
             $iconName          = strtolower(str_replace(' ', '', $affix->key));
             $icon              = new File();
@@ -75,7 +75,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             $icon->save();
 
             $affix->icon_file_id = $icon->id;
-            $affix->save();
+            $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
         }
 
         /** @var Collection|Expansion[] $expansions */

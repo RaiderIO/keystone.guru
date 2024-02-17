@@ -55,7 +55,7 @@ class FactionsSeeder extends Seeder implements TableSeederInterface
             $icon->save();
 
             $faction->icon_file_id = $icon->id;
-            $faction->save();
+            $faction->setTable(DatabaseSeeder::getTempTableName(Faction::class))->save();
         }
     }
 

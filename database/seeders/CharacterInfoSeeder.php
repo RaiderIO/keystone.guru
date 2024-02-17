@@ -64,7 +64,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
         foreach ($races as $name => $race) {
             /** @var CharacterRace $race */
             $race->name = $name;
-            $race->save();
+            $race->setTable(DatabaseSeeder::getTempTableName(CharacterRace::class))->save();
         }
 
         $this->command->info('Adding known classes');
@@ -88,15 +88,15 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
         $classes = [];
         foreach (CharacterClass::ALL as $characterClassKey) {
             $class = new CharacterClass([
-                'name'  => sprintf('classes.%s', $characterClassKey),
                 'key'   => $characterClassKey,
+                'name'  => sprintf('classes.%s', $characterClassKey),
                 'color' => $classColors[$characterClassKey],
             ]);
 
             // Temp file
             $class->icon_file_id = -1;
             /** @var $race Model */
-            $class->save();
+            $class->setTable(DatabaseSeeder::getTempTableName(CharacterClass::class))->save();
 
             $iconName          = strtolower(str_replace(' ', '', $class->name));
             $icon              = new File();
@@ -107,7 +107,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
             $icon->save();
 
             $class->icon_file_id = $icon->id;
-            $class->save();
+            $class->setTable(DatabaseSeeder::getTempTableName(CharacterClass::class))->save();
 
             $classes[$class->name] = $class;
         }
@@ -252,7 +252,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
                 $specialization->character_class_id = $class->id;
                 // Dummy file ID
                 $specialization->icon_file_id = -1;
-                $specialization->save();
+                $specialization->setTable(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))->save();
 
                 $icon              = new File();
                 $icon->model_id    = $specialization->id;
@@ -262,7 +262,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
                 $icon->save();
 
                 $specialization->icon_file_id = $icon->id;
-                $specialization->save();
+                $specialization->setTable(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))->save();
             }
         }
     }

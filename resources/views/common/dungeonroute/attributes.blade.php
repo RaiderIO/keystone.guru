@@ -23,14 +23,14 @@ $showNoAttributes = $showNoAttributes ?? false;
     $routeAttributes = $allRouteAttributes->groupBy('category');
 
     if ($showNoAttributes) {
-        $routeAttributes['meta'] = new \Illuminate\Support\Collection(
+        $routeAttributes['meta'] = collect([
         // Create a dummy attribute which users can tick on/off to include routes with no attributes.
             new \App\Models\RouteAttribute([
                 'id'   => -1,
                 'key'  => 'no_attributes',
                 'name' => 'routeattributes.no_attributes',
             ])
-        );
+        ]);
     }
 
     /** @var \Illuminate\Support\Collection $routeAttributes */

@@ -93,11 +93,10 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
         DungeonRoute::with(['dungeon'])
             ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->whereNull('mapping_version_id')
-            ->chunk(100, function (Collection $dungeonRoutes) use ($count) {
+            ->chunk(100, function (Collection $dungeonRoutes) use (&$count) {
                 /** @var Collection|DungeonRoute[] $dungeonRoutes */
                 foreach ($dungeonRoutes as $dungeonRoute) {
-                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->currentMappingVersion->id;
-                    $dungeonRoute->save();
+                    $dungeonRoute->update(['mapping_version_id' => $dungeonRoute->dungeon->currentMappingVersion->id]);
                 }
 
                 $count += $dungeonRoutes->count();

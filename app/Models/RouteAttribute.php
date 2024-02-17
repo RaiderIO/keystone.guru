@@ -18,6 +18,12 @@ class RouteAttribute extends Model
 {
     use SeederModel;
 
+    public $timestamps = false;
+
+    public $hidden = ['id', 'pivot'];
+
+    protected $fillable = ['id', 'category', 'key', 'name'];
+
     public const ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP        = 'rogue_shroud_skip';
     public const ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP        = 'warlock_gate_skip';
     public const ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP      = 'mage_slow_fall_skip';
@@ -31,8 +37,4 @@ class RouteAttribute extends Model
         self::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP,
         self::ROUTE_ATTRIBUTE_DEATH_SKIP,
     ];
-
-    public $timestamps = false;
-
-    public $hidden = ['id', 'pivot'];
 }
