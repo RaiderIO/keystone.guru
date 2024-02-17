@@ -26,7 +26,7 @@
                 "source": {
                     "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
                     "type": "git",
-                    "reference": "14bbfc0880735c2f5b25fcb6e11ae55aa2ac0a94"
+                    "reference": "6462aaec160e561431344167208bdf212f8ff059"
                 }
             }
         },

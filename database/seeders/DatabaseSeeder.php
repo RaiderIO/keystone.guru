@@ -154,7 +154,6 @@ class DatabaseSeeder extends Seeder
         // Remove contents from old table, replace it with contents from new table
 //        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
         DB::table($tableNameOld)->truncate();
-        DB::table('files')->where('model_class', $className)->delete();
 
         return DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s;', $tableNameOld, $tableNameNew));
 //        });
