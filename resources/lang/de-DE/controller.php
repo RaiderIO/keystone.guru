@@ -4,6 +4,7 @@
 return [
     'admintools'                  => [
         'error' => [
+            'mdt_string_parsing_failed'           => '@todo de-DE: .admintools.error.mdt_string_parsing_failed',
             'mdt_string_format_not_recognized'    => '@todo de: .admintools.error.mdt_string_format_not_recognized',
             'invalid_mdt_string'                  => '@todo de: .admintools.error.invalid_mdt_string',
             'invalid_mdt_string_exception'        => '@todo de: .admintools.error.invalid_mdt_string_exception',
@@ -17,6 +18,7 @@ return [
             'mdt_invalid_category'                => '@todo de: .admintools.error.mdt_invalid_category',
         ],
         'flash' => [
+            'thumbnail_regenerate_result' => '@todo de-DE: .admintools.flash.thumbnail_regenerate_result',
             'caches_dropped_successfully' => '@todo de: .admintools.flash.caches_dropped_successfully',
             'releases_exported'           => '@todo de: .admintools.flash.releases_exported',
             'exception'                   => [
@@ -33,6 +35,12 @@ return [
         'error' => [
             'unable_to_update_user_report' => '@todo de: .apiuserreport.error.unable_to_update_user_report',
             'unable_to_save_report'        => '@todo de: .apiuserreport.error.unable_to_save_report',
+        ],
+    ],
+    'brushline'                   => [
+        'error' => [
+            'unable_to_save_brushline'   => '@todo de-DE: .brushline.error.unable_to_save_brushline',
+            'unable_to_delete_brushline' => '@todo de-DE: .brushline.error.unable_to_delete_brushline',
         ],
     ],
     'dungeon'                     => [
@@ -81,11 +89,18 @@ return [
             'expansion_created'        => '@todo de: .expansion.flash.expansion_created',
         ],
     ],
+    'generic'                     => [
+        'error' => [
+            'floor_not_found_in_dungeon' => '@todo de-DE: .generic.error.floor_not_found_in_dungeon',
+            'not_found'                  => '@todo de-DE: .generic.error.not_found',
+        ],
+    ],
     'oauthlogin'                  => [
         'flash' => [
             'registered_successfully' => '@todo de: .oauthlogin.flash.registered_successfully',
             'user_exists'             => '@todo de: .oauthlogin.flash.user_exists',
             'email_exists'            => '@todo de: .oauthlogin.flash.email_exists',
+            'permission_denied'       => '@todo de-DE: .oauthlogin.flash.permission_denied',
         ],
     ],
     'register'                    => [
@@ -112,11 +127,18 @@ return [
     'mdtimport'                   => [
         'unknown_dungeon' => '@todo de: .mdtimport.unknown_dungeon',
         'error'           => [
+            'mdt_string_parsing_failed'             => '@todo de-DE: .mdtimport.error.mdt_string_parsing_failed',
             'mdt_string_format_not_recognized'      => '@todo de: .mdtimport.error.mdt_string_format_not_recognized',
             'invalid_mdt_string_exception'          => '@todo de: .mdtimport.error.invalid_mdt_string_exception',
             'invalid_mdt_string'                    => '@todo de: .mdtimport.error.invalid_mdt_string',
             'mdt_importer_not_configured_properly'  => '@todo de: .mdtimport.error.mdt_importer_not_configured_properly',
             'cannot_create_route_must_be_logged_in' => '@todo de: .mdtimport.error.cannot_create_route_must_be_logged_in',
+        ],
+    ],
+    'path'                        => [
+        'error' => [
+            'unable_to_save_path'   => '@todo de-DE: .path.error.unable_to_save_path',
+            'unable_to_delete_path' => '@todo de-DE: .path.error.unable_to_delete_path',
         ],
     ],
     'patreon'                     => [
@@ -168,12 +190,14 @@ return [
     ],
     'user'                        => [
         'flash' => [
-            'user_is_now_an_admin'         => '@todo de: .user.flash.user_is_now_an_admin',
-            'user_is_no_longer_an_admin'   => '@todo de: .user.flash.user_is_no_longer_an_admin',
-            'user_is_now_a_user'           => '@todo de: .user.flash.user_is_now_a_user',
-            'account_deleted_successfully' => '@todo de: .user.flash.account_deleted_successfully',
-            'account_deletion_error'       => '@todo de: .user.flash.account_deletion_error',
-            'user_is_not_a_patron'         => '@todo de: .user.flash.user_is_not_a_patron',
+            'user_is_now_an_admin'              => '@todo de: .user.flash.user_is_now_an_admin',
+            'user_is_no_longer_an_admin'        => '@todo de: .user.flash.user_is_no_longer_an_admin',
+            'user_is_now_a_user'                => '@todo de: .user.flash.user_is_now_a_user',
+            'account_deleted_successfully'      => '@todo de: .user.flash.account_deleted_successfully',
+            'account_deletion_error'            => '@todo de: .user.flash.account_deletion_error',
+            'user_is_not_a_patron'              => '@todo de: .user.flash.user_is_not_a_patron',
+            'all_benefits_granted_successfully' => '@todo de-DE: .user.flash.all_benefits_granted_successfully',
+            'error_granting_all_benefits'       => '@todo de-DE: .user.flash.error_granting_all_benefits',
         ],
     ],
 ];

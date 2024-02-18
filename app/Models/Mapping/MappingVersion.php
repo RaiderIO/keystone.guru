@@ -16,6 +16,7 @@ use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\Carbon;
 use Eloquent;
@@ -56,6 +57,7 @@ use Illuminate\Support\Collection;
  */
 class MappingVersion extends Model
 {
+    use SeederModel;
     use HasFactory;
 
     protected $visible = [

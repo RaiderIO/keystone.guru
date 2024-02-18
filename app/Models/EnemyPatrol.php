@@ -6,6 +6,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  */
 class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use SeederModel;
+
     public    $visible    = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
     protected $fillable   = [
         'id',
@@ -106,10 +109,9 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
         parent::boot();
 
         // Delete patrol properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item EnemyPatrol */
-            if ($item->polyline !== null) {
-                $item->polyline->delete();
+        static::deleting(function (EnemyPatrol $enemyPatrol) {
+            if ($enemyPatrol->polyline !== null) {
+                $enemyPatrol->polyline->delete();
             }
         });
     }

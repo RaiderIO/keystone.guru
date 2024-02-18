@@ -11,4 +11,6 @@ return [
     'mdt_exporter_changes'     => '@todo de-DE: .mdt_exporter_changes',
     'live_session_changes'     => '@todo de-DE: .live_session_changes',
     'simulation_craft_changes' => '@todo de-DE: .simulation_craft_changes',
+    'auto_route_changes'       => '@todo de-DE: .auto_route_changes',
+    'api_changes'              => '@todo de-DE: .api_changes',
 ];

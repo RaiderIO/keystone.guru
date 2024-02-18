@@ -92,6 +92,8 @@ class ViewService implements ViewServiceInterface
                     return [__($key) => $spells];
                 });
 
+            $appRevision = trim(file_get_contents(base_path('version')));
+
             return [
                 'isProduction'                    => config('app.env') === 'production',
                 'demoRoutes'                      => $demoRoutes,
@@ -102,8 +104,14 @@ class ViewService implements ViewServiceInterface
                     }),
                 'latestRelease'                   => $latestRelease,
                 'latestReleaseSpotlight'          => $latestReleaseSpotlight,
-                'appVersion'                      => GitVersionHelper::getVersion(),
-                'appVersionAndName'               => GitVersionHelper::getNameAndVersion(),
+                'appVersion'                      => $latestRelease->version,
+                'appRevision'                     => $appRevision,
+                'appVersionAndName'               => sprintf(
+                    '%s/%s-%s',
+                    config('app.name'),
+                    $latestRelease->version,
+                    substr($appRevision, 0, 6)
+                ),
 
                 // Home
                 'userCount'                       => User::count(),
@@ -122,7 +130,7 @@ class ViewService implements ViewServiceInterface
                 'characterClasses'                => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
                 'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
-                'allAffixes'                         => Affix::all(),
+                'allAffixes'                      => Affix::all(),
                 'allRouteAttributes'              => RouteAttribute::all(),
                 'allPublishedStates'              => PublishedState::all(),
                 'selectableSpellsByCategory'      => $selectableSpellsByCategory,

@@ -4,21 +4,33 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Traits\SeederModel;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $name
+ * @property int                       $id
+ * @property string                    $name
  *
- * @property Collection|DungeonRoute[] $dungeonroutes
+ * @property Collection|DungeonRoute[] $dungeonRoutes
  *
  * @mixin Eloquent
  */
 class PublishedState extends CacheModel
 {
+    use SeederModel;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'id',
+        'name',
+    ];
+
+    protected $hidden = ['pivot'];
+
     public const UNPUBLISHED     = 'unpublished';
     public const TEAM            = 'team';
     public const WORLD_WITH_LINK = 'world_with_link';
@@ -31,25 +43,17 @@ class PublishedState extends CacheModel
         self::WORLD           => 4,
     ];
 
-    public $timestamps = false;
-
-    protected $fillable = [
-        'id', 'name',
-    ];
-
-    protected $hidden = ['pivot'];
-
     /**
      * @return HasMany
      */
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
 
     /**
      * @param DungeonRoute $dungeonRoute
-     * @param User|null $user
+     * @param User|null    $user
      * @return Collection|string[]
      */
     public static function getAvailablePublishedStates(DungeonRoute $dungeonRoute, ?User $user = null): Collection
@@ -69,15 +73,5 @@ class PublishedState extends CacheModel
         }
 
         return $result;
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
     }
 }

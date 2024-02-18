@@ -4,6 +4,7 @@ return [
     'death_knight' => '@todo de: .death_knight',
     'demon_hunter' => '@todo de: .demon_hunter',
     'druid'        => '@todo de: .druid',
+    'evoker'       => '@todo de-DE: .evoker',
     'hunter'       => '@todo de: .hunter',
     'mage'         => '@todo de: .mage',
     'monk'         => '@todo de: .monk',

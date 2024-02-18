@@ -21,6 +21,18 @@
         {
             "type": "package",
             "package": {
+                "name": "wotuu/keystone.guru.deployer",
+                "version": "0.1",
+                "source": {
+                    "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
+                    "type": "git",
+                    "reference": "6462aaec160e561431344167208bdf212f8ff059"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
                 "name": "nnoggie/mythicdungeontools",
                 "version": "4.3.3.5",
                 "source": {
@@ -75,9 +87,11 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
+        "deployer/deployer": "^7.3",
         "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.0",
+        "wotuu/keystone.guru.deployer": "0.1"
     },
     "autoload": {
         "classmap": [

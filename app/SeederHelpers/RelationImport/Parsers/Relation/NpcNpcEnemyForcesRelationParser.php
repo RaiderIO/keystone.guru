@@ -5,6 +5,7 @@ namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcSpell;
+use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcEnemyForcesRelationParser implements RelationParserInterface
 {
@@ -45,7 +46,7 @@ class NpcNpcEnemyForcesRelationParser implements RelationParserInterface
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
-        NpcEnemyForces::insert($value);
+        NpcEnemyForces::from(DatabaseSeeder::getTempTableName(NpcEnemyForces::class))->insert($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

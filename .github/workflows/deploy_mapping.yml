@@ -6,23 +6,22 @@ on:
     branches: development
 
 jobs:
-  deploy-mapping:
+  deploy:
+    name: Deploy to Mapping
     runs-on: ubuntu-latest
-
     steps:
-      - name: Update mapping environment
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v4
+      - name: Composer install
+        uses: php-actions/composer@v6
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          script: cd /var/www/html/keystone.guru.mapping/;
-            php artisan readonly:enable &&
-            php artisan db:backup &&
-            php artisan mapping:sync --force=true;
-            php artisan up;
-            php artisan down --render="errors::503" --retry 60;
-            php artisan environment:updateprepare mapping &&
-            php artisan environment:update mapping;
-            php artisan readonly:disable &&
-            php artisan up
+          php_version: "7.4"
+          args: "--ignore-platform-req=ext-lua --ignore-platform-req=ext-zip --ignore-platform-req=ext-pcntl"
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.DEPLOYER_PAT }}"} }'
+      - name: Setup Deployer
+        uses: atymic/deployer-php-action@0.3.1
+        with:
+          ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
+          ssh-known-hosts: ${{ secrets.DEPLOYER_SSH_KNOWN_HOSTS }}
+      - name: Deploy
+        run: dep deploy mapping.keystone.guru --branch=mapping -vvv

@@ -9,6 +9,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Traits\SeederModel;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,13 +61,7 @@ use Mockery\Exception;
  */
 class Dungeon extends CacheModel implements MappingModelInterface
 {
-    const DIFFICULTY_10_MAN = 1;
-    const DIFFICULTY_25_MAN = 2;
-
-    const DIFFICULTY_ALL = [
-        self::DIFFICULTY_10_MAN,
-        self::DIFFICULTY_25_MAN,
-    ];
+    use SeederModel;
 
     /**
      * The accessors to append to the model's array form.
@@ -92,6 +87,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public $with       = ['expansion', 'gameVersion', 'floors'];
     public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
+
+    const DIFFICULTY_10_MAN = 1;
+    const DIFFICULTY_25_MAN = 2;
+
+    const DIFFICULTY_ALL = [
+        self::DIFFICULTY_10_MAN,
+        self::DIFFICULTY_25_MAN,
+    ];
 
     // Classic
     const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps';     //blackfanthomdeeps
@@ -973,22 +976,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public
-    static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
-
     /**
      * @return int|null
      */
-    public
-    function getDungeonId(): ?int
+    public function getDungeonId(): ?int
     {
         return $this->id;
     }

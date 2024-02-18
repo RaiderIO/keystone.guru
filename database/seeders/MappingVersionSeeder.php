@@ -17,14 +17,14 @@ use Illuminate\Support\Collection;
  * @author Wouter
  * @since 30/10/2022
  */
-class MappingVersionSeeder extends Seeder
+class MappingVersionSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Refresh the mapping versions so that we're sure we get the latest info
         Artisan::call('modelCache:clear', ['--model' => MappingVersion::class]);
@@ -93,16 +93,20 @@ class MappingVersionSeeder extends Seeder
         DungeonRoute::with(['dungeon'])
             ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->whereNull('mapping_version_id')
-            ->chunk(100, function (Collection $dungeonRoutes) use ($count) {
+            ->chunk(100, function (Collection $dungeonRoutes) use (&$count) {
                 /** @var Collection|DungeonRoute[] $dungeonRoutes */
                 foreach ($dungeonRoutes as $dungeonRoute) {
-                    $dungeonRoute->mapping_version_id = $dungeonRoute->dungeon->currentMappingVersion->id;
-                    $dungeonRoute->save();
+                    $dungeonRoute->update(['mapping_version_id' => $dungeonRoute->dungeon->currentMappingVersion->id]);
                 }
 
                 $count += $dungeonRoutes->count();
 
                 $this->command->info(sprintf('- Processed %d dungeon routes...', $count));
             });
+    }
+
+    public static function getAffectedModelClasses(): array
+    {
+        return [];
     }
 }

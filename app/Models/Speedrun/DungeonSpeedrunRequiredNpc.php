@@ -6,6 +6,7 @@ use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Npc;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonSpeedrunRequiredNpc extends CacheModel
 {
+    use SeederModel;
 
     protected $visible = [
         'id',

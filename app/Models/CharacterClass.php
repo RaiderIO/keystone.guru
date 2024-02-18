@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,7 @@ use Illuminate\Support\Collection;
  */
 class CharacterClass extends CacheModel
 {
+    use SeederModel;
     use HasIconFile;
 
     public $timestamps = false;
@@ -91,15 +93,5 @@ class CharacterClass extends CacheModel
     public function dungeonrouteplayerraces(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
     }
 }

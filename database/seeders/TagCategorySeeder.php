@@ -5,19 +5,16 @@ namespace Database\Seeders;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\TagCategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class TagCategorySeeder extends Seeder
+class TagCategorySeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding Tag Categories');
 
         $tagCategories = [
@@ -25,18 +22,19 @@ class TagCategorySeeder extends Seeder
             TagCategory::DUNGEON_ROUTE_TEAM     => DungeonRoute::class,
         ];
 
+        $tagCategoryAttributes = [];
         foreach ($tagCategories as $tagCategory => $class) {
-            TagCategory::create([
-                'id'          => TagCategory::ALL[$tagCategory],
+            $tagCategoryAttributes[] = [
                 'name'        => $tagCategory,
                 'model_class' => $class,
-            ]);
+            ];
         }
+
+        TagCategory::from(DatabaseSeeder::getTempTableName(TagCategory::class))->insert($tagCategoryAttributes);
     }
 
-
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('tag_categories')->truncate();
+        return [TagCategory::class];
     }
 }

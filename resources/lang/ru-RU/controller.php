@@ -4,6 +4,7 @@
 return [
     'admintools'                  => [
         'error' => [
+            'mdt_string_parsing_failed'           => '@todo ru-RU: .admintools.error.mdt_string_parsing_failed',
             'mdt_string_format_not_recognized'    => 'Формат строки MDT не распознан.',
             'invalid_mdt_string'                  => 'Неверная строка MDT',
             'invalid_mdt_string_exception'        => 'Неверная строка MDT: %s',
@@ -17,6 +18,7 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
+            'thumbnail_regenerate_result' => '@todo ru-RU: .admintools.flash.thumbnail_regenerate_result',
             'caches_dropped_successfully' => 'Кеш сброшен успешно',
             'releases_exported'           => 'Релизы экспортированы',
             'exception'                   => [
@@ -33,6 +35,12 @@ return [
         'error' => [
             'unable_to_update_user_report' => 'Невозможно обновить отчет пользователя',
             'unable_to_save_report'        => 'Невозможно сохранить отчет',
+        ],
+    ],
+    'brushline'                   => [
+        'error' => [
+            'unable_to_save_brushline'   => '@todo ru-RU: .brushline.error.unable_to_save_brushline',
+            'unable_to_delete_brushline' => '@todo ru-RU: .brushline.error.unable_to_delete_brushline',
         ],
     ],
     'dungeon'                     => [
@@ -81,6 +89,12 @@ return [
             'expansion_created'        => 'Дополнение создано',
         ],
     ],
+    'generic'                     => [
+        'error' => [
+            'floor_not_found_in_dungeon' => '@todo ru-RU: .generic.error.floor_not_found_in_dungeon',
+            'not_found'                  => '@todo ru-RU: .generic.error.not_found',
+        ],
+    ],
     'oauthlogin'                  => [
         'flash' => [
             'registered_successfully' => 'Регистрация прошла успешно.',
@@ -113,11 +127,18 @@ return [
     'mdtimport'                   => [
         'unknown_dungeon' => 'Неизвестное подземелье',
         'error'           => [
+            'mdt_string_parsing_failed'             => '@todo ru-RU: .mdtimport.error.mdt_string_parsing_failed',
             'mdt_string_format_not_recognized'      => 'Формат строки MDT не распознан.',
             'invalid_mdt_string_exception'          => 'Недействительная строка MDT: %s',
             'invalid_mdt_string'                    => 'Недействительная строка MDT',
             'mdt_importer_not_configured_properly'  => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',
             'cannot_create_route_must_be_logged_in' => 'Вы должны авторизоваться, чтобы создать маршрут',
+        ],
+    ],
+    'path'                        => [
+        'error' => [
+            'unable_to_save_path'   => '@todo ru-RU: .path.error.unable_to_save_path',
+            'unable_to_delete_path' => '@todo ru-RU: .path.error.unable_to_delete_path',
         ],
     ],
     'patreon'                     => [
@@ -176,7 +197,7 @@ return [
             'account_deletion_error'            => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
             'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',
             'all_benefits_granted_successfully' => '@todo ru-RU: .user.flash.all_benefits_granted_successfully',
-            'error_granting_all_benefits'       => '@todo ru-RU: .user.flash.error_granting_all_benefits'
+            'error_granting_all_benefits'       => '@todo ru-RU: .user.flash.error_granting_all_benefits',
         ],
     ],
 ];

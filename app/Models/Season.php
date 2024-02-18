@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasStart;
+use App\Models\Traits\SeederModel;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Eloquent;
@@ -16,29 +17,30 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int $id
- * @property int $expansion_id
- * @property int $seasonal_affix_id
- * @property int $index
- * @property Carbon $start
- * @property int $presets
- * @property int $affix_group_count
- * @property int $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property string $name Dynamic attribute
+ * @property int                     $id
+ * @property int                     $expansion_id
+ * @property int                     $seasonal_affix_id
+ * @property int                     $index
+ * @property Carbon                  $start
+ * @property int                     $presets
+ * @property int                     $affix_group_count
+ * @property int                     $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property string                  $name Dynamic attribute
  *
- * @property Expansion $expansion
+ * @property Expansion               $expansion
  * @property Collection|AffixGroup[] $affixgroups
- * @property Collection|Dungeon[] $dungeons
+ * @property Collection|Dungeon[]    $dungeons
  *
  * @mixin Eloquent
  */
 class Season extends CacheModel
 {
+    use SeederModel;
     use HasStart;
 
-    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count', 'start_affix_group_index'];
-    public $with = ['expansion', 'affixgroups', 'dungeons'];
-    public $timestamps = false;
+    protected $fillable   = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count', 'start_affix_group_index'];
+    public    $with       = ['expansion', 'affixgroups', 'dungeons'];
+    public    $timestamps = false;
 
     protected $appends = ['name'];
 
@@ -168,6 +170,7 @@ class Season extends CacheModel
             ]);
             throw $ex;
         }
+
         return $result;
     }
 
@@ -189,6 +192,7 @@ class Season extends CacheModel
             ]);
             throw $ex;
         }
+
         return $result;
     }
 
@@ -208,6 +212,7 @@ class Season extends CacheModel
             ]);
             throw new Exception('Error getting current affix group');
         }
+
         return $result;
     }
 
@@ -227,6 +232,7 @@ class Season extends CacheModel
             ]);
             throw new Exception('Error getting current affix group');
         }
+
         return $result;
     }
 
@@ -234,7 +240,7 @@ class Season extends CacheModel
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param Carbon $date The date at which you want to know the affix group.
+     * @param Carbon           $date The date at which you want to know the affix group.
      * @param GameServerRegion $region
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      * @throws Exception
@@ -268,7 +274,7 @@ class Season extends CacheModel
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region          = GameServerRegion::getUserOrDefaultRegion();
         $startIndex      = $this->affixgroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );

@@ -4,31 +4,31 @@ namespace Database\Seeders;
 
 use App\Models\PublishedState;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class PublishedStatesSeeder extends Seeder
+class PublishedStatesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding Published States');
 
+        $publishedStateAttributes = [];
         foreach (PublishedState::ALL as $publishedStateName => $id) {
-            PublishedState::create([
+            $publishedStateAttributes[] = [
                 'id'   => $id,
                 'name' => $publishedStateName,
-            ]);
+            ];
         }
+
+        PublishedState::from(DatabaseSeeder::getTempTableName(PublishedState::class))->insert($publishedStateAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('published_states')->truncate();
+        return [PublishedState::class];
     }
 }

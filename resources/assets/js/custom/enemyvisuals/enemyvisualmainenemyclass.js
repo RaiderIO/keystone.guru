@@ -21,12 +21,12 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
             'enchanted',
             'tide',
             'void',
-            'caster/melee',
-            'healer/caster',
-            'healer/melee',
-            'ranged/caster',
-            'ranged/healer',
-            'ranged/melee',
+            'caster_melee',
+            'healer_caster',
+            'healer_melee',
+            'ranged_caster',
+            'ranged_healer',
+            'ranged_melee',
         ];
     }
 
@@ -58,7 +58,7 @@ class EnemyVisualMainEnemyClass extends EnemyVisualMain {
                 } else if (npc.id === 155434) {
                     this.iconName = 'tide';
                 } else {
-                    this.iconName = npc.class.name.toLowerCase().replace('/', '');
+                    this.iconName = npc.class.key;
                 }
             }
         }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -19,6 +20,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Affix extends CacheModel
 {
+    use SeederModel;
+    use HasIconFile;
+
+    public $hidden = ['icon_file_id', 'pivot'];
+
+    public $timestamps = false;
+
+    protected $fillable = ['id', 'icon_file_id', 'affix_id', 'key', 'name', 'description'];
+
+
     const AFFIX_BOLSTERING  = 'Bolstering';
     const AFFIX_BURSTING    = 'Bursting';
     const AFFIX_EXPLOSIVE   = 'Explosive';
@@ -104,12 +115,6 @@ class Affix extends CacheModel
         Enemy::SEASONAL_TYPE_TORMENTED          => Affix::AFFIX_TORMENTED,
         Enemy::SEASONAL_TYPE_PRIDEFUL           => Affix::AFFIX_PRIDEFUL,
     ];
-
-    use HasIconFile;
-
-    public $hidden = ['icon_file_id', 'pivot'];
-
-    public $timestamps = false;
 
     /**
      * @return BelongsToMany
