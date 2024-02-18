@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $enemy_id
- * @property int $spell_id
+ * @property int   $id
+ * @property int   $enemy_id
+ * @property int   $spell_id
  *
  * @property Enemy $enemy
  * @property Spell $spell
@@ -17,7 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class EnemyActiveAura extends CacheModel
 {
-    public $visible = ['id', 'enemy_id', 'spell_id'];
+    use SeederModel;
+
+    public $visible    = ['id', 'enemy_id', 'spell_id'];
     public $timestamps = false;
 
     /**

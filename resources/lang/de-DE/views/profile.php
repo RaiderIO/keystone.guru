@@ -36,11 +36,12 @@ return [
         'account_delete_warning'                           => '@todo de: .edit.account_delete_warning',
         'account_delete_confirm'                           => '@todo de: .edit.account_delete_confirm',
 
-        'unlink_from_patreon'         => '@todo de: .edit.unlink_from_patreon',
-        'link_to_patreon_success'     => '@todo de: .edit.link_to_patreon_success',
-        'link_to_patreon'             => '@todo de: .edit.link_to_patreon',
-        'link_to_patreon_description' => '@todo de: .edit.link_to_patreon_description',
-        'patreon_benefit_table'             => [
+        'unlink_from_patreon'             => '@todo de: .edit.unlink_from_patreon',
+        'patreon_status_granted_manually' => '@todo de-DE: .edit.patreon_status_granted_manually',
+        'link_to_patreon_success'         => '@todo de: .edit.link_to_patreon_success',
+        'link_to_patreon'                 => '@todo de: .edit.link_to_patreon',
+        'link_to_patreon_description'     => '@todo de: .edit.link_to_patreon_description',
+        'patreon_benefit_table'           => [
             'header_active'  => '@todo de: .edit.patreon_benefit_table.header_active',
             'header_benefit' => '@todo de: .edit.patreon_benefit_table.header_benefit',
         ],

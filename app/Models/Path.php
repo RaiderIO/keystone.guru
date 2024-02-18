@@ -67,10 +67,9 @@ class Path extends Model
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item Path */
-            $item->linkedawakenedobelisks()->delete();
-            $item->polyline()->delete();
+        static::deleting(function (Path $path) {
+            $path->linkedawakenedobelisks()->delete();
+            $path->polyline()->delete();
         });
     }
 }

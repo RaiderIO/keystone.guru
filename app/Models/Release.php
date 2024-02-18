@@ -2,29 +2,29 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use App\Vendor\SemVer\Version;
 use Carbon\Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 
 /**
- * @property int $id
- * @property int $release_changelog_id
- * @property string $version
- * @property string $title
- * @property boolean $silent
- * @property boolean $spotlight
+ * @property int              $id
+ * @property int              $release_changelog_id
+ * @property string           $version
+ * @property string           $title
+ * @property boolean          $silent
+ * @property boolean          $spotlight
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon           $updated_at
+ * @property Carbon           $created_at
  *
- * @property string $github_body
- * @property string $discord_body
- * @property string $reddit_body
+ * @property string           $github_body
+ * @property string           $discord_body
+ * @property string           $reddit_body
  *
  * @property ReleaseChangelog $changelog
  *
@@ -32,16 +32,17 @@ use Throwable;
  */
 class Release extends CacheModel
 {
+    use SeederModel;
+    use SerializesDates;
+
+    protected $fillable = ['id', 'release_changelog_id', 'version', 'title', 'silent', 'spotlight', 'created_at', 'updated_at'];
+    protected $with     = ['changelog'];
+    protected $appends  = ['github_body', 'discord_body', 'reddit_body'];
+
     /**
      * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
      */
     private const DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
-
-    use SerializesDates;
-
-    protected $fillable = ['id', 'release_changelog_id', 'version', 'title', 'silent', 'spotlight', 'created_at', 'updated_at'];
-    protected $with = ['changelog'];
-    protected $appends = ['github_body', 'discord_body', 'reddit_body'];
 
     /**
      * @return Release|null

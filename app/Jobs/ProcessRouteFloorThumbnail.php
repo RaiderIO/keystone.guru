@@ -56,7 +56,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 Log::channel('scheduler')->warning(sprintf('Error refreshing thumbnail, attempt %d', $this->attempts));
 
                 // If there were errors, try again
-                ProcessRouteFloorThumbnail::dispatch($this, $this->dungeonRoute, $this->floorIndex, ++$this->attempts);
+                ProcessRouteFloorThumbnail::dispatch($this->thumbnailService, $this->dungeonRoute, $this->floorIndex, ++$this->attempts);
             } else {
                 Log::channel('scheduler')->info(
                     sprintf('Finished processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)

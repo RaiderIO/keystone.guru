@@ -60,7 +60,8 @@ class RefreshAffixGroupEaseTiers extends Command
         } catch (InvalidResponseException $exception) {
             $this->error(sprintf('Invalid response: %s', $exception->getMessage()));
 
-            return -1;
+            // @TODO fix when reimplementing Subcreation but as Archon instead.
+            return 0;
         }
 
         if (!isset($tierLists['last_updated']) || !isset($tierLists['current_affixes']) || !isset($tierLists['source_url']) || !isset($tierLists['tier_lists'])) {

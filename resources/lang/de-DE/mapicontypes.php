@@ -107,4 +107,7 @@ return [
     'class_druid'        => '@todo de-DE: .class_druid',
     'class_demon_hunter' => '@todo de-DE: .class_demon_hunter',
     'class_evoker'       => '@todo de-DE: .class_evoker',
+
+    'chest'        => '@todo de-DE: .chest',
+    'chest_locked' => '@todo de-DE: .chest_locked',
 ];

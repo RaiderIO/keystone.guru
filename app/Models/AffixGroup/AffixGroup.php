@@ -4,6 +4,7 @@ namespace App\Models\AffixGroup;
 
 use App\Models\Expansion;
 use App\Models\Season;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,8 @@ use Illuminate\Support\Collection;
  */
 class AffixGroup extends AffixGroupBase
 {
+    use SeederModel;
+
     public $fillable = ['season_id', 'seasonal_index', 'confirmed'];
 
 

@@ -24,8 +24,8 @@ jobs:
             php artisan db:backup;
             php artisan up;
             php artisan down --render="errors::503" --retry 60;
-            php artisan environment:updateprepare testing &&
-            php artisan environment:update testing;
+            php artisan environment:updateprepare &&
+            php artisan environment:update;
             php artisan readonly:disable &&
             php artisan up &&
             ./vendor/bin/phpunit;

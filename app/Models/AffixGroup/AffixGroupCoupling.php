@@ -4,6 +4,7 @@ namespace App\Models\AffixGroup;
 
 use App\Models\Affix;
 use App\Models\CacheModel;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class AffixGroupCoupling extends CacheModel
 {
+    use SeederModel;
+
     public $timestamps = false;
     protected $fillable = ['affix_id', 'affix_group_id'];
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,12 +14,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int     $height
  * @property boolean $admin_only
  *
- * @property MapIcon $mapicons
+ * @property MapIcon $mapIcons
  *
  * @mixin Eloquent
  */
 class MapIconType extends CacheModel
 {
+    use SeederModel;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'name',
+        'key',
+        'width',
+        'height',
+        'admin_only',
+    ];
+
     public const MAP_ICON_TYPE_UNKNOWN                   = 'unknown';
     public const MAP_ICON_TYPE_COMMENT                   = 'comment';
     public const MAP_ICON_TYPE_DOOR                      = 'door';
@@ -244,28 +257,8 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_CHEST_LOCKED => 94,
     ];
 
-    public $timestamps = false;
-
-    protected $fillable = [
-        'name',
-        'key',
-        'width',
-        'height',
-        'admin_only',
-    ];
-
-    public function mapicons(): HasMany
+    public function mapIcons(): HasMany
     {
         return $this->hasMany(MapIcon::class);
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
     }
 }

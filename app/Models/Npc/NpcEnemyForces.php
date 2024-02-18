@@ -8,18 +8,18 @@ use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\SeederModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property  int $id
- * @property int $mapping_version_id
- * @property int $npc_id
- * @property int $enemy_forces
- * @property int|null $enemy_forces_teeming
+ * @property int            $id
+ * @property int            $mapping_version_id
+ * @property int            $npc_id
+ * @property int            $enemy_forces
+ * @property int|null       $enemy_forces_teeming
  *
  * @property MappingVersion $mappingVersion
- * @property Npc $npc
+ * @property Npc            $npc
  *
  * @package App\Models\Npc
  * @author Wouter
@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class NpcEnemyForces extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
 
     public $timestamps = false;

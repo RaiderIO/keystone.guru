@@ -2,28 +2,26 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $character_race_id
- * @property int $character_class_id
+ * @property int        $id
+ * @property int        $character_race_id
+ * @property int        $character_class_id
  * @property Collection $specializations
  *
  * @mixin Eloquent
  */
 class CharacterRaceClassCoupling extends CacheModel
 {
+    use SeederModel;
+
     public $timestamps = false;
 
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
+    protected $fillable = [
+        'character_race_id',
+        'character_class_id',
+    ];
 }

@@ -13,14 +13,16 @@ trait ConvertsMDTStrings
 {
     use SavesStringToTempDisk;
 
-    /** @var string The location to save files - this currently uses the memfs so it's super fast */
+    /** @var string The location to save files - this currently uses the memfs, so it's superfast */
     private static string $TMP_FILE_SUB_DIR = 'mdt';
 
-    /** @var string */
-    private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/sudo /usr/bin/cli_weakauras_parser encode %s';
+    private static string $SUDO = '/usr/bin/sudo';
 
     /** @var string */
-    private static string $CLI_PARSER_DECODE_CMD = '/usr/bin/sudo /usr/bin/cli_weakauras_parser decode %s';
+    private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/cli_weakauras_parser encode %s';
+
+    /** @var string */
+    private static string $CLI_PARSER_DECODE_CMD = '/usr/bin/cli_weakauras_parser decode %s';
 
     /**
      * Checks if we should log a string to the error logger should it fail parsing
@@ -36,7 +38,7 @@ trait ConvertsMDTStrings
     }
 
     /**
-     * @param bool $encode True to encode, false to decode it.
+     * @param bool   $encode True to encode, false to decode it.
      * @param string $string The string you want to encode/decode.
      * @return string|null
      */
@@ -50,7 +52,11 @@ trait ConvertsMDTStrings
             $fileName = $this->saveFile(self::$TMP_FILE_SUB_DIR, $string);
 
             if ($fileName !== null) {
-                $cmd     = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
+                $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
+                // Performing sudo on local environment causes issues - but we're already root then
+                if (config('app.type') !== 'local') {
+                    $cmd = sprintf('%s %s', self::$SUDO, $cmd);
+                }
                 $process = new Process(explode(' ', $cmd));
                 $process->run();
 

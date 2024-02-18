@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
@@ -12,6 +13,8 @@ use Eloquent;
  */
 class RaidMarker extends CacheModel
 {
+    use SeederModel;
+
     const RAID_MARKER_STAR     = 'star';
     const RAID_MARKER_CIRCLE   = 'circle';
     const RAID_MARKER_DIAMOND  = 'diamond';
@@ -35,14 +38,4 @@ class RaidMarker extends CacheModel
     public $timestamps = false;
 
     protected $fillable = ['id', 'name'];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
 }

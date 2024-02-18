@@ -10,6 +10,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -53,6 +54,7 @@ use Illuminate\Support\Collection;
  */
 class Enemy extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
     use Reportable;
     use HasLatLng;

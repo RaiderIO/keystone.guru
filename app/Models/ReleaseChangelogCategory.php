@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
@@ -14,6 +15,13 @@ use Eloquent;
  */
 class ReleaseChangelogCategory extends CacheModel
 {
+    use SeederModel;
+
+    public    $table      = 'release_changelog_categories';
+    public    $timestamps = false;
+    protected $visible    = ['id', 'key', 'name'];
+    protected $fillable   = ['id', 'key', 'name'];
+
     public const GENERAL_CHANGES          = 'general_changes';
     public const ROUTE_CHANGES            = 'route_changes';
     public const MAP_CHANGES              = 'map_changes';
@@ -41,9 +49,4 @@ class ReleaseChangelogCategory extends CacheModel
         self::AUTO_ROUTE_CHANGES       => 11,
         self::API_CHANGES              => 12,
     ];
-
-    public    $table      = 'release_changelog_categories';
-    public    $timestamps = false;
-    protected $visible    = ['id', 'key', 'name'];
-    protected $fillable   = ['id', 'key', 'name'];
 }

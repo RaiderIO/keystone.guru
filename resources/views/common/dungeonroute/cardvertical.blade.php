@@ -131,9 +131,11 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     </div>
                     <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                         <div class="col">
-                            {{
-                                trim($dungeonroute->description)
-                            }}
+                            @if(empty($dungeonroute->description))
+                                &nbsp;
+                            @else
+                                {{ $dungeonroute->description }}
+                            @endif
                         </div>
                     </div>
                     <div class="row no-gutters p-2 enemy_forces">

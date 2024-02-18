@@ -1,8 +1,31 @@
 const mix = require('laravel-mix');
-const argv = require('yargs').argv;
 const {GitRevisionPlugin} = require('git-revision-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
-let gitRevisionPlugin = null; // Init in the config below
+
+// npm run dev --env.version <version>
+let version;
+let gitRevisionPluginList = [];
+if (typeof process.env.npm_config_output_version !== 'undefined' &&
+    process.env.hasOwnProperty('npm_config_output_version') &&
+    typeof process.env.npm_config_output_version !== 'undefined') {
+    version = process.env.npm_config_output_version;
+} else {
+    let gitRevisionPlugin = new GitRevisionPlugin({
+        versionCommand: 'rev-list HEAD -1'
+    });
+    gitRevisionPluginList.push(gitRevisionPlugin);
+    version = gitRevisionPlugin.version();
+
+    // Write the version that's going to be used to file
+    const fs = require('node:fs');
+    fs.writeFile('version', version, err => {
+        if (err) {
+            console.error(err);
+        } else {
+            // file written successfully
+        }
+    });
+}
 
 mix.options({
     // This dramatically speeds up the build process -  adding new .scss for the redesign greatly increased build times without this
@@ -30,19 +53,10 @@ mix.options({
         }]
     },
     plugins: [
-        // Use git version to output our files
-        gitRevisionPlugin = new GitRevisionPlugin({
-            versionCommand: 'tag | sort -V | (tail -n 1)'
-        }),
-
-        // // Compile handlebars
+        // Compile handlebars
         new WebpackShellPluginNext({
             onBuildStart: {
                 scripts: [
-                    // Update version file. Required by PHP version library to get the proper version
-                    // See https://stackoverflow.com/a/39611938/771270
-                    // This is now handled by ./compile.sh, it was either missing -l or saying it doesn't exist as an option
-                    // 'git tag | sort -V | (tail -n 1) > version',
                     // Compile handlebars
                     'handlebars ' + (mix.inProduction() ? '-m ' : '') +
                     'resources/assets/js/handlebars/ -f resources/assets/js/handlebars.js'
@@ -52,7 +66,8 @@ mix.options({
             },
             onBuildEnd: []
         })
-    ]
+        // Use git version to output our files
+    ].concat(gitRevisionPluginList)
 });
 
 /*
@@ -69,13 +84,17 @@ mix.options({
 // npm run dev --env.full true
 // false if not defined, true if defined
 let full = false;
-if (typeof argv.env !== 'undefined' && typeof argv.env.full !== 'undefined') {
-    full = argv.env.full;
+if (typeof process.env.npm_config_full !== 'undefined' &&
+    process.env.hasOwnProperty('npm_config_full') &&
+    typeof process.env.npm_config_full !== 'undefined') {
+    full = process.env.npm_config_full;
 }
 // npm run dev --env.images false
-let images = true;
-if (typeof argv.env !== 'undefined' && typeof argv.env.images !== 'undefined') {
-    images = argv.env.images;
+let images = false;
+if (typeof process.env.npm_config_images !== 'undefined' &&
+    process.env.hasOwnProperty('npm_config_images') &&
+    typeof process.env.npm_config_images !== 'undefined') {
+    images = process.env.npm_config_images;
 }
 
 mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts', 'public/webfonts');
@@ -259,23 +278,23 @@ let scripts = [
 // Output of files
 
 // Custom processing only
-mix.styles(['resources/assets/css/**/*.css'], 'public/css/custom-' + gitRevisionPlugin.version() + '.css');
+mix.styles(['resources/assets/css/**/*.css'], `public/css/custom-${version}.css`);
 
 // Do not translate in development
 if (mix.inProduction()) {
-    mix.babel(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
+    mix.babel(scripts, `public/js/custom-${version}.js`);
 } else {
-    mix.scripts(scripts, 'public/js/custom-' + gitRevisionPlugin.version() + '.js');
+    mix.scripts(scripts, `public/js/custom-${version}.js`);
 }
 
-mix.js('resources/assets/js/app.js', 'public/js/app-' + gitRevisionPlugin.version() + '.js')
-    .sass('resources/assets/sass/app.scss', 'public/css/app-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/theme/theme.scss', 'public/css/theme-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/home.scss', 'public/css/home-' + gitRevisionPlugin.version() + '.css')
-    .sass('resources/assets/sass/custom/custom.scss', 'public/css/custom-compiled-' + gitRevisionPlugin.version() + '.css')
+mix.js('resources/assets/js/app.js', `public/js/app-${version}.js`)
+    .sass('resources/assets/sass/app.scss', `public/css/app-${version}.css`)
+    .sass('resources/assets/sass/theme/theme.scss', `public/css/theme-${version}.css`)
+    .sass('resources/assets/sass/home.scss', `public/css/home-${version}.css`)
+    .sass('resources/assets/sass/custom/custom.scss', `public/css/custom-compiled-${version}.css`)
     // Lib processing
-    // .styles(['resources/assets/lib/**/*.css'], 'public/css/lib-' + gitRevisionPlugin.version() + '.css')
-    .babel('resources/assets/lib/**/*.js', 'public/js/lib-' + gitRevisionPlugin.version() + '.js');
+    // .styles(['resources/assets/lib/**/*.css'], `public/css/lib-${version}.css`)
+    .babel('resources/assets/lib/**/*.js', `public/js/lib-${version}.js`);
 
 mix.sourceMaps();
 

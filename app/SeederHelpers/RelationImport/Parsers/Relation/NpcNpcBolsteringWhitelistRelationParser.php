@@ -4,6 +4,7 @@ namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\Npc;
 use App\Models\NpcBolsteringWhitelist;
+use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcBolsteringWhitelistRelationParser implements RelationParserInterface
 {
@@ -44,7 +45,7 @@ class NpcNpcBolsteringWhitelistRelationParser implements RelationParserInterface
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
-        NpcBolsteringWhitelist::insert($value);
+        NpcBolsteringWhitelist::from(DatabaseSeeder::getTempTableName(NpcBolsteringWhitelist::class))->insert($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

@@ -17,6 +17,7 @@ return [
             'dungeon'                  => '@todo de: .dungeon.select.dungeon',
             'all'                      => '@todo de: .dungeon.select.all',
             'all_dungeons'             => '@todo de: .dungeon.select.all_dungeons',
+            'all_expansion_dungeons'   => '@todo de-DE: .dungeon.select.all_expansion_dungeons',
             'seasons'                  => '@todo de: .dungeon.select.seasons',
             'siege_of_boralus_warning' => '@todo de: .dungeon.select.siege_of_boralus_warning',
         ],
@@ -84,6 +85,8 @@ return [
             'save_settings'                                  => '@todo de: .forms.createroute.save_settings',
         ],
         'createtemporaryroute' => [
+            'key_levels'                => '@todo de-DE: .forms.createtemporaryroute.key_levels',
+            'key_levels_title'          => '@todo de-DE: .forms.createtemporaryroute.key_levels_title',
             'unregistered_user_message' => '@todo de: .forms.createtemporaryroute.unregistered_user_message',
             'registered_user_message'   => '@todo de: .forms.createtemporaryroute.registered_user_message',
             'create_route'              => '@todo de: .forms.createtemporaryroute.create_route',
@@ -97,6 +100,12 @@ return [
             'login_through_oauth2' => '@todo de: .forms.login.login_through_oauth2',
         ],
         'mapsettings'          => [
+            'map_facade_style'                              => '@todo de-DE: .forms.mapsettings.map_facade_style',
+            'map_facade_style_title'                        => '@todo de-DE: .forms.mapsettings.map_facade_style_title',
+            'map_facade_style_facade_option'                => '@todo de-DE: .forms.mapsettings.map_facade_style_facade_option',
+            'map_facade_style_split_floors_option'          => '@todo de-DE: .forms.mapsettings.map_facade_style_split_floors_option',
+            'map_facade_style_change_requires_page_refresh' => '@todo de-DE: .forms.mapsettings.map_facade_style_change_requires_page_refresh',
+
             'enemies'                                => '@todo de: .forms.mapsettings.enemies',
             'enemy_number_style'                     => '@todo de: .forms.mapsettings.enemy_number_style',
             'enemy_number_style_title'               => '@todo de: .forms.mapsettings.enemy_number_style_title',
@@ -123,6 +132,7 @@ return [
             'temporary_route'                        => '@todo de: .forms.mdtimport.temporary_route',
             'temporary_route_title'                  => '@todo de: .forms.mdtimport.temporary_route_title',
             'parsing_your_string'                    => '@todo de: .forms.mdtimport.parsing_your_string',
+            'import_as_this_week'                    => '@todo de-DE: .forms.mdtimport.import_as_this_week',
             'import_route'                           => '@todo de: .forms.mdtimport.import_route',
         ],
         'oauth'                => [
@@ -195,10 +205,13 @@ return [
     ],
     'layout'       => [
         'footer'  => [
-            'about'               => '@todo de: .layout.footer.about',
+            'developer'           => '@todo de-DE: .layout.footer.developer',
+            'api_documentation'   => '@todo de-DE: .layout.footer.api_documentation',
+            'keystone_guru'       => '@todo de-DE: .layout.footer.keystone_guru',
             'changelog'           => '@todo de: .layout.footer.changelog',
             'changelog_new'       => '@todo de: .layout.footer.changelog_new',
             'credits'             => '@todo de: .layout.footer.credits',
+            'about'               => '@todo de: .layout.footer.about',
             'external'            => '@todo de: .layout.footer.external',
             'patreon'             => '@todo de: .layout.footer.patreon',
             'discord'             => '@todo de: .layout.footer.discord',
@@ -218,6 +231,7 @@ return [
             'search'                  => '@todo de: .layout.header.search',
             'expansion_routes'        => '@todo de: .layout.header.expansion_routes',
             'routes'                  => '@todo de: .layout.header.routes',
+            'explore'                 => '@todo de-DE: .layout.header.explore',
             'affixes'                 => '@todo de: .layout.header.affixes',
             'new'                     => '@todo de: .layout.header.new',
         ],
@@ -244,11 +258,11 @@ return [
     ],
     'maps'         => [
         'controls' => [
-            'draw'      => [
+            'draw'           => [
                 'admin'           => '@todo de: .maps.controls.draw.admin',
                 'view_this_route' => '@todo de: .maps.controls.draw.view_this_route',
             ],
-            'elements'  => [
+            'elements'       => [
                 'dungeonrouteinfo'         => [
                     'timer'            => '@todo de: .maps.controls.elements.dungeonrouteinfo.timer',
                     'timer_title'      => '@todo de: .maps.controls.elements.dungeonrouteinfo.timer_title',
@@ -284,11 +298,11 @@ return [
                     'your_rating'              => '@todo de: .maps.controls.elements.rating.your_rating',
                 ],
             ],
-            'enemyinfo' => [
+            'enemyinfo'      => [
                 'enemy_info'      => '@todo de: .maps.controls.enemyinfo.enemy_info',
                 'report_an_issue' => '@todo de: .maps.controls.enemyinfo.report_an_issue',
             ],
-            'header'    => [
+            'header'         => [
                 'toggle_navigation'              => '@todo de: .maps.controls.header.toggle_navigation',
                 'stop'                           => '@todo de: .maps.controls.header.stop',
                 'start'                          => '@todo de: .maps.controls.header.start',
@@ -296,8 +310,10 @@ return [
                 'edit_route'                     => '@todo de: .maps.controls.header.edit_route',
                 'view_route'                     => '@todo de: .maps.controls.header.view_route',
                 'save_to_profile'                => '@todo de: .maps.controls.header.save_to_profile',
+                'edit_route_admin_settings'      => '@todo de-DE: .maps.controls.header.edit_route_admin_settings',
                 'simulate_route'                 => '@todo de: .maps.controls.header.simulate_route',
                 'edit_route_settings'            => '@todo de: .maps.controls.header.edit_route_settings',
+                'edit_mapping_version'           => '@todo de-DE: .maps.controls.header.edit_mapping_version',
                 'share'                          => '@todo de: .maps.controls.header.share',
                 'start_live_session'             => '@todo de: .maps.controls.header.start_live_session',
                 'start_live_session_paragraph_1' => '@todo de: .maps.controls.header.start_live_session_paragraph_1',
@@ -311,7 +327,7 @@ return [
                 'you_cannot_rate_your_own_route' => '@todo de: .maps.controls.header.you_cannot_rate_your_own_route',
                 'review_live_session'            => '@todo de: .maps.controls.header.review_live_session',
             ],
-            'pulls'     => [
+            'pulls'          => [
                 'settings_title'              => '@todo de: .maps.controls.pulls.settings_title',
                 'new_pull'                    => '@todo de: .maps.controls.pulls.new_pull',
                 'delete_all_pulls_title'      => '@todo de: .maps.controls.pulls.delete_all_pulls_title',
@@ -320,7 +336,24 @@ return [
                 'no_pulls_created_edit'       => '@todo de: .maps.controls.pulls.no_pulls_created_edit',
                 'no_pulls_created_view'       => '@todo de: .maps.controls.pulls.no_pulls_created_view',
             ],
-            'view'      => [
+            'pullsworkbench' => [
+                'modal'            => [
+                    'description' => [
+                        'label' => '@todo de-DE: .maps.controls.pullsworkbench.modal.description.label',
+                        'save'  => '@todo de-DE: .maps.controls.pullsworkbench.modal.description.save',
+                    ],
+                    'spells'      => [
+                        'label' => '@todo de-DE: .maps.controls.pullsworkbench.modal.spells.label',
+                        'save'  => '@todo de-DE: .maps.controls.pullsworkbench.modal.spells.save',
+                    ],
+                ],
+                'description'      => '@todo de-DE: .maps.controls.pullsworkbench.description',
+                'spells'           => '@todo de-DE: .maps.controls.pullsworkbench.spells',
+                'add_kill_area'    => '@todo de-DE: .maps.controls.pullsworkbench.add_kill_area',
+                'remove_kill_area' => '@todo de-DE: .maps.controls.pullsworkbench.remove_kill_area',
+                'delete_killzone'  => '@todo de-DE: .maps.controls.pullsworkbench.delete_killzone',
+            ],
+            'view'           => [
                 'edit_this_route_title'          => '@todo de: .maps.controls.view.edit_this_route_title',
                 'clone_this_route_title'         => '@todo de: .maps.controls.view.clone_this_route_title',
                 'report_for_moderation'          => '@todo de: .maps.controls.view.report_for_moderation',
@@ -338,15 +371,14 @@ return [
 
             'new_mapping_version_header_title'       => '@todo de: .maps.map.new_mapping_version_header_title',
             'new_mapping_version_header_description' => '@todo de: .maps.map.new_mapping_version_header_description',
+            'explore_header_title'                   => '@todo de-DE: .maps.map.explore_header_title',
             'admin_header_title'                     => '@todo de: .maps.map.admin_header_title',
 
-            'route'         => '@todo de: .maps.map.route',
-            'map_settings'  => '@todo de: .maps.map.map_settings',
-            'pull_settings' => '@todo de: .maps.map.pull_settings',
+            'route' => '@todo de: .maps.map.route',
         ],
     ],
     'modal'        => [
-        'userreport'      => [
+        'userreport'         => [
             'dungeonroute' => [
                 'report_route'           => '@todo de: .modal.userreport.dungeonroute.report_route',
                 'your_name'              => '@todo de: .modal.userreport.dungeonroute.your_name',
@@ -364,22 +396,45 @@ return [
                 'submit'                 => '@todo de: .modal.userreport.enemy.submit',
             ],
         ],
-        'createroute'     => [
+        'createroute'        => [
             'create_route'           => '@todo de: .modal.createroute.create_route',
             'create_temporary_route' => '@todo de: .modal.createroute.create_temporary_route',
             'import_from_mdt'        => '@todo de: .modal.createroute.import_from_mdt',
         ],
-        'legal'           => [
+        'legal'              => [
             'welcome_back_agree' => '@todo de: .modal.legal.welcome_back_agree',
             'terms_of_service'   => '@todo de: .modal.legal.terms_of_service',
             'privacy_policy'     => '@todo de: .modal.legal.privacy_policy',
             'cookie_policy'      => '@todo de: .modal.legal.cookie_policy',
             'i_agree'            => '@todo de: .modal.legal.i_agree',
         ],
-        'routesettings'   => [
+        'mappingversion'     => [
+            'enemy_forces_required'           => '@todo de-DE: .modal.mappingversion.enemy_forces_required',
+            'enemy_forces_required_teeming'   => '@todo de-DE: .modal.mappingversion.enemy_forces_required_teeming',
+            'enemy_forces_shrouded'           => '@todo de-DE: .modal.mappingversion.enemy_forces_shrouded',
+            'enemy_forces_shrouded_zul_gamux' => '@todo de-DE: .modal.mappingversion.enemy_forces_shrouded_zul_gamux',
+            'timer_max_seconds'               => '@todo de-DE: .modal.mappingversion.timer_max_seconds',
+            'save'                            => '@todo de-DE: .modal.mappingversion.save',
+        ],
+        'mapsettings'        => [
+            'map_settings'  => '@todo de-DE: .modal.mapsettings.map_settings',
+            'pull_settings' => '@todo de-DE: .modal.mapsettings.pull_settings',
+        ],
+        'routeadminsettings' => [
+            'title'                             => '@todo de-DE: .modal.routeadminsettings.title',
+            'dungeon_route_info'                => '@todo de-DE: .modal.routeadminsettings.dungeon_route_info',
+            'links'                             => '@todo de-DE: .modal.routeadminsettings.links',
+            'edit_mapping_version'              => '@todo de-DE: .modal.routeadminsettings.edit_mapping_version',
+            'combatlog_info'                    => '@todo de-DE: .modal.routeadminsettings.combatlog_info',
+            'challenge_mode_run'                => '@todo de-DE: .modal.routeadminsettings.challenge_mode_run',
+            'challenge_mode_run_data'           => '@todo de-DE: .modal.routeadminsettings.challenge_mode_run_data',
+            'route_not_created_from_combat_log' => '@todo de-DE: .modal.routeadminsettings.route_not_created_from_combat_log',
+            'route_not_created_through_api'     => '@todo de-DE: .modal.routeadminsettings.route_not_created_through_api',
+        ],
+        'routesettings'      => [
             'title' => '@todo de: .modal.routesettings.title',
         ],
-        'share'           => [
+        'share'              => [
             'share'                            => '@todo de: .modal.share.share',
             'publish'                          => '@todo de: .modal.share.publish',
             'review_route_settings'            => '@todo de: .modal.share.review_route_settings',
@@ -393,7 +448,7 @@ return [
             'loading'                          => '@todo de: .modal.share.loading',
             'copy_to_clipboard'                => '@todo de: .modal.share.copy_to_clipboard',
         ],
-        'simulate'        => [
+        'simulate'           => [
             'intro'                                   => '@todo de: .modal.simulate.intro',
             'title'                                   => '@todo de: .modal.simulate.title',
             'key_level'                               => '@todo de: .modal.simulate.key_level',
@@ -435,7 +490,7 @@ return [
             'loading'                                 => '@todo de: .modal.simulate.loading',
             'copy_to_clipboard'                       => '@todo de: .modal.simulate.copy_to_clipboard',
         ],
-        'simulateoptions' => [
+        'simulateoptions'    => [
             'advanced' => [
                 'patreon_link_text' => '@todo de: .modal.simulateoptions.advanced.patreon_link_text',
                 'patreon_only'      => '@todo de: .modal.simulateoptions.advanced.patreon_only',

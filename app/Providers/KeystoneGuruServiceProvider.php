@@ -271,6 +271,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'],
             function (View $view) use ($globalViewVariables) {
                 $view->with('version', $globalViewVariables['appVersion']);
+                $view->with('revision', $globalViewVariables['appRevision']);
                 $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
                 $view->with('latestRelease', $globalViewVariables['latestRelease']);
                 $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);

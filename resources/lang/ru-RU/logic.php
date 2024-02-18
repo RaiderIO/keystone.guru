@@ -19,9 +19,16 @@ return [
             ],
             'import_string' => [
                 'category'                                             => [
-                    'pull'   => 'Пулл %s',
-                    'object' => '@todo ru: .mdt.io.import_string.category.object',
+                    'awakened_obelisks' => '@todo ru-RU: .mdt.io.import_string.category.awakened_obelisks',
+                    'pulls'             => '@todo ru-RU: .mdt.io.import_string.category.pulls',
+                    'notes'             => '@todo ru-RU: .mdt.io.import_string.category.notes',
+                    'pull'              => 'Пулл %s',
+                    'object'            => '@todo ru: .mdt.io.import_string.category.object',
                 ],
+                'limit_reached_pulls'                                  => '@todo ru-RU: .mdt.io.import_string.limit_reached_pulls',
+                'limit_reached_brushlines'                             => '@todo ru-RU: .mdt.io.import_string.limit_reached_brushlines',
+                'limit_reached_paths'                                  => '@todo ru-RU: .mdt.io.import_string.limit_reached_paths',
+                'limit_reached_notes'                                  => '@todo ru-RU: .mdt.io.import_string.limit_reached_notes',
                 'unable_to_find_floor_for_object'                      => '@todo ru: .mdt.io.import_string.unable_to_find_floor_for_object',
                 'unable_to_find_floor_for_object_details'              => '@todo ru: .mdt.io.import_string.unable_to_find_floor_for_object_details',
                 'unable_to_find_mdt_enemy_for_clone_index'             => 'Невозможно найти врага MDT для клона индекса %s и NPC индекса %s.',
