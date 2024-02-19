@@ -42,7 +42,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                 'share' => [
                     'link' => !$dungeonroute->isSandbox(),
                     'embed' => !$dungeonroute->isSandbox(),
-                    'mdt-export' => true,
+                    'mdt-export' => $dungeon->mdt_supported,
                     'publish' => false,
                 ]
             ],

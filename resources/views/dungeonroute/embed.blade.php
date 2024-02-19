@@ -35,6 +35,7 @@ if (count($affixes) == 0) {
     'dependencies' => ['common/maps/map'],
     'switchDungeonFloorSelect' => '#map_floor_selection_dropdown',
     'defaultSelectedFloorId' => $floor->id,
+    'mdtStringCopyEnabled' => $dungeon->mdt_supported
 ]])
 
 @section('content')

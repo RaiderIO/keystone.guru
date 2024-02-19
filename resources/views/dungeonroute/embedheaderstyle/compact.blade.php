@@ -1,8 +1,10 @@
 <?php
-/** @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $dungeon \App\Models\Dungeon */
-/** @var $floor \App\Models\Floor\Floor */
-/** @var $embedOptions array */
+/**
+ * @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute
+ * @var $dungeon \App\Models\Dungeon
+ * @var $floor \App\Models\Floor\Floor
+ * @var $embedOptions array
+ */
 
 $routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
 $presentRouteUrl = route('dungeonroute.present', $routeParams);
@@ -67,14 +69,16 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                 <i class="fas fa-external-link-alt"></i> {{ __('views/dungeonroute.embed.view_route') }}
             </a>
         </div>
-        <div class="col-auto pl-1">
-            <div id="embed_copy_mdt_string" class="btn btn btn-primary float-right h-100">
-                <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+        @if($dungeon->mdt_supported)
+            <div class="col-auto pl-1">
+                <div id="embed_copy_mdt_string" class="btn btn btn-primary float-right h-100">
+                    <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                </div>
+                <div id="embed_copy_mdt_string_loader" class="btn btn btn-primary float-right h-100" disabled
+                     style="display: none;">
+                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                </div>
             </div>
-            <div id="embed_copy_mdt_string_loader" class="btn btn btn-primary float-right h-100" disabled
-                 style="display: none;">
-                <i class="fas fa-circle-notch fa-spin"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
-            </div>
-        </div>
+        @endif
     </div>
 </header>

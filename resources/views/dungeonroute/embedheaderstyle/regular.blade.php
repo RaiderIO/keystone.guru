@@ -54,9 +54,9 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         </div>
         <div class="col-md-auto px-1 d-md-flex d-none">
             @if($embedOptions['show']['affixes'])
-                <?php
-                $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                ?>
+                    <?php
+                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                    ?>
                 @if($mostRelevantAffixGroup !== null)
                     @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
                 @endif
@@ -86,14 +86,16 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                 <i class="fas fa-external-link-alt"></i> {{ __('views/dungeonroute.embed.view_route') }}
             </a>
         </div>
-        <div class="col-auto pl-1">
-            <div id="embed_copy_mdt_string" class="btn btn-primary float-right">
-                <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+        @if($dungeon->mdt_supported)
+            <div class="col-auto pl-1">
+                <div id="embed_copy_mdt_string" class="btn btn-primary float-right">
+                    <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                </div>
+                <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" disabled
+                     style="display: none;">
+                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                </div>
             </div>
-            <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" disabled
-                 style="display: none;">
-                <i class="fas fa-circle-notch fa-spin"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
-            </div>
-        </div>
+        @endif
     </div>
 </header>

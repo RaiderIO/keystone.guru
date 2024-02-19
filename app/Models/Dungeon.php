@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -34,6 +35,7 @@ use Mockery\Exception;
  * @property boolean                                 $speedrun_enabled            True if this dungeon has a speedrun enabled, false if it does not.
  * @property boolean                                 $facade_enabled              True if this dungeon uses facades, false if it does not.
  * @property boolean                                 $active                      True if this dungeon is active, false if it is not.
+ * @property boolean                                 $mdt_supported               True if MDT is supported for this dungeon, false if it is not.
  *
  * @property Expansion                               $expansion
  * @property GameVersion                             $gameVersion
@@ -68,7 +70,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends  = ['floor_count'];
+    protected $appends  = ['floor_count', 'mdt_supported'];
     protected $fillable = [
         'expansion_id',
         'game_version_id',
@@ -444,6 +446,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getFloorCountAttribute(): int
     {
         return $this->floors->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMdtSupportedAttribute(): bool
+    {
+        return Conversion::hasMDTDungeonName($this->key);
     }
 
     /**
