@@ -3,7 +3,8 @@ name: Testing Deploy
 
 on:
   push:
-    branches: development
+    branches:
+      - development
 
 jobs:
   deploy-testing:

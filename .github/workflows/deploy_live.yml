@@ -3,7 +3,8 @@ name: Live Deploy
 
 on:
   push:
-    branches: master
+    branches:
+      - master
 
 jobs:
   deploy-live:

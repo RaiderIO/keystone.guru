@@ -3,7 +3,8 @@ name: Mapping Deploy
 
 on:
   push:
-    branches: development
+    branches:
+      - development
 
 jobs:
   deploy:
@@ -11,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        if: github.actor == 'Wotuu'
       - name: Composer install
         uses: php-actions/composer@v6
         with:
