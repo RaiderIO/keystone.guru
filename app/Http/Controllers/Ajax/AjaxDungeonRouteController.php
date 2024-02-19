@@ -53,6 +53,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -746,33 +747,34 @@ class AjaxDungeonRouteController extends Controller
     {
         $this->authorize('view', $dungeonRoute);
 
-//        try {
-        $warnings     = new Collection();
-        $dungeonRoute = $mdtExportStringService
-            ->setDungeonRoute($dungeonRoute)
-            ->getEncodedString($warnings);
+        try {
+            $warnings     = new Collection();
+            $dungeonRoute = $mdtExportStringService
+                ->setDungeonRoute($dungeonRoute)
+                ->getEncodedString($warnings);
 
-        $warningResult = [];
-        foreach ($warnings as $warning) {
-            /** @var $warning ImportWarning */
-            $warningResult[] = $warning->toArray();
+            $warningResult = [];
+            foreach ($warnings as $warning) {
+                /** @var $warning ImportWarning */
+                $warningResult[] = $warning->toArray();
+            }
+
+            return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
+        } catch (Exception $ex) {
+            Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
+
+            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
+        } catch (Throwable $error) {
+            Log::critical($error->getMessage(), [
+                'dungeonroute' => $dungeonRoute->public_key,
+            ]);
+
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(500, __('controller.apidungeonroute.mdt_generate_no_lua'));
+            }
+
+            throw $error;
         }
-
-        return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
-//        } catch (Exception $ex) {
-//            Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
-//            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
-//        } catch (Throwable $error) {
-//            Log::critical($error->getMessage(), [
-//                'dungeonroute' => $dungeonRoute->public_key,
-//            ]);
-//
-//            if ($error->getMessage() === "Class 'Lua' not found") {
-//                return abort(500, __('controller.apidungeonroute.mdt_generate_no_lua'));
-//            }
-//
-//            throw $error;
-//        }
     }
 
     /**

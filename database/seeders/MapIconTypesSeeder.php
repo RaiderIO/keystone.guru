@@ -4,18 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\MapIconType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class MapIconTypesSeeder extends Seeder
+class MapIconTypesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
         $this->command->info('Adding known Map Icon Types');
 
         $mapIconTypes = [
@@ -130,6 +128,7 @@ class MapIconTypesSeeder extends Seeder
             MapIconType::MAP_ICON_TYPE_CHEST_LOCKED => ['name' => 'mapicontypes.chest_locked', 'width' => 32, 'height' => 32],
         ];
 
+        $mapIconTypeAttributes = [];
         foreach ($mapIconTypes as $key => $mapIconType) {
             // Just in case it doesn't exist
             if (isset($mapIconType['width']) && isset($mapIconType['height'])) {
@@ -153,19 +152,21 @@ class MapIconTypesSeeder extends Seeder
                 }
             }
 
-            MapIconType::create([
+            $mapIconTypeAttributes[] = [
                 'id'         => MapIconType::ALL[$key],
                 'key'        => $key,
                 'name'       => $mapIconType['name'],
                 'width'      => $imageSize[0],
                 'height'     => $imageSize[1],
                 'admin_only' => $mapIconType['admin_only'] ?? 0,
-            ]);
+            ];
         }
+
+        MapIconType::from(DatabaseSeeder::getTempTableName(MapIconType::class))->insert($mapIconTypeAttributes);
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('map_icon_types')->truncate();
+        return [MapIconType::class];
     }
 }

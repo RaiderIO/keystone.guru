@@ -7,7 +7,9 @@ use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,6 +34,7 @@ use Illuminate\Support\Collection;
  */
 class EnemyPack extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
+    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
 
@@ -50,10 +53,22 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
         'vertices_json',
     ];
 
+    protected $hidden = [
+        'mappingVersion', 'floor',
+    ];
+
     protected $casts = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
+    }
 
     /**
      * @return BelongsTo

@@ -2,19 +2,31 @@
 
 namespace App\Models\Patreon;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property string $key
+ * @property int    $id
  * @property string $name
+ * @property string $key
  *
  * @mixin Eloquent
  * @todo Using CacheModel causes cache problems? People did not get their patreon rewards applied properly because of it?
  */
 class PatreonBenefit extends Model
 {
+    use SeederModel;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'id',
+        'name',
+        'key',
+    ];
+
+    protected $hidden = ['pivot'];
     public const AD_FREE                 = 'ad-free';
     public const UNLIMITED_DUNGEONROUTES = 'unlimited-dungeonroutes';
     public const UNLISTED_ROUTES         = 'unlisted-routes';
@@ -30,22 +42,4 @@ class PatreonBenefit extends Model
         self::ADVANCED_SIMULATION  => 5,
         self::AD_FREE_TEAM_MEMBERS => 6,
     ];
-
-    public $timestamps = false;
-
-    protected $fillable = [
-        'id', 'key', 'name',
-    ];
-
-    protected $hidden = ['pivot'];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
 }

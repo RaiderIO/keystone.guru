@@ -8,6 +8,7 @@ use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,6 +34,7 @@ use Illuminate\Support\Collection;
  */
 class FloorUnion extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
 {
+    use SeederModel;
     use HasLatLng;
     use CloneForNewMappingVersionNoRelations;
 
@@ -52,7 +54,7 @@ class FloorUnion extends CacheModel implements MappingModelInterface, MappingMod
         'floorUnionAreas',
     ];
 
-    protected $hidden = ['floor'];
+    protected $hidden = ['mappingVersion', 'floor'];
 
     protected $casts = [
         'mapping_version_id' => 'integer',

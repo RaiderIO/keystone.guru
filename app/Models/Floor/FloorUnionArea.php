@@ -10,6 +10,7 @@ use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
+use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class FloorUnionArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
+    use SeederModel;
     use HasVertices;
 
     public $timestamps = false;
@@ -41,7 +43,7 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
         'vertices_json',
     ];
 
-    protected $hidden = ['floor'];
+    protected $hidden = ['mappingVersion', 'floor'];
 
     protected $casts = [
         'mapping_version_id' => 'integer',

@@ -43,12 +43,19 @@ return [
     'preset_label' => '@todo de: .preset_label',
     'add_label'    => '@todo de: .add_label',
 
-    'color_label'                  => '@todo de: .color_label',
-    'weight_label'                 => '@todo de: .weight_label',
-    'mapobject_visibility_label'   => '@todo de: .mapobject_visibility_label',
+    'color_label'                => '@todo de: .color_label',
+    'weight_label'               => '@todo de: .weight_label',
+    'mapobject_visibility_label' => '@todo de: .mapobject_visibility_label',
+
+    'mapping_manipulation_tools_header_label'  => '@todo de-DE: .mapping_manipulation_tools_header_label',
+    'mapping_manipulation_tools_rotate_label'  => '@todo de-DE: .mapping_manipulation_tools_rotate_label',
+    'mapping_manipulation_tools_scale_x_label' => '@todo de-DE: .mapping_manipulation_tools_scale_x_label',
+    'mapping_manipulation_tools_scale_y_label' => '@todo de-DE: .mapping_manipulation_tools_scale_y_label',
+    'mapping_manipulation_tools_move_x_label'  => '@todo de-DE: .mapping_manipulation_tools_move_x_label',
+    'mapping_manipulation_tools_move_y_label'  => '@todo de-DE: .mapping_manipulation_tools_move_y_label',
 
     // Map object translations
-    'header_floor_selection_label' => '@todo de: .header_floor_selection_label',
+    'header_floor_selection_label'             => '@todo de: .header_floor_selection_label',
 
     'header_map_object_group_label'                   => '@todo de: .header_map_object_group_label',
     'enemy_map_object_group_label'                    => '@todo de: .enemy_map_object_group_label',
@@ -60,6 +67,8 @@ return [
     'mapicon_map_object_group_label'                  => '@todo de: .mapicon_map_object_group_label',
     'killzone_map_object_group_label'                 => '@todo de: .killzone_map_object_group_label',
     'killzonepath_map_object_group_label'             => '@todo de: .killzonepath_map_object_group_label',
+    'floorunion_map_object_group_label'               => '@todo de-DE: .floorunion_map_object_group_label',
+    'floorunionarea_map_object_group_label'           => '@todo de-DE: .floorunionarea_map_object_group_label',
     'mountablearea_map_object_group_label'            => '@todo de: .mountablearea_map_object_group_label',
 
     'publish_state_title_unpublished'   => '@todo de: .publish_state_title_unpublished',
@@ -73,7 +82,6 @@ return [
 
     'publish_state_title_world_with_link'   => '@todo de: .publish_state_title_world_with_link',
     'publish_state_subtext_world_with_link' => '@todo de: .publish_state_subtext_world_with_link',
-
 
     'publish_label'              => '@todo de: .publish_label',
     'unpublish_label'            => '@todo de: .unpublish_label',
@@ -101,10 +109,10 @@ return [
 
     'select_category_label' => '@todo de: .select_category_label',
 
-    'show_details_label'     => '@todo de: .show_details_label',
-    'add_kill_area_label'    => '@todo de: .add_kill_area_label',
-    'remove_kill_area_label' => '@todo de: .remove_kill_area_label',
-    'delete_killzone_label'  => '@todo de: .delete_killzone_label',
+    'pull_workbench_header_label'           => '@todo de-DE: .pull_workbench_header_label',
+    'pull_workbench_add_kill_area_label'    => '@todo de-DE: .pull_workbench_add_kill_area_label',
+    'pull_workbench_remove_kill_area_label' => '@todo de-DE: .pull_workbench_remove_kill_area_label',
+    'pull_workbench_pull_description_label' => '@todo de-DE: .pull_workbench_pull_description_label',
 
     'kill_zone_has_boss_label'               => '@todo de: .kill_zone_has_boss_label',
     'kill_zone_has_awakened_label'           => '@todo de: .kill_zone_has_awakened_label',
@@ -149,6 +157,10 @@ return [
     'dungeonfloorswitchmarker_title'              => '@todo de: .dungeonfloorswitchmarker_title',
     'mountablearea'                               => '@todo de: .mountablearea',
     'mountablearea_title'                         => '@todo de: .mountablearea_title',
+    'floorunion'                                  => '@todo de-DE: .floorunion',
+    'floorunion_title'                            => '@todo de-DE: .floorunion_title',
+    'floorunionarea'                              => '@todo de-DE: .floorunionarea',
+    'floorunionarea_title'                        => '@todo de-DE: .floorunionarea_title',
 
     'draw_handler_route_tooltip_start' => '@todo de: .draw_handler_route_tooltip_start',
     'draw_handler_route_tooltip_cont'  => '@todo de: .draw_handler_route_tooltip_cont',
@@ -174,7 +186,6 @@ return [
     'npc_class_label'                             => '@todo de: .npc_class_label',
     'enemy_portrait_label'                        => '@todo de: .enemy_portrait_label',
 
-
     // Admin
     'object.deleted'                              => '@todo de: .object.deleted',
     'delete_all_pulls_successful'                 => '@todo de: .delete_all_pulls_successful',
@@ -198,9 +209,12 @@ return [
     'make_user_label'                                                => '@todo de: .make_user_label',
     'make_admin_label'                                               => '@todo de: .make_admin_label',
     'delete_user_label'                                              => '@todo de: .delete_user_label',
+    'grant_all_benefits_label'                                       => '@todo de-DE: .grant_all_benefits_label',
+    'patreon_benefits_manually_granted_label'                        => '@todo de-DE: .patreon_benefits_manually_granted_label',
 
     // Home page
     'import_notes_label'                                             => '@todo de: .import_notes_label',
+    'import_errors_label'                                            => '@todo de-DE: .import_errors_label',
     'warnings_label'                                                 => '@todo de: .warnings_label',
     'category_label'                                                 => '@todo de: .category_label',
     'message_label'                                                  => '@todo de: .message_label',
@@ -215,6 +229,9 @@ return [
     'route_published_state_changed'                                  => '@todo de: .route_published_state_changed',
     'datatable_no_routes_in_table'                                   => '@todo de: .datatable_no_routes_in_table',
     'cannot_change_sharing_settings_not_all_required_enemies_killed' => '@todo de: .cannot_change_sharing_settings_not_all_required_enemies_killed',
+
+    // Mapping version edit
+    'mapping_version_saved'                                          => '@todo de-DE: .mapping_version_saved',
 
     // Dungeonroute table
     'vote'                                                           => '@todo de: .vote',
@@ -275,6 +292,8 @@ return [
     'sidebar_enemy_bolstering_whitelist_npcs_label'      => '@todo de: .sidebar_enemy_bolstering_whitelist_npcs_label',
     'sidebar_enemy_spell_label'                          => '@todo de: .sidebar_enemy_spell_label',
     'sidebar_enemy_skippable_label'                      => '@todo de: .sidebar_enemy_skippable_label',
+    'sidebar_enemy_runs_away_in_fear_label'              => '@todo de-DE: .sidebar_enemy_runs_away_in_fear_label',
+    'sidebar_hyper_respawns_label'                       => '@todo de-DE: .sidebar_hyper_respawns_label',
     'sidebar_enemy_health_fortified_label'               => '@todo de: .sidebar_enemy_health_fortified_label',
     'sidebar_enemy_health_tyrannical_label'              => '@todo de: .sidebar_enemy_health_tyrannical_label',
     'sidebar_enemy_skippable_info_label'                 => '@todo de: .sidebar_enemy_skippable_info_label',
@@ -313,113 +332,132 @@ return [
     // Popups
     // Map Object
     'map_object_readonly_label'                          => '@todo de: .map_object_readonly_label',
+    'map_object_category_general_label'                  => '@todo de-DE: .map_object_category_general_label',
+    'map_object_category_legacy_label'                   => '@todo de-DE: .map_object_category_legacy_label',
+    'map_object_category_advanced_label'                 => '@todo de-DE: .map_object_category_advanced_label',
 
-    'mapicon_faction_select_default_label'                          => '@todo de: .mapicon_faction_select_default_label',
-    'mapicon_teeming_select_default_label'                          => '@todo de: .mapicon_teeming_select_default_label',
+    'mapicon_faction_select_default_label'                                 => '@todo de: .mapicon_faction_select_default_label',
+    'mapicon_teeming_select_default_label'                                 => '@todo de: .mapicon_teeming_select_default_label',
 
     // Map icon
-    'map_icon_faction_label'                                        => '@todo de: .map_icon_faction_label',
-    'map_icon_teeming_label'                                        => '@todo de: .map_icon_teeming_label',
-    'map_icon_team_id_label'                                        => '@todo de: .map_icon_team_id_label',
-    'map_icon_permanent_tooltip_label'                              => '@todo de: .map_icon_permanent_tooltip_label',
-    'map_icon_map_icon_type_id_label'                               => '@todo de: .map_icon_map_icon_type_id_label',
-    'map_icon_comment_label'                                        => '@todo de: .map_icon_comment_label',
-    'map_icon_map_icon_type_id_select_default_label'                => '@todo de: .map_icon_map_icon_type_id_select_default_label',
-    'map_icon_seasonal_type_label'                                  => '@todo de: .map_icon_seasonal_type_label',
-    'map_icon_seasonal_index_label'                                 => '@todo de: .map_icon_seasonal_index_label',
-    'map_icon_seasonal_index_select_default_label'                  => '@todo de: .map_icon_seasonal_index_select_default_label',
+    'map_icon_faction_label'                                               => '@todo de: .map_icon_faction_label',
+    'map_icon_teeming_label'                                               => '@todo de: .map_icon_teeming_label',
+    'map_icon_team_id_label'                                               => '@todo de: .map_icon_team_id_label',
+    'map_icon_permanent_tooltip_label'                                     => '@todo de: .map_icon_permanent_tooltip_label',
+    'map_icon_map_icon_type_id_label'                                      => '@todo de: .map_icon_map_icon_type_id_label',
+    'map_icon_comment_label'                                               => '@todo de: .map_icon_comment_label',
+    'map_icon_map_icon_type_id_select_default_label'                       => '@todo de: .map_icon_map_icon_type_id_select_default_label',
+    'map_icon_seasonal_type_label'                                         => '@todo de: .map_icon_seasonal_type_label',
+    'map_icon_seasonal_index_label'                                        => '@todo de: .map_icon_seasonal_index_label',
+    'map_icon_seasonal_index_select_default_label'                         => '@todo de: .map_icon_seasonal_index_select_default_label',
 
     // Admin map icon
-    'admin_map_icon_faction_label'                                  => '@todo de: .admin_map_icon_faction_label',
-    'admin_map_icon_teeming_label'                                  => '@todo de: .admin_map_icon_teeming_label',
-    'admin_map_icon_permanent_tooltip_label'                        => '@todo de: .admin_map_icon_permanent_tooltip_label',
-    'admin_map_icon_map_icon_type_id_label'                         => '@todo de: .admin_map_icon_map_icon_type_id_label',
-    'admin_map_icon_comment_label'                                  => '@todo de: .admin_map_icon_comment_label',
-    'admin_map_icon_map_icon_type_id_select_default_label'          => '@todo de: .admin_map_icon_map_icon_type_id_select_default_label',
-    'admin_map_icon_seasonal_type_label'                            => '@todo de: .admin_map_icon_seasonal_type_label',
-    'admin_map_icon_seasonal_index_label'                           => '@todo de: .admin_map_icon_seasonal_index_label',
-    'admin_map_icon_seasonal_index_select_default_label'            => '@todo de: .admin_map_icon_seasonal_index_select_default_label',
+    'admin_map_icon_faction_label'                                         => '@todo de: .admin_map_icon_faction_label',
+    'admin_map_icon_teeming_label'                                         => '@todo de: .admin_map_icon_teeming_label',
+    'admin_map_icon_permanent_tooltip_label'                               => '@todo de: .admin_map_icon_permanent_tooltip_label',
+    'admin_map_icon_map_icon_type_id_label'                                => '@todo de: .admin_map_icon_map_icon_type_id_label',
+    'admin_map_icon_comment_label'                                         => '@todo de: .admin_map_icon_comment_label',
+    'admin_map_icon_map_icon_type_id_select_default_label'                 => '@todo de: .admin_map_icon_map_icon_type_id_select_default_label',
+    'admin_map_icon_seasonal_type_label'                                   => '@todo de: .admin_map_icon_seasonal_type_label',
+    'admin_map_icon_seasonal_index_label'                                  => '@todo de: .admin_map_icon_seasonal_index_label',
+    'admin_map_icon_seasonal_index_select_default_label'                   => '@todo de: .admin_map_icon_seasonal_index_select_default_label',
 
     // Enemy
-    'enemy_faction_label'                                           => '@todo de: .enemy_faction_label',
-    'enemy_teeming_label'                                           => '@todo de: .enemy_teeming_label',
-    'enemy_npc_id_label'                                            => '@todo de: .enemy_npc_id_label',
-    'enemy_mdt_id_label'                                            => '@todo de: .enemy_mdt_id_label',
-    'enemy_mdt_npc_id_label'                                        => '@todo de: .enemy_mdt_npc_id_label',
-    'enemy_seasonal_type_label'                                     => '@todo de: .enemy_seasonal_type_label',
-    'enemy_seasonal_type_select_default_label'                      => '@todo de: .enemy_seasonal_type_select_default_label',
-    'enemy_seasonal_index_label'                                    => '@todo de: .enemy_seasonal_index_label',
-    'enemy_seasonal_index_select_default_label'                     => '@todo de: .enemy_seasonal_index_select_default_label',
-    'enemy_active_auras_label'                                      => '@todo de: .enemy_active_auras_label',
-    'enemy_active_auras_select_default_label'                       => '@todo de: .enemy_active_auras_select_default_label',
-    'enemy_enemy_forces_override_label'                             => '@todo de: .enemy_enemy_forces_override_label',
-    'enemy_enemy_forces_override_teeming_label'                     => '@todo de: .enemy_enemy_forces_override_teeming_label',
-    'enemy_dungeon_difficulty_select_default_label'                 => '@todo de-DE: .enemy_dungeon_difficulty_select_default_label',
-    'enemy_dungeon_difficulty_label'                                => '@todo de-DE: .enemy_dungeon_difficulty_label',
-    'enemy_required_label'                                          => '@todo de: .enemy_required_label',
-    'enemy_skippable_label'                                         => '@todo de: .enemy_skippable_label',
-    'enemy_npc_id_select_default_label'                             => '@todo de: .enemy_npc_id_select_default_label',
-    'enemy_mdt_npc_id_select_default_label'                         => '@todo de: .enemy_mdt_npc_id_select_default_label',
+    'enemy_faction_label'                                                  => '@todo de: .enemy_faction_label',
+    'enemy_teeming_label'                                                  => '@todo de: .enemy_teeming_label',
+    'enemy_npc_id_label'                                                   => '@todo de: .enemy_npc_id_label',
+    'enemy_floor_id_label'                                                 => '@todo de-DE: .enemy_floor_id_label',
+    'enemy_mdt_id_label'                                                   => '@todo de: .enemy_mdt_id_label',
+    'enemy_mdt_npc_id_label'                                               => '@todo de: .enemy_mdt_npc_id_label',
+    'enemy_seasonal_type_label'                                            => '@todo de: .enemy_seasonal_type_label',
+    'enemy_seasonal_type_select_default_label'                             => '@todo de: .enemy_seasonal_type_select_default_label',
+    'enemy_seasonal_index_label'                                           => '@todo de: .enemy_seasonal_index_label',
+    'enemy_seasonal_index_select_default_label'                            => '@todo de: .enemy_seasonal_index_select_default_label',
+    'enemy_active_auras_label'                                             => '@todo de: .enemy_active_auras_label',
+    'enemy_active_auras_select_default_label'                              => '@todo de: .enemy_active_auras_select_default_label',
+    'enemy_enemy_forces_override_label'                                    => '@todo de: .enemy_enemy_forces_override_label',
+    'enemy_enemy_forces_override_teeming_label'                            => '@todo de: .enemy_enemy_forces_override_teeming_label',
+    'enemy_dungeon_difficulty_select_default_label'                        => '@todo de-DE: .enemy_dungeon_difficulty_select_default_label',
+    'enemy_dungeon_difficulty_label'                                       => '@todo de-DE: .enemy_dungeon_difficulty_label',
+    'enemy_required_label'                                                 => '@todo de: .enemy_required_label',
+    'enemy_skippable_label'                                                => '@todo de: .enemy_skippable_label',
+    'enemy_hyper_respawn_label'                                            => '@todo de-DE: .enemy_hyper_respawn_label',
+    'enemy_kill_priority_label'                                            => '@todo de-DE: .enemy_kill_priority_label',
+    'enemy_kill_priority_select_default_label'                             => '@todo de-DE: .enemy_kill_priority_select_default_label',
+    'enemy_npc_id_select_default_label'                                    => '@todo de: .enemy_npc_id_select_default_label',
+    'enemy_mdt_npc_id_select_default_label'                                => '@todo de: .enemy_mdt_npc_id_select_default_label',
 
     // Admin enemy pack
-    'admin_enemy_pack_faction_label'                                => '@todo de: .admin_enemy_pack_faction_label',
-    'admin_enemy_pack_teeming_label'                                => '@todo de: .admin_enemy_pack_teeming_label',
-    'admin_enemy_pack_label_label'                                  => '@todo de: .admin_enemy_pack_label_label',
-
+    'admin_enemy_pack_faction_label'                                       => '@todo de: .admin_enemy_pack_faction_label',
+    'admin_enemy_pack_teeming_label'                                       => '@todo de: .admin_enemy_pack_teeming_label',
+    'admin_enemy_pack_label_label'                                         => '@todo de: .admin_enemy_pack_label_label',
 
     // Brushline
-    'brushline_color_label'                                         => '@todo de: .brushline_color_label',
-    'brushline_color_animated_label'                                => '@todo de: .brushline_color_animated_label',
-    'brushline_weight_label'                                        => '@todo de: .brushline_weight_label',
+    'brushline_color_label'                                                => '@todo de: .brushline_color_label',
+    'brushline_color_animated_label'                                       => '@todo de: .brushline_color_animated_label',
+    'brushline_weight_label'                                               => '@todo de: .brushline_weight_label',
 
     // Path
-    'path_color_label'                                              => '@todo de: .path_color_label',
-    'path_color_animated_label'                                     => '@todo de: .path_color_animated_label',
-    'path_weight_label'                                             => '@todo de: .path_weight_label',
+    'path_color_label'                                                     => '@todo de: .path_color_label',
+    'path_color_animated_label'                                            => '@todo de: .path_color_animated_label',
+    'path_weight_label'                                                    => '@todo de: .path_weight_label',
 
     // Enemy patrol
-    'enemypatrol_faction_label'                                     => '@todo de: .enemypatrol_faction_label',
-    'enemypatrol_teeming_label'                                     => '@todo de: .enemypatrol_teeming_label',
-    'enemypatrol_color_label'                                       => '@todo de: .enemypatrol_color_label',
-    'enemypatrol_color_animated_label'                              => '@todo de: .enemypatrol_color_animated_label',
-    'enemypatrol_weight_label'                                      => '@todo de: .enemypatrol_weight_label',
-    'enemypatrol_couple_enemies_label'                              => '@todo de: .enemypatrol_couple_enemies_label',
-    'enemypatrol_couple_enemies_button_text_label'                  => '@todo de: .enemypatrol_couple_enemies_button_text_label',
+    'enemypatrol_faction_label'                                            => '@todo de: .enemypatrol_faction_label',
+    'enemypatrol_teeming_label'                                            => '@todo de: .enemypatrol_teeming_label',
+    'enemypatrol_color_label'                                              => '@todo de: .enemypatrol_color_label',
+    'enemypatrol_color_animated_label'                                     => '@todo de: .enemypatrol_color_animated_label',
+    'enemypatrol_weight_label'                                             => '@todo de: .enemypatrol_weight_label',
+    'enemypatrol_couple_enemies_label'                                     => '@todo de: .enemypatrol_couple_enemies_label',
+    'enemypatrol_couple_enemies_button_text_label'                         => '@todo de: .enemypatrol_couple_enemies_button_text_label',
 
     // Enemy pack
-    'enemypack_group_label'                                         => '@todo de: .enemypack_group_label',
-    'enemypack_color_label'                                         => '@todo de: .enemypack_color_label',
-    'enemypack_color_animated_label'                                => '@todo de: .enemypack_color_animated_label',
-    'enemypack_faction_label'                                       => '@todo de: .enemypack_faction_label',
-    'enemypack_teeming_label'                                       => '@todo de: .enemypack_teeming_label',
-    'enemypack_mark_as_skippable_label'                             => '@todo de-DE: .enemypack_mark_as_skippable_label',
-    'enemypack_mark_as_skippable_button_text_label'                 => '@todo de-DE: .enemypack_mark_as_skippable_button_text_label',
+    'enemypack_group_label'                                                => '@todo de: .enemypack_group_label',
+    'enemypack_color_label'                                                => '@todo de: .enemypack_color_label',
+    'enemypack_color_animated_label'                                       => '@todo de: .enemypack_color_animated_label',
+    'enemypack_faction_label'                                              => '@todo de: .enemypack_faction_label',
+    'enemypack_teeming_label'                                              => '@todo de: .enemypack_teeming_label',
+    'enemypack_mark_as_skippable_label'                                    => '@todo de-DE: .enemypack_mark_as_skippable_label',
+    'enemypack_mark_as_skippable_button_text_label'                        => '@todo de-DE: .enemypack_mark_as_skippable_button_text_label',
 
     // Dungeon floor switch marker
-    'dungeonfloorswitchmarker_faction_label'                        => '@todo de: .dungeonfloorswitchmarker_faction_label',
-    'dungeonfloorswitchmarker_teeming_label'                        => '@todo de: .dungeonfloorswitchmarker_teeming_label',
-    'dungeonfloorswitchmarker_target_floor_id_label'                => '@todo de: .dungeonfloorswitchmarker_target_floor_id_label',
-    'dungeonfloorswitchmarker_direction_label'                      => '@todo de: .dungeonfloorswitchmarker_direction_label',
-    'dungeonfloorswitchmarker_target_floor_id_select_default_label' => '@todo de: .dungeonfloorswitchmarker_target_floor_id_select_default_label',
-    'dungeonfloorswitchmarker_go_to_label'                          => '@todo de: .dungeonfloorswitchmarker_go_to_label',
-    'dungeonfloorswitchmarker_unknown_label'                        => '@todo de: .dungeonfloorswitchmarker_unknown_label',
+    'dungeonfloorswitchmarker_faction_label'                               => '@todo de: .dungeonfloorswitchmarker_faction_label',
+    'dungeonfloorswitchmarker_teeming_label'                               => '@todo de: .dungeonfloorswitchmarker_teeming_label',
+    'dungeonfloorswitchmarker_source_floor_id_label'                       => '@todo de-DE: .dungeonfloorswitchmarker_source_floor_id_label',
+    'dungeonfloorswitchmarker_source_floor_id_select_default_label'        => '@todo de-DE: .dungeonfloorswitchmarker_source_floor_id_select_default_label',
+    'dungeonfloorswitchmarker_target_floor_id_label'                       => '@todo de: .dungeonfloorswitchmarker_target_floor_id_label',
+    'dungeonfloorswitchmarker_target_floor_id_select_default_label'        => '@todo de: .dungeonfloorswitchmarker_target_floor_id_select_default_label',
+    'dungeonfloorswitchmarker_linked_dungeon_floor_switch_marker_id_label' => '@todo de-DE: .dungeonfloorswitchmarker_linked_dungeon_floor_switch_marker_id_label',
+    'dungeonfloorswitchmarker_direction_label'                             => '@todo de: .dungeonfloorswitchmarker_direction_label',
+    'dungeonfloorswitchmarker_direction_select_default_label'              => '@todo de-DE: .dungeonfloorswitchmarker_direction_select_default_label',
+    'dungeonfloorswitchmarker_go_to_label'                                 => '@todo de: .dungeonfloorswitchmarker_go_to_label',
+    'dungeonfloorswitchmarker_unknown_label'                               => '@todo de: .dungeonfloorswitchmarker_unknown_label',
 
     // Mountable area
-    'mountablearea_faction_label'                                   => '@todo de: .mountablearea_faction_label',
-    'mountablearea_teeming_label'                                   => '@todo de: .mountablearea_teeming_label',
-    'mountablearea_speed_label'                                     => '@todo de-DE: .mountablearea_speed_label',
+    'mountablearea_faction_label'                                          => '@todo de: .mountablearea_faction_label',
+    'mountablearea_teeming_label'                                          => '@todo de: .mountablearea_teeming_label',
+    'mountablearea_speed_label'                                            => '@todo de-DE: .mountablearea_speed_label',
+
+    // Floor Union
+    'floorunion_target_floor_id_select_default_label'                      => '@todo de-DE: .floorunion_target_floor_id_select_default_label',
+    'floorunion_target_floor_id_label'                                     => '@todo de-DE: .floorunion_target_floor_id_label',
+    'floorunion_size_label'                                                => '@todo de-DE: .floorunion_size_label',
+    'floorunion_rotation_label'                                            => '@todo de-DE: .floorunion_rotation_label',
+
+    // Floor Union Area
+    'floorunionarea_floor_union_id_label'                                  => '@todo de-DE: .floorunionarea_floor_union_id_label',
 
     // Dungeonroute table
-    'actions_label'                                                 => '@todo de: .actions_label',
-    'add_to_team_label'                                             => '@todo de: .add_to_team_label',
+    'actions_label'                                                        => '@todo de: .actions_label',
+    'add_to_team_label'                                                    => '@todo de: .add_to_team_label',
 
     // Teams
-    'view_label'                                                    => '@todo de: .view_label',
-    'collaborator_label'                                            => '@todo de: .collaborator_label',
-    'moderator_label'                                               => '@todo de: .moderator_label',
-    'admin_label'                                                   => '@todo de: .admin_label',
-    'change_role_success'                                           => '@todo de: .change_role_success',
-    'change_default_role_success'                                   => '@todo de: .change_default_role_success',
+    'view_label'                                                           => '@todo de: .view_label',
+    'collaborator_label'                                                   => '@todo de: .collaborator_label',
+    'moderator_label'                                                      => '@todo de: .moderator_label',
+    'admin_label'                                                          => '@todo de: .admin_label',
+    'change_role_success'                                                  => '@todo de: .change_role_success',
+    'change_default_role_success'                                          => '@todo de: .change_default_role_success',
 
     'team_admin'                                           => '@todo de: .team_admin',
     'team_moderator'                                       => '@todo de: .team_moderator',

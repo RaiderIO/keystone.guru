@@ -49,12 +49,14 @@ return [
         'linkpreview_default_description_sandbox' => '@todo de: .edit.linkpreview_default_description_sandbox',
     ],
     'embed'          => [
-        'title'             => '@todo de: .embed.title',
-        'any'               => '@todo de: .embed.any',
-        'select_floor'      => '@todo de: .embed.select_floor',
-        'affixes_title'     => '@todo de: .embed.affixes_title',
-        'affixes_selected'  => '@todo de: .embed.affixes_selected',
-        'copy_mdt_string'   => '@todo de: .embed.copy_mdt_string',
+        'title'            => '@todo de: .embed.title',
+        'any'              => '@todo de: .embed.any',
+        'select_floor'     => '@todo de: .embed.select_floor',
+        'affixes_title'    => '@todo de: .embed.affixes_title',
+        'affixes_selected' => '@todo de: .embed.affixes_selected',
+        'view_route'       => '@todo de-DE: .embed.view_route',
+        'present_route'    => '@todo de-DE: .embed.present_route',
+        'copy_mdt_string'  => '@todo de: .embed.copy_mdt_string',
     ],
     'limitreached'   => [
         'title'                     => '@todo de: .limitreached.title',
@@ -79,9 +81,10 @@ return [
         'unavailable_description' => '@todo de: .unavailable.unavailable_description',
     ],
     'view'           => [
-        'any'                                             => '@todo de: .view.any',
-        'linkpreview_title'                               => '@todo de: .view.linkpreview_title',
-        'linkpreview_default_description'                 => '@todo de: .view.linkpreview_default_description',
+        'any'                                     => '@todo de: .view.any',
+        'linkpreview_title'                       => '@todo de: .view.linkpreview_title',
+        'linkpreview_default_description'         => '@todo de: .view.linkpreview_default_description',
         'linkpreview_default_description_sandbox' => '@todo de: .view.linkpreview_default_description_sandbox',
+        'linkpreview_default_description_explore' => '@todo de-DE: .view.linkpreview_default_description_explore'
     ],
 ];

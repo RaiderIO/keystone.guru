@@ -2,23 +2,24 @@
 
 namespace App\Models\Timewalking;
 
-use App;
 use App\Models\CacheModel;
 use App\Models\Expansion;
+use App\Models\Season;
 use App\Models\Traits\HasStart;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int $id The ID of this timewalking event.
- * @property int $expansion_id
- * @property int $season_id
- * @property string $key
- * @property string $name
- * @property Carbon $start
- * @property int $start_duration_weeks
- * @property int $week_interval
+ * @property int       $id The ID of this timewalking event.
+ * @property int       $expansion_id
+ * @property int       $season_id
+ * @property string    $key
+ * @property string    $name
+ * @property Carbon    $start
+ * @property int       $start_duration_weeks
+ * @property int       $week_interval
  *
  * @property Expansion $expansion
  *
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  */
 class TimewalkingEvent extends CacheModel
 {
+    use SeederModel;
     use HasStart;
 
     public $timestamps = false;
@@ -42,5 +44,13 @@ class TimewalkingEvent extends CacheModel
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
     }
 }

@@ -8,19 +8,16 @@ use App\Models\ReleaseChangelogChange;
 use FilesystemIterator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
-class ReleasesSeeder extends Seeder
+class ReleasesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
-
         $this->command->info('Adding releases');
         $rootDir         = database_path('seeders/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
@@ -67,9 +64,9 @@ class ReleasesSeeder extends Seeder
 
         $this->command->info(sprintf('Inserting %d releases..', count($releaseAttributes)));
 
-        $result = Release::insert($releaseAttributes) &&
-            ReleaseChangelog::insert($releaseChangeLogAttributes) &&
-            ReleaseChangelogChange::insert($releaseChangeLogChangesAttributes);
+        $result = Release::from(DatabaseSeeder::getTempTableName(Release::class))->insert($releaseAttributes) &&
+            ReleaseChangelog::from(DatabaseSeeder::getTempTableName(ReleaseChangelog::class))->insert($releaseChangeLogAttributes) &&
+            ReleaseChangelogChange::from(DatabaseSeeder::getTempTableName(ReleaseChangelogChange::class))->insert($releaseChangeLogChangesAttributes);
 
         if ($result) {
             $this->command->info(sprintf('Inserting %d releases OK', count($releaseAttributes)));
@@ -78,10 +75,12 @@ class ReleasesSeeder extends Seeder
         }
     }
 
-    private function rollback()
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('releases')->truncate();
-        DB::table('release_changelogs')->truncate();
-        DB::table('release_changelog_changes')->truncate();
+        return [
+            Release::class,
+            ReleaseChangelog::class,
+            ReleaseChangelogChange::class,
+        ];
     }
 }

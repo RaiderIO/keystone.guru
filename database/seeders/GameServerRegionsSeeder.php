@@ -4,18 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\GameServerRegion;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class GameServerRegionsSeeder extends Seeder
+class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->rollback();
         $this->command->info('Adding known game server regions');
 
         $gameServerRegionAttributes = [
@@ -60,11 +58,14 @@ class GameServerRegionsSeeder extends Seeder
             ],
         ];
 
-        GameServerRegion::insert($gameServerRegionAttributes);
+        GameServerRegion::from(DatabaseSeeder::getTempTableName(GameServerRegion::class))->insert($gameServerRegionAttributes);
     }
 
-    private function rollback()
+    /**
+     * @return string[]
+     */
+    public static function getAffectedModelClasses(): array
     {
-        DB::table('game_server_regions')->truncate();
+        return [GameServerRegion::class];
     }
 }

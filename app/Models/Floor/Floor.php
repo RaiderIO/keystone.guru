@@ -15,6 +15,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
+use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\User;
 use Eloquent;
@@ -83,6 +84,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class Floor extends CacheModel implements MappingModelInterface
 {
+    use SeederModel;
     use HasFactory;
     use HasLatLng;
 

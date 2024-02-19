@@ -33,7 +33,7 @@ class AjaxNpcController extends Controller
 
             $result = response()->noContent();
         } catch (\Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

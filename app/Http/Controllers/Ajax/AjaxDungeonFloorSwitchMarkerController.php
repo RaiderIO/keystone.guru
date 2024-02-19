@@ -6,6 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Requests\DungeonFloorSwitchMarker\DungeonFloorSwitchMarkerFormRequest;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\Mapping\MappingVersion;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,13 +27,17 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
 
     /**
      * @param DungeonFloorSwitchMarkerFormRequest $request
+     * @param MappingVersion                      $mappingVersion
      * @param DungeonFloorSwitchMarker|null       $dungeonFloorSwitchMarker
      * @return DungeonFloorSwitchMarker|Model
      * @throws Throwable
      */
-    public function store(DungeonFloorSwitchMarkerFormRequest $request, DungeonFloorSwitchMarker $dungeonFloorSwitchMarker = null): DungeonFloorSwitchMarker
-    {
-        return $this->storeModel($request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
+    public function store(
+        DungeonFloorSwitchMarkerFormRequest $request,
+        MappingVersion                      $mappingVersion,
+        DungeonFloorSwitchMarker            $dungeonFloorSwitchMarker = null
+    ): DungeonFloorSwitchMarker {
+        return $this->storeModel($mappingVersion, $request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }
 
     /**
@@ -54,7 +59,7 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
             }
             $result = response()->noContent();
         } catch (Exception $ex) {
-            $result = response('Not found', Http::NOT_FOUND);
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;

@@ -8,7 +8,9 @@ use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
+use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class MountableArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
 {
+    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
 
@@ -40,6 +43,14 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     public $hidden = [
         'floor',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function mappingVersion(): BelongsTo
+    {
+        return $this->belongsTo(MappingVersion::class);
+    }
 
     /**
      * @return BelongsTo

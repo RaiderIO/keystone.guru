@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -9,6 +10,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Traits\SeederModel;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +35,7 @@ use Mockery\Exception;
  * @property boolean                                 $speedrun_enabled            True if this dungeon has a speedrun enabled, false if it does not.
  * @property boolean                                 $facade_enabled              True if this dungeon uses facades, false if it does not.
  * @property boolean                                 $active                      True if this dungeon is active, false if it is not.
+ * @property boolean                                 $mdt_supported               True if MDT is supported for this dungeon, false if it is not.
  *
  * @property Expansion                               $expansion
  * @property GameVersion                             $gameVersion
@@ -60,20 +63,14 @@ use Mockery\Exception;
  */
 class Dungeon extends CacheModel implements MappingModelInterface
 {
-    const DIFFICULTY_10_MAN = 1;
-    const DIFFICULTY_25_MAN = 2;
-
-    const DIFFICULTY_ALL = [
-        self::DIFFICULTY_10_MAN,
-        self::DIFFICULTY_25_MAN,
-    ];
+    use SeederModel;
 
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected $appends  = ['floor_count'];
+    protected $appends  = ['floor_count', 'mdt_supported'];
     protected $fillable = [
         'expansion_id',
         'game_version_id',
@@ -92,6 +89,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public $with       = ['expansion', 'gameVersion', 'floors'];
     public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
     public $timestamps = false;
+
+    const DIFFICULTY_10_MAN = 1;
+    const DIFFICULTY_25_MAN = 2;
+
+    const DIFFICULTY_ALL = [
+        self::DIFFICULTY_10_MAN,
+        self::DIFFICULTY_25_MAN,
+    ];
 
     // Classic
     const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps';     //blackfanthomdeeps
@@ -441,6 +446,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getFloorCountAttribute(): int
     {
         return $this->floors->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMdtSupportedAttribute(): bool
+    {
+        return Conversion::hasMDTDungeonName($this->key);
     }
 
     /**
@@ -973,22 +986,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public
-    static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
-        });
-    }
-
     /**
      * @return int|null
      */
-    public
-    function getDungeonId(): ?int
+    public function getDungeonId(): ?int
     {
         return $this->id;
     }

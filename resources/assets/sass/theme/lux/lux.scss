@@ -73,7 +73,7 @@
 
     h4 a,
     .header,
-    .description,
+    .description_row,
     .enemy_forces {
       color: #fff;
     }
@@ -94,5 +94,9 @@
 
   .br-theme-fontawesome-stars .br-widget a {
     font-size: 2.48em;
+  }
+
+  .modal .modal-content .close {
+    color: black;
   }
 }

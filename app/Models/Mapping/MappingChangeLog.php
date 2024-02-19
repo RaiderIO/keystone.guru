@@ -3,6 +3,7 @@
 namespace App\Models\Mapping;
 
 use App\Models\Traits\HasGenericModelRelation;
+use App\Models\Traits\SeederModel;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MappingChangeLog extends Model
 {
+    use SeederModel;
     use HasGenericModelRelation;
 
     protected $fillable = ['dungeon_id', 'model_id', 'model_class', 'before_model', 'after_model'];

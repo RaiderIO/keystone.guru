@@ -555,7 +555,7 @@ class DungeonRouteController extends Controller
         if (!is_numeric($floorIndex)) {
             $dungeonroute = DungeonRoute::where('public_key', $floorIndex)->first();
             if ($dungeonroute === null) {
-                return response('Not found', Http::NOT_FOUND);
+                return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         }
         $this->authorize('embed', $dungeonroute);

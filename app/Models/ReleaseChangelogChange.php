@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class ReleaseChangelogChange extends CacheModel
 {
+    use SeederModel;
+
     protected $fillable = ['id', 'release_changelog_id', 'release_changelog_category_id', 'ticket_id', 'change'];
     protected $visible = ['ticket_id', 'change', 'category', 'release_changelog_category_id', 'release_changelog_id'];
     protected $with = ['category'];

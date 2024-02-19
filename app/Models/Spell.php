@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -23,6 +24,14 @@ use Illuminate\Contracts\Routing\UrlGenerator;
  */
 class Spell extends CacheModel implements MappingModelInterface
 {
+    use SeederModel;
+
+    public $incrementing = false;
+    public $timestamps   = false;
+
+    public    $hidden  = ['pivot'];
+    protected $appends = ['icon_url'];
+
     const SCHOOL_PHYSICAL = 1;
     const SCHOOL_HOLY     = 2;
     const SCHOOL_FIRE     = 4;
@@ -76,12 +85,6 @@ class Spell extends CacheModel implements MappingModelInterface
     const SPELL_ANCIENT_HYSTERIA    = 90355;
     const SPELL_PRIMAL_RAGE         = 264667;
     const SPELL_FERAL_HIDE_DRUMS    = 381301;
-
-    public $incrementing = false;
-    public $timestamps   = false;
-
-    public    $hidden  = ['pivot'];
-    protected $appends = ['icon_url'];
 
     /**
      * @return array

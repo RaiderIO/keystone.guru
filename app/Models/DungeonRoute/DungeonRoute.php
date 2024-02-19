@@ -1498,7 +1498,7 @@ class DungeonRoute extends Model
         /** @var AffixGroup|null $result */
         $result = null;
 
-        if ($this->affixes->isNotEmpty()) {
+        if ($this->dungeon->gameVersion->has_seasons && $this->affixes->isNotEmpty()) {
             $result = $this->affixes->first();
 
             /** @var SeasonService $seasonService */

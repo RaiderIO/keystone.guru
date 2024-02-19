@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use App\User;
 use Eloquent;
@@ -24,6 +25,8 @@ use Illuminate\Support\Facades\Auth;
  */
 class GameServerRegion extends CacheModel
 {
+    use SeederModel;
+
     protected $fillable   = ['short', 'name', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
     public    $timestamps = false;
 
@@ -68,16 +71,6 @@ class GameServerRegion extends CacheModel
 
         return $cacheService->remember('default_region', function () {
             return GameServerRegion::where('short', self::DEFAULT_REGION)->first();
-        });
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function ($someModel) {
-            return false;
         });
     }
 }

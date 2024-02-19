@@ -13,4 +13,7 @@ return [
     'json_string_count_rule'              => [
         'message' => 'Json string must have at least :count elements.',
     ],
+    'map_icon_type_role_check_rule'              => [
+        'message' => 'That map icon type is not available for your access level.',
+    ],
 ];

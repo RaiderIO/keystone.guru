@@ -1,6 +1,6 @@
 <?php
 /** @var $isProduction string */
-/** @var $version string */
+/** @var $revision string */
 /** @var $theme string */
 /** @var $hasNewChangelog bool */
 /** @var $latestRelease \App\Models\Release */
@@ -8,14 +8,14 @@
 
 // Show ads or not
 $showAds = $showAds ?? true;
-$user = \Illuminate\Support\Facades\Auth::user();
+$user    = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal = $showLegalModal ?? true;
-$showSpotlight = $showSpotlight ?? true;
+$showSpotlight  = $showSpotlight ?? true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
 // Any additional parameters to pass to the login/register blade
-$loginParams = $loginParams ?? [];
+$loginParams    = $loginParams ?? [];
 $registerParams = $registerParams ?? [];
 // Show cookie consent
 $cookieConsent = $cookieConsent ?? true;
@@ -54,7 +54,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
 
     @sectionMissing('linkpreview')
         @include('common.general.linkpreview', [
-            'title' => __('views/layouts.app.linkpreview_title')
+            'title' => __('views/layouts.app.linkpreview_title'),
         ])
     @endif
 
@@ -64,12 +64,12 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset(sprintf('css/app-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/custom-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/app-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/custom-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     {{--    <link href="{{ asset(sprintf('css/lib-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">--}}
-    <link href="{{ asset(sprintf('css/theme-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/home-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/custom-compiled-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/theme-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/home-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ asset(sprintf('css/custom-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="{{ url("/images/icon/favicon.ico") }}">
     @yield('head')
 
@@ -126,10 +126,10 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
 @endif
 
 <!-- Scripts -->
-<script src="{{ asset('js/app-' . $version . '.js') . $devCacheBuster }}"></script>
+<script src="{{ asset(sprintf('js/app-%s.js', $revision)) . $devCacheBuster }}"></script>
 <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-<script src="{{ asset('js/custom-' . $version . '.js') .$devCacheBuster }}"></script>
-<script src="{{ asset('js/lib-' . $version . '.js') . $devCacheBuster }}"></script>
+<script src="{{ asset(sprintf('js/custom-%s.js', $revision)) .$devCacheBuster }}"></script>
+<script src="{{ asset(sprintf('js/lib-%s.js', $revision)) . $devCacheBuster }}"></script>
 @yield('scripts')
 <script type="application/javascript">
     $(function () {

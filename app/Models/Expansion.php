@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Carbon\Carbon;
 use Eloquent;
@@ -34,6 +35,7 @@ use Illuminate\Support\Collection;
  */
 class Expansion extends CacheModel
 {
+    use SeederModel;
     use HasIconFile;
     use UserCurrentTime;
 

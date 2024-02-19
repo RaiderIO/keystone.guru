@@ -51,7 +51,7 @@ $dungeon = $dungeonroute->dungeon;
                 'share' => [
                     'link' => !$dungeonroute->isSandbox(),
                     'embed' => !$dungeonroute->isSandbox(),
-                    'mdt-export' => true,
+                    'mdt-export' => $dungeon->mdt_supported,
                     'publish' => false,
                 ]
             ],

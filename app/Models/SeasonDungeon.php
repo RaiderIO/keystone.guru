@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SeasonDungeon extends CacheModel
 {
+    use SeederModel;
+
     protected $fillable = ['season_id', 'dungeon_id'];
     public $with = ['season', 'dungeon'];
     public $timestamps = false;

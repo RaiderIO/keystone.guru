@@ -2,11 +2,12 @@
 
 namespace App\Models\Tags;
 
+use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
+ * @property int    $id
  * @property string $name
  * @property string $model_class
  *
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TagCategory extends Model
 {
+    use SeederModel;
+
     public $timestamps = false;
 
     const DUNGEON_ROUTE_PERSONAL = 'dungeon_route_personal';

@@ -70,9 +70,8 @@ class Brushline extends Model
         parent::boot();
 
         // Delete Brushline properly if it gets deleted
-        static::deleting(function ($item) {
-            /** @var $item Brushline */
-            $item->polyline()->delete();
+        static::deleting(function (Brushline $brushline) {
+            $brushline->polyline()->delete();
         });
     }
 }

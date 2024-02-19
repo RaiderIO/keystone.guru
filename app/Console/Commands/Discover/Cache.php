@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Discover;
 
+use App\Jobs\RefreshDiscoverCache;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
@@ -16,7 +17,7 @@ class Cache extends Command
      *
      * @var string
      */
-    protected $signature = 'discover:cache';
+    protected $signature = 'discover:cache {--async=}';
 
     /**
      * The console command description.
@@ -38,12 +39,21 @@ class Cache extends Command
     /**
      * Execute the console command.
      *
-     * @param DiscoverServiceInterface $discoverService
+     * @param DiscoverServiceInterface  $discoverService
      * @param ExpansionServiceInterface $expansionService
      * @return int
      */
-    public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
+    public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int
     {
+        $async = (bool)$this->option('async');
+
+        if ($async) {
+            $this->info('Caching Discover pages async');
+            RefreshDiscoverCache::dispatch();
+
+            return 0;
+        }
+
         $this->info('Caching Discover pages');
 
         // Disable cache so that we may refresh it
@@ -108,6 +118,7 @@ class Cache extends Command
             // Reset for the next iteration
             $discoverService = $discoverService->withSeason(null);
         }
+
         return 0;
     }
 }

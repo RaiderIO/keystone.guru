@@ -100,6 +100,12 @@ return [
             'login_through_oauth2' => 'Авторизация с помощью OAuth2',
         ],
         'mapsettings'          => [
+            'map_facade_style'                              => '@todo ru-RU: .forms.mapsettings.map_facade_style',
+            'map_facade_style_title'                        => '@todo ru-RU: .forms.mapsettings.map_facade_style_title',
+            'map_facade_style_facade_option'                => '@todo ru-RU: .forms.mapsettings.map_facade_style_facade_option',
+            'map_facade_style_split_floors_option'          => '@todo ru-RU: .forms.mapsettings.map_facade_style_split_floors_option',
+            'map_facade_style_change_requires_page_refresh' => '@todo ru-RU: .forms.mapsettings.map_facade_style_change_requires_page_refresh',
+
             'enemies'                                => 'Враги',
             'enemy_number_style'                     => 'Стиль числа врагов',
             'enemy_number_style_title'               => 'Это управляет тем, что означают числа, когда вы наводите указатель мыши на врагов или когда вы выбираете тип отображения \'Силы врага\'.',
@@ -199,10 +205,13 @@ return [
     ],
     'layout'       => [
         'footer'  => [
-            'about'               => 'О нас',
+            'developer'           => '@todo ru-RU: .layout.footer.developer',
+            'api_documentation'   => '@todo ru-RU: .layout.footer.api_documentation',
+            'keystone_guru'       => '@todo ru-RU: .layout.footer.keystone_guru',
             'changelog'           => 'Журнал изменений',
             'changelog_new'       => 'НОВОЕ',
             'credits'             => 'Благодарности',
+            'about'               => 'О нас',
             'external'            => 'Внешние ссылки',
             'patreon'             => 'Patreon',
             'discord'             => 'Discord',
@@ -414,6 +423,8 @@ return [
         'routeadminsettings' => [
             'title'                             => '@todo ru-RU: .modal.routeadminsettings.title',
             'dungeon_route_info'                => '@todo ru-RU: .modal.routeadminsettings.dungeon_route_info',
+            'links'                             => '@todo ru-RU: .modal.routeadminsettings.links',
+            'edit_mapping_version'              => '@todo ru-RU: .modal.routeadminsettings.edit_mapping_version',
             'combatlog_info'                    => '@todo ru-RU: .modal.routeadminsettings.combatlog_info',
             'challenge_mode_run'                => '@todo ru-RU: .modal.routeadminsettings.challenge_mode_run',
             'challenge_mode_run_data'           => '@todo ru-RU: .modal.routeadminsettings.challenge_mode_run_data',

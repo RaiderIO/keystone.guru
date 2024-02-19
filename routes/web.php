@@ -444,50 +444,53 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         // Metrics
         Route::group(['prefix' => 'metric'], function () {
             Route::post('/', [AjaxMetricController::class, 'store'])->name('ajax.metric.store');
-            Route::post('/route/{dungeonRoute}', [AjaxMetricController::class, 'storeDungeonRoute'])->name('ajax.metric.store.dungeonroute');
+            Route::post('/route/{dungeonRoute}', [AjaxMetricController::class, 'storeDungeonRoute'])->name('ajax.metric.dungeonroute.store');
         });
 
         // Must be an admin to perform these actions
         Route::group(['middleware' => ['auth', 'role:admin']], function () {
             Route::group(['prefix' => 'admin'], function () {
-                Route::patch('mappingVersion/{mappingVersion}', [AjaxMappingVersionController::class, 'store']);
 
                 Route::get('/user', [AjaxUserController::class, 'list']);
                 Route::get('/npc', [AjaxNpcController::class, 'list']);
 
-                Route::post('/enemy', [AjaxEnemyController::class, 'store']);
-                Route::put('/enemy/{enemy}', [AjaxEnemyController::class, 'store']);
-                Route::delete('/enemy/{enemy}', [AjaxEnemyController::class, 'delete']);
-
-                Route::post('/enemypack', [AjaxEnemyPackController::class, 'store']);
-                Route::put('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'store']);
-                Route::delete('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'delete']);
-
-                Route::post('/enemypatrol', [AjaxEnemyPatrolController::class, 'store']);
-                Route::put('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'store']);
-                Route::delete('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'delete']);
-
-                Route::post('/dungeonfloorswitchmarker', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
-                Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
-                Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'delete']);
-
-                Route::post('/mapicon', [AjaxMapIconController::class, 'adminStore']);
-                Route::put('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminStore']);
-                Route::delete('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminDelete']);
-
-                Route::post('/mountablearea', [AjaxMountableAreaController::class, 'store']);
-                Route::put('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'store']);
-                Route::delete('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'delete']);
-
-                Route::post('/floorunion', [AjaxFloorUnionController::class, 'store']);
-                Route::put('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'store']);
-                Route::delete('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'delete']);
-
-                Route::post('/floorunionarea', [AjaxFloorUnionAreaController::class, 'store']);
-                Route::put('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'store']);
-                Route::delete('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'delete']);
-
                 Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
+
+                Route::group(['prefix' => 'mappingVersion/{mappingVersion}'], function () {
+                    Route::patch('/', [AjaxMappingVersionController::class, 'store']);
+
+                    Route::post('/enemy', [AjaxEnemyController::class, 'store']);
+                    Route::put('/enemy/{enemy}', [AjaxEnemyController::class, 'store']);
+                    Route::delete('/enemy/{enemy}', [AjaxEnemyController::class, 'delete']);
+
+                    Route::post('/enemypack', [AjaxEnemyPackController::class, 'store']);
+                    Route::put('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'store']);
+                    Route::delete('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'delete']);
+
+                    Route::post('/enemypatrol', [AjaxEnemyPatrolController::class, 'store'])->name('ajax.admin.enemypatrol.create');
+                    Route::put('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'store'])->name('ajax.admin.enemypatrol.update');
+                    Route::delete('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'delete'])->name('ajax.admin.enemypatrol.delete');
+
+                    Route::post('/dungeonfloorswitchmarker', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
+                    Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
+                    Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'delete']);
+
+                    Route::post('/mapicon', [AjaxMapIconController::class, 'adminStore']);
+                    Route::put('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminStore']);
+                    Route::delete('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminDelete']);
+
+                    Route::post('/mountablearea', [AjaxMountableAreaController::class, 'store']);
+                    Route::put('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'store']);
+                    Route::delete('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'delete']);
+
+                    Route::post('/floorunion', [AjaxFloorUnionController::class, 'store']);
+                    Route::put('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'store']);
+                    Route::delete('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'delete']);
+
+                    Route::post('/floorunionarea', [AjaxFloorUnionAreaController::class, 'store']);
+                    Route::put('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'store']);
+                    Route::delete('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'delete']);
+                });
             });
 
             Route::put('/userreport/{userreport}/status', [AjaxUserReportController::class, 'status']);
