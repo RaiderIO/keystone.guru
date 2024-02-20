@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Service\Subcreation;
+namespace App\Service\EaseTier;
 
-use App\Service\Subcreation\Exceptions\InvalidResponseException;
+use App\Service\EaseTier\Exceptions\InvalidResponseException;
 use App\Service\Traits\Curl;
 
-class SubcreationApiService implements SubcreationApiServiceInterface
+class ArchonApiService implements ArchonApiServiceInterface
 {
     use Curl;
 
@@ -16,7 +16,7 @@ class SubcreationApiService implements SubcreationApiServiceInterface
      */
     public function getDungeonEaseTierListOverall(): array
     {
-        $responseStr = $this->curlGet('https://subcreation.net/api/v0/dungeon_ease_tier_list_overall');
+        $responseStr = $this->curlGet('https://www.archon.gg/wow/tier-list/dps-rankings/mythic-plus/20/all-dungeons/this-week/data.json');
 
         $response = json_decode($responseStr, true);
 

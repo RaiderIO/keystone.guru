@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service\Subcreation;
+namespace App\Service\EaseTier;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
@@ -15,7 +15,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     /**
      * @inheritDoc
      */
-    function getTierForAffixAndDungeon(AffixGroup $affixGroup, Dungeon $dungeon): ?string
+    public function getTierForAffixAndDungeon(AffixGroup $affixGroup, Dungeon $dungeon): ?string
     {
         $result = null;
 
@@ -39,7 +39,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     /**
      * @inheritDoc
      */
-    function getTiersByAffixGroups(Collection $affixGroups): Collection
+    public function getTiersByAffixGroups(Collection $affixGroups): Collection
     {
         $result = collect();
 
@@ -58,7 +58,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     /**
      * @inheritDoc
      */
-    function getTiers(): Collection
+    public function getTiers(): Collection
     {
         $result = collect();
 

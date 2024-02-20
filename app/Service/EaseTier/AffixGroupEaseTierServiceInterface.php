@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Subcreation;
+namespace App\Service\EaseTier;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;

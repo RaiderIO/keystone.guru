@@ -6,9 +6,9 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\Dungeon;
 use App\Models\SubcreationEaseTierPull;
+use App\Service\EaseTier\ArchonApiServiceInterface;
+use App\Service\EaseTier\Exceptions\InvalidResponseException;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\Subcreation\Exceptions\InvalidResponseException;
-use App\Service\Subcreation\SubcreationApiServiceInterface;
 use Carbon\Carbon;
 use DateTimeZone;
 use Exception;
@@ -48,15 +48,15 @@ class RefreshAffixGroupEaseTiers extends Command
     /**
      * Execute the console command.
      *
-     * @param SubcreationApiServiceInterface $subcreationApiService
-     * @param SeasonServiceInterface         $seasonService
+     * @param ArchonApiServiceInterface $archonApiService
+     * @param SeasonServiceInterface    $seasonService
      * @return int
      * @throws Exception
      */
-    public function handle(SubcreationApiServiceInterface $subcreationApiService, SeasonServiceInterface $seasonService)
+    public function handle(ArchonApiServiceInterface $archonApiService, SeasonServiceInterface $seasonService)
     {
         try {
-            $tierLists = $subcreationApiService->getDungeonEaseTierListOverall();
+            $tierLists = $archonApiService->getDungeonEaseTierListOverall();
         } catch (InvalidResponseException $exception) {
             $this->error(sprintf('Invalid response: %s', $exception->getMessage()));
 
