@@ -54,6 +54,8 @@ class Cache extends Command
             return 0;
         }
 
+        set_time_limit(3600);
+
         $this->info('Caching Discover pages');
 
         // Disable cache so that we may refresh it
