@@ -4,38 +4,40 @@ namespace App\Models\AffixGroup;
 
 use App\Models\CacheModel;
 use App\Models\Dungeon;
-use App\Models\SubcreationEaseTierPull;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id The ID of this Affix.
- * @property int $subcreation_ease_tier_pull_id
- * @property int $affix_group_id
- * @property int $dungeon_id
- * @property string $tier
+ * @property int                    $id
+ * @property int                    $affix_group_ease_tier_pull_id
+ * @property int                    $affix_group_id
+ * @property int                    $dungeon_id
+ * @property string                 $tier
  *
- * @property AffixGroup $affixgroup
- * @property Dungeon $dungeon
+ * @property AffixGroupEaseTierPull $affixGroupEaseTierPull
+ * @property AffixGroup             $affixGroup
+ * @property Dungeon                $dungeon
  *
  * @mixin Eloquent
  */
 class AffixGroupEaseTier extends CacheModel
 {
-    public $fillable = ['subcreation_ease_tier_pull_id', 'affix_group_id', 'dungeon_id', 'tier'];
+    public $fillable = ['affix_group_ease_tier_pull_id', 'affix_group_id', 'dungeon_id', 'tier'];
+
+    public $timestamps = false;
 
     /**
      * @return BelongsTo
      */
-    public function subcreationeasetierpull(): BelongsTo
+    public function affixGroupEaseTierPull(): BelongsTo
     {
-        return $this->belongsTo(SubcreationEaseTierPull::class);
+        return $this->belongsTo(AffixGroupEaseTierPull::class);
     }
 
     /**
      * @return BelongsTo
      */
-    public function affixgroup(): BelongsTo
+    public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);
     }

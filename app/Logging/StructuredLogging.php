@@ -3,6 +3,8 @@
 namespace App\Logging;
 
 use App\Logic\Utils\Stopwatch;
+use Illuminate\Container\Container;
+use Illuminate\Foundation\Application;
 use Monolog\Logger;
 
 class StructuredLogging implements StructuredLoggingInterface
@@ -15,9 +17,20 @@ class StructuredLogging implements StructuredLoggingInterface
 
     private ?string $channel = null;
 
+    public function __construct()
+    {
+        /** @var Application|Container $app */
+        $app = app();
+
+        if ($app->runningInConsole()) {
+            $this->setChannel('stderr');
+        }
+    }
+
+
     /**
      * @param string $key
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     public function addContext(string $key, ...$context): void
@@ -52,12 +65,13 @@ class StructuredLogging implements StructuredLoggingInterface
     protected function setChannel(?string $channel): StructuredLogging
     {
         $this->channel = $channel;
+
         return $this;
     }
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function start(string $functionName, array $context = []): void
@@ -78,7 +92,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function end(string $functionName, array $context = []): void
@@ -100,7 +114,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function debug(string $functionName, array $context = []): void
@@ -110,7 +124,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function notice(string $functionName, array $context = []): void
@@ -120,7 +134,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function info(string $functionName, array $context = []): void
@@ -130,7 +144,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function warning(string $functionName, array $context = []): void
@@ -140,7 +154,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function error(string $functionName, array $context = []): void
@@ -150,7 +164,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function critical(string $functionName, array $context = []): void
@@ -160,7 +174,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     /**
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     protected function emergency(string $functionName, array $context = []): void
@@ -169,9 +183,9 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param int $level
+     * @param int    $level
      * @param string $functionName
-     * @param array $context
+     * @param array  $context
      * @return void
      */
     private function log(int $level, string $functionName, array $context = []): void

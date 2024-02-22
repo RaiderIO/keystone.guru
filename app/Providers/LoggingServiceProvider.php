@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Logging\StructuredLogging;
+use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
+use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLogging;
@@ -34,6 +37,7 @@ use App\Service\Patreon\Logging\PatreonServiceLogging;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
+use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
@@ -44,6 +48,9 @@ class LoggingServiceProvider extends ServiceProvider
     public function register()
     {
         parent::register();
+
+        // AffixGroup
+        $this->app->bind(AffixGroupEaseTierServiceLoggingInterface::class, AffixGroupEaseTierServiceLogging::class);
 
         // Combat log
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);

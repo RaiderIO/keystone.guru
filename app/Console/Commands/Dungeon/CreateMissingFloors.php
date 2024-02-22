@@ -51,9 +51,9 @@ class CreateMissingFloors extends Command
             $dungeonTranslationKey = explode('.', $dungeon->name)[2];
             $floorsTranslationKey  = sprintf('dungeons.%s.%s.floors', $dungeon->expansion->shortname, $dungeonTranslationKey);
 
-            $translatedFloors = __($floorsTranslationKey, [], 'en');
+            $translatedFloors = __($floorsTranslationKey, [], 'en-US');
 
-            $this->info(sprintf('- %s', __($dungeon->name, [], 'en')));
+            $this->info(sprintf('- %s', __($dungeon->name, [], 'en-US')));
             $index = 1;
             foreach ($translatedFloors as $key => $value) {
                 $floorKey = sprintf('%s.%s', $floorsTranslationKey, $key);
@@ -65,7 +65,7 @@ class CreateMissingFloors extends Command
                     'default'    => $index === 1,
                 ]);
 
-                $this->comment(sprintf('-- Added new floor %s', __($floorKey, [], 'en')));
+                $this->comment(sprintf('-- Added new floor %s', __($floorKey, [], 'en-US')));
 
                 $index++;
             }

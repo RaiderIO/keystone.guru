@@ -13,6 +13,8 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\UserReport;
+use App\Service\AdProvider\AdProviderService;
+use App\Service\AdProvider\AdProviderServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
@@ -39,6 +41,10 @@ use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\AffixGroup\AffixGroupEaseTierService;
+use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
+use App\Service\AffixGroup\ArchonApiService;
+use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\EchoServer\EchoServerHttpApiService;
 use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
@@ -62,8 +68,6 @@ use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Service\Metric\MetricService;
 use App\Service\Metric\MetricServiceInterface;
-use App\Service\AdProvider\AdProviderService;
-use App\Service\AdProvider\AdProviderServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -78,10 +82,6 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
-use App\Service\Subcreation\AffixGroupEaseTierService;
-use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
-use App\Service\Subcreation\SubcreationApiService;
-use App\Service\Subcreation\SubcreationApiServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
@@ -147,8 +147,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
-        $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
+
+        // Depends on SeasonService
+        $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
 
         // Depends on CacheService, CoordinatesService, OverpulledEnemyService
         $this->app->bind(MapContextServiceInterface::class, MapContextService::class);
@@ -168,7 +170,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // External communication
         $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
         $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
-        $this->app->bind(SubcreationApiServiceInterface::class, SubcreationApiService::class);
+        $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
