@@ -62,7 +62,7 @@ return [
             'filter'                => 'Filter',
         ],
         'tier'       => [
-            'data_by_subcreation' => '%s - data by https://mplus.subcreation.net',
+            'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',
         ],
     ],
     'forms'        => [

@@ -114,7 +114,7 @@ class Update extends Command
             $this->call('supervisor:start');
         }
 
-        // Refresh the subcreation ease tiers (for a first run to populate the data)
+        // Refresh the affix group ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
         // Dispatch the refreshing of the discovery cache - this can take up to 5 minutes and can be done in the background
         RefreshDiscoverCache::dispatch();
