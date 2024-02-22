@@ -35,7 +35,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      *
      * @group AffixGroupEaseTierService
      */
-    public function getTiersHash_GivenUnsortedDungeonNamesResponse_ShouldGenerateExpectedHash()
+    public function getTiersHash_GivenUnsortedDungeonNamesResponse_ShouldGenerateSameHash()
     {
         // Arrange
         $response                  = $this->getResponse('response_unsorted_dungeon_names');
@@ -66,6 +66,26 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
 
         // Assert
         $this->assertEquals('89032af835ef1b1553b17c86eb668078', $hash);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     *
+     * @group AffixGroupEaseTierService
+     */
+    public function getTiersHash_GivenDifferentTiersResponse_ShouldGenerateDifferentHash()
+    {
+        // Arrange
+        $response                  = $this->getResponse('response_different_tiers');
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock($this);
+
+        // Act
+        $hash = $affixGroupEaseTierService->getTiersHash($response, []);
+
+        // Assert
+        $this->assertEquals('761ba5dc6a6bc38ca8158a814c9ed6c1', $hash);
     }
 
     /**

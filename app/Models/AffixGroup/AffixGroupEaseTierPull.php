@@ -50,21 +50,15 @@ class AffixGroupEaseTierPull extends CacheModel
     }
 
     /**
-     * @return string
+     * @return void
      */
-    public function getAffixGroupEaseTiersHash(): string
+    public static function boot()
     {
-        return md5(
-            $this->affixGroupEaseTiers->sort(function (AffixGroupEaseTier $affixGroupEaseTier) {
-                return __($affixGroupEaseTier->dungeon->name, [], 'en-US');
-            })->map(function (AffixGroupEaseTier $affixGroupEaseTier) {
-                return sprintf(
-                    '%s|%s|%s',
-                    __($affixGroupEaseTier->dungeon->name, [], 'en-US'),
-                    $affixGroupEaseTier->affixGroup->text,
-                    $affixGroupEaseTier->tier
-                );
-            })->join('|')
-        );
+        parent::boot();
+
+        // Delete AffixGroupEaseTiers properly if it gets deleted
+        static::deleting(function (AffixGroupEaseTierPull $affixGroupEaseTierPull) {
+            $affixGroupEaseTierPull->affixGroupEaseTiers()->delete();
+        });
     }
 }

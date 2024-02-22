@@ -4,6 +4,7 @@ namespace App\Service\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
+use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
 use Illuminate\Support\Collection;
 
@@ -18,9 +19,9 @@ interface AffixGroupEaseTierServiceInterface
 
     /**
      * @param array $tierListsResponse
-     * @return bool
+     * @return AffixGroupEaseTierPull|null
      */
-    public function parseTierList(array $tierListsResponse): bool;
+    public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull;
 
     /**
      * @param AffixGroup $affixGroup

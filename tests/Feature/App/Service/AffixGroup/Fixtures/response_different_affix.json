@@ -1,0 +1,85 @@
+{
+    "difficulty": {
+        "slug": "20"
+    },
+    "affixes": {
+        "slug": "this-week"
+    },
+    "encounterTierList": {
+        "title": "Dungeon Ease Tier List for +20 to +32 Mythic+",
+        "label": "Tyrannical, Storming, Raging",
+        "metrics": [
+            {
+                "value": "score",
+                "label": "Mythic+ Score"
+            }
+        ],
+        "tierLists": [
+            {
+                "metric": "score",
+                "tiers": [
+                    {
+                        "tier": "S",
+                        "entries": [
+                            {
+                                "id": 61501,
+                                "name": "Black Rook Hold",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/black-rook-hold/this-week"
+                            }
+                        ]
+                    },
+                    {
+                        "tier": "A",
+                        "entries": [
+                            {
+                                "id": 61763,
+                                "name": "Atal'Dazar",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/ataldazar/this-week"
+                            },
+                            {
+                                "id": 12579,
+                                "name": "Galakrond's Fall",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/galakronds-fall/this-week"
+                            },
+                            {
+                                "id": 61862,
+                                "name": "Waycrest Manor",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/waycrest-manor/this-week"
+                            }
+                        ]
+                    },
+                    {
+                        "tier": "B",
+                        "entries": [
+                            {
+                                "id": 61466,
+                                "name": "Darkheart Thicket",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/darkheart-thicket/this-week"
+                            }
+                        ]
+                    },
+                    {
+                        "tier": "C",
+                        "entries": [
+                            {
+                                "id": 10643,
+                                "name": "Throne of the Tides",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/throne-of-the-tides/this-week"
+                            },
+                            {
+                                "id": 12580,
+                                "name": "Murozond's Rise",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/murozonds-rise/this-week"
+                            },
+                            {
+                                "id": 61279,
+                                "name": "Everbloom",
+                                "url": "/wow/tier-list/dps-rankings/mythic-plus/20/everbloom/this-week"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

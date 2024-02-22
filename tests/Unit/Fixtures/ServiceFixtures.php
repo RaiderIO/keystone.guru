@@ -5,6 +5,7 @@ namespace Tests\Unit\Fixtures;
 use App\Models\Season;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
+use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
@@ -25,37 +26,46 @@ use Tests\TestCases\PublicTestCase;
 class ServiceFixtures
 {
     /**
-     * @param PublicTestCase $testCase
-     * @param array          $methodsNotToMock
+     * @param PublicTestCase                                 $testCase
+     * @param SeasonServiceInterface|null                    $seasonService
+     * @param AffixGroupEaseTierServiceLoggingInterface|null $log
+     * @param array                                          $methodsToMock
      * @return MockObject|AffixGroupEaseTierServiceInterface
      */
     public static function getAffixGroupEaseTierServiceMock(
-        PublicTestCase $testCase,
-        array          $methodsNotToMock = []
+        PublicTestCase                            $testCase,
+        SeasonServiceInterface                    $seasonService = null,
+        AffixGroupEaseTierServiceLoggingInterface $log = null,
+        array                                     $methodsToMock = []
+
     ): MockObject {
         return $testCase
             ->getMockBuilder(AffixGroupEaseTierService::class)
-            ->setMethods(null)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+                $seasonService ?? self::getSeasonServiceMock($testCase),
+                $log ?? LoggingFixtures::createAffixGroupEaseTierServiceLogging($testCase),
+            ])
             ->getMock();
     }
 
     /**
      * @param PublicTestCase                   $testCase
      * @param CombatLogServiceLoggingInterface $log
-     * @param array                            $methodsNotToMock
+     * @param array                            $methodsToMock
      * @return MockObject|CombatLogServiceInterface
      */
     public static function getCombatLogServiceMock(
         PublicTestCase                   $testCase,
         CombatLogServiceLoggingInterface $log,
-        array                            $methodsNotToMock = []
+        array                            $methodsToMock = []
     ): MockObject {
         return $testCase
             ->getMockBuilder(CombatLogService::class)
             ->setConstructorArgs([
                 $log,
             ])
-            ->setMethods(null)
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 
@@ -63,7 +73,7 @@ class ServiceFixtures
      * @param PublicTestCase                               $testCase
      * @param CombatLogService                             $combatLogService
      * @param CombatLogDungeonRouteServiceLoggingInterface $log
-     * @param array                                        $methodsNotToMock
+     * @param array                                        $methodsToMock
      *
      * @return MockObject|ResultEventDungeonRouteServiceInterface
      */
@@ -71,7 +81,7 @@ class ServiceFixtures
         PublicTestCase                               $testCase,
         CombatLogService                             $combatLogService,
         CombatLogDungeonRouteServiceLoggingInterface $log,
-        array                                        $methodsNotToMock = []
+        array                                        $methodsToMock = []
     ): MockObject {
         return $testCase
             ->getMockBuilder(ResultEventDungeonRouteService::class)
@@ -79,39 +89,42 @@ class ServiceFixtures
                 $combatLogService,
                 $log,
             ])
-            ->setMethods(null)
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 
     /**
      * @param PublicTestCase $testCase
-     * @param array          $methodsNotToMock
-     * @return ExpansionServiceInterface
+     * @param array          $methodsToMock
+     * @return MockObject|ExpansionServiceInterface
      */
     public static function getExpansionServiceMock(
         PublicTestCase $testCase,
-        array          $methodsNotToMock = []
-    ): ExpansionServiceInterface {
-        return $testCase->createMock(ExpansionService::class);
+        array          $methodsToMock = []
+    ): MockObject {
+        return $testCase->getMockBuilder(ExpansionService::class)
+            ->onlyMethods($methodsToMock)
+            ->getMock();
     }
 
     /**
      * @param PublicTestCase  $testCase
-     * @param array           $methodsNotToMock
+     * @param array           $methodsToMock
      * @param Collection|null $seasons
      * @return MockObject|SeasonServiceInterface
      */
     public static function getSeasonServiceMock(
         PublicTestCase $testCase,
-        array          $methodsNotToMock = [],
+        array          $methodsToMock = [],
         Collection     $seasons = null): SeasonServiceInterface
     {
+        $methodsToMock[]          = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
             ->getMockBuilder(SeasonService::class)
             ->setConstructorArgs([
                 self::getExpansionServiceMock($testCase),
-            ]);
-        $seasonServiceMockBuilder->onlyMethods(['getSeasons']);
+            ])
+            ->onlyMethods($methodsToMock);
 
         $seasonServiceMock = $seasonServiceMockBuilder->getMock();
         $seasonServiceMock->method('getSeasons')
@@ -136,7 +149,7 @@ class ServiceFixtures
     ): MockObject {
         return $testCase
             ->getMockBuilder(CoordinatesService::class)
-            ->setMethods(null)
+            ->onlyMethods($methodsNotToMock)
             ->getMock();
     }
 }

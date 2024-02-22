@@ -19,6 +19,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     const DUNGEON_NAME_MAPPING = [
         'Dawn of the Infinite: Galakrond\'s Fall' => 'Galakrond\'s Fall',
         'Dawn of the Infinite: Murozond\'s Rise'  => 'Murozond\'s Rise',
+        'The Everbloom'                           => 'Everbloom',
     ];
 
     private SeasonServiceInterface $seasonService;
@@ -72,7 +73,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     /**
      * @inheritDoc
      */
-    public function parseTierList(array $tierListsResponse): bool
+    public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull
     {
         $lastEaseTierPull = AffixGroupEaseTierPull::latest()->first();
 
@@ -82,10 +83,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         if ($affixGroup === null) {
             $this->log->parseTierListUnknownAffixGroup($affixGroupString);
 
-            return false;
+            return null;
         }
 
-        $result    = false;
+        $result    = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
 
         if ($lastEaseTierPull === null ||
@@ -107,7 +108,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             });
 
             $affixGroupEaseTiersAttributes = [];
-
             foreach ($tierListsResponse['encounterTierList']['tierLists'][0]['tiers'] as $tierList) {
                 /** @var array{tier: string, entries: array} $tierList */
                 try {
@@ -140,8 +140,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 }
             }
 
-            $result = AffixGroupEaseTier::insert($affixGroupEaseTiersAttributes);
-            $this->log->parseTierListSave($result);
+            $affixGroupEaseTierSaveResult = AffixGroupEaseTier::insert($affixGroupEaseTiersAttributes);
+            $this->log->parseTierListSave($affixGroupEaseTierSaveResult);
+
+            $result = $affixGroupEaseTierPull;
         } else {
             $this->log->parseTierListDataNotUpdatedYet();
         }
