@@ -41,10 +41,10 @@ use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EaseTier\AffixGroupEaseTierService;
-use App\Service\EaseTier\AffixGroupEaseTierServiceInterface;
-use App\Service\EaseTier\ArchonApiService;
-use App\Service\EaseTier\ArchonApiServiceInterface;
+use App\Service\AffixGroup\AffixGroupEaseTierService;
+use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
+use App\Service\AffixGroup\ArchonApiService;
+use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\EchoServer\EchoServerHttpApiService;
 use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
@@ -147,8 +147,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
-        $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
+
+        // Depends on SeasonService
+        $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
 
         // Depends on CacheService, CoordinatesService, OverpulledEnemyService
         $this->app->bind(MapContextServiceInterface::class, MapContextService::class);

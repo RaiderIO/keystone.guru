@@ -7,11 +7,6 @@ use Exception;
 
 class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMappingImportServiceLoggingInterface
 {
-    public function __construct()
-    {
-        $this->setChannel('stderr');
-    }
-
     /**
      * @param string|null $mdtMappingHash
      * @param string      $latestMdtMappingHash

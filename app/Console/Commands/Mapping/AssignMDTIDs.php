@@ -49,12 +49,12 @@ class AssignMDTIDs extends Command
                     return $enemy->mdt_id > 0;
                 })->isNotEmpty()) {
                     $this->comment(
-                        sprintf('- Skipping dungeon %s - already assigned has assigned MDT IDs', __($mappingVersion->dungeon->name, [], 'en'))
+                        sprintf('- Skipping dungeon %s - already assigned has assigned MDT IDs', __($mappingVersion->dungeon->name, [], 'en-US'))
                     );
                     continue;
                 }
 
-                $this->info(sprintf('Assigning MDT IDs for dungeon %s', __($mappingVersion->dungeon->name, [], 'en')));
+                $this->info(sprintf('Assigning MDT IDs for dungeon %s', __($mappingVersion->dungeon->name, [], 'en-US')));
 
                 $previousNpcId = 0;
                 foreach ($enemies as $enemy) {

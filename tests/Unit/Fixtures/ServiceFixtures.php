@@ -3,6 +3,8 @@
 namespace Tests\Unit\Fixtures;
 
 use App\Models\Season;
+use App\Service\AffixGroup\AffixGroupEaseTierService;
+use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
@@ -22,6 +24,21 @@ use Tests\TestCases\PublicTestCase;
 
 class ServiceFixtures
 {
+    /**
+     * @param PublicTestCase $testCase
+     * @param array          $methodsNotToMock
+     * @return MockObject|AffixGroupEaseTierServiceInterface
+     */
+    public static function getAffixGroupEaseTierServiceMock(
+        PublicTestCase $testCase,
+        array          $methodsNotToMock = []
+    ): MockObject {
+        return $testCase
+            ->getMockBuilder(AffixGroupEaseTierService::class)
+            ->setMethods(null)
+            ->getMock();
+    }
+
     /**
      * @param PublicTestCase                   $testCase
      * @param CombatLogServiceLoggingInterface $log

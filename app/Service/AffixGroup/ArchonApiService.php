@@ -1,9 +1,9 @@
 <?php
 
 
-namespace App\Service\EaseTier;
+namespace App\Service\AffixGroup;
 
-use App\Service\EaseTier\Exceptions\InvalidResponseException;
+use App\Service\AffixGroup\Exceptions\InvalidResponseException;
 use App\Service\Traits\Curl;
 
 class ArchonApiService implements ArchonApiServiceInterface
@@ -11,8 +11,7 @@ class ArchonApiService implements ArchonApiServiceInterface
     use Curl;
 
     /**
-     * @return array
-     * @throws InvalidResponseException
+     * @inheritDoc
      */
     public function getDungeonEaseTierListOverall(): array
     {
@@ -23,6 +22,9 @@ class ArchonApiService implements ArchonApiServiceInterface
         if (!is_array($response)) {
             throw new InvalidResponseException($responseStr);
         }
+
+        // Temp fix for strange characters being put in front of the affix list
+        $response['encounterTierList']['label'] = trim($response['encounterTierList']['label'], '‍');
 
         return $response;
     }

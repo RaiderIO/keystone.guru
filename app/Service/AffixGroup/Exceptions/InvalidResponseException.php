@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\EaseTier\Exceptions;
+namespace App\Service\AffixGroup\Exceptions;
 
 class InvalidResponseException extends \Exception
 {
