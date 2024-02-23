@@ -15,6 +15,14 @@ class RefreshDiscoverCache implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $timeout = 1800;
+
+    public function __construct()
+    {
+        $this->queue = sprintf('%s-%s-long-running', config('app.type'), config('app.env'));
+    }
+
+
     /**
      * @throws Exception
      */

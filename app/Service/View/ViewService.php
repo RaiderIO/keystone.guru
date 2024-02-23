@@ -21,12 +21,11 @@ use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
-use App\Service\Subcreation\AffixGroupEaseTierServiceInterface;
+use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Tremby\LaravelGitVersion\GitVersionHelper;
 
 class ViewService implements ViewServiceInterface
 {

@@ -1,0 +1,39 @@
+{
+    "id": 223,
+    "release_changelog_id": 230,
+    "version": "v8.1",
+    "title": "Subcreation integration replaced with Archon.gg",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-02-22T21:51:37+00:00",
+    "updated_at": "2024-02-22T21:51:37+00:00",
+    "changelog": {
+        "id": 230,
+        "release_id": 223,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 230,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2210,
+                "change": "Subcreation implementation has been replaced with Archon.gg implementation instead. No changes to functionality are to be expected - only that all Subcreation references are replaced with Archon.gg instead.",
+                "category": {
+                    "id": 1,
+                    "key": "general_changes",
+                    "name": "releasechangelogcategories.general_changes"
+                }
+            },
+            {
+                "release_changelog_id": 230,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2209,
+                "change": "Background job performing caching operations should no longer time out after 60 seconds.",
+                "category": {
+                    "id": 5,
+                    "key": "bugfixes",
+                    "name": "releasechangelogcategories.bugfixes"
+                }
+            }
+        ]
+    }
+}

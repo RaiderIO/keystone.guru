@@ -9,12 +9,12 @@ $tier = $tier ?? optional(optional(optional($affixGroupEaseTiersByAffixGroup->ge
 $url = $url ?? null;
 ?>
 @if($tier !== null)
-    <a href="{{ $url ?? 'https://mplus.subcreation.net' }}" target="_blank" rel="noopener noreferrer">
+    <a href="{{ $url ?? 'https://www.archon.gg/wow' }}" target="_blank" rel="noopener noreferrer">
     <span class="tier {{ strtolower($tier) }}"
           @if( $url === null )
           data-toggle="tooltip"
           title="{{ sprintf(
-            __('views/common.dungeonroute.tier.data_by_subcreation'),
+            __('views/common.dungeonroute.tier.data_by_archon_gg'),
                 $affixgroup->getTextAttribute()
             )}}"
           @endif

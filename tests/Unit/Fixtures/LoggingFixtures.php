@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Fixtures;
 
+use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -11,12 +12,21 @@ class LoggingFixtures
 {
     /**
      * @param PublicTestCase $testCase
+     * @return MockObject|AffixGroupEaseTierServiceLoggingInterface
+     */
+    public static function createAffixGroupEaseTierServiceLogging(
+        PublicTestCase $testCase
+    ): MockObject {
+        return $testCase->createMock(AffixGroupEaseTierServiceLoggingInterface::class);
+    }
+
+    /**
+     * @param PublicTestCase $testCase
      * @return MockObject|CombatLogServiceLoggingInterface
      */
     public static function createCombatLogServiceLogging(
         PublicTestCase $testCase
-    ): MockObject
-    {
+    ): MockObject {
         return $testCase->createMock(CombatLogServiceLoggingInterface::class);
     }
 
@@ -26,8 +36,7 @@ class LoggingFixtures
      */
     public static function createCombatLogDungeonRouteServiceLogging(
         PublicTestCase $testCase
-    ): MockObject
-    {
+    ): MockObject {
         return $testCase->createMock(CombatLogDungeonRouteServiceLoggingInterface::class);
     }
 }

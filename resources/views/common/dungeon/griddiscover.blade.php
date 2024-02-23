@@ -1,5 +1,5 @@
-@inject('seasonService', 'App\Service\Season\SeasonService')
-@inject('subcreationTierListService', 'App\Service\Subcreation\AffixGroupEaseTierServiceInterface')
+@inject('seasonService', \App\Service\Season\SeasonServiceInterface::class)
+@inject('subcreationTierListService', \App\Service\AffixGroup\AffixGroupEaseTierServiceInterface::class)
 <?php
 /**
  * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion

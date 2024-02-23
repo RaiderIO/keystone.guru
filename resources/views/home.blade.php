@@ -84,7 +84,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
                             {!! __('views/home.discover_new_routes_description',
-                                    ['subcreation' => '<a href="https://mplus.subcreation.net/" target="_blank">mplus.subcreation.net</a>',
+                                    ['archon_gg' => '<a href="https://www.archon.gg/wow" target="_blank">archon.gg</a>',
                                     'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
                         </p>
                     </div>
@@ -286,7 +286,6 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 </div>
 
                 <iframe id="{{ $demoRoutesIFrameId }}"
-                        frameborder="0"
                         loading="lazy"
                         class="lazyload"
                         style="border:0; top: 0; left: 0; position: absolute;"

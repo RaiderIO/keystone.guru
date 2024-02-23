@@ -17,9 +17,9 @@ class CombatLogServiceTest extends PublicTestCase
      * @return void
      *
      * @group CombatLogService
-     * @dataProvider parseCombatLogToEvents_ShouldParseEventsWithoutErrors_GivenCombatLog_DataProvider
+     * @dataProvider parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider
      */
-    public function parseCombatLogToEvents_ShouldParseEventsWithoutErrors_GivenCombatLog(string $combatLogPath)
+    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors(string $combatLogPath)
     {
         // Arrange
         ini_set('memory_limit', '1G');
@@ -39,7 +39,7 @@ class CombatLogServiceTest extends PublicTestCase
         gc_collect_cycles();
     }
 
-    public function parseCombatLogToEvents_ShouldParseEventsWithoutErrors_GivenCombatLog_DataProvider(): array
+    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider(): array
     {
         return [
 //            [

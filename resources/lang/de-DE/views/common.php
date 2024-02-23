@@ -62,7 +62,7 @@ return [
             'filter'                => '@todo de: .dungeonroute.table.filter',
         ],
         'tier'       => [
-            'data_by_subcreation' => '@todo de: .dungeonroute.tier.data_by_subcreation',
+            'data_by_archon_gg' => '@todo de: .dungeonroute.tier.data_by_archon_gg',
         ],
     ],
     'forms'        => [
