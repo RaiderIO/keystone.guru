@@ -15,7 +15,7 @@ class DungeonRouteLevelRule implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $explode = explode(';', $value);
+        $explode = explode(';', (string) $value);
 
         return count($explode) === 2 && is_numeric($explode[0]) && is_numeric($explode[1]);
     }

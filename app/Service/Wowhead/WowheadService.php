@@ -62,7 +62,7 @@ class WowheadService implements WowheadServiceInterface
                     if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
                         $grabNext = true;
                     } else if ($grabNext) {
-                        $possibleHealth = (int)str_replace(',', '', $td->innerHtml);
+                        $possibleHealth = (int)str_replace(',', '', (string) $td->innerHtml);
                         if ($possibleHealth > 0) {
                             $health = $possibleHealth;
                             break;

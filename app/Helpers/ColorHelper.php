@@ -49,7 +49,7 @@ $GLOBALS['clrLkp'] = [
  */
 function hex2rgb($hex): array
 {
-    $parts = str_split(substr($hex, 1), 2);
+    $parts = str_split(substr((string) $hex, 1), 2);
     if (!$parts || count($parts) < 3) {
         throw new Exception('Invalid hex value');
     }

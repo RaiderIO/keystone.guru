@@ -34,7 +34,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         98362,
     ];
 
-    public function __construct(private CacheServiceInterface $cacheService, private CoordinatesServiceInterface $coordinatesService, private MDTMappingImportServiceLoggingInterface $log)
+    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly MDTMappingImportServiceLoggingInterface $log)
     {
     }
 

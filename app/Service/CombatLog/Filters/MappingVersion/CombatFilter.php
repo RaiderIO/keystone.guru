@@ -15,7 +15,7 @@ class CombatFilter extends BaseCombatFilter
     private bool $zoneFound = false;
 
     /** @var MappingVersionCombatFilterLoggingInterface */
-    private MappingVersionCombatFilterLoggingInterface $log;
+    private readonly MappingVersionCombatFilterLoggingInterface $log;
 
     public function __construct(Collection $resultEvents)
     {

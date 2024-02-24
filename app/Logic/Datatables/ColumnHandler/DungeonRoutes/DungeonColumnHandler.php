@@ -29,7 +29,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
             $searchValue = $columnData['search']['value'];
             // -1 = all dungeons = no filter
             if ((int)$searchValue !== -1 && !empty($searchValue)) {
-                $explode = explode('-', $searchValue);
+                $explode = explode('-', (string) $searchValue);
                 if (count($explode) === 2) {
                     if ($explode[0] === 'season') {
                         $seasonId = $explode[1];

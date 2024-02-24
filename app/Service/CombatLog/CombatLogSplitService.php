@@ -37,8 +37,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
 
     public function __construct(
-        private CombatLogServiceInterface             $combatLogService,
-        private CombatLogSplitServiceLoggingInterface $log)
+        private readonly CombatLogServiceInterface             $combatLogService,
+        private readonly CombatLogSplitServiceLoggingInterface $log)
     {
         $this->reset();
     }

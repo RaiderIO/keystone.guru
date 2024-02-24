@@ -12,7 +12,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
     /** @var Collection|RaidEventPull[] */
     private Collection $raidEventPulls;
 
-    public function __construct(private CoordinatesServiceInterface $coordinatesService, private SimulationCraftRaidEventsOptions $options)
+    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService, private readonly SimulationCraftRaidEventsOptions $options)
     {
     }
 

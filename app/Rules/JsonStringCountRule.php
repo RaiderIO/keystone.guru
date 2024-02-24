@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class JsonStringCountRule implements Rule
 {
-    public function __construct(private int $count)
+    public function __construct(private readonly int $count)
     {
     }
 
@@ -19,7 +19,7 @@ class JsonStringCountRule implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $decoded = json_decode($value, true);
+        $decoded = json_decode((string) $value, true);
 
         return is_array($decoded) && count($decoded) >= $this->count;
     }

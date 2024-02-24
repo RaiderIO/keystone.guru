@@ -261,7 +261,7 @@ class AjaxDungeonRouteController extends Controller
 
         // Level handling
         if ($request->has('level')) {
-            $split = explode(';', $request->get('level'));
+            $split = explode(';', (string) $request->get('level'));
             if (count($split) === 2) {
                 $query->where(function (Builder $query) use ($split) {
                     $query->where('level_min', '>=', (int)$split[0])
@@ -642,7 +642,7 @@ class AjaxDungeonRouteController extends Controller
     {
         // Init the fields we should get for this request
         $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
-        $fields = explode(',', $fields);
+        $fields = explode(',', (string) $fields);
 
         // Show enemies or raw data when fetching enemy packs
         $enemyPackEnemies = (int)$request->get('enemyPackEnemies', true) === 1;

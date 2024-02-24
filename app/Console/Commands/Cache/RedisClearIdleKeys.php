@@ -51,7 +51,7 @@ class RedisClearIdleKeys extends Command
             foreach ($result[1] as $redisKey) {
                 $output = [];
                 foreach ($keyWhitelistRegex as $regex) {
-                    if (preg_match($regex, $redisKey, $output) !== false) {
+                    if (preg_match($regex, (string) $redisKey, $output) !== false) {
                         $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
                         if ($idleTime > $seconds) {
                             $toDelete[] = $redisKey;

@@ -22,7 +22,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
 {
     private ?DungeonRoute $dungeonRoute = null;
 
-    public function __construct(private SeasonServiceInterface $seasonService)
+    public function __construct(private readonly SeasonServiceInterface $seasonService)
     {
     }
 

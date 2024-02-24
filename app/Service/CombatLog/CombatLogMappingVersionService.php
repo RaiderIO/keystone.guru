@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface
 {
-    public function __construct(private CombatLogServiceInterface $combatLogService, private CoordinatesServiceInterface $coordinatesService, private CombatLogMappingVersionServiceLoggingInterface $log)
+    public function __construct(private readonly CombatLogServiceInterface $combatLogService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly CombatLogMappingVersionServiceLoggingInterface $log)
     {
     }
 

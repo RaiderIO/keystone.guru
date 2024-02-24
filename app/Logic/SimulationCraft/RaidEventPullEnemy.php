@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutputInterface
 {
-    public function __construct(private SimulationCraftRaidEventsOptions $options, private Enemy $enemy, private int $enemyIndexInPull)
+    public function __construct(private readonly SimulationCraftRaidEventsOptions $options, private readonly Enemy $enemy, private readonly int $enemyIndexInPull)
     {
     }
 

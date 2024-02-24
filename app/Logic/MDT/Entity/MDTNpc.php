@@ -45,12 +45,12 @@ class MDTNpc implements Arrayable
     private int $health = 0;
 
     /** @var int|null */
-    private ?int $healthPercentage;
+    private readonly ?int $healthPercentage;
 
     /** @var array */
     private array $characteristics = [];
 
-    function __construct(private int $index, private array $rawMdtNpc)
+    function __construct(private readonly int $index, private array $rawMdtNpc)
     {
         // We need to do this ksort magic because php arrays that we get from Lua are in a random order - this makes it consistent
         $this->recur_ksort($this->rawMdtNpc['clones']);

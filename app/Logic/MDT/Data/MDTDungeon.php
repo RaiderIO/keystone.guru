@@ -36,9 +36,9 @@ use LuaException;
 class MDTDungeon
 {
     function __construct(
-        private CacheServiceInterface       $cacheService,
-        private CoordinatesServiceInterface $coordinatesService,
-        private Dungeon                     $dungeon
+        private readonly CacheServiceInterface       $cacheService,
+        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly Dungeon                     $dungeon
     ) {
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));

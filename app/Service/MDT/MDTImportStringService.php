@@ -62,9 +62,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     function __construct(
         /** @var SeasonService Used for grabbing info about the current M+ season. */
-        private SeasonServiceInterface      $seasonService,
-        private CacheServiceInterface       $cacheService,
-        private CoordinatesServiceInterface $coordinatesService
+        private readonly SeasonServiceInterface      $seasonService,
+        private readonly CacheServiceInterface       $cacheService,
+        private readonly CoordinatesServiceInterface $coordinatesService
     ) {
     }
 
@@ -759,7 +759,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             'polyline' => [
                 // Make sure there is a pound sign in front of the value at all times, but never double up should
                 // MDT decide to suddenly place it here
-                'color'         => (!str_starts_with($details[4], '#') ? '#' : '') . $details[4],
+                'color'         => (!str_starts_with((string) $details[4], '#') ? '#' : '') . $details[4],
                 'weight'        => $weight,
                 'vertices_json' => json_encode($vertices),
                 // To be set later
@@ -828,7 +828,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     $bloodLustNames = ['bloodlust', 'heroism', 'fury of the ancients', 'time warp', 'timewarp', 'ancient hysteria'];
 
                     // If the user wants to put heroism/bloodlust on this pull, directly assign it instead
-                    $commentLower = strtolower(trim($details[4]));
+                    $commentLower = strtolower(trim((string) $details[4]));
                     if (in_array($commentLower, $bloodLustNames)) {
                         $spellId = 0;
 

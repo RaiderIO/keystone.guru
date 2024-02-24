@@ -124,7 +124,7 @@ class AdminToolsController extends Controller
         $importString = $request->get('import_string');
 
         // Correct the string since wowhead sucks
-        $importString = str_replace('[Listview.extraCols.popularity]', '["Listview.extraCols.popularity"]', $importString);
+        $importString = str_replace('[Listview.extraCols.popularity]', '["Listview.extraCols.popularity"]', (string) $importString);
 
         $decoded = json_decode($importString, true);
 
@@ -273,7 +273,7 @@ class AdminToolsController extends Controller
      */
     public function enemyforcesimportsubmit(Request $request)
     {
-        $json = json_decode($request->get('import_string'), true);
+        $json = json_decode((string) $request->get('import_string'), true);
 
         $results = [];
         foreach ($json['Npcs'] as $jsonNpc) {
@@ -562,7 +562,7 @@ class AdminToolsController extends Controller
     {
         // Parse all Map TABLE data and convert them to a workable format
         $mapTable                   = $request->get('map_table_xhr_response');
-        $mapTableParsed             = json_decode($mapTable, true)['data'];
+        $mapTableParsed             = json_decode((string) $mapTable, true)['data'];
         $mapTableHeaders            = [
             'ID', 'Directory', 'MapName_lang', 'MapDescription0_lang', 'MapDescription1_lang', 'PvpShortDescription_lang',
             'Corpse[0]', 'Corpse[1]', 'MapType', 'InstanceType', 'ExpansionID', 'AreaTableID', 'LoadingScreenID',
@@ -575,7 +575,7 @@ class AdminToolsController extends Controller
 
         // Parse all Map Group Member TABLE data and convert them to a workable format
         $mapGroupMemberTable                    = $request->get('ui_map_group_member_table_xhr_response');
-        $mapGroupMemberTableParsed              = json_decode($mapGroupMemberTable, true)['data'];
+        $mapGroupMemberTableParsed              = json_decode((string) $mapGroupMemberTable, true)['data'];
         $mapGroupMemberTableHeaders             = [
             'ID', 'Name_lang', 'UiMapGroupID', 'UiMapID', 'FloorIndex', 'RelativeHeightIndex',
         ];
@@ -584,7 +584,7 @@ class AdminToolsController extends Controller
 
         // Parse all UI Map Assignment TABLE data and convert them to a workable format
         $uiMapAssignmentTable       = $request->get('ui_map_assignment_table_xhr_response');
-        $uiMapAssignmentTableParsed = json_decode($uiMapAssignmentTable, true)['data'];
+        $uiMapAssignmentTableParsed = json_decode((string) $uiMapAssignmentTable, true)['data'];
 
         $uiMapAssignmentTableHeaders               = [
             'UiMin[0]', 'UiMin[1]', 'UiMax[0]', 'UiMax[1]', 'Region[0]', 'Region[1]', 'Region[2]',
@@ -610,7 +610,7 @@ class AdminToolsController extends Controller
             foreach ($allDungeons as $dungeon) {
                 // The map names don't always match up (the combined dungeons such as Karazhan seem problematic, have to do this by hand)
                 $mapId = (int)$mapTableRow[$mapTableHeaderIndexMapId];
-                if (trim($mapTableRow[$mapTableHeaderIndexMapName]) === __($dungeon->name)) {
+                if (trim((string) $mapTableRow[$mapTableHeaderIndexMapName]) === __($dungeon->name)) {
                     if ($dungeon->map_id !== $mapId) {
                         $beforeModel = clone $dungeon;
 
@@ -649,7 +649,7 @@ class AdminToolsController extends Controller
                         if ((int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId] === $uiMapId) {
                             // We found the group member - now find which floor it was for
                             $mapGroupMemberFloorName = html_entity_decode(
-                                trim($mapGroupMemberRow[$mapGroupMemberTableHeaderIndexNameLang]),
+                                trim((string) $mapGroupMemberRow[$mapGroupMemberTableHeaderIndexNameLang]),
                                 ENT_QUOTES,
                                 'UTF-8'
                             );

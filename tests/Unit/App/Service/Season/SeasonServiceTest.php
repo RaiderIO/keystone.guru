@@ -10,7 +10,7 @@ use Tests\TestCases\PublicTestCase;
 class SeasonServiceTest extends PublicTestCase
 {
     /** @var Collection|array{start: Carbon, affix_group_count: int} */
-    private Collection $seasonAttributes;
+    private readonly Collection $seasonAttributes;
 
     /** @var Collection|Season[] */
     private Collection $seasons;

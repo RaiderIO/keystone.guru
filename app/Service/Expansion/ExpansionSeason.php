@@ -13,7 +13,7 @@ class ExpansionSeason
     private ?Season $season = null;
 
     /** @var ExpansionSeasonAffixGroups */
-    private ExpansionSeasonAffixGroups $affixGroups;
+    private readonly ExpansionSeasonAffixGroups $affixGroups;
 
     /** @var bool */
     private bool $isAwakened = false;

@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 
 class TimewalkingEventService implements TimewalkingEventServiceInterface
 {
-    public function __construct(private SeasonServiceInterface $seasonService)
+    public function __construct(private readonly SeasonServiceInterface $seasonService)
     {
     }
 

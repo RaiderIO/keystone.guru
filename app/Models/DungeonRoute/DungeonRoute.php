@@ -901,7 +901,7 @@ class DungeonRoute extends Model
         $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
-        $dungeonRouteLevelParts = explode(';', $dungeonRouteLevel);
+        $dungeonRouteLevelParts = explode(';', (string) $dungeonRouteLevel);
         $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
         $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
 
@@ -965,7 +965,7 @@ class DungeonRoute extends Model
         }
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
-        $dungeonRouteLevelParts = explode(';', $dungeonRouteLevel);
+        $dungeonRouteLevelParts = explode(';', (string) $dungeonRouteLevel);
         $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
         $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
 

@@ -287,7 +287,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     {
         $lua = [];
         foreach ($translations->unique() as $translation) {
-            $lua[] = sprintf('L["%s"] = "%s"', addslashes($translation), addslashes($translation));
+            $lua[] = sprintf('L["%s"] = "%s"', addslashes((string) $translation), addslashes((string) $translation));
         }
 
         // Add another EOL at the end of it

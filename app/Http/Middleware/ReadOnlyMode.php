@@ -7,7 +7,7 @@ use Teapot\StatusCode\Http;
 
 class ReadOnlyMode
 {
-    public function __construct(private ReadOnlyModeServiceInterface $readOnlyModeService)
+    public function __construct(private readonly ReadOnlyModeServiceInterface $readOnlyModeService)
     {
     }
 

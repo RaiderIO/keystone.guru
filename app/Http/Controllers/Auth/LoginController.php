@@ -54,7 +54,7 @@ class LoginController extends Controller
      * @return Response
      * @throws ValidationException
      */
-    protected function sendFailedLoginResponse(Request $request)
+    protected function sendFailedLoginResponse(Request $request): never
     {
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],

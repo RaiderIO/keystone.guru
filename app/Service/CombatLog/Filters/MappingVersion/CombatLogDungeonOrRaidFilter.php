@@ -7,9 +7,9 @@ use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 
 class CombatLogDungeonOrRaidFilter extends BaseCombatLogFilter implements CombatLogParserInterface
 {
-    private SpecialEventsFilter $specialEventsFilter;
+    private readonly SpecialEventsFilter $specialEventsFilter;
 
-    private CombatFilter $combatFilter;
+    private readonly CombatFilter $combatFilter;
 
     public function __construct()
     {

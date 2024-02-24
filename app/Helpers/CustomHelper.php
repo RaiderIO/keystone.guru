@@ -61,9 +61,9 @@ function str_getcsv_assoc(string $csv_string, string $delimiter = ",", bool $ski
     $enc   = preg_replace_callback(
         '/"(.*?)"/s',
         fn($field) => urlencode(utf8_encode($field[1])),
-        $enc
+        (string) $enc
     );
-    $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', $enc);
+    $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', (string) $enc);
 
     return array_map(
         function ($line) use ($delimiter, $trim_fields) {

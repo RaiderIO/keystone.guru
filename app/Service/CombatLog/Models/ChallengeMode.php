@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class ChallengeMode
 {
-    public function __construct(private Carbon $carbon, private Dungeon $dungeon, private int $keyLevel)
+    public function __construct(private readonly Carbon $carbon, private readonly Dungeon $dungeon, private readonly int $keyLevel)
     {
     }
 

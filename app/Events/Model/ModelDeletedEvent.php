@@ -16,7 +16,7 @@ class ModelDeletedEvent extends ContextEvent
     protected string $modelClass;
 
     /** @var string $modelName */
-    private string $modelName;
+    private readonly string $modelName;
 
     /**
      * Create a new event instance.

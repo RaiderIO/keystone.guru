@@ -8,7 +8,7 @@ use Patreon\OAuth;
 
 class PatreonApiService implements PatreonApiServiceInterface
 {
-    public function __construct(private PatreonApiServiceLoggingInterface $log)
+    public function __construct(private readonly PatreonApiServiceLoggingInterface $log)
     {
     }
 
@@ -151,7 +151,7 @@ class PatreonApiService implements PatreonApiServiceInterface
 
                 $next = isset($requestResult['links']['next']) ?
                     // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
-                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode($requestResult['meta']['pagination']['cursors']['next'])) :
+                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string) $requestResult['meta']['pagination']['cursors']['next'])) :
                     null;
             } else {
                 // Found an error - just stop it now

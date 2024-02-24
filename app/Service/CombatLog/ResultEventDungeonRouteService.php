@@ -30,7 +30,7 @@ use InvalidArgumentException;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {
-    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, private CombatLogDungeonRouteServiceLoggingInterface $log)
+    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
     {
     }
 
