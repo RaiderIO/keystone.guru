@@ -1,6 +1,6 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
+    "name": "wotuu/keystone.guru",
+    "description": "A website where users can build and find their favorite routes for completing in Mythic Plus dungeons in World of Warcraft®",
     "keywords": [
         "framework",
         "laravel"
@@ -44,7 +44,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-lua": "*",

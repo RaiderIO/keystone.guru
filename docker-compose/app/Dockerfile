@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -90,11 +90,17 @@ RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \
     cp /usr/lib/x86_64-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so && \
     ln /usr/include/lua5.3/lua.h /usr/include/lauxlib.h && \
     ln /usr/include/lua5.3/lua.h /usr/include/lua.h && \
-    ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h && \
-    pecl install lua-2.0.6
+    ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h
 
-#sudo mkdir -p /usr/lib/lua/5.3/
-#sudo cp storage/lua/* /usr/lib/lua/5.3/
+# Install PHP Lua https://serverfault.com/a/219577/1076801
+RUN mkdir /tmp/php-lua && \
+    cd /tmp/php-lua && \
+    git clone https://github.com/Wotuu/php-lua.git . && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install
+
 # Install LUA BitOp
 COPY LuaBitOp-1.0.3.zip /tmp/LuaBitOp-1.0.3.zip
 
