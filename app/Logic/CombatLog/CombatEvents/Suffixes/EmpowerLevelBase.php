@@ -18,7 +18,7 @@ abstract class EmpowerLevelBase extends Suffix
 
     /**
      * @param array $parameters
-     * @return \App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters
+     * @return HasParameters
      */
     public function setParameters(array $parameters): HasParameters
     {

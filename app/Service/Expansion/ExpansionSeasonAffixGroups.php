@@ -20,12 +20,6 @@ class ExpansionSeasonAffixGroups
     /** @var Collection */
     private Collection $allAffixGroups;
 
-    /**
-     * @param ExpansionServiceInterface $expansionService
-     * @param Expansion                 $expansion
-     * @param GameServerRegion          $gameServerRegion
-     * @param ExpansionSeason           $expansionSeason
-     */
     public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion, ExpansionSeason $expansionSeason)
     {
         $this->featuredAffixes   = optional($expansionSeason->getSeason())->getFeaturedAffixes() ?? collect();

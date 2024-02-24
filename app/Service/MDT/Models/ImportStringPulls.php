@@ -10,44 +10,22 @@ use Illuminate\Support\Collection;
 
 class ImportStringPulls
 {
-    private Collection     $warnings;
-    private Collection     $errors;
-    private Dungeon        $dungeon;
-    private MappingVersion $mappingVersion;
-    private bool           $isRouteTeeming;
-    private ?int           $seasonalIndex;
-    private array          $mdtPulls;
-
     private int $enemyForces = 0;
 
     private Collection $killZoneAttributes;
 
     /**
-     * @param Collection     $warnings
-     * @param Collection     $errors
-     * @param Dungeon        $dungeon
-     * @param MappingVersion $mappingVersion
-     * @param bool           $isRouteTeeming
-     * @param int|null       $seasonalIndex
-     * @param array          $mdtPulls
+     * @param int|null $seasonalIndex
      */
     public function __construct(
-        Collection     $warnings,
-        Collection     $errors,
-        Dungeon        $dungeon,
-        MappingVersion $mappingVersion,
-        bool           $isRouteTeeming,
-        ?int           $seasonalIndex,
-        array          $mdtPulls)
+        private Collection     $warnings,
+        private Collection     $errors,
+        private Dungeon        $dungeon,
+        private MappingVersion $mappingVersion,
+        private bool           $isRouteTeeming,
+        private ?int           $seasonalIndex,
+        private array          $mdtPulls)
     {
-        $this->warnings       = $warnings;
-        $this->errors         = $errors;
-        $this->dungeon        = $dungeon;
-        $this->mappingVersion = $mappingVersion;
-        $this->isRouteTeeming = $isRouteTeeming;
-        $this->seasonalIndex  = $seasonalIndex;
-        $this->mdtPulls       = $mdtPulls;
-
         $this->killZoneAttributes = collect();
     }
 
@@ -108,7 +86,6 @@ class ImportStringPulls
     }
 
     /**
-     * @param int $amount
      * @return $this
      */
     public function addEnemyForces(int $amount): self
@@ -119,7 +96,6 @@ class ImportStringPulls
     }
 
     /**
-     * @param array $attributes
      * @return self
      */
     public function addKillZoneAttributes(array $attributes): self

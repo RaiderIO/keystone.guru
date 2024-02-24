@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
 class PolylineFixtures
 {
     /**
-     * @param Floor                    $floor
      * @param Collection|LatLng[]|null $latLngs
      * @param string|null              $color
      * @param string|null              $colorAnimated
@@ -26,7 +25,7 @@ class PolylineFixtures
         return [
             'color'          => $color ?? randomHexColor(),
             'color_animated' => $colorAnimated ?? randomHexColor(),
-            'weight'         => $weight ?? rand(1, 5),
+            'weight'         => $weight ?? random_int(1, 5),
             'vertices_json'  => json_encode($latLngs !== null ? $latLngs->toArray() : [
                 LatLngFixtures::getLatLng($floor)->toArray(),
                 LatLngFixtures::getLatLng($floor)->toArray(),

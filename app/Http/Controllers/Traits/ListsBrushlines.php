@@ -19,7 +19,7 @@ trait ListsBrushlines
     /**
      * Lists all brushlines on a specific floor of a dungeon route.
      *
-     * @param $floorId
+     * @param                   $floorId
      * @param DungeonRoute|null $dungeonRoute
      * @return Collection
      */
@@ -30,7 +30,7 @@ trait ListsBrushlines
                 ->where('dungeon_route_id', $dungeonRoute->id)
                 ->where('floor_id', $floorId)
                 ->get();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

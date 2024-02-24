@@ -64,8 +64,6 @@ class GameVersion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_game_version', function () {
-            return GameVersion::where('key', self::DEFAULT_GAME_VERSION)->first();
-        });
+        return $cacheService->remember('default_game_version', fn() => GameVersion::where('key', self::DEFAULT_GAME_VERSION)->first());
     }
 }

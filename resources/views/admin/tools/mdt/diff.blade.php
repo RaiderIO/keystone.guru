@@ -5,6 +5,7 @@
 @section('scripts')
     @parent
 
+    <!--suppress HtmlDeprecatedAttribute -->
     <script type="text/javascript">
         $(function () {
             $('.apply_btn').unbind('click').bind('click', function () {
@@ -24,7 +25,7 @@
                     beforeSend: function () {
                         $this.addClass('btn-disabled');
                     },
-                    success: function (json) {
+                    success: function () {
                         // Remove the parent
                         $('#' + $this.data('category') + '_' + $this.data('id')).fadeOut(500);
                     },
@@ -41,10 +42,8 @@
 @section('content')
     <?php
     /** @var $warnings \Illuminate\Support\Collection */
-    $warnings = $warnings->groupBy(function ($item) {
-        /** @var $item \App\Logic\MDT\Exception\ImportWarning */
-        return $item->getCategory();
-    });
+    $warnings = $warnings->groupBy(fn($item) => /** @var $item \App\Logic\MDT\Exception\ImportWarning */
+    $item->getCategory());
 
     $headers = [
         'mismatched_health'               => __('views/admin.tools.mdt.diff.headers.mismatched_health'),
@@ -69,15 +68,15 @@
                     <th width="15%">{{ __('views/admin.tools.mdt.diff.table_header_actions') }}</th>
                 </tr>
                 @foreach($category as $importWarning)
-                    <?php /** @var $importWarning \App\Logic\MDT\Exception\ImportWarning */
-                    $data = ($importWarning->getData());
-                    $mdtNpc = $data['mdt_npc'];
+                        <?php /** @var $importWarning \App\Logic\MDT\Exception\ImportWarning */
+                        $data   = ($importWarning->getData());
+                        $mdtNpc = $data['mdt_npc'];
 
-                    $old = $data['old'] ?? '';
-                    $new = $data['new'] ?? '';
-                    $count = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
-                    $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('views/admin.tools.mdt.diff.no_dungeon_name_found');
-                    ?>
+                        $old         = $data['old'] ?? '';
+                        $new         = $data['new'] ?? '';
+                        $count       = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
+                        $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('views/admin.tools.mdt.diff.no_dungeon_name_found');
+                        ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>
                             {{ __($dungeonName) }}

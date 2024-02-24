@@ -38,14 +38,8 @@ abstract class Prefix implements HasParameters
         self::PREFIX_SPELL_BUILDING              => SpellBuilding::class,
     ];
 
-    protected int $combatLogVersion;
-
-    /**
-     * @param int $combatLogVersion
-     */
-    public function __construct(int $combatLogVersion)
+    public function __construct(protected int $combatLogVersion)
     {
-        $this->combatLogVersion = $combatLogVersion;
     }
 
     /**
@@ -60,8 +54,6 @@ abstract class Prefix implements HasParameters
     }
 
     /**
-     * @param int    $combatLogVersion
-     * @param string $eventName
      * @return Prefix
      * @throws Exception
      */

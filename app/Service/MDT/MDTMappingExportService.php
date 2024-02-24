@@ -35,8 +35,6 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     }
 
     /**
-     * @param MappingVersion $mappingVersion
-     * @param Collection     $translations
      * @return string
      */
     private function getHeader(MappingVersion $mappingVersion, Collection $translations): string
@@ -65,7 +63,6 @@ MDT.mapInfo[dungeonIndex] = {
     }
 
     /**
-     * @param MappingVersion $mappingVersion
      * @return string
      */
     private function getDungeonMaps(MappingVersion $mappingVersion): string
@@ -85,8 +82,6 @@ MDT.dungeonMaps[dungeonIndex] = {
     }
 
     /**
-     * @param MappingVersion $mappingVersion
-     * @param Collection     $translations
      * @return string
      */
     private function getDungeonSubLevels(MappingVersion $mappingVersion, Collection $translations): string
@@ -106,7 +101,6 @@ MDT.dungeonSubLevels[dungeonIndex] = {
     }
 
     /**
-     * @param MappingVersion $mappingVersion
      * @return string
      */
     private function getDungeonTotalCount(MappingVersion $mappingVersion): string
@@ -121,7 +115,6 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     }
 
     /**
-     * @param MappingVersion $mappingVersion
      * @return string
      */
     private function getMapPOIs(MappingVersion $mappingVersion): string
@@ -167,8 +160,6 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     /**
      * Takes a mapping version and outputs an array in the way MDT would read it
      *
-     * @param MappingVersion $mappingVersion
-     * @param Collection     $translations
      * @return string
      */
     private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations): string
@@ -195,9 +186,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         foreach ($enemiesByNpcId as $npcId => $enemies) {
             // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
             /** @var Collection|Enemy[] $enemies */
-            $enemies = $enemies->sort(function (Enemy $a, Enemy $b) {
-                return $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id;
-            });
+            $enemies = $enemies->sort(fn(Enemy $a, Enemy $b) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
 
@@ -292,7 +281,6 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     }
 
     /**
-     * @param Collection $translations
      * @return string
      */
     private function getTranslations(Collection $translations): string

@@ -36,7 +36,6 @@ class Cache extends Command
     /**
      * Execute the console command.
      *
-     * @param ViewServiceInterface $viewService
      * @return int
      */
     public function handle(ViewServiceInterface $viewService)

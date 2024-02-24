@@ -7,24 +7,12 @@ use Carbon\Carbon;
 
 class ChallengeMode
 {
-    private Carbon  $carbon;
-    
-    private Dungeon $dungeon;
-
-    private int $keyLevel;
-    /**
-     * @param \Carbon\Carbon      $carbon
-     * @param \App\Models\Dungeon $dungeon
-     * @param int                 $keyLevel
-     */
-    public function __construct(Carbon $carbon, Dungeon $dungeon, int $keyLevel)
+    public function __construct(private Carbon $carbon, private Dungeon $dungeon, private int $keyLevel)
     {
-        $this->carbon   = $carbon;
-        $this->dungeon  = $dungeon;
-        $this->keyLevel = $keyLevel;
     }
+
     /**
-     * @return \Carbon\Carbon
+     * @return Carbon
      */
     public function getCarbon(): Carbon
     {

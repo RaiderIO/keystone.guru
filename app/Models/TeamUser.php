@@ -10,16 +10,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $team_id
- * @property int $user_id
+ * @property int    $id
+ * @property int    $team_id
+ * @property int    $user_id
  * @property string $role
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property Team $team
- * @property User $user
+ * @property Team   $team
+ * @property User   $user
  *
  * @method static Builder isModerator(int $userId)
  *
@@ -27,12 +27,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TeamUser extends Model
 {
-    const ROLE_MEMBER       = 'member';
-    const ROLE_COLLABORATOR = 'collaborator';
-    const ROLE_MODERATOR    = 'moderator';
-    const ROLE_ADMIN        = 'admin';
+    public const ROLE_MEMBER       = 'member';
+    public const ROLE_COLLABORATOR = 'collaborator';
+    public const ROLE_MODERATOR    = 'moderator';
+    public const ROLE_ADMIN        = 'admin';
 
-    const ALL_ROLES = [
+    public const ALL_ROLES = [
         self::ROLE_MEMBER       => 1,
         self::ROLE_COLLABORATOR => 2,
         self::ROLE_MODERATOR    => 3,
@@ -40,13 +40,11 @@ class TeamUser extends Model
     ];
 
     protected $fillable = ['team_id', 'user_id', 'role'];
-    
+
     protected $with = ['user'];
 
     /**
      *
-     * @param Builder $query
-     * @param int $userId
      * @return Builder
      */
     public function scopeIsModerator(Builder $query, int $userId): Builder

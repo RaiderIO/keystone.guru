@@ -9,23 +9,11 @@ use Illuminate\Support\Collection;
 
 class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOutputInterface
 {
-    private CoordinatesServiceInterface $coordinatesService;
-
-    private SimulationCraftRaidEventsOptions $options;
-
     /** @var Collection|RaidEventPull[] */
     private Collection $raidEventPulls;
 
-    /**
-     * @param CoordinatesServiceInterface      $coordinatesService
-     * @param SimulationCraftRaidEventsOptions $options
-     */
-    public function __construct(
-        CoordinatesServiceInterface      $coordinatesService,
-        SimulationCraftRaidEventsOptions $options
-    ) {
-        $this->coordinatesService = $coordinatesService;
-        $this->options            = $options;
+    public function __construct(private CoordinatesServiceInterface $coordinatesService, private SimulationCraftRaidEventsOptions $options)
+    {
     }
 
     /**
@@ -45,7 +33,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
                 continue;
             }
 
-            $previousKillLocation  = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
+            $previousKillLocation = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
 
             $this->raidEventPulls->push(
                 (new RaidEventPull($this->coordinatesService, $this->options))

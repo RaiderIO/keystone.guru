@@ -224,7 +224,6 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @param string $fileName
      * @return array
      */
     private function getResponse(string $fileName = 'response'): array

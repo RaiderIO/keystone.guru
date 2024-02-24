@@ -26,9 +26,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param FloorUnionFormRequest $request
-     * @param MappingVersion        $mappingVersion
-     * @param FloorUnion|null       $floorUnion
+     * @param FloorUnion|null $floorUnion
      * @return FloorUnion|Model
      * @throws Throwable
      */
@@ -40,8 +38,6 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request    $request
-     * @param FloorUnion $floorUnion
      * @return Response|ResponseFactory
      * @throws Throwable
      */
@@ -55,7 +51,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
                     }
                 }
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

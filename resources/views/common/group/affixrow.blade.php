@@ -3,8 +3,8 @@
 /** @var $season \App\Models\Season|null */
 /** @var $expansionKey string */
 
-$isTeeming = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
-$cssClasses = $cssClasses ?? '';
+$isTeeming  = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
+$cssClasses ??= '';
 ?>
 <div
     class="row affix_list_row expansion {{$expansionKey}}
@@ -14,9 +14,9 @@ $cssClasses = $cssClasses ?? '';
     {{ $isTeeming ? 'style="display: none;"' : '' }} data-id="{{ $affixGroup->id }}">
     <?php
     $count = 0;
-    foreach($affixGroup->affixes as $affix){
-    $last = count($affixGroup->affixes) - 1 === $count;
-    ?>
+    foreach ($affixGroup->affixes as $affix){
+        $last = count($affixGroup->affixes) - 1 === $count;
+        ?>
     <div class="col col-md pr-0 affix_row">
         <div class="row no-gutters">
             <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
@@ -35,7 +35,7 @@ $cssClasses = $cssClasses ?? '';
             @endif
         </div>
     </div>
-    <?php $count++;
+        <?php $count++;
     } ?>
     <span class="col col-md-auto text-right pl-0">
         <span class="check" style="visibility: hidden;">

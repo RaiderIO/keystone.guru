@@ -6,8 +6,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $release_id
+ * @property int    $id
+ * @property int    $release_id
  * @property string $platform
  *
  * @property string $updated_at

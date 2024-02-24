@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Exception;
 use Illuminate\Console\Command;
 
 class ImportMapping extends Command
@@ -38,7 +39,7 @@ class ImportMapping extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService)
     {
@@ -55,7 +56,7 @@ class ImportMapping extends Command
                     $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
                     $dungeon->setRelation('npcs', $dungeon->npcs()->get());
                     $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     $this->error($exception->getMessage());
                 }
             }
@@ -63,7 +64,7 @@ class ImportMapping extends Command
             // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
             /** @var Dungeon $dungeon */
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
-            
+
             $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 

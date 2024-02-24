@@ -44,7 +44,7 @@ class SiteController extends Controller
             if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
                 $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
             }
-            $season = $season ?? $seasonService->getCurrentSeason();
+            $season ??= $seasonService->getCurrentSeason();
 
             return view('profile.overview', [
                 'dungeonRoutes' => $coverageService->getForUser(Auth::user(), $season),
@@ -55,7 +55,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse|Redirector
      */
     public function home(Request $request)
@@ -64,7 +63,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function credits(Request $request)
@@ -73,7 +71,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function about(Request $request)
@@ -82,7 +79,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function privacy(Request $request)
@@ -91,7 +87,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function terms(Request $request)
@@ -100,7 +95,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function cookies(Request $request)
@@ -109,7 +103,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View|RedirectResponse
      */
     public function changelog(Request $request)
@@ -123,7 +116,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function health(Request $request)
@@ -132,7 +124,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function mapping(Request $request)
@@ -141,7 +132,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function timetest(Request $request)
@@ -150,11 +140,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DiscoverServiceInterface $discoverService
-     * @param SeasonService $seasonService
-     * @param ExpansionService $expansionService
-     * @param TimewalkingEventServiceInterface $timewalkingEventService
      * @return Factory|View
      * @throws Exception
      */
@@ -164,8 +149,7 @@ class SiteController extends Controller
         SeasonService                    $seasonService,
         ExpansionService                 $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService
-    )
-    {
+    ) {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
         return view('misc.affixes', [
@@ -185,7 +169,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function status(Request $request)
@@ -194,7 +177,6 @@ class SiteController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Application|Redirector|RedirectResponse
      */
     public function dungeonroutes(Request $request)
@@ -202,17 +184,12 @@ class SiteController extends Controller
         return redirect(route('dungeonroutes'), 301);
     }
 
-    /**
-     * @param Request $request
-     */
     public function phpinfo(Request $request)
     {
         phpinfo();
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
      * @return Application|Factory|View
      */
     public function embed(Request $request, DungeonRoute $dungeonRoute)

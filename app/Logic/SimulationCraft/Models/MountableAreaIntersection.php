@@ -7,18 +7,8 @@ use App\Models\MountableArea;
 
 class MountableAreaIntersection
 {
-    private MountableArea $mountableArea;
-
-    private LatLng $latLng;
-
-    /**
-     * @param MountableArea $mountableArea
-     * @param LatLng        $latLng
-     */
-    public function __construct(MountableArea $mountableArea, LatLng $latLng)
+    public function __construct(private MountableArea $mountableArea, private LatLng $latLng)
     {
-        $this->mountableArea = $mountableArea;
-        $this->latLng        = $latLng;
     }
 
     /**

@@ -1,12 +1,11 @@
 <?php
-/** @var $dungeon \App\Models\Dungeon */
-/** @var $floor \App\Models\Floor\Floor */
-$floorCouplings = $floorCouplings ?? collect();
+/**
+ * @var \App\Models\Dungeon     $dungeon
+ * @var \App\Models\Floor\Floor $floor
+ */
+$floorCouplings ??= collect();
 
 $connectedFloorCandidates = $dungeon->floors;
-if (isset($floor)) {
-    $connectedFloorCandidates = $connectedFloorCandidates;
-}
 ?>
 @if($connectedFloorCandidates->isNotEmpty())
     {!! Form::label('connectedfloors[]', __('views/admin.floor.edit.connected_floors'), ['class' => 'font-weight-bold']) !!}

@@ -2,21 +2,18 @@
 
 namespace App\Models\KillZone;
 
-use App\Models\Enemy;
-use App\Models\Npc;
 use App\Models\Spell;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\JoinClause;
 
 /**
- * @property int $id
- * @property int $kill_zone_id
- * @property int $spell_id
+ * @property int      $id
+ * @property int      $kill_zone_id
+ * @property int      $spell_id
  *
  * @property KillZone $killzone
- * @property Spell $spell
+ * @property Spell    $spell
  *
  * @mixin Eloquent
  */

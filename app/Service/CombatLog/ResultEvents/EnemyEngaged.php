@@ -54,7 +54,6 @@ class EnemyEngaged extends BaseResultEvent
     }
 
     /**
-     * @param Enemy $resolvedEnemy
      * @return self
      */
     public function setResolvedEnemy(Enemy $resolvedEnemy): self

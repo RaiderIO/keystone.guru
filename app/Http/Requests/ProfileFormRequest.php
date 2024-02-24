@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\User;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +17,8 @@ class ProfileFormRequest extends FormRequest
     public function authorize()
     {
         /** @var User $user */
-        $user = \Auth::user();
+        $user = Auth::user();
+
         return $user->hasRole("user") || $user->hasRole("admin");
     }
 

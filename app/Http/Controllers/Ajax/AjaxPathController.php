@@ -28,10 +28,7 @@ class AjaxPathController extends Controller
     use ValidatesFloorId;
 
     /**
-     * @param APIPathFormRequest          $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param DungeonRoute                $dungeonRoute
-     * @param Path|null                   $path
+     * @param Path|null $path
      * @return Brushline|Response
      * @throws AuthorizationException
      */
@@ -105,7 +102,7 @@ class AjaxPathController extends Controller
                 }
 
                 $result = $path;
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         });
@@ -114,9 +111,6 @@ class AjaxPathController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Path         $path
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
@@ -140,7 +134,7 @@ class AjaxPathController extends Controller
             } else {
                 $result = response(__('controller.path.error.unable_to_delete_path'), Http::INTERNAL_SERVER_ERROR);
             }
-        } catch (\Exception $ex) {
+        } catch (\Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

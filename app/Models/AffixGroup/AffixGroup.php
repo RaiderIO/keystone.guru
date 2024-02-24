@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $season_id
- * @property int $expansion_id
- * @property int|null $seasonal_index
- * @property bool $confirmed
+ * @property int                             $id
+ * @property int                             $season_id
+ * @property int                             $expansion_id
+ * @property int|null                        $seasonal_index
+ * @property bool                            $confirmed
  *
- * @property Season $season
- * @property Expansion $expansion
+ * @property Season                          $season
+ * @property Expansion                       $expansion
  * @property Collection|AffixGroupEaseTier[] $easetiers
  *
  * @mixin Eloquent
@@ -60,8 +60,6 @@ class AffixGroup extends AffixGroupBase
     }
 
     /**
-     * @param Season     $season
-     * @param Collection $affixIds
      * @return void
      */
     public static function findMatchingAffixGroupsForAffixIds(Season $season, Collection $affixIds): Collection

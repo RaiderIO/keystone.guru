@@ -46,10 +46,6 @@ abstract class DungeonRouteBuilder
      */
     private const ENEMY_LAST_PULL_DISTANCE_CAP_YARDS = 100;
 
-    protected CoordinatesServiceInterface $coordinatesService;
-
-    protected DungeonRoute $dungeonRoute;
-
     protected ?Floor $currentFloor;
 
     /** @var Collection|Enemy[] */
@@ -64,16 +60,10 @@ abstract class DungeonRouteBuilder
 
     private DungeonRouteBuilderLoggingInterface $log;
 
-    /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param DungeonRoute                $dungeonRoute
-     */
     public function __construct(
-        CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute
+        protected CoordinatesServiceInterface $coordinatesService,
+        protected DungeonRoute                $dungeonRoute
     ) {
-        $this->coordinatesService = $coordinatesService;
-        $this->dungeonRoute       = $dungeonRoute;
         /** @var DungeonRouteBuilderLoggingInterface $log */
         $log                    = App::make(DungeonRouteBuilderLoggingInterface::class);
         $this->log              = $log;
@@ -87,15 +77,13 @@ abstract class DungeonRouteBuilder
             ->get()
             ->each(function (Enemy $enemy) {
                 // Ensure that the kill priority is 0 if it wasn't set
-                $enemy->kill_priority = $enemy->kill_priority ?? 0;
+                $enemy->kill_priority ??= 0;
             })
-            ->sort(function (Enemy $enemy) {
-                return $enemy->enemy_patrol_id === null ? 0 : $enemy->enemy_patrol_id;
-            })
+            ->sort(fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds          = $dungeonRoute->dungeon->getInUseNpcIds();
+        $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
         $this->activePullCollection = new ActivePullCollection();
     }
 
@@ -117,8 +105,6 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param ActivePull $activePull
-     *
      * @return KillZone
      */
     protected function createPull(ActivePull $activePull): KillZone
@@ -208,9 +194,7 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param ActivePullEnemy $activePullEnemy
-     * @param Collection      $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
-     *
+     * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      * @return Enemy|null
      */
     protected function findUnkilledEnemyForNpcAtIngameLocation(
@@ -330,11 +314,7 @@ abstract class DungeonRouteBuilder
      * If we're looking for the closest enemy for an active pull, check if we can find a matching enemy in an already
      * engaged pack.
      *
-     * @param Collection      $preferredGroups
-     * @param Collection      $filteredEnemies
-     * @param ActivePullEnemy $activePullEnemy
-     * @param LatLng|null     $previousPullLatLng
-     * @param ClosestEnemy    $closestEnemy
+     * @param LatLng|null $previousPullLatLng
      * @return void
      */
     private function findClosestEnemyInPreferredGroups(
@@ -369,10 +349,7 @@ abstract class DungeonRouteBuilder
      * Check if we can find an enemy on our preferred floor first. If we cannot find it, only then consider enemies
      * on other floors.
      *
-     * @param Collection      $filteredEnemies
-     * @param ActivePullEnemy $activePullEnemy
-     * @param LatLng|null     $previousPullLatLng
-     * @param ClosestEnemy    $closestEnemy
+     * @param LatLng|null $previousPullLatLng
      * @return void
      */
     private function findClosestEnemyInPreferredFloor(
@@ -382,9 +359,7 @@ abstract class DungeonRouteBuilder
         ClosestEnemy    $closestEnemy
     ): void {
         /** @var Collection|Enemy[] $preferredEnemiesOnCurrentFloor */
-        $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(function (Enemy $availableEnemy) {
-            return $availableEnemy->floor_id == $this->currentFloor->id;
-        });
+        $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(fn(Enemy $availableEnemy) => $availableEnemy->floor_id == $this->currentFloor->id);
 
         if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
             $this->findClosestEnemyAndDistanceFromList(
@@ -399,10 +374,7 @@ abstract class DungeonRouteBuilder
     /**
      * If we cannot find an enemy with any other criteria, just consider them all instead.
      *
-     * @param Collection      $filteredEnemies
-     * @param ActivePullEnemy $activePullEnemy
-     * @param LatLng|null     $previousPullLatLng
-     * @param ClosestEnemy    $closestEnemy
+     * @param LatLng|null $previousPullLatLng
      * @return void
      */
     private function findClosestEnemyInAllFilteredEnemies(
@@ -454,11 +426,7 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Collection      $enemies
-     * @param ActivePullEnemy $enemy
-     * @param LatLng|null     $previousPullLatLng
-     * @param ClosestEnemy    $closestEnemy
-     * @param bool            $considerPatrols
+     * @param LatLng|null $previousPullLatLng
      *
      * @return bool
      */
@@ -474,9 +442,7 @@ abstract class DungeonRouteBuilder
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
 
         // Sort descending - higher priorities go first
-        $enemiesByKillPriority = $enemies->groupBy(function (Enemy $enemy) {
-            return $enemy->kill_priority ?? 0;
-        })->sortKeysDesc();
+        $enemiesByKillPriority = $enemies->groupBy(fn(Enemy $enemy) => $enemy->kill_priority ?? 0)->sortKeysDesc();
 
         foreach ($enemiesByKillPriority as $killPriority => $availableEnemies) {
             /** @var Collection|Enemy[] $availableEnemies */
@@ -531,11 +497,7 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Enemy        $availableEnemy
-     * @param LatLng       $enemyLatLng
-     * @param LatLng|null  $previousPullLatLng
-     * @param IngameXY     $targetIngameXY
-     * @param ClosestEnemy $closestEnemy
+     * @param LatLng|null $previousPullLatLng
      *
      * @return bool True if an enemy close enough was found
      */

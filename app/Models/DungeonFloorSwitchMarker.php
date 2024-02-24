@@ -160,20 +160,12 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelInterfa
     {
         $direction = $this->direction;
 
-        switch ($direction) {
-            case FloorCoupling::DIRECTION_UP:
-                $result = 1;
-                break;
-            case FloorCoupling::DIRECTION_DOWN:
-                $result = -1;
-                break;
-            case FloorCoupling::DIRECTION_LEFT:
-                $result = -2;
-                break;
-            default:
-                $result = 2;
-                break;
-        }
+        $result = match ($direction) {
+            FloorCoupling::DIRECTION_UP => 1,
+            FloorCoupling::DIRECTION_DOWN => -1,
+            FloorCoupling::DIRECTION_LEFT => -2,
+            default => 2,
+        };
 
         return $result;
     }

@@ -27,7 +27,6 @@ trait ConvertsMDTStrings
     /**
      * Checks if we should log a string to the error logger should it fail parsing
      *
-     * @param string $string
      * @return bool
      * @see https://stackoverflow.com/a/34982057/771270
      */
@@ -91,7 +90,6 @@ trait ConvertsMDTStrings
     }
 
     /**
-     * @param string $string
      * @return string
      */
     private function encode(string $string): ?string
@@ -100,7 +98,6 @@ trait ConvertsMDTStrings
     }
 
     /**
-     * @param string $string
      * @return string
      */
     private function decode(string $string): string

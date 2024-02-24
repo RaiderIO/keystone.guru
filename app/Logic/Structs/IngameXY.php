@@ -7,24 +7,13 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class IngameXY implements Arrayable
 {
-    private float $x;
-
-    private float $y;
-
-    private ?Floor $floor;
-
     private ?LatLng $latLng = null;
 
     /**
-     * @param float      $x
-     * @param float      $y
      * @param Floor|null $floor
      */
-    public function __construct(float $x = 0, float $y = 0, ?Floor $floor = null)
+    public function __construct(private float $x = 0, private float $y = 0, private ?Floor $floor = null)
     {
-        $this->x     = $x;
-        $this->y     = $y;
-        $this->floor = $floor;
     }
 
     /**
@@ -36,8 +25,6 @@ class IngameXY implements Arrayable
     }
 
     /**
-     * @param float $x
-     *
      * @return IngameXY
      */
     public function setX(float $x): IngameXY
@@ -56,8 +43,6 @@ class IngameXY implements Arrayable
     }
 
     /**
-     * @param float $y
-     *
      * @return IngameXY
      */
     public function setY(float $y): IngameXY
@@ -108,9 +93,7 @@ class IngameXY implements Arrayable
     }
 
     /**
-     * @param array      $ingameXY
      * @param Floor|null $floor
-     *
      * @return IngameXY
      */
     public static function fromArray(array $ingameXY, ?Floor $floor): IngameXY

@@ -93,8 +93,6 @@ class KillZone extends Model
     private ?Floor $dominantFloorCache = null;
 
     /**
-     * @param Collection $enemyIds
-     *
      * @return void
      */
     public function setEnemiesAttributeCache(Collection $enemyIds): void
@@ -119,9 +117,7 @@ class KillZone extends Model
             // Disabling model caching makes this query work - not sure why the cache would break it, but it does
             ->disableCache()
             ->get()
-            ->map(function (Enemy $enemy) {
-                return $enemy->id;
-            });
+            ->map(fn(Enemy $enemy) => $enemy->id);
     }
 
     /**
@@ -187,7 +183,6 @@ class KillZone extends Model
     /**
      * The floor that we have a killzone on, or the floor that contains the most enemies (and thus most dominant floor)
      *
-     * @param bool $useCache
      *
      * @return Floor
      */
@@ -222,8 +217,6 @@ class KillZone extends Model
     }
 
     /**
-     * @param bool $useCache
-     *
      * @return LatLng|null
      */
     public function getKillLocation(bool $useCache = false): ?LatLng
@@ -297,7 +290,6 @@ class KillZone extends Model
      * Calculate the bounding box of all enemies that this pull kills, take the north edge of that bounding box
      * and return the middle of that edge as a lat/lng.
      *
-     * @param int $boundingBoxMargin
      *
      * @return array|null
      */
@@ -318,7 +310,6 @@ class KillZone extends Model
     /**
      * Gets a list of enemy forces that this kill zone kills that may be skipped.
      *
-     * @param bool $teeming
      *
      * @return Collection
      */

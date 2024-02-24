@@ -1,5 +1,5 @@
 <?php
-$showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
+$showLegalModal ??= true;
 ?>
 
 <script>
@@ -13,7 +13,7 @@ $showLegalModal = isset($showLegalModal) ? $showLegalModal : true;
     // Legal nag so that everyone agrees to the terms, that has registered.
     @if($showLegalModal && !Auth::user()->legal_agreed)
 
-    document.addEventListener('DOMContentLoaded', function (event) {
+    document.addEventListener('DOMContentLoaded', function () {
         $('#legal_modal').modal('show');
         $('#legal_confirm_btn').unbind('click').bind('click', _agreeLegalBtnClicked);
     });

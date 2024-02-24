@@ -19,6 +19,7 @@ class UserReportController extends Controller
         foreach ($userReports as $userReport) {
             $userReport->model;
         }
+
         return view('admin.userreport.list', ['models' => $userReports]);
     }
 }

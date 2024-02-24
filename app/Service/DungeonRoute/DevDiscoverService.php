@@ -125,7 +125,7 @@ class DevDiscoverService extends BaseDiscoverService
     }
 
     /**
-     * @param Season $season
+     * @param Season         $season
      * @param AffixGroupBase $affixGroup
      * @return Collection
      */
@@ -176,7 +176,7 @@ class DevDiscoverService extends BaseDiscoverService
     }
 
     /**
-     * @param Season $season
+     * @param Season         $season
      * @param AffixGroupBase $affixGroup
      * @return Collection
      */

@@ -17,7 +17,7 @@ class MountableAreaRelationMapping extends RelationMapping
         parent::__construct('mountable_areas.json', MountableArea::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
     }
 }

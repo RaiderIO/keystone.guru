@@ -6,11 +6,11 @@
  * @var $__env array
  * @var $orientation string
  */
-$cols             = $cols ?? 1;
-$showDungeonImage = $showDungeonImage ?? false;
-$affixgroup       = $affixgroup ?? null;
-$cache            = $cache ?? true;
-$orientation      = $orientation ?? 'vertical';
+$cols             ??= 1;
+$showDungeonImage ??= false;
+$affixgroup       ??= null;
+$cache            ??= true;
+$orientation      ??= 'vertical';
 
 $i = 0;
 

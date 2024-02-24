@@ -7,10 +7,10 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $season_id
- * @property int $dungeon_id
- * @property Season $season
+ * @property int     $id
+ * @property int     $season_id
+ * @property int     $dungeon_id
+ * @property Season  $season
  * @property Dungeon $dungeon
  *
  * @mixin Eloquent
@@ -19,9 +19,9 @@ class SeasonDungeon extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['season_id', 'dungeon_id'];
-    public $with = ['season', 'dungeon'];
-    public $timestamps = false;
+    protected $fillable   = ['season_id', 'dungeon_id'];
+    public    $with       = ['season', 'dungeon'];
+    public    $timestamps = false;
 
     /**
      * @return BelongsTo

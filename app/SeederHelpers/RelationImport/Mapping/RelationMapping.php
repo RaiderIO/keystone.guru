@@ -16,15 +16,6 @@ use Illuminate\Support\Collection;
  */
 abstract class RelationMapping
 {
-    /** @var string */
-    private string $fileName;
-
-    /** @var string */
-    private string $class;
-
-    /** @var boolean True if the model's data remains in the DB and needs to be updated instead of inserted blindly */
-    private bool $persistent;
-
     /** @var Collection|ConditionalInterface[] */
     private Collection $conditionals;
 
@@ -39,16 +30,9 @@ abstract class RelationMapping
 
     /**
      * RelationMapping constructor.
-     * @param string $fileName
-     * @param string $class
-     * @param bool $persistent
      */
-    public function __construct(string $fileName, string $class, bool $persistent = false)
+    public function __construct(private string $fileName, private string $class, private bool $persistent = false)
     {
-        $this->fileName   = $fileName;
-        $this->class      = $class;
-        $this->persistent = $persistent;
-
         $this->conditionals            = collect();
         $this->attributeParsers        = collect();
         $this->preSaveRelationParsers  = collect();
@@ -64,12 +48,12 @@ abstract class RelationMapping
     }
 
     /**
-     * @param Collection $conditionals
      * @return $this
      */
     protected function setConditionals(Collection $conditionals): self
     {
         $this->conditionals = $conditionals;
+
         return $this;
     }
 
@@ -82,12 +66,12 @@ abstract class RelationMapping
     }
 
     /**
-     * @param Collection $attributeParsers
      * @return RelationMapping
      */
     public function setAttributeParsers(Collection $attributeParsers): RelationMapping
     {
         $this->attributeParsers = $attributeParsers;
+
         return $this;
     }
 
@@ -106,6 +90,7 @@ abstract class RelationMapping
     protected function setPreSaveRelationParsers($preSaveRelationParsers): self
     {
         $this->preSaveRelationParsers = $preSaveRelationParsers;
+
         return $this;
     }
 
@@ -124,6 +109,7 @@ abstract class RelationMapping
     protected function setPostSaveRelationParsers($postSaveRelationParsers): self
     {
         $this->postSaveRelationParsers = $postSaveRelationParsers;
+
         return $this;
     }
 

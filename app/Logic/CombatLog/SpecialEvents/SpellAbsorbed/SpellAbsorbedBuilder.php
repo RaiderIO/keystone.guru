@@ -25,13 +25,10 @@ class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
         string $eventName,
         array  $parameters,
         string $rawEvent
-    ): SpecialEvent
-    {
-        switch ($combatLogVersion) {
-            case CombatLogVersion::CLASSIC:
-                return new SpellAbsorbedV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-            default:
-                return new SpellAbsorbedV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-        }
+    ): SpecialEvent {
+        return match ($combatLogVersion) {
+            CombatLogVersion::CLASSIC => new SpellAbsorbedV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            default => new SpellAbsorbedV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+        };
     }
 }

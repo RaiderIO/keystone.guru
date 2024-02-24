@@ -60,28 +60,15 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /** @var string $encodedString The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;
 
-    /** @var SeasonService Used for grabbing info about the current M+ season. */
-    private SeasonServiceInterface $seasonService;
-
-    private CacheServiceInterface $cacheService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
     function __construct(
-        SeasonServiceInterface      $seasonService,
-        CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService
+        /** @var SeasonService Used for grabbing info about the current M+ season. */
+        private SeasonServiceInterface      $seasonService,
+        private CacheServiceInterface       $cacheService,
+        private CoordinatesServiceInterface $coordinatesService
     ) {
-        $this->seasonService      = $seasonService;
-        $this->cacheService       = $cacheService;
-        $this->coordinatesService = $coordinatesService;
     }
 
     /**
-     * @param Collection $warnings
-     * @param array      $decoded
-     * @param Dungeon    $dungeon
-     * @param bool       $importAsThisWeek
      *
      * @return AffixGroup|null
      * @throws Exception
@@ -102,7 +89,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringRiftOffsets $importStringRiftOffsets
      *
      * @return ImportStringRiftOffsets
      * @throws ImportWarning
@@ -140,7 +126,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     ->where($seasonalIndexWhere)->firstOrFail(),
             ];
 
-        } catch (Exception $exception) {
+        } catch (Exception) {
             throw new ImportWarning(__('logic.mdt.io.import_string.category.awakened_obelisks'),
                 __('logic.mdt.io.import_string.unable_to_find_awakened_obelisks')
             );
@@ -213,7 +199,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * Parse the $decoded['value']['pulls'] value and save the result in the ImportStringPulls object.
      *
-     * @param ImportStringPulls $importStringPulls
      *
      * @return ImportStringPulls
      * @throws InvalidMDTDungeonException
@@ -321,17 +306,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringPulls $importStringPulls
-     * @param Collection        $mdtEnemiesByMdtNpcIndex
-     * @param Collection        $enemiesByNpcId
-     * @param Collection        $enemyForcesByNpcIds
-     * @param int               $totalEnemiesSelected
-     * @param int               $totalEnemiesMatched
-     * @param bool              $seasonalIndexSkip
-     * @param array             $killZoneAttributes
-     * @param int               $newPullIndex
-     * @param string            $mdtNpcIndex
-     * @param string|array      $mdtNpcClones
+     * @param string|array $mdtNpcClones
      *
      * @return bool
      */
@@ -351,7 +326,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         if ($mdtNpcIndex === 'color') {
             // Make sure there is a pound sign in front of the value at all times, but never double up should
             // MDT decide to suddenly place it here
-            $killZoneAttributes['color'] = (substr($mdtNpcClones, 0, 1) !== '#' ? '#' : '') . $mdtNpcClones;
+            $killZoneAttributes['color'] = (!str_starts_with($mdtNpcClones, '#') ? '#' : '') . $mdtNpcClones;
 
             return false;
         } // Numeric means it's an index of the dungeon's NPCs, if it isn't numeric skip to the next pull
@@ -585,7 +560,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * Parse any saved objects from the MDT string to a $dungeonRoute, optionally $save'ing the objects to the database.
      *
-     * @param ImportStringObjects $importStringObjects
      *
      * @return ImportStringObjects
      */
@@ -652,9 +626,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $mdtSubLevel = ((int)$details[2]);
 
                 /** @var Floor $floor */
-                $floor = $floors->first(function (Floor $floor) use ($mdtSubLevel) {
-                    return ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel;
-                });
+                $floor = $floors->first(fn(Floor $floor) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
 
                 if ($floor === null) {
                     throw new ImportWarning(
@@ -694,12 +666,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringObjects $importStringObjects
-     * @param MappingVersion      $mappingVersion
-     * @param Floor               $floor
-     * @param array               $details
-     * @param array               $line
-     * @param float               $rotationRad
      * @return void
      */
     private function parseObjectTriangle(
@@ -749,11 +715,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringObjects $importStringObjects
-     * @param MappingVersion      $mappingVersion
-     * @param Floor               $floor
-     * @param array               $details
-     * @param array               $line
      *
      * @return void
      */
@@ -784,7 +745,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 );
 
                 // Attempt to set the dominant floor, or fall back to what was set before
-                $dominantFloor = $dominantFloor ?? $latLng->getFloor();
+                $dominantFloor ??= $latLng->getFloor();
             }
 
             $vertices[] = $latLng->toArray();
@@ -798,7 +759,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             'polyline' => [
                 // Make sure there is a pound sign in front of the value at all times, but never double up should
                 // MDT decide to suddenly place it here
-                'color'         => (substr($details[4], 0, 1) !== '#' ? '#' : '') . $details[4],
+                'color'         => (!str_starts_with($details[4], '#') ? '#' : '') . $details[4],
                 'weight'        => $weight,
                 'vertices_json' => json_encode($vertices),
                 // To be set later
@@ -833,10 +794,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringObjects $importStringObjects
-     * @param MappingVersion      $mappingVersion
-     * @param Floor               $floor
-     * @param array               $details
      *
      * @return void
      */
@@ -1114,8 +1071,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringPulls $importStringPulls
-     * @param DungeonRoute      $dungeonRoute
      *
      * @return void
      */
@@ -1166,7 +1121,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     /**
      * @param AffixGroup|null $affixGroup
-     * @param DungeonRoute    $dungeonRoute
      *
      * @return void
      */
@@ -1187,8 +1141,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringObjects $importStringObjects
-     * @param DungeonRoute        $dungeonRoute
      *
      * @return void
      */
@@ -1278,8 +1230,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
-     * @param ImportStringRiftOffsets $importStringRiftOffsets
-     * @param DungeonRoute            $dungeonRoute
      *
      * @return void
      */

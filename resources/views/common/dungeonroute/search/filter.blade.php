@@ -1,8 +1,10 @@
 <?php
-/** @var $key string */
-/** @var $text string */
-/** @var $expanded boolean */
-$expanded = $expanded ?? true;
+/**
+ * @var $key string
+ * @var $text string
+ * @var $expanded boolean
+ */
+$expanded ??= true;
 ?>
 <div class="form-group">
     <div id="filter_accordeon_{{ $key }}">

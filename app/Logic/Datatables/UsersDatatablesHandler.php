@@ -26,6 +26,7 @@ class UsersDatatablesHandler extends DatatablesHandler
         $query->havings = $havings;
 
         $foundRows = DB::select(DB::raw('SELECT FOUND_ROWS() as count'));
+
         return $foundRows[0]->count;
     }
 

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,33 +16,16 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected ThumbnailServiceInterface $thumbnailService;
-
-    protected DungeonRoute $dungeonRoute;
-
-    protected int $floorIndex;
-
-    protected int $attempts;
-
     /**
      * Create a new job instance.
-     *
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute              $dungeonRoute
-     * @param int                       $floorIndex
-     * @param int                       $attempts
      */
-    public function __construct(ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, int $floorIndex, int $attempts = 0)
+    public function __construct(protected ThumbnailServiceInterface $thumbnailService, protected DungeonRoute $dungeonRoute, protected int $floorIndex, protected int $attempts = 0)
     {
-        $this->queue            = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
-        $this->thumbnailService = $thumbnailService;
-        $this->dungeonRoute     = $dungeonRoute;
-        $this->floorIndex       = $floorIndex;
-        $this->attempts         = $attempts;
+        $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {

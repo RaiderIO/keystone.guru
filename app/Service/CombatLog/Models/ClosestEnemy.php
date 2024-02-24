@@ -27,13 +27,12 @@ class ClosestEnemy
     }
 
     /**
-     * @param float $distanceBetweenEnemies
-     *
      * @return ClosestEnemy
      */
     public function setDistanceBetweenEnemies(float $distanceBetweenEnemies): ClosestEnemy
     {
         $this->distanceBetweenEnemies = $distanceBetweenEnemies;
+
         return $this;
     }
 
@@ -46,13 +45,12 @@ class ClosestEnemy
     }
 
     /**
-     * @param float $distanceBetweenLastPullAndEnemy
-     *
      * @return ClosestEnemy
      */
     public function setDistanceBetweenLastPullAndEnemy(float $distanceBetweenLastPullAndEnemy): ClosestEnemy
     {
         $this->distanceBetweenLastPullAndEnemy = $distanceBetweenLastPullAndEnemy;
+
         return $this;
     }
 
@@ -65,13 +63,12 @@ class ClosestEnemy
     }
 
     /**
-     * @param float $weightedTotalDistance
-     *
      * @return ClosestEnemy
      */
     public function setWeightedTotalDistance(float $weightedTotalDistance): ClosestEnemy
     {
         $this->weightedTotalDistance = $weightedTotalDistance;
+
         return $this;
     }
 
@@ -91,6 +88,7 @@ class ClosestEnemy
     public function setEnemy(?Enemy $enemy): ClosestEnemy
     {
         $this->enemy = $enemy;
+
         return $this;
     }
 }

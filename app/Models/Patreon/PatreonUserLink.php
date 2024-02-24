@@ -12,16 +12,16 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property string $email
- * @property string scope
- * @property string $access_token
- * @property string $refresh_token
- * @property string $version
- * @property string $expires_at
+ * @property int                         $id
+ * @property int                         $user_id
+ * @property string                      $email
+ * @property string                      scope
+ * @property string                      $access_token
+ * @property string                      $refresh_token
+ * @property string                      $version
+ * @property string                      $expires_at
  *
- * @property User $user
+ * @property User                        $user
  * @property Collection|PatreonBenefit[] $patreonbenefits
  *
  * @mixin Eloquent
@@ -39,9 +39,9 @@ class PatreonUserLink extends Model
         'version',
         'expires_at',
     ];
-    protected $with = ['patreonbenefits'];
-    protected $visible = ['patreonbenefits', 'manually_granted'];
-    protected $appends = ['manually_granted'];
+    protected $with     = ['patreonbenefits'];
+    protected $visible  = ['patreonbenefits', 'manually_granted'];
+    protected $appends  = ['manually_granted'];
 
     /**
      * @return bool

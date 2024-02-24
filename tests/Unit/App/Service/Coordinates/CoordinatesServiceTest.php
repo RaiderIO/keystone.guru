@@ -15,8 +15,6 @@ class CoordinatesServiceTest extends PublicTestCase
      * Scenario: Tests that the ingame location
      *
      * @test
-     * @param LatLng   $latLng
-     * @param IngameXY $expected
      * @return void
      * @dataProvider checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider
      * @group

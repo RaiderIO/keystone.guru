@@ -1,7 +1,7 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
 
-$show          = $show ?? [];
+$show          ??= [];
 $showLink      = $show['link'] ?? true;
 $showEmbed     = $show['embed'] ?? true;
 $showMdtExport = $show['mdt-export'] ?? true;

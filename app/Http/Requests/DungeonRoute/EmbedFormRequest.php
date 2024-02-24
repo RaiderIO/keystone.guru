@@ -35,7 +35,7 @@ class EmbedFormRequest extends FormRequest
             'showEnemyForces'       => 'nullable|bool',
             'showAffixes'           => 'nullable|bool',
             'showTitle'             => 'nullable|bool',
-            'showPresenterButton'   => 'nullable|bool'
+            'showPresenterButton'   => 'nullable|bool',
         ];
     }
 }

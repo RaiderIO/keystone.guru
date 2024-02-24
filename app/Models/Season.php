@@ -88,7 +88,6 @@ class Season extends CacheModel
     }
 
     /**
-     * @param Dungeon $dungeon
      * @return bool
      */
     public function hasDungeon(Dungeon $dungeon): bool
@@ -114,7 +113,6 @@ class Season extends CacheModel
 
     /**
      * Get the amount of weeks that have passed since the start of the M+ season, on a specific date.
-     * @param Carbon $date
      * @return int
      */
     public function getWeeksSinceStartAt(Carbon $date): int
@@ -141,7 +139,6 @@ class Season extends CacheModel
     /**
      * Get the amount of full iterations of the entire list of affix groups
      *
-     * @param Carbon $date
      * @return int
      */
     public function getAffixGroupIterationsAt(Carbon $date): int
@@ -155,7 +152,6 @@ class Season extends CacheModel
     /**
      * Get the affix group that is currently active in the region's timezone.
      *
-     * @param GameServerRegion $region
      * @return AffixGroup|null
      * @throws Exception
      */
@@ -177,7 +173,6 @@ class Season extends CacheModel
     /**
      * Get the affix group that will be active next week in the region's timezone.
      *
-     * @param GameServerRegion $region
      * @return AffixGroup|null
      * @throws Exception
      */
@@ -240,8 +235,7 @@ class Season extends CacheModel
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param Carbon           $date The date at which you want to know the affix group.
-     * @param GameServerRegion $region
+     * @param Carbon $date The date at which you want to know the affix group.
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      * @throws Exception
      */
@@ -268,7 +262,6 @@ class Season extends CacheModel
     }
 
     /**
-     * @param AffixGroup $affixGroup
      * @return int
      * @throws Exception
      */
@@ -278,16 +271,13 @@ class Season extends CacheModel
         $startIndex      = $this->affixgroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );
-        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(function (AffixGroup $affixGroupCandidate) use ($affixGroup) {
-            return $affixGroupCandidate->id === $affixGroup->id;
-        })->first());
+        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixgroups->count()) % $this->presets + 1 : 0;
     }
 
     /**
      * Get the current preset (if any) at a specific date.
-     * @param Carbon $date
      * @return int The preset at the passed date.
      */
     public function getPresetAtDate(Carbon $date): int

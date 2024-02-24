@@ -18,12 +18,6 @@ abstract class ContextEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var Model $_context */
-    protected Model $_context;
-
-    /** @var User $_user */
-    protected User $_user;
-
     /**
      * Create a new event instance.
      *
@@ -31,10 +25,8 @@ abstract class ContextEvent implements ShouldBroadcast
      * @param $user User
      * @return void
      */
-    public function __construct(Model $context, User $user)
+    public function __construct(protected Model $_context, protected User $_user)
     {
-        $this->_context = $context;
-        $this->_user    = $user;
     }
 
     /**
@@ -62,7 +54,7 @@ abstract class ContextEvent implements ShouldBroadcast
         return [
             '__name'            => $this->broadcastAs(),
             'context_route_key' => $this->_context->getRouteKey(),
-            'context_class'     => get_class($this->_context),
+            'context_class'     => $this->_context::class,
             'user'              => [
                 'color'      => $this->_user->echo_color,
                 'name'       => $this->_user->name,

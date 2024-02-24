@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Models\Dungeon;
+use Exception;
 use Illuminate\Console\Command;
 
 class RotateIngameCoords extends Command
@@ -25,15 +26,15 @@ class RotateIngameCoords extends Command
      * Execute the console command.
      *
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handle()
+    public function handle(): int
     {
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
 
         if ($dungeon === null) {
-            throw new \Exception('Unable to find dungeon!');
+            throw new Exception('Unable to find dungeon!');
         }
 
         foreach ($dungeon->floors as $floor) {
@@ -47,5 +48,7 @@ class RotateIngameCoords extends Command
             $floor->update($newCoordinates);
             $this->info(sprintf('- Rotated floor %d 90 degrees: %s', $floor->id, json_encode($newCoordinates)));
         }
+
+        return 0;
     }
 }

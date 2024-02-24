@@ -14,8 +14,7 @@ interface ViewServiceInterface
     public function getGlobalViewVariables(bool $useCache = true): array;
 
     /**
-     * @param GameServerRegion $gameServerRegion
-     * @param bool             $useCache True to use the cache, false to regenerate it.
+     * @param bool $useCache True to use the cache, false to regenerate it.
      * @return array
      */
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array;

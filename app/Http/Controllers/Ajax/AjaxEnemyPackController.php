@@ -17,9 +17,7 @@ use Throwable;
 class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
-     * @param EnemyPackFormRequest $request
-     * @param MappingVersion       $mappingVersion
-     * @param EnemyPack|null       $enemyPack
+     * @param EnemyPack|null $enemyPack
      * @return EnemyPack|Model
      * @throws Throwable
      */
@@ -31,8 +29,6 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request   $request
-     * @param EnemyPack $enemyPack
      * @return Response
      * @throws Exception
      * @throws Throwable

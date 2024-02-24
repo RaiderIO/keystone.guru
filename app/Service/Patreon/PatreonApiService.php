@@ -8,14 +8,8 @@ use Patreon\OAuth;
 
 class PatreonApiService implements PatreonApiServiceInterface
 {
-    private PatreonApiServiceLoggingInterface $log;
-
-    /**
-     * @param PatreonApiServiceLoggingInterface $log
-     */
-    public function __construct(PatreonApiServiceLoggingInterface $log)
+    public function __construct(private PatreonApiServiceLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
 
@@ -132,8 +126,6 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @param API $apiClient
-     * @param string $suffix
      * @return array
      */
     private function getAllPages(API $apiClient, string $suffix): array
@@ -189,7 +181,6 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @param string $accessToken
      * @return API
      */
     private function getApiClient(string $accessToken): API

@@ -10,15 +10,10 @@ use App\Models\MountableArea;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 {
-    /** @var CoordinatesServiceInterface */
-    private CoordinatesServiceInterface $coordinatesService;
-
-    /** @var SimulationCraftRaidEventsOptions */
-    private SimulationCraftRaidEventsOptions $options;
-
     /** @var int */
     private int $pullIndex;
 
@@ -31,16 +26,8 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     /** @var Collection|RaidEventPullEnemy[] */
     private Collection $raidEventPullEnemies;
 
-    /**
-     * @param CoordinatesServiceInterface      $coordinatesService
-     * @param SimulationCraftRaidEventsOptions $options
-     */
-    public function __construct(
-        CoordinatesServiceInterface      $coordinatesService,
-        SimulationCraftRaidEventsOptions $options
-    ) {
-        $this->coordinatesService = $coordinatesService;
-        $this->options            = $options;
+    public function __construct(private CoordinatesServiceInterface $coordinatesService, private SimulationCraftRaidEventsOptions $options)
+    {
     }
 
     /**
@@ -100,7 +87,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB): float
     {
         if (optional($latLngA->getFloor())->id !== optional($latLngB->getFloor())->id) {
-            throw new \InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
+            throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
         }
 
         [$mountFactorsAndSpeeds, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
@@ -163,8 +150,6 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
 
     /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
      * @return float
      */
     private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(LatLng $latLngA, LatLng $latLngB): float
@@ -263,12 +248,10 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         // then determine if an intersection causes a mount up, or a dismount
         /** @var MountableAreaIntersection[]|Collection $allMountableAreaIntersections */
         $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
-            function (MountableAreaIntersection $foundIntersection) use ($latLngA) {
-                return $this->coordinatesService->distanceBetweenPoints(
-                    $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
-                    $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
-                );
-            })->values();
+            fn(MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
+                $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
+                $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
+            ))->values();
 
         $totalDistance = $this->coordinatesService->distanceBetweenPoints(
             $latLngA->getLng(), $latLngB->getLng(),

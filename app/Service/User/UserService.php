@@ -3,8 +3,8 @@
 namespace App\Service\User;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserService implements UserServiceInterface
 {

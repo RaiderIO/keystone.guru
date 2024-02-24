@@ -15,8 +15,8 @@ use App\Logic\CombatLog\Guid\Guid;
  */
 class AdvancedDataV20 implements AdvancedDataInterface
 {
-    private ?Guid $infoGuid;
-    private ?Guid $ownerGuid;
+    private ?Guid $infoGuid  = null;
+    private ?Guid $ownerGuid = null;
     private int   $currentHP;
     private int   $maxHP;
     private int   $attackPower;

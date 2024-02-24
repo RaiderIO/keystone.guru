@@ -26,8 +26,6 @@ class DungeonRouteThumbnailJobCollectionResource extends ResourceCollection
      */
     public function toArray($request)
     {
-        return ['data' => $this->collection->map(function (DungeonRouteThumbnailJob $dungeonRoute) {
-            return new DungeonRouteThumbnailJobResource($dungeonRoute);
-        })];
+        return ['data' => $this->collection->map(fn(DungeonRouteThumbnailJob $dungeonRoute) => new DungeonRouteThumbnailJobResource($dungeonRoute))];
     }
 }

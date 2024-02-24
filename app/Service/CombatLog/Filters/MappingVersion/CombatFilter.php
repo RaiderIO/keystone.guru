@@ -37,7 +37,7 @@ class CombatFilter extends BaseCombatFilter
         // First, we wait for the challenge mode to start
         if ($combatLogEvent instanceof ZoneChange) {
             $this->log->parseZoneChangeFound($lineNr);
-            $this->zoneFound   = true;
+            $this->zoneFound = true;
 
             return false;
         }

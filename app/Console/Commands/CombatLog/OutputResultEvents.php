@@ -4,6 +4,7 @@ namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
+use Exception;
 
 class OutputResultEvents extends BaseCombatLogCommand
 {
@@ -24,17 +25,16 @@ class OutputResultEvents extends BaseCombatLogCommand
     /**
      * Execute the console command.
      *
-     * @param CombatLogServiceInterface $combatLogService
      *
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(CombatLogServiceInterface $combatLogService): int
     {
         ini_set('memory_limit', '2G');
 
-        $filePath = $this->argument('filePath');
-        $force = (bool)$this->option('force');
+        $filePath      = $this->argument('filePath');
+        $force         = (bool)$this->option('force');
         $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
@@ -49,10 +49,6 @@ class OutputResultEvents extends BaseCombatLogCommand
     }
 
     /**
-     * @param CombatLogServiceInterface $combatLogService
-     * @param string $filePath
-     * @param bool $force
-     * @param bool $dungeonOrRaid
      * @return int
      */
     private function outputResultEvents(
@@ -60,8 +56,7 @@ class OutputResultEvents extends BaseCombatLogCommand
         string                    $filePath,
         bool                      $force = false,
         bool                      $dungeonOrRaid = false
-    ): int
-    {
+    ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
@@ -71,16 +66,14 @@ class OutputResultEvents extends BaseCombatLogCommand
 
             $result = 1;
         } else {
-            if( $dungeonOrRaid ) {
+            if ($dungeonOrRaid) {
                 $resultEvents = $combatLogService->getResultEventsForDungeonOrRaid($filePath);
             } else {
                 $resultEvents = $combatLogService->getResultEventsForChallengeMode($filePath);
             }
 
-            $result       = file_put_contents($resultingFile, $resultEvents->map(function (BaseResultEvent $resultEvent) {
-                // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
-                return trim($resultEvent->getBaseEvent()->getRawEvent());
-            })->implode(PHP_EOL));
+            $result = file_put_contents($resultingFile, $resultEvents->map(fn(BaseResultEvent $resultEvent) => // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+            trim($resultEvent->getBaseEvent()->getRawEvent()))->implode(PHP_EOL));
 
             if ($result) {
                 $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));

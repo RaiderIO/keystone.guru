@@ -33,15 +33,11 @@ class ActivePull
     }
 
     /**
-     * @param Carbon $timestamp
-     *
      * @return float
      */
     public function getAverageHPPercentAt(Carbon $timestamp): float
     {
-        $inCombatSum = $this->enemiesInCombat->sum(function (ActivePullEnemy $activePullEnemy) use ($timestamp) {
-            return $activePullEnemy->getHPPercentAt($timestamp);
-        });
+        $inCombatSum = $this->enemiesInCombat->sum(fn(ActivePullEnemy $activePullEnemy) => $activePullEnemy->getHPPercentAt($timestamp));
 
         $totalEnemiesInPull = ($this->enemiesInCombat->count() + $this->enemiesKilled->count());
         if ($totalEnemiesInPull === 0) {
@@ -76,8 +72,6 @@ class ActivePull
     }
 
     /**
-     * @param string $uniqueId
-     *
      * @return $this
      */
     public function enemyKilled(string $uniqueId): ActivePull
@@ -96,8 +90,6 @@ class ActivePull
     }
 
     /**
-     * @param int $spellId
-     *
      * @return $this
      */
     public function addSpell(int $spellId): ActivePull
@@ -111,8 +103,6 @@ class ActivePull
     }
 
     /**
-     * @param ActivePullEnemy $activePullEnemy
-     *
      * @return $this
      */
     public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
@@ -123,8 +113,6 @@ class ActivePull
     }
 
     /**
-     * @param string $uniqueUid
-     *
      * @return bool
      */
     public function isEnemyInCombat(string $uniqueUid): bool
@@ -141,8 +129,6 @@ class ActivePull
     }
 
     /**
-     * @param ActivePull $activePull
-     *
      * @return void
      */
     public function merge(ActivePull $activePull): void

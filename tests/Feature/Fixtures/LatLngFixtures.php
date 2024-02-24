@@ -14,8 +14,8 @@ class LatLngFixtures
         ?float $lng = null
     ): LatLng {
         return new LatLng(
-            $lat ?? rand(0, CoordinatesService::MAP_MAX_LAT),
-            $lng ?? rand(0, CoordinatesService::MAP_MAX_LNG),
+            $lat ?? random_int(0, CoordinatesService::MAP_MAX_LAT),
+            $lng ?? random_int(0, CoordinatesService::MAP_MAX_LNG),
             $floor,
         );
     }

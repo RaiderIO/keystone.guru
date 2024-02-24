@@ -103,7 +103,6 @@ class RaidEventPullEnemyTest extends TestCase
     /**
      * @param array|null $npcAttributes
      * @param array|null $enemyAttributes
-     * @param int $enemyIndexInPull
      * @return RaidEventPullEnemy|MockObject
      */
     private function createRaidEventPullEnemyWithParams(?array $npcAttributes = null, ?array $enemyAttributes = null, int $enemyIndexInPull = self::ENEMY_INDEX_IN_PULL): MockObject

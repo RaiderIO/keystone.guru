@@ -28,7 +28,7 @@ class UserResource extends JsonResource
             'links'      => [
                 'view'   => route('profile.view', ['user' => $this]),
                 'avatar' => optional($this->iconfile)->getURL(),
-            ]
+            ],
         ];
     }
 }

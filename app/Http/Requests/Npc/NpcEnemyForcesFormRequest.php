@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Npc;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NpcEnemyForcesFormRequest extends FormRequest
@@ -13,7 +14,7 @@ class NpcEnemyForcesFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**

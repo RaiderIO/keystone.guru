@@ -10,25 +10,13 @@ use Illuminate\Support\Str;
 
 class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutputInterface
 {
-    /** @var SimulationCraftRaidEventsOptions */
-    private SimulationCraftRaidEventsOptions $options;
-
-    /** @var Enemy */
-    private Enemy $enemy;
-
-    /** @var int */
-    private int $enemyIndexInPull;
-
-    public function __construct(SimulationCraftRaidEventsOptions $options, Enemy $enemy, int $enemyIndexInPull)
+    public function __construct(private SimulationCraftRaidEventsOptions $options, private Enemy $enemy, private int $enemyIndexInPull)
     {
-        $this->options          = $options;
-        $this->enemy            = $enemy;
-        $this->enemyIndexInPull = $enemyIndexInPull;
     }
 
     /**
      * @param SimulationCraftRaidEventsOptions $options
-     * @param Npc $npc
+     * @param Npc                              $npc
      * @return int
      */
     public function calculateHealth(SimulationCraftRaidEventsOptions $options, Npc $npc): int

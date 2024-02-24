@@ -12,9 +12,6 @@ use Redirect;
 class GameVersionController extends Controller
 {
     /**
-     * @param Request                     $request
-     * @param GameVersion                 $gameVersion
-     * @param GameVersionServiceInterface $gameVersionService
      * @return RedirectResponse
      */
     public function update(Request $request, GameVersion $gameVersion, GameVersionServiceInterface $gameVersionService): RedirectResponse

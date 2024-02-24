@@ -13,8 +13,7 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view the dungeon route.
      *
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonroute
+     * @param User|null $user
      * @return mixed
      */
     public function view(?User $user, DungeonRoute $dungeonroute)
@@ -30,8 +29,7 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can present the dungeon route.
      *
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonroute
+     * @param User|null $user
      * @return mixed
      */
     public function present(?User $user, DungeonRoute $dungeonroute)
@@ -47,9 +45,7 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view the dungeon route.
      *
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonroute
-     * @param string       $secret
+     * @param User|null $user
      * @return mixed
      */
     public function preview(?User $user, DungeonRoute $dungeonroute, string $secret)
@@ -60,8 +56,7 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view an embedded the dungeon route.
      *
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonroute
+     * @param User|null $user
      * @return mixed
      */
     public function embed(?User $user, DungeonRoute $dungeonroute)
@@ -81,8 +76,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can publish dungeon routes.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function publish(User $user, DungeonRoute $dungeonroute)
@@ -98,8 +91,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can unpublish dungeon routes.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function unpublish(User $user, DungeonRoute $dungeonroute)
@@ -111,8 +102,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can rate a dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function rate(User $user, DungeonRoute $dungeonroute)
@@ -123,8 +112,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can favorite a dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function favorite(User $user, DungeonRoute $dungeonroute)
@@ -136,8 +123,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can clone a dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function clone(User $user, DungeonRoute $dungeonroute)
@@ -148,8 +133,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can migrate a dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function migrate(User $user, DungeonRoute $dungeonroute)
@@ -160,8 +143,7 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can update the dungeon route.
      *
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonroute
+     * @param User|null $user
      * @return mixed
      */
     public function edit(?User $user, DungeonRoute $dungeonroute)
@@ -172,8 +154,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can delete the dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function delete(User $user, DungeonRoute $dungeonroute)
@@ -185,8 +165,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can restore the dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function restore(User $user, DungeonRoute $dungeonroute)
@@ -198,8 +176,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can permanently delete the dungeon route.
      *
-     * @param User         $user
-     * @param DungeonRoute $dungeonroute
      * @return mixed
      */
     public function forceDelete(User $user, DungeonRoute $dungeonroute)
@@ -208,8 +184,7 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonRoute
+     * @param User|null $user
      * @return mixed
      */
     public function addKillZone(?User $user, DungeonRoute $dungeonRoute)
@@ -222,8 +197,7 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonRoute
+     * @param User|null $user
      * @return mixed
      */
     public function addBrushline(?User $user, DungeonRoute $dungeonRoute)
@@ -236,8 +210,7 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonRoute
+     * @param User|null $user
      * @return mixed
      */
     public function addPath(?User $user, DungeonRoute $dungeonRoute)
@@ -250,8 +223,7 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null    $user
-     * @param DungeonRoute $dungeonRoute
+     * @param User|null $user
      * @return mixed
      */
     public function addMapIcon(?User $user, DungeonRoute $dungeonRoute)

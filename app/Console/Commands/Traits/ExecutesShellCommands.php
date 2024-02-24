@@ -14,7 +14,6 @@ trait ExecutesShellCommands
      * Executes a shell command and echos its response to the info console.
      *
      * @param string|array $cmds
-     * @param boolean $echo
      * @return array
      */
     protected function shell($cmds, bool $echo = true): array

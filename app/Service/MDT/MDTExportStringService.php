@@ -35,23 +35,12 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
 
-    private CacheServiceInterface $cacheService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
-    /**
-     * @param CacheServiceInterface       $cacheService
-     * @param CoordinatesServiceInterface $coordinatesService
-     */
-    public function __construct(CacheServiceInterface $cacheService, CoordinatesServiceInterface $coordinatesService)
+    public function __construct(private CacheServiceInterface $cacheService, private CoordinatesServiceInterface $coordinatesService)
     {
-        $this->cacheService       = $cacheService;
-        $this->coordinatesService = $coordinatesService;
     }
 
 
     /**
-     * @param Collection $warnings
      * @return array
      */
     private function extractObjects(Collection $warnings): array
@@ -97,7 +86,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => 1,
                     3 => $line->floor->mdt_sub_level ?? $line->floor->index,
                     4 => true,
-                    5 => strpos($line->polyline->color, '#') === 0 ? substr($line->polyline->color, 1) : $line->polyline->color,
+                    5 => str_starts_with($line->polyline->color, '#') ? substr($line->polyline->color, 1) : $line->polyline->color,
                     6 => -8,
                     7 => true,
                 ],
@@ -148,7 +137,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $floor  = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
-            if( $this->dungeonRoute->dungeon->facade_enabled ) {
+            if ($this->dungeonRoute->dungeon->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
                     $latLng
@@ -173,7 +162,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     }
 
     /**
-     * @param Collection $warnings
      * @return array
      * @throws InvalidArgumentException
      */
@@ -243,7 +231,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 continue;
             }
 
-            $pull['color'] = strpos($killZone->color, '#') === 0 ? substr($killZone->color, 1) : $killZone->color;
+            $pull['color'] = str_starts_with($killZone->color, '#') ? substr($killZone->color, 1) : $killZone->color;
 
             $result[$pullIndex++] = $pull;
         }

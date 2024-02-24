@@ -13,16 +13,16 @@ class CoordinatesService implements CoordinatesServiceInterface
 {
 
     /** @var int Y */
-    const MAP_MAX_LAT = -256;
+    public const MAP_MAX_LAT = -256;
 
     /** @var int X */
-    const MAP_MAX_LNG = 384;
+    public const MAP_MAX_LNG = 384;
 
     /** @var int */
-    const MAP_SIZE = 256;
+    public const MAP_SIZE = 256;
 
     /** @var int */
-    const MAP_ASPECT_RATIO = 1.5;
+    public const MAP_ASPECT_RATIO = 1.5;
 
     /**
      * @param LatLng $latLng
@@ -89,7 +89,7 @@ class CoordinatesService implements CoordinatesServiceInterface
     {
         $sourceFloor = $latLng->getFloor();
         if ($sourceFloor === null) {
-            throw new \InvalidArgumentException('No floor set for latlng!');
+            throw new InvalidArgumentException('No floor set for latlng!');
         }
 
         $result = clone $latLng;
@@ -160,7 +160,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         $sourceFloor = $latLng->getFloor();
 
         if ($sourceFloor === null) {
-            throw new \InvalidArgumentException('No floor set for latlng!');
+            throw new InvalidArgumentException('No floor set for latlng!');
         }
 
         // Check if this floor has unions.
@@ -197,18 +197,14 @@ class CoordinatesService implements CoordinatesServiceInterface
 
 
     /**
-     * @param float $x1
-     * @param float $x2
-     * @param float $y1
-     * @param float $y2
      * @return float
      */
     public function distanceBetweenPoints(float $x1, float $x2, float $y1, float $y2): float
     {
         // Pythagoras theorem: a^2+b^2=c^2
         return sqrt(
-            pow($x1 - $x2, 2) +
-            pow($y1 - $y2, 2)
+            ($x1 - $x2) ** 2 +
+            ($y1 - $y2) ** 2
         );
     }
 

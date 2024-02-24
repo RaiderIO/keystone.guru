@@ -1,8 +1,10 @@
 <?php
-/** @var $dungeon \App\Models\Dungeon */
-/* @var $floor \App\Models\Floor\Floor */
-/* @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection */
-$floor = $floor ?? null;
+/**
+ * @var $dungeon \App\Models\Dungeon
+ * @var $floor \App\Models\Floor\Floor
+ * @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection
+ */
+$floor ??= null;
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$dungeon, $floor ?? null],

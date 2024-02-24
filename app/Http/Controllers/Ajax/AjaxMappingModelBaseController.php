@@ -32,8 +32,6 @@ abstract class AjaxMappingModelBaseController extends Controller
 
     /**
      * @param MappingVersion|null        $mappingVersion
-     * @param array                      $validated
-     * @param string                     $modelClass
      * @param MappingModelInterface|null $model
      * @param Closure|null               $onSaveSuccess
      * @return Model

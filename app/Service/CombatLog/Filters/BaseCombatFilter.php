@@ -42,9 +42,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         194181,
     ];
 
-    /** @var Collection|BaseResultEvent[] */
-    private Collection $resultEvents;
-
     /** @var Collection|int[] A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
@@ -60,9 +57,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var BaseCombatFilterLoggingInterface */
     private BaseCombatFilterLoggingInterface $log;
 
-    public function __construct(Collection $resultEvents)
+    public function __construct(/** @var Collection|BaseResultEvent[] */
+        private Collection $resultEvents)
     {
-        $this->resultEvents           = $resultEvents;
         $this->validNpcIds            = collect();
         $this->accurateEnemySightings = collect();
         $this->summonedEnemies        = collect();
@@ -73,9 +70,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $this->log = $log;
     }
 
-    /**
-     * @param Collection $validNpcIds
-     */
     public function setValidNpcIds(Collection $validNpcIds): void
     {
         $this->validNpcIds = $validNpcIds;
@@ -175,8 +169,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param BaseEvent $combatLogEvent
-     *
      * @return bool
      */
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
@@ -217,8 +209,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param AdvancedDataInterface $advancedData
-     *
      * @return string|null
      */
     private function hasAdvancedDataNewGuid(AdvancedDataInterface $advancedData): ?string
@@ -248,8 +238,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param BaseEvent $combatLogEvent
-     *
      * @return bool
      */
     private function hasDeathAuraApplied(BaseEvent $combatLogEvent): bool
@@ -274,8 +262,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param BaseEvent $combatLogEvent
-     *
      * @return bool
      */
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool

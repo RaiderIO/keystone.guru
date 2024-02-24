@@ -10,6 +10,7 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -29,7 +30,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param ExpansionService $expansionService
      * @return RedirectResponse
      */
     public function discover(ExpansionService $expansionService)
@@ -40,12 +40,9 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                $expansion
-     * @param string                   $seasonIndex
-     * @param DiscoverServiceInterface $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function discoverSeason(
         Expansion                $expansion,
@@ -92,9 +89,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                $expansion
-     * @param string                   $seasonIndex
-     * @param DiscoverServiceInterface $discoverService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
      */
@@ -128,11 +122,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param string                    $seasonIndex
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface    $seasonService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
      */
@@ -171,11 +160,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param Dungeon                   $dungeon
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface    $seasonService
+     * @param Dungeon $dungeon
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
      */
@@ -214,9 +199,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                $expansion
-     * @param string                   $seasonIndex
-     * @param DiscoverServiceInterface $discoverService
      * @return Factory|RedirectResponse
      * @throws AuthorizationException
      */
@@ -250,9 +232,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param ExpansionServiceInterface $expansionService
-     * @param DiscoverServiceInterface  $discoverService
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      * @throws AuthorizationException
      */
@@ -290,14 +269,9 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param Dungeon                   $dungeon
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface    $seasonService
      * @return Factory
      * @throws AuthorizationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function discoverdungeon(
         Expansion                 $expansion,
@@ -345,8 +319,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                $expansion
-     * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
      */
@@ -364,9 +336,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
      * @return Factory
      * @throws AuthorizationException
      */
@@ -390,9 +359,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
      * @return Factory
      * @throws AuthorizationException
      */
@@ -416,8 +382,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                $expansion
-     * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
      */
@@ -439,9 +403,6 @@ class DungeonRouteDiscoverController extends Controller
 
 
     /**
-     * @param Expansion                $expansion
-     * @param Dungeon                  $dungeon
-     * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
      */
@@ -463,14 +424,9 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param Dungeon                   $dungeon
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface    $seasonService
      * @return Factory
      * @throws AuthorizationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function discoverdungeonthisweek(
         Expansion                 $expansion,
@@ -509,14 +465,9 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                 $expansion
-     * @param Dungeon                   $dungeon
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
-     * @param SeasonServiceInterface    $seasonService
      * @return Factory
      * @throws AuthorizationException
-     * @throws \Exception
+     * @throws Exception
      */
     public function discoverdungeonnextweek(
         Expansion                 $expansion,
@@ -555,9 +506,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param Expansion                $expansion
-     * @param Dungeon                  $dungeon
-     * @param DiscoverServiceInterface $discoverService
      * @return Factory
      * @throws AuthorizationException
      */
@@ -585,10 +533,6 @@ class DungeonRouteDiscoverController extends Controller
      *
      * This function will correct this mistake and apply the correct expansion + season.
      *
-     * @param Expansion                $originalExpansion
-     * @param Dungeon                  $dungeon
-     * @param DiscoverServiceInterface $discoverService
-     * @param SeasonServiceInterface   $seasonService
      * @return Expansion
      */
     private function applyCorrectedExpansion(

@@ -70,8 +70,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function start(string $functionName, array $context = []): void
@@ -91,8 +89,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function end(string $functionName, array $context = []): void
@@ -113,8 +109,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function debug(string $functionName, array $context = []): void
@@ -123,8 +117,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function notice(string $functionName, array $context = []): void
@@ -133,8 +125,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function info(string $functionName, array $context = []): void
@@ -143,8 +133,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function warning(string $functionName, array $context = []): void
@@ -153,8 +141,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function error(string $functionName, array $context = []): void
@@ -163,8 +149,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function critical(string $functionName, array $context = []): void
@@ -173,8 +157,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     protected function emergency(string $functionName, array $context = []): void
@@ -183,9 +165,6 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param int    $level
-     * @param string $functionName
-     * @param array  $context
      * @return void
      */
     private function log(int $level, string $functionName, array $context = []): void

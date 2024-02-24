@@ -8,6 +8,8 @@
 
 namespace App\Traits;
 
+use Exception;
+
 trait CompressesImages
 {
     /**
@@ -19,12 +21,12 @@ trait CompressesImages
      * @param $pathToPngFile string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
      * @param $maxQuality int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
      * @return string - content of PNG file after conversion
-     * @throws \Exception
+     * @throws Exception
      */
     private function _compressPng(string $pathToPngFile, int $maxQuality = 90)
     {
         if (!file_exists($pathToPngFile)) {
-            throw new \Exception("File does not exist: $pathToPngFile");
+            throw new Exception("File does not exist: $pathToPngFile");
         }
 
         // guarantee that quality won't be worse than that.
@@ -36,7 +38,7 @@ trait CompressesImages
         $compressedPngContent = shell_exec("pngquant --quality=$minQuality-$maxQuality - < " . escapeshellarg($pathToPngFile));
 
         if (!$compressedPngContent) {
-            throw new \Exception("Conversion to compressed PNG failed. Is pngquant 1.8+ installed on the server?");
+            throw new Exception("Conversion to compressed PNG failed. Is pngquant 1.8+ installed on the server?");
         }
 
         return $compressedPngContent;
@@ -47,7 +49,7 @@ trait CompressesImages
      *
      * @param $source string
      * @param $target string
-     * @throws \Exception
+     * @throws Exception
      */
     public function compressPng(string $source, string $target)
     {

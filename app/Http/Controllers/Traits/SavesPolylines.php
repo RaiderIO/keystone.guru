@@ -21,10 +21,6 @@ use Illuminate\Support\Facades\Auth;
 trait SavesPolylines
 {
     /**
-     * @param CoordinatesServiceInterface                                                      $coordinatesService
-     * @param MappingVersion                                                                   $mappingVersion
-     * @param Polyline                                                                         $polyline
-     * @param Model                                                                            $ownerModel
      * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
      * @param Floor|null                                                                       $changedFloor
      * @return Polyline
@@ -59,7 +55,7 @@ trait SavesPolylines
             'id' => $polyline->id,
         ], [
             'model_id'       => $ownerModel->id,
-            'model_class'    => get_class($ownerModel),
+            'model_class'    => $ownerModel::class,
             'color'          => $data['color'] ?? '#f00',
             'color_animated' => Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ? $data['color_animated'] : null,
             'weight'         => (int)$data['weight'] ?? 2,

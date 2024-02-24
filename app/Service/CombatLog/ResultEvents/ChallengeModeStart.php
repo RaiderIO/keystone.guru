@@ -17,7 +17,7 @@ class ChallengeModeStart extends BaseResultEvent
 
         try {
             $this->dungeon = Dungeon::where('challenge_mode_id', $baseEvent->getChallengeModeID())->firstOrFail();
-        } catch (Exception $exception) {
+        } catch (Exception) {
             throw new DungeonNotSupportedException(
                 sprintf('Dungeon with challenge mode ID %d not found', $baseEvent->getChallengeModeID())
             );

@@ -127,14 +127,8 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];
 
-    protected int $combatLogVersion;
-
-    /**
-     * @param int $combatLogVersion
-     */
-    public function __construct(int $combatLogVersion)
+    public function __construct(protected int $combatLogVersion)
     {
-        $this->combatLogVersion = $combatLogVersion;
     }
 
     /**
@@ -149,8 +143,6 @@ abstract class Suffix implements HasParameters
     }
 
     /**
-     * @param int    $combatLogVersion
-     * @param string $eventName
      * @return Suffix
      * @throws Exception
      */

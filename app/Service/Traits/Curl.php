@@ -5,7 +5,6 @@ namespace App\Service\Traits;
 trait Curl
 {
     /**
-     * @param string $url
      * @return string
      */
     private function curlGet(string $url): string
@@ -22,7 +21,7 @@ trait Curl
             CURLOPT_AUTOREFERER    => true,   // set referrer on redirect
             CURLOPT_CONNECTTIMEOUT => 120,    // time-out on connect
             CURLOPT_TIMEOUT        => 120,    // time-out on response
-            CURLOPT_URL            => $url
+            CURLOPT_URL            => $url,
         ]);
 
         try {
@@ -35,8 +34,6 @@ trait Curl
     }
 
     /**
-     * @param string $url
-     * @param array  $postBody
      * @return string
      */
     private function curlPost(string $url, array $postBody): string

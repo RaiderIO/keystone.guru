@@ -61,8 +61,6 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param LatLng                      $latLng
      * @return bool
      */
     public function contains(CoordinatesServiceInterface $coordinatesService, LatLng $latLng): bool
@@ -71,9 +69,6 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param LatLng                      $latLngA
-     * @param LatLng                      $latLngB
      * @return array{array{lat: float, lng: float}}
      */
     public function getIntersections(CoordinatesServiceInterface $coordinatesService, LatLng $latLngA, LatLng $latLngB): array

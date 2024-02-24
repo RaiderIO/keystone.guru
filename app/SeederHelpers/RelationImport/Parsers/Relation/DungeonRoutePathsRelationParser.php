@@ -10,7 +10,6 @@ use App\Models\Polyline;
 class DungeonRoutePathsRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool
@@ -29,7 +28,7 @@ class DungeonRoutePathsRelationParser implements RelationParserInterface
 
     /**
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @return bool
      */
     public function canParseRelation(string $name, array $value): bool
@@ -39,9 +38,9 @@ class DungeonRoutePathsRelationParser implements RelationParserInterface
 
     /**
      * @param string $modelClassName
-     * @param array $modelData
+     * @param array  $modelData
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @return array
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
@@ -64,7 +63,7 @@ class DungeonRoutePathsRelationParser implements RelationParserInterface
             $path = new Path($pathData);
             $path->save();
 
-            $polyline['model_class'] = get_class($path);
+            $polyline['model_class'] = $path::class;
             $polyline['model_id']    = $path->id;
 
             // Insert polyline, while capturing the result and coupling to the path
@@ -74,7 +73,7 @@ class DungeonRoutePathsRelationParser implements RelationParserInterface
             // Restore awakened obelisk data
             foreach ($awakenedObeliskLinkData as $data) {
                 $data['source_map_object_id']         = $path->id;
-                $data['source_map_object_class_name'] = get_class($path);
+                $data['source_map_object_class_name'] = $path::class;
                 MapObjectToAwakenedObeliskLink::insert($data);
             }
         }

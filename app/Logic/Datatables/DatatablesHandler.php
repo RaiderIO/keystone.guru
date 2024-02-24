@@ -10,24 +10,21 @@ namespace App\Logic\Datatables;
 
 use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
-    /**  @var Request */
-    protected Request $request;
-
     /**  @var Builder */
     protected Builder $builder;
 
     /** @var DatatablesColumnHandler[] */
     protected array $columnHandlers;
 
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request        = $request;
         $this->columnHandlers = [];
     }
 
@@ -48,8 +45,6 @@ abstract class DatatablesHandler
     }
 
     /**
-     * @param Builder $builder
-     *
      * @return $this
      */
     public function setBuilder(Builder $builder): DatatablesHandler
@@ -80,7 +75,7 @@ abstract class DatatablesHandler
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function applyRequestToBuilder(): DatatablesHandler
     {
@@ -89,8 +84,7 @@ abstract class DatatablesHandler
         $this->builder->limit((int)$this->request->get('length'));
 
         // For any custom column handlers, handle their wishes inside a single where
-        $this->builder->where(function (Builder $subBuilder)
-        {
+        $this->builder->where(function (Builder $subBuilder) {
             foreach ($this->columnHandlers as $columnHandler) {
                 $columnHandler->applyToBuilder($subBuilder);
             }

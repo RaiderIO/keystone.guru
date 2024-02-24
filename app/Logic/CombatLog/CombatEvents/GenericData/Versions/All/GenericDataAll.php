@@ -11,7 +11,7 @@ class GenericDataAll implements GenericDataInterface
 {
     use ValidatesParameterCount;
 
-    private ?Guid $sourceGuid;
+    private ?Guid $sourceGuid = null;
 
     private string $sourceName;
 
@@ -19,7 +19,7 @@ class GenericDataAll implements GenericDataInterface
 
     private string $sourceRaidFlags;
 
-    private ?Guid $destGuid;
+    private ?Guid $destGuid = null;
 
     private string $destName;
 

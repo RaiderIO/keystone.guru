@@ -1,39 +1,39 @@
 <?php
 /**
  * @var \App\Models\Timewalking\TimewalkingEvent $timewalkingEvent
- * @var \App\Models\AffixGroup\AffixGroup $affixGroup
- * @var \Illuminate\Support\Carbon|null $startDate
- * @var boolean $showStartDate
- * @var boolean $isCurrentWeek
- * @var boolean $isFirst
- * @var boolean $isLast
- * @var boolean $showTopBorder
- * @var boolean $showBottomBorder
- * @var boolean $isOdd
+ * @var \App\Models\AffixGroup\AffixGroup        $affixGroup
+ * @var \Illuminate\Support\Carbon|null          $startDate
+ * @var boolean                                  $showStartDate
+ * @var boolean                                  $isCurrentWeek
+ * @var boolean                                  $isFirst
+ * @var boolean                                  $isLast
+ * @var boolean                                  $showTopBorder
+ * @var boolean                                  $showBottomBorder
+ * @var boolean                                  $isOdd
  */
 
-$startDate = $startDate ?? null;
-$timewalkingEvent = $timewalkingEvent ?? null;
-$isCurrentWeek = $isCurrentWeek ?? false;
-$isFirst = $isFirst ?? false;
-$isLast = $isLast ?? false;
-$showTopBorder = $showTopBorder ?? true;
-$showBottomBorder = $showBottomBorder ?? true;
-$isOdd = $isOdd ?? false;
+$startDate        ??= null;
+$timewalkingEvent ??= null;
+$isCurrentWeek    ??= false;
+$isFirst          ??= false;
+$isLast           ??= false;
+$showTopBorder    ??= true;
+$showBottomBorder ??= true;
+$isOdd            ??= false;
 
 $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $timewalkingEvent->expansion->shortname : '';
 ?>
 <tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ !$affixGroup->confirmed ? 'unconfirmed' : '' }} {{ $timewalkingClasses }}">
     <?php
     // Current week if we found the current affix group for this region
-    $currentWeekClass = $isCurrentWeek ? 'current_week ' : '';
-    $topBorderClass = $showTopBorder ? 'border_top ' : '';
+    $currentWeekClass  = $isCurrentWeek ? 'current_week ' : '';
+    $topBorderClass    = $showTopBorder ? 'border_top ' : '';
     $bottomBorderClass = $showBottomBorder ? 'border_bottom ' : '';
     ?>
     <td class="first_column {{ $currentWeekClass . $topBorderClass . $bottomBorderClass }}">
         <div class="affix_row">
             @if($timewalkingEvent !== null)
-{{--                <img src="{{ $timewalkingEvent->expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/>--}}
+                {{--                <img src="{{ $timewalkingEvent->expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/>--}}
                 {{ sprintf(__('views/misc.table.affixrowtable.expansion_timewalking'), __($timewalkingEvent->expansion->name)) }}
             @else
                 <span>
@@ -47,16 +47,16 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     </td>
     <?php
     $affixIndex = 0;
-    for($i = 0; $i < 4; $i++) {
-        $affix = $affixGroup->affixes->get($i);
+    for ($i = 0; $i < 4; $i++) {
+        $affix      = $affixGroup->affixes->get($i);
         $lastColumn = $i === 3;
-        $class = $currentWeekClass . $topBorderClass . $bottomBorderClass;
-        $class .= $lastColumn ? 'last_column ' : '';
-        $class .= $isFirst ? 'first_row ' : '';
-        $class .= $isLast ? 'last_row ' : '';
+        $class      = $currentWeekClass . $topBorderClass . $bottomBorderClass;
+        $class      .= $lastColumn ? 'last_column ' : '';
+        $class      .= $isFirst ? 'first_row ' : '';
+        $class      .= $isLast ? 'last_row ' : '';
         ?>
-        <td class="{{ $class }}">
-            @if($affix !== null)
+    <td class="{{ $class }}">
+        @if($affix !== null)
             <div class="affix_row">
                 <div class="row no-gutters">
                     <div
@@ -74,8 +74,8 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
                     </div>
                 </div>
             </div>
-            @endif
-        </td><?php
-    }
-    ?>
+        @endif
+    </td><?php
+         }
+         ?>
 </tr>

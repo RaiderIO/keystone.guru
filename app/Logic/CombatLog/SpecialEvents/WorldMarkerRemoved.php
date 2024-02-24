@@ -20,7 +20,7 @@ class WorldMarkerRemoved extends SpecialEvent
     {
         return $this->marker;
     }
-    
+
     /**
      * @param array $parameters
      *

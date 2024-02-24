@@ -49,18 +49,18 @@ class Expansion extends CacheModel
         'updated_at',
     ];
 
-    const EXPANSION_CLASSIC      = 'classic';
-    const EXPANSION_TBC          = 'tbc';
-    const EXPANSION_WOTLK        = 'wotlk';
-    const EXPANSION_CATACLYSM    = 'cata';
-    const EXPANSION_MOP          = 'mop';
-    const EXPANSION_WOD          = 'wod';
-    const EXPANSION_LEGION       = 'legion';
-    const EXPANSION_BFA          = 'bfa';
-    const EXPANSION_SHADOWLANDS  = 'shadowlands';
-    const EXPANSION_DRAGONFLIGHT = 'dragonflight';
+    public const EXPANSION_CLASSIC      = 'classic';
+    public const EXPANSION_TBC          = 'tbc';
+    public const EXPANSION_WOTLK        = 'wotlk';
+    public const EXPANSION_CATACLYSM    = 'cata';
+    public const EXPANSION_MOP          = 'mop';
+    public const EXPANSION_WOD          = 'wod';
+    public const EXPANSION_LEGION       = 'legion';
+    public const EXPANSION_BFA          = 'bfa';
+    public const EXPANSION_SHADOWLANDS  = 'shadowlands';
+    public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
-    const ALL = [
+    public const ALL = [
         self::EXPANSION_CLASSIC      => 'Classic',
         self::EXPANSION_TBC          => 'The Burning Crusade',
         self::EXPANSION_WOTLK        => 'Wrath of the Lich King',
@@ -111,7 +111,6 @@ class Expansion extends CacheModel
     }
 
     /**
-     * @param GameServerRegion $gameServerRegion
      * @return Season|null
      */
     public function currentSeason(GameServerRegion $gameServerRegion): ?Season
@@ -139,7 +138,6 @@ class Expansion extends CacheModel
     }
 
     /**
-     * @param GameServerRegion $gameServerRegion
      * @return Season|null
      */
     public function nextSeason(GameServerRegion $gameServerRegion): ?Season
@@ -170,7 +168,6 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include active dungeons.
      *
-     * @param Builder $query
      *
      * @return Builder
      */
@@ -182,7 +179,6 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include inactive dungeons.
      *
-     * @param Builder $query
      *
      * @return Builder
      */
@@ -200,7 +196,6 @@ class Expansion extends CacheModel
     }
 
     /**
-     * @param GameVersion $gameVersion
      * @return bool
      */
     public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
@@ -230,8 +225,6 @@ class Expansion extends CacheModel
     /**
      * Saves an expansion with the data from a Request.
      *
-     * @param Request $request
-     * @param string  $fileUploadDirectory
      *
      * @return bool
      * @throws Exception

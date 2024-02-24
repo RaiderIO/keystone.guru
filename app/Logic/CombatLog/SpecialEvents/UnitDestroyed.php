@@ -11,5 +11,5 @@ namespace App\Logic\CombatLog\SpecialEvents;
  */
 class UnitDestroyed extends UnitDied
 {
-    
+
 }

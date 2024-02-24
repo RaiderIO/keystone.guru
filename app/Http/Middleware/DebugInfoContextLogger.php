@@ -29,8 +29,8 @@ class DebugInfoContextLogger
 
         // @TODO use structured logging?
         logger()->debug('DebugInfoContextLogger::handle', [
-            'url'           => $request->url(),
-            'method'        => $request->method(),
+            'url'    => $request->url(),
+            'method' => $request->method(),
         ]);
 
         /** @var Response $response */

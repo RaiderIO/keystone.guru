@@ -21,8 +21,6 @@ class Counter
 
     /**
      * Increase a new or existing counter.
-     *
-     * @param string $counterName
      */
     public static function increase(string $counterName)
     {
@@ -64,6 +62,7 @@ class Counter
         foreach (self::$counters as $name => $count) {
             $result[$name] = self::getCountString($name);
         }
+
         return $result;
     }
 }

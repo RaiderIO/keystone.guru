@@ -17,7 +17,7 @@ class EnemyRelationMapping extends RelationMapping
         parent::__construct('enemies.json', Enemy::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
     }
 }

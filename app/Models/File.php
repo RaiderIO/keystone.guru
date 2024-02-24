@@ -119,7 +119,7 @@ class File extends Model
 
         $newFile              = new File();
         $newFile->model_id    = $model->id;
-        $newFile->model_class = get_class($model);
+        $newFile->model_class = $model::class;
         $newFile->disk        = $disk;
         $newFile->path        = $uploadedFile->store($dir, $disk);
         $saveResult           = $newFile->save();

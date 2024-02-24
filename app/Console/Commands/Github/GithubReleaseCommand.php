@@ -17,7 +17,7 @@ abstract class GithubReleaseCommand extends Command
         if ($version === null) {
             $release = Release::latest()->disableCache()->first();
         } else {
-            if (substr($version, 0, 1) !== 'v') {
+            if (!str_starts_with($version, 'v')) {
                 $version = 'v' . $version;
             }
 

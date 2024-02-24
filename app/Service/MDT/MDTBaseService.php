@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 namespace App\Service\MDT;
 
@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Artisan;
 use Lua;
 
 class MDTBaseService
-{   /**
+{
+    /**
      * Gets a Lua instance and load all the required files in it.
      * @return Lua
      */
-    protected function getLua() : Lua
+    protected function getLua(): Lua
     {
         $lua = new Lua();
 
@@ -25,7 +26,6 @@ class MDTBaseService
     }
 
     /**
-     * @param array $contents
      * @return string
      */
     protected function encode(array $contents): string
@@ -36,7 +36,6 @@ class MDTBaseService
     }
 
     /**
-     * @param string $string
      * @return array|null Null if the string could not be decoded
      */
     protected function decode(string $string): ?array

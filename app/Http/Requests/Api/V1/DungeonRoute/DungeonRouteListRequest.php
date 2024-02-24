@@ -25,7 +25,7 @@ class DungeonRouteListRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'dungeon_id' => ['nullable', Rule::exists('dungeons', 'id')]
+            'dungeon_id' => ['nullable', Rule::exists('dungeons', 'id')],
         ];
     }
 }

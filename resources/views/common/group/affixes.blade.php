@@ -23,9 +23,9 @@ else if (empty($defaultSelected)) {
     $defaultSelected = $currentAffixes->pluck(['id'])->values();
 }
 
-$teemingSelector = $teemingSelector ?? null;
-$names           = $names ?? true;
-$id              = $id ?? 'route_select_affixes';
+$teemingSelector ??= null;
+$names           ??= true;
+$id              ??= 'route_select_affixes';
 
 $allAffixGroupsWithSeasons = $allAffixGroups
     ->merge($currentSeason->affixgroups)

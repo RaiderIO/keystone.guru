@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Floor;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FloorFormRequest extends FormRequest
@@ -13,7 +14,7 @@ class FloorFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**

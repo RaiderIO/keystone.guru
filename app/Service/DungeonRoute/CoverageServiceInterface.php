@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 interface CoverageServiceInterface
 {
     /**
-     * @param User $user
      * @return Collection
      */
     function getForUser(User $user, Season $season): Collection;

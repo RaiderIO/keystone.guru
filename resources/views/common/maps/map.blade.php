@@ -20,23 +20,23 @@
 $user               = Auth::user();
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
-$embedStyle         = $embedStyle ?? '';
+$embedStyle         ??= '';
 $edit               = isset($edit) && $edit;
-$mapClasses         = $mapClasses ?? '';
-$dungeonroute       = $dungeonroute ?? null;
-$livesession        = $livesession ?? null;
-$mappingVersion     = $mappingVersion ?? null;
-$mapBackgroundColor = $mapBackgroundColor ?? null;
+$mapClasses         ??= '';
+$dungeonroute       ??= null;
+$livesession        ??= null;
+$mappingVersion     ??= null;
+$mapBackgroundColor ??= null;
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                = $show['controls'] ?? [];
-$show['controls']['enemyInfo']   = $show['controls']['enemyInfo'] ?? true;
-$show['controls']['pulls']       = $show['controls']['pulls'] ?? true;
+$show['controls']                ??= [];
+$show['controls']['enemyInfo']   ??= true;
+$show['controls']['pulls']       ??= true;
 $show['controls']['enemyForces'] = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']        = $show['controls']['draw'] ?? false;
-$show['controls']['view']        = $show['controls']['view'] ?? false;
-$show['controls']['present']     = $show['controls']['present'] ?? false;
-$show['controls']['live']        = $show['controls']['live'] ?? false;
+$show['controls']['draw']        ??= false;
+$show['controls']['view']        ??= false;
+$show['controls']['present']     ??= false;
+$show['controls']['live']        ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -44,15 +44,15 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
-$mapFacadeStyle                   = $mapFacadeStyle ?? \App\User::getCurrentUserMapFacadeStyle();
+$mapFacadeStyle                   ??= \App\User::getCurrentUserMapFacadeStyle();
 $useFacade                        = $mapFacadeStyle === \App\User::MAP_FACADE_STYLE_FACADE;
 
 // Allow echo to be overridden
-$echo           = $echo ?? Auth::check() && !$sandboxMode;
-$zoomToContents = $zoomToContents ?? false;
+$echo           ??= Auth::check() && !$sandboxMode;
+$zoomToContents ??= false;
 
 // Show ads or not
-$showAds = $showAds ?? true;
+$showAds ??= true;
 // If this is an embedded route, do not show ads
 if ($embed || optional($dungeonroute)->demo === 1) {
     $showAds = false;
@@ -61,9 +61,9 @@ if ($embed || optional($dungeonroute)->demo === 1) {
 $noUI            = isset($noUI) && $noUI;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
-$defaultZoom = $defaultZoom ?? 2;
+$defaultZoom ??= 2;
 // By default hidden elements
-$hiddenMapObjectGroups = $hiddenMapObjectGroups ?? [];
+$hiddenMapObjectGroups ??= [];
 // Show the attribution
 $showAttribution = isset($showAttribution) && !$showAttribution ? false : true;
 
@@ -140,7 +140,8 @@ if ($isAdmin) {
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
                             <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                                 data-toggle="tooltip" title="{{ __($faction->name) }}"/>
+                                 data-toggle="tooltip" title="{{ __($faction->name) }}"
+								 alt="Faction"/>
                         </a>
 
                     @endforeach

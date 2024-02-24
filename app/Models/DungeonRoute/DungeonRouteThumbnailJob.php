@@ -31,10 +31,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonRouteThumbnailJob extends Model
 {
-    const STATUS_QUEUED    = 'queued';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_EXPIRED   = 'expired';
-    const STATUS_ERROR     = 'error';
+    public const STATUS_QUEUED    = 'queued';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_EXPIRED   = 'expired';
+    public const STATUS_ERROR     = 'error';
 
     protected $fillable = [
         'dungeon_route_id',

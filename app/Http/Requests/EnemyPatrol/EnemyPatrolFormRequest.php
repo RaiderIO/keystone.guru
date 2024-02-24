@@ -43,7 +43,7 @@ class EnemyPatrolFormRequest extends FormRequest
             'polyline.vertices_json'  => [
                 'json',
                 new JsonStringCountRule(2),
-            ]
+            ],
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Error;
 use Exception;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -20,23 +21,16 @@ class CombatLogEntry
         'Everyone within 10 yards will be consumed!',
     ];
 
-    private string $rawEvent;
-
     private ?Carbon $parsedTimestamp = null;
 
     private ?BaseEvent $parsedEvent = null;
 
-    /**
-     * @param string $rawEvent
-     */
-    public function __construct(string $rawEvent)
+    public function __construct(private string $rawEvent)
     {
-        $this->rawEvent = $rawEvent;
     }
 
     /**
      * @param array $eventWhiteList Empty to return all events
-     * @param int   $combatLogVersion
      * @return BaseEvent|null
      * @throws Exception
      */
@@ -56,8 +50,8 @@ class CombatLogEntry
         } catch (InvalidFormatException $exception) {
             throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $exception->getCode(), $exception);
         }
-        $eventData             = $matches[2];
-        $mayParseEvent         = empty($eventWhiteList);
+        $eventData     = $matches[2];
+        $mayParseEvent = empty($eventWhiteList);
 
         if (!$mayParseEvent) {
             foreach ($eventWhiteList as $whiteListedName) {
@@ -84,7 +78,7 @@ class CombatLogEntry
                     $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
 
-            } catch (\Error|Exception $exception) {
+            } catch (Error|Exception $exception) {
                 echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
 
                 throw $exception;

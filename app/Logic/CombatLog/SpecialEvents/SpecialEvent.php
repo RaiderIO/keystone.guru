@@ -130,11 +130,6 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     }
 
     /**
-     * @param int    $combatLogVersion
-     * @param Carbon $timestamp
-     * @param string $eventName
-     * @param array  $parameters
-     * @param string $rawEvent
      *
      * @return SpecialEvent
      * @throws Exception

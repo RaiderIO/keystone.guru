@@ -12,16 +12,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $enemy_id
- * @property int $floor_id
- * @property double $lat
- * @property double $lng
+ * @property int          $id
+ * @property int          $dungeon_route_id
+ * @property int          $enemy_id
+ * @property int          $floor_id
+ * @property double       $lat
+ * @property double       $lng
  *
  * @property DungeonRoute $dungeonroute
- * @property Enemy $enemy
- * @property Floor $floor
+ * @property Enemy        $enemy
+ * @property Floor        $floor
  *
  * @mixin Eloquent
  */
@@ -31,7 +31,7 @@ class PridefulEnemy extends Model
     use HasLatLng;
 
     protected $fillable = ['dungeon_route_id', 'enemy_id', 'floor_id', 'lat', 'lng'];
-    protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
+    protected $visible  = ['enemy_id', 'floor_id', 'lat', 'lng'];
 
     /**
      * @return BelongsTo

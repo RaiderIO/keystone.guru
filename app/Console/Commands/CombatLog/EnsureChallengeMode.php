@@ -3,8 +3,6 @@
 namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CombatLogServiceInterface;
-use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class EnsureChallengeMode extends BaseCombatLogCommand
 {
@@ -24,7 +22,6 @@ class EnsureChallengeMode extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     * @param CombatLogServiceInterface $combatLogService
      * @return int
      */
     public function handle(CombatLogServiceInterface $combatLogService): int
@@ -32,16 +29,12 @@ class EnsureChallengeMode extends BaseCombatLogCommand
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
-        
+
         // Assume error
-        return $this->parseCombatLogRecursively($filePath, function(string $filePath) use($combatLogService){
-            return $this->analyzeCombatLog($combatLogService, $filePath);
-        });
+        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->analyzeCombatLog($combatLogService, $filePath));
     }
 
     /**
-     * @param CombatLogServiceInterface $combatLogService
-     * @param string $filePath
      * @return int
      */
     private function analyzeCombatLog(CombatLogServiceInterface $combatLogService, string $filePath): int

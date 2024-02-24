@@ -14,8 +14,6 @@ class TeamPolicy
     /**
      * Determine whether the user can edit a team.
      *
-     * @param User $user
-     * @param Team $team
      * @return bool
      */
     public function edit(User $user, Team $team): bool
@@ -27,8 +25,6 @@ class TeamPolicy
     /**
      * Determine whether the user can delete a team or not.
      *
-     * @param User $user
-     * @param Team $team
      * @return bool
      */
     public function delete(User $user, Team $team): bool
@@ -37,8 +33,6 @@ class TeamPolicy
     }
 
     /**
-     * @param User $user
-     * @param Team $team
      * @return boolean
      */
     public function moderateRoute(User $user, Team $team): bool
@@ -47,8 +41,6 @@ class TeamPolicy
     }
 
     /**
-     * @param User $user
-     * @param Team $team
      * @return boolean
      */
     public function changeRole(User $user, Team $team): bool
@@ -57,8 +49,6 @@ class TeamPolicy
     }
 
     /**
-     * @param User $user
-     * @param Team $team
      * @return boolean
      */
     public function changeDefaultRole(User $user, Team $team): bool
@@ -67,9 +57,6 @@ class TeamPolicy
     }
 
     /**
-     * @param User $user
-     * @param Team $team
-     * @param User $member
      * @return boolean
      */
     public function removeMember(User $user, Team $team, User $member): bool
@@ -78,8 +65,6 @@ class TeamPolicy
     }
 
     /**
-     * @param User $user
-     * @param Team $team
      * @return bool
      */
     public function refreshInviteLink(User $user, Team $team): bool
@@ -90,8 +75,6 @@ class TeamPolicy
     /**
      * Determine whether the user can perform ad-free giveaways on a member of a team.
      *
-     * @param User $user
-     * @param Team $team
      * @return bool
      */
     public function canAdFreeGiveaway(User $user, Team $team): bool

@@ -73,7 +73,6 @@ class Handler extends ExceptionHandler
     }
 
 
-
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
@@ -91,11 +90,10 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @param Request $request
      * @return bool
      */
     private function isApiRequest(Request $request): bool
     {
-        return strpos($request->decodedPath(), 'api/') === 0;
+        return str_starts_with($request->decodedPath(), 'api/');
     }
 }

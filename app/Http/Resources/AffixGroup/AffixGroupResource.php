@@ -25,7 +25,7 @@ class AffixGroupResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'affixes' => new AffixCollectionResource($this->affixes)
+            'affixes' => new AffixCollectionResource($this->affixes),
         ];
     }
 }

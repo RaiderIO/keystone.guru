@@ -1,10 +1,11 @@
 <?php
-/** @var $user \App\User */
-/** @var $link boolean */
-/** @var $showAnonIcon boolean */
-
-$link         = $link ?? false;
-$showAnonIcon = $showAnonIcon ?? true;
+/**
+ * @var \App\User $user
+ * @var boolean   $link
+ * @var boolean   $showAnonIcon
+ */
+$link         ??= false;
+$showAnonIcon ??= true;
 ?>
 @isset($user)
     @if($link)
@@ -12,7 +13,7 @@ $showAnonIcon = $showAnonIcon ?? true;
             @endif
 
             @isset($user->iconfile)
-                <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px"/>
+                <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px" alt="Icon"/>
             @elseif($showAnonIcon)
                 <i class="fas fa-user"></i>
             @endisset

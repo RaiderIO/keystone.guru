@@ -24,25 +24,8 @@ use Illuminate\Support\Collection;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface
 {
-    private CombatLogServiceInterface $combatLogService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
-    private CombatLogMappingVersionServiceLoggingInterface $log;
-
-    /**
-     * @param CombatLogServiceInterface                      $combatLogService
-     * @param CoordinatesServiceInterface                    $coordinatesService
-     * @param CombatLogMappingVersionServiceLoggingInterface $log
-     */
-    public function __construct(
-        CombatLogServiceInterface                      $combatLogService,
-        CoordinatesServiceInterface                    $coordinatesService,
-        CombatLogMappingVersionServiceLoggingInterface $log
-    ) {
-        $this->combatLogService   = $combatLogService;
-        $this->coordinatesService = $coordinatesService;
-        $this->log                = $log;
+    public function __construct(private CombatLogServiceInterface $combatLogService, private CoordinatesServiceInterface $coordinatesService, private CombatLogMappingVersionServiceLoggingInterface $log)
+    {
     }
 
     /**
@@ -113,8 +96,6 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
 
     /**
-     * @param string              $filePath
-     * @param callable            $extractDungeonCallable
      * @param MappingVersion|null $mappingVersion
      * @return MappingVersion|null
      */
@@ -128,7 +109,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $hasExistingMappingVersion = $mappingVersion !== null;
 
         $now            = Carbon::now();
-        $mappingVersion = $mappingVersion ?? MappingVersion::create([
+        $mappingVersion ??= MappingVersion::create([
             'dungeon_id'            => -1,
             'version'               => 1,
             'enemy_forces_required' => 0,

@@ -16,22 +16,16 @@ class TagPolicy
     /**
      * Determine whether the user can edit the tag.
      *
-     * @param User $user
-     * @param TagCategory $tagCategory
-     * @param Model $model
      * @return mixed
      */
     public function createTag(User $user, TagCategory $tagCategory, Model $model)
     {
         $result = false;
 
-        switch ($tagCategory->name) {
-            case TagCategory::DUNGEON_ROUTE_PERSONAL:
-            case TagCategory::DUNGEON_ROUTE_TEAM:
-                /** @var DungeonRoute $model */
-                $result = $model->mayUserEdit($user);
-                break;
-        }
+        $result = match ($tagCategory->name) {
+            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model->mayUserEdit($user),
+            default => $result,
+        };
 
         return $result;
     }
@@ -39,8 +33,6 @@ class TagPolicy
     /**
      * Determine whether the user can edit the tag.
      *
-     * @param User $user
-     * @param Tag $tag
      * @return mixed
      */
     public function edit(User $user, Tag $tag)
@@ -66,8 +58,6 @@ class TagPolicy
     }
 
     /**
-     * @param User $user
-     * @param Tag $tag
      * @return bool|mixed
      */
     public function delete(User $user, Tag $tag)

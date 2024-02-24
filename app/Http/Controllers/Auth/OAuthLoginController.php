@@ -58,12 +58,12 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Redirect the user to the OAuth authentication page.
      *
-     * @param Request $request
      * @return RedirectResponse
      */
     public function redirectToProvider(Request $request): RedirectResponse
     {
         $this->redirectTo = $request->get('redirect', '/');
+
         return Socialite::driver($this->getDriver())->redirect();
     }
 
@@ -82,7 +82,6 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Obtain the user information from Google.
      *
-     * @param Request $request
      * @return RedirectResponse
      */
     public function handleProviderCallback(Request $request): RedirectResponse
@@ -127,7 +126,7 @@ abstract class OAuthLoginController extends LoginController
             if ($success) {
                 Auth::login($existingUser, true);
             }
-        } catch (InvalidStateException|ClientException $exception) {
+        } catch (InvalidStateException|ClientException) {
             Session::flash('warning', __('controller.oauthlogin.flash.permission_denied'));
             $this->redirectTo = '/';
         }

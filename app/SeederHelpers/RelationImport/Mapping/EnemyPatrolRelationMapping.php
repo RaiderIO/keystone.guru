@@ -18,7 +18,7 @@ class EnemyPatrolRelationMapping extends RelationMapping
         parent::__construct('enemy_patrols.json', EnemyPatrol::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
         $this->setPreSaveRelationParsers(collect([
             new EnemyPatrolPolylineRelationParser(),

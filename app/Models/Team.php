@@ -295,7 +295,6 @@ class Team extends Model
 
     /**
      * Checks if a user can remove another user from the team.
-     * @param User $user
      * @param User $targetUser The user that's to be removed.
      * @return boolean
      */
@@ -340,7 +339,7 @@ class Team extends Model
 
                 $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 logger()->error('Unable to remove member from team', [
                     'team' => $this,
                     'user' => $member,
@@ -387,9 +386,7 @@ class Team extends Model
         }
 
         $roles    = TeamUser::ALL_ROLES;
-        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(function ($obj, $key) use ($roles) {
-            return $roles[$obj->role];
-        })->first();
+        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(fn($obj, $key) => $roles[$obj->role])->first();
 
         return $newOwner !== null ? $newOwner->user : null;
     }

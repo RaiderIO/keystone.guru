@@ -228,8 +228,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param int $floorId
-     *
      * @return Collection|FloorUnion[]
      */
     public function getFloorUnionsOnFloor(int $floorId): Collection
@@ -254,8 +252,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param int $floorId
-     *
      * @return FloorUnion|null
      */
     public function getFloorUnionForFloor(int $floorId): ?FloorUnion
@@ -281,8 +277,6 @@ class MappingVersion extends Model
 
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -310,10 +304,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param ConvertsVerticesInterface   $hasVertices
-     * @param Floor                       $floor
-     *
      * @return Floor
      * @todo duplicated function in DungeonRoute.php
      *
@@ -334,16 +324,12 @@ class MappingVersion extends Model
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(function (LatLng $latLng) {
-            return $latLng->toArray();
-        }));
+        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(fn(LatLng $latLng) => $latLng->toArray()));
 
         return $newFloor;
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -366,8 +352,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -390,8 +374,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -417,8 +399,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -453,8 +433,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -477,8 +455,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -488,8 +464,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param bool                        $useFacade
      *
      * @return Collection
      */
@@ -569,7 +543,7 @@ class MappingVersion extends Model
                 /** @var CloneForNewMappingVersionNoRelations $model */
                 $newModel = $model->cloneForNewMappingVersion($newMappingVersion);
 
-                $idMapping->get(get_class($model))->push([
+                $idMapping->get($model::class)->push([
                     'oldModel' => $model,
                     'newModel' => $newModel,
                 ]);

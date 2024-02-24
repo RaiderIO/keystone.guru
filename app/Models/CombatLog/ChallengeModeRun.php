@@ -5,7 +5,9 @@ namespace App\Models\CombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -50,7 +52,7 @@ class ChallengeModeRun extends Model
     ];
 
     protected $with = [
-        'challengeModeRunData'
+        'challengeModeRunData',
     ];
 
     /**
@@ -87,7 +89,7 @@ class ChallengeModeRun extends Model
 
     /**
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getFormattedElapsedTime(): string
     {
@@ -101,7 +103,7 @@ class ChallengeModeRun extends Model
         $seconds      = floor($milliseconds / 1000);
         $milliseconds -= ($seconds * 1000);
 
-        $interval = \Carbon\CarbonInterval::create(
+        $interval = CarbonInterval::create(
             0,
             0,
             0,

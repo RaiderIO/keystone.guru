@@ -20,11 +20,9 @@ class MDTImportController extends Controller
 {
     /**
      * Returns some details about the passed string.
-     * @param ImportStringFormRequest         $request
-     * @param MDTImportStringServiceInterface $mdtImportStringService
      *
      * @return ImportStringDetails|never-returns
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function details(
         ImportStringFormRequest         $request,
@@ -34,12 +32,12 @@ class MDTImportController extends Controller
         $string    = $validated['import_string'];
 
 //        try {
-            $warnings = collect();
-            $errors   = collect();
+        $warnings = collect();
+        $errors   = collect();
 
-            return $mdtImportStringService
-                ->setEncodedString($string)
-                ->getDetails($warnings, $errors);
+        return $mdtImportStringService
+            ->setEncodedString($string)
+            ->getDetails($warnings, $errors);
 //        } catch (MDTStringParseException $ex) {
 //            return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
 //        } catch (InvalidMDTStringException $ex) {
@@ -71,8 +69,6 @@ class MDTImportController extends Controller
     }
 
     /**
-     * @param ImportStringFormRequest         $request
-     * @param MDTImportStringServiceInterface $mdtImportStringService
      * @return Factory|View|void
      * @throws Throwable
      */
@@ -103,9 +99,9 @@ class MDTImportController extends Controller
                     'dungeon_route_id' => $dungeonRoute->id,
                     'import_string'    => $string,
                 ]);
-            } catch (MDTStringParseException $ex) {
+            } catch (MDTStringParseException) {
                 return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
-            } catch (InvalidMDTStringException $ex) {
+            } catch (InvalidMDTStringException) {
                 return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {
                 // We're not interested if the string was 100% not an MDT string - it will never work then

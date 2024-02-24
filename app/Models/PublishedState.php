@@ -52,8 +52,7 @@ class PublishedState extends CacheModel
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param User|null    $user
+     * @param User|null $user
      * @return Collection|string[]
      */
     public static function getAvailablePublishedStates(DungeonRoute $dungeonRoute, ?User $user = null): Collection

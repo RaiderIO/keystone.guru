@@ -16,7 +16,6 @@ class RangeDamageTest extends PublicTestCase
 
     /**
      * @test
-     * @param string $advancedRangeDamageEvent
      * @return void
      * @throws \Exception
      * @group CombatLog
@@ -43,10 +42,6 @@ class RangeDamageTest extends PublicTestCase
 
     /**
      * @test
-     * @param string $advancedRangeDamageEvent
-     * @param int    $expectedSpellId
-     * @param string $expectedSpellName
-     * @param string $expectedSpellSchool
      * @return void
      * @throws \Exception
      * @group CombatLog
@@ -76,17 +71,6 @@ class RangeDamageTest extends PublicTestCase
 
     /**
      * @test
-     * @param string $advancedRangeDamageEvent
-     * @param int    $expectedAmount
-     * @param int    $expectedRawAmount
-     * @param int    $expectedOverKill
-     * @param int    $expectedSchool
-     * @param int    $expectedResisted
-     * @param int    $expectedBlocked
-     * @param int    $expectedAbsorbed
-     * @param bool   $expectedIsCritical
-     * @param bool   $expectedIsGlancing
-     * @param bool   $expectedIsCrushing
      * @return void
      * @throws \Exception
      * @group CombatLog

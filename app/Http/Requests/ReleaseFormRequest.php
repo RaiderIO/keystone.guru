@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Release;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +16,7 @@ class ReleaseFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::user()->hasRole("admin");
+        return Auth::user()->hasRole("admin");
     }
 
     /**
@@ -35,6 +36,7 @@ class ReleaseFormRequest extends FormRequest
         $rules = [
             'version' => ['required', $rule],
         ];
+
         return $rules;
     }
 }

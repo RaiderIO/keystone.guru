@@ -13,15 +13,8 @@ class PatreonService implements PatreonServiceInterface
     /** @var User|null */
     private ?User $cachedAdminUser = null;
 
-    /** @var PatreonServiceLoggingInterface */
-    private PatreonServiceLoggingInterface $log;
-
-    /**
-     * @param PatreonServiceLoggingInterface $log
-     */
-    public function __construct(PatreonServiceLoggingInterface $log)
+    public function __construct(private PatreonServiceLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
 
@@ -33,6 +26,7 @@ class PatreonService implements PatreonServiceInterface
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
             $this->log->loadCampaignBenefitsAdminUserNull();
+
             return null;
         }
 
@@ -43,12 +37,11 @@ class PatreonService implements PatreonServiceInterface
             $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignBenefitsRetrieveTiersErrors($tiersAndBenefitsResponse);
+
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(function ($included) {
-                return $included['type'] === 'benefit';
-            })->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(fn($included) => $included['type'] === 'benefit')->toArray();
         } finally {
             $this->log->loadCampaignBenefitsEnd();
         }
@@ -62,6 +55,7 @@ class PatreonService implements PatreonServiceInterface
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
             $this->log->loadCampaignTiersAdminUserNull();
+
             return null;
         }
 
@@ -73,12 +67,11 @@ class PatreonService implements PatreonServiceInterface
             $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveTiersAndBenefitsErrors($tiersAndBenefitsResponse);
+
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(function ($included) {
-                return $included['type'] === 'tier';
-            })->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(fn($included) => $included['type'] === 'tier')->toArray();
         } finally {
             $this->log->loadCampaignTiersEnd();
         }
@@ -92,6 +85,7 @@ class PatreonService implements PatreonServiceInterface
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
             $this->log->loadCampaignMembersAdminUserNull();
+
             return null;
         }
 
@@ -103,12 +97,11 @@ class PatreonService implements PatreonServiceInterface
             $membersResponse = $patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
             if (isset($membersResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveMembersErrors($membersResponse);
+
                 return null;
             }
 
-            return collect($membersResponse['data'])->filter(function ($included) {
-                return $included['type'] === 'member';
-            })->toArray();
+            return collect($membersResponse['data'])->filter(fn($included) => $included['type'] === 'member')->toArray();
         } finally {
             $this->log->loadCampaignMembersEnd();
         }
@@ -132,6 +125,7 @@ class PatreonService implements PatreonServiceInterface
 
             if (empty($memberEmail)) {
                 $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
+
                 return false;
             }
 
@@ -140,18 +134,21 @@ class PatreonService implements PatreonServiceInterface
 
             if ($patreonUserLink === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
+
                 return false;
             }
 
             $user = $patreonUserLink->user;
             if ($user === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
+
                 return false;
             }
 
             // Exception for users that were granted their membership status
             if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
                 $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
+
                 return true;
             }
 
@@ -201,13 +198,13 @@ class PatreonService implements PatreonServiceInterface
 
 
     /**
-     * @param PatreonApiService $patreonApiService
      * @return User|null
      */
     private function loadAdminUser(PatreonApiService $patreonApiService): ?User
     {
         if (isset($this->cachedAdminUser)) {
             $this->log->loadAdminUserIsCached($this->cachedAdminUser->id);
+
             return $this->cachedAdminUser;
         }
 
@@ -219,6 +216,7 @@ class PatreonService implements PatreonServiceInterface
 
             if ($adminUser === null) {
                 $this->log->loadAdminUserAdminUserNotFound();
+
                 return null;
             }
 
@@ -226,6 +224,7 @@ class PatreonService implements PatreonServiceInterface
             $adminUser->load(['patreonUserLink']);
             if ($adminUser->patreonUserLink === null) {
                 $this->log->loadAdminUserPatreonUserLinkNotSet();
+
                 return null;
             }
 
@@ -236,15 +235,19 @@ class PatreonService implements PatreonServiceInterface
 
                 if (isset($tokens['errors'])) {
                     $this->log->loadAdminUserTokenRefreshError($tokens);
+
                     return null;
                 } else if (!isset($tokens['access_token'])) {
                     $this->log->loadAdminUserAccessTokenNotSet($tokens);
+
                     return null;
                 } else if (!isset($tokens['refresh_token'])) {
                     $this->log->loadAdminUserRefreshTokenNotSet($tokens);
+
                     return null;
                 } else if (!isset($tokens['expires_in'])) {
                     $this->log->loadAdminUserExpiresInNotSet($tokens);
+
                     return null;
                 } else {
                     $adminUser->patreonUserLink->update([
@@ -265,9 +268,6 @@ class PatreonService implements PatreonServiceInterface
 
 
     /**
-     * @param array $campaignTiers
-     * @param array $campaignBenefits
-     * @param int $tierId
      * @return array|null
      */
     private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): ?array

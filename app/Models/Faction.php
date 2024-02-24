@@ -31,12 +31,12 @@ class Faction extends CacheModel
     public    $fillable   = ['id', 'icon_file_id', 'key', 'name', 'color'];
     protected $with       = ['iconfile'];
 
-    const FACTION_ANY         = 'any';
-    const FACTION_UNSPECIFIED = 'unspecified';
-    const FACTION_HORDE       = 'horde';
-    const FACTION_ALLIANCE    = 'alliance';
+    public const FACTION_ANY         = 'any';
+    public const FACTION_UNSPECIFIED = 'unspecified';
+    public const FACTION_HORDE       = 'horde';
+    public const FACTION_ALLIANCE    = 'alliance';
 
-    const ALL = [
+    public const ALL = [
         self::FACTION_UNSPECIFIED => 1,
         self::FACTION_HORDE       => 2,
         self::FACTION_ALLIANCE    => 3,

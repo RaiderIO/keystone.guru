@@ -13,7 +13,6 @@ class AdvancedDataTest extends PublicTestCase
 
     /**
      * @test
-     * @param string $advancedRangeDamageEvent
      * @return void
      * @throws \Exception
      * @group CombatLog

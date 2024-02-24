@@ -16,26 +16,14 @@ use Illuminate\Support\Collection;
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 {
 
-    const DUNGEON_NAME_MAPPING = [
+    public const DUNGEON_NAME_MAPPING = [
         'Dawn of the Infinite: Galakrond\'s Fall' => 'Galakrond\'s Fall',
         'Dawn of the Infinite: Murozond\'s Rise'  => 'Murozond\'s Rise',
         'The Everbloom'                           => 'Everbloom',
     ];
 
-    private SeasonServiceInterface $seasonService;
-
-    private AffixGroupEaseTierServiceLoggingInterface $log;
-
-    /**
-     * @param SeasonServiceInterface                    $seasonService
-     * @param AffixGroupEaseTierServiceLoggingInterface $log
-     */
-    public function __construct(
-        SeasonServiceInterface                    $seasonService,
-        AffixGroupEaseTierServiceLoggingInterface $log)
+    public function __construct(private SeasonServiceInterface $seasonService, private AffixGroupEaseTierServiceLoggingInterface $log)
     {
-        $this->seasonService = $seasonService;
-        $this->log           = $log;
     }
 
     /**
@@ -224,12 +212,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(function (string $affixName) use ($affixList) {
-                // Find the affix in the list and match by translated name - must be found to continue
-                return $affixList->filter(function (Affix $affix) use ($affixName) {
-                    return __($affix->name, [], 'en-US') === $affixName;
-                })->isEmpty();
-            });
+            $invalidAffixes = $affixes->filter(fn(string $affixName) => // Find the affix in the list and match by translated name - must be found to continue
+            $affixList->filter(fn(Affix $affix) => __($affix->name, [], 'en-US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {
@@ -237,9 +221,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
 
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(function (Affix $affix) use ($affixes) {
-                        return $affixes->search($affix->key) === false;
-                    });
+                    $notFoundAffixes = $affixGroup->affixes->filter(fn(Affix $affix) => $affixes->search($affix->key) === false);
 
                     // If we have found the match, we're done
                     if ($notFoundAffixes->isEmpty()) {

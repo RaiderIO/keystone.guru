@@ -29,7 +29,6 @@ class NpcController extends Controller
     /**
      * Checks if the incoming request is a save as new request or not.
      *
-     * @param Request $request
      *
      * @return bool
      */
@@ -39,8 +38,7 @@ class NpcController extends Controller
     }
 
     /**
-     * @param NpcFormRequest $request
-     * @param Npc|null       $npc
+     * @param Npc|null $npc
      *
      * @return array|mixed
      * @throws Exception
@@ -197,9 +195,7 @@ class NpcController extends Controller
     public function new()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
-                return [$id => __($name)];
-            }),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  =>
                 Npc::orderByRaw('dungeon_id, name')
@@ -211,10 +207,8 @@ class NpcController extends Controller
 
                         return [
                             $dungeonName => $value->pluck('name', 'id')
-                                ->map(function ($value, $key) {
-                                    // Make sure the value is formatted as 'Hymdal (123456)'
-                                    return sprintf('%s (%s)', $value, $key);
-                                }),
+                                ->map(fn($value, $key) => // Make sure the value is formatted as 'Hymdal (123456)'
+                                sprintf('%s (%s)', $value, $key)),
                         ];
                     })
                     ->toArray(),
@@ -222,9 +216,6 @@ class NpcController extends Controller
     }
 
     /**
-     * @param Request             $request
-     * @param NpcServiceInterface $npcService
-     * @param Npc                 $npc
      *
      * @return Factory|View
      */
@@ -232,9 +223,7 @@ class NpcController extends Controller
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
-                return [$id => __($name)];
-            }),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);
@@ -243,9 +232,6 @@ class NpcController extends Controller
     /**
      * Override to give the type hint which is required.
      *
-     * @param NpcFormRequest      $request
-     * @param NpcServiceInterface $npcService
-     * @param Npc                 $npc
      *
      * @return Factory|RedirectResponse|View
      * @throws Exception
@@ -267,7 +253,6 @@ class NpcController extends Controller
     }
 
     /**
-     * @param NpcFormRequest $request
      *
      * @return RedirectResponse
      * @throws Exception

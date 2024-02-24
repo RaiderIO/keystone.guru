@@ -8,8 +8,8 @@
 /** @var $__env array */
 /** @var $cache boolean */
 
-$showAffixes      = $showAffixes ?? true;
-$showDungeonImage = $showDungeonImage ?? false;
+$showAffixes      ??= true;
+$showDungeonImage ??= false;
 
 $cacheFn = function()
 
@@ -30,9 +30,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(function (\App\Models\AffixGroup\AffixGroup $affixGroup) use ($currentAffixGroup) {
-                return $affixGroup->id === $currentAffixGroup->id;
-            })->isNotEmpty() ? $currentAffixGroup : null);
+            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(fn(\App\Models\AffixGroup\AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
         }
     }
 
@@ -55,11 +53,12 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         <li>
                             <img class="thumbnail"
                                  src="{{ $dungeonroute->getThumbnailUrl($floor->index) }}"
-                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"/>
+                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
+                                 alt="Thumbnail"/>
                         </li>
                     @endforeach
                 @else
-                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"/>
+                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}" alt="Dungeon"/>
                 @endif
             </ul>
         </div>
@@ -106,12 +105,14 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                              data-content="{{ $affixes }}" style="cursor: pointer;">
                             <div class="col">
                                 <img class="select_icon"
-                                     src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"/>
+                                     src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"
+                                     alt="Dominant affix"/>
                             </div>
                             @if($seasonalAffix !== null)
                                 <div class="col ml-1">
                                     <img class="select_icon"
-                                         src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"/>
+                                         src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"
+                                         alt="Dominant affix"/>
                                 </div>
                             @endif
                         </div>

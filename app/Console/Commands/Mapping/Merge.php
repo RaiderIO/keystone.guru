@@ -34,7 +34,6 @@ class Merge extends Command
     /**
      * Execute the console command.
      *
-     * @param MappingService $mappingService
      * @return int
      * @throws MissingArgumentException
      */
@@ -71,9 +70,7 @@ class Merge extends Command
         }
 
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(function (Dungeon $dungeon) {
-            return __($dungeon->name);
-        });
+        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(fn(Dungeon $dungeon) => __($dungeon->name));
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
         } else if ($changedDungeonNames->isEmpty()) {
@@ -94,7 +91,7 @@ class Merge extends Command
                     ],
                 ]);
                 $this->info('Pull request created!');
-            } catch (ValidationFailedException $ex) {
+            } catch (ValidationFailedException) {
                 $this->warn('Pull request not created - no changes between branches!');
             }
         } else {

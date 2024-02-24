@@ -13,7 +13,6 @@ class CombatLogServiceTest extends PublicTestCase
     /**
      * @test
      *
-     * @param string $combatLogPath
      * @return void
      *
      * @group CombatLogService

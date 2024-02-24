@@ -1,8 +1,8 @@
 <?php
-$class  = $class ?? '';
-$size   = $size ?? 'md';
-$static = $static ?? false;
-$active = $active ?? false;
+$class  ??= '';
+$size   ??= 'md';
+$static ??= false;
+$active ??= false;
 ?>
 @if( $active )
     @include('common.general.inline', ['path' => 'modal/active', 'options' => [
@@ -12,7 +12,7 @@ $active = $active ?? false;
 
 <div class="modal fade" id="{{ $id }}" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
      @if($static)
-     data-backdrop="static"
+         data-backdrop="static"
     @endif>
     <div class="{{ $class }} modal-dialog modal-{{$size}} vertical-align-center">
         <div class="modal-content">

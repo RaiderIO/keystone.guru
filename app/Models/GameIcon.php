@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $file_id
+ * @property int    $id
+ * @property int    $file_id
  * @property string $category
  * @property string $name
  * @property string $alias
  *
- * @property File $file
+ * @property File   $file
  *
  * @mixin Eloquent
  */
