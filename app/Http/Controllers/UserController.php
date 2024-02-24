@@ -33,8 +33,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      */
     public function makeadmin(Request $request, User $user)
@@ -58,8 +56,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      */
     public function makeuser(Request $request, User $user)
@@ -78,8 +74,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      */
     public function delete(Request $request, User $user): RedirectResponse
@@ -87,7 +81,7 @@ class UserController extends Controller
         try {
             $user->delete();
             Session::flash('status', __('controller.user.flash.account_deleted_successfully'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             Session::flash('warning', __('controller.user.flash.account_deletion_error'));
         }
 
@@ -95,8 +89,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      */
     public function grantAllBenefits(Request $request, User $user): RedirectResponse
@@ -130,7 +122,7 @@ class UserController extends Controller
             }
 
             Session::flash('status', __('controller.user.flash.all_benefits_granted_successfully'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             Session::flash('warning', __('controller.user.flash.error_granting_all_benefits'));
         }
 
@@ -138,8 +130,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return Application|ResponseFactory|Response
      */
     public function storePatreonBenefits(Request $request, User $user)

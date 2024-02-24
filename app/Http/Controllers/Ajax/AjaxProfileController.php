@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class AjaxProfileController
 {
     /**
-     * @param Request $request
      * @return Response
      */
     public function legalAgree(Request $request): Response

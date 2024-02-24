@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\User;
 
-use App\Models\Dungeon;
-use App\Models\GameVersion\GameVersion;
 use App\User;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;

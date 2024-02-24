@@ -21,8 +21,6 @@ class APIDungeonRouteController extends Controller
      *     tags={"Route"},
      *     @OA\Response(response=200, description="Successful operation")
      * )
-     *
-     * @param DungeonRouteListRequest $request
      * @return DungeonRouteCollectionResource
      */
     public function list(DungeonRouteListRequest $request): DungeonRouteCollectionResource
@@ -61,9 +59,6 @@ class APIDungeonRouteController extends Controller
      *     @OA\Response(response=200, description="Successful operation")
      * )
      *
-     * @param DungeonRouteThumbnailRequest              $request
-     * @param APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService
-     * @param DungeonRoute                              $dungeonRoute
      * @return DungeonRouteThumbnailJobCollectionResource
      */
     public function createThumbnails(

@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Logic\Structs\LatLng;
-use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -12,7 +10,6 @@ use App\Models\Traits\HasGenericModelRelation;
 use App\Models\Traits\HasVertices;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id

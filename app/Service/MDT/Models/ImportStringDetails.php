@@ -10,70 +10,14 @@ use Illuminate\Support\Collection;
 
 class ImportStringDetails implements Arrayable
 {
-    /** @var Collection|ImportWarning[] */
-    private Collection $warnings;
-
-    /** @var Collection|ImportError[] */
-    private Collection $errors;
-
-    private Dungeon $dungeon;
-
-    /** @var Collection|string[] */
-    private Collection $affixes;
-
-    private bool $hasThisWeeksAffixGroup = false;
-
-    private int $pulls = 0;
-
-    private int $paths = 0;
-
-    private int $lines = 0;
-
-    private int $notes = 0;
-
-    private int $enemyForces = 0;
-
-    private int $enemyForcesMax = 0;
-
     private ?string $faction = null;
 
     /**
      * @param ImportWarning|Collection $warnings
-     * @param Collection               $errors
-     * @param Dungeon                  $dungeon
      * @param Collection|string[]      $affixes
-     * @param bool                     $hasThisWeeksAffixGroup
-     * @param int                      $pulls
-     * @param int                      $paths
-     * @param int                      $lines
-     * @param int                      $notes
-     * @param int                      $enemyForces
-     * @param int                      $enemyForcesMax
      */
-    public function __construct(
-        Collection $warnings,
-        Collection $errors,
-        Dungeon    $dungeon,
-        Collection $affixes,
-        bool       $hasThisWeeksAffixGroup,
-        int        $pulls,
-        int        $paths,
-        int        $lines,
-        int        $notes,
-        int        $enemyForces,
-        int        $enemyForcesMax)
+    public function __construct(private Collection $warnings, private Collection $errors, private Dungeon $dungeon, private Collection $affixes, private bool $hasThisWeeksAffixGroup, private int $pulls, private int $paths, private int $lines, private int $notes, private int $enemyForces, private int $enemyForcesMax)
     {
-        $this->warnings               = $warnings;
-        $this->errors                 = $errors;
-        $this->dungeon                = $dungeon;
-        $this->affixes                = $affixes;
-        $this->hasThisWeeksAffixGroup = $hasThisWeeksAffixGroup;
-        $this->pulls                  = $pulls;
-        $this->paths                  = $paths;
-        $this->lines                  = $lines;
-        $this->notes                  = $notes;
-        $this->enemyForces            = $enemyForces;
-        $this->enemyForcesMax         = $enemyForcesMax;
     }
 
     /**
@@ -165,7 +109,6 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @param string $faction
      * @return ImportStringDetails
      */
     public function setFaction(string $faction): ImportStringDetails

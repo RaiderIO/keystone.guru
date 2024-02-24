@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Log;
 class AjaxUserReportController
 {
     /**
-     * @param Request $request
-     * @param UserReport $userreport
      * @return Model|UserReport
      */
     public function status(Request $request, UserReport $userreport)
@@ -32,15 +30,13 @@ class AjaxUserReportController
     }
 
     /**
-     * @param UserReportFormRequest $request
-     * @param Model $model
      * @return bool
      */
     private function store(UserReportFormRequest $request, Model $model): bool
     {
         $userReport              = new UserReport();
         $userReport->model_id    = $model->id;
-        $userReport->model_class = get_class($model);
+        $userReport->model_class = $model::class;
         $userReport->user_id     = Auth::id() ?? -1;
         // May be null if user was not logged in, this is fine
         $userReport->username   = $request->get('username', null);
@@ -63,8 +59,6 @@ class AjaxUserReportController
     }
 
     /**
-     * @param UserReportFormRequest $request
-     * @param DungeonRoute $dungeonroute
      *
      * @return Response
      */
@@ -78,8 +72,6 @@ class AjaxUserReportController
     }
 
     /**
-     * @param UserReportFormRequest $request
-     * @param Enemy $enemy
      *
      * @return Response
      */

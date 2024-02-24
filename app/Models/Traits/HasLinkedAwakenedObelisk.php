@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int|null $linked_awakened_obelisk_id
+ * @property int|null                                    $linked_awakened_obelisk_id
  *
  * @property Collection|MapObjectToAwakenedObeliskLink[] $linkedawakenedobelisks
  *
@@ -23,7 +23,7 @@ trait HasLinkedAwakenedObelisk
     public function linkedawakenedobelisks(): HasMany
     {
         return $this->hasMany(MapObjectToAwakenedObeliskLink::class, 'source_map_object_id')
-            ->where('source_map_object_class_name', get_class($this));
+            ->where('source_map_object_class_name', $this::class);
     }
 
     /**
@@ -62,14 +62,14 @@ trait HasLinkedAwakenedObelisk
         $mapIcon = MapIcon::find($mapIconId);
         // Delete any existing links
         MapObjectToAwakenedObeliskLink::where('source_map_object_id', $this->id)
-            ->where('source_map_object_class_name', get_class($this))
+            ->where('source_map_object_class_name', $this::class)
             ->delete();
 
         // Insert new link
         if ($mapIcon !== null && $mapIcon->isAwakenedObelisk()) {
             $result = MapObjectToAwakenedObeliskLink::create([
                 'source_map_object_id'           => $this->id,
-                'source_map_object_class_name'   => get_class($this),
+                'source_map_object_class_name'   => $this::class,
                 'target_map_icon_type_id'        => $mapIcon->map_icon_type_id,
                 'target_map_icon_seasonal_index' => $mapIcon->seasonal_index,
             ]);

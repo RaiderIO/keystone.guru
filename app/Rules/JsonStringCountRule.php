@@ -6,14 +6,8 @@ use Illuminate\Contracts\Validation\Rule;
 
 class JsonStringCountRule implements Rule
 {
-    private int $count;
-
-    /**
-     * @param int $count
-     */
-    public function __construct(int $count)
+    public function __construct(private int $count)
     {
-        $this->count = $count;
     }
 
     /**

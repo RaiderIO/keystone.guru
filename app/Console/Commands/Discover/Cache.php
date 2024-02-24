@@ -39,8 +39,6 @@ class Cache extends Command
     /**
      * Execute the console command.
      *
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
      * @return int
      */
     public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int

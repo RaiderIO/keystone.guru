@@ -30,7 +30,7 @@ class ModelDeletedEvent extends ContextEvent
     {
         // Don't save Model here because serialization will fail due to object being deleted
         $this->modelId    = $model->getRouteKey();
-        $this->modelClass = get_class($model);
+        $this->modelClass = $model::class;
         $this->modelName  = strtolower((new ReflectionClass($model))->getShortName());
         parent::__construct($context, $user);
     }

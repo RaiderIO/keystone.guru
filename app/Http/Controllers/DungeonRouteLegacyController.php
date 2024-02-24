@@ -15,8 +15,6 @@ use Illuminate\Http\Request;
 class DungeonRouteLegacyController extends Controller
 {
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
      * @return RedirectResponse
      */
     public function viewold(Request $request, DungeonRoute $dungeonroute)
@@ -29,8 +27,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
      * @return RedirectResponse
      */
     public function edit(Request $request, DungeonRoute $dungeonroute)
@@ -43,9 +39,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param string $floorIndex
      * @return RedirectResponse
      */
     public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
@@ -59,9 +52,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param string $floorIndex
      * @return RedirectResponse
      */
     public function embedold(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
@@ -75,9 +65,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param string $floorIndex
      * @return RedirectResponse
      */
     public function viewfloorold(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
@@ -91,9 +78,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param string $floorIndex
      * @return RedirectResponse
      */
     public function previewold(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
@@ -107,8 +91,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
      * @return RedirectResponse
      */
     public function cloneold(Request $request, DungeonRoute $dungeonroute)
@@ -121,8 +103,6 @@ class DungeonRouteLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
      * @return RedirectResponse
      */
     public function claimold(Request $request, DungeonRoute $dungeonroute)

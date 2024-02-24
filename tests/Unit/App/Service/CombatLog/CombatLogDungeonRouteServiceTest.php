@@ -12,7 +12,6 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
     /**
      * @test
      *
-     * @param string $combatLogPath
      * @return void
      *
      * @group CombatLogDungeonRouteService

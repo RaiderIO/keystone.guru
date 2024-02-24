@@ -15,30 +15,19 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class DatatablesColumnHandler
 {
 
-    /** @var DatatablesHandler */
-    private DatatablesHandler $dtHandler;
-
-    /**  @var string */
-    private string $columnName;
-
     /** @var string|null */
     private ?string $columnData;
 
-    public function __construct(DatatablesHandler $dtHandler, string $columnName, string $columnData = null)
+    public function __construct(private DatatablesHandler $dtHandler, private string $columnName, string $columnData = null)
     {
-        $this->dtHandler = $dtHandler;
-
-        $this->columnName = $columnName;
         // If not set, just copy the column name
-        $this->columnData = $columnData ?? $columnName;
+        $this->columnData = $columnData ?? $this->columnName;
     }
 
     /**
-     * @param Builder $subBuilder
      * @param $columnData
      * @param $order
      * @param $generalSearch
-     *
      * @return mixed
      */
     protected abstract function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
@@ -68,7 +57,6 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @param Builder $subBuilder
      *
      * @return $this
      * @throws Exception

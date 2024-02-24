@@ -18,8 +18,7 @@ use Session;
 class ReleaseController extends Controller
 {
     /**
-     * @param ReleaseFormRequest $request
-     * @param Release|null       $release
+     * @param Release|null $release
      * @return mixed
      */
     public function store(ReleaseFormRequest $request, Release $release = null)
@@ -105,8 +104,6 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Release $release
      * @return Factory|View
      */
     public function edit(Request $request, Release $release)
@@ -118,8 +115,6 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param ReleaseFormRequest $request
-     * @param Release            $release
      * @return Factory|View
      * @throws Exception
      */
@@ -136,7 +131,6 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param ReleaseFormRequest $request
      * @return RedirectResponse
      * @throws Exception
      */
@@ -162,7 +156,6 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param Release $release
      * @return Factory|View
      */
     public function view(Release $release)

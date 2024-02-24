@@ -23,13 +23,13 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         parent::__construct($resultEvents);
 
         /** @var DungeonRouteCombatFilterLoggingInterface $log */
-        $log = App::make(DungeonRouteCombatFilterLoggingInterface::class);
+        $log       = App::make(DungeonRouteCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
     /**
      * @param BaseEvent $combatLogEvent
-     * @param int $lineNr
+     * @param int       $lineNr
      *
      * @return bool
      */

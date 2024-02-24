@@ -25,7 +25,6 @@ use Session;
 class ProfileController extends Controller
 {
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
     public function edit(Request $request)
@@ -34,8 +33,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return Application|Factory|View
      */
     public function view(Request $request, User $user)
@@ -44,7 +41,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function routes(Request $request)
@@ -53,7 +49,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
     public function favorites(Request $request)
@@ -62,7 +57,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
     public function tags(Request $request)
@@ -71,9 +65,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
-     * @param EchoServerHttpApiServiceInterface $echoServerHttpApiService
      * @return RedirectResponse
      * @throws Exception
      */
@@ -134,11 +125,11 @@ class ProfileController extends Controller
                         $context = null;
 
                         // If it's a route edit page
-                        if (strpos($name, 'route-edit') !== false) {
+                        if (str_contains($name, 'route-edit')) {
                             $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
                             /** @var DungeonRoute $context */
                             $context = DungeonRoute::where('public_key', $routeKey)->first();
-                        } else if (strpos($name, 'live-session') !== false) {
+                        } else if (str_contains($name, 'live-session')) {
                             $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
                             /** @var LiveSession $context */
                             $context = LiveSession::where('public_key', $routeKey)->first();
@@ -172,8 +163,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return RedirectResponse
      */
     public function updatePrivacy(Request $request, User $user)
@@ -190,7 +179,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
     public function changepassword(Request $request)
@@ -229,7 +217,6 @@ class ProfileController extends Controller
     /**
      * Creates a tag from the tag manager
      *
-     * @param TagFormRequest $request
      * @return Application|Factory|View
      */
     public function createtag(TagFormRequest $request)
@@ -254,7 +241,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
     public function list(Request $request)
@@ -263,7 +249,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      * @throws Exception
      */
@@ -277,7 +262,7 @@ class ProfileController extends Controller
             User::findOrFail(Auth::id())->delete();
             Auth::logout();
             Session::flash('status', __('controller.profile.flash.account_deleted_successfully'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             Session::flash('warning', __('controller.profile.flash.error_deleting_account'));
         }
 

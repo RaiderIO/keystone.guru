@@ -19,10 +19,10 @@ class OverpulledEnemyChangedEvent extends ContextEvent
     /**
      * Create a new event instance.
      *
-     * @param Model $context
-     * @param User $user
+     * @param Model           $context
+     * @param User            $user
      * @param OverpulledEnemy $overpulledEnemy
-     * @param Enemy $enemy
+     * @param Enemy           $enemy
      */
     public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
     {

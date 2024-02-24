@@ -16,7 +16,6 @@ trait SerializesDates
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param DateTimeInterface $date
      *
      * @return string
      */

@@ -9,30 +9,12 @@ use Illuminate\Support\Collection;
 
 class ImportStringObjects
 {
-    private Collection $warnings;
-    private Collection $errors;
-    private Dungeon    $dungeon;
-    private Collection $killZoneAttributes;
-    private array      $mdtObjects;
     private Collection $lines;
     private Collection $paths;
     private Collection $mapIcons;
 
-    /**
-     * @param Collection $warnings
-     * @param Collection $errors
-     * @param Dungeon    $dungeon
-     * @param Collection $killZoneAttributes
-     * @param array      $mdtObjects
-     */
-    public function __construct(Collection $warnings, Collection $errors, Dungeon $dungeon, Collection $killZoneAttributes, array $mdtObjects)
+    public function __construct(private Collection $warnings, private Collection $errors, private Dungeon $dungeon, private Collection $killZoneAttributes, private array $mdtObjects)
     {
-        $this->warnings           = $warnings;
-        $this->errors             = $errors;
-        $this->dungeon            = $dungeon;
-        $this->killZoneAttributes = $killZoneAttributes;
-        $this->mdtObjects         = $mdtObjects;
-
         $this->lines    = collect();
         $this->paths    = collect();
         $this->mapIcons = collect();

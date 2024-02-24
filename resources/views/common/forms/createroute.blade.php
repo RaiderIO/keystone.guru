@@ -7,8 +7,8 @@ $teeming                = old('teeming') ?? false;
 $defaultSelectedAffixes = old('affixes') ?? [];
 
 // Make sure $model exists
-$dungeonroute         = $dungeonroute ?? null;
-$dungeonSelectId      = 'dungeon_id_select';
+$dungeonroute    ??= null;
+$dungeonSelectId = 'dungeon_id_select';
 ?>
 
 @include('common.general.inline', ['path' => 'common/forms/createroute', 'options' => [

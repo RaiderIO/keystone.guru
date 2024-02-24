@@ -29,10 +29,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     use PublicKeyDungeonRoute;
 
     /**
-     * @param APIEnemyFormRequest         $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MappingVersion              $mappingVersion
-     * @param Enemy|null                  $enemy
+     * @param Enemy|null $enemy
      *
      * @return Enemy|Model
      * @throws Throwable
@@ -84,9 +81,6 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Enemy        $enemy
      *
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
@@ -114,7 +108,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 $result = ['name' => ''];
             }
 
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -122,9 +116,6 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request $request
-     * @param Enemy   $enemy
-     *
      * @return Response|ResponseFactory
      * @throws Throwable
      */
@@ -141,7 +132,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     }
                 }
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

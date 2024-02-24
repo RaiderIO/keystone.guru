@@ -5,7 +5,7 @@
 /** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
 /** @var $allFactions \Illuminate\Support\Collection|\App\Models\Faction[] */
 
-$factions = $factions ?? $allFactions;
+$factions ??= $allFactions;
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
@@ -21,7 +21,7 @@ $factions = $factions ?? $allFactions;
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->key) }} {
+        .{{ strtolower($faction->key) }}  {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -43,7 +43,7 @@ $factions = $factions ?? $allFactions;
 
 
             <?php
-                // @formatter:off
+            // @formatter:off
                 // This piece of code (which does not format well at all, hence manual formatting) makes sure that if
                 // we had an existing dungeon route we load their defaults, if we submitted something but failed to
                 // validate its contents, we restore the sent data back to the form

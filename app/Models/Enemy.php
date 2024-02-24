@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
@@ -105,18 +104,18 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         'kill_priority'      => 'integer',
     ];
 
-    const SEASONAL_TYPE_BEGUILING          = 'beguiling';
-    const SEASONAL_TYPE_AWAKENED           = 'awakened';
-    const SEASONAL_TYPE_INSPIRING          = 'inspiring';
-    const SEASONAL_TYPE_PRIDEFUL           = 'prideful';
-    const SEASONAL_TYPE_TORMENTED          = 'tormented';
-    const SEASONAL_TYPE_ENCRYPTED          = 'encrypted';
-    const SEASONAL_TYPE_MDT_PLACEHOLDER    = 'mdt_placeholder';
-    const SEASONAL_TYPE_SHROUDED           = 'shrouded';
-    const SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
-    const SEASONAL_TYPE_NO_SHROUDED        = 'no_shrouded';
+    public const SEASONAL_TYPE_BEGUILING          = 'beguiling';
+    public const SEASONAL_TYPE_AWAKENED           = 'awakened';
+    public const SEASONAL_TYPE_INSPIRING          = 'inspiring';
+    public const SEASONAL_TYPE_PRIDEFUL           = 'prideful';
+    public const SEASONAL_TYPE_TORMENTED          = 'tormented';
+    public const SEASONAL_TYPE_ENCRYPTED          = 'encrypted';
+    public const SEASONAL_TYPE_MDT_PLACEHOLDER    = 'mdt_placeholder';
+    public const SEASONAL_TYPE_SHROUDED           = 'shrouded';
+    public const SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
+    public const SEASONAL_TYPE_NO_SHROUDED        = 'no_shrouded';
 
-    const SEASONAL_TYPE_ALL = [
+    public const SEASONAL_TYPE_ALL = [
         self::SEASONAL_TYPE_BEGUILING,
         self::SEASONAL_TYPE_AWAKENED,
         self::SEASONAL_TYPE_INSPIRING,
@@ -129,10 +128,10 @@ class Enemy extends CacheModel implements MappingModelInterface, MappingModelClo
         self::SEASONAL_TYPE_NO_SHROUDED,
     ];
 
-    const TEEMING_VISIBLE = 'visible';
-    const TEEMING_HIDDEN  = 'hidden';
+    public const TEEMING_VISIBLE = 'visible';
+    public const TEEMING_HIDDEN  = 'hidden';
 
-    const TEEMING_ALL = [
+    public const TEEMING_ALL = [
         self::TEEMING_VISIBLE,
         self::TEEMING_HIDDEN,
     ];

@@ -2,16 +2,19 @@
 
 namespace App\Logic\Scheduler;
 
+use Illuminate\Redis\RedisManager;
+use Queue;
+
 trait ChecksForDuplicateJobs
 {
     protected function isJobQueuedForModel($jobClassName, $model, $queue = '')
     {
         $exists = false;
 
-        /** @var \Illuminate\Redis\RedisManager $redis */
-        $redis = \Queue::getRedis();
+        /** @var RedisManager $redis */
+        $redis = Queue::getRedis();
 
-        $jobs = $redis->connection(null)->lrange(\Queue::getQueue($queue), 0, -1);
+        $jobs = $redis->connection(null)->lrange(Queue::getQueue($queue), 0, -1);
         // Pass $exists by reference
         foreach ($jobs as $jobJson) {
             $job = \GuzzleHttp\json_decode($jobJson, true);

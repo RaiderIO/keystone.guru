@@ -8,36 +8,13 @@ use Carbon\Carbon;
 
 class ActivePullEnemy
 {
-    private string $uniqueId;
-
-    private int $npcId;
-
-    private float $x;
-
-    private float $y;
-
-    private Carbon $engagedAt;
-
-    private ?Carbon $diedAt;
-
-    private ?Enemy $resolvedEnemy;
+    private ?Enemy $resolvedEnemy = null;
 
     /**
-     * @param string      $uniqueId
-     * @param int         $npcId
-     * @param float       $x
-     * @param float       $y
-     * @param Carbon      $engagedAt
      * @param Carbon|null $diedAt
      */
-    public function __construct(string $uniqueId, int $npcId, float $x, float $y, Carbon $engagedAt, ?Carbon $diedAt)
+    public function __construct(private string $uniqueId, private int $npcId, private float $x, private float $y, private Carbon $engagedAt, private ?Carbon $diedAt)
     {
-        $this->uniqueId      = $uniqueId;
-        $this->npcId         = $npcId;
-        $this->x             = $x;
-        $this->y             = $y;
-        $this->engagedAt     = $engagedAt;
-        $this->diedAt        = $diedAt;
     }
 
     /**
@@ -116,7 +93,6 @@ class ActivePullEnemy
     }
 
     /**
-     * @param Carbon $carbon
      * @return float
      */
     public function getHPPercentAt(Carbon $carbon): float

@@ -10,19 +10,17 @@ use Illuminate\Support\Collection;
 interface ThumbnailServiceInterface
 {
     /**
-     * @param DungeonRoute $dungeonRoute
      * @return bool
      */
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool;
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int|null     $viewportWidth
-     * @param int|null     $viewportHeight
-     * @param int|null     $imageWidth
-     * @param int|null     $imageHeight
-     * @param int|null     $zoomLevel
-     * @param int|null     $quality
+     * @param int|null $viewportWidth
+     * @param int|null $viewportHeight
+     * @param int|null $imageWidth
+     * @param int|null $imageHeight
+     * @param int|null $zoomLevel
+     * @param int|null $quality
      * @return Collection|DungeonRouteThumbnailJob[]
      */
     public function queueThumbnailRefreshForApi(
@@ -36,9 +34,6 @@ interface ThumbnailServiceInterface
     ): Collection;
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @param int          $attempts
      * @return bool
      */
     public function createThumbnail(
@@ -48,15 +43,12 @@ interface ThumbnailServiceInterface
     ): bool;
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @param int          $attempts
-     * @param int|null     $viewportWidth
-     * @param int|null     $viewportHeight
-     * @param int|null     $imageWidth
-     * @param int|null     $imageHeight
-     * @param int|null     $zoomLevel
-     * @param int|null     $quality
+     * @param int|null $viewportWidth
+     * @param int|null $viewportHeight
+     * @param int|null $imageWidth
+     * @param int|null $imageHeight
+     * @param int|null $zoomLevel
+     * @param int|null $quality
      * @return bool
      */
     public function createThumbnailCustom(
@@ -72,14 +64,11 @@ interface ThumbnailServiceInterface
     ): bool;
 
     /**
-     * @param DungeonRoute $sourceDungeonRoute
-     * @param DungeonRoute $targetDungeonRoute
      * @return void
      */
     public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool;
 
     /**
-     * @param DungeonRoute $dungeonRoute
      * @return bool
      */
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool;

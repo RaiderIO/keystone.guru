@@ -27,8 +27,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param TeamDefaultRoleFormRequest $request
-     * @param Team $team
      * @return Response
      * @throws AuthorizationException
      */
@@ -42,8 +40,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
      * @return array|Application|ResponseFactory|Response
      * @throws Exception
      */
@@ -69,9 +65,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param DungeonRoute $dungeonroute
      * @return array|Application|ResponseFactory|Response
      * @throws Exception
      */
@@ -93,9 +86,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param DungeonRoute $dungeonroute
      * @return array|Application|ResponseFactory|Response
      * @throws Exception
      */
@@ -117,9 +107,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param User $user
      * @return array|Application|ResponseFactory|Response
      * @throws Exception
      */
@@ -153,8 +140,6 @@ class AjaxTeamController extends Controller
 
     /**
      * Invalidate the current invite link and generate a new one.
-     * @param Request $request
-     * @param Team $team
      * @return array
      * @throws Exception
      */
@@ -169,9 +154,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param User $user
      * @return array|Application|ResponseFactory|Response
      * @throws AuthorizationException
      */
@@ -202,9 +184,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param User $user
      * @return array|Application|ResponseFactory|Response
      * @throws AuthorizationException
      */

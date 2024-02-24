@@ -16,7 +16,6 @@ class SwingDamageTest extends PublicTestCase
 
     /**
      * @test
-     * @param string $advancedSwingDamageEvent
      * @return void
      * @throws \Exception
      * @group CombatLog
@@ -43,17 +42,6 @@ class SwingDamageTest extends PublicTestCase
 
     /**
      * @test
-     * @param string $advancedSwingDamageEvent
-     * @param int    $expectedAmount
-     * @param int    $expectedRawAmount
-     * @param int    $expectedOverKill
-     * @param int    $expectedSchool
-     * @param int    $expectedResisted
-     * @param int    $expectedBlocked
-     * @param int    $expectedAbsorbed
-     * @param bool   $expectedIsCritical
-     * @param bool   $expectedIsGlancing
-     * @param bool   $expectedIsCrushing
      * @return void
      * @throws \Exception
      * @group CombatLog

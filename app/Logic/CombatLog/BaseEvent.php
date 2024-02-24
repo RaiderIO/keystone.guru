@@ -6,26 +6,8 @@ use Carbon\Carbon;
 
 abstract class BaseEvent
 {
-    private int $combatLogVersion;
-
-    private Carbon $timestamp;
-
-    private string $eventName;
-
-    private string $rawEvent;
-
-    /**
-     * @param int    $combatLogVersion
-     * @param Carbon $timestamp
-     * @param string $eventName
-     * @param string $rawEvent
-     */
-    public function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, string $rawEvent)
+    public function __construct(private int $combatLogVersion, private Carbon $timestamp, private string $eventName, private string $rawEvent)
     {
-        $this->combatLogVersion = $combatLogVersion;
-        $this->timestamp        = $timestamp;
-        $this->eventName        = $eventName;
-        $this->rawEvent         = $rawEvent;
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
+use Exception;
 
 class CombatLogEvent extends BaseEvent
 {
@@ -17,9 +18,8 @@ class CombatLogEvent extends BaseEvent
     protected Suffix $suffix;
 
     /**
-     * @param array $parameters
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function setParameters(array $parameters): CombatLogEvent
     {

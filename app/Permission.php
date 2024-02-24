@@ -2,10 +2,11 @@
 
 namespace App;
 
+use Eloquent;
 use Laratrust\Models\LaratrustPermission;
 
 /**
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Permission extends LaratrustPermission
 {

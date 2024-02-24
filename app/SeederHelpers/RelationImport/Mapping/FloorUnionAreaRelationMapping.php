@@ -17,7 +17,7 @@ class FloorUnionAreaRelationMapping extends RelationMapping
         parent::__construct('floor_union_areas.json', FloorUnionArea::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
     }
 }

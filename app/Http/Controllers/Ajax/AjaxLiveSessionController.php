@@ -16,9 +16,6 @@ use Teapot\StatusCode\Http;
 class AjaxLiveSessionController extends Controller
 {
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param LiveSession $liveSession
      * @return Response|ResponseFactory
      */
     function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
@@ -40,7 +37,7 @@ class AjaxLiveSessionController extends Controller
                 $result = ['expires_in' => $liveSession->getExpiresInSeconds()];
             }
 
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

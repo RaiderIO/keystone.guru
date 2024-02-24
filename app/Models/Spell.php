@@ -32,15 +32,15 @@ class Spell extends CacheModel implements MappingModelInterface
     public    $hidden  = ['pivot'];
     protected $appends = ['icon_url'];
 
-    const SCHOOL_PHYSICAL = 1;
-    const SCHOOL_HOLY     = 2;
-    const SCHOOL_FIRE     = 4;
-    const SCHOOL_NATURE   = 8;
-    const SCHOOL_FROST    = 16;
-    const SCHOOL_SHADOW   = 32;
-    const SCHOOL_ARCANE   = 64;
+    public const SCHOOL_PHYSICAL = 1;
+    public const SCHOOL_HOLY     = 2;
+    public const SCHOOL_FIRE     = 4;
+    public const SCHOOL_NATURE   = 8;
+    public const SCHOOL_FROST    = 16;
+    public const SCHOOL_SHADOW   = 32;
+    public const SCHOOL_ARCANE   = 64;
 
-    const ALL_SCHOOLS = [
+    public const ALL_SCHOOLS = [
         'Physical' => self::SCHOOL_PHYSICAL,
         'Holy'     => self::SCHOOL_HOLY,
         'Fire'     => self::SCHOOL_FIRE,
@@ -50,41 +50,41 @@ class Spell extends CacheModel implements MappingModelInterface
         'Arcane'   => self::SCHOOL_ARCANE,
     ];
 
-    const DISPEL_TYPE_MAGIC   = 'Magic';
-    const DISPEL_TYPE_DISEASE = 'Disease';
-    const DISPEL_TYPE_POISON  = 'Poison';
-    const DISPEL_TYPE_CURSE   = 'Curse';
+    public const DISPEL_TYPE_MAGIC   = 'Magic';
+    public const DISPEL_TYPE_DISEASE = 'Disease';
+    public const DISPEL_TYPE_POISON  = 'Poison';
+    public const DISPEL_TYPE_CURSE   = 'Curse';
 
-    const ALL_DISPEL_TYPES = [
+    public const ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
         self::DISPEL_TYPE_DISEASE,
         self::DISPEL_TYPE_POISON,
         self::DISPEL_TYPE_CURSE,
     ];
 
-    const CATEGORY_GENERAL      = 'general';
-    const CATEGORY_WARRIOR      = 'warrior';
-    const CATEGORY_HUNTER       = 'hunter';
-    const CATEGORY_DEATH_KNIGHT = 'death_knight';
-    const CATEGORY_MAGE         = 'mage';
-    const CATEGORY_PRIEST       = 'priest';
-    const CATEGORY_MONK         = 'monk';
-    const CATEGORY_ROGUE        = 'rogue';
-    const CATEGORY_WARLOCK      = 'warlock';
-    const CATEGORY_SHAMAN       = 'shaman';
-    const CATEGORY_PALADIN      = 'paladin';
-    const CATEGORY_DRUID        = 'druid';
-    const CATEGORY_DEMON_HUNTER = 'demon_hunter';
-    const CATEGORY_EVOKER       = 'evoker';
+    public const CATEGORY_GENERAL      = 'general';
+    public const CATEGORY_WARRIOR      = 'warrior';
+    public const CATEGORY_HUNTER       = 'hunter';
+    public const CATEGORY_DEATH_KNIGHT = 'death_knight';
+    public const CATEGORY_MAGE         = 'mage';
+    public const CATEGORY_PRIEST       = 'priest';
+    public const CATEGORY_MONK         = 'monk';
+    public const CATEGORY_ROGUE        = 'rogue';
+    public const CATEGORY_WARLOCK      = 'warlock';
+    public const CATEGORY_SHAMAN       = 'shaman';
+    public const CATEGORY_PALADIN      = 'paladin';
+    public const CATEGORY_DRUID        = 'druid';
+    public const CATEGORY_DEMON_HUNTER = 'demon_hunter';
+    public const CATEGORY_EVOKER       = 'evoker';
 
     // Some hard coded spells that we have exceptions for in the code
-    const SPELL_BLOODLUST           = 2825;
-    const SPELL_HEROISM             = 32182;
-    const SPELL_TIME_WARP           = 80353;
-    const SPELL_FURY_OF_THE_ASPECTS = 390386;
-    const SPELL_ANCIENT_HYSTERIA    = 90355;
-    const SPELL_PRIMAL_RAGE         = 264667;
-    const SPELL_FERAL_HIDE_DRUMS    = 381301;
+    public const SPELL_BLOODLUST           = 2825;
+    public const SPELL_HEROISM             = 32182;
+    public const SPELL_TIME_WARP           = 80353;
+    public const SPELL_FURY_OF_THE_ASPECTS = 390386;
+    public const SPELL_ANCIENT_HYSTERIA    = 90355;
+    public const SPELL_PRIMAL_RAGE         = 264667;
+    public const SPELL_FERAL_HIDE_DRUMS    = 381301;
 
     /**
      * @return array

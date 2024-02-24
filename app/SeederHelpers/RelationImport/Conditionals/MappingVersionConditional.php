@@ -35,7 +35,7 @@ class MappingVersionConditional implements ConditionalInterface
 
     /**
      * @param RelationMapping $relationMapping
-     * @param array $modelData
+     * @param array           $modelData
      * @return bool
      * @throws Exception
      */
@@ -44,27 +44,26 @@ class MappingVersionConditional implements ConditionalInterface
         // This class no longer seems necessary - we always truncate and re-populate the seed
         return true;
 
-        if (isset($modelData['dungeon_id'])) {
-            $dungeon = $this->getDungeonById($modelData['dungeon_id']);
-        } else if (isset($modelData['floor_id'])) {
-            $dungeon = $this->getDungeonById($this->getFloorById($modelData['floor_id'])->dungeon_id);
-        } else {
-            throw new Exception(sprintf('Unable to find dungeon in model data! %s', json_encode($modelData)));
-        }
-
-        // Initial import of mapping that does not have mapping versions yet..
-        if (!isset($modelData['mapping_version_id'])) {
-            return true;
-        }
-
-        $modelMappingVersion = MappingVersion::findOrFail($modelData['mapping_version_id']);
-
-        // Only import this model if it's a version upgrade
-        return $modelMappingVersion->version > $dungeon->currentMappingVersion->version;
+//        if (isset($modelData['dungeon_id'])) {
+//            $dungeon = $this->getDungeonById($modelData['dungeon_id']);
+//        } else if (isset($modelData['floor_id'])) {
+//            $dungeon = $this->getDungeonById($this->getFloorById($modelData['floor_id'])->dungeon_id);
+//        } else {
+//            throw new Exception(sprintf('Unable to find dungeon in model data! %s', json_encode($modelData)));
+//        }
+//
+//        // Initial import of mapping that does not have mapping versions yet..
+//        if (!isset($modelData['mapping_version_id'])) {
+//            return true;
+//        }
+//
+//        $modelMappingVersion = MappingVersion::findOrFail($modelData['mapping_version_id']);
+//
+//        // Only import this model if it's a version upgrade
+//        return $modelMappingVersion->version > $dungeon->currentMappingVersion->version;
     }
 
     /**
-     * @param int $id
      * @return Floor
      */
     private function getFloorById(int $id): Floor
@@ -80,7 +79,6 @@ class MappingVersionConditional implements ConditionalInterface
     }
 
     /**
-     * @param int $id
      * @return Dungeon
      */
     private function getDungeonById(int $id): Dungeon

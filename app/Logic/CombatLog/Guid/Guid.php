@@ -2,7 +2,9 @@
 
 namespace App\Logic\CombatLog\Guid;
 
-abstract class Guid
+use Stringable;
+
+abstract class Guid implements Stringable
 {
     private const GUID_TYPE_BATTLE_PET    = 'BattlePet';
     private const GUID_TYPE_B_NET_ACCOUNT = 'BNetAccount';
@@ -36,11 +38,8 @@ abstract class Guid
         self::GUID_TYPE_EVADE         => Evade::class,
     ];
 
-    private string $guid;
-
-    protected function __construct(string $guid)
+    protected function __construct(private string $guid)
     {
-        $this->guid = $guid;
     }
 
     /**
@@ -52,7 +51,6 @@ abstract class Guid
     }
 
     /**
-     * @param string $guid
      * @return Guid|null
      */
     public static function createFromGuidString(string $guid): ?Guid
@@ -79,7 +77,7 @@ abstract class Guid
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->guid;
     }

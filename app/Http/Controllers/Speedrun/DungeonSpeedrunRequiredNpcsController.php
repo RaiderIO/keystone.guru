@@ -19,11 +19,6 @@ use Session;
 class DungeonSpeedrunRequiredNpcsController extends Controller
 {
     /**
-     * @param NpcServiceInterface $npcService
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param Floor $floor
-     * @param int $difficulty
      * @return Application|Factory|View
      */
     public function new(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor, int $difficulty)
@@ -40,10 +35,6 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
     }
 
     /**
-     * @param DungeonSpeedrunRequiredNpcsFormRequest $request
-     * @param Dungeon $dungeon
-     * @param Floor $floor
-     * @param int $difficulty
      * @return RedirectResponse
      */
     public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $difficulty)
@@ -61,18 +52,13 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param Floor $floor
-     * @param int $difficulty
-     * @param DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc
      * @return RedirectResponse
      */
     public function delete(Request $request, Dungeon $dungeon, Floor $floor, int $difficulty, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc)
     {
         try {
             $dungeonspeedrunrequirednpc->delete();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             abort(500);
         }
 

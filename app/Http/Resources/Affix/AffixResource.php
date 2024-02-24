@@ -25,7 +25,7 @@ class AffixResource extends JsonResource
     {
         return [
             'id'   => $this->affix_id,
-            'name' => __($this->name, [], 'en-US')
+            'name' => __($this->name, [], 'en-US'),
         ];
     }
 }

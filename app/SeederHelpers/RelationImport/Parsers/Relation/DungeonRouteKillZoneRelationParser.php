@@ -11,8 +11,6 @@ use App\Models\KillZone\KillZoneSpell;
 class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
-     *
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool

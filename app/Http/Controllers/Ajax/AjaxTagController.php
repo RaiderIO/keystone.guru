@@ -25,7 +25,6 @@ use Teapot\StatusCode\Http;
 class AjaxTagController extends Controller
 {
     /**
-     * @param Request $request
      * @return Tag[]|Collection
      */
     public function all(Request $request)
@@ -34,8 +33,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param TagCategory $category
      * @return Tag[]|Collection
      */
     public function list(Request $request, TagCategory $category)
@@ -44,7 +41,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param APITagFormRequest $request
      *
      * @return Application|ResponseFactory|Response
      * @throws AuthorizationException
@@ -104,8 +100,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param APITagUpdateFormRequest $request
-     * @param Tag $tag
      * @return Response
      * @throws AuthorizationException
      */
@@ -123,8 +117,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Tag $tag
      * @return Response
      * @throws AuthorizationException
      * @throws Exception
@@ -143,9 +135,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Tag $tag
-     *
      * @return array|ResponseFactory|Response
      * @throws Exception
      */

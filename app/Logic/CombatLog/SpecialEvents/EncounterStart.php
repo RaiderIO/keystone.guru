@@ -30,7 +30,7 @@ class EncounterStart extends EncounterBase
     {
         parent::setParameters($parameters);
 
-        $this->instanceID    = $parameters[4];
+        $this->instanceID = $parameters[4];
 
         return $this;
     }

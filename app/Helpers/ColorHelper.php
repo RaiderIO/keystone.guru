@@ -39,7 +39,7 @@ $GLOBALS['clrLkp'] = [
     ["indigo", 270], ["blue", 255], ["light green blue", 240], ["green blue", 225], ["green cyan", 210],
     ["blaucyan", 195], ["cyan", 180], ["green cyan", 165], ["blue green", 150], ["light blue-green", 135],
     ["green", 120], ["limett", 105], ["green yellow", 90], ["light green yellow", 75], ["yellow", 60],
-    ["safran", 45], ["orange", 30], ["brown", 20], ["vermilion", 15], ["red", 0]
+    ["safran", 45], ["orange", 30], ["brown", 20], ["vermilion", 15], ["red", 0],
 ];
 
 /**
@@ -54,9 +54,7 @@ function hex2rgb($hex): array
         throw new Exception('Invalid hex value');
     }
 
-    return array_map(function ($p) {
-        return hexdec($p);
-    }, $parts);
+    return array_map(fn($p) => hexdec($p), $parts);
 }
 
 /**
@@ -122,7 +120,6 @@ function rgb2hex($r, $g, $b)
 }
 
 
-
 /**
  * @return string A random hex color.
  */
@@ -130,7 +127,6 @@ function randomHexColor(): string
 {
     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
 }
-
 
 
 /**

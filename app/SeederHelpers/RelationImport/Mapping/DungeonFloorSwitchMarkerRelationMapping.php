@@ -17,7 +17,7 @@ class DungeonFloorSwitchMarkerRelationMapping extends RelationMapping
         parent::__construct('dungeon_floor_switch_markers.json', DungeonFloorSwitchMarker::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
     }
 }

@@ -12,7 +12,6 @@ use Database\Seeders\DatabaseSeeder;
 class DungeonFloorsRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool

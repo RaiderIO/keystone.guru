@@ -73,11 +73,11 @@ class Missed extends Suffix
         }
         // May be set for absorbs
         if (isset($parameters[3])) {
-            $this->unknown1     = $parameters[3];
+            $this->unknown1 = $parameters[3];
         }
         // May be set for absorbs
         if (isset($parameters[4])) {
-            $this->critical     = $parameters[4] !== 'nil';
+            $this->critical = $parameters[4] !== 'nil';
         }
 
         return $this;

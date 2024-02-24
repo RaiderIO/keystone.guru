@@ -9,36 +9,18 @@ class CreateRouteBody
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
-    public CreateRouteMetadata $metadata;
-
-    public CreateRouteSettings $settings;
-
-    public CreateRouteChallengeMode $challengeMode;
-
-    /** @var Collection|CreateRouteNpc[] */
-    public Collection $npcs;
-
-    /** @var Collection|CreateRouteSpell[] */
-    public Collection $spells;
-
     public function __construct(
-        CreateRouteMetadata      $metadata,
-        CreateRouteSettings      $settings,
-        CreateRouteChallengeMode $challengeMode,
-        Collection               $npcs,
-        Collection               $spells
-    )
-    {
-        $this->metadata      = $metadata;
-        $this->settings      = $settings;
-        $this->challengeMode = $challengeMode;
-        $this->npcs          = $npcs;
-        $this->spells        = $spells;
+        public CreateRouteMetadata      $metadata,
+        public CreateRouteSettings      $settings,
+        public CreateRouteChallengeMode $challengeMode,
+        /** @var Collection|CreateRouteNpc[] */
+        public Collection               $npcs,
+        /** @var Collection|CreateRouteSpell[] */
+        public Collection               $spells
+    ) {
     }
 
     /**
-     * @param array $body
-     *
      * @return CreateRouteBody
      */
     public static function createFromArray(array $body): CreateRouteBody

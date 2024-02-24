@@ -18,8 +18,7 @@ class DungeonController extends Controller
     use ChangesMapping;
 
     /**
-     * @param DungeonFormRequest $request
-     * @param Dungeon|null       $dungeon
+     * @param Dungeon|null $dungeon
      *
      * @return mixed
      * @throws Exception
@@ -29,8 +28,8 @@ class DungeonController extends Controller
         $validated = $request->validated();
 
         $validated['expansion_id']     = Expansion::where('shortname', Dungeon::findExpansionByKey($validated['key']))->firstOrFail()->id;
-        $validated['active']           = $validated['active'] ?? 0;
-        $validated['speedrun_enabled'] = $validated['speedrun_enabled'] ?? 0;
+        $validated['active']           ??= 0;
+        $validated['speedrun_enabled'] ??= 0;
 
         if ($dungeon === null) {
             $beforeDungeon = new Dungeon();
@@ -77,8 +76,6 @@ class DungeonController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
      *
      * @return Factory|View
      */
@@ -91,9 +88,6 @@ class DungeonController extends Controller
     }
 
     /**
-     * @param DungeonFormRequest $request
-     * @param Dungeon            $dungeon
-     *
      * @return Factory|View
      * @throws Exception
      */
@@ -110,7 +104,6 @@ class DungeonController extends Controller
     }
 
     /**
-     * @param DungeonFormRequest $request
      *
      * @return RedirectResponse
      * @throws Exception

@@ -20,15 +20,10 @@ use Exception;
 
 class DungeonRouteFilter implements CombatLogParserInterface
 {
-    private SeasonServiceInterface $seasonService;
-    private ?DungeonRoute          $dungeonRoute = null;
+    private ?DungeonRoute $dungeonRoute = null;
 
-    /**
-     * @param SeasonServiceInterface $seasonService
-     */
-    public function __construct(SeasonServiceInterface $seasonService)
+    public function __construct(private SeasonServiceInterface $seasonService)
     {
-        $this->seasonService = $seasonService;
     }
 
     /**
@@ -49,7 +44,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
         } else if ($combatLogEvent instanceof ChallengeModeStart) {
             try {
                 $dungeon = Dungeon::where('challenge_mode_id', $combatLogEvent->getChallengeModeID())->firstOrFail();
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 throw new DungeonNotSupportedException(
                     sprintf('Dungeon with instance ID %d not found', $combatLogEvent->getInstanceID())
                 );

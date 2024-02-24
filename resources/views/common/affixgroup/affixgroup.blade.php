@@ -1,13 +1,13 @@
 <?php
 /** @var $affixgroup \App\Models\AffixGroup\AffixGroup */
-$media    = $media ?? 'lg';
-$showText = $showText ?? true;
-$class    = $class ?? '';
-$dungeon  = $dungeon ?? null;
-$center   = $center ?? false;
+$media    ??= 'lg';
+$showText ??= true;
+$class    ??= '';
+$dungeon  ??= null;
+$center   ??= false;
 
 $count = $affixgroup->affixes->count();
-$cols  = $cols ?? $count;
+$cols  ??= $count;
 
 $chunkCount = ceil($count / $cols);
 $chunks     = $affixgroup->affixes->chunk($chunkCount);

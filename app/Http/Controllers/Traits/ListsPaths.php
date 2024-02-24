@@ -17,7 +17,7 @@ trait ListsPaths
     /**
      * Lists all paths on a specific floor of a dungeon route.
      *
-     * @param $floorId
+     * @param                   $floorId
      * @param DungeonRoute|null $dungeonRoute
      * @return Collection
      */

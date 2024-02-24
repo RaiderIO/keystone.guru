@@ -13,12 +13,8 @@ use Illuminate\Support\Collection;
 
 class TimewalkingEventService implements TimewalkingEventServiceInterface
 {
-    /** @var SeasonService */
-    private $seasonService;
-
-    public function __construct(SeasonServiceInterface $seasonService)
+    public function __construct(private SeasonServiceInterface $seasonService)
     {
-        $this->seasonService = $seasonService;
     }
 
     /**
@@ -55,7 +51,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
 
     /**
      * @param Expansion $expansion
-     * @param Carbon $date
+     * @param Carbon    $date
      * @return AffixGroup|null
      * @TODO Support user regions?
      */

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AdProvider\SyncAdsTxt;
 use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\CreateMappingVersion;
@@ -34,7 +35,6 @@ use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\Metric\Aggregate;
-use App\Console\Commands\AdProvider\SyncAdsTxt;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;

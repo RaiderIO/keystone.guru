@@ -7,7 +7,7 @@ use App\Logic\CombatLog\Guid\Guid;
 
 class HealAbsorbed extends Suffix
 {
-    private ?Guid $extraGUID;
+    private ?Guid $extraGUID = null;
 
     private string $extraName;
 

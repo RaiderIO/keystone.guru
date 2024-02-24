@@ -61,6 +61,7 @@ class CreateGithubRelease extends GithubReleaseCommand
             foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
                 if ($githubRelease['name'] === $release->version) {
                     $this->error(sprintf('OK Unable to create release for %s; already exists!', $release->version));
+
                     return;
                 }
             }

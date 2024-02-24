@@ -54,8 +54,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param MapContextServiceInterface              $mapContextService
-     * @param ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService
      *
      * @return View
      */
@@ -119,8 +117,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return void
      */
     public function npcimportsubmit(Request $request)
@@ -231,8 +227,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function dungeonroutesubmit(Request $request)
@@ -255,12 +249,8 @@ class AdminToolsController extends Controller
     {
         $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
             ->get()
-            ->mapWithKeys(function (MappingVersion $mappingVersion) {
-                return [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()];
-            })
-            ->groupBy(function (int $count, string $key) {
-                return $count === 0;
-            }, true);
+            ->mapWithKeys(fn(MappingVersion $mappingVersion) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
+            ->groupBy(fn(int $count, string $key) => $count === 0, true);
 
         return view('admin.tools.dungeonroute.mappingversions', [
             'mappingVersionUsage' => collect([
@@ -279,8 +269,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function enemyforcesimportsubmit(Request $request)
@@ -323,8 +311,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return void
      */
     public function enemyforcesrecalculatesubmit(Request $request)
@@ -334,9 +320,7 @@ class AdminToolsController extends Controller
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->select('id')
-            ->when($dungeonId !== -1, function (Builder $builder) use ($dungeonId) {
-                return $builder->where('dungeon_id', $dungeonId);
-            });
+            ->when($dungeonId !== -1, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId));
 
         $count = 0;
         foreach ($builder->get() as $dungeonRoute) {
@@ -356,8 +340,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request          $request
-     * @param ThumbnailService $thumbnailService
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
@@ -370,9 +352,7 @@ class AdminToolsController extends Controller
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->with('dungeon')
-            ->when($dungeonId !== -1, function (Builder $builder) use ($dungeonId) {
-                return $builder->where('dungeon_id', $dungeonId);
-            })
+            ->when($dungeonId !== -1, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->orderByDesc('created_at');
 
         $successCount  = 0;
@@ -409,8 +389,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request                         $request
-     * @param MDTImportStringServiceInterface $mdtImportStringService
      *
      * @return JsonResponse
      */
@@ -432,9 +410,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request                         $request
-     * @param MDTImportStringServiceInterface $mdtImportStringService
-     *
      * @return never|void
      * @throws Throwable
      */
@@ -447,7 +422,7 @@ class AdminToolsController extends Controller
             $dungeonRoute->makeVisible(['affixes', 'killZones']);
 
             dd($dungeonRoute);
-        } catch (InvalidMDTStringException $ex) {
+        } catch (InvalidMDTStringException) {
             return abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
 
@@ -477,9 +452,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request                         $request
-     * @param MDTImportStringServiceInterface $mdtImportStringService
-     * @param MDTExportStringServiceInterface $mdtExportStringService
      *
      * @return never|void
      * @throws Throwable
@@ -528,9 +500,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request                          $request
-     * @param MDTMappingImportServiceInterface $mdtMappingService
-     *
      * @return void
      * @throws Throwable
      */
@@ -555,20 +524,15 @@ class AdminToolsController extends Controller
 
                     return [
                         __($dungeon->name) =>
-                            $mappingVersionByDungeon->mapWithKeys(function (MappingVersion $mappingVersion) use ($dungeon) {
-                                return [
-                                    $mappingVersion->id => $mappingVersion->getPrettyName(),
-                                ];
-                            }),
+                            $mappingVersionByDungeon->mapWithKeys(fn(MappingVersion $mappingVersion) => [
+                                $mappingVersion->id => $mappingVersion->getPrettyName(),
+                            ]),
                     ];
                 }),
         ]);
     }
 
     /**
-     * @param Request                          $request
-     * @param MDTMappingExportServiceInterface $mdtMappingService
-     *
      * @return void
      * @throws Throwable
      */
@@ -590,7 +554,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
      *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      * @throws Exception
@@ -860,8 +823,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request               $request
-     * @param CacheServiceInterface $cacheService
      *
      * @return RedirectResponse
      */
@@ -881,8 +842,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return void
      */
     public function mappingForceSync(Request $request)
@@ -891,8 +850,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return array
      */
     public function applychange(Request $request)
@@ -933,8 +890,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function exportreleases(Request $request)
@@ -947,7 +902,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
      *
      * @return mixed
      * @throws Exception
@@ -960,8 +914,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function exceptionselect(Request $request)
@@ -970,7 +922,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Request $request
      *
      * @throws TokenMismatchException
      * @throws Exception

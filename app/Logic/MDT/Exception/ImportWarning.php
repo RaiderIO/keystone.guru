@@ -19,15 +19,9 @@ use Illuminate\Contracts\Support\Arrayable;
  */
 class ImportWarning extends Exception implements Arrayable
 {
-    private string $category;
-    private array  $data;
-
-    function __construct(string $category, string $message, array $data = [])
+    function __construct(private string $category, string $message, private array $data = [])
     {
         parent::__construct($message);
-
-        $this->category = $category;
-        $this->data     = $data;
     }
 
     /**

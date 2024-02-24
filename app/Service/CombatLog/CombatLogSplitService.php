@@ -26,30 +26,20 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_END,
     ];
 
-    private CombatLogServiceInterface $combatLogService;
-    private CombatLogSplitServiceLoggingInterface $log;
-
     /** @var Collection|string[] */
     private Collection $rawEvents;
 
-    private ?string $lastCombatLogVersion;
-    private ?ChallengeModeStartEvent $lastChallengeModeStartEvent;
-    private ?string $lastZoneChange;
-    private ?string $lastMapChange;
-    private ?Carbon $lastTimestamp;
+    private ?string                  $lastCombatLogVersion;
+    private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
+    private ?string                  $lastZoneChange;
+    private ?string                  $lastMapChange;
+    private ?Carbon                  $lastTimestamp               = null;
 
 
-    /**
-     * @param CombatLogServiceInterface $combatLogService
-     * @param CombatLogSplitServiceLoggingInterface $log
-     */
     public function __construct(
-        CombatLogServiceInterface             $combatLogService,
-        CombatLogSplitServiceLoggingInterface $log)
+        private CombatLogServiceInterface             $combatLogService,
+        private CombatLogSplitServiceLoggingInterface $log)
     {
-        $this->combatLogService = $combatLogService;
-        $this->log              = $log;
-
         $this->reset();
     }
 
@@ -81,6 +71,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
                 if ($combatLogEntry->getParsedTimestamp() === null) {
                     $this->log->splitCombatLogOnChallengeModesTimestampNotSet();
+
                     return $parsedEvent;
                 }
 
@@ -97,6 +88,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
                         // Reset variables
                         $this->resetCurrentChallengeMode();
+
                         return $parsedEvent;
                     }
 
@@ -120,8 +112,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                         // Reset variables
                         $this->resetCurrentChallengeMode();
                     }
-                }
-                // If we're going to start a challenge mode event
+                } // If we're going to start a challenge mode event
                 else if ($parsedEvent instanceof ChallengeModeStartEvent) {
                     $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent();
 
@@ -190,7 +181,6 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
      * Based on the currently known information (as for what dungeon we're doing), generate a file path
      * to save the current combat log at.
      *
-     * @param string $originalFilePath
      * @return string
      */
     private function generateTargetCombatLogFileName(string $originalFilePath): string

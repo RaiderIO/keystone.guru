@@ -3,7 +3,6 @@
 namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
-use Illuminate\Console\Command;
 
 class SplitChallengeMode extends BaseCombatLogCommand
 {
@@ -24,7 +23,6 @@ class SplitChallengeMode extends BaseCombatLogCommand
     /**
      * Execute the console command.
      *
-     * @param CombatLogSplitServiceInterface $combatLogSplitService
      *
      * @return int
      */
@@ -34,14 +32,10 @@ class SplitChallengeMode extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogSplitService) {
-            return $this->splitCombatLog($combatLogSplitService, $filePath);
-        });
+        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->splitCombatLog($combatLogSplitService, $filePath));
     }
 
     /**
-     * @param CombatLogSplitServiceInterface $combatLogSplitService
-     * @param string                         $filePath
      *
      * @return int
      */

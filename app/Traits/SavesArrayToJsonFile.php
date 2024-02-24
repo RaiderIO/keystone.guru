@@ -3,11 +3,13 @@
 
 namespace App\Traits;
 
+use stdClass;
+
 trait SavesArrayToJsonFile
 {
 
     /**
-     * @param $dataArr array|\stdClass
+     * @param $dataArr array|stdClass
      * @param $dir string
      * @param $filename string
      */

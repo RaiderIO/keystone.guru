@@ -5,6 +5,7 @@ namespace App\Console\Commands\MDT;
 use App\Logic\MDT\Conversion;
 use App\Models\Expansion;
 use App\Service\MDT\MDTMappingExportServiceInterface;
+use Exception;
 use Illuminate\Console\Command;
 
 class ExportMapping extends Command
@@ -37,7 +38,7 @@ class ExportMapping extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(MDTMappingExportServiceInterface $mappingExportService)
     {
@@ -60,7 +61,7 @@ class ExportMapping extends Command
 
             $name = Conversion::getMDTDungeonName($dungeon->key);
             if ($name === null) {
-                throw new \Exception(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
+                throw new Exception(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
             }
             $fileName = sprintf('%s/%s.lua', $targetFolder, $name);
 

@@ -11,19 +11,19 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $floor_id
- * @property int $npc_id
- * @property int $npc2_id
- * @property int $npc3_id
- * @property int $npc4_id
- * @property int $npc5_id
- * @property int $difficulty
- * @property int $count
+ * @property int      $id
+ * @property int      $floor_id
+ * @property int      $npc_id
+ * @property int      $npc2_id
+ * @property int      $npc3_id
+ * @property int      $npc4_id
+ * @property int      $npc5_id
+ * @property int      $difficulty
+ * @property int      $count
  *
- * @property Dungeon $dungeon
- * @property Floor $floor
- * @property Npc $npc
+ * @property Dungeon  $dungeon
+ * @property Floor    $floor
+ * @property Npc      $npc
  * @property Npc|null $npc2
  * @property Npc|null $npc3
  * @property Npc|null $npc4
@@ -47,7 +47,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'count',
     ];
 
-    protected $fillable = [
+    protected $fillable   = [
         'floor_id',
         'npc_id',
         'npc2_id',
@@ -57,7 +57,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'difficulty',
         'count',
     ];
-    public $timestamps = false;
+    public    $timestamps = false;
 
     /**
      * @return BelongsTo

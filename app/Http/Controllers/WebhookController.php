@@ -14,7 +14,6 @@ class WebhookController extends Controller
     /**
      * Validate an incoming github webhook
      *
-     * @param Request $request
      *
      * @return void
      * @throws BadRequestException|UnauthorizedException
@@ -40,8 +39,6 @@ class WebhookController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DiscordApiServiceInterface $discordApiService
      * @return Response
      */
     public function github(Request $request, DiscordApiServiceInterface $discordApiService)
@@ -57,16 +54,16 @@ class WebhookController extends Controller
             $embeds = [];
 
             // https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
-            $totalCharacterCount = 0;
+            $totalCharacterCount      = 0;
             $totalEmbedCharacterLimit = 5950;
-            
+
             foreach ($commits as $commit) {
                 // Skip system commits (such as merge branch X into Y)
                 if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
                     // Skip commits that have originally be done on another branch
                     !$commit['distinct'] ||
                     // Skip merge commits
-                    strpos($commit['message'], 'Merge remote-tracking branch') === 0
+                    str_starts_with($commit['message'], 'Merge remote-tracking branch')
                 ) {
                     continue;
                 }
@@ -79,7 +76,7 @@ class WebhookController extends Controller
                 ])->render()), 0, $totalEmbedCharacterLimit);
 
                 $totalCharacterCount += strlen($commitDescription);
-                
+
                 $embeds[] = [
                     'title'       => sprintf(
                         '%s: %s',
@@ -91,11 +88,11 @@ class WebhookController extends Controller
                 ];
 
                 if (!empty($commit['added']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
-                    $addedDescription = substr(trim(view('app.commit.added', [
+                    $addedDescription    = substr(trim(view('app.commit.added', [
                         'added' => $commit['added'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($addedDescription);
-                    
+
                     $embeds[] = [
                         'color'       => 2328118, // #238636
                         'description' => $addedDescription,
@@ -107,7 +104,7 @@ class WebhookController extends Controller
                         'modified' => $commit['modified'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($modifiedDescription);
-                    
+
                     $embeds[] = [
                         'color'       => 25284, // #0062C4
                         'description' => $modifiedDescription,
@@ -115,11 +112,11 @@ class WebhookController extends Controller
                 }
 
                 if (!empty($commit['removed']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
-                    $removedDescription = substr(trim(view('app.commit.removed', [
+                    $removedDescription  = substr(trim(view('app.commit.removed', [
                         'removed' => $commit['removed'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($removedDescription);
-                    
+
                     $embeds[] = [
                         'color'       => 14300723, // #DA3633
                         'description' => $removedDescription,

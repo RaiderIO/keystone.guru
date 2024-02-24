@@ -18,7 +18,7 @@ class WorldMarkerPlaced extends SpecialEvent
     private float $positionX;
 
     private float $positionY;
-    
+
     /**
      * @return int
      */
@@ -26,7 +26,7 @@ class WorldMarkerPlaced extends SpecialEvent
     {
         return $this->instanceId;
     }
-    
+
     /**
      * @return int
      */
@@ -34,7 +34,7 @@ class WorldMarkerPlaced extends SpecialEvent
     {
         return $this->marker;
     }
-    
+
     /**
      * @return float
      */
@@ -42,7 +42,7 @@ class WorldMarkerPlaced extends SpecialEvent
     {
         return $this->positionX;
     }
-    
+
     /**
      * @return float
      */

@@ -18,9 +18,9 @@ class TimestampAttributeParser implements AttributeParserInterface
 
     /**
      * @param string $modelClassName
-     * @param array $modelData
+     * @param array  $modelData
      * @param string $name
-     * @param $value
+     * @param        $value
      * @return array
      */
     public function parseAttribute(string $modelClassName, array $modelData, string $name, $value): array

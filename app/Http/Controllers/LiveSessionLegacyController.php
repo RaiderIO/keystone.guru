@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 class LiveSessionLegacyController extends Controller
 {
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
      * @return RedirectResponse
      */
     public function view(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession)
@@ -26,10 +23,6 @@ class LiveSessionLegacyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
-     * @param string $floorIndex
      * @return RedirectResponse
      */
     public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex)

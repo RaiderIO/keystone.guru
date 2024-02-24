@@ -10,14 +10,8 @@ use Illuminate\Support\Collection;
 class APIDungeonRouteControllerService implements APIDungeonRouteControllerServiceInterface
 {
 
-    private ThumbnailServiceInterface $thumbnailService;
-
-    /**
-     * @param ThumbnailServiceInterface $thumbnailService
-     */
-    public function __construct(ThumbnailServiceInterface $thumbnailService)
+    public function __construct(private ThumbnailServiceInterface $thumbnailService)
     {
-        $this->thumbnailService = $thumbnailService;
     }
 
     /**

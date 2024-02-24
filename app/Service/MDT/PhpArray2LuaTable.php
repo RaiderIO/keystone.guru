@@ -18,8 +18,6 @@ class PhpArray2LuaTable
     private const TOKEN_STRING_QUOTE = '"';
 
     /**
-     * @param string $tableName
-     * @param array $contents
      * @return string
      */
     public function toLuaTableString(string $tableName, array $contents): string
@@ -30,7 +28,6 @@ class PhpArray2LuaTable
     }
 
     /**
-     * @param array $array
      * @return array
      */
     private function arrayToLuaTokens(array $array): array

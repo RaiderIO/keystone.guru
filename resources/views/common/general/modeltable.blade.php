@@ -1,7 +1,9 @@
 <?php
-/** @var \Illuminate\Database\Eloquent\Model $model */
-/** @var $exclude array */
-$exclude = $exclude ?? [];
+/**
+ * @var \Illuminate\Database\Eloquent\Model $model
+ * @var $exclude array
+ */
+$exclude ??= [];
 ?>
 <table>
     <thead>

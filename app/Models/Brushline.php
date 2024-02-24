@@ -52,7 +52,7 @@ class Brushline extends Model
      */
     public function polyline(): HasOne
     {
-        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', static::class);
     }
 
     /**

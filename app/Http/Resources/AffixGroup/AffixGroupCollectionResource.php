@@ -26,8 +26,6 @@ class AffixGroupCollectionResource extends ResourceCollection
      */
     public function toArray($request)
     {
-        return $this->collection->map(function(AffixGroup $affixGroup){
-            return new AffixGroupResource($affixGroup);
-        });
+        return $this->collection->map(fn(AffixGroup $affixGroup) => new AffixGroupResource($affixGroup));
     }
 }

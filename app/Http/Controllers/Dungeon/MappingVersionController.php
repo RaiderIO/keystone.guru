@@ -14,9 +14,6 @@ use Session;
 class MappingVersionController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param MappingServiceInterface $mappingService
      * @return RedirectResponse
      */
     public function savenew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
@@ -31,9 +28,6 @@ class MappingVersionController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param MappingVersion $mappingVersion
      * @return RedirectResponse
      * @throws Exception
      */

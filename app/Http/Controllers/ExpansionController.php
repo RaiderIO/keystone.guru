@@ -14,7 +14,6 @@ use Session;
 class ExpansionController extends Controller
 {
     /**
-     * @param ExpansionFormRequest $request
      * @param Expansion|null $expansion
      * @return mixed
      * @throws Exception
@@ -44,8 +43,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Expansion $expansion
      * @return Factory|View
      */
     public function edit(Request $request, Expansion $expansion)
@@ -54,8 +51,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     * @param ExpansionFormRequest $request
-     * @param Expansion $expansion
      * @return Factory|View
      * @throws Exception
      */
@@ -72,7 +67,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     * @param ExpansionFormRequest $request
      * @return RedirectResponse
      * @throws Exception
      */

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\hasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 /**
  * @property int                                 $id
@@ -170,14 +171,13 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int                 $enemyForces
      * @param MappingVersion|null $mappingVersion
      * @return NpcEnemyForces
      */
     public function setEnemyForces(int $enemyForces, ?MappingVersion $mappingVersion = null): NpcEnemyForces
     {
         if ($this->dungeon_id === -1 && $mappingVersion === null) {
-            throw new \InvalidArgumentException('Unable to set enemy forces for global npc without a mapping version!');
+            throw new InvalidArgumentException('Unable to set enemy forces for global npc without a mapping version!');
         }
 
         $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion)->first();
@@ -280,10 +280,6 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int  $keyLevel
-     * @param bool $fortified
-     * @param bool $tyrannical
-     * @param bool $thundering
      * @return float
      */
     public function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
@@ -308,10 +304,6 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int  $keyLevel
-     * @param bool $fortified
-     * @param bool $tyrannical
-     * @param bool $thundering
      * @return void
      */
     public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float

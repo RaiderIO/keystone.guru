@@ -19,8 +19,7 @@ use Throwable;
 class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @param MountableAreaFormRequest $request
-     * @param MountableArea|null       $mountableArea
+     * @param MountableArea|null $mountableArea
      * @return MountableArea|Model
      * @throws Exception
      * @throws Throwable
@@ -39,8 +38,6 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request       $request
-     * @param MountableArea $mountableArea
      * @return Response|ResponseFactory
      * @throws Throwable
      */
@@ -57,7 +54,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                     }
                 }
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

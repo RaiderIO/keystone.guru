@@ -3,22 +3,23 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property int $model_id
- * @property string $model_class
- * @property string $session_id
+ * @property int      $id
+ * @property int      $user_id
+ * @property int      $model_id
+ * @property string   $model_class
+ * @property string   $session_id
  * @property int|null $source
- * @property string $created_at
- * @property string $updated_at
+ * @property string   $created_at
+ * @property string   $updated_at
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class PageView extends Model
 {
@@ -44,8 +45,6 @@ class PageView extends Model
 
     /**
      * Tracks a view for this model. The view may not track if there's a recent view, and we're still in the same 'session'.
-     * @param int $modelId
-     * @param string $modelClass
      * @param int|null $source
      * @return bool True if the page view was tracked, false if it was not.
      */

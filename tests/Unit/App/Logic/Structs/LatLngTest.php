@@ -13,8 +13,6 @@ class LatLngTest extends PublicTestCase
      * @test
      * @group LatLng
      *
-     * @param LatLng $latLng
-     * @param LatLng $expected
      * @return void
      * @dataProvider scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider
      */
@@ -58,8 +56,6 @@ class LatLngTest extends PublicTestCase
      * @test
      * @group LatLng
      *
-     * @param LatLng $latLng
-     * @param LatLng $expected
      * @return void
      * @dataProvider scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider
      */
@@ -99,9 +95,6 @@ class LatLngTest extends PublicTestCase
      * @test
      * @group LatLng
      *
-     * @param LatLng $latLng
-     * @param int    $rotation
-     * @param LatLng $expected
      * @return void
      * @dataProvider rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider
      */
@@ -146,9 +139,6 @@ class LatLngTest extends PublicTestCase
      * @test
      * @group LatLng2
      *
-     * @param LatLng $latLng
-     * @param int    $rotation
-     * @param LatLng $expected
      * @return void
      * @dataProvider rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider
      */

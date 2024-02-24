@@ -26,10 +26,8 @@ use Tests\TestCases\PublicTestCase;
 class ServiceFixtures
 {
     /**
-     * @param PublicTestCase                                 $testCase
      * @param SeasonServiceInterface|null                    $seasonService
      * @param AffixGroupEaseTierServiceLoggingInterface|null $log
-     * @param array                                          $methodsToMock
      * @return MockObject|AffixGroupEaseTierServiceInterface
      */
     public static function getAffixGroupEaseTierServiceMock(
@@ -50,9 +48,6 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase                   $testCase
-     * @param CombatLogServiceLoggingInterface $log
-     * @param array                            $methodsToMock
      * @return MockObject|CombatLogServiceInterface
      */
     public static function getCombatLogServiceMock(
@@ -70,10 +65,6 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase                               $testCase
-     * @param CombatLogService                             $combatLogService
-     * @param CombatLogDungeonRouteServiceLoggingInterface $log
-     * @param array                                        $methodsToMock
      *
      * @return MockObject|ResultEventDungeonRouteServiceInterface
      */
@@ -94,8 +85,6 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase $testCase
-     * @param array          $methodsToMock
      * @return MockObject|ExpansionServiceInterface
      */
     public static function getExpansionServiceMock(
@@ -108,8 +97,6 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase  $testCase
-     * @param array           $methodsToMock
      * @param Collection|null $seasons
      * @return MockObject|SeasonServiceInterface
      */
@@ -139,8 +126,6 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase $testCase
-     * @param array          $methodsNotToMock
      * @return MockObject|CoordinatesServiceInterface
      */
     public static function getCoordinatesServiceMock(

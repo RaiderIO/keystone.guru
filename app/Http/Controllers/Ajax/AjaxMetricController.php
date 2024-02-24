@@ -13,8 +13,6 @@ use Illuminate\Http\Response;
 class AjaxMetricController extends Controller
 {
     /**
-     * @param APIMetricFormRequest $request
-     * @param MetricServiceInterface $metricService
      * @return Response
      * @throws AuthorizationException
      */
@@ -28,9 +26,6 @@ class AjaxMetricController extends Controller
     }
 
     /**
-     * @param APIDungeonRouteMetricFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param MetricServiceInterface $metricService
      * @return Response
      */
     public function storeDungeonRoute(APIDungeonRouteMetricFormRequest $request, DungeonRoute $dungeonRoute, MetricServiceInterface $metricService)

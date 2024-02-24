@@ -18,7 +18,7 @@ use Exception;
 
 class Conversion
 {
-    const EXPANSION_NAME_MAPPING = [
+    public const EXPANSION_NAME_MAPPING = [
         Expansion::EXPANSION_CLASSIC      => null,
         Expansion::EXPANSION_TBC          => null,
         Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
@@ -31,7 +31,7 @@ class Conversion
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight', // DF S1 has MoP/WoD dungeons under here
     ];
 
-    const DUNGEON_NAME_MAPPING = [
+    public const DUNGEON_NAME_MAPPING = [
         Expansion::EXPANSION_WOTLK => [
             Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
             Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
@@ -151,8 +151,6 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
-     *
      * @return string|null
      */
     public static function getExpansionName(string $dungeonKey): ?string
@@ -169,8 +167,6 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
-     *
      * @return string|null
      */
     public static function getMDTExpansionName(string $dungeonKey): ?string
@@ -240,7 +236,6 @@ class Conversion
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
      *
-     * @param LatLng $latLng
      *
      * @return array
      */
@@ -256,7 +251,6 @@ class Conversion
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
      *
-     * @param LatLng $latLng
      *
      * @return array
      */
@@ -268,9 +262,6 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      *
-     * @param SeasonService $seasonService
-     * @param Dungeon       $dungeon
-     * @param int           $mdtWeek
      *
      * @return AffixGroup|null
      * @throws Exception
@@ -298,8 +289,6 @@ class Conversion
     }
 
     /**
-     * @param AffixGroup $affixGroup
-     *
      * @return int
      */
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int

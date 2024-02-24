@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\WowTools;
 
-use App\Console\Commands\Traits\ConvertsMDTStrings;
-use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Npc;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Console\Command;

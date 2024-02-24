@@ -77,6 +77,7 @@ class Stopwatch
                 $timerStart += ($now - self::$timers[$timerName]['end']);
             }
         }
+
         return round(($now - $timerStart) * 1000, 4);
     }
 
@@ -100,7 +101,6 @@ class Stopwatch
     }
 
     /**
-     * @param string $timerName
      * @return float
      */
     public static function stop(string $timerName = 'default'): float
@@ -131,6 +131,7 @@ class Stopwatch
         foreach (self::$timers as $key => $value) {
             $result[$key] = self::getElapsedString($key);
         }
+
         return $result;
     }
 }

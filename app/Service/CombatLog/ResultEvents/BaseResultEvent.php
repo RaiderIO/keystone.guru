@@ -6,14 +6,8 @@ use App\Logic\CombatLog\BaseEvent;
 
 abstract class BaseResultEvent
 {
-    private BaseEvent $baseEvent;
-
-    /**
-     * @param BaseEvent $baseEvent
-     */
-    public function __construct(BaseEvent $baseEvent)
+    public function __construct(private BaseEvent $baseEvent)
     {
-        $this->baseEvent = $baseEvent;
     }
 
     /**

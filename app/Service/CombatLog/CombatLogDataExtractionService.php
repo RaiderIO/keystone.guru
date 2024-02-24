@@ -20,26 +20,8 @@ use App\Service\Season\SeasonServiceInterface;
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
 
-    private CombatLogServiceInterface $combatLogService;
-
-    private SeasonServiceInterface $seasonService;
-
-    private CombatLogDataExtractionServiceLoggingInterface $log;
-
-    /**
-     * @param CombatLogServiceInterface                      $combatLogService
-     * @param SeasonServiceInterface                         $seasonService
-     * @param CombatLogDataExtractionServiceLoggingInterface $log
-     */
-    public function __construct(
-        CombatLogServiceInterface                      $combatLogService,
-        SeasonServiceInterface                         $seasonService,
-        CombatLogDataExtractionServiceLoggingInterface $log
-    )
+    public function __construct(private CombatLogServiceInterface $combatLogService, private SeasonServiceInterface $seasonService, private CombatLogDataExtractionServiceLoggingInterface $log)
     {
-        $this->combatLogService = $combatLogService;
-        $this->seasonService    = $seasonService;
-        $this->log              = $log;
     }
 
     /**
@@ -93,10 +75,8 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 }
 
                 $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en-US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
-            }
-
-            else if ($parsedEvent instanceof ZoneChange) {
-                if( $currentKeyLevel !== 1 ) {
+            } else if ($parsedEvent instanceof ZoneChange) {
+                if ($currentKeyLevel !== 1) {
                     $this->log->extractDataSetZoneFailedChallengeModeActive();
                 } else {
                     $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
@@ -162,7 +142,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
                         if ($npc->base_health !== $newBaseHealth) {
                             $npc->update([
-                                'base_health' => $newBaseHealth
+                                'base_health' => $newBaseHealth,
                             ]);
 
                             $result->updatedNpc();

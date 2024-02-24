@@ -17,7 +17,6 @@ class PatreonController extends Controller
     /**
      * Unlinks the user from Patreon.
      *
-     * @param Request $request
      * @return RedirectResponse
      */
     public function unlink(Request $request)
@@ -26,14 +25,12 @@ class PatreonController extends Controller
         optional(Auth::user()->patreonUserLink)->delete();
 
         Session::flash('status', __('controller.patreon.flash.unlink_successful'));
+
         return redirect()->route('profile.edit', ['#patreon']);
     }
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     * @param Request $request
-     * @param PatreonApiServiceInterface $patreonApiService
-     * @param PatreonServiceInterface $patreonService
      * @return RedirectResponse
      */
     public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService)
@@ -79,9 +76,7 @@ class PatreonController extends Controller
                     } else if (!isset($identityResponse['included'])) {
                         Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
                     } else {
-                        $member = collect($identityResponse['included'])->filter(function (array $included) {
-                            return $included['type'] === 'member';
-                        })->first();
+                        $member = collect($identityResponse['included'])->filter(fn(array $included) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
@@ -108,8 +103,6 @@ class PatreonController extends Controller
     }
 
     /**
-     * @param array $attributes
-     * @param User $user
      * @return PatreonUserLink
      */
     private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink

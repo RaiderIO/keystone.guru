@@ -35,8 +35,6 @@ class RefreshMembershipStatus extends Command
     /**
      * Execute the console command.
      *
-     * @param PatreonApiService $patreonApiService
-     * @param PatreonServiceInterface $patreonService
      * @return int
      */
     public function handle(PatreonApiService $patreonApiService, PatreonServiceInterface $patreonService): int

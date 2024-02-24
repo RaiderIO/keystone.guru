@@ -1,6 +1,6 @@
 <?php
 /** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
-$dungeonroute = $dungeonroute ?? null;
+$dungeonroute ??= null;
 $publicKey    = optional($dungeonroute)->public_key ?? 'auto';
 ?>
 

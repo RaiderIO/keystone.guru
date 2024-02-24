@@ -18,9 +18,7 @@ class NpcService implements NpcServiceInterface
             __($dungeon->name) => Npc::whereIn('dungeon_id', [$dungeon->id])
                 ->get(['name', 'id'])
                 ->pluck('name', 'id')
-                ->mapWithKeys(function ($name, $id) {
-                    return [$id => sprintf('%s (%d)', $name, $id)];
-                }),
+                ->mapWithKeys(fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
         ]);
 
         if ($includeAllDungeonsNpcs) {
@@ -28,9 +26,7 @@ class NpcService implements NpcServiceInterface
                 __('services.npcservice.all_dungeons') => Npc::whereIn('dungeon_id', [-1])
                     ->get(['name', 'id'])
                     ->pluck('name', 'id')
-                    ->mapWithKeys(function ($name, $id) {
-                        return [$id => sprintf('%s (%d)', $name, $id)];
-                    }),
+                    ->mapWithKeys(fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
             ]);
 
             $npcIds = $npcIds->merge($allDungeonNpcs);

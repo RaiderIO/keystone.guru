@@ -27,8 +27,8 @@ class InviteEvent extends ContextEvent
      * Create a new event instance.
      *
      * @param LiveSession $liveSession
-     * @param User $user
-     * @param Collection $invitees
+     * @param User        $user
+     * @param Collection  $invitees
      * @return void
      */
     public function __construct(LiveSession $liveSession, User $user, Collection $invitees)

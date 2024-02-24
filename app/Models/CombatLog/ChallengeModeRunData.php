@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $challenge_mode_run_id
- * @property string $run_id
- * @property string $correlation_id
- * @property string $post_body
+ * @property int              $id
+ * @property int              $challenge_mode_run_id
+ * @property string           $run_id
+ * @property string           $correlation_id
+ * @property string           $post_body
  *
  * @property ChallengeModeRun $challengeModeRun
  *

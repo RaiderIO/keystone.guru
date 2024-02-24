@@ -39,8 +39,6 @@ class RefreshAffixGroupEaseTiers extends Command
     /**
      * Execute the console command.
      *
-     * @param ArchonApiServiceInterface          $archonApiService
-     * @param AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
      * @return int
      */
     public function handle(

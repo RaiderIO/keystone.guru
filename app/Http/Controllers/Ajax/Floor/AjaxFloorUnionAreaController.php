@@ -20,10 +20,7 @@ use Throwable;
 class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @param FloorUnionAreaFormRequest $request
-     * @param MappingVersion $mappingVersion
      * @param FloorUnionArea|null $floorUnionArea
-     *
      * @return FloorUnionArea|Model
      * @throws Throwable
      */
@@ -41,9 +38,6 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request        $request
-     * @param FloorUnionArea $floorUnionArea
-     *
      * @return Response|ResponseFactory
      * @throws Throwable
      */
@@ -60,7 +54,7 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
                     }
                 }
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

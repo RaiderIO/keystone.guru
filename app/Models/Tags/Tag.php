@@ -45,7 +45,6 @@ class Tag extends Model
     }
 
     /**
-     * @param Builder  $query
      * @param int|null $categoryId
      * @return Builder
      */
@@ -64,25 +63,20 @@ class Tag extends Model
     public function getUsage(): Collection
     {
         $result = new Collection();
-        switch ($this->tagCategory->name) {
-            case TagCategory::DUNGEON_ROUTE_PERSONAL:
-            case TagCategory::DUNGEON_ROUTE_TEAM:
-                // Find all routes that match the name of this tag
-                $result = DungeonRoute::join('tags', 'tags.model_id', '=', 'dungeon_routes.id')
-                    ->where('tags.model_class', $this->model_class)
-                    ->where('tags.name', $this->name)
-                    ->where('tags.user_id', $this->user_id)
-                    ->where('tags.tag_category_id', $this->tag_category_id)
-                    ->get();
-                break;
-        }
+        $result = match ($this->tagCategory->name) {
+            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => DungeonRoute::join('tags', 'tags.model_id', '=', 'dungeon_routes.id')
+                ->where('tags.model_class', $this->model_class)
+                ->where('tags.name', $this->name)
+                ->where('tags.user_id', $this->user_id)
+                ->where('tags.tag_category_id', $this->tag_category_id)
+                ->get(),
+            default => $result,
+        };
 
         return $result;
     }
 
     /**
-     * @param TagFormRequest $request
-     * @param int            $tagCategoryId
      * @return Tag
      */
     public static function saveFromRequest(TagFormRequest $request, int $tagCategoryId): Tag

@@ -2,7 +2,9 @@
 
 namespace App\Service\AffixGroup\Exceptions;
 
-class InvalidResponseException extends \Exception
+use Exception;
+
+class InvalidResponseException extends Exception
 {
 
 }

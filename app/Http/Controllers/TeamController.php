@@ -35,7 +35,6 @@ use Teapot\StatusCode;
 class TeamController extends Controller
 {
     /**
-     * @param TeamFormRequest $request
      * @param Team|null $team
      * @return mixed
      * @throws Exception
@@ -90,8 +89,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
      * @return Application|ResponseFactory|RedirectResponse|Response
      * @throws AuthorizationException
      */
@@ -111,8 +108,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
      * @return RedirectResponse
      * @throws AuthorizationException
      */
@@ -122,7 +117,7 @@ class TeamController extends Controller
 
         try {
             $team->delete();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             abort(500);
         }
 
@@ -130,8 +125,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @param TeamFormRequest $request
-     * @param Team $team
      * @return Team|Factory|Builder|Model|RedirectResponse|View|object
      * @throws Exception
      */
@@ -150,7 +143,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @param TeamFormRequest $request
      * @return RedirectResponse
      * @throws Exception
      */
@@ -173,12 +165,11 @@ class TeamController extends Controller
     public function list()
     {
         $user = Auth::user();
+
         return view('team.list', ['models' => $user->teams]);
     }
 
     /**
-     * @param Request $request
-     * @param string $invitecode
      * @return Factory|View
      */
     public function invite(Request $request, string $invitecode)
@@ -201,8 +192,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param string $invitecode
      * @return Factory|View
      */
     public function inviteaccept(Request $request, string $invitecode)
@@ -225,7 +214,6 @@ class TeamController extends Controller
     /**
      * Creates a tag from the tag manager
      *
-     * @param TagFormRequest $request
      * @return RedirectResponse
      */
     public function createtag(TagFormRequest $request)

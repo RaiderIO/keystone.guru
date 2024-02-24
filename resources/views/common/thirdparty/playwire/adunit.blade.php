@@ -5,8 +5,8 @@
 /** @var bool $map */
 
 $id   = 'playwire-' . $id;
-$type = $type ?? 'responsive';
-$map  = $map ?? false;
+$type ??= 'responsive';
+$map  ??= false;
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 // A bit of a hacky solution but it'll work

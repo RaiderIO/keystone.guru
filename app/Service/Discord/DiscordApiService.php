@@ -19,6 +19,7 @@ class DiscordApiService implements DiscordApiServiceInterface
     public function sendMessage(string $webhookUrl, string $message, string $username = null, array $embeds = []): bool
     {
         $result = $this->curlPost($webhookUrl, ['message' => $message, 'username' => $username]);
+
         return true;
     }
 
@@ -30,6 +31,7 @@ class DiscordApiService implements DiscordApiServiceInterface
     public function sendEmbeds(string $webhookUrl, array $embeds): bool
     {
         $result = $this->curlPost($webhookUrl, ['embeds' => $embeds]);
+
         return true;
     }
 

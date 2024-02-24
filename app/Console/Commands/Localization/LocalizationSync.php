@@ -57,12 +57,6 @@ class LocalizationSync extends Command
         return 0;
     }
 
-    /**
-     * @param string $baseLang
-     * @param string $targetLang
-     * @param string $baseDir
-     * @param string $targetDir
-     */
     public function scanDir(string $baseLang, string $targetLang, string $baseDir, string $targetDir): void
     {
         foreach (scandir($baseDir) as $name) {
@@ -116,8 +110,6 @@ class LocalizationSync extends Command
      * If lemmas are given substitute them in the content
      * Otherwise extract lemmas from content
      *
-     * @param string $targetLang
-     * @param string $content
      * @param false|array $lemmas
      * @return string
      */
@@ -150,7 +142,7 @@ class LocalizationSync extends Command
 
                 $expects_key = true;
             } // array closing
-            else if (preg_match('#^\]#', $content, $match)) {
+            else if (preg_match('#^]#', $content, $match)) {
                 // there are no more open array, including top level
                 if (count($tree) < 1) {
                     return false;

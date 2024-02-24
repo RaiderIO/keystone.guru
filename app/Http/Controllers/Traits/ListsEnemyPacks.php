@@ -18,9 +18,6 @@ trait ListsEnemyPacks
     /**
      * Lists all enemy packs on a floor. If enemies = true, $teeming will return more points based on teeming enemies.
      *
-     * @param int $floorId
-     * @param bool $teeming
-     * @param bool $enemies
      * @return EnemyPack[]|Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     function listEnemyPacks(int $floorId, bool $enemies = true, bool $teeming = false): Collection

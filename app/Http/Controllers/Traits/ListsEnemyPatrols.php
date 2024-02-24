@@ -16,7 +16,6 @@ trait ListsEnemyPatrols
     /**
      * Lists all patrols of a floor.
      *
-     * @param int $floorId
      * @return Collection
      */
     function listEnemyPatrols(int $floorId): Collection

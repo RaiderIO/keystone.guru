@@ -8,9 +8,7 @@ use App\User;
 interface GameVersionServiceInterface
 {
     /**
-     * @param GameVersion $gameVersion
-     * @param User|null   $user
-     *
+     * @param User|null $user
      * @return void
      */
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void;

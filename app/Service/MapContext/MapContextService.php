@@ -17,22 +17,8 @@ use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 
 class MapContextService implements MapContextServiceInterface
 {
-    private CacheServiceInterface $cacheService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
-    private OverpulledEnemyServiceInterface $overpulledEnemyService;
-
-    /**
-     * @param CacheServiceInterface           $cacheService
-     * @param CoordinatesServiceInterface     $coordinatesService
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     */
-    public function __construct(CacheServiceInterface $cacheService, CoordinatesServiceInterface $coordinatesService, OverpulledEnemyServiceInterface $overpulledEnemyService)
+    public function __construct(private CacheServiceInterface $cacheService, private CoordinatesServiceInterface $coordinatesService, private OverpulledEnemyServiceInterface $overpulledEnemyService)
     {
-        $this->cacheService           = $cacheService;
-        $this->coordinatesService     = $coordinatesService;
-        $this->overpulledEnemyService = $overpulledEnemyService;
     }
 
     /**

@@ -27,11 +27,6 @@ class ExpansionSeason
     /** @var bool */
     private bool $isInfernal = false;
 
-    /**
-     * @param ExpansionServiceInterface $expansionService
-     * @param Expansion                 $expansion
-     * @param GameServerRegion          $gameServerRegion
-     */
     public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion)
     {
         $this->season = $expansionService->getCurrentSeason($expansion, $gameServerRegion);

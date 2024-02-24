@@ -21,7 +21,7 @@ class GameVersionService implements GameVersionServiceInterface
         if (!app()->runningInConsole()) {
             // Set the new cookie
             $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
-            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, 0, '/', null, true, false);
+            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, ['expires' => 0, 'path' => '/', 'domain' => null, 'secure' => true, 'httponly' => false]);
         }
     }
 

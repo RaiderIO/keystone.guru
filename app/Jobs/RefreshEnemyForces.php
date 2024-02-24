@@ -15,17 +15,11 @@ class RefreshEnemyForces implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /** @var int $dungeonRouteId */
-    private int $dungeonRouteId;
-
     /**
      * Create a new job instance.
-     *
-     * @param int $dungeonRouteId
      */
-    public function __construct(int $dungeonRouteId)
+    public function __construct(private int $dungeonRouteId)
     {
-        $this->dungeonRouteId = $dungeonRouteId;
     }
 
     /**

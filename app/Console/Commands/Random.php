@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
 use Illuminate\Console\Command;
 
@@ -72,6 +71,6 @@ class Random extends Command
 //        dd($echoServerHttpApiService->getChannelUsers('presence-local-route-edit.E2mXPo3'));
 //        dd($echoServerHttpApiService->getChannels());
 
-        return 0;
+//        return 0;
     }
 }

@@ -9,12 +9,14 @@
 namespace App\Logic\MDT\Exception;
 
 
+use Exception;
+
 /**
  * @package App\Logic\MDT\Exception
  * @author Wouter
  * @since 30/04/2021
  */
-class InvalidMDTStringException extends \Exception
+class InvalidMDTStringException extends Exception
 {
 
 }

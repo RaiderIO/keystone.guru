@@ -6,7 +6,6 @@ use App\Models\GameServerRegion;
 use App\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use SocialiteProviders\Battlenet\Provider;
 
 class BattleNetLoginController extends OAuthLoginController
@@ -46,6 +45,7 @@ class BattleNetLoginController extends OAuthLoginController
         }
 
         Provider::setRegion($region);
+
         return parent::redirectToProvider($request);
     }
 }

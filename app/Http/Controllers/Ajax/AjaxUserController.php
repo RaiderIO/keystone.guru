@@ -14,7 +14,6 @@ use Teapot\StatusCode;
 class AjaxUserController
 {
     /**
-     * @param Request $request
      * @return array|mixed
      * @throws Exception
      */
@@ -37,8 +36,6 @@ class AjaxUserController
     }
 
     /**
-     * @param UserFormRequest $request
-     * @param string          $publicKey
      * @return User
      */
     public function store(UserFormRequest $request, string $publicKey): User

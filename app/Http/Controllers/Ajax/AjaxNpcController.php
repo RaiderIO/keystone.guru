@@ -10,6 +10,7 @@ use App\Logic\Datatables\ColumnHandler\Npc\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -32,7 +33,7 @@ class AjaxNpcController extends Controller
             $this->mappingChanged($npc, null);
 
             $result = response()->noContent();
-        } catch (\Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -40,9 +41,8 @@ class AjaxNpcController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function list(Request $request)
     {
@@ -57,6 +57,7 @@ class AjaxNpcController extends Controller
 //            ->orderByDesc('mapping_versions.version');
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
+
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
             new IdColumnHandler($datatablesHandler),
             new NameColumnHandler($datatablesHandler),

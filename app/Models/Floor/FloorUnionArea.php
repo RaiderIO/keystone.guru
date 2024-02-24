@@ -78,8 +78,6 @@ class FloorUnionArea extends CacheModel implements MappingModelInterface, Mappin
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param LatLng                      $latLng
      * @return bool
      */
     public function containsPoint(CoordinatesServiceInterface $coordinatesService, LatLng $latLng): bool

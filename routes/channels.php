@@ -65,15 +65,13 @@ $dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonRout
 };
 
 Broadcast::channel(sprintf('%s-route-edit.{dungeonRoute}', config('app.type')), $dungeonRouteChannelCallback);
-Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), function (?User $user, LiveSession $liveSession) use ($dungeonRouteChannelCallback) {
+Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), fn(?User $user, LiveSession $liveSession) =>
     // Validate live sessions the same way as a dungeon route
-    return $dungeonRouteChannelCallback($user, $liveSession->dungeonroute);
-});
+    $dungeonRouteChannelCallback($user, $liveSession->dungeonroute));
 Broadcast::channel(sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', config('app.type')),
-    function (?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) use ($dungeonRouteChannelCallback) {
-    // Validate to see if both routes may be viewed by the user
-    return $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB);
-});
+    fn(?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) =>
+        // Validate to see if both routes may be viewed by the user
+        $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB));
 
 Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {
     $result = false;

@@ -6,14 +6,8 @@ use App\Service\Cache\CacheServiceInterface;
 
 class ReadOnlyModeService implements ReadOnlyModeServiceInterface
 {
-    private CacheServiceInterface $cacheService;
-
-    /**
-     * @param CacheServiceInterface $cacheService
-     */
-    public function __construct(CacheServiceInterface $cacheService)
+    public function __construct(private CacheServiceInterface $cacheService)
     {
-        $this->cacheService = $cacheService;
     }
 
 

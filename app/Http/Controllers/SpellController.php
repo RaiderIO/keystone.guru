@@ -18,7 +18,6 @@ class SpellController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     * @param Request $request
      * @return bool
      */
     private function isSaveAsNew(Request $request)
@@ -27,7 +26,6 @@ class SpellController extends Controller
     }
 
     /**
-     * @param SpellFormRequest $request
      * @param Spell|null $spell
      * @return array|mixed
      * @throws Exception
@@ -85,8 +83,6 @@ class SpellController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Spell $spell
      * @return Factory|View
      */
     public function edit(Request $request, Spell $spell)
@@ -101,8 +97,6 @@ class SpellController extends Controller
     /**
      * Override to give the type hint which is required.
      *
-     * @param SpellFormRequest $request
-     * @param Spell $spell
      * @return Factory|RedirectResponse|View
      * @throws Exception
      */
@@ -123,7 +117,6 @@ class SpellController extends Controller
     }
 
     /**
-     * @param SpellFormRequest $request
      * @return RedirectResponse
      * @throws Exception
      */

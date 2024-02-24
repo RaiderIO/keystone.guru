@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Floor;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\Floor\FloorFormRequest;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
@@ -17,7 +16,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 
 class FloorController extends Controller
@@ -25,10 +23,7 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param FloorFormRequest $request
-     * @param Dungeon          $dungeon
-     * @param Floor|null       $floor
-     *
+     * @param Floor|null $floor
      * @return Floor
      * @throws Exception
      */
@@ -79,8 +74,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
      *
      * @return Factory|View
      */
@@ -92,9 +85,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param Floor   $floor
      *
      * @return Application|Factory|RedirectResponse|View
      */
@@ -116,10 +106,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param Floor                      $floor
      *
      * @return Application|Factory|View|RedirectResponse
      */
@@ -148,9 +134,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param FloorFormRequest $request
-     * @param Dungeon          $dungeon
-     * @param Floor            $floor
      *
      * @return Factory|View
      * @throws Exception
@@ -168,9 +151,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param FloorFormRequest $request
-     * @param Dungeon          $dungeon
-     *
      * @return RedirectResponse
      * @throws Exception
      */

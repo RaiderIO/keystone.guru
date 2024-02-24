@@ -78,9 +78,6 @@ class Save extends Command
         return 0;
     }
 
-    /**
-     * @param string $dungeonDataDir
-     */
     private function saveMappingVersions(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
@@ -97,9 +94,6 @@ class Save extends Command
         );
     }
 
-    /**
-     * @param string $dungeonDataDir
-     */
     private function saveMappingCommitLogs(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
@@ -116,9 +110,6 @@ class Save extends Command
         );
     }
 
-    /**
-     * @param string $dungeonDataDir
-     */
     private function saveDungeons(string $dungeonDataDir)
     {
         // Save NPC data in the root of folder
@@ -210,8 +201,6 @@ class Save extends Command
     }
 
     /**
-     * @param Dungeon $dungeon
-     * @param string  $rootDirPath
      *
      * @return void
      */
@@ -301,8 +290,6 @@ class Save extends Command
     }
 
     /**
-     * @param Dungeon $dungeon
-     * @param string  $rootDirPath
      *
      * @return void
      */
@@ -322,8 +309,6 @@ class Save extends Command
     }
 
     /**
-     * @param Floor  $floor
-     * @param string $rootDirPath
      *
      * @return void
      */

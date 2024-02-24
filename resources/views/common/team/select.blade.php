@@ -1,11 +1,11 @@
 <?php
 /** @var $teams \Illuminate\Support\Collection|\App\Models\Team[] */
 
-$id       = $id ?? 'team_id_select';
-$name     = $name ?? 'team_id';
-$label    = $label ?? __('views/common.team.select.team');
-$required = $required ?? true;
-$selectedId = $selectedId ?? null;
+$id         ??= 'team_id_select';
+$name       ??= 'team_id';
+$label      ??= __('views/common.team.select.team');
+$required   ??= true;
+$selectedId ??= null;
 
 $teamsSelect = $teams->pluck('name', 'id')->toArray();
 if (!$required) {

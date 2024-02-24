@@ -40,30 +40,8 @@ use Ramsey\Uuid\Uuid;
 
 class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceInterface
 {
-    protected CombatLogService $combatLogService;
-
-    protected SeasonServiceInterface $seasonService;
-
-    protected CoordinatesServiceInterface $coordinatesService;
-
-    protected CreateRouteDungeonRouteServiceLoggingInterface $log;
-
-    /**
-     * @param CombatLogService                               $combatLogService
-     * @param SeasonServiceInterface                         $seasonService
-     * @param CoordinatesServiceInterface                    $coordinatesService
-     * @param CreateRouteDungeonRouteServiceLoggingInterface $log
-     */
-    public function __construct(
-        CombatLogService                               $combatLogService,
-        SeasonServiceInterface                         $seasonService,
-        CoordinatesServiceInterface                    $coordinatesService,
-        CreateRouteDungeonRouteServiceLoggingInterface $log
-    ) {
-        $this->combatLogService   = $combatLogService;
-        $this->seasonService      = $seasonService;
-        $this->coordinatesService = $coordinatesService;
-        $this->log                = $log;
+    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, protected CreateRouteDungeonRouteServiceLoggingInterface $log)
+    {
     }
 
     /**
@@ -111,14 +89,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(function (BaseResultEvent $resultEvent) {
-                return $resultEvent instanceof ChallengeModeStartResultEvent;
-            })->first()->getChallengeModeStartEvent();
+            $challengeModeStartEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
 
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(function (BaseResultEvent $resultEvent) {
-                return $resultEvent instanceof ChallengeModeEndResultEvent;
-            })->first()->getChallengeModeEndEvent();
+            $challengeModeEndEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
             $challengeMode = new CreateRouteChallengeMode(
                 $challengeModeStartEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
@@ -205,8 +179,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     * @param CreateRouteBody $createRouteBody
-     * @param DungeonRoute    $dungeonRoute
      *
      * @return void
      */
@@ -272,8 +244,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     * @param MappingVersion    $mappingVersion
-     * @param CreateRouteBody   $createRouteBody
      * @param DungeonRoute|null $dungeonRoute
      *
      * @return void

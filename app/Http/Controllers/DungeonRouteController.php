@@ -51,11 +51,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param Dungeon      $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string|null  $title
-     *
+     * @param string|null $title
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -76,12 +72,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param DungeonRoute               $dungeonroute
-     * @param string                     $title
-     * @param string                     $floorIndex
      *
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
@@ -113,7 +103,7 @@ class DungeonRouteController extends Controller
             // Find any currently active report the user has made
             $currentReport = UserReport::where('user_id', Auth::id())
                 ->where('model_id', $dungeonroute->id)
-                ->where('model_class', get_class($dungeonroute))
+                ->where('model_class', $dungeonroute::class)
                 ->where('category', 'dungeonroute')
                 ->where('status', 0)
                 ->first();
@@ -160,11 +150,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param Dungeon      $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string|null  $title
-     *
+     * @param string|null $title
      * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
@@ -185,12 +171,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param DungeonRoute               $dungeonroute
-     * @param string                     $title
-     * @param string                     $floorIndex
      *
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
@@ -266,12 +246,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param DungeonRoute               $dungeonroute
-     * @param string                     $title
-     * @param string                     $floorIndex
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
@@ -320,12 +294,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param ExpansionServiceInterface    $expansionService
-     * @param MigrateToSeasonalTypeRequest $request
-     * @param Dungeon                      $dungeon
-     * @param DungeonRoute                 $dungeonroute
-     * @param string                       $title
-     * @param string                       $seasonalType
      *
      * @return RedirectResponse
      * @throws AuthorizationException
@@ -346,11 +314,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRouteFormRequest   $request
-     * @param SeasonServiceInterface    $seasonService
-     * @param ExpansionServiceInterface $expansionService
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute|null         $dungeonroute
+     * @param DungeonRoute|null $dungeonroute
      *
      * @return DungeonRoute
      * @throws Exception
@@ -370,9 +334,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonServiceInterface           $seasonService
-     * @param ExpansionServiceInterface        $expansionService
      *
      * @return DungeonRoute
      * @throws Exception
@@ -390,11 +351,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                   $request
-     * @param Dungeon                   $dungeon
-     * @param DungeonRoute              $dungeonroute
-     * @param string                    $title
-     * @param ThumbnailServiceInterface $thumbnailService
      *
      * @return Application|RedirectResponse|Redirector
      * @throws AuthorizationException
@@ -421,10 +377,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param Dungeon      $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string       $title
      *
      * @return RedirectResponse
      */
@@ -441,12 +393,9 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param Dungeon      $dungeon
-     * @param DungeonRoute $dungeonroute
-     * @param string|null  $title
+     * @param string|null $title
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      * @throws InvalidArgumentException
      */
     public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
@@ -465,12 +414,8 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param DungeonRoute               $dungeonroute
-     * @param string|null                $title
-     * @param string|null                $floorIndex
+     * @param string|null $title
+     * @param string|null $floorIndex
      *
      * @return Factory|RedirectResponse|View
      * @throws AuthorizationException
@@ -538,10 +483,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param EmbedFormRequest           $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param DungeonRoute               $dungeonroute
-     * @param string                     $floorIndex
+     * @param DungeonRoute $dungeonroute
      *
      * @return Application|Factory|View
      * @throws AuthorizationException
@@ -613,13 +555,8 @@ class DungeonRouteController extends Controller
     /**
      * Override to give the type hint which is required.
      *
-     * @param DungeonRouteFormRequest   $request
-     * @param SeasonServiceInterface    $seasonService
-     * @param ExpansionServiceInterface $expansionService
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute              $dungeonroute
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
@@ -638,10 +575,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRouteFormRequest   $request
-     * @param SeasonServiceInterface    $seasonService
-     * @param ExpansionServiceInterface $expansionService
-     * @param ThumbnailServiceInterface $thumbnailService
      *
      * @return RedirectResponse
      * @throws Exception
@@ -662,9 +595,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRouteTemporaryFormRequest $request
-     * @param SeasonServiceInterface           $seasonService
-     * @param ExpansionServiceInterface        $expansionService
      *
      * @return RedirectResponse
      * @throws Exception
@@ -686,8 +616,6 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
-     * @param Dungeon                 $dungeon
-     * @param DungeonRoute            $dungeonroute
      * @param string|null             $title
      *
      * @return RedirectResponse

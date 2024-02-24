@@ -26,8 +26,6 @@ class DungeonCollectionResource extends ResourceCollection
      */
     public function toArray($request)
     {
-        return ['data' => $this->collection->map(function(Dungeon $dungeon){
-            return new DungeonResource($dungeon);
-        })];
+        return ['data' => $this->collection->map(fn(Dungeon $dungeon) => new DungeonResource($dungeon))];
     }
 }

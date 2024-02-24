@@ -27,18 +27,8 @@ use ZipArchive;
 
 class CombatLogService implements CombatLogServiceInterface
 {
-    private SeasonServiceInterface $seasonService;
-
-    private CombatLogServiceLoggingInterface $log;
-
-    /**
-     * @param SeasonServiceInterface           $seasonService
-     * @param CombatLogServiceLoggingInterface $log
-     */
-    public function __construct(SeasonServiceInterface $seasonService, CombatLogServiceLoggingInterface $log)
+    public function __construct(private SeasonServiceInterface $seasonService, private CombatLogServiceLoggingInterface $log)
     {
-        $this->seasonService = $seasonService;
-        $this->log           = $log;
     }
 
     /**
@@ -106,7 +96,7 @@ class CombatLogService implements CombatLogServiceInterface
             if ($parsedEvent instanceof ChallengeModeStartEvent) {
                 try {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeId())->firstOrFail();
-                } catch (Exception $exception) {
+                } catch (Exception) {
                     throw new DungeonNotSupportedException(
                         sprintf('Dungeon with challenge mode ID %d not found', $parsedEvent->getChallengeModeId())
                     );

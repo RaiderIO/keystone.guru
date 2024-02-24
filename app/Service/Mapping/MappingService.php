@@ -66,9 +66,7 @@ class MappingService implements MappingServiceInterface
         return $dungeonQueryBuilder
             ->whereNotNull('dungeon_id')
             ->get()
-            ->keyBy(function (Dungeon $dungeon) {
-                return $dungeon->id;
-            });
+            ->keyBy(fn(Dungeon $dungeon) => $dungeon->id);
     }
 
     /**

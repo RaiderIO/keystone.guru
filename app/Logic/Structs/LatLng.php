@@ -8,22 +8,11 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class LatLng implements Arrayable
 {
-    private float $lat;
-
-    private float $lng;
-
-    private ?Floor $floor;
-
     /**
-     * @param float      $lat
-     * @param float      $lng
      * @param Floor|null $floor
      */
-    public function __construct(float $lat = 0, float $lng = 0, ?Floor $floor = null)
+    public function __construct(private float $lat = 0, private float $lng = 0, private ?Floor $floor = null)
     {
-        $this->lat   = $lat;
-        $this->lng   = $lng;
-        $this->floor = $floor;
     }
 
     /**
@@ -35,8 +24,6 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param float $lat
-     *
      * @return LatLng
      */
     public function setLat(float $lat): LatLng
@@ -55,8 +42,6 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param float $lng
-     *
      * @return LatLng
      */
     public function setLng(float $lng): LatLng
@@ -87,10 +72,6 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param LatLng $currentMapCenter
-     * @param int    $currentMapSize
-     * @param LatLng $targetMapCenter
-     * @param int    $targetMapSize
      * @return $this
      */
     public function scale(LatLng $currentMapCenter, int $currentMapSize, LatLng $targetMapCenter, int $targetMapSize): self
@@ -115,8 +96,6 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param LatLng $centerLatLng
-     * @param float  $degrees
      * @return self
      */
     public function rotate(LatLng $centerLatLng, float $degrees): self

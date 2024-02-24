@@ -17,6 +17,6 @@ trait Reportable
      */
     public function userreports(): HasMany
     {
-        return $this->hasMany(UserReport::class, 'model_id')->where('model_class', get_class($this));
+        return $this->hasMany(UserReport::class, 'model_id')->where('model_class', $this::class);
     }
 }

@@ -22,10 +22,6 @@ use Teapot\StatusCode\Http;
 class AjaxOverpulledEnemyController extends Controller
 {
     /**
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param LiveSession $liveSession
      * @return array
      * @throws AuthorizationException
      */
@@ -68,10 +64,6 @@ class AjaxOverpulledEnemyController extends Controller
     }
 
     /**
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
      * @return array|ResponseFactory|Response
      * @throws AuthorizationException
      */
@@ -106,7 +98,7 @@ class AjaxOverpulledEnemyController extends Controller
                 // Optionally don't calculate the return value
                 $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Models\AffixGroup;
 
-use App;
 use App\Models\Affix;
 use App\Models\CacheModel;
 use Eloquent;
@@ -10,11 +9,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property int $id The ID of this Affix.
- * @property int $season_id
- * @property int $seasonal_index
- * @property int $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
- * @property string $text To string of the affix group
+ * @property int                $id The ID of this Affix.
+ * @property int                $season_id
+ * @property int                $seasonal_index
+ * @property int                $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
+ * @property string             $text To string of the affix group
  *
  * @property Collection|Affix[] $affixes
  *
@@ -22,10 +21,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 abstract class AffixGroupBase extends CacheModel
 {
-    public $timestamps = false;
-    public $with = ['affixes'];
-    public $hidden = ['pivot'];
-    protected $appends = ['text'];
+    public    $timestamps = false;
+    public    $with       = ['affixes'];
+    public    $hidden     = ['pivot'];
+    protected $appends    = ['text'];
 
     protected abstract function getAffixGroupCouplingsTableName(): string;
 
@@ -61,7 +60,6 @@ abstract class AffixGroupBase extends CacheModel
     }
 
     /**
-     * @param string $key
      * @return bool
      */
     public function hasAffix(string $key): bool

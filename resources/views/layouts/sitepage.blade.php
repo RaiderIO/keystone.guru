@@ -9,23 +9,23 @@
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Custom content or not
-$custom = $custom ?? false;
+$custom ??= false;
 // Wide mode or not (only relevant if custom = false)
-$wide = $wide ?? false;
+$wide ??= false;
 // Show header or not
-$header = $header ?? true;
+$header ??= true;
 // Show footer or not
-$footer = $footer ?? true;
+$footer ??= true;
 // Show ads if not set
-$showAds = $showAds ?? true;
+$showAds ??= true;
 // Any class to add to the root div
-$rootClass = $rootClass ?? '';
-$disableDefaultRootClasses = $disableDefaultRootClasses ?? false;
+$rootClass ??= '';
+$disableDefaultRootClasses ??= false;
 // Page title
-$title = $title ?? null;
+$title ??= null;
 // Breadcrumbs
-$breadcrumbs       = $breadcrumbs ?? $viewName;
-$breadcrumbsParams = $breadcrumbsParams ?? [];
+$breadcrumbs ??= $viewName;
+$breadcrumbsParams ??= [];
 ?>
 @extends('layouts.app', ['title' => $title])
 

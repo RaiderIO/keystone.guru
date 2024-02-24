@@ -41,11 +41,12 @@ class WowheadService implements WowheadServiceInterface
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (strpos($line, self::HEALTH_IDENTIFYING_TOKEN) === false) {
+            if (!str_contains($line, self::HEALTH_IDENTIFYING_TOKEN)) {
                 continue;
             }
 
             // Extract the html we want to parse
+            /** @noinspection HtmlUnknownAttribute */
             $html = sprintf('<table %s</table>', $this->getStringBetween($line, '<table', '</table>'));
 
             // Find the health value from this little html
@@ -68,7 +69,7 @@ class WowheadService implements WowheadServiceInterface
                         }
                     }
                 }
-            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException $e) {
+            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException) {
             }
         }
 
@@ -76,9 +77,6 @@ class WowheadService implements WowheadServiceInterface
     }
 
     /**
-     * @param string $string
-     * @param string $start
-     * @param string $end
      * @return false|string
      */
     private function getStringBetween(string $string, string $start, string $end)

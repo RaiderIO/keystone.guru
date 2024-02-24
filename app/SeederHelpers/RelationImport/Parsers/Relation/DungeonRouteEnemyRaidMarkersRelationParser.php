@@ -8,7 +8,6 @@ use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool

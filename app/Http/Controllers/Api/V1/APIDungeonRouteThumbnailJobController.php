@@ -18,8 +18,6 @@ class APIDungeonRouteThumbnailJobController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailJobEnvelope"))
      *     )
      *  )
-     *
-     * @param DungeonRouteThumbnailJob $dungeonRouteThumbnailJob
      * @return DungeonRouteThumbnailJobResource
      * @throws AuthorizationException
      */

@@ -8,7 +8,6 @@ use App\Models\DungeonRoute\DungeonRouteAttribute;
 class DungeonRouteAttributesRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool

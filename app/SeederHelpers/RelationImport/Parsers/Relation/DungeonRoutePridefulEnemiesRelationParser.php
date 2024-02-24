@@ -7,7 +7,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 class DungeonRoutePridefulEnemiesRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool
@@ -26,7 +25,7 @@ class DungeonRoutePridefulEnemiesRelationParser implements RelationParserInterfa
 
     /**
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @return bool
      */
     public function canParseRelation(string $name, array $value): bool
@@ -36,9 +35,9 @@ class DungeonRoutePridefulEnemiesRelationParser implements RelationParserInterfa
 
     /**
      * @param string $modelClassName
-     * @param array $modelData
+     * @param array  $modelData
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @return array
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array

@@ -9,15 +9,13 @@
  * @var bool                                                   $selectable
  */
 $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
-$selectable = $selectable ?? true;
-$route = $route ?? null;
-$routeParams = $routeParams ?? [];
-$linkMapFn = function(\App\Models\Dungeon $dungeon) use($route, $routeParams) {
-    return [
-        'dungeon' => $dungeon->key,
-        'link' => route($route, array_merge($routeParams, ['dungeon' => $dungeon]))
-    ];
-};
+$selectable       ??= true;
+$route            ??= null;
+$routeParams      ??= [];
+$linkMapFn        = fn(\App\Models\Dungeon $dungeon) => [
+    'dungeon' => $dungeon->key,
+    'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon]))
+];
 
 ?>
 <div id="{{ $id }}">

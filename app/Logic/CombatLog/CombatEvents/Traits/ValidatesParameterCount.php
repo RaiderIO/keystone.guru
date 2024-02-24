@@ -19,7 +19,6 @@ trait ValidatesParameterCount
     }
 
     /**
-     * @param array $parameters
      * @return void
      */
     public function validateParameters(array $parameters): void
@@ -29,7 +28,7 @@ trait ValidatesParameterCount
         if ($parameterCount < $this->getParameterCount() - $this->getOptionalParameterCount() ||
             $parameterCount > $this->getParameterCount()) {
             throw new InvalidArgumentException(
-                sprintf('Invalid parameter count for %s - wanted %d, got %d', get_class($this), $this->getParameterCount(), $parameterCount)
+                sprintf('Invalid parameter count for %s - wanted %d, got %d', $this::class, $this->getParameterCount(), $parameterCount)
             );
         }
     }

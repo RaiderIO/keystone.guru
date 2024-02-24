@@ -61,14 +61,8 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         2112,
     ];
 
-    protected Collection $resultEvents;
-
-    /**
-     * @param Collection $resultEvents
-     */
-    public function __construct(Collection $resultEvents)
+    public function __construct(protected Collection $resultEvents)
     {
-        $this->resultEvents = $resultEvents;
     }
 
     /**

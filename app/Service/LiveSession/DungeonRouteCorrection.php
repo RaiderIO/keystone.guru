@@ -31,17 +31,11 @@ class DungeonRouteCorrection
         return $this->obsoleteEnemies;
     }
 
-    /**
-     * @param int $enemyId
-     */
     public function addObsoleteEnemy(int $enemyId)
     {
         $this->obsoleteEnemies->push($enemyId);
     }
 
-    /**
-     * @param Collection $enemies
-     */
     public function addObsoleteEnemies(Collection $enemies)
     {
         $this->obsoleteEnemies = $this->obsoleteEnemies->merge($enemies);
@@ -57,12 +51,12 @@ class DungeonRouteCorrection
 
 
     /**
-     * @param int $enemyForces
      * @return DungeonRouteCorrection
      */
     public function setEnemyForces(int $enemyForces): DungeonRouteCorrection
     {
         $this->enemyForces = $enemyForces;
+
         return $this;
     }
 

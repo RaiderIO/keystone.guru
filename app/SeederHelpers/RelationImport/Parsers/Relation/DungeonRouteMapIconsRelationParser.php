@@ -9,7 +9,6 @@ use App\Models\MapObjectToAwakenedObeliskLink;
 class DungeonRouteMapIconsRelationParser implements RelationParserInterface
 {
     /**
-     * @param string $modelClassName
      * @return bool
      */
     public function canParseRootModel(string $modelClassName): bool
@@ -28,7 +27,7 @@ class DungeonRouteMapIconsRelationParser implements RelationParserInterface
 
     /**
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @return bool
      */
     public function canParseRelation(string $name, array $value): bool
@@ -38,9 +37,9 @@ class DungeonRouteMapIconsRelationParser implements RelationParserInterface
 
     /**
      * @param string $modelClassName
-     * @param array $modelData
+     * @param array  $modelData
      * @param string $name
-     * @param array $value
+     * @param array  $value
      * @return array
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
@@ -58,7 +57,7 @@ class DungeonRouteMapIconsRelationParser implements RelationParserInterface
             // Restore awakened obelisk data
             foreach ($awakenedObeliskLinkData as $data) {
                 $data['source_map_object_id']         = $mapIcon->id;
-                $data['source_map_object_class_name'] = get_class($mapIcon);
+                $data['source_map_object_class_name'] = $mapIcon::class;
                 MapObjectToAwakenedObeliskLink::insert($data);
             }
         }

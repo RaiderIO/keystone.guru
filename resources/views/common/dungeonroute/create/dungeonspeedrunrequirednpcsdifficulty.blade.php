@@ -1,11 +1,13 @@
 <?php
 
-/** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
-/** @var \App\Models\Dungeon[]|\Illuminate\Support\Collection $allSpeedrunDungeons */
-/** @var string $dungeonSelectId */
+/**
+ * @var \App\Models\DungeonRoute\DungeonRoute|null           $dungeonroute
+ * @var \App\Models\Dungeon[]|\Illuminate\Support\Collection $allSpeedrunDungeons
+ * @var string                                               $dungeonSelectId
+ **/
 
-$id           = $id ?? 'dungeon_speedrun_required_npc_mode';
-$dungeonroute = $dungeonroute ?? null;
+$id           ??= 'dungeon_speedrun_required_npc_mode';
+$dungeonroute ??= null;
 ?>
 @section('scripts')
     @parent

@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\Floor\Floor;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -17,9 +18,9 @@ use Symfony\Component\Process\Process;
 
 class ThumbnailService implements ThumbnailServiceInterface
 {
-    const THUMBNAIL_FOLDER_PATH = '/images/route_thumbnails';
+    public const THUMBNAIL_FOLDER_PATH = '/images/route_thumbnails';
 
-    const THUMBNAIL_CUSTOM_FOLDER_PATH = '/images/route_thumbnails_custom';
+    public const THUMBNAIL_CUSTOM_FOLDER_PATH = '/images/route_thumbnails_custom';
 
     /**
      * @inheritDoc
@@ -64,15 +65,12 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @param string       $targetFolder
-     * @param int|null     $viewportWidth
-     * @param int|null     $viewportHeight
-     * @param int|null     $imageWidth
-     * @param int|null     $imageHeight
-     * @param int|null     $zoomLevel
-     * @param int|null     $quality
+     * @param int|null $viewportWidth
+     * @param int|null $viewportHeight
+     * @param int|null $imageWidth
+     * @param int|null $imageHeight
+     * @param int|null $zoomLevel
+     * @param int|null $quality
      * @return bool
      */
     private function doCreateThumbnail(
@@ -92,11 +90,11 @@ class ThumbnailService implements ThumbnailServiceInterface
             return false;
         }
 
-        $viewportWidth  = $viewportWidth ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
-        $viewportHeight = $viewportHeight ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
-        $imageWidth     = $imageWidth ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
-        $imageHeight    = $imageHeight ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
-        $zoomLevel      = $zoomLevel ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
+        $viewportWidth  ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
+        $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
+        $imageWidth     ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
+        $imageHeight    ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
+        $zoomLevel      ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
 
 
         // 1. Headless chrome saves file in a temp location
@@ -265,8 +263,6 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
      * @return string
      */
     public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string
@@ -275,9 +271,6 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int          $floorIndex
-     * @param string       $targetFolder
      * @return string
      */
     public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder): string
@@ -299,8 +292,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         // Copy over all thumbnails
         foreach ($sourceDungeonRoute->dungeon->floors()->where('facade', 0)->get() as $floor) {
-            $sourcePath = $this->getTargetFilePath($sourceDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
-            $targetPath = $this->getTargetFilePath($targetDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
+            $sourcePath = static::getTargetFilePath($sourceDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
+            $targetPath = static::getTargetFilePath($targetDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
 
             if (!File::exists($sourcePath) || !File::exists($targetPath)) {
                 continue;
@@ -308,7 +301,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             try {
                 $result = $result && File::copy($sourcePath, $targetPath);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $result = false;
 
                 logger()->error($exception->getMessage(), [

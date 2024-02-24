@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $release_id
- * @property string $description
+ * @property int                                 $id
+ * @property int                                 $release_id
+ * @property string                              $description
  *
- * @property Release $release
+ * @property Release                             $release
  * @property ReleaseChangelogChange[]|Collection $changes
  *
  * @mixin Eloquent
@@ -23,7 +23,7 @@ class ReleaseChangelog extends CacheModel
     use SeederModel;
 
     protected $fillable = ['id', 'release_id', 'description'];
-    protected $with = ['changes'];
+    protected $with     = ['changes'];
 
     public $timestamps = false;
 

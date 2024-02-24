@@ -2,6 +2,7 @@
 
 namespace App\Logic\MDT\Entity;
 
+use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
 class MDTMapPOI implements Arrayable
@@ -35,8 +36,6 @@ class MDTMapPOI implements Arrayable
         self::TYPE_THE_UNDERROT_SKIP,
     ];
 
-    private int $subLevel;
-
     private string $template;
 
     private string $type;
@@ -51,32 +50,25 @@ class MDTMapPOI implements Arrayable
 
     private float $y;
 
-    private array $rawMapPOI;
-
     /**
-     * @param int $subLevel
-     * @param array $rawMapPOI
-     * @throws \Exception
+     * @throws Exception
      */
-    public function __construct(int $subLevel, array $rawMapPOI)
+    public function __construct(private int $subLevel, private array $rawMapPOI)
     {
-        $this->subLevel  = $subLevel;
-        $this->rawMapPOI = $rawMapPOI;
-
-        $this->template        = $rawMapPOI['template'];
-        $this->type            = $rawMapPOI['type'];
-        $this->target          = $rawMapPOI['target'] ?? 0;
-        $this->direction       = $rawMapPOI['direction'] ?? 0;
-        $this->connectionIndex = $rawMapPOI['connectionIndex'] ?? 0;
-        $this->x               = $rawMapPOI['x'];
-        $this->y               = $rawMapPOI['y'];
+        $this->template        = $this->rawMapPOI['template'];
+        $this->type            = $this->rawMapPOI['type'];
+        $this->target          = $this->rawMapPOI['target'] ?? 0;
+        $this->direction       = $this->rawMapPOI['direction'] ?? 0;
+        $this->connectionIndex = $this->rawMapPOI['connectionIndex'] ?? 0;
+        $this->x               = $this->rawMapPOI['x'];
+        $this->y               = $this->rawMapPOI['y'];
 
         if (!in_array($this->template, self::ALL_TEMPLATES)) {
-            throw new \Exception(sprintf('Found new template %s - we need to add it!', $this->template));
+            throw new Exception(sprintf('Found new template %s - we need to add it!', $this->template));
         }
 
         if (!in_array($this->type, self::ALL_TYPES)) {
-            throw new \Exception(sprintf('Found new type %s - we need to add it!', $this->type));
+            throw new Exception(sprintf('Found new type %s - we need to add it!', $this->type));
         }
     }
 

@@ -162,7 +162,6 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     }
 
 
-
     /**
      * @param int|null $enemyId
      * @param float    $distanceBetweenEnemies

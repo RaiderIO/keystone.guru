@@ -29,7 +29,6 @@ class MappingChangeLog extends Model
     protected $fillable = ['dungeon_id', 'model_id', 'model_class', 'before_model', 'after_model'];
 
     /**
-     * @param MappingCommitLog $mostRecentMappingCommitLog
      * @return bool
      */
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool

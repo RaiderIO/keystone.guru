@@ -4,13 +4,13 @@ namespace App\Logic\CombatLog\Guid;
 
 class Creature extends Guid
 {
-    const CREATURE_UNIT_TYPE_CREATURE    = 'Creature';
-    const CREATURE_UNIT_TYPE_PET         = 'Pet';
-    const CREATURE_UNIT_TYPE_GAME_OBJECT = 'GameObject';
-    const CREATURE_UNIT_TYPE_VEHICLE     = 'Vehicle';
+    public const CREATURE_UNIT_TYPE_CREATURE    = 'Creature';
+    public const CREATURE_UNIT_TYPE_PET         = 'Pet';
+    public const CREATURE_UNIT_TYPE_GAME_OBJECT = 'GameObject';
+    public const CREATURE_UNIT_TYPE_VEHICLE     = 'Vehicle';
 
     private string $unitType;
-    
+
     private int $unknown1;
 
     private int $serverId;
@@ -45,6 +45,7 @@ class Creature extends Guid
     {
         return $this->unitType;
     }
+
     /**
      * @return int
      */

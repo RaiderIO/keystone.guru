@@ -9,8 +9,6 @@ use Mockery\Exception;
 trait PublicKeyDungeonRoute
 {
     /**
-     * @param string $publicKey
-     * @param bool $auth
      * @return DungeonRoute
      * @throws Exception
      */

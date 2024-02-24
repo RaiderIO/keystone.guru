@@ -17,7 +17,6 @@ class CacheService implements CacheServiceInterface
     private bool $cacheEnabled = true;
 
     /**
-     * @param string $key
      * @return DateInterval|null
      */
     private function getTtl(string $key): ?DateInterval
@@ -34,19 +33,20 @@ class CacheService implements CacheServiceInterface
     public function setCacheEnabled(bool $cacheEnabled): CacheService
     {
         $this->cacheEnabled = $cacheEnabled;
+
         return $this;
     }
 
     /**
      * Remembers a value with a specific key if a condition is met
-     * @param bool $condition
-     * @param string $key
-     * @param Closure|mixed $value
+     * @param bool                     $condition
+     * @param string                   $key
+     * @param Closure|mixed            $value
      * @param string|null|DateInterval $ttl
      * @return Closure|mixed|null
      * @throws InvalidArgumentException
      */
-    public function rememberWhen(bool $condition, string $key, $value, $ttl = null)
+    public function rememberWhen(bool $condition, string $key, $value, $ttl = null): mixed
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
@@ -58,12 +58,12 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string $key
-     * @param Closure|mixed $value
+     * @param string                   $key
+     * @param Closure|mixed            $value
      * @param string|null|DateInterval $ttl
      * @return mixed
      */
-    public function remember(string $key, $value, $ttl = null)
+    public function remember(string $key, $value, $ttl = null): mixed
     {
         $result = null;
 
@@ -80,7 +80,7 @@ class CacheService implements CacheServiceInterface
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }
-                // If not overridden, get the TTL from config, if it's set anyways
+                // If not overridden, get the TTL from config, if it's set anyway
                 try {
                     if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
                         $result = $value;
@@ -104,14 +104,14 @@ class CacheService implements CacheServiceInterface
      * @param string $key
      * @return mixed
      */
-    public function get(string $key)
+    public function get(string $key): mixed
     {
         return Cache::get($key);
     }
 
     /**
-     * @param string $key
-     * @param $object
+     * @param string                   $key
+     * @param                          $object
      * @param string|null|DateInterval $ttl
      * @return bool
      * @throws InvalidArgumentException
@@ -122,7 +122,6 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string $key
      * @return bool
      * @throws InvalidArgumentException
      */
@@ -142,6 +141,7 @@ class CacheService implements CacheServiceInterface
 
     /**
      *
+     * @throws InvalidArgumentException
      */
     public function dropCaches(): void
     {

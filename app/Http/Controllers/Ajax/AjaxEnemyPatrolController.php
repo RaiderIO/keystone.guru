@@ -23,10 +23,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     use SavesPolylines;
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param EnemyPatrolFormRequest      $request
-     * @param MappingVersion              $mappingVersion
-     * @param EnemyPatrol|null            $enemyPatrol
+     * @param EnemyPatrol|null $enemyPatrol
      * @return EnemyPatrol|Model
      * @throws Throwable
      */
@@ -71,8 +68,6 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request     $request
-     * @param EnemyPatrol $enemyPatrol
      * @return array|ResponseFactory|Response
      */
     function delete(Request $request, EnemyPatrol $enemyPatrol)
@@ -87,7 +82,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 $this->mappingChanged($enemyPatrol, null);
             }
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

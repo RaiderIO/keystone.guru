@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Release;
 
 use App\Models\Release;
+use Exception;
 use Illuminate\Console\Command;
 
 class GetReleaseBody extends Command
@@ -35,32 +36,25 @@ class GetReleaseBody extends Command
      * Execute the console command.
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
         $version  = $this->argument('version');
         $platform = $this->argument('platform');
 
-        if (substr($version, 0, 1) !== 'v') {
+        if (!str_starts_with($version, 'v')) {
             $version = 'v' . $version;
         }
 
         /** @var Release $release */
         $release = Release::where('version', $version)->first();
 
-        switch ($platform) {
-            case 'github':
-                $this->line($release->github_body);
-                break;
-            case 'reddit':
-                $this->line($release->reddit_body);
-                break;
-            case 'discord':
-                $this->line($release->discord_body);
-                break;
-            default:
-                throw new \Exception(sprintf('Unsupport platform %s', $platform));
-        }
+        match ($platform) {
+            'github' => $this->line($release->github_body),
+            'reddit' => $this->line($release->reddit_body),
+            'discord' => $this->line($release->discord_body),
+            default => throw new Exception(sprintf('Unsupport platform %s', $platform)),
+        };
     }
 }

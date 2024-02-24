@@ -30,30 +30,8 @@ use InvalidArgumentException;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {
-    protected CombatLogService $combatLogService;
-
-    protected SeasonServiceInterface $seasonService;
-
-    protected CoordinatesServiceInterface $coordinatesService;
-
-    private CombatLogDungeonRouteServiceLoggingInterface $log;
-
-    /**
-     * @param CombatLogService                             $combatLogService
-     * @param SeasonServiceInterface                       $seasonService
-     * @param CoordinatesServiceInterface                  $coordinatesService
-     * @param CombatLogDungeonRouteServiceLoggingInterface $log
-     */
-    public function __construct(
-        CombatLogService                             $combatLogService,
-        SeasonServiceInterface                       $seasonService,
-        CoordinatesServiceInterface                  $coordinatesService,
-        CombatLogDungeonRouteServiceLoggingInterface $log
-    ) {
-        $this->combatLogService   = $combatLogService;
-        $this->seasonService      = $seasonService;
-        $this->coordinatesService = $coordinatesService;
-        $this->log                = $log;
+    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, private CombatLogDungeonRouteServiceLoggingInterface $log)
+    {
     }
 
     /**
@@ -139,7 +117,6 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
     /**
      * @param Collection|BaseResultEvent[] $resultEvents
-     * @param DungeonRoute                 $dungeonRoute
      * @return void
      */
     private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
@@ -222,10 +199,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param MappingVersion               $mappingVersion
      * @param Collection|BaseResultEvent[] $resultEvents
      * @param DungeonRoute|null            $dungeonRoute
-     *
      * @return void
      */
     private function generateMapIconsFromEvents(

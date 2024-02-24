@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Team;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +16,7 @@ class TeamFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::check();
+        return Auth::check();
     }
 
     /**

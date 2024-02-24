@@ -70,7 +70,6 @@ class AjaxDungeonRouteController extends Controller
     use ListsDungeonFloorSwitchMarkers;
 
     /**
-     * @param Request $request
      * @return mixed
      * @throws Exception
      */
@@ -214,8 +213,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param APIDungeonRouteSearchFormRequest $request
-     * @param ExpansionServiceInterface        $expansionService
      * @return Response|string
      * @throws Exception
      */
@@ -240,13 +237,9 @@ class AjaxDungeonRouteController extends Controller
                                      'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-            ->when($expansion !== null, function (Builder $builder) use ($expansion) {
-                return $builder->where('dungeons.expansion_id', $expansion->id);
-            })
-            ->when($season !== null, function (Builder $builder) use ($season) {
-                return $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeon_routes.dungeon_id')
-                    ->where('season_dungeons.season_id', $season->id);
-            })
+            ->when($expansion !== null, fn(Builder $builder) => $builder->where('dungeons.expansion_id', $expansion->id))
+            ->when($season !== null, fn(Builder $builder) => $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeon_routes.dungeon_id')
+                ->where('season_dungeons.season_id', $season->id))
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function ($query) {
@@ -357,10 +350,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                   $request
-     * @param string                    $category
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
      * @return Response|string
      */
     public function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
@@ -444,11 +433,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param APIDungeonRouteFormRequest $request
-     * @param SeasonService              $seasonService
-     * @param ExpansionServiceInterface  $expansionService
-     * @param ThumbnailServiceInterface  $thumbnailService
-     * @param DungeonRoute|null          $dungeonRoute
+     * @param DungeonRoute|null $dungeonRoute
      * @return DungeonRoute
      * @throws AuthorizationException
      */
@@ -474,9 +459,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request       $request
-     * @param SeasonService $seasonService
-     * @param DungeonRoute  $dungeonRoute
      *
      * @return Response
      * @throws AuthorizationException
@@ -497,8 +479,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
      */
@@ -514,9 +494,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param PublishFormRequest $request
-     * @param DungeonRoute       $dungeonRoute
-     *
      * @return Response
      * @throws Exception
      */
@@ -540,10 +517,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                   $request
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute              $dungeonRoute
-     * @param Team                      $team
      * @return Response
      * @throws AuthorizationException
      */
@@ -564,10 +537,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param ExpansionServiceInterface $expansionService
-     * @param Request                   $request
-     * @param DungeonRoute              $dungeonRoute
-     * @param string                    $seasonalType
      * @return Application|ResponseFactory|Response
      * @throws AuthorizationException
      */
@@ -585,8 +554,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws Exception
      */
@@ -610,8 +577,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
      * @return array
      * @throws Exception
      */
@@ -634,8 +599,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
      */
@@ -653,8 +616,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
      * @return Response
      * @throws Exception
      */
@@ -674,8 +635,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param string  $publickey
      * @return array
      * @throws Exception
      */
@@ -734,9 +693,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                         $request
-     * @param MDTExportStringServiceInterface $mdtExportStringService
-     * @param DungeonRoute                    $dungeonRoute
      * @return array|void
      * @throws AuthorizationException
      * @throws Throwable
@@ -778,9 +734,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param APISimulateFormRequest     $request
-     * @param RaidEventsServiceInterface $raidEventsService
-     * @param DungeonRoute               $dungeonRoute
      * @return array
      * @throws AuthorizationException
      */
@@ -798,9 +751,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param Request                   $request
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRoute              $dungeonroute
      * @return Response
      */
     public function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
@@ -811,8 +761,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @param APIDungeonRouteDataFormRequest $request
-     * @param CoordinatesServiceInterface    $coordinatesService
      * @return Collection
      */
     public function getDungeonRoutesData(APIDungeonRouteDataFormRequest $request, CoordinatesServiceInterface $coordinatesService): Collection

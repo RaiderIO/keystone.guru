@@ -17,7 +17,7 @@ class MapIconRelationMapping extends RelationMapping
         parent::__construct('map_icons.json', MapIcon::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
     }
 }

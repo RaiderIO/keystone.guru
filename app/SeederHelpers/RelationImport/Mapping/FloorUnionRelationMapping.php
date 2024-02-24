@@ -17,7 +17,7 @@ class FloorUnionRelationMapping extends RelationMapping
         parent::__construct('floor_unions.json', FloorUnion::class);
 
         $this->setConditionals(collect([
-            new MappingVersionConditional()
+            new MappingVersionConditional(),
         ]));
     }
 }

@@ -24,20 +24,15 @@ use Illuminate\Support\Collection;
  */
 class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 {
-    /** @var Collection|BaseResultEvent[] */
-    private Collection $resultEvents;
-
     private ResultEventDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
         CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute $dungeonRoute,
-        Collection $resultEvents
-    )
-    {
+        DungeonRoute                $dungeonRoute,
+        /** @var Collection|BaseResultEvent[] */
+        private Collection          $resultEvents
+    ) {
         parent::__construct($coordinatesService, $dungeonRoute);
-
-        $this->resultEvents = $resultEvents;
 
         /** @var ResultEventDungeonRouteBuilderLoggingInterface $log */
         $log       = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
@@ -178,7 +173,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
-     * @param EnemyEngaged $enemyEngaged
      * @return ActivePullEnemy
      */
     private function createActivePullEnemy(EnemyEngaged $enemyEngaged): ActivePullEnemy

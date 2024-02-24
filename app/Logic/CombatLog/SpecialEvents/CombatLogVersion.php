@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\CombatLogVersion as CombatLogVersionConstant;
+use Exception;
 
 /**
  * COMBAT_LOG_VERSION,20,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,10.1.0,PROJECT_ID,1
@@ -57,7 +58,7 @@ class CombatLogVersion extends SpecialEvent
     /**
      * @param array $parameters
      * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public function setParameters(array $parameters): self
     {
@@ -69,7 +70,7 @@ class CombatLogVersion extends SpecialEvent
         $this->projectID          = $parameters[6];
 
         if (!isset(CombatLogVersionConstant::ALL[$this->version])) {
-            throw new \Exception(sprintf('Unable to find combat log version %d!', $this->version));
+            throw new Exception(sprintf('Unable to find combat log version %d!', $this->version));
         }
 
         return $this;

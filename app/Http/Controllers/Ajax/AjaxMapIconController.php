@@ -7,7 +7,6 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
@@ -37,11 +36,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MapIconFormRequest          $request
-     * @param MappingVersion|null         $mappingVersion
-     * @param ?DungeonRoute               $dungeonRoute
-     * @param MapIcon|null                $mapIcon
+     * @param MappingVersion|null $mappingVersion
+     * @param MapIcon|null        $mapIcon
      * @return MapIcon|Model
      * @throws AuthorizationException
      * @throws Throwable
@@ -124,9 +120,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request           $request
      * @param DungeonRoute|null $dungeonRoute
-     * @param MapIcon           $mapIcon
      * @return array|ResponseFactory|Response
      * @throws Exception
      */
@@ -162,7 +156,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             } else {
                 $result = ['result' => 'error'];
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -170,9 +164,6 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MapIconFormRequest $request
-     * @param MappingVersion $mappingVersion
      * @param MapIcon|null $mapIcon
      * @return MapIcon
      * @throws AuthorizationException
@@ -189,8 +180,6 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
 
     /**
-     * @param Request $request
-     * @param MapIcon $mapIcon
      * @return array|ResponseFactory|Response
      * @throws Exception
      */

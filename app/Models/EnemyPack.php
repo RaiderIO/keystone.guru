@@ -87,8 +87,6 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
     }
 
     /**
-     * @param string $seasonalType
-     *
      * @return Collection|Enemy[]
      */
     public function getEnemiesWithSeasonalType(string $seasonalType): Collection

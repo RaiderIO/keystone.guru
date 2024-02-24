@@ -10,7 +10,7 @@
  * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
  * @var $edit bool
  */
-$echo        = $echo ?? false;
+$echo        ??= false;
 $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 ?>

@@ -222,7 +222,6 @@ class User extends Authenticatable
     /**
      * Checks if this user has paid for a certain tier one way or the other.
      *
-     * @param string $key
      *
      * @return bool
      */
@@ -320,7 +319,7 @@ class User extends Authenticatable
         foreach ($this->teams as $team) {
             try {
                 $newOwner = $team->getNewAdminUponAdminAccountDeletion($this);
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 $newOwner = null;
             }
             /** @var $team Team */

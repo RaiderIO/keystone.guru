@@ -29,9 +29,7 @@ trait SeederModel
 //        static::saving($fixDbTableFn);
 
         // This model may NOT be deleted, it's read only!
-        static::deleting(function (Model $model) {
-            // Only these may be deleted!
-            return $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy;
-        });
+        static::deleting(fn(Model $model) => // Only these may be deleted!
+            $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy);
     }
 }
