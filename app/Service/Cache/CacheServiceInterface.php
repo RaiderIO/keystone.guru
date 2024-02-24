@@ -7,11 +7,11 @@ interface CacheServiceInterface
 {
     public function setCacheEnabled(bool $cacheEnabled): self;
 
-    public function rememberWhen(bool $condition, string $key, $value, $ttl = null);
+    public function rememberWhen(bool $condition, string $key, $value, $ttl = null): mixed;
 
-    public function remember(string $key, $value, $ttl = null);
+    public function remember(string $key, $value, $ttl = null): mixed;
 
-    public function get(string $key);
+    public function get(string $key): mixed;
 
     public function set(string $key, $object, $ttl = null): bool;
 
