@@ -41,6 +41,18 @@
                     "reference": "90ca82cff5abf838775bd7b8ceb02c489faefe31"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "paquettg/php-html-parser-php-8-fix",
+                "version": "3.1",
+                "source": {
+                    "url": "git@github.com:Wotuu/php-html-parser.git",
+                    "type": "git",
+                    "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
+                }
+            }
         }
     ],
     "require": {
@@ -57,6 +69,7 @@
         "fakerphp/faker": "^1.23",
         "genealabs/laravel-model-caching": "^0.11.1",
         "geoip2/geoip2": "~2.0",
+        "graham-campbell/github": "^12.4",
         "intervention/image": "^2.5",
         "jenssegers/agent": "^2.6",
         "laravel-frontend-presets/argon": "^1.0",
@@ -69,10 +82,9 @@
         "laravelcollective/html": "6.3.*",
         "marvinlabs/laravel-discord-logger": "^1.1",
         "nnoggie/mythicdungeontools": "4.3.3.5",
-        "paquettg/php-html-parser": "^3.0",
+        "paquettg/php-html-parser-php-8-fix": "^3.1",
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.0",
-        "php-http/guzzle6-adapter": "^2.0",
         "predis/predis": "^1.1",
         "santigarcor/laratrust": "^7.1",
         "shrikeh/teapot": "^2.3",
@@ -90,6 +102,7 @@
         "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^9.0",
+        "rector/rector": "^1.0",
         "wotuu/keystone.guru.deployer": "0.1"
     },
     "autoload": {
@@ -119,7 +132,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "php-http/discovery": true
         }
     }
 }
