@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61a8f86894cd447b80ab0dada076203d",
+    "content-hash": "f33b7daf44ed983ed1a91e77ad3e7309",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -5478,27 +5478,28 @@
         },
         {
             "name": "predis/predis",
-            "version": "v1.1.10",
+            "version": "v2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "a2fb02d738bedadcffdbb07efa3a5e7bd57f8d6e"
+                "reference": "b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/a2fb02d738bedadcffdbb07efa3a5e7bd57f8d6e",
-                "reference": "a2fb02d738bedadcffdbb07efa3a5e7bd57f8d6e",
+                "url": "https://api.github.com/repos/predis/predis/zipball/b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1",
+                "reference": "b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9"
+                "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8"
+                "friendsofphp/php-cs-fixer": "^3.3",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
             },
             "suggest": {
-                "ext-curl": "Allows access to Webdis when paired with phpiredis",
-                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+                "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
             },
             "type": "library",
             "autoload": {
@@ -5512,18 +5513,12 @@
             ],
             "authors": [
                 {
-                    "name": "Daniele Alessandri",
-                    "email": "suppakilla@gmail.com",
-                    "homepage": "http://clorophilla.net",
-                    "role": "Creator & Maintainer"
-                },
-                {
                     "name": "Till Krüss",
                     "homepage": "https://till.im",
                     "role": "Maintainer"
                 }
             ],
-            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "description": "A flexible and feature-complete Redis client for PHP.",
             "homepage": "http://github.com/predis/predis",
             "keywords": [
                 "nosql",
@@ -5532,7 +5527,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v1.1.10"
+                "source": "https://github.com/predis/predis/tree/v2.2.2"
             },
             "funding": [
                 {
@@ -5540,7 +5535,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-05T17:46:08+00:00"
+            "time": "2023-09-13T16:42:03+00:00"
         },
         {
             "name": "psr/cache",
@@ -6476,21 +6471,21 @@
         },
         {
             "name": "socialiteproviders/discord",
-            "version": "4.1.1",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SocialiteProviders/Discord.git",
-                "reference": "c6eddeb07ace7473e82d02d4db852dfacf5ef574"
+                "reference": "c71c379acfdca5ba4aa65a3db5ae5222852a919c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SocialiteProviders/Discord/zipball/c6eddeb07ace7473e82d02d4db852dfacf5ef574",
-                "reference": "c6eddeb07ace7473e82d02d4db852dfacf5ef574",
+                "url": "https://api.github.com/repos/SocialiteProviders/Discord/zipball/c71c379acfdca5ba4aa65a3db5ae5222852a919c",
+                "reference": "c71c379acfdca5ba4aa65a3db5ae5222852a919c",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.2 || ^8.0",
+                "php": "^7.4 || ^8.0",
                 "socialiteproviders/manager": "~4.0"
             },
             "type": "library",
@@ -6510,10 +6505,19 @@
                 }
             ],
             "description": "Discord OAuth2 Provider for Laravel Socialite",
+            "keywords": [
+                "discord",
+                "laravel",
+                "oauth",
+                "provider",
+                "socialite"
+            ],
             "support": {
-                "source": "https://github.com/SocialiteProviders/Discord/tree/4.1.1"
+                "docs": "https://socialiteproviders.com/discord",
+                "issues": "https://github.com/socialiteproviders/providers/issues",
+                "source": "https://github.com/socialiteproviders/providers"
             },
-            "time": "2021-01-05T22:03:58+00:00"
+            "time": "2023-07-24T23:28:47+00:00"
         },
         {
             "name": "socialiteproviders/manager",
@@ -6591,20 +6595,20 @@
         },
         {
             "name": "spatie/macroable",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/macroable.git",
-                "reference": "7a99549fc001c925714b329220dea680c04bfa48"
+                "reference": "ec2c320f932e730607aff8052c44183cf3ecb072"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/macroable/zipball/7a99549fc001c925714b329220dea680c04bfa48",
-                "reference": "7a99549fc001c925714b329220dea680c04bfa48",
+                "url": "https://api.github.com/repos/spatie/macroable/zipball/ec2c320f932e730607aff8052c44183cf3ecb072",
+                "reference": "ec2c320f932e730607aff8052c44183cf3ecb072",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0"
+                "php": "^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.0|^9.3"
@@ -6635,31 +6639,31 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/macroable/issues",
-                "source": "https://github.com/spatie/macroable/tree/1.0.1"
+                "source": "https://github.com/spatie/macroable/tree/2.0.0"
             },
-            "time": "2020-11-03T10:15:05+00:00"
+            "time": "2021-03-26T22:39:02+00:00"
         },
         {
             "name": "spatie/url",
-            "version": "1.3.5",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/url.git",
-                "reference": "3633de58e0709ea98cecceff61ee51caf1fde7e3"
+                "reference": "ae324f5f77290827d66486fc88aa2c9373bc2170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/url/zipball/3633de58e0709ea98cecceff61ee51caf1fde7e3",
-                "reference": "3633de58e0709ea98cecceff61ee51caf1fde7e3",
+                "url": "https://api.github.com/repos/spatie/url/zipball/ae324f5f77290827d66486fc88aa2c9373bc2170",
+                "reference": "ae324f5f77290827d66486fc88aa2c9373bc2170",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0",
-                "psr/http-message": "^1.0",
-                "spatie/macroable": "^1.0.1"
+                "php": "^8.0",
+                "psr/http-message": "^1.0 || ^2.0",
+                "spatie/macroable": "^2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0|^9.3"
+                "pestphp/pest": "^1.21"
             },
             "type": "library",
             "autoload": {
@@ -6687,9 +6691,19 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/url/issues",
-                "source": "https://github.com/spatie/url/tree/1.3.5"
+                "source": "https://github.com/spatie/url/tree/2.3.0"
             },
-            "time": "2020-11-03T10:36:20+00:00"
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-01-05T10:09:13+00:00"
         },
         {
             "name": "stella-maris/clock",
