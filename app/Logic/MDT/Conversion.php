@@ -19,7 +19,7 @@ use Exception;
 class Conversion
 {
     public const EXPANSION_NAME_MAPPING = [
-        Expansion::EXPANSION_CLASSIC      => null,
+        Expansion::EXPANSION_CLASSIC      => 'ClassicEra',
         Expansion::EXPANSION_TBC          => null,
         Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
         Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',
@@ -32,7 +32,34 @@ class Conversion
     ];
 
     public const DUNGEON_NAME_MAPPING = [
-        Expansion::EXPANSION_WOTLK => [
+        Expansion::EXPANSION_CLASSIC => [
+            Dungeon::DUNGEON_BLACKFATHOM_DEEPS           => 'BlackfathomDeeps',
+            Dungeon::DUNGEON_BLACKROCK_DEPTHS            => 'BlackrockDepths',
+            Dungeon::DUNGEON_DEADMINES                   => 'Deadmines',
+            Dungeon::DUNGEON_DIRE_MAUL_WEST              => 'DireMaulWest',
+            Dungeon::DUNGEON_DIRE_MAUL_NORTH             => 'DireMaulNorth',
+            Dungeon::DUNGEON_DIRE_MAUL_EAST              => 'DireMaulEast',
+            Dungeon::DUNGEON_GNOMEREGAN                  => 'Gnomeregan',
+            Dungeon::DUNGEON_LOWER_BLACKROCK_SPIRE       => 'LowerBlackrockSpire',
+            Dungeon::DUNGEON_MARAUDON                    => 'Maraudon',
+            Dungeon::DUNGEON_RAGEFIRE_CHASM              => 'RagefireChasm',
+            Dungeon::DUNGEON_RAZORFEN_DOWNS              => 'RazorfenDowns',
+            Dungeon::DUNGEON_RAZORFEN_KRAUL              => 'RazorfenKraul',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_ARMORY    => 'ScarletMonasteryArmory',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_CATHEDRAL => 'ScarletMonasteryCathedral',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_LIBRARY   => 'ScarletMonasteryLibrary',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_GRAVEYARD => 'ScarletMonasteryGraveyard',
+            Dungeon::DUNGEON_SCHOLOMANCE                 => 'Scholomance',
+            Dungeon::DUNGEON_SHADOWFANG_KEEP             => 'ShadowfangKeep',
+            Dungeon::DUNGEON_STRATHOLME                  => 'Stratholme',
+            Dungeon::DUNGEON_THE_STOCKADE                => 'TheStockade',
+            Dungeon::DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   => 'TheTempleOfAtalHakkar',
+            Dungeon::DUNGEON_ULDAMAN                     => 'Uldaman',
+            Dungeon::DUNGEON_UPPER_BLACKROCK_SPIRE       => 'UpperBlackrockSpire',
+            Dungeon::DUNGEON_WAILING_CAVERNS             => 'WailingCaverns',
+            Dungeon::DUNGEON_ZUL_FARRAK                  => 'ZulFarrak',
+        ],
+        Expansion::EXPANSION_WOTLK   => [
             Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
             Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
             Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
