@@ -13,7 +13,8 @@ use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
+use Intervention\Image\ImageManager;
 use Symfony\Component\Process\Process;
 
 class ThumbnailService implements ThumbnailServiceInterface
@@ -148,7 +149,10 @@ class ThumbnailService implements ThumbnailServiceInterface
 
                     // Rescale it
                     Log::channel('scheduler')->info(sprintf('Scaling and moving image from %s to %s', $tmpFile, $target));
-                    Image::configure(['driver' => 'imagick'])->make($tmpFile)->resize($imageWidth, $imageHeight)->save($target, $quality);
+                    (new ImageManager(new ImagickDriver()))
+                        ->read($tmpFile)
+                        ->resize($imageWidth, $imageHeight)
+                        ->save($target, $quality);
 
                     // Remove any old .png file that may be there
                     $oldPngFilePath = str_replace('.jpg', '.png', $target);
