@@ -36,7 +36,7 @@ class SeasonServiceTest extends PublicTestCase
         parent::__construct($name, $data, $dataName);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

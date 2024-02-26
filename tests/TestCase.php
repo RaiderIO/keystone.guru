@@ -10,7 +10,7 @@ abstract class TestCase extends BaseTestCase
     use Bootstrap;
     use Shutdown;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-//    public function tearDown(): void
+//    protected function tearDown(): void
 //    {
 //        parent::tearDown();
 //

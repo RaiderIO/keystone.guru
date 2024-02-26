@@ -10,7 +10,7 @@ class MappingVersionTestBase extends AjaxPublicTestCase
 {
     protected MappingVersion $mappingVersion;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

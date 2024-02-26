@@ -9,7 +9,7 @@ class DungeonRouteTestBase extends AjaxPublicTestCase
 {
     protected DungeonRoute $dungeonRoute;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

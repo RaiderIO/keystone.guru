@@ -6,7 +6,7 @@ use App\User;
 
 class AjaxPublicTestCase extends PublicTestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
