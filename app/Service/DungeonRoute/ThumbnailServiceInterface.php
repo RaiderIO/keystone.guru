@@ -15,30 +15,30 @@ interface ThumbnailServiceInterface
      */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,
-        ?int $viewportWidth = null,
-        ?int $viewportHeight = null,
-        ?int $imageWidth = null,
-        ?int $imageHeight = null,
-        ?int $zoomLevel = null,
-        ?int $quality = null
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
+        ?int         $zoomLevel = null,
+        ?int         $quality = null
     ): Collection;
 
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
-        int $floorIndex,
-        int $attempts
+        int          $floorIndex,
+        int          $attempts
     ): bool;
 
     public function createThumbnailCustom(
         DungeonRoute $dungeonRoute,
-        int $floorIndex,
-        int $attempts,
-        ?int $viewportWidth = null,
-        ?int $viewportHeight = null,
-        ?int $imageWidth = null,
-        ?int $imageHeight = null,
-        ?int $zoomLevel = null,
-        ?int $quality = null
+        int          $floorIndex,
+        int          $attempts,
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
+        ?int         $zoomLevel = null,
+        ?int         $quality = null
     ): bool;
 
     /**

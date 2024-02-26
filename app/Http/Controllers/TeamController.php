@@ -44,13 +44,13 @@ class TeamController extends Controller
         $new = $team === null;
 
         if ($new) {
-            $team = new Team();
-            $team->name = $request->get('name');
+            $team             = new Team();
+            $team->name       = $request->get('name');
             $team->public_key = Team::generateRandomPublicKey();
         }
 
-        $team->description = $request->get('description');
-        $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
+        $team->description  = $request->get('description');
+        $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
         // Update or insert it
@@ -101,10 +101,10 @@ class TeamController extends Controller
 
         return view('team.edit', [
             'userHasAdFreeTeamMembersPatreonBenefit' => $user->hasPatreonBenefit(PatreonBenefit::AD_FREE_TEAM_MEMBERS),
-            'userAdFreeTeamMembersRemaining' => PatreonAdFreeGiveaway::getCountLeft($user),
-            'userAdFreeTeamMembersMax' => config('keystoneguru.patreon.ad_free_giveaways'),
-            'userIsModerator' => $team->isUserModerator($user),
-            'team' => $team,
+            'userAdFreeTeamMembersRemaining'         => PatreonAdFreeGiveaway::getCountLeft($user),
+            'userAdFreeTeamMembersMax'               => config('keystoneguru.patreon.ad_free_giveaways'),
+            'userIsModerator'                        => $team->isUserModerator($user),
+            'team'                                   => $team,
         ]);
     }
 
@@ -179,7 +179,7 @@ class TeamController extends Controller
     public function invite(Request $request, string $invitecode)
     {
         /** @var Team $team */
-        $team = Team::where('invite_code', $invitecode)->first();
+        $team   = Team::where('invite_code', $invitecode)->first();
         $result = null;
 
         if ($team !== null) {
@@ -226,7 +226,7 @@ class TeamController extends Controller
 
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
 
-        if (! Tag::where('name', $request->get('tag_name_new'))
+        if (!Tag::where('name', $request->get('tag_name_new'))
             ->where('user_id', Auth::id())
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {

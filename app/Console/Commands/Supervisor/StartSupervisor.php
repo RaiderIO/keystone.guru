@@ -44,7 +44,7 @@ class StartSupervisor extends Command
 
         $appType = config('app.type');
         // Local environments don't call it local, but empty instead
-        $appType = $appType === 'local' ? '' : '-'.$appType;
+        $appType = $appType === 'local' ? '' : '-' . $appType;
 
         $this->shell([
             'sudo supervisorctl reread',

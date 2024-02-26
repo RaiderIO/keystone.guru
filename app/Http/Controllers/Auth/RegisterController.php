@@ -57,11 +57,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|alpha_dash|max:32|unique:users',
-            'email' => 'required|email|max:255|unique:users',
+            'name'                  => 'required|alpha_dash|max:32|unique:users',
+            'email'                 => 'required|email|max:255|unique:users',
             'game_server_region_id' => 'nullable|int',
-            'password' => 'required|min:8|confirmed',
-            'legal_agreed' => 'required|accepted',
+            'password'              => 'required|min:8|confirmed',
+            'legal_agreed'          => 'required|accepted',
         ], [
             'legal_agreed.required' => __('controller.register.legal_agreed_required'),
             'legal_agreed.accepted' => __('controller.register.legal_agreed_accepted'),
@@ -80,14 +80,14 @@ class RegisterController extends Controller
 
         /** @var User $user */
         $user = User::create([
-            'public_key' => User::generateRandomPublicKey(),
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'echo_color' => randomHexColor(),
+            'public_key'            => User::generateRandomPublicKey(),
+            'name'                  => $data['name'],
+            'email'                 => $data['email'],
+            'echo_color'            => randomHexColor(),
             'game_server_region_id' => $data['region'] ?? GameServerRegion::DEFAULT_REGION,
-            'password' => bcrypt($data['password']),
-            'legal_agreed' => $data['legal_agreed'],
-            'legal_agreed_ms' => intval($data['legal_agreed_ms']),
+            'password'              => bcrypt($data['password']),
+            'legal_agreed'          => $data['legal_agreed'],
+            'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);
 
         $user->attachRole($userRole);

@@ -78,7 +78,7 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         $result = clone $latLng;
         // Nothing to do if facade is not enabled - the coordinates are the same always
-        if (! $mappingVersion->dungeon->facade_enabled) {
+        if (!$mappingVersion->dungeon->facade_enabled) {
             return $result;
         }
 
@@ -231,11 +231,11 @@ class CoordinatesService implements CoordinatesServiceInterface
         if ($polygon[0] != $polygon[count($polygon) - 1]) {
             $polygon[] = $polygon[0];
         }
-        $j = 0;
+        $j        = 0;
         $oddNodes = false;
-        $lat = $latLng->getLat();
-        $lng = $latLng->getLng();
-        $n = count($polygon);
+        $lat      = $latLng->getLat();
+        $lng      = $latLng->getLng();
+        $n        = count($polygon);
         for ($i = 0; $i < $n; $i++) {
             $j++;
             if ($j == $n) {
@@ -245,7 +245,7 @@ class CoordinatesService implements CoordinatesServiceInterface
                         $lng))) {
                 if ($polygon[$i]['lat'] + ($lng - $polygon[$i]['lng']) / ($polygon[$j]['lng'] - $polygon[$i]['lng']) * ($polygon[$j]['lat'] -
                         $polygon[$i]['lat']) < $lat) {
-                    $oddNodes = ! $oddNodes;
+                    $oddNodes = !$oddNodes;
                 }
             }
         }

@@ -12,17 +12,17 @@ use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 
 /**
- * @property int $id
- * @property int $release_changelog_id
- * @property string $version
- * @property string $title
- * @property bool $silent
- * @property bool $spotlight
- * @property Carbon $updated_at
- * @property Carbon $created_at
- * @property string $github_body
- * @property string $discord_body
- * @property string $reddit_body
+ * @property int              $id
+ * @property int              $release_changelog_id
+ * @property string           $version
+ * @property string           $title
+ * @property bool             $silent
+ * @property bool             $spotlight
+ * @property Carbon           $updated_at
+ * @property Carbon           $created_at
+ * @property string           $github_body
+ * @property string           $discord_body
+ * @property string           $reddit_body
  * @property ReleaseChangelog $changelog
  *
  * @mixin Eloquent
@@ -71,23 +71,23 @@ class Release extends CacheModel
      */
     public function getDiscordBodyAttribute(): string
     {
-        $body = trim(view('app.release.discord', [
-            'model' => $this,
+        $body       = trim(view('app.release.discord', [
+            'model'   => $this,
             'mention' => $this->isMajorUpgrade(),
         ])->render());
         $bodyLength = strlen($body);
 
-        $footer = trim(view('app.release.discord_footer', [
-            'homeUrl' => route('home'),
+        $footer       = trim(view('app.release.discord_footer', [
+            'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
-            'affixesUrl' => route('misc.affixes'),
-            'newRouteUrl' => route('dungeonroute.new'),
-            'patreonUrl' => 'https://www.patreon.com/keystoneguru',
+            'affixesUrl'   => route('misc.affixes'),
+            'newRouteUrl'  => route('dungeonroute.new'),
+            'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
         $footerLength = strlen($footer);
 
         // Subtract additional characters to account for the strings added below, to make sure the footer doesn't get cut into
-        $truncatedBody = substr($body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT - 50 - $footerLength);
+        $truncatedBody       = substr($body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT - 50 - $footerLength);
         $truncatedBodyLength = strlen($truncatedBody);
 
         if ($bodyLength !== $truncatedBodyLength) {
@@ -156,14 +156,14 @@ class Release extends CacheModel
 
         return [
             [
-                'color' => 14641434, // '#DF691A'
-                'title' => $this->getFormattedTitle(),
+                'color'       => 14641434, // '#DF691A'
+                'title'       => $this->getFormattedTitle(),
                 'description' => substr($this->discord_body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT),
-                'url' => sprintf('%s/release/%s', config('app.url'), $this->version),
-                'timestamp' => Carbon::now()->toIso8601String(),
-                'footer' => [
+                'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
+                'timestamp'   => Carbon::now()->toIso8601String(),
+                'footer'      => [
                     'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
-                    'text' => 'Keystone.guru Discord Bot',
+                    'text'     => 'Keystone.guru Discord Bot',
                 ],
             ],
         ];

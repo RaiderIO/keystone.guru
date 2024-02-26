@@ -13,7 +13,7 @@ class DebugBarMessageLogger
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -25,12 +25,12 @@ class DebugBarMessageLogger
             if (class_exists('Debugbar')) {
                 Debugbar::info('Counter details');
                 foreach (Counter::getAll() as $counter) {
-                    Debugbar::info('- '.$counter);
+                    Debugbar::info('- ' . $counter);
                 }
 
                 Debugbar::info('Stopwatch details');
                 foreach (Stopwatch::getAll() as $key => $time) {
-                    Debugbar::info('- '.$key.' -> '.$time);
+                    Debugbar::info('- ' . $key . ' -> ' . $time);
                 }
             }
         }

@@ -36,7 +36,7 @@ class AssignMDTIDs extends Command
 
         foreach ($mappingVersions as $mappingVersion) {
             if ($mappingVersion->dungeon->expansion->shortname === Expansion::EXPANSION_WOTLK) {
-                $index = 1;
+                $index   = 1;
                 $enemies = $mappingVersion->enemies->sortBy('npc_id');
 
                 if ($enemies->isEmpty()) {
@@ -44,7 +44,7 @@ class AssignMDTIDs extends Command
                     continue;
                 }
 
-                if ($enemies->filter(fn (Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
+                if ($enemies->filter(fn(Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
                     $this->comment(
                         sprintf('- Skipping dungeon %s - already assigned has assigned MDT IDs', __($mappingVersion->dungeon->name, [], 'en-US'))
                     );
@@ -58,7 +58,7 @@ class AssignMDTIDs extends Command
                 foreach ($enemies as $enemy) {
 
                     if ($previousNpcId !== $enemy->npc_id) {
-                        $index = 1;
+                        $index         = 1;
                         $previousNpcId = $enemy->npc_id;
                     }
 

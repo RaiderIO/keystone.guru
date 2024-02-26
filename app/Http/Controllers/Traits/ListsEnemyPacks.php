@@ -28,14 +28,14 @@ trait ListsEnemyPacks
             $result = EnemyPack::with(['enemies' => function ($query) use ($teeming) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 // Only include teeming enemies when requested
-                if (! $teeming) {
+                if (!$teeming) {
                     $query->whereNull('teeming');
                 }
                 $query->select(['id', 'enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
             }]);
         } else {
             $fields[] = 'vertices_json';
-            $result = EnemyPack::query();
+            $result   = EnemyPack::query();
         }
 
         return $result->where('floor_id', $floorId)->get($fields);

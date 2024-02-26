@@ -6,7 +6,7 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
- * @property int $id
+ * @property int    $id
  * @property string $key
  * @property string $name
  * @property string $category
@@ -50,17 +50,17 @@ class ReleaseChangelogCategory extends CacheModel
     public const API_CHANGES = 'api_changes';
 
     public const ALL = [
-        self::GENERAL_CHANGES => 1,
-        self::ROUTE_CHANGES => 2,
-        self::MAP_CHANGES => 3,
-        self::MAPPING_CHANGES => 4,
-        self::BUGFIXES => 5,
-        self::MDT_IMPORTER_CHANGES => 6,
-        self::TEAM_CHANGES => 7,
-        self::MDT_EXPORTER_CHANGES => 8,
-        self::LIVE_SESSION_CHANGES => 9,
+        self::GENERAL_CHANGES          => 1,
+        self::ROUTE_CHANGES            => 2,
+        self::MAP_CHANGES              => 3,
+        self::MAPPING_CHANGES          => 4,
+        self::BUGFIXES                 => 5,
+        self::MDT_IMPORTER_CHANGES     => 6,
+        self::TEAM_CHANGES             => 7,
+        self::MDT_EXPORTER_CHANGES     => 8,
+        self::LIVE_SESSION_CHANGES     => 9,
         self::SIMULATION_CRAFT_CHANGES => 10,
-        self::AUTO_ROUTE_CHANGES => 11,
-        self::API_CHANGES => 12,
+        self::AUTO_ROUTE_CHANGES       => 11,
+        self::API_CHANGES              => 12,
     ];
 }

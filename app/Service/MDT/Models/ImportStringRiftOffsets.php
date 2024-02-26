@@ -13,15 +13,15 @@ class ImportStringRiftOffsets
     private readonly Collection $paths;
 
     public function __construct(
-        private readonly Collection $warnings,
-        private readonly Dungeon $dungeon,
+        private readonly Collection     $warnings,
+        private readonly Dungeon        $dungeon,
         private readonly MappingVersion $mappingVersion,
-        private readonly ?int $seasonalIndex,
-        private readonly array $riftOffsets,
-        private readonly int $week
+        private readonly ?int           $seasonalIndex,
+        private readonly array          $riftOffsets,
+        private readonly int            $week
     ) {
         $this->mapIcons = collect();
-        $this->paths = collect();
+        $this->paths    = collect();
     }
 
     public function getWarnings(): Collection

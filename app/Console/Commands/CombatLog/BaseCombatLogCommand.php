@@ -17,7 +17,7 @@ abstract class BaseCombatLogCommand extends Command
             $this->info(sprintf('%s is a dir, parsing all files in the dir..', $filePath));
             foreach (glob(sprintf('%s/*', $filePath)) as $filePath) {
                 // While have a successful result, keep parsing
-                if (! is_file($filePath)) {
+                if (!is_file($filePath)) {
                     continue;
                 }
 

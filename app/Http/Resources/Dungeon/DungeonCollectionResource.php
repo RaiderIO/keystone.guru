@@ -20,11 +20,11 @@ class DungeonCollectionResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
     {
-        return ['data' => $this->collection->map(fn (Dungeon $dungeon) => new DungeonResource($dungeon))];
+        return ['data' => $this->collection->map(fn(Dungeon $dungeon) => new DungeonResource($dungeon))];
     }
 }

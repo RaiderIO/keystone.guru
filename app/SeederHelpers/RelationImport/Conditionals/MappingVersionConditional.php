@@ -4,7 +4,6 @@ namespace App\SeederHelpers\RelationImport\Conditionals;
 
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Models\Mapping\MappingVersion;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
 use Exception;
 use Illuminate\Support\Collection;
@@ -26,7 +25,7 @@ class MappingVersionConditional implements ConditionalInterface
 
     public function __construct()
     {
-        $this->floorCache = collect();
+        $this->floorCache   = collect();
         $this->dungeonCache = collect();
     }
 

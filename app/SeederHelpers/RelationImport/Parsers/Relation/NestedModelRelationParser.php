@@ -23,8 +23,8 @@ class NestedModelRelationParser implements RelationParserInterface
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         // Converts a relation like this: enemy: { id: 1, <otherattributes> } to enemy_id: 1 for saving
-        if (! isset($modelData[$name.'_id'])) {
-            $modelData[$name.'_id'] = $value['id'];
+        if (!isset($modelData[$name . '_id'])) {
+            $modelData[$name . '_id'] = $value['id'];
         }
 
         return $modelData;

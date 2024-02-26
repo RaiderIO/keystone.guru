@@ -34,9 +34,9 @@ abstract class SpellBase extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->extraSpellId = $parameters[0];
+        $this->extraSpellId   = $parameters[0];
         $this->extraSpellName = $parameters[1];
-        $this->extraSchool = $parameters[2];
+        $this->extraSchool    = $parameters[2];
 
         return $this;
     }

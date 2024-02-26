@@ -55,30 +55,30 @@ class AdminToolsController extends Controller
     }
 
     public function combatlog(
-        MapContextServiceInterface $mapContextService,
+        MapContextServiceInterface              $mapContextService,
         ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService
     ): View {
         try {
             $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
-                //                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
-                //                    '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip',
+            //                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
+            //                    '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip',
                 base_path(
-                    //                    'WoWCombatLog-050923_172619_7_freehold.zip'
-                    //                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
-                    //                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
-                    //                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
-                    //                    'WoWCombatLog-051223_185606_14_brackenhide-hollow.zip'
-                    //                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
-                    //                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
-                    //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
-                    //                'WoWCombatLog-051323_095734_13_neltharus.zip',
-                    //                'WoWCombatLog-060223_181049_20_neltharus.zip'
+                //                    'WoWCombatLog-050923_172619_7_freehold.zip'
+                //                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
+                //                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
+                //                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
+                //                    'WoWCombatLog-051223_185606_14_brackenhide-hollow.zip'
+                //                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
+                //                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
+                //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
+                //                'WoWCombatLog-051323_095734_13_neltharus.zip',
+                //                'WoWCombatLog-060223_181049_20_neltharus.zip'
                     'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip',
-                    //                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold_events.txt'
-                    //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
-                    //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
-                    //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
-                    //                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
+                //                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold_events.txt'
+                //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
+                //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
+                //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
+                //                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
                 )
             );
         } catch (Exception $exception) {
@@ -96,12 +96,12 @@ class AdminToolsController extends Controller
         $floor = $dungeonRoute->dungeon->floors()->first();
 
         return view('dungeonroute.edit', [
-            'dungeon' => $dungeonRoute->dungeon,
+            'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
-            'title' => $dungeonRoute->getTitleSlug(),
-            'floor' => $floor,
-            'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonRoute, $floor),
-            'floorindex' => 1,
+            'title'        => $dungeonRoute->getTitleSlug(),
+            'floor'        => $floor,
+            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, $floor),
+            'floorindex'   => 1,
         ]);
     }
 
@@ -121,7 +121,7 @@ class AdminToolsController extends Controller
         $importString = $request->get('import_string');
 
         // Correct the string since wowhead sucks
-        $importString = str_replace('[Listview.extraCols.popularity]', '["Listview.extraCols.popularity"]', (string) $importString);
+        $importString = str_replace('[Listview.extraCols.popularity]', '["Listview.extraCols.popularity"]', (string)$importString);
 
         $decoded = json_decode($importString, true);
 
@@ -130,23 +130,23 @@ class AdminToolsController extends Controller
         // Wowhead type => keystone.guru type
         $npcTypeMapping = [
             15 => NpcType::ABERRATION,
-            1 => NpcType::BEAST,
-            8 => NpcType::CRITTER,
-            3 => NpcType::DEMON,
-            2 => NpcType::DRAGONKIN,
-            4 => NpcType::ELEMENTAL,
-            5 => NpcType::GIANT,
-            7 => NpcType::HUMANOID,
-            9 => NpcType::MECHANICAL,
-            6 => NpcType::UNDEAD,
+            1  => NpcType::BEAST,
+            8  => NpcType::CRITTER,
+            3  => NpcType::DEMON,
+            2  => NpcType::DRAGONKIN,
+            4  => NpcType::ELEMENTAL,
+            5  => NpcType::GIANT,
+            7  => NpcType::HUMANOID,
+            9  => NpcType::MECHANICAL,
+            6  => NpcType::UNDEAD,
             10 => NpcType::UNCATEGORIZED,
             // 12 => NpcType::BATTLE_PET,
         ];
 
         $aggressivenessMapping = [
             -1 => 'aggressive',
-            0 => 'neutral',
-            1 => 'friendly',
+            0  => 'neutral',
+            1  => 'friendly',
         ];
 
         $classificationMapping = [
@@ -171,13 +171,13 @@ class AdminToolsController extends Controller
                     continue;
                 }
 
-                if (! isset($npcTypeMapping[$npcData['type']])) {
+                if (!isset($npcTypeMapping[$npcData['type']])) {
                     $log[] = sprintf('*** Unable to find npc type %s; npc %s (%s) NOT added; needs manual work', $npcData['type'], $npcData['id'], $npcData['name']);
 
                     continue;
                 }
 
-                $npcCandidate->id = $npcData['id'];
+                $npcCandidate->id                = $npcData['id'];
                 $npcCandidate->classification_id = $classificationMapping[($npcData['classification'] ?? 0) + ($npcData['boss'] ?? 0) + 1];
                 // Bosses
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
@@ -186,7 +186,7 @@ class AdminToolsController extends Controller
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
                 $npcCandidate->dungeon_id = count($npcData['location']) > 1 ? -1 : $dungeon->id;
-                $npcCandidate->name = $npcData['name'];
+                $npcCandidate->name       = $npcData['name'];
                 // Do not overwrite health if it was set already
                 if ($npcCandidate->base_health <= 0) {
                     $npcCandidate->base_health = 12345;
@@ -248,13 +248,13 @@ class AdminToolsController extends Controller
     {
         $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
             ->get()
-            ->mapWithKeys(fn (MappingVersion $mappingVersion) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
-            ->groupBy(fn (int $count, string $key) => $count === 0, true);
+            ->mapWithKeys(fn(MappingVersion $mappingVersion) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
+            ->groupBy(fn(int $count, string $key) => $count === 0, true);
 
         return view('admin.tools.dungeonroute.mappingversions', [
             'mappingVersionUsage' => collect([
                 'unused' => $mappingVersionUsage[1],
-                'used' => $mappingVersionUsage[0],
+                'used'   => $mappingVersionUsage[0],
             ]),
         ]);
     }
@@ -272,7 +272,7 @@ class AdminToolsController extends Controller
      */
     public function enemyforcesimportsubmit(Request $request)
     {
-        $json = json_decode((string) $request->get('import_string'), true);
+        $json = json_decode((string)$request->get('import_string'), true);
 
         $results = [];
         foreach ($json['Npcs'] as $jsonNpc) {
@@ -281,7 +281,7 @@ class AdminToolsController extends Controller
             if ($npc !== null) {
                 $keyMapping = [
                     'MythicHealth' => 'base_health',
-                    'Amount' => 'enemy_forces',
+                    'Amount'       => 'enemy_forces',
                 ];
 
                 $toUpdate = [];
@@ -314,11 +314,11 @@ class AdminToolsController extends Controller
      */
     public function enemyforcesrecalculatesubmit(Request $request)
     {
-        $dungeonId = (int) $request->get('dungeon_id');
+        $dungeonId = (int)$request->get('dungeon_id');
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->select('id')
-            ->when($dungeonId !== -1, fn (Builder $builder) => $builder->where('dungeon_id', $dungeonId));
+            ->when($dungeonId !== -1, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId));
 
         $count = 0;
         foreach ($builder->get() as $dungeonRoute) {
@@ -344,19 +344,19 @@ class AdminToolsController extends Controller
     {
         set_time_limit(3600);
 
-        $dungeonId = (int) $request->get('dungeon_id');
-        $onlyMissing = (int) $request->get('only_missing');
+        $dungeonId   = (int)$request->get('dungeon_id');
+        $onlyMissing = (int)$request->get('only_missing');
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->with('dungeon')
-            ->when($dungeonId !== -1, fn (Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->when($dungeonId !== -1, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->orderByDesc('created_at');
 
-        $successCount = 0;
-        $failureCount = 0;
+        $successCount  = 0;
+        $failureCount  = 0;
         $dungeonRoutes = $builder->get();
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $shouldRefresh = ! $onlyMissing || ! $thumbnailService->hasThumbnailsGenerated($dungeonRoute);
+            $shouldRefresh = !$onlyMissing || !$thumbnailService->hasThumbnailsGenerated($dungeonRoute);
 
             if ($shouldRefresh) {
                 if ($thumbnailService->queueThumbnailRefresh($dungeonRoute)) {
@@ -369,8 +369,8 @@ class AdminToolsController extends Controller
 
         Session::flash('status', __('controller.admintools.flash.thumbnail_regenerate_result', [
             'success' => $successCount,
-            'total' => $successCount + $failureCount,
-            'failed' => $failureCount,
+            'total'   => $successCount + $failureCount,
+            'failed'  => $failureCount,
         ]));
 
         return view('admin.tools.thumbnails.regenerate');
@@ -520,7 +520,7 @@ class AdminToolsController extends Controller
                     $dungeon = Dungeon::findOrFail($id);
 
                     return [
-                        __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(fn (MappingVersion $mappingVersion) => [
+                        __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(fn(MappingVersion $mappingVersion) => [
                             $mappingVersion->id => $mappingVersion->getPrettyName(),
                         ]),
                     ];
@@ -557,9 +557,9 @@ class AdminToolsController extends Controller
     public function importingamecoordinatessubmit(Request $request)
     {
         // Parse all Map TABLE data and convert them to a workable format
-        $mapTable = $request->get('map_table_xhr_response');
-        $mapTableParsed = json_decode((string) $mapTable, true)['data'];
-        $mapTableHeaders = [
+        $mapTable                   = $request->get('map_table_xhr_response');
+        $mapTableParsed             = json_decode((string)$mapTable, true)['data'];
+        $mapTableHeaders            = [
             'ID', 'Directory', 'MapName_lang', 'MapDescription0_lang', 'MapDescription1_lang', 'PvpShortDescription_lang',
             'Corpse[0]', 'Corpse[1]', 'MapType', 'InstanceType', 'ExpansionID', 'AreaTableID', 'LoadingScreenID',
             'TimeOfDayOverride', 'ParentMapId', 'CosmeticParentMapID', 'TimeOffset', 'MinimapIconScale', 'CorpseMapID',
@@ -567,33 +567,33 @@ class AdminToolsController extends Controller
             'Flags[1]', 'Flags[2]',
         ];
         $mapTableHeaderIndexMapName = array_search('MapName_lang', $mapTableHeaders);
-        $mapTableHeaderIndexMapId = array_search('ID', $mapTableHeaders);
+        $mapTableHeaderIndexMapId   = array_search('ID', $mapTableHeaders);
 
         // Parse all Map Group Member TABLE data and convert them to a workable format
-        $mapGroupMemberTable = $request->get('ui_map_group_member_table_xhr_response');
-        $mapGroupMemberTableParsed = json_decode((string) $mapGroupMemberTable, true)['data'];
-        $mapGroupMemberTableHeaders = [
+        $mapGroupMemberTable                    = $request->get('ui_map_group_member_table_xhr_response');
+        $mapGroupMemberTableParsed              = json_decode((string)$mapGroupMemberTable, true)['data'];
+        $mapGroupMemberTableHeaders             = [
             'ID', 'Name_lang', 'UiMapGroupID', 'UiMapID', 'FloorIndex', 'RelativeHeightIndex',
         ];
         $mapGroupMemberTableHeaderIndexNameLang = array_search('Name_lang', $mapGroupMemberTableHeaders);
-        $mapGroupMemberTableHeaderIndexUiMapId = array_search('UiMapID', $mapGroupMemberTableHeaders);
+        $mapGroupMemberTableHeaderIndexUiMapId  = array_search('UiMapID', $mapGroupMemberTableHeaders);
 
         // Parse all UI Map Assignment TABLE data and convert them to a workable format
-        $uiMapAssignmentTable = $request->get('ui_map_assignment_table_xhr_response');
-        $uiMapAssignmentTableParsed = json_decode((string) $uiMapAssignmentTable, true)['data'];
+        $uiMapAssignmentTable       = $request->get('ui_map_assignment_table_xhr_response');
+        $uiMapAssignmentTableParsed = json_decode((string)$uiMapAssignmentTable, true)['data'];
 
-        $uiMapAssignmentTableHeaders = [
+        $uiMapAssignmentTableHeaders               = [
             'UiMin[0]', 'UiMin[1]', 'UiMax[0]', 'UiMax[1]', 'Region[0]', 'Region[1]', 'Region[2]',
             'Region[3]', 'Region[4]', 'Region[5]', 'ID', 'UiMapID', 'OrderIndex', 'MapID', 'AreaID',
             'WMODoodadPlacementID', 'WMOGroupID',
         ];
-        $uiMapAssignmentTableHeaderIndexMapId = array_search('MapID', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexUiMapId = array_search('UiMapID', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMapId      = array_search('MapID', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexUiMapId    = array_search('UiMapID', $uiMapAssignmentTableHeaders);
         $uiMapAssignmentTableHeaderIndexOrderIndex = array_search('OrderIndex', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMinX = array_search('Region[0]', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMinY = array_search('Region[1]', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMaxX = array_search('Region[3]', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMaxY = array_search('Region[4]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMinX       = array_search('Region[0]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMinY       = array_search('Region[1]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders);
 
         /** @var Collection|Dungeon[] $allDungeons */
         //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
@@ -605,8 +605,8 @@ class AdminToolsController extends Controller
         foreach ($mapTableParsed as $mapTableRow) {
             foreach ($allDungeons as $dungeon) {
                 // The map names don't always match up (the combined dungeons such as Karazhan seem problematic, have to do this by hand)
-                $mapId = (int) $mapTableRow[$mapTableHeaderIndexMapId];
-                if (trim((string) $mapTableRow[$mapTableHeaderIndexMapName]) === __($dungeon->name)) {
+                $mapId = (int)$mapTableRow[$mapTableHeaderIndexMapId];
+                if (trim((string)$mapTableRow[$mapTableHeaderIndexMapName]) === __($dungeon->name)) {
                     if ($dungeon->map_id !== $mapId) {
                         $beforeModel = clone $dungeon;
 
@@ -634,23 +634,23 @@ class AdminToolsController extends Controller
                 continue;
             }
             foreach ($uiMapAssignmentTableParsed as $uiMapAssignmentRow) {
-                if ((int) $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMapId] === $dungeon->map_id &&
-                    (int) $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexOrderIndex] === 0) {
+                if ((int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMapId] === $dungeon->map_id &&
+                    (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexOrderIndex] === 0) {
                     // Now that we know the UI map ID - cross-reference it with the map group to get the correct floor
-                    $uiMapId = (int) $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId];
+                    $uiMapId = (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId];
 
                     // Try to find the map group member (floor definition) - NOTE: sometimes this doesn't exist,
                     // and you'll have to manually verify it without!
                     $foundMapGroupMember = false;
                     foreach ($mapGroupMemberTableParsed as $mapGroupMemberRow) {
-                        if ((int) $mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId] === $uiMapId) {
+                        if ((int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId] === $uiMapId) {
                             // We found the group member - now find which floor it was for
                             $mapGroupMemberFloorName = html_entity_decode(
-                                trim((string) $mapGroupMemberRow[$mapGroupMemberTableHeaderIndexNameLang]),
+                                trim((string)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexNameLang]),
                                 ENT_QUOTES,
                                 'UTF-8'
                             );
-                            $foundFloor = false;
+                            $foundFloor              = false;
                             foreach ($dungeon->floors as $floor) {
                                 if ($mapGroupMemberFloorName === __($floor->name)) {
                                     $beforeModel = clone $floor;
@@ -662,7 +662,7 @@ class AdminToolsController extends Controller
                                         'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
                                     ]);
 
-                                    dump('Updated floor '.__($floor->name));
+                                    dump('Updated floor ' . __($floor->name));
 
                                     $this->mappingChanged($beforeModel, $floor);
                                     $foundFloor = true;
@@ -670,10 +670,10 @@ class AdminToolsController extends Controller
                                 }
                             }
 
-                            if (! $foundFloor) {
+                            if (!$foundFloor) {
                                 dump(
                                     sprintf('Unable to find floor with id %d and name %s in dungeon %s (typo in name or floor does not exist?)',
-                                        (int) $mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId],
+                                        (int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId],
                                         __($dungeon->name),
                                         $mapGroupMemberFloorName
                                     )
@@ -685,9 +685,10 @@ class AdminToolsController extends Controller
                         }
                     }
 
-                    if (! $foundMapGroupMember) {
+                    if (!$foundMapGroupMember) {
                         if ($dungeon->floors->count() === 1) {
-                            $floor = $dungeon->floors->first();
+                            /** @var Floor $floor */
+                            $floor       = $dungeon->floors->first();
                             $beforeModel = clone $floor;
 
                             $floor->update([
@@ -697,12 +698,12 @@ class AdminToolsController extends Controller
                                 'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
                             ]);
 
-                            dump('Updated floor from backup: '.__($floor->name));
+                            dump('Updated floor from backup: ' . __($floor->name));
 
                             $this->mappingChanged($beforeModel, $floor);
                         } else {
                             dump(sprintf('Unable to find map group member with ui map id %d (%s)',
-                                (int) $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId],
+                                (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId],
                                 __($dungeon->name)
                             ), [
                                 'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
@@ -725,11 +726,11 @@ class AdminToolsController extends Controller
      * @throws Exception
      */
     public function mdtdiff(
-        CacheServiceInterface $cacheService,
+        CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService
     ) {
         $warnings = new Collection();
-        $npcs = Npc::with(['enemies', 'type'])->get();
+        $npcs     = Npc::with(['enemies', 'type'])->get();
 
         // For each dungeon
         foreach (Dungeon::all() as $dungeon) {
@@ -739,7 +740,7 @@ class AdminToolsController extends Controller
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {
                 // Ignore mobs we should ignore
-                if (! $mdtNpc->isValid() || $mdtNpc->isAwakened()) {
+                if (!$mdtNpc->isValid() || $mdtNpc->isAwakened()) {
                     continue;
                 }
 
@@ -752,7 +753,7 @@ class AdminToolsController extends Controller
                     $warnings->push(
                         new ImportWarning('missing_npc',
                             sprintf(__('controller.admintools.error.mdt_unable_to_find_npc_for_id'), $mdtNpc->getId()),
-                            ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc]
+                            ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                         )
                     );
                 } // Found, compare
@@ -763,7 +764,7 @@ class AdminToolsController extends Controller
                         $warnings->push(
                             new ImportWarning('mismatched_health',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
                             )
                         );
                     }
@@ -775,7 +776,7 @@ class AdminToolsController extends Controller
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npcEnemyForces?->enemy_forces),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces, 'new' => $mdtNpc->getCount()]
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces, 'new' => $mdtNpc->getCount()]
                             )
                         );
                     }
@@ -785,7 +786,7 @@ class AdminToolsController extends Controller
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npcEnemyForces?->enemy_forces_teeming),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
                     }
@@ -796,7 +797,7 @@ class AdminToolsController extends Controller
                             new ImportWarning('mismatched_enemy_count',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_enemy_count'),
                                     $mdtNpc->getId(), count($mdtNpc->getClones()), $npc->enemies === null ? 0 : $npc->enemies->count()),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc]
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
                             )
                         );
                     }
@@ -807,7 +808,7 @@ class AdminToolsController extends Controller
                             new ImportWarning('mismatched_enemy_type',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_enemy_type'),
                                     $mdtNpc->getId(), $mdtNpc->getCreatureType(), $npc->type->type),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->getCreatureType()]
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->getCreatureType()]
                             )
                         );
                     }
@@ -850,8 +851,8 @@ class AdminToolsController extends Controller
     public function applychange(Request $request)
     {
         $category = $request->get('category');
-        $npcId = $request->get('npc_id');
-        $value = $request->get('value');
+        $npcId    = $request->get('npc_id');
+        $value    = $request->get('value');
 
         /** @var Npc $npc */
         $npc = Npc::with(['enemyForces'])->find($npcId);
@@ -866,13 +867,13 @@ class AdminToolsController extends Controller
                     $npc->setEnemyForces($value);
                 }
                 break;
-                // Teeming is deprecated pretty much
-                //            case 'mismatched_enemy_forces_teeming':
-                //                $npc->enemyForces->enemy_forces_teeming = $value;
-                //                $npc->enemyForces->save();
-                //                break;
+            // Teeming is deprecated pretty much
+            //            case 'mismatched_enemy_forces_teeming':
+            //                $npc->enemyForces->enemy_forces_teeming = $value;
+            //                $npc->enemyForces->save();
+            //                break;
             case 'mismatched_enemy_type':
-                $npcType = NpcType::where('type', $value)->first();
+                $npcType          = NpcType::where('type', $value)->first();
                 $npc->npc_type_id = $npcType->id;
                 $npc->save();
                 break;

@@ -40,7 +40,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     private ?Carbon $lastTimestamp = null;
 
     public function __construct(
-        private readonly CombatLogServiceInterface $combatLogService,
+        private readonly CombatLogServiceInterface             $combatLogService,
         private readonly CombatLogSplitServiceLoggingInterface $log)
     {
         $this->reset();
@@ -51,7 +51,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         $this->log->splitCombatLogOnChallengeModesStart($filePath);
         try {
             $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
-            $result = collect();
+            $result         = collect();
             // We don't need to do anything if there are no runs
             // If there's one run, we may still want to trim the fat of the log and keep just
             // the one challenge mode that's in there
@@ -65,7 +65,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
                 $combatLogEntry = (new CombatLogEntry($rawEvent));
-                $parsedEvent = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);
+                $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);
 
                 if ($combatLogEntry->getParsedTimestamp() === null) {
                     $this->log->splitCombatLogOnChallengeModesTimestampNotSet();
@@ -111,7 +111,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                         $this->resetCurrentChallengeMode();
                     }
                 } // If we're going to start a challenge mode event
-                elseif ($parsedEvent instanceof ChallengeModeStartEvent) {
+                else if ($parsedEvent instanceof ChallengeModeStartEvent) {
                     $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent();
 
                     $this->lastChallengeModeStartEvent = $parsedEvent;
@@ -126,10 +126,10 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
                     $this->log->splitCombatLogOnChallengeModesCombatLogVersionEvent();
                     $this->lastCombatLogVersion = $rawEvent;
-                } elseif ($parsedEvent instanceof ZoneChangeEvent) {
+                } else if ($parsedEvent instanceof ZoneChangeEvent) {
                     $this->log->splitCombatLogOnChallengeModesZoneChangeEvent();
                     $this->lastZoneChange = $rawEvent;
-                } elseif ($parsedEvent instanceof MapChangeEvent) {
+                } else if ($parsedEvent instanceof MapChangeEvent) {
                     $this->log->splitCombatLogOnChallengeModesMapChangeEvent();
                     $this->lastMapChange = $rawEvent;
                 }
@@ -153,8 +153,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     {
         $this->log->resetCurrentChallengeMode();
 
-        $this->rawEvents = collect();
-        $this->lastTimestamp = null;
+        $this->rawEvents                   = collect();
+        $this->lastTimestamp               = null;
         $this->lastChallengeModeStartEvent = null;
     }
 
@@ -164,8 +164,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         $this->resetCurrentChallengeMode();
 
         $this->lastCombatLogVersion = null;
-        $this->lastZoneChange = null;
-        $this->lastMapChange = null;
+        $this->lastZoneChange       = null;
+        $this->lastMapChange        = null;
     }
 
     /**
@@ -179,7 +179,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         // new combat log in the original location instead of the location we're reading from.
         $count = 0;
         do {
-            $countStr = $count === 0 ? '' : sprintf('-%d', $count);
+            $countStr     = $count === 0 ? '' : sprintf('-%d', $count);
             $saveFilePath = sprintf('%s/%s_%d_%s%s.txt',
                 dirname($originalFilePath),
                 pathinfo($originalFilePath, PATHINFO_FILENAME),

@@ -13,11 +13,11 @@ trait SavesArrayToJsonFile
      */
     protected function saveDataToJsonFile($dataArr, string $dir, string $filename)
     {
-        if (! file_exists($dir)) {
+        if (!file_exists($dir)) {
             mkdir($dir, 755, true);
         }
 
-        $filePath = $dir.'/'.$filename;
+        $filePath = $dir . '/' . $filename;
         $file = fopen($filePath, 'w') or exit('Cannot create file');
         fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT));
         fclose($file);

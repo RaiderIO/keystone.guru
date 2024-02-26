@@ -7,12 +7,12 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property int $model_id
+ * @property int    $id
+ * @property int    $model_id
  * @property string $model_class
- * @property int $category
+ * @property int    $category
  * @property string $tag
- * @property int $value
+ * @property int    $value
  * @property string $updated_at
  * @property string $created_at
  *

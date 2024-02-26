@@ -29,12 +29,12 @@ class DungeonRouteFormRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'dungeon_route_title' => 'nullable|string|max:80',
+            'dungeon_route_title'       => 'nullable|string|max:80',
             'dungeon_route_description' => 'nullable|string|max:1000',
-            'dungeon_route_sandbox' => 'int',
-            'dungeon_route_level' => new DungeonRouteLevelRule($this->request),
+            'dungeon_route_sandbox'     => 'int',
+            'dungeon_route_level'       => new DungeonRouteLevelRule($this->request),
             // Only active dungeons are allowed
-            'dungeon_id' => ['required', Rule::in(
+            'dungeon_id'                => ['required', Rule::in(
                 Dungeon::select('dungeons.id')
                     ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
                     ->where('expansions.active', true)
@@ -44,27 +44,27 @@ class DungeonRouteFormRequest extends FormRequest
                     ->toArray()
             )],
             // May be -1 (unset) or must be part of the user's teams
-            'team_id' => [Rule::in(
+            'team_id'                   => [Rule::in(
                 array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [null, -1])
             )],
-            'teeming' => 'nullable|int',
-            'template' => 'nullable|int',
+            'teeming'                   => 'nullable|int',
+            'template'                  => 'nullable|int',
 
             // Array since there's potentially a seasonal index per expansion
-            'seasonal_index' => 'nullable|array',
-            'seasonal_index.*' => 'nullable|numeric',
+            'seasonal_index'            => 'nullable|array',
+            'seasonal_index.*'          => 'nullable|numeric',
 
             'faction_id' => [Rule::exists('factions', 'id'), new FactionSelectionRequiredRule($this->request)],
 
-            'race' => 'nullable|array',
+            'race'  => 'nullable|array',
             'class' => 'nullable|array',
 
-            'race.*' => 'nullable|numeric',
+            'race.*'  => 'nullable|numeric',
             'class.*' => 'nullable|numeric',
 
-            'route_select_affixes' => 'array',
+            'route_select_affixes'   => 'array',
             'route_select_affixes.*' => 'string',
-            'attributes.*' => 'nullable|numeric',
+            'attributes.*'           => 'nullable|numeric',
 
             'unlisted' => 'nullable|int',
 

@@ -13,11 +13,11 @@ interface APIDungeonRouteControllerServiceInterface
      */
     public function createThumbnails(
         DungeonRoute $dungeonRoute,
-        ?int $viewportWidth = null,
-        ?int $viewportHeight = null,
-        ?int $imageWidth = null,
-        ?int $imageHeight = null,
-        ?int $zoomLevel = null,
-        ?int $quality = null
+        ?int         $viewportWidth = null,
+        ?int         $viewportHeight = null,
+        ?int         $imageWidth = null,
+        ?int         $imageHeight = null,
+        ?int         $zoomLevel = null,
+        ?int         $quality = null
     ): Collection;
 }

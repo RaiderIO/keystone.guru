@@ -62,7 +62,7 @@ class MappingService implements MappingServiceInterface
         return $dungeonQueryBuilder
             ->whereNotNull('dungeon_id')
             ->get()
-            ->keyBy(fn (Dungeon $dungeon) => $dungeon->id);
+            ->keyBy(fn(Dungeon $dungeon) => $dungeon->id);
     }
 
     /**
@@ -71,7 +71,7 @@ class MappingService implements MappingServiceInterface
     public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
     {
         $currentMappingVersion = $dungeon->currentMappingVersion;
-        $newVersion        = (($currentMappingVersion?->version) ?? 0) + 1;
+        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
 
         return MappingVersion::create([
             'dungeon_id'       => $dungeon->id,
@@ -93,11 +93,11 @@ class MappingService implements MappingServiceInterface
 
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
-            'dungeon_id' => $dungeon->id,
+            'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $hash,
-            'version' => $newMappingVersionVersion,
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
+            'version'          => $newMappingVersionVersion,
+            'created_at'       => Carbon::now()->toDateTimeString(),
+            'updated_at'       => Carbon::now()->toDateTimeString(),
         ]);
 
         $newMappingVersion = MappingVersion::find($id);

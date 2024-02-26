@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property Collection|Metric[] $metrics
+ * @property Collection|Metric[]            $metrics
  * @property Collection|MetricAggregation[] $metricAggregations
  *
  * @mixin Eloquent
@@ -18,7 +18,7 @@ trait HasMetrics
 {
     public function metric(int $category, string $tag): int
     {
-        return (int) $this->hasMany(Metric::class, 'model_id')
+        return (int)$this->hasMany(Metric::class, 'model_id')
             ->where('model_class', $this::class)
             ->where('category', $category)
             ->where('tag', $tag)

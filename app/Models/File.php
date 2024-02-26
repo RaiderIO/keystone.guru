@@ -9,8 +9,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * @property int $id
- * @property int $model_id
+ * @property int    $id
+ * @property int    $model_id
  * @property string $model_class
  * @property string $disk
  * @property string $path
@@ -99,38 +99,39 @@ class File extends Model
         if (config('app.env') === 'local') {
             return url($this->path);
         } else {
-            return url('storage/'.$this->path);
+            return url('storage/' . $this->path);
         }
     }
 
     /**
      * Saves a file to the database
      *
-     * @param  $uploadedFile  UploadedFile The uploaded file element.
-     * @param  $model  Model The model that wants to save this file.
-     * @param  $dir  string The directory to save this file in.
+     * @param UploadedFile $uploadedFile The uploaded file element.
+     * @param Model        $model The model that wants to save this file.
+     * @param string       $dir The directory to save this file in.
      * @return File The newly saved file in the database.
      *
      * @throws Exception
      */
-    public static function saveFileToDB($uploadedFile, $model, $dir = 'upload'): File
+    public static function saveFileToDB(UploadedFile $uploadedFile, Model $model, string $dir = 'upload'): File
     {
         $disk = config('app.env') === 'local' ? 'public_uploads' : 'public';
 
         // Ensure the path exists
-        $storageDir = Storage::disk($disk)->getAdapter()->getPathPrefix().$dir;
-        if (! is_dir($storageDir)) {
+        $rootDir    = config(sprintf('filesystems.disks.%s.root', $disk));
+        $storageDir = sprintf('%s/%s', $rootDir, $dir);
+        if (!is_dir($storageDir)) {
             mkdir($storageDir, 755, true);
         }
 
-        $newFile = new File();
-        $newFile->model_id = $model->id;
+        $newFile              = new File();
+        $newFile->model_id    = $model->id;
         $newFile->model_class = $model::class;
-        $newFile->disk = $disk;
-        $newFile->path = $uploadedFile->store($dir, $disk);
-        $saveResult = $newFile->save();
+        $newFile->disk        = $disk;
+        $newFile->path        = $uploadedFile->store($dir, $disk);
+        $saveResult           = $newFile->save();
 
-        if (! $saveResult) {
+        if (!$saveResult) {
             // Remove the uploaded file from disk
             $newFile->deleteFromDisk();
 

@@ -40,18 +40,18 @@ class Merge extends Command
      */
     public function handle(MappingService $mappingService)
     {
-        $username = config('keystoneguru.github_username');
+        $username   = config('keystoneguru.github_username');
         $repository = config('keystoneguru.github_repository');
-        $head = 'mapping';
-        $base = 'development';
+        $head       = 'mapping';
+        $base       = 'development';
 
         /** @var PullRequest $githubPrClient */
         $githubPrClient = GitHub::pr();
 
         $prList = $githubPrClient->all($username, $repository, [
             'state' => 'open',
-            'head' => $head,
-            'base' => $base,
+            'head'  => $head,
+            'base'  => $base,
         ]);
 
         $existingPrId = 0;
@@ -71,10 +71,10 @@ class Merge extends Command
         }
 
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(fn (Dungeon $dungeon) => __($dungeon->name));
+        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(fn(Dungeon $dungeon) => __($dungeon->name));
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
-        } elseif ($changedDungeonNames->isEmpty()) {
+        } else if ($changedDungeonNames->isEmpty()) {
             $prTitle = 'Mapping update for no dungeons';
         } else {
             $prTitle = sprintf('Mapping update for %s', $changedDungeonNames->implode(', '));
@@ -83,10 +83,10 @@ class Merge extends Command
         if (empty($existingPrId)) {
             try {
                 $githubPrClient->create($username, $repository, [
-                    'title' => $prTitle,
-                    'head' => $head,
-                    'base' => $base,
-                    'body' => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
+                    'title'  => $prTitle,
+                    'head'   => $head,
+                    'base'   => $base,
+                    'body'   => 'This is an automatically generated pull request because changes were detected and committed in https://mapping.keystone.guru/',
                     'labels' => [
                         'mapping',
                     ],

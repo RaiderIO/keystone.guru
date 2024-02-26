@@ -18,9 +18,9 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
 
         foreach (GameVersion::ALL as $key => $id) {
             $gameVersionAttributes[] = [
-                'id' => $id,
-                'key' => $key,
-                'name' => sprintf('gameversions.%s.name', $key),
+                'id'          => $id,
+                'key'         => $key,
+                'name'        => sprintf('gameversions.%s.name', $key),
                 'description' => sprintf('gameversions.%s.description', $key),
                 'has_seasons' => $key === GameVersion::GAME_VERSION_RETAIL,
             ];

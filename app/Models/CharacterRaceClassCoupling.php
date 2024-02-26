@@ -7,9 +7,9 @@ use Eloquent;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $character_race_id
- * @property int $character_class_id
+ * @property int        $id
+ * @property int        $character_race_id
+ * @property int        $character_class_id
  * @property Collection $specializations
  *
  * @mixin Eloquent
