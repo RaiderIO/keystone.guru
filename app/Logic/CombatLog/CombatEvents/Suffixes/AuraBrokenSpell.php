@@ -42,10 +42,10 @@ class AuraBrokenSpell extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->extraSpellId = $parameters[0];
+        $this->extraSpellId   = $parameters[0];
         $this->extraSpellName = $parameters[1];
-        $this->extraSchool = $parameters[2];
-        $this->auraType = $parameters[3];
+        $this->extraSchool    = $parameters[2];
+        $this->auraType       = $parameters[3];
 
         return $this;
     }

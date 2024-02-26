@@ -33,10 +33,10 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
             sprintf('Started processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)
         );
 
-        if ((int) config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
+        if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
             $result = $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
 
-            if (! $result) {
+            if (!$result) {
                 Log::channel('scheduler')->warning(sprintf('Error refreshing thumbnail, attempt %d', $this->attempts));
 
                 // If there were errors, try again

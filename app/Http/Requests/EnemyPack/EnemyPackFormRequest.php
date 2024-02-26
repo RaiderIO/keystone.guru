@@ -26,16 +26,16 @@ class EnemyPackFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'int',
+            'id'                 => 'int',
             'mapping_version_id' => ['required', Rule::exists(MappingVersion::class, 'id')],
-            'floor_id' => ['required', Rule::exists(Floor::class, 'id')],
-            'group' => 'nullable|int',
-            'color' => 'nullable|string',
-            'color_animated' => 'nullable|string',
-            'teeming' => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],
-            'faction' => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
-            'label' => 'string',
-            'vertices_json' => [
+            'floor_id'           => ['required', Rule::exists(Floor::class, 'id')],
+            'group'              => 'nullable|int',
+            'color'              => 'nullable|string',
+            'color_animated'     => 'nullable|string',
+            'teeming'            => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],
+            'faction'            => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
+            'label'              => 'string',
+            'vertices_json'      => [
                 'json',
                 new JsonStringCountRule(2),
             ],

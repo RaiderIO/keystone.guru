@@ -17,13 +17,13 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
     public function run(): void
     {
         $this->command->info('Adding releases');
-        $rootDir = database_path('seeders/releases/');
+        $rootDir         = database_path('seeders/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // Keep a list of all data that we must insert
         $releaseChangeLogChangesAttributes = [];
-        $releaseChangeLogAttributes = [];
-        $releaseAttributes = [];
+        $releaseChangeLogAttributes        = [];
+        $releaseAttributes                 = [];
 
         // Iterate over all saved releases
         foreach ($rootDirIterator as $releaseData) {
@@ -36,14 +36,14 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
                 $changelogData = $modelsData['changelog'];
                 // Changelog
                 $releaseChangeLogAttributes[] = array_filter($changelogData, function ($value) {
-                    return ! is_array($value);
+                    return !is_array($value);
                 });
 
                 // Save the changes for each changelog
                 foreach ($changelogData['changes'] as $changeData) {
                     // Changelog changes
                     $releaseChangeLogChangesAttributes[] = array_filter($changeData, function ($value) {
-                        return ! is_array($value);
+                        return !is_array($value);
                     });
                 }
             }
@@ -51,7 +51,7 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             // Save the release last!
             /** @var array{created_at: \Carbon\Carbon, updated_at: \Carbon\Carbon} $releaseAttribute */
             $releaseAttribute = array_filter($modelsData, function ($value) {
-                return ! is_array($value);
+                return !is_array($value);
             });
 
             $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();

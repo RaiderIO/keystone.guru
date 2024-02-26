@@ -20,11 +20,11 @@ class AffixGroupCollectionResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
     {
-        return $this->collection->map(fn (AffixGroup $affixGroup) => new AffixGroupResource($affixGroup));
+        return $this->collection->map(fn(AffixGroup $affixGroup) => new AffixGroupResource($affixGroup));
     }
 }

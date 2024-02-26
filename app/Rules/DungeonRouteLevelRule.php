@@ -9,12 +9,12 @@ class DungeonRouteLevelRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
      */
     public function passes($attribute, $value): bool
     {
-        $explode = explode(';', (string) $value);
+        $explode = explode(';', (string)$value);
 
         return count($explode) === 2 && is_numeric($explode[0]) && is_numeric($explode[1]);
     }

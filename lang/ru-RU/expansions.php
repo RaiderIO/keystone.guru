@@ -1,34 +1,34 @@
 <?php
 
 return [
-    'classic' => [
+    'classic'            => [
         'name' => '@todo ru-RU: .classic.name',
     ],
-    'tbc' => [
+    'tbc'                => [
         'name' => '@todo ru: .tbc.name',
     ],
-    'wotlk' => [
+    'wotlk'              => [
         'name' => '@todo ru: .wotlk.name',
     ],
-    'cata' => [
+    'cata'               => [
         'name' => '@todo ru: .cata.name',
     ],
-    'mop' => [
+    'mop'                => [
         'name' => '@todo ru: .mop.name',
     ],
-    'wod' => [
+    'wod'                => [
         'name' => '@todo ru: .wod.name',
     ],
-    'legion' => [
+    'legion'             => [
         'name' => 'Легион',
     ],
     'battle_for_azeroth' => [
         'name' => 'Битва за Азерот',
     ],
-    'shadowlands' => [
+    'shadowlands'        => [
         'name' => 'Темные земли',
     ],
-    'dragonflight' => [
+    'dragonflight'       => [
         'name' => '@todo ru: .dragonflight.name',
     ],
 ];

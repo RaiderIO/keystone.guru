@@ -43,10 +43,10 @@ abstract class EncounterBase extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->encounterID = $parameters[0];
+        $this->encounterID   = $parameters[0];
         $this->encounterName = $parameters[1];
-        $this->difficultyID = $parameters[2];
-        $this->groupSize = $parameters[3];
+        $this->difficultyID  = $parameters[2];
+        $this->groupSize     = $parameters[3];
 
         return $this;
     }

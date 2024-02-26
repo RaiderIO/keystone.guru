@@ -43,7 +43,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             // Insert - not create. Skip all the boot static things - those will mess this up
             $mappingVersionId = MappingVersion::insertGetId([
                 'dungeon_id' => $dungeon->id,
-                'version' => 1,
+                'version'    => 1,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
@@ -82,9 +82,9 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
         }
 
         /**
-        // This works initially as well?
-        UPDATE `dungeon_routes`
-        SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
+         * // This works initially as well?
+         * UPDATE `dungeon_routes`
+         * SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
          */
         $this->command->info('Coupling dungeon routes to latest mapping version.. ');
         $count = 0;

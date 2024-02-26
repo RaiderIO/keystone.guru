@@ -34,9 +34,9 @@ class Leech extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->amount = $parameters[0];
+        $this->amount       = $parameters[0];
         $this->overEnergize = $parameters[1];
-        $this->powerType = $parameters[2];
+        $this->powerType    = $parameters[2];
 
         return $this;
     }

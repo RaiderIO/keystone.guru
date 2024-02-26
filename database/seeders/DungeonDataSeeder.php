@@ -59,7 +59,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
     public function __construct()
     {
-        $this->importedModels = collect();
+        $this->importedModels  = collect();
         $this->relationMapping = collect([
             // Loose files
             new MappingVersionRelationMapping(),
@@ -109,7 +109,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
      */
     private function importDungeonMapping(): void
     {
-        $rootDir = database_path(self::DUNGEON_DATA_DIR);
+        $rootDir         = database_path(self::DUNGEON_DATA_DIR);
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // Parse the root files first
@@ -139,13 +139,13 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 continue;
             }
 
-            $this->command->info('Expansion '.$rootDirChildBaseName);
+            $this->command->info('Expansion ' . $rootDirChildBaseName);
             $expansionDirIterator = new FilesystemIterator($rootDirChild);
 
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
                 /** @var $dungeonKeyDir SplFileInfo */
-                $this->command->info('- Importing dungeon '.basename($dungeonKeyDir));
+                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
@@ -154,7 +154,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     if ($floorDirFile->getType() !== 'dir') {
                         continue;
                     }
-                    $this->command->info('-- Importing floor '.basename($floorDirFile));
+                    $this->command->info('-- Importing floor ' . basename($floorDirFile));
 
                     $importFileIterator = new FilesystemIterator($floorDirFile);
                     // For each file inside a floor
@@ -188,7 +188,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
      */
     private function importDungeonRoutes(): void
     {
-        $rootDir = database_path(self::DUNGEON_DATA_DIR);
+        $rootDir         = database_path(self::DUNGEON_DATA_DIR);
         $rootDirIterator = new FilesystemIterator($rootDir);
 
         // For each expansion
@@ -201,7 +201,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
-                $this->command->info('- Importing dungeon '.basename($dungeonKeyDir));
+                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
@@ -211,7 +211,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                         continue;
                     }
 
-                    if (! str_contains($floorDirFile, 'dungeonroutes')) {
+                    if (!str_contains($floorDirFile, 'dungeonroutes')) {
                         continue;
                     }
 
@@ -254,18 +254,18 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
      */
     private function parseRawFile(string $rootDir, string $filePath, int $depth = 1): void
     {
-        $prefix = str_repeat('-', $depth).' ';
+        $prefix = str_repeat('-', $depth) . ' ';
 
         $fileName = basename($filePath);
 
         // Import file
-        $this->command->info($prefix.'Importing '.$fileName);
+        $this->command->info($prefix . 'Importing ' . $fileName);
         $found = false;
         foreach ($this->relationMapping as $mapping) {
             if ($mapping->getFileName() === $fileName) {
                 $count = $this->loadModelsFromFile($filePath, $mapping);
                 $this->command->info(sprintf(
-                    $prefix.'Imported %s (%s from %s)',
+                    $prefix . 'Imported %s (%s from %s)',
                     str_replace($rootDir, '', $fileName),
                     $count,
                     $fileName
@@ -277,8 +277,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         }
 
         // Let the user know if something wrong happened
-        if (! $found) {
-            $this->command->error($prefix.'Unable to find table->model mapping for file '.$filePath);
+        if (!$found) {
+            $this->command->error($prefix . 'Unable to find table->model mapping for file ' . $filePath);
         }
     }
 
@@ -308,26 +308,26 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
             // First, check if we may even insert this model (for example if the mapping version is not new enough so we shouldn't re-insert the model)
             foreach ($mapping->getConditionals() as $conditional) {
-                if (! ($shouldParseModel = $conditional->shouldParseModel($mapping, $modelData))) {
+                if (!($shouldParseModel = $conditional->shouldParseModel($mapping, $modelData))) {
                     break;
                 }
             }
 
             // Ok, we found a reason not to parse this model. Continue to the next model
-            if (! $shouldParseModel) {
+            if (!$shouldParseModel) {
                 continue;
             }
 
             $unsetRelations = [];
             // We're editing $modelData inside the loop - don't convert it to foreach nor move the count() outside the loop
             for ($i = 0; $i < count($modelData); $i++) {
-                $keys = array_keys($modelData);
-                $key = $keys[$i];
+                $keys  = array_keys($modelData);
+                $key   = $keys[$i];
                 $value = $modelData[$key];
 
                 // Parse individual attributes of the root object
                 foreach ($mapping->getAttributeParsers() as $attributeParser) {
-                    if (! is_array($value) &&
+                    if (!is_array($value) &&
                         $attributeParser->canParseModel($mapping->getClass())) {
                         $modelData = $attributeParser->parseAttribute($mapping->getClass(), $modelData, $key, $value);
                     }
@@ -345,7 +345,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 }
 
                 // The column may not be set due to objects appearing in this array that need to be de-normalized
-                if (! in_array($key, $modelColumns)) {
+                if (!in_array($key, $modelColumns)) {
                     // Keep track of all relations we removed so we can parse them again after saving the model
                     $unsetRelations[$key] = $value;
                     unset($modelData[$key]);
@@ -367,7 +367,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 $updatedModels++;
 
             } // If we should do some post-processing, create & save it now so that we can do just that
-            elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
+            else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 /** @var \Eloquent $mappingClass */
                 $mappingClass = $mapping->getClass();
                 $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
@@ -408,8 +408,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Bulk save the models that did not need any post-attribute parsing
         if ($modelsToSave->isNotEmpty()) {
+            /** @var Collection $importedModels */
+            $importedModels = $this->importedModels->get($mapping->getClass());
             $this->importedModels->put($mapping->getClass(),
-                $this->importedModels->get($mapping->getClass())->merge($modelsToSave)
+                $importedModels->merge($modelsToSave)
             );
         }
 

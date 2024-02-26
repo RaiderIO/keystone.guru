@@ -35,12 +35,12 @@ class AjaxPridefulEnemyController extends Controller
         }
 
         $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
-        $pridefulEnemy->enemy_id = (int) $enemy->id;
-        $pridefulEnemy->floor_id = (int) $request->get('floor_id');
-        $pridefulEnemy->lat = (float) $request->get('lat');
-        $pridefulEnemy->lng = (float) $request->get('lng');
+        $pridefulEnemy->enemy_id         = (int)$enemy->id;
+        $pridefulEnemy->floor_id         = (int)$request->get('floor_id');
+        $pridefulEnemy->lat              = (float)$request->get('lat');
+        $pridefulEnemy->lng              = (float)$request->get('lng');
 
-        if (! $pridefulEnemy->save()) {
+        if (!$pridefulEnemy->save()) {
             throw new Exception('Unable to save prideful enemy!');
         }
 

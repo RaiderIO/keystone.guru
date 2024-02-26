@@ -32,8 +32,8 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
      */
     public function store(
         DungeonFloorSwitchMarkerFormRequest $request,
-        MappingVersion $mappingVersion,
-        ?DungeonFloorSwitchMarker $dungeonFloorSwitchMarker = null
+        MappingVersion                      $mappingVersion,
+        ?DungeonFloorSwitchMarker           $dungeonFloorSwitchMarker = null
     ): DungeonFloorSwitchMarker {
         return $this->storeModel($mappingVersion, $request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }

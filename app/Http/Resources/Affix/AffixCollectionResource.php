@@ -20,11 +20,11 @@ class AffixCollectionResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
     {
-        return $this->collection->map(fn (Affix $affix) => new AffixResource($affix));
+        return $this->collection->map(fn(Affix $affix) => new AffixResource($affix));
     }
 }

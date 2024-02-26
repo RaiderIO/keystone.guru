@@ -17,18 +17,18 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int $id
- * @property int $expansion_id
- * @property int $seasonal_affix_id
- * @property int $index
- * @property Carbon $start
- * @property int $presets
- * @property int $affix_group_count
- * @property int $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property string $name Dynamic attribute
- * @property Expansion $expansion
+ * @property int                     $id
+ * @property int                     $expansion_id
+ * @property int                     $seasonal_affix_id
+ * @property int                     $index
+ * @property Carbon                  $start
+ * @property int                     $presets
+ * @property int                     $affix_group_count
+ * @property int                     $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property string                  $name Dynamic attribute
+ * @property Expansion               $expansion
  * @property Collection|AffixGroup[] $affixgroups
- * @property Collection|Dungeon[] $dungeons
+ * @property Collection|Dungeon[]    $dungeons
  *
  * @mixin Eloquent
  */
@@ -123,7 +123,7 @@ class Season extends CacheModel
         $weeksSinceStart = $this->getWeeksSinceStartAt($date);
 
         // Round down
-        return (int) ($weeksSinceStart / $this->affixgroups->count());
+        return (int)($weeksSinceStart / $this->affixgroups->count());
     }
 
     /**
@@ -138,7 +138,7 @@ class Season extends CacheModel
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
-                'region' => $region->short,
+                'region'    => $region->short,
             ]);
             throw $ex;
         }
@@ -158,7 +158,7 @@ class Season extends CacheModel
         } catch (Exception $ex) {
             Log::error('Error getting current affix group', [
                 'exception' => $ex,
-                'region' => $region->short,
+                'region'    => $region->short,
             ]);
             throw $ex;
         }
@@ -207,7 +207,7 @@ class Season extends CacheModel
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param  Carbon  $date  The date at which you want to know the affix group.
+     * @param Carbon $date The date at which you want to know the affix group.
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      *
      * @throws Exception
@@ -217,7 +217,7 @@ class Season extends CacheModel
         /** @var SeasonService $seasonService */
         if ($this->hasTimewalkingEvent()) {
             $timewalkingEventService = resolve(TimewalkingEventService::class);
-            $result = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
+            $result                  = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
         } else {
             // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,
             // we do not know anything before that so we need help
@@ -239,11 +239,11 @@ class Season extends CacheModel
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
-        $startIndex = $this->affixgroups->search(
+        $region          = GameServerRegion::getUserOrDefaultRegion();
+        $startIndex      = $this->affixgroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );
-        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(fn (AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
+        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixgroups->count()) % $this->presets + 1 : 0;
     }

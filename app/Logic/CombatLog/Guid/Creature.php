@@ -30,13 +30,13 @@ class Creature extends Guid
     {
         parent::__construct($guid);
 
-        $this->unitType = $parameters[0];
-        $this->unknown1 = $parameters[1];
-        $this->serverId = $parameters[2];
+        $this->unitType   = $parameters[0];
+        $this->unknown1   = $parameters[1];
+        $this->serverId   = $parameters[2];
         $this->instanceId = $parameters[3];
-        $this->zoneUID = $parameters[4];
-        $this->id = $parameters[5];
-        $this->spawnUID = $parameters[6];
+        $this->zoneUID    = $parameters[4];
+        $this->id         = $parameters[5];
+        $this->spawnUID   = $parameters[6];
 
         // Creature-0-3778-2526-12117-196045-0003CA41E4
     }

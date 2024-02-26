@@ -25,7 +25,7 @@ class APITagUpdateFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name'  => 'required|string',
             'color' => 'required|string',
         ];
     }

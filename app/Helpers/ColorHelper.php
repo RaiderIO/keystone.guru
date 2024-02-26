@@ -40,12 +40,12 @@ $GLOBALS['clrLkp'] = [
  */
 function hex2rgb($hex): array
 {
-    $parts = str_split(substr((string) $hex, 1), 2);
-    if (! $parts || count($parts) < 3) {
+    $parts = str_split(substr((string)$hex, 1), 2);
+    if (!$parts || count($parts) < 3) {
         throw new Exception('Invalid hex value');
     }
 
-    return array_map(fn ($p) => hexdec($p), $parts);
+    return array_map(fn($p) => hexdec($p), $parts);
 }
 
 /**
@@ -91,7 +91,7 @@ function hex2name($hex)
  */
 function pad($v)
 {
-    return substr($v.'0', 0, 2);
+    return substr($v . '0', 0, 2);
 }
 
 /**
@@ -99,7 +99,7 @@ function pad($v)
  */
 function rgb2hex($r, $g, $b)
 {
-    return '#'.implode('', array_map('dechex', array_map('round', [$r, $g, $b])));
+    return '#' . implode('', array_map('dechex', array_map('round', [$r, $g, $b])));
 }
 
 /**
@@ -107,7 +107,7 @@ function rgb2hex($r, $g, $b)
  */
 function randomHexColor(): string
 {
-    return '#'.str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+    return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
 }
 
 /**

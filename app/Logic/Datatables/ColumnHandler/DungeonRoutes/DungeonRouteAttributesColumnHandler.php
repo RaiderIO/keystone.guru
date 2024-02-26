@@ -24,19 +24,19 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
     {
         $routeattributes = $columnData['search']['value'];
         // If filtering or ordering
-        if (! empty($routeattributes) || $order !== null) {
+        if (!empty($routeattributes) || $order !== null) {
             // $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
             $subBuilder->groupBy('dungeon_routes.id');
         }
 
         // If filtering OR ordering add the join
-        if (! empty($routeattributes) || $order !== null) {
+        if (!empty($routeattributes) || $order !== null) {
             $subBuilder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
 
             // If filtering
-            if (! empty($routeattributes)) {
+            if (!empty($routeattributes)) {
                 $allRouteAttributeIds = RouteAttribute::all()->pluck('id')->toArray();
-                $routeAttributeIds = explode(',', (string) $routeattributes);
+                $routeAttributeIds    = explode(',', (string)$routeattributes);
 
                 // Compute the attribute IDs that the user does NOT want
                 $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
@@ -65,7 +65,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
             // If ordering
             if ($order !== null) {
-                $subBuilder->orderByRaw('COUNT(dungeon_route_attributes.id) '.($order['dir'] === 'asc' ? 'asc' : 'desc'));
+                $subBuilder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
             }
         }
     }

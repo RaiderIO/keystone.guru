@@ -11,8 +11,8 @@ class MapIconTypeRoleCheckRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
      */
     public function passes($attribute, $value): bool
     {
@@ -21,7 +21,7 @@ class MapIconTypeRoleCheckRule implements Rule
             $mapIconType = MapIconType::where('id', $value)->first();
 
             // Only allow admins to save admin_only icons
-            if ($mapIconType === null || $mapIconType->admin_only && ! (Auth::check() && Auth::user()->hasRole('admin'))) {
+            if ($mapIconType === null || $mapIconType->admin_only && !(Auth::check() && Auth::user()->hasRole('admin'))) {
                 return false;
             }
         }

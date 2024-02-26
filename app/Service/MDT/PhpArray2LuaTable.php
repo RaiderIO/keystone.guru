@@ -4,7 +4,7 @@ namespace App\Service\MDT;
 
 class PhpArray2LuaTable
 {
-    private const TOKEN_OBJECT_OPEN = '{'.PHP_EOL;
+    private const TOKEN_OBJECT_OPEN = '{' . PHP_EOL;
 
     private const TOKEN_OBJECT_CLOSE = '}';
 
@@ -14,7 +14,7 @@ class PhpArray2LuaTable
 
     private const TOKEN_ASSIGNMENT_OPERATOR = '=';
 
-    private const TOKEN_ITEM_SEPARATOR = ';'.PHP_EOL;
+    private const TOKEN_ITEM_SEPARATOR = ';' . PHP_EOL;
 
     private const TOKEN_STRING_QUOTE = '"';
 
@@ -61,7 +61,7 @@ class PhpArray2LuaTable
     {
         if (is_string($value)) {
             $tokens = [self::TOKEN_STRING_QUOTE, $value, self::TOKEN_STRING_QUOTE];
-        } elseif (is_bool($value)) {
+        } else if (is_bool($value)) {
             $tokens = [$value ? 'true' : 'false'];
         } else {
             // ints, floats, etc

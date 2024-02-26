@@ -35,14 +35,14 @@ class DungeonFloorsRelationParser implements RelationParserInterface
             }
 
             foreach ($floor['dungeon_speedrun_required_npcs10_man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
-                if (! isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
+                if (!isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
                     $dungeonSpeedrunRequiredNpc['difficulty'] = Dungeon::DIFFICULTY_25_MAN;
                 }
                 DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))->insert($dungeonSpeedrunRequiredNpc);
             }
 
             foreach ($floor['dungeon_speedrun_required_npcs25_man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
-                if (! isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
+                if (!isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
                     $dungeonSpeedrunRequiredNpc['difficulty'] = Dungeon::DIFFICULTY_25_MAN;
                 }
                 DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))->insert($dungeonSpeedrunRequiredNpc);

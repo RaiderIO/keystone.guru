@@ -14,14 +14,14 @@ class CreateRouteNpcChronologicalRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
      */
     public function passes($attribute, $value): bool
     {
         foreach ($value as $index => $npc) {
             $engagedAt = $npc['engagedAt'] ?? null;
-            $diedAt = $npc['diedAt'] ?? null;
+            $diedAt    = $npc['diedAt'] ?? null;
 
             if ($engagedAt === null || $diedAt === null) {
                 $this->failedNpcIndices[] = $index;
@@ -30,7 +30,7 @@ class CreateRouteNpcChronologicalRule implements Rule
             }
 
             $engagedAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $engagedAt);
-            $diedAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $diedAt);
+            $diedAtCarbon    = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $diedAt);
 
             if ($diedAtCarbon->isBefore($engagedAtCarbon)) {
                 $this->failedNpcIndices[] = $index;

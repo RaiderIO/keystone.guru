@@ -30,15 +30,15 @@ class CombatLogEntry
     }
 
     /**
-     * @param  array  $eventWhiteList  Empty to return all events
+     * @param array $eventWhiteList Empty to return all events
      *
      * @throws Exception
      */
     public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL): ?BaseEvent
     {
         $matches = [];
-        if (! preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
-            if (! in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
+        if (!preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
+            if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
                 throw new InvalidArgumentException(sprintf('Unable to parse event %s', $this->rawEvent));
             }
 
@@ -50,10 +50,10 @@ class CombatLogEntry
         } catch (InvalidFormatException $exception) {
             throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $exception->getCode(), $exception);
         }
-        $eventData = $matches[2];
+        $eventData     = $matches[2];
         $mayParseEvent = empty($eventWhiteList);
 
-        if (! $mayParseEvent) {
+        if (!$mayParseEvent) {
             foreach ($eventWhiteList as $whiteListedName) {
                 if ($mayParseEvent = Str::startsWith($eventData, $whiteListedName)) {
                     break;
@@ -72,14 +72,14 @@ class CombatLogEntry
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
-                elseif (count($parameters) > 23) {
+                else if (count($parameters) > 23) {
                     $this->parsedEvent = (new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 } else {
                     $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
 
             } catch (Error|Exception $exception) {
-                echo sprintf('%s parsing: %s', PHP_EOL.PHP_EOL.$exception->getMessage(), $this->rawEvent);
+                echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
 
                 throw $exception;
             }

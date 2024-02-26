@@ -42,9 +42,9 @@ class WorldMarkerPlaced extends SpecialEvent
         parent::setParameters($parameters);
 
         $this->instanceId = $parameters[0];
-        $this->marker = $parameters[1];
-        $this->positionX = $parameters[2];
-        $this->positionY = $parameters[3];
+        $this->marker     = $parameters[1];
+        $this->positionX  = $parameters[2];
+        $this->positionY  = $parameters[3];
 
         return $this;
     }
