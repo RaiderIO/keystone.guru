@@ -1361,7 +1361,7 @@ class DungeonRoute extends Model
     /**
      * {@inheritDoc}
      */
-    public function touch()
+    public function touch($attribute = null)
     {
         DungeonRoute::dropCaches($this->id);
 
