@@ -20,9 +20,10 @@ class AjaxPridefulEnemyController extends Controller
 {
     /**
      * @return PridefulEnemy
+     *
      * @throws Exception
      */
-    function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -34,12 +35,12 @@ class AjaxPridefulEnemyController extends Controller
         }
 
         $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
-        $pridefulEnemy->enemy_id         = (int)$enemy->id;
-        $pridefulEnemy->floor_id         = (int)$request->get('floor_id');
-        $pridefulEnemy->lat              = (float)$request->get('lat');
-        $pridefulEnemy->lng              = (float)$request->get('lng');
+        $pridefulEnemy->enemy_id = (int) $enemy->id;
+        $pridefulEnemy->floor_id = (int) $request->get('floor_id');
+        $pridefulEnemy->lat = (float) $request->get('lat');
+        $pridefulEnemy->lng = (float) $request->get('lng');
 
-        if (!$pridefulEnemy->save()) {
+        if (! $pridefulEnemy->save()) {
             throw new Exception('Unable to save prideful enemy!');
         }
 
@@ -54,9 +55,10 @@ class AjaxPridefulEnemyController extends Controller
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonRoute);
 

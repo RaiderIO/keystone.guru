@@ -19,9 +19,9 @@ class APIDungeonRouteController extends Controller
      *     path="/api/v1/route",
      *     summary="Get a list of routes",
      *     tags={"Route"},
+     *
      *     @OA\Response(response=200, description="Successful operation")
      * )
-     * @return DungeonRouteCollectionResource
      */
     public function list(DungeonRouteListRequest $request): DungeonRouteCollectionResource
     {
@@ -42,29 +42,32 @@ class APIDungeonRouteController extends Controller
      *     path="/api/v1/route/{route}/thumbnail",
      *     summary="Create a new thumbnail for a route you can view",
      *     tags={"Route"},
+     *
      *     @OA\Parameter(
      *         description="Public key of the route you want to generate a thumbnail for",
      *         in="path",
      *         name="route",
      *         required=true,
+     *
      *         @OA\Schema(
      *             type="string"
      *         )
      *     ),
+     *
      *     @OA\RequestBody(
      *          description="Pet object that needs to be added to the store",
      *          required=true,
+     *
      *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailRequest")
      *      ),
+     *
      *     @OA\Response(response=200, description="Successful operation")
      * )
-     *
-     * @return DungeonRouteThumbnailJobCollectionResource
      */
     public function createThumbnails(
-        DungeonRouteThumbnailRequest              $request,
+        DungeonRouteThumbnailRequest $request,
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
-        DungeonRoute                              $dungeonRoute
+        DungeonRoute $dungeonRoute
     ): DungeonRouteThumbnailJobCollectionResource {
         $validated = $request->validated();
 

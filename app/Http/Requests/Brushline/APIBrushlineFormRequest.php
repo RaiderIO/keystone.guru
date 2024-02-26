@@ -11,8 +11,6 @@ class APIBrushlineFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -23,18 +21,15 @@ class APIBrushlineFormRequest extends FormRequest
     {
     }
 
-
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
         return [
-            'floor_id'                => ['required', Rule::exists(Floor::class, 'id')],
-            'polyline'                => 'required|array',
-            'polyline.color'          => [
+            'floor_id' => ['required', Rule::exists(Floor::class, 'id')],
+            'polyline' => 'required|array',
+            'polyline.color' => [
                 'nullable',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
@@ -44,10 +39,10 @@ class APIBrushlineFormRequest extends FormRequest
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'polyline.weight'         => [
+            'polyline.weight' => [
                 'int',
             ],
-            'polyline.vertices_json'  => [
+            'polyline.vertices_json' => [
                 'json',
                 new JsonStringCountRule(2),
             ],

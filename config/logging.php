@@ -14,7 +14,7 @@ return [
     | one of the channels defined in the "channels" configuration array.
     |
     */
-    'default'  => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'stack'),
     /*
     |--------------------------------------------------------------------------
     | Log Channels
@@ -30,71 +30,71 @@ return [
     |
     */
     'channels' => [
-        'stack'          => [
-            'driver'   => 'stack',
+        'stack' => [
+            'driver' => 'stack',
             'channels' => ['daily', 'discord'],
         ],
-        'scheduler'      => [
-            'driver'   => 'stack',
+        'scheduler' => [
+            'driver' => 'stack',
             'channels' => ['scheduler_file', 'discord'],
         ],
-        'single'         => [
+        'single' => [
             'driver' => 'single',
-            'path'   => storage_path('logs/laravel.log'),
-            'level'  => 'debug',
+            'path' => storage_path('logs/laravel.log'),
+            'level' => 'debug',
         ],
         'scheduler_file' => [
             'driver' => 'daily',
-            'path'   => storage_path('logs/scheduler.log'),
-            'level'  => 'debug',
-            'days'   => 14,
+            'path' => storage_path('logs/scheduler.log'),
+            'level' => 'debug',
+            'days' => 14,
         ],
-        'daily'          => [
+        'daily' => [
             'driver' => 'daily',
-            'path'   => storage_path('logs/laravel.log'),
-            'level'  => 'debug',
-            'days'   => 14,
+            'path' => storage_path('logs/laravel.log'),
+            'level' => 'debug',
+            'days' => 14,
         ],
-        'slack'          => [
-            'driver'   => 'slack',
-            'url'      => env('LOG_SLACK_WEBHOOK_URL'),
+        'slack' => [
+            'driver' => 'slack',
+            'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
-            'emoji'    => ':boom:',
-            'level'    => 'critical',
+            'emoji' => ':boom:',
+            'level' => 'critical',
         ],
-        'papertrail'     => [
-            'driver'       => 'monolog',
-            'level'        => 'debug',
-            'handler'      => SyslogUdpHandler::class,
+        'papertrail' => [
+            'driver' => 'monolog',
+            'level' => 'debug',
+            'handler' => SyslogUdpHandler::class,
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
             ],
         ],
-        'stderr'         => [
-            'driver'  => 'monolog',
+        'stderr' => [
+            'driver' => 'monolog',
             'handler' => StreamHandler::class,
-            'with'    => [
+            'with' => [
                 'stream' => 'php://stderr',
             ],
         ],
-        'syslog'         => [
+        'syslog' => [
             'driver' => 'syslog',
-            'level'  => 'debug',
+            'level' => 'debug',
         ],
-        'errorlog'       => [
+        'errorlog' => [
             'driver' => 'errorlog',
-            'level'  => 'debug',
+            'level' => 'debug',
         ],
-        'discord'        => empty(env('APP_LOG_DISCORD_WEBHOOK')) ? [] : [
+        'discord' => empty(env('APP_LOG_DISCORD_WEBHOOK')) ? [] : [
             'driver' => 'custom',
-            'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
-            'via'    => MarvinLabs\DiscordLogger\Logger::class,
-            'level'  => 'error',
-//            'formatter' => Monolog\Formatter\LineFormatter::class,
-//            'formatter_with' => [
-//                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
-//            ],
-        ]
+            'url' => env('APP_LOG_DISCORD_WEBHOOK'),
+            'via' => MarvinLabs\DiscordLogger\Logger::class,
+            'level' => 'error',
+            //            'formatter' => Monolog\Formatter\LineFormatter::class,
+            //            'formatter_with' => [
+            //                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
+            //            ],
+        ],
     ],
 ];

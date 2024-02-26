@@ -16,24 +16,24 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int      $id
- * @property int      $mapping_version_id
- * @property int      $floor_id
+ * @property int $id
+ * @property int $mapping_version_id
+ * @property int $floor_id
  * @property int|null $speed
- * @property string   $vertices_json
- *
- * @property Floor    $floor
+ * @property string $vertices_json
+ * @property Floor $floor
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
+class MountableArea extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
-    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
+    use SeederModel;
 
     public $timestamps = false;
-    public $fillable   = [
+
+    public $fillable = [
         'mapping_version_id',
         'floor_id',
         'speed',
@@ -44,25 +44,16 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
         'floor',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return bool
-     */
     public function contains(CoordinatesServiceInterface $coordinatesService, LatLng $latLng): bool
     {
         return $coordinatesService->polygonContainsPoint($latLng, json_decode($this->vertices_json, true));
@@ -95,17 +86,11 @@ class MountableArea extends CacheModel implements MappingModelInterface, Mapping
         return $result;
     }
 
-    /**
-     * @return int
-     */
     public function getSpeedOrDefault(): int
     {
         return $this->speed ?? config('keystoneguru.character.mounted_movement_speed_yards_second');
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
         return optional($this->floor)->dungeon_id ?? null;

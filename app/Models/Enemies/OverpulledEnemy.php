@@ -12,16 +12,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @property int         $id
- * @property int         $live_session_id
- * @property int         $kill_zone_id
- * @property int         $npc_id
- * @property int         $mdt_id
- *
+ * @property int $id
+ * @property int $live_session_id
+ * @property int $kill_zone_id
+ * @property int $npc_id
+ * @property int $mdt_id
  * @property LiveSession $livesession
- * @property KillZone    $killzone
- * @property Npc         $npc
- * @property Enemy       $enemy
+ * @property KillZone $killzone
+ * @property Npc $npc
+ * @property Enemy $enemy
  *
  * @mixin Eloquent
  */
@@ -38,33 +37,21 @@ class OverpulledEnemy extends Model
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function livesession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function killzone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return Enemy
-     */
     public function getEnemy(): Enemy
     {
         /** @var Enemy $result */

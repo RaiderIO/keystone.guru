@@ -25,9 +25,8 @@ use Teapot\StatusCode;
 class LiveSessionController extends Controller
 {
     /**
-     * @param string|null $title
-     *
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
@@ -36,8 +35,8 @@ class LiveSessionController extends Controller
 
         $liveSession = LiveSession::create([
             'dungeon_route_id' => $dungeonroute->id,
-            'user_id'          => Auth::id(),
-            'public_key'       => LiveSession::generateRandomPublicKey(),
+            'user_id' => Auth::id(),
+            'public_key' => LiveSession::generateRandomPublicKey(),
         ]);
 
         // If the team is set for this route, invite all team members that are currently viewing this route to join
@@ -53,9 +52,9 @@ class LiveSessionController extends Controller
                     $publicKey = $channelUser['public_key'] ?? $channelUser['user_info']['public_key'];
                     /** @var array $channelUser */
                     // Ignore the current user!
-                    if (!isset($publicKey)) {
+                    if (! isset($publicKey)) {
                         logger()->notice('Echo user public_key not set', $channelUser);
-                    } else if ($publicKey !== $user->public_key &&
+                    } elseif ($publicKey !== $user->public_key &&
                         $dungeonroute->team->isUserMember(new User($channelUser))) {
                         $invitees->push($publicKey);
                     }
@@ -73,26 +72,25 @@ class LiveSessionController extends Controller
         }
 
         return redirect()->route('dungeonroute.livesession.view', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'livesession'  => $liveSession,
+            'title' => $dungeonroute->getTitleSlug(),
+            'livesession' => $liveSession,
         ]);
     }
 
     /**
-     * @param string|null $title
-     *
      * @return Application|Factory|View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function view(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        ?string                    $title,
-        LiveSession                $livesession)
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        ?string $title,
+        LiveSession $livesession)
     {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
 
@@ -108,19 +106,18 @@ class LiveSessionController extends Controller
     }
 
     /**
-     * @param string|null $title
-     *
      * @return Application|Factory|View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function viewfloor(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        ?string                    $title,
-        LiveSession                $livesession,
-        string                     $floorIndex)
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        ?string $title,
+        LiveSession $livesession,
+        string $floorIndex)
     {
         $this->authorize('view', $dungeonroute);
         try {
@@ -132,10 +129,10 @@ class LiveSessionController extends Controller
         // In case someone edits the url to something funky
         if ($dungeonroute->id !== $livesession->dungeon_route_id) {
             logger()->debug('Passed dungeonroute does not match dungeonroute attached to live sessions!', [
-                'dungeon_route_id'              => $dungeonroute->id,
-                'dungeon_route_public_key'      => $dungeonroute->public_key,
-                'live_session_id'               => $livesession->id,
-                'live_session_public_key'       => $livesession->public_key,
+                'dungeon_route_id' => $dungeonroute->id,
+                'dungeon_route_public_key' => $dungeonroute->public_key,
+                'live_session_id' => $livesession->id,
+                'live_session_public_key' => $livesession->public_key,
                 'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
             ]);
 
@@ -145,8 +142,8 @@ class LiveSessionController extends Controller
         // It's broken - get rid of it
         if ($livesession->dungeonroute === null) {
             logger()->debug('Live session is attached to a deleted dungeon route - deleting live session', [
-                'live_session_id'               => $livesession->id,
-                'live_session_public_key'       => $livesession->public_key,
+                'live_session_id' => $livesession->id,
+                'live_session_public_key' => $livesession->public_key,
                 'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
             ]);
 
@@ -154,7 +151,7 @@ class LiveSessionController extends Controller
             abort(404);
         }
 
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
@@ -163,19 +160,19 @@ class LiveSessionController extends Controller
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.livesession.view', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $livesession,
+                'title' => $dungeonroute->getTitleSlug(),
+                'livesession' => $livesession,
             ]);
         } else {
             return view('dungeonroute.livesession.view', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $livesession,
-                'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextLiveSession($livesession, $floor),
+                'title' => $dungeonroute->getTitleSlug(),
+                'livesession' => $livesession,
+                'floor' => $floor,
+                'mapContext' => $mapContextService->createMapContextLiveSession($livesession, $floor),
             ]);
         }
     }

@@ -16,27 +16,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                $id
- * @property int                $mapping_version_id
- * @property int                $floor_id
- * @property int                $group
- * @property string             $teeming
- * @property string             $faction
- * @property string|null        $color
- * @property string|null        $color_animated
- * @property string             $label
- * @property string             $vertices_json
- *
- * @property Floor              $floor
+ * @property int $id
+ * @property int $mapping_version_id
+ * @property int $floor_id
+ * @property int $group
+ * @property string $teeming
+ * @property string $faction
+ * @property string|null $color
+ * @property string|null $color_animated
+ * @property string $label
+ * @property string $vertices_json
+ * @property Floor $floor
  * @property Collection|Enemy[] $enemies
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
+class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
-    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
+    use SeederModel;
 
     public $timestamps = false;
 
@@ -59,28 +58,19 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
 
     protected $casts = [
         'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
+        'floor_id' => 'integer',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
@@ -94,9 +84,6 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
         return $this->enemies()->where('seasonal_type', $seasonalType)->get();
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
         return optional($this->floor)->dungeon_id ?? null;

@@ -16,7 +16,7 @@ class CombatLogDungeonOrRaidFilter extends BaseCombatLogFilter implements Combat
         parent::__construct();
 
         $this->specialEventsFilter = new SpecialEventsFilter($this->resultEvents);
-        $this->combatFilter        = new CombatFilter($this->resultEvents);
+        $this->combatFilter = new CombatFilter($this->resultEvents);
 
         $this->addFilter($this->specialEventsFilter);
         $this->addFilter($this->combatFilter);

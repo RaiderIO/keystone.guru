@@ -31,16 +31,15 @@ class FactionSelectionRequiredRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param string $attribute
-     * @param mixed  $value
-     * @return bool
+     * @param  string  $attribute
+     * @param  mixed  $value
      */
     public function passes($attribute, $value): bool
     {
         $dungeonId = $this->request->get('dungeon_id');
         $factionId = $this->request->get('faction_id');
 
-        $result = !empty($value);
+        $result = ! empty($value);
         /** @var Collection|Dungeon[] $factionSelectionRequired */
         $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
@@ -53,8 +52,6 @@ class FactionSelectionRequiredRule implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

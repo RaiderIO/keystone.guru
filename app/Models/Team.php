@@ -17,15 +17,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int                       $id
- * @property string                    $public_key
- * @property string                    $name
- * @property string                    $description
- * @property string                    $invite_code
- * @property string                    $default_role
- *
- * @property Collection|TeamUser[]     $teamusers
- * @property Collection|User[]         $members
+ * @property int $id
+ * @property string $public_key
+ * @property string $name
+ * @property string $description
+ * @property string $invite_code
+ * @property string $default_role
+ * @property Collection|TeamUser[] $teamusers
+ * @property Collection|User[] $members
  * @property Collection|DungeonRoute[] $dungeonroutes
  *
  * @mixin Eloquent
@@ -34,39 +33,30 @@ class Team extends Model
 {
     use HasIconFile;
 
-    protected $visible  = ['name', 'description', 'public_key'];
+    protected $visible = ['name', 'description', 'public_key'];
+
     protected $fillable = ['default_role'];
 
     use GeneratesPublicKey;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     * @return string
      */
     public function getRouteKeyName(): string
     {
         return 'public_key';
     }
 
-    /**
-     * @return HasMany
-     */
     public function teamusers(): HasMany
     {
         return $this->hasMany(TeamUser::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_users');
     }
 
-    /**
-     * @return HasMany
-     */
     public function dungeonroutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
@@ -74,7 +64,6 @@ class Team extends Model
 
     /**
      * Get the amount of routes that are visible for everyone in the team
-     * @return int
      */
     public function getVisibleRouteCount(): int
     {
@@ -85,8 +74,8 @@ class Team extends Model
 
     /**
      * Checks if a user can add/remove a route to this team or not.
-     * @param $user User
-     * @return boolean
+     *
+     * @param  $user  User
      */
     public function canAddRemoveRoute(User $user): bool
     {
@@ -99,8 +88,8 @@ class Team extends Model
     /**
      * Adds a route to this Team.
      *
-     * @param DungeonRoute $dungeonRoute The route to add.
-     * @return boolean True if successful, false if not (already assigned, for example).
+     * @param  DungeonRoute  $dungeonRoute  The route to add.
+     * @return bool True if successful, false if not (already assigned, for example).
      */
     public function addRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -118,8 +107,8 @@ class Team extends Model
     /**
      * Removes a route from this Team.
      *
-     * @param DungeonRoute $dungeonRoute The route to remove.
-     * @return boolean True if successful, false if not (already removed, for example).
+     * @param  DungeonRoute  $dungeonRoute  The route to remove.
+     * @return bool True if successful, false if not (already removed, for example).
      */
     public function removeRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -139,8 +128,8 @@ class Team extends Model
 
     /**
      * Get the role of a user in this team, or false if the user does not exist in this team.
-     * @param $user User
-     * @return string|null
+     *
+     * @param  $user  User
      */
     public function getUserRole(User $user): ?string
     {
@@ -152,23 +141,23 @@ class Team extends Model
 
     /**
      * Get the roles that a user may assign to other users in this team.
-     * @param $user User The user attempting to change roles.
-     * @param $targetUser User The user that is targeted for a role change.
-     * @return array
+     *
+     * @param  $user  User The user attempting to change roles.
+     * @param  $targetUser  User The user that is targeted for a role change.
      */
     public function getAssignableRoles(User $user, User $targetUser): array
     {
-        $userRole       = $this->getUserRole($user);
+        $userRole = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
-        $result         = [];
+        $result = [];
 
         // If both users have a valid role (should always be the case)
         if ($userRole !== null && $targetUserRole !== null) {
-            $roles             = TeamUser::ALL_ROLES;
-            $userRoleKey       = $roles[$userRole];
+            $roles = TeamUser::ALL_ROLES;
+            $userRoleKey = $roles[$userRole];
             $targetUserRoleKey = $roles[$targetUserRole];
 
-            $admin     = $roles[TeamUser::ROLE_ADMIN];
+            $admin = $roles[TeamUser::ROLE_ADMIN];
             $moderator = $roles[TeamUser::ROLE_MODERATOR];
             // For now, admins cannot be demoted to anything else
             if ($targetUserRoleKey !== $admin) {
@@ -192,25 +181,24 @@ class Team extends Model
      *
      * @TODO Should this go to a Policy?
      *
-     * @param $user User
-     * @param $targetUser User
-     * @param $role string
-     * @return boolean
+     * @param  $user  User
+     * @param  $targetUser  User
+     * @param  $role  string
      */
     public function canChangeRole(User $user, User $targetUser, string $role): bool
     {
         $result = false;
-        $roles  = TeamUser::ALL_ROLES;
+        $roles = TeamUser::ALL_ROLES;
 
         // Only if it's a valid role
         if (isset($roles[$role])) {
-            $userRole       = $this->getUserRole($user);
+            $userRole = $this->getUserRole($user);
             $targetUserRole = $this->getUserRole($targetUser);
 
             if ($userRole !== null && $targetUserRole !== null) {
-                $userRoleKey       = $roles[$userRole];
+                $userRoleKey = $roles[$userRole];
                 $targetUserRoleKey = $roles[$targetUserRole];
-                $targetRoleKey     = $roles[$role];
+                $targetRoleKey = $roles[$role];
 
                 // User has a bigger role, and then only up to where the current user is (no promotions past their own
                 // rank) the person, and only users who are currently a moderator or admin may change roles
@@ -223,14 +211,15 @@ class Team extends Model
 
     /**
      * Changes the role of a user in this team.
-     * @param $user User The user of which the role should be changed.
-     * @param $role string The new role of the user.
+     *
+     * @param  $user  User The user of which the role should be changed.
+     * @param  $role  string The new role of the user.
      */
     public function changeRole(User $user, string $role): void
     {
         /** @var TeamUser $teamUser */
         $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
-        $roles    = TeamUser::ALL_ROLES;
+        $roles = TeamUser::ALL_ROLES;
         // Only when user is part of the team, and when the role is a valid one.
         if ($teamUser !== null && isset($roles[$role])) {
             // Update the role with the new one
@@ -250,8 +239,7 @@ class Team extends Model
     /**
      * Gets if a user is an admin and may perform admin actions.
      *
-     * @param $user User
-     * @return bool
+     * @param  $user  User
      */
     public function isUserAdmin(User $user): bool
     {
@@ -262,7 +250,8 @@ class Team extends Model
 
     /**
      * Checks if the user is a collaborator or higher.
-     * @param $user  User
+     *
+     * @param  $user  User
      * @return bool True if the user is, false if not.
      */
     public function isUserCollaborator(User $user): bool
@@ -273,8 +262,7 @@ class Team extends Model
     /**
      * Gets if a user is a moderator and may perform moderation actions.
      *
-     * @param $user User
-     * @return bool
+     * @param  $user  User
      */
     public function isUserModerator(User $user): bool
     {
@@ -285,8 +273,8 @@ class Team extends Model
 
     /**
      * Checks if a user is a member of this team or not.
-     * @param $user User|null
-     * @return bool
+     *
+     * @param  $user  User|null
      */
     public function isUserMember(?User $user): bool
     {
@@ -295,20 +283,20 @@ class Team extends Model
 
     /**
      * Checks if a user can remove another user from the team.
-     * @param User $targetUser The user that's to be removed.
-     * @return boolean
+     *
+     * @param  User  $targetUser  The user that's to be removed.
      */
     public function canRemoveMember(User $user, User $targetUser): bool
     {
         $result = false;
 
-        $userRole       = $this->getUserRole($user);
+        $userRole = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
 
         if ($userRole !== null && $targetUserRole !== null) {
             $roles = TeamUser::ALL_ROLES;
             // Moderator or higher
-            $userRoleKey       = $roles[$userRole];
+            $userRoleKey = $roles[$userRole];
             $targetUserRoleKey = $roles[$targetUserRole];
 
             // Be admin, or moderator that's removing normal users
@@ -323,8 +311,8 @@ class Team extends Model
     /**
      * Removes a member from this Team.
      *
-     * @param User $member The user to remove.
-     * @return boolean True if successful, false if not (already removed, for example).
+     * @param  User  $member  The user to remove.
+     * @return bool True if successful, false if not (already removed, for example).
      */
     public function removeMember(User $member): bool
     {
@@ -353,17 +341,17 @@ class Team extends Model
     /**
      * Adds a member to this team.
      *
-     * @param $user User
-     * @param $role string
+     * @param  $user  User
+     * @param  $role  string
      */
     public function addMember(User $user, string $role): void
     {
         // Prevent duplicate member listings
-        if (!$this->isUserMember($user)) {
+        if (! $this->isUserMember($user)) {
             TeamUser::create([
                 'team_id' => $this->id,
                 'user_id' => $user->id,
-                'role'    => $role,
+                'role' => $role,
             ]);
         }
     }
@@ -372,8 +360,10 @@ class Team extends Model
      * Get the new owner of this team should a user decide to delete their account.
      *
      * @return User|null Null returned if there was no change in owner.
+     *
      * @throws Exception
-     * @var User $user
+     *
+     * @var User
      */
     public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {
@@ -385,15 +375,12 @@ class Team extends Model
                 ));
         }
 
-        $roles    = TeamUser::ALL_ROLES;
-        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(fn($obj, $key) => $roles[$obj->role])->first();
+        $roles = TeamUser::ALL_ROLES;
+        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(fn ($obj, $key) => $roles[$obj->role])->first();
 
         return $newOwner !== null ? $newOwner->user : null;
     }
 
-    /**
-     * @return Collection
-     */
     public function getAvailableTags(): Collection
     {
         return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])

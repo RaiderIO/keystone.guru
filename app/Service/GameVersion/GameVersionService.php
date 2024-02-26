@@ -9,25 +9,23 @@ class GameVersionService implements GameVersionServiceInterface
 {
     private const GAME_VERSION_COOKIE = 'game_version';
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void
     {
         optional($user)->update(['game_version_id' => $gameVersion->id]);
 
         // Unit tests and artisan commands don't like this
-        if (!app()->runningInConsole()) {
+        if (! app()->runningInConsole()) {
             // Set the new cookie
             $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
             setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, ['expires' => 0, 'path' => '/', 'domain' => null, 'secure' => true, 'httponly' => false]);
         }
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getGameVersion(?User $user): GameVersion
     {

@@ -8,8 +8,6 @@ class APIKillZoneMassFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -18,14 +16,12 @@ class APIKillZoneMassFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
         return [
-            'killzones'         => sprintf('nullable|array|max:%d', config('keystoneguru.dungeon_route_limits.kill_zones')),
-            'killzones.*.id'    => 'int',
+            'killzones' => sprintf('nullable|array|max:%d', config('keystoneguru.dungeon_route_limits.kill_zones')),
+            'killzones.*.id' => 'int',
             'killzones.*.color' => [
                 'required',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',

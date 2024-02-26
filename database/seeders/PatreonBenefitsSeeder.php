@@ -9,8 +9,6 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -19,9 +17,9 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
         $patreonBenefitAttributes = [];
         foreach (PatreonBenefit::ALL as $patreonBenefitKey => $id) {
             $patreonBenefitAttributes[] = [
-                'id'   => $id,
+                'id' => $id,
                 'name' => sprintf('patreonbenefits.%s', $patreonBenefitKey),
-                'key'  => $patreonBenefitKey,
+                'key' => $patreonBenefitKey,
             ];
         }
 

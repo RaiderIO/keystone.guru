@@ -14,11 +14,16 @@ abstract class Prefix implements HasParameters
     // Bit of a special one, SWING_DAMAGE_LANDED_SUPPORT is actually a spell and not a swing.
     // We have to include the full name here so it doesn't collide with anything else
     public const PREFIX_SWING_DAMAGE_LANDED_SUPPORT = 'SWING_DAMAGE_LANDED_SUPPORT';
-    public const PREFIX_SWING                       = 'SWING';
-    public const PREFIX_RANGE                       = 'RANGE';
-    public const PREFIX_SPELL_PERIODIC              = 'SPELL_PERIODIC';
-    public const PREFIX_SPELL_BUILDING              = 'SPELL_BUILDING';
-    public const PREFIX_SPELL                       = 'SPELL';
+
+    public const PREFIX_SWING = 'SWING';
+
+    public const PREFIX_RANGE = 'RANGE';
+
+    public const PREFIX_SPELL_PERIODIC = 'SPELL_PERIODIC';
+
+    public const PREFIX_SPELL_BUILDING = 'SPELL_BUILDING';
+
+    public const PREFIX_SPELL = 'SPELL';
 
     public const PREFIX_ALL = [
         self::PREFIX_SWING_DAMAGE_LANDED_SUPPORT,
@@ -31,11 +36,11 @@ abstract class Prefix implements HasParameters
 
     private const PREFIX_CLASS_MAPPING = [
         self::PREFIX_SWING_DAMAGE_LANDED_SUPPORT => SwingDamageLandedSupport::class,
-        self::PREFIX_SWING                       => Swing::class,
-        self::PREFIX_RANGE                       => Range::class,
-        self::PREFIX_SPELL                       => Spell::class,
-        self::PREFIX_SPELL_PERIODIC              => SpellPeriodic::class,
-        self::PREFIX_SPELL_BUILDING              => SpellBuilding::class,
+        self::PREFIX_SWING => Swing::class,
+        self::PREFIX_RANGE => Range::class,
+        self::PREFIX_SPELL => Spell::class,
+        self::PREFIX_SPELL_PERIODIC => SpellPeriodic::class,
+        self::PREFIX_SPELL_BUILDING => SpellBuilding::class,
     ];
 
     public function __construct(protected int $combatLogVersion)
@@ -43,7 +48,6 @@ abstract class Prefix implements HasParameters
     }
 
     /**
-     * @param array $parameters
      * @return self
      */
     public function setParameters(array $parameters): HasParameters
@@ -54,7 +58,6 @@ abstract class Prefix implements HasParameters
     }
 
     /**
-     * @return Prefix
      * @throws Exception
      */
     public static function createFromEventName(int $combatLogVersion, string $eventName): Prefix

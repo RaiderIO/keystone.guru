@@ -32,7 +32,7 @@ class Restore extends Command
      */
     public function handle()
     {
-        $id = (int)$this->argument('id');
+        $id = (int) $this->argument('id');
 
         $changeLogs = MappingChangeLog::where('id', '>=', $id)->get();
 
@@ -42,7 +42,7 @@ class Restore extends Command
                 if ($changeLog->model_class === Enemy::class) {
                     // This mob was marked as inspiring
                     if (str_contains((string) $changeLog->after_model, 'inspiring')) {
-                        $enemy                = Enemy::findOrFail($changeLog->model_id);
+                        $enemy = Enemy::findOrFail($changeLog->model_id);
                         $enemy->seasonal_type = 'inspiring';
                         $enemy->save();
                         $this->info(sprintf('Successfully restored %s -> ID = %s', $changeLog->model_class, $changeLog->model_id));
@@ -76,7 +76,6 @@ class Restore extends Command
             }
 
         }
-
 
         return 0;
     }

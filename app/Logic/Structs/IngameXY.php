@@ -9,24 +9,15 @@ class IngameXY implements Arrayable
 {
     private ?LatLng $latLng = null;
 
-    /**
-     * @param Floor|null $floor
-     */
     public function __construct(private float $x = 0, private float $y = 0, private ?Floor $floor = null)
     {
     }
 
-    /**
-     * @return float
-     */
     public function getX(): float
     {
         return $this->x;
     }
 
-    /**
-     * @return IngameXY
-     */
     public function setX(float $x): IngameXY
     {
         $this->x = $x;
@@ -34,17 +25,11 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getY(): float
     {
         return $this->y;
     }
 
-    /**
-     * @return IngameXY
-     */
     public function setY(float $y): IngameXY
     {
         $this->y = $y;
@@ -52,19 +37,11 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    /**
-     * @return Floor|null
-     */
     public function getFloor(): ?Floor
     {
         return $this->floor;
     }
 
-    /**
-     * @param Floor|null $floor
-     *
-     * @return IngameXY
-     */
     public function setFloor(?Floor $floor): IngameXY
     {
         $this->floor = $floor;
@@ -72,9 +49,6 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -92,10 +66,6 @@ class IngameXY implements Arrayable
         );
     }
 
-    /**
-     * @param Floor|null $floor
-     * @return IngameXY
-     */
     public static function fromArray(array $ingameXY, ?Floor $floor): IngameXY
     {
         return new IngameXY($ingameXY['x'], $ingameXY['y'], $floor);

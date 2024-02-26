@@ -77,5 +77,4 @@ class LoggingServiceProvider extends ServiceProvider
         // Wow Tools
         $this->app->bind(WowToolsServiceLoggingInterface::class, WowToolsServiceLogging::class);
     }
-
 }

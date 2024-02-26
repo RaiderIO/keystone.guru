@@ -4,9 +4,6 @@ namespace App\Http\Requests\MappingVersion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @package App\Http\Requests
- */
 class APIMappingVersionFormRequest extends FormRequest
 {
     /**
@@ -21,17 +18,15 @@ class APIMappingVersionFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
         return [
-            'enemy_forces_required'           => 'int',
-            'enemy_forces_required_teeming'   => 'int|nullable',
-            'enemy_forces_shrouded'           => 'int|nullable',
+            'enemy_forces_required' => 'int',
+            'enemy_forces_required_teeming' => 'int|nullable',
+            'enemy_forces_shrouded' => 'int|nullable',
             'enemy_forces_shrouded_zul_gamux' => 'int|nullable',
-            'timer_max_seconds'               => 'int',
+            'timer_max_seconds' => 'int',
         ];
     }
 }

@@ -11,7 +11,6 @@ use Illuminate\Console\Command;
 
 class RefreshAffixGroupEaseTiers extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -38,11 +37,9 @@ class RefreshAffixGroupEaseTiers extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(
-        ArchonApiServiceInterface          $archonApiService,
+        ArchonApiServiceInterface $archonApiService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
     ): int {
         try {
@@ -53,7 +50,7 @@ class RefreshAffixGroupEaseTiers extends Command
             return -1;
         }
 
-        if (!isset($tierLists['encounterTierList'])) {
+        if (! isset($tierLists['encounterTierList'])) {
             $this->error(sprintf('Invalid response: %s', json_encode($tierLists)));
 
             return -1;

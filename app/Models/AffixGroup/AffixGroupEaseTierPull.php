@@ -10,15 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                             $id
- * @property int                             $affix_group_id
- * @property string                          $tiers_hash
- *
- * @property Carbon                          $last_updated_at
- * @property Carbon                          $created_at
- * @property Carbon                          $updated_at
- *
- * @property AffixGroup                      $affixGroup
+ * @property int $id
+ * @property int $affix_group_id
+ * @property string $tiers_hash
+ * @property Carbon $last_updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property AffixGroup $affixGroup
  * @property Collection|AffixGroupEaseTier[] $affixGroupEaseTiers
  *
  * @mixin Eloquent
@@ -33,17 +31,11 @@ class AffixGroupEaseTierPull extends CacheModel
         'last_updated_at',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function affixGroupEaseTiers(): HasMany
     {
         return $this->hasMany(AffixGroupEaseTier::class);

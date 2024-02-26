@@ -13,7 +13,7 @@ class RaidEventsService implements RaidEventsServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getRaidEvents(SimulationCraftRaidEventsOptions $options): RaidEventsCollection
     {

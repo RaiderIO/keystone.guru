@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\DungeonRoute;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
@@ -24,12 +23,12 @@ class ThumbnailService implements ThumbnailServiceInterface
     public const THUMBNAIL_CUSTOM_FOLDER_PATH = '/images/route_thumbnails_custom';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        int          $attempts = 0): bool
+        int $floorIndex,
+        int $attempts = 0): bool
     {
         return $this->doCreateThumbnail(
             $dungeonRoute,
@@ -39,18 +38,18 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function createThumbnailCustom(
         DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        int          $attempts,
-        ?int         $viewportWidth = null,
-        ?int         $viewportHeight = null,
-        ?int         $imageWidth = null,
-        ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
-        ?int         $quality = null): bool
+        int $floorIndex,
+        int $attempts,
+        ?int $viewportWidth = null,
+        ?int $viewportHeight = null,
+        ?int $imageWidth = null,
+        ?int $imageHeight = null,
+        ?int $zoomLevel = null,
+        ?int $quality = null): bool
     {
         return $this->doCreateThumbnail(
             $dungeonRoute,
@@ -65,25 +64,16 @@ class ThumbnailService implements ThumbnailServiceInterface
         );
     }
 
-    /**
-     * @param int|null $viewportWidth
-     * @param int|null $viewportHeight
-     * @param int|null $imageWidth
-     * @param int|null $imageHeight
-     * @param int|null $zoomLevel
-     * @param int|null $quality
-     * @return bool
-     */
     private function doCreateThumbnail(
         DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        string       $targetFolder,
-        ?int         $viewportWidth = null,
-        ?int         $viewportHeight = null,
-        ?int         $imageWidth = null,
-        ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
-        ?int         $quality = null): bool
+        int $floorIndex,
+        string $targetFolder,
+        ?int $viewportWidth = null,
+        ?int $viewportHeight = null,
+        ?int $imageWidth = null,
+        ?int $imageHeight = null,
+        ?int $zoomLevel = null,
+        ?int $quality = null): bool
     {
         if (app()->isDownForMaintenance()) {
             Log::channel('scheduler')->info('Not generating thumbnail - app is down for maintenance');
@@ -91,12 +81,11 @@ class ThumbnailService implements ThumbnailServiceInterface
             return false;
         }
 
-        $viewportWidth  ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
+        $viewportWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
         $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
-        $imageWidth     ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
-        $imageHeight    ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
-        $zoomLevel      ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
-
+        $imageWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
+        $imageHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
+        $zoomLevel ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
 
         // 1. Headless chrome saves file in a temp location
         // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
@@ -105,7 +94,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         $filename = self::getFilename($dungeonRoute, $floorIndex);
 
         $tmpFile = sprintf('/tmp/%s', $filename);
-        $target  = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
+        $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
 
         // puppeteer chromium-browser
         $process = new Process([
@@ -114,12 +103,12 @@ class ThumbnailService implements ThumbnailServiceInterface
             resource_path('assets/puppeteer/route_thumbnail.js'),
             // First argument; where to navigate
             route('dungeonroute.preview', [
-                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeon' => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute->public_key,
-                'title'        => $dungeonRoute->getTitleSlug(),
-                'floorindex'   => $floorIndex,
-                'secret'       => config('keystoneguru.thumbnail.preview_secret'),
-                'zoomLevel'    => $zoomLevel,
+                'title' => $dungeonRoute->getTitleSlug(),
+                'floorindex' => $floorIndex,
+                'secret' => config('keystoneguru.thumbnail.preview_secret'),
+                'zoomLevel' => $zoomLevel,
             ]),
             // Second argument; where to save the resulting image
             $tmpFile,
@@ -132,7 +121,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         $process->run();
 
         if ($process->isSuccessful()) {
-            if (!file_exists($tmpFile)) {
+            if (! file_exists($tmpFile)) {
                 Log::channel('scheduler')->error('Unable to find generated thumbnail; did puppeteer download Chromium?');
             } else {
                 try {
@@ -143,7 +132,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $dungeonRoute->save();
 
                     // Ensure our write path exists
-                    if (!is_dir($targetFolder)) {
+                    if (! is_dir($targetFolder)) {
                         mkdir($targetFolder, 0755, true);
                     }
 
@@ -182,10 +171,10 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         // Log any errors that may have occurred
         $errors = $process->getErrorOutput();
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             Log::channel('scheduler')->error($errors, [
                 'dungeonRoute' => $dungeonRoute->public_key,
-                'floor'        => $floorIndex,
+                'floor' => $floorIndex,
             ]);
 
             return false;
@@ -195,7 +184,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool
     {
@@ -209,7 +198,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         }
 
         // Temporarily disable timestamps since we don't want this action to update the updated_at
-        $dungeonRoute->timestamps                  = false;
+        $dungeonRoute->timestamps = false;
         $dungeonRoute->thumbnail_refresh_queued_at = Carbon::now()->toDateTimeString();
         $dungeonRoute->save();
 
@@ -220,33 +209,32 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,
-        ?int         $viewportWidth = null,
-        ?int         $viewportHeight = null,
-        ?int         $imageWidth = null,
-        ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
-        ?int         $quality = null): Collection
+        ?int $viewportWidth = null,
+        ?int $viewportHeight = null,
+        ?int $imageWidth = null,
+        ?int $imageHeight = null,
+        ?int $zoomLevel = null,
+        ?int $quality = null): Collection
     {
         $result = collect();
 
         // Generate thumbnails for _all_ floors
         foreach ($dungeonRoute->dungeon->floors as $floor) {
             /** @var Floor $floor */
-
             $dungeonRouteThumbnailJob = DungeonRouteThumbnailJob::create([
                 'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $floor->id,
-                'status'           => DungeonRouteThumbnailJob::STATUS_QUEUED,
-                'viewport_width'   => $viewportWidth,
-                'viewport_height'  => $viewportHeight,
-                'image_width'      => $imageWidth,
-                'image_height'     => $imageHeight,
-                'zoom_level'       => $zoomLevel,
-                'quality'          => $quality,
+                'floor_id' => $floor->id,
+                'status' => DungeonRouteThumbnailJob::STATUS_QUEUED,
+                'viewport_width' => $viewportWidth,
+                'viewport_height' => $viewportHeight,
+                'image_width' => $imageWidth,
+                'image_height' => $imageHeight,
+                'zoom_level' => $zoomLevel,
+                'quality' => $quality,
             ]);
 
             $dungeonRouteThumbnailJob->setRelation('dungeonRoute', $dungeonRoute);
@@ -266,29 +254,23 @@ class ThumbnailService implements ThumbnailServiceInterface
         return $result;
     }
 
-    /**
-     * @return string
-     */
     public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
         return sprintf('%s_%s.jpg', $dungeonRoute->public_key, $floorIndex);
     }
 
-    /**
-     * @return string
-     */
     public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder): string
     {
         return public_path(sprintf('%s/%s', $targetFolder, self::getFilename($dungeonRoute, $floorIndex)));
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool
     {
         // If the dungeons don't match then this doesn't make sense
-        if (!$sourceDungeonRoute->has_thumbnail || $sourceDungeonRoute->dungeon_id !== $targetDungeonRoute->dungeon_id) {
+        if (! $sourceDungeonRoute->has_thumbnail || $sourceDungeonRoute->dungeon_id !== $targetDungeonRoute->dungeon_id) {
             return false;
         }
 
@@ -299,7 +281,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             $sourcePath = static::getTargetFilePath($sourceDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
             $targetPath = static::getTargetFilePath($targetDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
 
-            if (!File::exists($sourcePath) || !File::exists($targetPath)) {
+            if (! File::exists($sourcePath) || ! File::exists($targetPath)) {
                 continue;
             }
 
@@ -317,10 +299,6 @@ class ThumbnailService implements ThumbnailServiceInterface
         return $result;
     }
 
-    /**
-     * @param DungeonRoute $dungeonRoute
-     * @return bool
-     */
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool
     {
         $result = true;

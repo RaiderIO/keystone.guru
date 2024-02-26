@@ -39,6 +39,7 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
      * Execute the console command.
      *
      * @return int
+     *
      * @throws MissingArgumentException
      */
     public function handle()
@@ -54,14 +55,14 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
             $sourceBranch = 'development';
             $targetBranch = 'master';
 
-            $username   = config('keystoneguru.github_username');
+            $username = config('keystoneguru.github_username');
             $repository = config('keystoneguru.github_repository');
 
             /** @var PullRequest $githubPullRequestClient */
             $githubPullRequestClient = GitHub::pr();
             // May throw an exception if it doesn't exist
             $existingPullRequestId = 0;
-            $pullRequestTitle      = sprintf('Release %s', $release->version);
+            $pullRequestTitle = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
             foreach ($githubPullRequestClient->all($username, $repository, ['state' => 'open', 'labels' => 'release']) as $githubPullRequest) {
@@ -75,23 +76,23 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
             }
 
             // Append the release title here so that we don't match on it earlier
-            $pullRequestTitle .= !empty($release->title) ? sprintf(' - %s', $release->title) : '';
+            $pullRequestTitle .= ! empty($release->title) ? sprintf(' - %s', $release->title) : '';
 
             $params = [
-                'title'     => $pullRequestTitle,
-                'body'      => $release->github_body,
-                'labels'    => [
+                'title' => $pullRequestTitle,
+                'body' => $release->github_body,
+                'labels' => [
                     'release',
                 ],
                 'assignees' => [
                     $username,
                 ],
-                'base'      => $targetBranch,
-                'head'      => $sourceBranch,
+                'base' => $targetBranch,
+                'head' => $sourceBranch,
             ];
 
             if ($existingPullRequestId === 0) {
-                $newPullRequest        = $githubPullRequestClient->create($username, $repository, $params);
+                $newPullRequest = $githubPullRequestClient->create($username, $repository, $params);
                 $existingPullRequestId = $newPullRequest['id'];
                 $this->info(sprintf('Successfully created GitHub pull request %s', $version));
                 $result = 1;
@@ -103,14 +104,13 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
 
             // Add labels to the pull request
             // The library I'm using cannot do this yet - do it later?
-//            if ($existingPullRequestId !== 0) {
-//
-//                /** @var Issue $githubIssueClient */
-//                $githubIssueClient = GitHub::issues();
-//
-//                $githubIssueClient->
-//            }
-
+            //            if ($existingPullRequestId !== 0) {
+            //
+            //                /** @var Issue $githubIssueClient */
+            //                $githubIssueClient = GitHub::issues();
+            //
+            //                $githubIssueClient->
+            //            }
 
         } else {
             $this->error(sprintf('Unable to find release %s', $version));

@@ -13,8 +13,6 @@ class TeamPolicy
 
     /**
      * Determine whether the user can edit a team.
-     *
-     * @return bool
      */
     public function edit(User $user, Team $team): bool
     {
@@ -24,49 +22,32 @@ class TeamPolicy
 
     /**
      * Determine whether the user can delete a team or not.
-     *
-     * @return bool
      */
     public function delete(User $user, Team $team): bool
     {
         return $team->isUserMember($user) && $team->getUserRole($user) === TeamUser::ROLE_ADMIN;
     }
 
-    /**
-     * @return boolean
-     */
     public function moderateRoute(User $user, Team $team): bool
     {
         return $team->canAddRemoveRoute($user);
     }
 
-    /**
-     * @return boolean
-     */
     public function changeRole(User $user, Team $team): bool
     {
         return $team->isUserModerator($user);
     }
 
-    /**
-     * @return boolean
-     */
     public function changeDefaultRole(User $user, Team $team): bool
     {
         return $team->getUserRole($user) === TeamUser::ROLE_ADMIN;
     }
 
-    /**
-     * @return boolean
-     */
     public function removeMember(User $user, Team $team, User $member): bool
     {
         return $team->canRemoveMember($user, $member);
     }
 
-    /**
-     * @return bool
-     */
     public function refreshInviteLink(User $user, Team $team): bool
     {
         return $team->isUserModerator($user);
@@ -74,8 +55,6 @@ class TeamPolicy
 
     /**
      * Determine whether the user can perform ad-free giveaways on a member of a team.
-     *
-     * @return bool
      */
     public function canAdFreeGiveaway(User $user, Team $team): bool
     {

@@ -26,14 +26,14 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
     }
 
     /**
-     * @param DungeonFloorSwitchMarker|null $dungeonFloorSwitchMarker
      * @return DungeonFloorSwitchMarker|Model
+     *
      * @throws Throwable
      */
     public function store(
         DungeonFloorSwitchMarkerFormRequest $request,
-        MappingVersion                      $mappingVersion,
-        DungeonFloorSwitchMarker            $dungeonFloorSwitchMarker = null
+        MappingVersion $mappingVersion,
+        ?DungeonFloorSwitchMarker $dungeonFloorSwitchMarker = null
     ): DungeonFloorSwitchMarker {
         return $this->storeModel($mappingVersion, $request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int    $id
- * @property int    $dungeon_route_id
+ * @property int $id
+ * @property int $dungeon_route_id
  * @property string $import_string
  *
  * @mixin Eloquent
@@ -26,8 +26,6 @@ class MDTImport extends Model
 
     /**
      * Get the dungeon route that this import created.
-     *
-     * @return BelongsTo
      */
     public function dungeonroute(): BelongsTo
     {

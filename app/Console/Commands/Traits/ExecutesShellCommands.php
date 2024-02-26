@@ -9,12 +9,10 @@ use Illuminate\Console\Command;
  */
 trait ExecutesShellCommands
 {
-
     /**
      * Executes a shell command and echos its response to the info console.
      *
-     * @param string|array $cmds
-     * @return array
+     * @param  string|array  $cmds
      */
     protected function shell($cmds, bool $echo = true): array
     {
@@ -25,7 +23,7 @@ trait ExecutesShellCommands
         }
 
         foreach ($cmds as $cmd) {
-            if (!empty($cmd)) {
+            if (! empty($cmd)) {
                 $cmdResult = trim(shell_exec($cmd));
 
                 if ($echo) {

@@ -19,15 +19,15 @@ use Throwable;
 class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @param MountableArea|null $mountableArea
      * @return MountableArea|Model
+     *
      * @throws Exception
      * @throws Throwable
      */
     public function store(
         MountableAreaFormRequest $request,
-        MappingVersion           $mappingVersion,
-        MountableArea            $mountableArea = null): MountableArea
+        MappingVersion $mappingVersion,
+        ?MountableArea $mountableArea = null): MountableArea
     {
         $validated = $request->validated();
 
@@ -39,11 +39,12 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws Throwable
      */
     public function delete(Request $request, MountableArea $mountableArea)
     {
-        return DB::transaction(function () use ($request, $mountableArea) {
+        return DB::transaction(function () use ($mountableArea) {
             try {
                 if ($mountableArea->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments

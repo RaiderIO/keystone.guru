@@ -8,18 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property string           $model_class
- *
+ * @property string $model_class
  * @property Collection|Tag[] $tags
  *
  * @mixin Model
  */
 trait HasTags
 {
-    /**
-     * @param int|null $tagCategoryId
-     * @return hasMany
-     */
     public function tags(?int $tagCategoryId = null): HasMany
     {
         $result = $this->hasMany(Tag::class, 'model_id')->where('model_class', $this::class);
@@ -31,9 +26,6 @@ trait HasTags
         return $result;
     }
 
-    /**
-     * @return bool
-     */
     public function hasTag(int $tagCategoryId, string $name): bool
     {
         return in_array($name, $this->tags($tagCategoryId)->get()->pluck(['name'])->toArray());

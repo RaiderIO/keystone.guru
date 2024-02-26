@@ -14,17 +14,14 @@ class ImportStringPulls
 
     private readonly Collection $killZoneAttributes;
 
-    /**
-     * @param int|null $seasonalIndex
-     */
     public function __construct(
-        private readonly Collection     $warnings,
-        private readonly Collection     $errors,
-        private readonly Dungeon        $dungeon,
+        private readonly Collection $warnings,
+        private readonly Collection $errors,
+        private readonly Dungeon $dungeon,
         private readonly MappingVersion $mappingVersion,
-        private readonly bool           $isRouteTeeming,
-        private readonly ?int           $seasonalIndex,
-        private readonly array          $mdtPulls)
+        private readonly bool $isRouteTeeming,
+        private readonly ?int $seasonalIndex,
+        private readonly array $mdtPulls)
     {
         $this->killZoneAttributes = collect();
     }
@@ -45,41 +42,26 @@ class ImportStringPulls
         return $this->errors;
     }
 
-    /**
-     * @return Dungeon
-     */
     public function getDungeon(): Dungeon
     {
         return $this->dungeon;
     }
 
-    /**
-     * @return MappingVersion
-     */
     public function getMappingVersion(): MappingVersion
     {
         return $this->mappingVersion;
     }
 
-    /**
-     * @return bool
-     */
     public function isRouteTeeming(): bool
     {
         return $this->isRouteTeeming;
     }
 
-    /**
-     * @return int|null
-     */
     public function getSeasonalIndex(): ?int
     {
         return $this->seasonalIndex;
     }
 
-    /**
-     * @return array
-     */
     public function getMdtPulls(): array
     {
         return $this->mdtPulls;
@@ -95,9 +77,6 @@ class ImportStringPulls
         return $this;
     }
 
-    /**
-     * @return self
-     */
     public function addKillZoneAttributes(array $attributes): self
     {
         $this->killZoneAttributes->push($attributes);
@@ -105,17 +84,11 @@ class ImportStringPulls
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getEnemyForces(): int
     {
         return $this->enemyForces;
     }
 
-    /**
-     * @return Collection
-     */
     public function getKillZoneAttributes(): Collection
     {
         return $this->killZoneAttributes;

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
@@ -13,12 +12,8 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
-    /** @var bool */
     private bool $cacheEnabled = true;
 
-    /**
-     * @return DateInterval|null
-     */
     private function getTtl(string $key): ?DateInterval
     {
         $cacheConfig = config('keystoneguru.cache');
@@ -26,10 +21,6 @@ class CacheService implements CacheServiceInterface
         return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
     }
 
-    /**
-     * @param bool $cacheEnabled
-     * @return CacheService
-     */
     public function setCacheEnabled(bool $cacheEnabled): CacheService
     {
         $this->cacheEnabled = $cacheEnabled;
@@ -39,18 +30,18 @@ class CacheService implements CacheServiceInterface
 
     /**
      * Remembers a value with a specific key if a condition is met
-     * @param bool                     $condition
-     * @param string                   $key
-     * @param Closure|mixed            $value
-     * @param string|null|DateInterval $ttl
+     *
+     * @param  Closure|mixed  $value
+     * @param  string|null|DateInterval  $ttl
      * @return Closure|mixed|null
+     *
      * @throws InvalidArgumentException
      */
     public function rememberWhen(bool $condition, string $key, $value, $ttl = null): mixed
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
-        } else if ($value instanceof Closure) {
+        } elseif ($value instanceof Closure) {
             $value = $value();
         }
 
@@ -58,17 +49,15 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string                   $key
-     * @param Closure|mixed            $value
-     * @param string|null|DateInterval $ttl
-     * @return mixed
+     * @param  Closure|mixed  $value
+     * @param  string|null|DateInterval  $ttl
      */
     public function remember(string $key, $value, $ttl = null): mixed
     {
         $result = null;
 
         // If we should ignore the cache, of if it's found
-        if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+        if (! $this->cacheEnabled || ($result = $this->get($key)) === null) {
 
             // Get the result by calling the closure
             if ($value instanceof Closure) {
@@ -100,20 +89,14 @@ class CacheService implements CacheServiceInterface
         return $result;
     }
 
-    /**
-     * @param string $key
-     * @return mixed
-     */
     public function get(string $key): mixed
     {
         return Cache::get($key);
     }
 
     /**
-     * @param string                   $key
-     * @param                          $object
-     * @param string|null|DateInterval $ttl
-     * @return bool
+     * @param  string|null|DateInterval  $ttl
+     *
      * @throws InvalidArgumentException
      */
     public function set(string $key, $object, $ttl = null): bool
@@ -122,7 +105,6 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @return bool
      * @throws InvalidArgumentException
      */
     public function unset(string $key): bool
@@ -130,17 +112,12 @@ class CacheService implements CacheServiceInterface
         return Cache::delete($key);
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
     public function has(string $key): bool
     {
         return Cache::has($key);
     }
 
     /**
-     *
      * @throws InvalidArgumentException
      */
     public function dropCaches(): void

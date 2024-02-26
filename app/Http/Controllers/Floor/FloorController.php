@@ -23,18 +23,18 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param Floor|null $floor
      * @return Floor
+     *
      * @throws Exception
      */
-    public function store(FloorFormRequest $request, Dungeon $dungeon, Floor $floor = null)
+    public function store(FloorFormRequest $request, Dungeon $dungeon, ?Floor $floor = null)
     {
         $beforeFloor = $floor === null ? null : clone $floor;
 
         $validated = $request->validated();
 
         if ($floor === null) {
-            $floor   = Floor::create(array_merge([
+            $floor = Floor::create(array_merge([
                 'dungeon_id' => $dungeon->id,
             ], $validated));
             $success = $floor instanceof Floor;
@@ -74,7 +74,6 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Factory|View
      */
     public function new(Request $request, Dungeon $dungeon)
@@ -85,7 +84,6 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Application|Factory|RedirectResponse|View
      */
     public function edit(Request $request, Dungeon $dungeon, Floor $floor)
@@ -94,8 +92,8 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.edit', [
-                'dungeon'        => $dungeon,
-                'floor'          => $floor,
+                'dungeon' => $dungeon,
+                'floor' => $floor,
                 'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get(),
             ]);
         } else {
@@ -106,14 +104,13 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Application|Factory|View|RedirectResponse
      */
     public function mapping(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        Floor                      $floor)
+        Dungeon $dungeon,
+        Floor $floor)
     {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));
@@ -122,8 +119,8 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.mapping', [
-                'floor'          => $floor,
-                'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $floor, $mappingVersion),
+                'floor' => $floor,
+                'mapContext' => $mapContextService->createMapContextMappingVersionEdit($dungeon, $floor, $mappingVersion),
                 'mappingVersion' => $mappingVersion,
             ]);
         } else {
@@ -134,8 +131,8 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
@@ -152,6 +149,7 @@ class FloorController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(FloorFormRequest $request, Dungeon $dungeon)
@@ -164,7 +162,7 @@ class FloorController extends Controller
 
         return redirect()->route('admin.floor.edit', [
             'dungeon' => $dungeon,
-            'floor'   => $floor,
+            'floor' => $floor,
         ]);
     }
 }

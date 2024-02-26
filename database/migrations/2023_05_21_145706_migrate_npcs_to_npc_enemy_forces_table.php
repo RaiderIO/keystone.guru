@@ -22,13 +22,12 @@ class MigrateNpcsToNpcEnemyForcesTable extends Migration
         $allNpcs = Npc::all();
         foreach (MappingVersion::all() as $mappingVersion) {
             /** @var MappingVersion $mappingVersion */
-
             foreach ($allNpcs->whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id]) as $npc) {
                 /** @var Npc $npc */
                 NpcEnemyForces::create([
-                    'npc_id'               => $npc->id,
-                    'mapping_version_id'   => $mappingVersion->id,
-                    'enemy_forces'         => $npc->enemy_forces > 0 ? $npc->enemy_forces : 0,
+                    'npc_id' => $npc->id,
+                    'mapping_version_id' => $mappingVersion->id,
+                    'enemy_forces' => $npc->enemy_forces > 0 ? $npc->enemy_forces : 0,
                     'enemy_forces_teeming' => $npc->enemy_forces_teeming > 0 ? $npc->enemy_forces_teeming : null,
                 ]);
             }

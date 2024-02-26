@@ -9,8 +9,6 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -19,7 +17,7 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
         $publishedStateAttributes = [];
         foreach (PublishedState::ALL as $publishedStateName => $id) {
             $publishedStateAttributes[] = [
-                'id'   => $id,
+                'id' => $id,
                 'name' => $publishedStateName,
             ];
         }

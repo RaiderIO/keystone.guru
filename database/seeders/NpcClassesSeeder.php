@@ -9,8 +9,6 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -19,7 +17,7 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
         $npcClassAttributes = [];
         foreach (NpcClass::ALL as $key) {
             $npcClassAttributes[] = [
-                'key'  => $key,
+                'key' => $key,
                 'name' => sprintf('npcclasses.%s', $key),
             ];
         }

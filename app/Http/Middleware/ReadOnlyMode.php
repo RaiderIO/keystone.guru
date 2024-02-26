@@ -1,4 +1,6 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Closure;
@@ -10,7 +12,6 @@ class ReadOnlyMode
     public function __construct(private readonly ReadOnlyModeServiceInterface $readOnlyModeService)
     {
     }
-
 
     /**
      * Handle an incoming request.

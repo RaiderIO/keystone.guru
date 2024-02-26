@@ -39,6 +39,7 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
      * Execute the console command.
      *
      * @return int
+     *
      * @throws MissingArgumentException
      */
     public function handle()
@@ -51,30 +52,30 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
         $this->info(sprintf('>> Creating Github ticket for %s', $version));
 
         if ($release !== null) {
-            $username   = config('keystoneguru.github_username');
+            $username = config('keystoneguru.github_username');
             $repository = config('keystoneguru.github_repository');
 
             /** @var Issue $githubIssueClient */
             $githubIssueClient = GitHub::issues();
             // May throw an exception if it doesn't exist
             $existingIssueId = 0;
-            $issueTitle      = sprintf('Release %s', $release->version);
+            $issueTitle = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
             foreach ($githubIssueClient->all($username, $repository, ['filter' => 'all', 'state' => 'all', 'labels' => 'release']) as $githubIssue) {
-                if (str_starts_with((string) $githubIssue['title'], $issueTitle) && !isset($githubIssue['pull_request'])) {
+                if (str_starts_with((string) $githubIssue['title'], $issueTitle) && ! isset($githubIssue['pull_request'])) {
                     $existingIssueId = $githubIssue['number'];
                     break;
                 }
             }
 
             // Append the release title here so that we don't match on it earlier
-            $issueTitle .= !empty($release->title) ? sprintf(' - %s', $release->title) : '';
+            $issueTitle .= ! empty($release->title) ? sprintf(' - %s', $release->title) : '';
 
             $params = [
-                'title'     => $issueTitle,
-                'body'      => $release->github_body,
-                'labels'    => [
+                'title' => $issueTitle,
+                'body' => $release->github_body,
+                'labels' => [
                     'release',
                 ],
                 'assignees' => [
@@ -91,7 +92,6 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
                 $this->info(sprintf('Successfully updated GitHub issue %s', $version));
                 $result = 2;
             }
-
 
         } else {
             $this->error(sprintf('Unable to find release %s', $version));

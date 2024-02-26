@@ -29,16 +29,15 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     use PublicKeyDungeonRoute;
 
     /**
-     * @param Enemy|null $enemy
-     *
      * @return Enemy|Model
+     *
      * @throws Throwable
      */
     public function store(
-        APIEnemyFormRequest         $request,
+        APIEnemyFormRequest $request,
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion              $mappingVersion,
-        Enemy                       $enemy = null
+        MappingVersion $mappingVersion,
+        ?Enemy $enemy = null
     ): Enemy {
         $validated = $request->validated();
 
@@ -56,7 +55,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
             foreach ($activeAuras as $activeAura) {
-                if (!empty($activeAura)) {
+                if (! empty($activeAura)) {
                     $spell = Spell::findOrFail($activeAura);
                     // Only when the passed spell is actually an aura
                     if ($spell->aura) {
@@ -72,7 +71,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
-                $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
+                $ingameXY = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
                 $newLatLng = $coordinatesService->calculateMapLocationForIngameLocation($ingameXY->setFloor($enemy->floor));
 
                 $enemy->update($newLatLng->toArray());
@@ -81,8 +80,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     *
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
@@ -96,11 +95,11 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
 
             // Create a new one, if the user didn't just want to clear it
-            if (!empty($raidMarkerName)) {
+            if (! empty($raidMarkerName)) {
                 DungeonRouteEnemyRaidMarker::create([
                     'dungeon_route_id' => $dungeonRoute->id,
-                    'raid_marker_id'   => RaidMarker::ALL[$raidMarkerName],
-                    'enemy_id'         => $enemy->id,
+                    'raid_marker_id' => RaidMarker::ALL[$raidMarkerName],
+                    'enemy_id' => $enemy->id,
                 ]);
 
                 $result = ['name' => $raidMarkerName];
@@ -117,11 +116,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws Throwable
      */
     public function delete(Request $request, Enemy $enemy)
     {
-        return DB::transaction(function () use ($request, $enemy) {
+        return DB::transaction(function () use ($enemy) {
             try {
                 if ($enemy->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments

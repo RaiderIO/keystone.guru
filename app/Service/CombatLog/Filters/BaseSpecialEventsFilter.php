@@ -66,10 +66,6 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
      * @throws FloorNotSupportedException
      * @throws DungeonNotSupportedException
      */
@@ -87,7 +83,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
             try {
                 $this->resultEvents->push((new ZoneChangeResultEvent($combatLogEvent)));
             } catch (DungeonNotSupportedException $e) {
-                if (!in_array($combatLogEvent->getZoneId(), self::IGNORE_MAP_IDS)) {
+                if (! in_array($combatLogEvent->getZoneId(), self::IGNORE_MAP_IDS)) {
                     throw $e;
                 }
             }
@@ -100,7 +96,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
             try {
                 $this->resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
             } catch (FloorNotSupportedException $e) {
-                if (!in_array($combatLogEvent->getUiMapID(), self::IGNORE_FLOOR_MAP_UI_IDS)) {
+                if (! in_array($combatLogEvent->getUiMapID(), self::IGNORE_FLOOR_MAP_UI_IDS)) {
                     throw $e;
                 }
             }
@@ -110,5 +106,4 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
 
         return false;
     }
-
 }

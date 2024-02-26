@@ -11,9 +11,6 @@ use Redirect;
 
 class GameVersionController extends Controller
 {
-    /**
-     * @return RedirectResponse
-     */
     public function update(Request $request, GameVersion $gameVersion, GameVersionServiceInterface $gameVersionService): RedirectResponse
     {
         $gameVersionService->setGameVersion($gameVersion, Auth::user());

@@ -198,7 +198,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-
     Route::group(['prefix' => '{dungeonroute}'], function () {
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
@@ -408,7 +407,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('cache/drop', (new AdminToolsController())->dropcache(...))->name('admin.tools.cache.drop');
                 Route::get('mapping/forcesync', (new AdminToolsController())->mappingForceSync(...))->name('admin.tools.mapping.forcesync');
 
-
                 Route::get('datadump/exportdungeondata', (new AdminToolsController())->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('datadump/exportreleases', (new AdminToolsController())->exportreleases(...))->name('admin.tools.datadump.exportreleases');
             });
@@ -506,7 +504,6 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
         // May be performed without being logged in (sandbox functionality)
         Route::group(['prefix' => '{dungeonRoute}'], function () {
-
 
             Route::post('/brushline', (new AjaxBrushlineController())->store(...))->name('ajax.dungeonroute.brushline.create');
             Route::put('/brushline/{brushline}', (new AjaxBrushlineController())->store(...))->name('ajax.dungeonroute.brushline.update');

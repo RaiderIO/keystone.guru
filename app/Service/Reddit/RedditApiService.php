@@ -1,22 +1,21 @@
 <?php
 
-
 namespace App\Service\Reddit;
 
 class RedditApiService implements RedditApiServiceInterface
 {
-    function createPost(string $subreddit, string $subject, string $body): bool
+    public function createPost(string $subreddit, string $subject, string $body): bool
     {
         $ch = curl_init();
 
         curl_setopt_array($ch, [
-            CURLOPT_URL            => 'https://www.reddit.com/api/v1/access_token',
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => http_build_query([
-                'grant_type'    => 'refresh_token',
+            CURLOPT_URL => 'https://www.reddit.com/api/v1/access_token',
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query([
+                'grant_type' => 'refresh_token',
                 'refresh_token' => config('keystoneguru.reddit.api.refresh_token'),
             ]),
-            CURLOPT_HTTPHEADER     => [
+            CURLOPT_HTTPHEADER => [
                 sprintf('Authorization: Basic %s',
                     base64_encode(
                         sprintf('%s:%s', config('keystoneguru.reddit.oauth.client_id'), config('keystoneguru.reddit.oauth.secret'))
@@ -37,7 +36,6 @@ class RedditApiService implements RedditApiServiceInterface
          * "scope": "submit"
          * }
          */
-
         $response = json_decode(curl_exec($ch), true);
 
         curl_close($ch);
@@ -48,15 +46,15 @@ class RedditApiService implements RedditApiServiceInterface
             $ch = curl_init();
 
             curl_setopt_array($ch, [
-                CURLOPT_URL            => 'https://oauth.reddit.com/api/submit',
-                CURLOPT_POST           => true,
-                CURLOPT_POSTFIELDS     => http_build_query([
-                    'sr'    => $subreddit,
+                CURLOPT_URL => 'https://oauth.reddit.com/api/submit',
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => http_build_query([
+                    'sr' => $subreddit,
                     'title' => $subject,
-                    'text'  => $body,
-                    'kind'  => 'self',
+                    'text' => $body,
+                    'kind' => 'self',
                 ]),
-                CURLOPT_HTTPHEADER     => [
+                CURLOPT_HTTPHEADER => [
                     sprintf('Authorization: Bearer %s', $token),
                     'Content-Type: application/x-www-form-urlencoded',
                     'User-Agent: keystone.guru/v3.3',
@@ -75,15 +73,14 @@ class RedditApiService implements RedditApiServiceInterface
         return false;
     }
 
-
-    function sendMessage(string $webhookUrl, string $message, string $username = null): string
+    public function sendMessage(string $webhookUrl, string $message, ?string $username = null): string
     {
         // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord
         $ch = curl_init();
 
         curl_setopt_array($ch, [
-            CURLOPT_URL        => $webhookUrl,
-            CURLOPT_POST       => true,
+            CURLOPT_URL => $webhookUrl,
+            CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => json_encode(['content' => $message, 'username' => $username], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json',
@@ -95,5 +92,4 @@ class RedditApiService implements RedditApiServiceInterface
 
         return $response;
     }
-
 }

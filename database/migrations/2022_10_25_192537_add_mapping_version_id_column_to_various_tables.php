@@ -32,7 +32,7 @@ class AddMappingVersionIdColumnToVariousTables extends Migration
         });
 
         foreach (self::TABLES as $tableName) {
-            Schema::table($tableName, function (Blueprint $table) use ($tableName) {
+            Schema::table($tableName, function (Blueprint $table) {
                 $table->integer('mapping_version_id')->after('id')->default(0);
 
                 $table->dropIndex(['floor_id']);

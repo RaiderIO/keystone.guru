@@ -18,8 +18,8 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @package App\Service\CombatLog\Builders
  * @author Wouter
+ *
  * @since 24/06/2023
  */
 class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
@@ -28,20 +28,17 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
     public function __construct(
         CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute,
+        DungeonRoute $dungeonRoute,
         /** @var Collection|BaseResultEvent[] */
-        private readonly Collection          $resultEvents
+        private readonly Collection $resultEvents
     ) {
         parent::__construct($coordinatesService, $dungeonRoute);
 
         /** @var ResultEventDungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
+        $log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
         $this->log = $log;
     }
 
-    /**
-     * @return DungeonRoute
-     */
     public function build(): DungeonRoute
     {
         foreach ($this->resultEvents as $resultEvent) {
@@ -55,8 +52,9 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     /** @var $baseEvent MapChangeCombatLogEvent */
                     $this->currentFloor = $resultEvent->getFloor();
-                } else if ($this->currentFloor === null) {
+                } elseif ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();
+
                     continue;
                 }
 
@@ -70,12 +68,12 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                             $activePull = $this->activePullCollection->addNewPull();
 
                             $this->log->buildCreateNewActivePull();
-                        } else if ($activePull->isCompleted()) {
+                        } elseif ($activePull->isCompleted()) {
                             $activePull = $this->activePullCollection->addNewPull();
 
                             $this->log->buildCreateNewActivePullChainPullCompleted();
                         } // Check if we need to account for chain pulling
-                        else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($resultEvent->getEngagedEvent()->getTimestamp()))
+                        elseif (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($resultEvent->getEngagedEvent()->getTimestamp()))
                             <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
                             $activePull = $this->activePullCollection->addNewPull();
 
@@ -83,7 +81,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         }
 
                         $activePullEnemy = $this->createActivePullEnemy($resultEvent);
-                        $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                        $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
                             $activePullEnemy,
                             $this->activePullCollection->getInCombatGroups()
                         );
@@ -105,7 +103,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     } else {
                         $this->log->buildEnemyNotInValidNpcIds($resultEvent->getGuid()->getGuid());
                     }
-                } else if ($resultEvent instanceof EnemyKilled) {
+                } elseif ($resultEvent instanceof EnemyKilled) {
                     if ($this->validNpcIds->search($resultEvent->getGuid()->getId()) === false) {
                         // No need to log really
                         continue;
@@ -115,7 +113,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     // Check if we had this enemy in combat, if so, we just killed it in our current pull
                     // UnitDied only has DestGuid
                     $guid = $resultEvent->getGuid()->getGuid();
-
 
                     // Find the pull that this enemy is part of
                     foreach ($this->activePullCollection as $activePull) {
@@ -135,7 +132,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                             $this->activePullCollection->forget($pullIndex);
                         }
                     }
-                } else if ($resultEvent instanceof SpellCast) {
+                } elseif ($resultEvent instanceof SpellCast) {
                     // Add BL to the newest pull
                     if ($this->activePullCollection->isEmpty()) {
                         $activePull = $this->activePullCollection->addNewPull();
@@ -157,7 +154,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             }
         }
 
-
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {
             if ($activePull->getEnemiesInCombat()->isEmpty()) {
@@ -172,9 +168,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         return $this->dungeonRoute;
     }
 
-    /**
-     * @return ActivePullEnemy
-     */
     private function createActivePullEnemy(EnemyEngaged $enemyEngaged): ActivePullEnemy
     {
         return new ActivePullEnemy(

@@ -12,10 +12,8 @@ use Illuminate\Support\Facades\App;
 
 class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
 {
-    /** @var bool */
     private bool $challengeModeStarted = false;
 
-    /** @var DungeonRouteCombatFilterLoggingInterface */
     private readonly DungeonRouteCombatFilterLoggingInterface $log;
 
     public function __construct(Collection $resultEvents)
@@ -23,16 +21,10 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         parent::__construct($resultEvents);
 
         /** @var DungeonRouteCombatFilterLoggingInterface $log */
-        $log       = App::make(DungeonRouteCombatFilterLoggingInterface::class);
+        $log = App::make(DungeonRouteCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // First, we wait for the challenge mode to start
@@ -44,7 +36,7 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         }
 
         // If it hasn't started yet, we don't process anything
-        if (!$this->challengeModeStarted) {
+        if (! $this->challengeModeStarted) {
             return false;
         }
 

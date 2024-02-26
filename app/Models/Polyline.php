@@ -12,39 +12,34 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int         $id
- * @property int         $model_id
- * @property string      $model_class
- * @property string      $color
+ * @property int $id
+ * @property int $model_id
+ * @property string $model_class
+ * @property string $color
  * @property string|null $color_animated
- * @property int         $weight
- * @property string      $vertices_json JSON encoded vertices
- *
- * @property Model       $model
+ * @property int $weight
+ * @property string $vertices_json JSON encoded vertices
+ * @property Model $model
  *
  * @mixin Eloquent
  */
-class Polyline extends Model implements MappingModelCloneableInterface, ConvertsVerticesInterface
+class Polyline extends Model implements ConvertsVerticesInterface, MappingModelCloneableInterface
 {
     use HasGenericModelRelation;
     use HasVertices;
 
     public $timestamps = false;
-    public $visible    = ['color', 'color_animated', 'weight', 'vertices_json'];
-    public $fillable   = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
 
-    /**
-     * @param MappingVersion             $mappingVersion
-     * @param MappingModelInterface|null $newParent
-     *
-     * @return Polyline
-     */
+    public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
+
+    public $fillable = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Polyline
     {
         /** @var Polyline|MappingModelInterface $clone */
-        $clone           = clone $this;
-        $clone->exists   = false;
-        $clone->id       = null;
+        $clone = clone $this;
+        $clone->exists = false;
+        $clone->id = null;
         $clone->model_id = $newParent->id;
         $clone->save();
 

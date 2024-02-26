@@ -20,14 +20,14 @@ use Throwable;
 class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @param FloorUnionArea|null $floorUnionArea
      * @return FloorUnionArea|Model
+     *
      * @throws Throwable
      */
     public function store(
         FloorUnionAreaFormRequest $request,
-        MappingVersion            $mappingVersion,
-        FloorUnionArea            $floorUnionArea = null
+        MappingVersion $mappingVersion,
+        ?FloorUnionArea $floorUnionArea = null
     ): FloorUnionArea {
         $validated = $request->validated();
 
@@ -39,11 +39,12 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws Throwable
      */
     public function delete(Request $request, FloorUnionArea $floorUnionArea)
     {
-        return DB::transaction(function () use ($request, $floorUnionArea) {
+        return DB::transaction(function () use ($floorUnionArea) {
             try {
                 if ($floorUnionArea->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments

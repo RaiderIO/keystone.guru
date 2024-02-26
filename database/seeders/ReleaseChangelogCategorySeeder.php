@@ -9,8 +9,6 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -19,8 +17,8 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
         $releaseChangelogCategoryAttributes = [];
         foreach (ReleaseChangelogCategory::ALL as $key => $id) {
             $releaseChangelogCategoryAttributes[] = [
-                'id'   => $id,
-                'key'  => $key,
+                'id' => $id,
+                'key' => $key,
                 'name' => sprintf('releasechangelogcategories.%s', $key),
             ];
         }

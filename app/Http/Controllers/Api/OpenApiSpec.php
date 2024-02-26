@@ -10,5 +10,4 @@ namespace App\Http\Controllers\Api;
  */
 class OpenApiSpec
 {
-
 }

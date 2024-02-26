@@ -30,15 +30,15 @@ class CombatLogEntry
     }
 
     /**
-     * @param array $eventWhiteList Empty to return all events
-     * @return BaseEvent|null
+     * @param  array  $eventWhiteList  Empty to return all events
+     *
      * @throws Exception
      */
     public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL): ?BaseEvent
     {
         $matches = [];
-        if (!preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
-            if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
+        if (! preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
+            if (! in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
                 throw new InvalidArgumentException(sprintf('Unable to parse event %s', $this->rawEvent));
             }
 
@@ -50,10 +50,10 @@ class CombatLogEntry
         } catch (InvalidFormatException $exception) {
             throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $exception->getCode(), $exception);
         }
-        $eventData     = $matches[2];
+        $eventData = $matches[2];
         $mayParseEvent = empty($eventWhiteList);
 
-        if (!$mayParseEvent) {
+        if (! $mayParseEvent) {
             foreach ($eventWhiteList as $whiteListedName) {
                 if ($mayParseEvent = Str::startsWith($eventData, $whiteListedName)) {
                     break;
@@ -72,14 +72,14 @@ class CombatLogEntry
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
-                else if (count($parameters) > 23) {
+                elseif (count($parameters) > 23) {
                     $this->parsedEvent = (new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 } else {
                     $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
 
             } catch (Error|Exception $exception) {
-                echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
+                echo sprintf('%s parsing: %s', PHP_EOL.PHP_EOL.$exception->getMessage(), $this->rawEvent);
 
                 throw $exception;
             }
@@ -88,9 +88,6 @@ class CombatLogEntry
         return $this->parsedEvent;
     }
 
-    /**
-     * @return string
-     */
     public function getRawEvent(): string
     {
         return $this->rawEvent;
@@ -98,16 +95,13 @@ class CombatLogEntry
 
     /**
      * @return Carbon|null Can be null if accessed before event was parsed, or if event was part of RAW_EVENT_IGNORE
-     * and it didn't have any timestamp as a result.
+     *                     and it didn't have any timestamp as a result.
      */
     public function getParsedTimestamp(): ?Carbon
     {
         return $this->parsedTimestamp;
     }
 
-    /**
-     * @return BaseEvent|null
-     */
     public function getParsedEvent(): ?BaseEvent
     {
         return $this->parsedEvent;

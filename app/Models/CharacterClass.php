@@ -12,39 +12,52 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                       $id
- * @property string                                    $key
- * @property string                                    $name
- * @property string                                    $color
- *
+ * @property int $id
+ * @property string $key
+ * @property string $name
+ * @property string $color
  * @property Collection|CharacterClassSpecialization[] $specializations
- * @property Collection|DungeonRoutePlayerClass[]      $dungeonrouteplayerclasses
- * @property Collection|DungeonRoutePlayerRace[]       $dungeonrouteplayerraces
+ * @property Collection|DungeonRoutePlayerClass[] $dungeonrouteplayerclasses
+ * @property Collection|DungeonRoutePlayerRace[] $dungeonrouteplayerraces
  *
  * @mixin Eloquent
  */
 class CharacterClass extends CacheModel
 {
-    use SeederModel;
     use HasIconFile;
+    use SeederModel;
 
     public $timestamps = false;
-    public $hidden     = ['icon_file_id', 'pivot'];
-    public $fillable   = ['key', 'name', 'color'];
 
-    public const CHARACTER_CLASS_WARRIOR      = 'warrior';
-    public const CHARACTER_CLASS_HUNTER       = 'hunter';
+    public $hidden = ['icon_file_id', 'pivot'];
+
+    public $fillable = ['key', 'name', 'color'];
+
+    public const CHARACTER_CLASS_WARRIOR = 'warrior';
+
+    public const CHARACTER_CLASS_HUNTER = 'hunter';
+
     public const CHARACTER_CLASS_DEATH_KNIGHT = 'death_knight';
-    public const CHARACTER_CLASS_MAGE         = 'mage';
-    public const CHARACTER_CLASS_PRIEST       = 'priest';
-    public const CHARACTER_CLASS_MONK         = 'monk';
-    public const CHARACTER_CLASS_ROGUE        = 'rogue';
-    public const CHARACTER_CLASS_WARLOCK      = 'warlock';
-    public const CHARACTER_CLASS_SHAMAN       = 'shaman';
-    public const CHARACTER_CLASS_PALADIN      = 'paladin';
-    public const CHARACTER_CLASS_DRUID        = 'druid';
+
+    public const CHARACTER_CLASS_MAGE = 'mage';
+
+    public const CHARACTER_CLASS_PRIEST = 'priest';
+
+    public const CHARACTER_CLASS_MONK = 'monk';
+
+    public const CHARACTER_CLASS_ROGUE = 'rogue';
+
+    public const CHARACTER_CLASS_WARLOCK = 'warlock';
+
+    public const CHARACTER_CLASS_SHAMAN = 'shaman';
+
+    public const CHARACTER_CLASS_PALADIN = 'paladin';
+
+    public const CHARACTER_CLASS_DRUID = 'druid';
+
     public const CHARACTER_CLASS_DEMON_HUNTER = 'demon_hunter';
-    public const CHARACTER_CLASS_EVOKER       = 'evoker';
+
+    public const CHARACTER_CLASS_EVOKER = 'evoker';
 
     // Do NOT change the order of this array!
     public const ALL = [
@@ -63,33 +76,21 @@ class CharacterClass extends CacheModel
         self::CHARACTER_CLASS_EVOKER,
     ];
 
-    /**
-     * @return HasMany
-     */
     public function specializations(): HasMany
     {
         return $this->hasMany(CharacterClassSpecialization::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function races(): BelongsToMany
     {
         return $this->belongsToMany(CharacterRace::class, 'character_race_class_couplings');
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function dungeonrouteplayerclasses(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerClass::class, 'dungeon_route_player_classes');
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function dungeonrouteplayerraces(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');

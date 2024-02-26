@@ -12,23 +12,22 @@ use App\Models\Traits\SeederModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int            $id
- * @property int            $mapping_version_id
- * @property int            $npc_id
- * @property int            $enemy_forces
- * @property int|null       $enemy_forces_teeming
- *
+ * @property int $id
+ * @property int $mapping_version_id
+ * @property int $npc_id
+ * @property int $enemy_forces
+ * @property int|null $enemy_forces_teeming
  * @property MappingVersion $mappingVersion
- * @property Npc            $npc
+ * @property Npc $npc
  *
- * @package App\Models\Npc
  * @author Wouter
+ *
  * @since 21/05/2023
  */
-class NpcEnemyForces extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
+class NpcEnemyForces extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
-    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
+    use SeederModel;
 
     public $timestamps = false;
 
@@ -40,25 +39,16 @@ class NpcEnemyForces extends CacheModel implements MappingModelInterface, Mappin
         'enemy_forces_teeming',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
         return $this->npc->dungeon_id;

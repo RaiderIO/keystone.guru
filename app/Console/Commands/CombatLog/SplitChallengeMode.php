@@ -22,9 +22,6 @@ class SplitChallengeMode extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     *
-     *
-     * @return int
      */
     public function handle(CombatLogSplitServiceInterface $combatLogSplitService): int
     {
@@ -32,13 +29,9 @@ class SplitChallengeMode extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->splitCombatLog($combatLogSplitService, $filePath));
+        return $this->parseCombatLogRecursively($filePath, fn (string $filePath) => $this->splitCombatLog($combatLogSplitService, $filePath));
     }
 
-    /**
-     *
-     * @return int
-     */
     private function splitCombatLog(CombatLogSplitServiceInterface $combatLogSplitService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));

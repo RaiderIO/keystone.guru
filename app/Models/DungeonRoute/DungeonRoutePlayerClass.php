@@ -8,20 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int            $id
- * @property int            $dungeon_route_id
- * @property int            $character_class_id
- * @property int            $index
- *
- * @property DungeonRoute   $dungeonRoute
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $character_class_id
+ * @property int $index
+ * @property DungeonRoute $dungeonRoute
  * @property CharacterClass $characterClass
  *
  * @mixin Eloquent
  */
 class DungeonRoutePlayerClass extends Model
 {
+    public $hidden = ['id'];
 
-    public    $hidden   = ['id'];
     protected $fillable = [
         'character_class_id',
         'dungeon_route_id',
@@ -29,17 +28,11 @@ class DungeonRoutePlayerClass extends Model
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function characterClass(): BelongsTo
     {
         return $this->belongsTo(CharacterClass::class);

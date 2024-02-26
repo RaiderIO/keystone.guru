@@ -25,9 +25,6 @@ class ChallengeModeEnd extends BaseResultEvent
         }
     }
 
-    /**
-     * @return ChallengeModeEndEvent
-     */
     public function getChallengeModeEndEvent(): ChallengeModeEndEvent
     {
         /** @var ChallengeModeEndEvent $baseEvent */
@@ -36,9 +33,6 @@ class ChallengeModeEnd extends BaseResultEvent
         return $baseEvent;
     }
 
-    /**
-     * @return Dungeon
-     */
     public function getDungeon(): Dungeon
     {
         return $this->dungeon;

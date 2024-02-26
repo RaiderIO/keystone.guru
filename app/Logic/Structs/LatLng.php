@@ -8,24 +8,15 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class LatLng implements Arrayable
 {
-    /**
-     * @param Floor|null $floor
-     */
     public function __construct(private float $lat = 0, private float $lng = 0, private ?Floor $floor = null)
     {
     }
 
-    /**
-     * @return float
-     */
     public function getLat(): float
     {
         return $this->lat;
     }
 
-    /**
-     * @return LatLng
-     */
     public function setLat(float $lat): LatLng
     {
         $this->lat = $lat;
@@ -33,17 +24,11 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getLng(): float
     {
         return $this->lng;
     }
 
-    /**
-     * @return LatLng
-     */
     public function setLng(float $lng): LatLng
     {
         $this->lng = $lng;
@@ -51,19 +36,11 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    /**
-     * @return Floor|null
-     */
     public function getFloor(): ?Floor
     {
         return $this->floor;
     }
 
-    /**
-     * @param Floor|null $floor
-     *
-     * @return LatLng
-     */
     public function setFloor(?Floor $floor): LatLng
     {
         $this->floor = $floor;
@@ -95,9 +72,6 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    /**
-     * @return self
-     */
     public function rotate(LatLng $centerLatLng, float $degrees): self
     {
         $lng1 = $this->lng - $centerLatLng->lng;
@@ -117,8 +91,6 @@ class LatLng implements Arrayable
     /**
      * Only use this when saving the end result to models, please!
      * Trying to get rid of this structure as much as possible by using this class in the first place.
-     *
-     * @return array
      */
     public function toArray(): array
     {
@@ -135,10 +107,7 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param array{lat: float, lng: float} $latLng
-     * @param Floor|null                    $floor
-     *
-     * @return LatLng
+     * @param  array{lat: float, lng: float}  $latLng
      */
     public static function fromArray(array $latLng, ?Floor $floor = null): LatLng
     {

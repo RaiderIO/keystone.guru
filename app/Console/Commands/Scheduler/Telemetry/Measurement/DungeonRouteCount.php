@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
-
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
 use Illuminate\Support\Collection;
@@ -11,9 +10,9 @@ use InfluxDB\Point;
 class DungeonRouteCount extends Measurement
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function getPoints(): array
+    public function getPoints(): array
     {
         /** @var PublishedState[]|Collection $publishedStates */
         $publishedStates = PublishedState::all();
@@ -34,7 +33,7 @@ class DungeonRouteCount extends Measurement
                 $this->getTags(),
                 // Merge the published states with the 'all' and 'temporary' fields
                 array_merge([
-                    'all'       => DungeonRoute::count(),
+                    'all' => DungeonRoute::count(),
                     'temporary' => DungeonRoute::where('author_id', '<=', 0)->count(),
                 ], $publishedStateFields),
                 time()

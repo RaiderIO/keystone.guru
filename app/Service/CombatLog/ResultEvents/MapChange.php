@@ -9,13 +9,11 @@ use Exception;
 
 class MapChange extends BaseResultEvent
 {
-
     private ?Floor $floor = null;
 
     public function __construct(MapChangeEvent $baseEvent)
     {
         parent::__construct($baseEvent);
-
 
         try {
             $this->floor = Floor::findByUiMapId($baseEvent->getUiMapID());
@@ -26,17 +24,11 @@ class MapChange extends BaseResultEvent
         }
     }
 
-    /**
-     * @return Floor|null
-     */
     public function getFloor(): ?Floor
     {
         return $this->floor;
     }
 
-    /**
-     * @return MapChangeEvent
-     */
     public function getMapChangeEvent(): MapChangeEvent
     {
         /** @var MapChangeEvent $mapChangeEvent */

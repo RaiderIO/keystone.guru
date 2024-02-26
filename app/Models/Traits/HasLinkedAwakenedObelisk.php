@@ -9,17 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int|null                                    $linked_awakened_obelisk_id
- *
+ * @property int|null $linked_awakened_obelisk_id
  * @property Collection|MapObjectToAwakenedObeliskLink[] $linkedawakenedobelisks
  *
  * @mixin Eloquent
  */
 trait HasLinkedAwakenedObelisk
 {
-    /**
-     * @return HasMany
-     */
     public function linkedawakenedobelisks(): HasMany
     {
         return $this->hasMany(MapObjectToAwakenedObeliskLink::class, 'source_map_object_id')
@@ -28,6 +24,7 @@ trait HasLinkedAwakenedObelisk
 
     /**
      * Gets the ID of the awakened obelisk that this model is linked to.
+     *
      * @return int|null Null if not linked to any awakened obelisk.
      */
     public function getLinkedAwakenedObeliskIdAttribute(): ?int
@@ -53,12 +50,13 @@ trait HasLinkedAwakenedObelisk
 
     /**
      * Adds a link to an awakened obelisk by its map icon ID.
-     * @param int|null $mapIconId Null to unset any previous relation.
+     *
+     * @param  int|null  $mapIconId  Null to unset any previous relation.
      * @return bool True if a new relation was added successfully, false otherwise
      */
     public function setLinkedAwakenedObeliskByMapIconId(?int $mapIconId): bool
     {
-        $result  = false;
+        $result = false;
         $mapIcon = MapIcon::find($mapIconId);
         // Delete any existing links
         MapObjectToAwakenedObeliskLink::where('source_map_object_id', $this->id)
@@ -68,9 +66,9 @@ trait HasLinkedAwakenedObelisk
         // Insert new link
         if ($mapIcon !== null && $mapIcon->isAwakenedObelisk()) {
             $result = MapObjectToAwakenedObeliskLink::create([
-                'source_map_object_id'           => $this->id,
-                'source_map_object_class_name'   => $this::class,
-                'target_map_icon_type_id'        => $mapIcon->map_icon_type_id,
+                'source_map_object_id' => $this->id,
+                'source_map_object_class_name' => $this::class,
+                'target_map_icon_type_id' => $mapIcon->map_icon_type_id,
                 'target_map_icon_seasonal_index' => $mapIcon->seasonal_index,
             ]);
         }

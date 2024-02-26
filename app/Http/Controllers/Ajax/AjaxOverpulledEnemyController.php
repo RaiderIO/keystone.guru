@@ -23,13 +23,14 @@ class AjaxOverpulledEnemyController extends Controller
 {
     /**
      * @return array
+     *
      * @throws AuthorizationException
      */
-    function store(
+    public function store(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonRoute,
-        LiveSession                     $liveSession)
+        OverpulledEnemyFormRequest $request,
+        DungeonRoute $dungeonRoute,
+        LiveSession $liveSession)
     {
         $this->authorize('view', $dungeonRoute);
         $this->authorize('view', $liveSession);
@@ -46,12 +47,12 @@ class AjaxOverpulledEnemyController extends Controller
                 ->where('mdt_id', $enemy->mdt_id)
                 ->firstOrNew([
                     'live_session_id' => $liveSession->id,
-                    'kill_zone_id'    => $validated['kill_zone_id'],
-                    'npc_id'          => $enemy->npc_id,
-                    'mdt_id'          => $enemy->mdt_id,
+                    'kill_zone_id' => $validated['kill_zone_id'],
+                    'npc_id' => $enemy->npc_id,
+                    'mdt_id' => $enemy->mdt_id,
                 ]);
 
-            if (!$overpulledEnemy->save()) {
+            if (! $overpulledEnemy->save()) {
                 throw new Exception('Unable to save overpulled enemy!');
             }
 
@@ -65,13 +66,14 @@ class AjaxOverpulledEnemyController extends Controller
 
     /**
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function delete(
+    public function delete(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonroute,
-        LiveSession                     $livesession)
+        OverpulledEnemyFormRequest $request,
+        DungeonRoute $dungeonroute,
+        LiveSession $livesession)
     {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);

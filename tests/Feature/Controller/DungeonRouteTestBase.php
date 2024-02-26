@@ -20,12 +20,10 @@ final class DungeonRouteTestBase extends AjaxPublicTestCase
         $this->dungeonRoute->save();
     }
 
-
     protected function tearDown(): void
     {
         $this->dungeonRoute->delete();
 
         parent::tearDown();
     }
-
 }

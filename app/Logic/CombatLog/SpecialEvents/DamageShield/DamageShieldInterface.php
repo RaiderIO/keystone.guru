@@ -6,5 +6,4 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 
 interface DamageShieldInterface extends HasParameters
 {
-
 }

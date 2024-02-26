@@ -13,16 +13,14 @@ use Illuminate\Support\Collection;
 /**
  * The Mapping Versions are loaded from mapping_versions.json using the DungeonDataSeeder after this initial seed.
  *
- * @package Database\Seeders
  * @author Wouter
+ *
  * @since 30/10/2022
  */
 class MappingVersionSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -31,6 +29,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
 
         if (MappingVersion::count() !== 0) {
             $this->command->comment('NOT adding Mapping Versions - initial seed has already happened');
+
             return;
         }
 
@@ -44,7 +43,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             // Insert - not create. Skip all the boot static things - those will mess this up
             $mappingVersionId = MappingVersion::insertGetId([
                 'dungeon_id' => $dungeon->id,
-                'version'    => 1,
+                'version' => 1,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);

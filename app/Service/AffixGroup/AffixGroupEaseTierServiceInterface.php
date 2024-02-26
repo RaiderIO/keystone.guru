@@ -10,19 +10,10 @@ use Illuminate\Support\Collection;
 
 interface AffixGroupEaseTierServiceInterface
 {
-    /**
-     * @return string
-     */
     public function getTiersHash(array $tierList, array $dungeonNameMapping): string;
 
-    /**
-     * @return AffixGroupEaseTierPull|null
-     */
     public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull;
 
-    /**
-     * @return string|null
-     */
     public function getTierForAffixAndDungeon(AffixGroup $affixGroup, Dungeon $dungeon): ?string;
 
     /**
@@ -30,13 +21,7 @@ interface AffixGroupEaseTierServiceInterface
      */
     public function getTiersByAffixGroups(Collection $affixGroups): Collection;
 
-    /**
-     * @return Collection
-     */
     public function getTiers(): Collection;
 
-    /**
-     * @return AffixGroup|null
-     */
     public function getAffixGroupByString(string $affixString): ?AffixGroup;
 }

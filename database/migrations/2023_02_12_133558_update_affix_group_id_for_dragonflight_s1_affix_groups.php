@@ -17,14 +17,14 @@ class UpdateAffixGroupIdForDragonflightS1AffixGroups extends Migration
             102 => 1000,
             103 => 101,
             // These were deleted in previous migration
-//            104 => false,
-//            105 => false,
+            //            104 => false,
+            //            105 => false,
             106 => 102,
             107 => 103,
             108 => 104,
             109 => 105,
             110 => 106,
-            99  => 107,
+            99 => 107,
             100 => 108,
             // Correct wrong ones to the correct ones
             990 => 99,

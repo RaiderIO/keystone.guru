@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Mapping;
-
 
 use App\Models\Mapping\MappingCommitLog;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\TimestampAttributeParser;
@@ -10,7 +8,7 @@ use App\SeederHelpers\RelationImport\Parsers\Attribute\TimestampAttributeParser;
 class MappingCommitLogRelationMapping extends RelationMapping
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct()
     {

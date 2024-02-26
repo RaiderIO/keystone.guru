@@ -29,30 +29,29 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     /** @var Collection|string[] */
     private Collection $rawEvents;
 
-    private ?string                  $lastCombatLogVersion;
-    private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
-    private ?string                  $lastZoneChange;
-    private ?string                  $lastMapChange;
-    private ?Carbon                  $lastTimestamp               = null;
+    private ?string $lastCombatLogVersion;
 
+    private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
+
+    private ?string $lastZoneChange;
+
+    private ?string $lastMapChange;
+
+    private ?Carbon $lastTimestamp = null;
 
     public function __construct(
-        private readonly CombatLogServiceInterface             $combatLogService,
+        private readonly CombatLogServiceInterface $combatLogService,
         private readonly CombatLogSplitServiceLoggingInterface $log)
     {
         $this->reset();
     }
 
-    /**
-     * @param string $filePath
-     * @return Collection
-     */
     public function splitCombatLogOnChallengeModes(string $filePath): Collection
     {
         $this->log->splitCombatLogOnChallengeModesStart($filePath);
         try {
             $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
-            $result         = collect();
+            $result = collect();
             // We don't need to do anything if there are no runs
             // If there's one run, we may still want to trim the fat of the log and keep just
             // the one challenge mode that's in there
@@ -62,12 +61,11 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 return $result;
             }
 
-            $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
-            use ($filePath, $targetFilePath, &$result) {
+            $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($filePath, &$result) {
                 $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
                 $combatLogEntry = (new CombatLogEntry($rawEvent));
-                $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);
+                $parsedEvent = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);
 
                 if ($combatLogEntry->getParsedTimestamp() === null) {
                     $this->log->splitCombatLogOnChallengeModesTimestampNotSet();
@@ -113,7 +111,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                         $this->resetCurrentChallengeMode();
                     }
                 } // If we're going to start a challenge mode event
-                else if ($parsedEvent instanceof ChallengeModeStartEvent) {
+                elseif ($parsedEvent instanceof ChallengeModeStartEvent) {
                     $this->log->splitCombatLogOnChallengeModesChallengeModeStartEvent();
 
                     $this->lastChallengeModeStartEvent = $parsedEvent;
@@ -128,10 +126,10 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
                     $this->log->splitCombatLogOnChallengeModesCombatLogVersionEvent();
                     $this->lastCombatLogVersion = $rawEvent;
-                } else if ($parsedEvent instanceof ZoneChangeEvent) {
+                } elseif ($parsedEvent instanceof ZoneChangeEvent) {
                     $this->log->splitCombatLogOnChallengeModesZoneChangeEvent();
                     $this->lastZoneChange = $rawEvent;
-                } else if ($parsedEvent instanceof MapChangeEvent) {
+                } elseif ($parsedEvent instanceof MapChangeEvent) {
                     $this->log->splitCombatLogOnChallengeModesMapChangeEvent();
                     $this->lastMapChange = $rawEvent;
                 }
@@ -151,37 +149,28 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         return $result;
     }
 
-
-    /**
-     * @return void
-     */
     private function resetCurrentChallengeMode(): void
     {
         $this->log->resetCurrentChallengeMode();
 
-        $this->rawEvents                   = collect();
-        $this->lastTimestamp               = null;
+        $this->rawEvents = collect();
+        $this->lastTimestamp = null;
         $this->lastChallengeModeStartEvent = null;
     }
 
-    /**
-     * @return void
-     */
     private function reset(): void
     {
         $this->log->reset();
         $this->resetCurrentChallengeMode();
 
         $this->lastCombatLogVersion = null;
-        $this->lastZoneChange       = null;
-        $this->lastMapChange        = null;
+        $this->lastZoneChange = null;
+        $this->lastMapChange = null;
     }
 
     /**
      * Based on the currently known information (as for what dungeon we're doing), generate a file path
      * to save the current combat log at.
-     *
-     * @return string
      */
     private function generateTargetCombatLogFileName(string $originalFilePath): string
     {
@@ -190,7 +179,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         // new combat log in the original location instead of the location we're reading from.
         $count = 0;
         do {
-            $countStr     = $count === 0 ? '' : sprintf('-%d', $count);
+            $countStr = $count === 0 ? '' : sprintf('-%d', $count);
             $saveFilePath = sprintf('%s/%s_%d_%s%s.txt',
                 dirname($originalFilePath),
                 pathinfo($originalFilePath, PATHINFO_FILENAME),
@@ -204,7 +193,6 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
             // the same dungeons of the same key level
             $count++;
         } while (file_exists(str_replace('.txt', '.zip', $saveFilePath)));
-
 
         return $saveFilePath;
     }

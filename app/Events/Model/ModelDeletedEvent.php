@@ -9,29 +9,26 @@ use ReflectionClass;
 
 class ModelDeletedEvent extends ContextEvent
 {
-    /** @var int $modelId */
     protected int $modelId;
 
-    /** @var string $modelClass */
     protected string $modelClass;
 
-    /** @var string $modelName */
     private readonly string $modelName;
 
     /**
      * Create a new event instance.
      *
-     * @param $context Model
-     * @param $user User
-     * @param $model Model
+     * @param  $context  Model
+     * @param  $user  User
+     * @param  $model  Model
      * @return void
      */
     public function __construct(Model $context, User $user, Model $model)
     {
         // Don't save Model here because serialization will fail due to object being deleted
-        $this->modelId    = $model->getRouteKey();
+        $this->modelId = $model->getRouteKey();
         $this->modelClass = $model::class;
-        $this->modelName  = strtolower((new ReflectionClass($model))->getShortName());
+        $this->modelName = strtolower((new ReflectionClass($model))->getShortName());
         parent::__construct($context, $user);
     }
 
@@ -39,7 +36,7 @@ class ModelDeletedEvent extends ContextEvent
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'model_id'    => $this->modelId,
+            'model_id' => $this->modelId,
             'model_class' => $this->modelClass,
         ]);
     }

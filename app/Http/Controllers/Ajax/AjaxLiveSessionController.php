@@ -18,7 +18,7 @@ class AjaxLiveSessionController extends Controller
     /**
      * @return Response|ResponseFactory
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
     {
         try {
             if ($liveSession->expires_at === null) {

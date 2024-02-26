@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php
+
+/** @noinspection PhpUndefinedClassInspection */
 
 /**
  * Created by PhpStorm.
@@ -8,7 +10,6 @@
  */
 
 namespace App\Logic\MDT\Data;
-
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
@@ -29,40 +30,40 @@ use Lua;
 use LuaException;
 
 /**
- * @package App\Logic\MDT\Data
  * @author Wouter
+ *
  * @since 05/01/2019
  */
 class MDTDungeon
 {
-    function __construct(
-        private readonly CacheServiceInterface       $cacheService,
+    public function __construct(
+        private readonly CacheServiceInterface $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
-        private readonly Dungeon                     $dungeon
+        private readonly Dungeon $dungeon
     ) {
-        if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
+        if (! Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
         }
     }
 
     /**
      * @return array{normal: int, teeming: int, teemingEnabled: bool}
+     *
      * @throws Exception
      */
     public function getDungeonTotalCount(): array
     {
-        $lua               = $this->getLua();
+        $lua = $this->getLua();
         $dungeonTotalCount = $lua->call('GetDungeonTotalCount');
 
         return [
-            'normal'         => (int)$dungeonTotalCount['normal'],
-            'teeming'        => (int)$dungeonTotalCount['teeming'],
+            'normal' => (int) $dungeonTotalCount['normal'],
+            'teeming' => (int) $dungeonTotalCount['teeming'],
             'teemingEnabled' => $dungeonTotalCount['teemingEnabled'],
         ];
     }
 
     /**
-     * @return int
      * @throws Exception
      */
     public function getMDTDungeonID(): int
@@ -74,7 +75,9 @@ class MDTDungeon
 
     /**
      * Get a list of NPCs
+     *
      * @return Collection|MDTNpc[]
+     *
      * @throws Exception
      */
     public function getMDTNPCs(): Collection
@@ -82,11 +85,11 @@ class MDTDungeon
         return $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
             $mdtNpcs = new Collection();
 
-            $lua           = $this->getLua();
+            $lua = $this->getLua();
             $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
             foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
-                $mdtNpcs->push(new MDTNpc((int)$mdtNpcIndex, $mdtNpc));
+                $mdtNpcs->push(new MDTNpc((int) $mdtNpcIndex, $mdtNpc));
             }
 
             return $mdtNpcs;
@@ -95,18 +98,19 @@ class MDTDungeon
 
     /**
      * @return Collection|MDTMapPOI[]
+     *
      * @throws Exception
      */
     public function getMDTMapPOIs(): Collection
     {
-        $lua           = $this->getLua();
+        $lua = $this->getLua();
         $rawMdtMapPOIs = $lua->call('GetMapPOIs');
-        $result        = new Collection();
+        $result = new Collection();
 
         // May be null
         foreach ($rawMdtMapPOIs ?? [] as $subLevel => $pois) {
             foreach ($pois as $poiIndex => $poi) {
-                $result->push(new MDTMapPOI((int)$subLevel, $poi));
+                $result->push(new MDTMapPOI((int) $subLevel, $poi));
             }
         }
 
@@ -115,7 +119,8 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param Floor|Collection $floors The floors that you want to get the clones for.
+     *
+     * @param  Floor|Collection  $floors  The floors that you want to get the clones for.
      * @return Collection|Enemy[]
      */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
@@ -132,14 +137,14 @@ class MDTDungeon
             }
 
             // Ensure floors is a collection
-            if (!($floors instanceof Collection)) {
+            if (! ($floors instanceof Collection)) {
                 $floors = [$floors];
             }
 
             // A bit of a hack, but it works. If we have a floor with a facade in it, we only parse THAT floor
             // since that's the only floor that MDT will have. We will then put the enemies in the correct floors.
             // Pinky promise.
-            $facadeFloors = $floors->filter(fn(Floor $floor) => $floor->facade);
+            $facadeFloors = $floors->filter(fn (Floor $floor) => $floor->facade);
 
             if ($facadeFloors->isNotEmpty()) {
                 $floors = $facadeFloors;
@@ -155,7 +160,7 @@ class MDTDungeon
                 foreach ($mdtNpc->getClones() as $mdtCloneIndex => $clone) {
                     //Only clones that are on the same floor
                     foreach ($floors as $floor) {
-                        if ((int)$clone['sublevel'] === ($floor->mdt_sub_level ?? $floor->index)) {
+                        if ((int) $clone['sublevel'] === ($floor->mdt_sub_level ?? $floor->index)) {
                             // Set some additional props that come in handy when converting to an enemy
                             $clone['mdtNpcIndex'] = $mdtNpc->getIndex();
                             // Group ID
@@ -163,7 +168,7 @@ class MDTDungeon
 
                             $npcId = $mdtNpc->getId();
                             // Make sure array is set
-                            if (!isset($npcClones[$npcId])) {
+                            if (! isset($npcClones[$npcId])) {
                                 $npcClones[$npcId] = [];
                             }
 
@@ -197,25 +202,25 @@ class MDTDungeon
                     foreach ($clones as $mdtCloneIndex => $clone) {
                         $enemy = new Enemy([
                             // Dummy so we can ID them later on
-                            'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
-                            'floor_id'                      => $floorId,
-                            'enemy_pack_id'                 => (int)$clone['g'],
-                            'npc_id'                        => $npcId,
+                            'id' => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
+                            'floor_id' => $floorId,
+                            'enemy_pack_id' => (int) $clone['g'],
+                            'npc_id' => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
-                            'mdt_id'                        => $mdtCloneIndex,
-                            'lat'                           => $clone['lat'],
-                            'lng'                           => $clone['lng'],
-                            'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
-                            'faction'                       => isset($clone['faction']) ?
-                                ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
+                            'mdt_id' => $mdtCloneIndex,
+                            'lat' => $clone['lat'],
+                            'lng' => $clone['lng'],
+                            'teeming' => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
+                            'faction' => isset($clone['faction']) ?
+                                ((int) $clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
                                 : 'any',
-                            'enemy_forces_override'         => null,
+                            'enemy_forces_override' => null,
                             'enemy_forces_override_teeming' => null,
                         ]);
                         // Special MDT fields which are not fillable
-                        $enemy->mdt_npc_index = (int)$clone['mdtNpcIndex'];
-                        $enemy->is_mdt        = true;
-                        $enemy->enemy_id      = -1;
+                        $enemy->mdt_npc_index = (int) $clone['mdtNpcIndex'];
+                        $enemy->is_mdt = true;
+                        $enemy->enemy_id = -1;
 
                         $enemy->npc = $this->dungeon->npcs->firstWhere('id', $enemy->npc_id);
 
@@ -241,8 +246,8 @@ class MDTDungeon
 
                         if (isset($clone['disguised']) && $clone['disguised']) {
                             $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
-                            $enemy->lat           += 2;
-                            $enemy->lng           += 2;
+                            $enemy->lat += 2;
+                            $enemy->lng += 2;
                         }
 
                         $enemies->push($enemy);
@@ -255,24 +260,23 @@ class MDTDungeon
     }
 
     /**
-     * @return Lua
      * @throws Exception
      */
     private function getLua(): Lua
     {
         $lua = null;
 
-        $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
-        $expansionName    = Conversion::getExpansionName($this->dungeon->key);
+        $mdtHome = base_path('vendor/nnoggie/mythicdungeontools');
+        $expansionName = Conversion::getExpansionName($this->dungeon->key);
         $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 
         $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
-        if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
+        if (! empty($mdtExpansionName) && ! empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
             $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 
             $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);
 
-            if (!file_exists($mdtDungeonNameFile)) {
+            if (! file_exists($mdtDungeonNameFile)) {
                 throw new Exception(sprintf('Unable to find file %s', $mdtDungeonNameFile));
             }
 
@@ -291,11 +295,11 @@ class MDTDungeon
                         MDT.zoneIdToDungeonIdx = {}
 
                         local L = {}
-                        ' .
+                        '.
                 // Some files require LibStub
-                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')).PHP_EOL.
                 // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
-                file_get_contents($mdtDungeonNameFile) . PHP_EOL .
+                file_get_contents($mdtDungeonNameFile).PHP_EOL.
                 // Insert dummy function to get what we need
                 '
                         function GetDungeonTotalCount()

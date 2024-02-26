@@ -7,8 +7,5 @@ use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 
 interface RaidEventsServiceInterface
 {
-    /**
-     * @return RaidEventsCollection
-     */
     public function getRaidEvents(SimulationCraftRaidEventsOptions $options): RaidEventsCollection;
 }

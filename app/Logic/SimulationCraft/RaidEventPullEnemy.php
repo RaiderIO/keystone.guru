@@ -8,29 +8,24 @@ use App\Models\NpcClassification;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Str;
 
-class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutputInterface
+class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemyInterface
 {
     public function __construct(private readonly SimulationCraftRaidEventsOptions $options, private readonly Enemy $enemy, private readonly int $enemyIndexInPull)
     {
     }
 
-    /**
-     * @param SimulationCraftRaidEventsOptions $options
-     * @param Npc                              $npc
-     * @return int
-     */
     public function calculateHealth(SimulationCraftRaidEventsOptions $options, Npc $npc): int
     {
         return $npc->calculateHealthForKey(
-                $options->key_level,
-                $options->affix === SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED,
-                $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL,
-                $options->isThunderingAffixActive()
-            ) * ($this->options->hp_percent / 100);
+            $options->key_level,
+            $options->affix === SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED,
+            $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL,
+            $options->isThunderingAffixActive()
+        ) * ($this->options->hp_percent / 100);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toString(): string
     {
@@ -38,9 +33,9 @@ class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutput
 
         if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
             $name = sprintf('BOUNTY1_%s', $name);
-        } else if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+        } elseif ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
             $name = sprintf('BOUNTY3_%s', $name);
-        } else if ($this->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+        } elseif ($this->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
             $name = sprintf('BOSS_%s', $name);
         }
 

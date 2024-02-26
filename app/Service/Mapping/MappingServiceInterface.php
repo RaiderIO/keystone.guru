@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
@@ -24,16 +23,10 @@ interface MappingServiceInterface
      */
     public function getDungeonsWithUnmergedMappingChanges(): Collection;
 
-    /**
-     * @return MappingVersion
-     */
     public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion;
 
     /**
      * Creates a new mapping version for a dungeon.
-     *
-     * @param string|null $hash
-     * @return MappingVersion
      */
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion;
 

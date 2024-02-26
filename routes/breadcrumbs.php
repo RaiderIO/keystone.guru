@@ -43,7 +43,6 @@ Breadcrumbs::for('dungeon.explore.list', function (Generator $trail) {
     $trail->push(__('breadcrumbs.home.dungeon.explore'), route('dungeon.explore.list'));
 });
 
-
 /**
  * Routes page
  */
@@ -109,7 +108,6 @@ Breadcrumbs::for('dungeonroutes.new', function (Generator $trail, Expansion $exp
     $trail->parent('dungeonroutes.expansion', $expansion);
     $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.new', ['expansion' => $expansion]));
 });
-
 
 /**
  * General for a dungeon
@@ -186,7 +184,6 @@ Breadcrumbs::for('team.invite', function (Generator $trail, Team $team) {
     $trail->parent('team.list');
     $trail->push(__('breadcrumbs.home.join_team'), route('team.invite', $team));
 });
-
 
 /**
  * Admin pages
@@ -283,7 +280,6 @@ Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', function (Generator $tr
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]));
 });
-
 
 // Npcs
 Breadcrumbs::for('admin.npc.list', function (Generator $trail) {

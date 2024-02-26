@@ -24,11 +24,10 @@ class RedisClearIdleKeys extends Command
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(): int
     {
-        $seconds = (int)$this->argument('seconds');
+        $seconds = (int) $this->argument('seconds');
 
         // Only keys starting with this prefix may be cleaned up by this task, ex.
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
@@ -38,14 +37,14 @@ class RedisClearIdleKeys extends Command
         ];
 
         Log::channel('scheduler')->info(sprintf('Clearing idle keys in redis that haven\'t been accessed in %d seconds', $seconds));
-        $i                = 0;
-        $nextKey          = 0;
+        $i = 0;
+        $nextKey = 0;
         $deletedKeysCount = 0;
 
         do {
             $result = Redis::command('SCAN', [$nextKey]);
 
-            $nextKey = (int)$result[0];
+            $nextKey = (int) $result[0];
 
             $toDelete = [];
             foreach ($result[1] as $redisKey) {
@@ -62,7 +61,7 @@ class RedisClearIdleKeys extends Command
                 }
             }
 
-            if (!empty($toDelete)) {
+            if (! empty($toDelete)) {
                 $count = count($toDelete);
 
                 // https://redis.io/commands/del/

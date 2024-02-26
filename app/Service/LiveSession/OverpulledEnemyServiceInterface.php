@@ -6,8 +6,5 @@ use App\Models\LiveSession;
 
 interface OverpulledEnemyServiceInterface
 {
-    /**
-     * @return DungeonRouteCorrection
-     */
-    function getRouteCorrection(LiveSession $liveSession): DungeonRouteCorrection;
+    public function getRouteCorrection(LiveSession $liveSession): DungeonRouteCorrection;
 }

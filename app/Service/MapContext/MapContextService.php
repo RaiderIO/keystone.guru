@@ -21,13 +21,7 @@ class MapContextService implements MapContextServiceInterface
     {
     }
 
-    /**
-     * @param DungeonRoute $dungeonRoute
-     * @param Floor        $floor
-     * @param string|null  $mapFacadeStyle
-     * @return MapContextDungeonRoute
-     */
-    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, string $mapFacadeStyle = null): MapContextDungeonRoute
+    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, ?string $mapFacadeStyle = null): MapContextDungeonRoute
     {
         return new MapContextDungeonRoute(
             $this->cacheService,
@@ -38,12 +32,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    /**
-     * @param LiveSession $liveSession
-     * @param Floor       $floor
-     *
-     * @return MapContextLiveSession
-     */
     public function createMapContextLiveSession(LiveSession $liveSession, Floor $floor): MapContextLiveSession
     {
         return new MapContextLiveSession(
@@ -55,13 +43,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    /**
-     * @param Dungeon        $dungeon
-     * @param Floor          $floor
-     * @param MappingVersion $mappingVersion
-     *
-     * @return MapContextDungeonExplore
-     */
     public function createMapContextDungeonExplore(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion): MapContextDungeonExplore
     {
         return new MapContextDungeonExplore(
@@ -73,13 +54,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    /**
-     * @param Dungeon        $dungeon
-     * @param Floor          $floor
-     * @param MappingVersion $mappingVersion
-     *
-     * @return MapContextMappingVersionEdit
-     */
     public function createMapContextMappingVersionEdit(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion): MapContextMappingVersionEdit
     {
         return new MapContextMappingVersionEdit(
@@ -90,6 +64,4 @@ class MapContextService implements MapContextServiceInterface
             $mappingVersion
         );
     }
-
-
 }

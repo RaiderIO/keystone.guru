@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelChangedEvent;
@@ -17,8 +16,9 @@ use Throwable;
 
 /**
  * Base class for all models that are mapping versionable
- * @package App\Http\Controllers
+ *
  * @author Wouter
+ *
  * @since 06/11/2022
  */
 abstract class AjaxMappingModelBaseController extends Controller
@@ -31,13 +31,9 @@ abstract class AjaxMappingModelBaseController extends Controller
     }
 
     /**
-     * @param MappingVersion|null        $mappingVersion
-     * @param MappingModelInterface|null $model
-     * @param Closure|null               $onSaveSuccess
-     * @return Model
      * @throws Throwable
      */
-    protected function storeModel(?MappingVersion $mappingVersion, array $validated, string $modelClass, MappingModelInterface $model = null, Closure $onSaveSuccess = null): Model
+    protected function storeModel(?MappingVersion $mappingVersion, array $validated, string $modelClass, ?MappingModelInterface $model = null, ?Closure $onSaveSuccess = null): Model
     {
         $validated['mapping_version_id'] = optional($mappingVersion)->id;
 
@@ -47,7 +43,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             $beforeModel = $model === null ? null : clone $model;
 
             if ($model === null) {
-                $model   = $modelClass::create($validated);
+                $model = $modelClass::create($validated);
                 $success = $model instanceof $modelClass;
             } else {
                 $success = $model->update($validated);

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Mapping;
-
 
 use App\Models\EnemyPack;
 use App\SeederHelpers\RelationImport\Conditionals\MappingVersionConditional;
@@ -10,7 +8,7 @@ use App\SeederHelpers\RelationImport\Conditionals\MappingVersionConditional;
 class EnemyPackRelationMapping extends RelationMapping
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct()
     {

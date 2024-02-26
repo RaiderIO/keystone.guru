@@ -19,6 +19,7 @@ class CombatLogEvent extends BaseEvent
 
     /**
      * @return $this
+     *
      * @throws Exception
      */
     public function setParameters(array $parameters): CombatLogEvent
@@ -37,48 +38,39 @@ class CombatLogEvent extends BaseEvent
         return $this;
     }
 
-    /**
-     * @return GenericDataInterface
-     */
     public function getGenericData(): GenericDataInterface
     {
         return $this->genericData;
     }
 
-    /**
-     * @return Prefix
-     */
     public function getPrefix(): Prefix
     {
         return $this->prefix;
     }
 
-    /**
-     * @return Suffix
-     */
     public function getSuffix(): Suffix
     {
         return $this->suffix;
     }
-//
-//
-//    /**
-//     * @param string $eventName
-//     * @return bool
-//     */
-//    public static function canParseEventName(string $eventName): bool
-//    {
-//        $result = false;
-//
-//        foreach (Prefix::PREFIX_ALL as $prefix) {
-//            foreach (Suffix::SUFFIX_ALL as $suffix) {
-//                if ($eventName === sprintf('%s_%s', $prefix, $suffix)) {
-//                    $result = true;
-//                    break 2;
-//                }
-//            }
-//        }
-//
-//        return $result;
-//    }
+    //
+    //
+    //    /**
+    //     * @param string $eventName
+    //     * @return bool
+    //     */
+    //    public static function canParseEventName(string $eventName): bool
+    //    {
+    //        $result = false;
+    //
+    //        foreach (Prefix::PREFIX_ALL as $prefix) {
+    //            foreach (Suffix::SUFFIX_ALL as $suffix) {
+    //                if ($eventName === sprintf('%s_%s', $prefix, $suffix)) {
+    //                    $result = true;
+    //                    break 2;
+    //                }
+    //            }
+    //        }
+    //
+    //        return $result;
+    //    }
 }

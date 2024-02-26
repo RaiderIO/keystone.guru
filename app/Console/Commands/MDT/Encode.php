@@ -8,8 +8,8 @@ use Illuminate\Console\Command;
 
 class Encode extends Command
 {
-    use ExecutesShellCommands;
     use ConvertsMDTStrings;
+    use ExecutesShellCommands;
 
     /**
      * The name and signature of the console command.

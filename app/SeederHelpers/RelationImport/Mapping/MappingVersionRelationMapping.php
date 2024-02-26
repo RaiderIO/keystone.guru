@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Mapping;
-
 
 use App\Models\Mapping\MappingVersion;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\TimestampAttributeParser;
@@ -10,7 +8,7 @@ use App\SeederHelpers\RelationImport\Parsers\Attribute\TimestampAttributeParser;
 class MappingVersionRelationMapping extends RelationMapping
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct()
     {

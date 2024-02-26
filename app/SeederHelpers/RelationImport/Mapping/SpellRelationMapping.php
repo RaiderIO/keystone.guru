@@ -1,15 +1,13 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Mapping;
-
 
 use App\Models\Spell;
 
 class SpellRelationMapping extends RelationMapping
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct()
     {

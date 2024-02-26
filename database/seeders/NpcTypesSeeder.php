@@ -9,8 +9,6 @@ class NpcTypesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -19,7 +17,7 @@ class NpcTypesSeeder extends Seeder implements TableSeederInterface
         $npcTypeAttributes = [];
         foreach (NpcType::ALL as $npcTypeName => $id) {
             $npcTypeAttributes[] = [
-                'id'   => $id,
+                'id' => $id,
                 'type' => $npcTypeName,
             ];
         }

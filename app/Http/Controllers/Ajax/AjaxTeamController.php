@@ -21,13 +21,14 @@ use Teapot\StatusCode\Http;
 
 class AjaxTeamController extends Controller
 {
-    function list(Request $request)
+    public function list(Request $request)
     {
         return Auth::user()->teams()->get();
     }
 
     /**
      * @return Response
+     *
      * @throws AuthorizationException
      */
     public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team)
@@ -41,6 +42,7 @@ class AjaxTeamController extends Controller
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function changeRole(Request $request, Team $team)
@@ -51,7 +53,7 @@ class AjaxTeamController extends Controller
         $user = Auth::user();
         /** @var User $targetUser */
         $targetUser = User::where('name', $request->get('username'))->firstOrFail();
-        $role       = $request->get('role');
+        $role = $request->get('role');
 
         // Only if the current user may do such a thing
         if ($team->canChangeRole($user, $targetUser, $role)) {
@@ -66,6 +68,7 @@ class AjaxTeamController extends Controller
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
@@ -87,6 +90,7 @@ class AjaxTeamController extends Controller
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
@@ -108,6 +112,7 @@ class AjaxTeamController extends Controller
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function removeMember(Request $request, Team $team, User $user)
@@ -121,7 +126,7 @@ class AjaxTeamController extends Controller
             // Disband if no team members are left
             if ($team->members->isEmpty()) {
                 $team->delete();
-            } else if ($team->isUserAdmin($user)) {
+            } elseif ($team->isUserAdmin($user)) {
                 // Promote someone else to be the new admin
                 $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                 if ($newAdmin !== null) {
@@ -140,7 +145,9 @@ class AjaxTeamController extends Controller
 
     /**
      * Invalidate the current invite link and generate a new one.
+     *
      * @return array
+     *
      * @throws Exception
      */
     public function refreshInviteLink(Request $request, Team $team)
@@ -155,6 +162,7 @@ class AjaxTeamController extends Controller
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function addAdFreeGiveaway(Request $request, Team $team, User $user): PatreonAdFreeGiveaway
@@ -172,19 +180,19 @@ class AjaxTeamController extends Controller
             abort(422, 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.');
         }
 
-
         if ($user->hasAdFreeGiveaway()) {
             abort(422, 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.');
         }
 
         return PatreonAdFreeGiveaway::create([
-            'giver_user_id'    => $currentUser->id,
+            'giver_user_id' => $currentUser->id,
             'receiver_user_id' => $user->id,
         ]);
     }
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function removeAdFreeGiveaway(Request $request, Team $team, User $user)

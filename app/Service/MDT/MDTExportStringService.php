@@ -20,8 +20,9 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
- * @package App\Service\MDT
+ *
  * @author Wouter
+ *
  * @since 09/11/2022
  */
 class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
@@ -29,7 +30,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /** @var int How far away do we create notes in MDT */
     private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
-    /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
+    /** @var string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private readonly string $encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
@@ -39,10 +40,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
     }
 
-
-    /**
-     * @return array
-     */
     private function extractObjects(Collection $warnings): array
     {
         $result = [];
@@ -79,7 +76,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         foreach ($lines as $line) {
             /** @var Path|Brushline $line */
-
             $mdtLine = [
                 'd' => [
                     1 => $line->polyline->weight,
@@ -97,8 +93,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 $mdtLine['d'][7] = true;
             }
 
-            $vertexIndex            = 1;
-            $verticesLatLngs        = $line->polyline->getDecodedLatLngs($line->floor);
+            $vertexIndex = 1;
+            $verticesLatLngs = $line->polyline->getDecodedLatLngs($line->floor);
             $previousMdtCoordinates = null;
 
             foreach ($verticesLatLngs as $vertexLatLng) {
@@ -130,11 +126,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         // For each killzone, ensure we extract the comments into something MDT understands
         foreach ($this->dungeonRoute->killZones as $killZone) {
-            if (!isset($killZone->description)) {
+            if (! isset($killZone->description)) {
                 continue;
             }
 
-            $floor  = $killZone->getDominantFloor();
+            $floor = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
             if ($this->dungeonRoute->dungeon->facade_enabled) {
@@ -162,7 +158,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     }
 
     /**
-     * @return array
      * @throws InvalidArgumentException
      */
     private function extractPulls(MappingVersion $mappingVersion, Collection $warnings): array
@@ -181,8 +176,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $pull = [];
 
             // Lua is 1 based, not 0 based
-            $enemyIndex      = 1;
-            $enemiesAdded    = 0;
+            $enemyIndex = 1;
+            $enemiesAdded = 0;
             $killZoneEnemies = $killZone->getEnemies();
             foreach ($killZoneEnemies as $enemy) {
                 // MDT does not handle prideful NPCs
@@ -202,7 +197,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!in_array(optional($enemy->npc->classification)->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
+                    if (! in_array(optional($enemy->npc->classification)->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
                         $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                             sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                             ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
@@ -213,7 +208,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 }
 
                 // Create an array if it didn't exist yet
-                if (!isset($pull[$mdtNpcIndex])) {
+                if (! isset($pull[$mdtNpcIndex])) {
                     $pull[$mdtNpcIndex] = [];
                 }
 
@@ -239,51 +234,49 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         return $result;
     }
 
-
     /**
      * Gets the MDT encoded string based on the currently set DungeonRoute.
-     * @param Collection $warnings
-     * @return string
+     *
      * @throws Exception
      */
     public function getEncodedString(Collection $warnings): string
     {
-//        $lua = $this->_getLua();
+        //        $lua = $this->_getLua();
 
         $mdtObject = [
             //
-            'objects'    => $this->extractObjects($warnings),
+            'objects' => $this->extractObjects($warnings),
             // M+ level
             'difficulty' => $this->dungeonRoute->level_min,
-            'week'       => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
+            'week' => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
                 Conversion::convertAffixGroupToWeek($this->dungeonRoute->affixes->first()),
-            'value'      => [
+            'value' => [
                 'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
-                'selection'         => [],
-                'currentPull'       => 1,
-                'teeming'           => $this->dungeonRoute->teeming,
+                'selection' => [],
+                'currentPull' => 1,
+                'teeming' => $this->dungeonRoute->teeming,
                 // Legacy - we don't do anything with it
-                'riftOffsets'       => [
+                'riftOffsets' => [
 
                 ],
-                'pulls'             => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
-                'currentSublevel'   => 1,
+                'pulls' => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
+                'currentSublevel' => 1,
             ],
-            'text'       => $this->dungeonRoute->title,
-            'mdi'        => [
+            'text' => $this->dungeonRoute->title,
+            'mdi' => [
                 'freeholdJoined' => false,
-                'freehold'       => 1,
-                'beguiling'      => 1,
+                'freehold' => 1,
+                'beguiling' => 1,
             ],
             // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
-            'uid'        => $this->dungeonRoute->public_key . 'xxKG',
+            'uid' => $this->dungeonRoute->public_key.'xxKG',
         ];
 
         try {
             return $this->encode($mdtObject);
         } catch (Exception $exception) {
             // Encoding issue - adjust the title and try again
-            if (str_contains($exception->getMessage(), "call to lua function [string &quot;line&quot;]")) {
+            if (str_contains($exception->getMessage(), 'call to lua function [string &quot;line&quot;]')) {
                 $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->dungeonRoute->title);
 
                 // If stripping ascii characters worked in changing the title somehow
@@ -331,7 +324,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /**
      * Sets a dungeon route to be staged for encoding to an encoded string.
      *
-     * @param $dungeonRoute DungeonRoute
+     * @param  $dungeonRoute  DungeonRoute
      * @return $this Returns self to allow for chaining.
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self

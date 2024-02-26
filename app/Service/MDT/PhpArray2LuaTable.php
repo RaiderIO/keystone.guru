@@ -1,25 +1,23 @@
 <?php
 
-
 namespace App\Service\MDT;
 
 class PhpArray2LuaTable
 {
-    private const TOKEN_OBJECT_OPEN  = '{' . PHP_EOL;
+    private const TOKEN_OBJECT_OPEN = '{'.PHP_EOL;
+
     private const TOKEN_OBJECT_CLOSE = '}';
 
-    private const TOKEN_ARRAY_KEY_OPEN  = '[';
+    private const TOKEN_ARRAY_KEY_OPEN = '[';
+
     private const TOKEN_ARRAY_KEY_CLOSE = ']';
 
     private const TOKEN_ASSIGNMENT_OPERATOR = '=';
 
-    private const TOKEN_ITEM_SEPARATOR = ';' . PHP_EOL;
+    private const TOKEN_ITEM_SEPARATOR = ';'.PHP_EOL;
 
     private const TOKEN_STRING_QUOTE = '"';
 
-    /**
-     * @return string
-     */
     public function toLuaTableString(string $tableName, array $contents): string
     {
         return sprintf('
@@ -27,9 +25,6 @@ class PhpArray2LuaTable
         ', $tableName, self::TOKEN_ASSIGNMENT_OPERATOR, implode('', $this->arrayToLuaTokens($contents)));
     }
 
-    /**
-     * @return array
-     */
     private function arrayToLuaTokens(array $array): array
     {
         $tokens = [self::TOKEN_OBJECT_OPEN];
@@ -57,24 +52,16 @@ class PhpArray2LuaTable
         return $tokens;
     }
 
-    /**
-     * @param $key
-     * @return array
-     */
     private function renderArrayKey($key): array
     {
         return [self::TOKEN_ARRAY_KEY_OPEN, ...$this->renderValue($key), self::TOKEN_ARRAY_KEY_CLOSE];
     }
 
-    /**
-     * @param $value
-     * @return array
-     */
     private function renderValue($value): array
     {
         if (is_string($value)) {
             $tokens = [self::TOKEN_STRING_QUOTE, $value, self::TOKEN_STRING_QUOTE];
-        } else if (is_bool($value)) {
+        } elseif (is_bool($value)) {
             $tokens = [$value ? 'true' : 'false'];
         } else {
             // ints, floats, etc

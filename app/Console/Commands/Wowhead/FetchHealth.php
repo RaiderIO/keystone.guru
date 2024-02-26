@@ -37,6 +37,7 @@ class FetchHealth extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function handle(WowheadServiceInterface $wowheadService)
@@ -50,8 +51,9 @@ class FetchHealth extends Command
         foreach ($dungeon->npcs as $npc) {
             if ($npc->dungeon_id === -1) {
                 continue;
-            } else if ($npc->base_health !== 12345) {
+            } elseif ($npc->base_health !== 12345) {
                 $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
+
                 continue;
             }
 

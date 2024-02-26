@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Cache;
 
 use App\Logic\Utils\Counter;
@@ -9,10 +8,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class DevCacheService extends CacheService
 {
-    /**
-     * @param string $key
-     * @return mixed
-     */
     public function get(string $key): mixed
     {
         $result = parent::get($key);
@@ -22,11 +17,9 @@ class DevCacheService extends CacheService
     }
 
     /**
-     * @param bool          $condition
-     * @param string        $key
-     * @param Closure|mixed $value
-     * @param string|null   $ttl
-     * @return mixed
+     * @param  Closure|mixed  $value
+     * @param  string|null  $ttl
+     *
      * @throws InvalidArgumentException
      */
     public function rememberWhen(bool $condition, string $key, $value, $ttl = null): mixed
@@ -41,10 +34,8 @@ class DevCacheService extends CacheService
     }
 
     /**
-     * @param string        $key
-     * @param Closure|mixed $value
-     * @param string|null   $ttl
-     * @return mixed
+     * @param  Closure|mixed  $value
+     * @param  string|null  $ttl
      */
     public function remember(string $key, $value, $ttl = null): mixed
     {

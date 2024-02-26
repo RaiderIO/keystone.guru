@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
-    /**  @var Builder */
     protected Builder $builder;
 
     /** @var DatatablesColumnHandler[] */
@@ -28,17 +27,11 @@ abstract class DatatablesHandler
         $this->columnHandlers = [];
     }
 
-    /**
-     * @return Request
-     */
     public function getRequest(): Request
     {
         return $this->request;
     }
 
-    /**
-     * @return Builder
-     */
     public function getBuilder(): Builder
     {
         return $this->builder;
@@ -55,13 +48,12 @@ abstract class DatatablesHandler
     }
 
     /**
-     * @param DatatablesColumnHandler|array $dtColumnHandlers
-     *
+     * @param  DatatablesColumnHandler|array  $dtColumnHandlers
      * @return $this
      */
     public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
     {
-        if (!is_array($dtColumnHandlers)) {
+        if (! is_array($dtColumnHandlers)) {
             $dtColumnHandlers = [$dtColumnHandlers];
         }
 
@@ -75,13 +67,14 @@ abstract class DatatablesHandler
 
     /**
      * @return $this
+     *
      * @throws Exception
      */
     public function applyRequestToBuilder(): DatatablesHandler
     {
         // Set limits
-        $this->builder->offset((int)$this->request->get('start'));
-        $this->builder->limit((int)$this->request->get('length'));
+        $this->builder->offset((int) $this->request->get('start'));
+        $this->builder->limit((int) $this->request->get('length'));
 
         // For any custom column handlers, handle their wishes inside a single where
         $this->builder->where(function (Builder $subBuilder) {
@@ -94,9 +87,9 @@ abstract class DatatablesHandler
             foreach ($columns as $column) {
                 $columnName = $column['name'];
                 // Only if the column name was set
-                if (!empty($columnName)) {
+                if (! empty($columnName)) {
                     // Only if not handled by a custom column handler
-                    if (!isset($this->columnHandlers[$columnName])) {
+                    if (! isset($this->columnHandlers[$columnName])) {
                         // Handle filtering/sorting by this column
                         (new SimpleColumnHandler($this, $columnName))->applyToBuilder($subBuilder);
                     }
@@ -107,9 +100,6 @@ abstract class DatatablesHandler
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getResult(): array
     {
         $isDev = config('app.env') !== 'production';
@@ -121,18 +111,18 @@ abstract class DatatablesHandler
         $data = $this->builder->get();
 
         $recordsTotal = $this->calculateRecordsTotal();
-        $result       = [
-            'draw'            => (int)$this->request->get('draw'),
+        $result = [
+            'draw' => (int) $this->request->get('draw'),
             // Initial amount of records
-            'recordsTotal'    => $recordsTotal,
+            'recordsTotal' => $recordsTotal,
             // The amount of records after filtering
-            'data'            => $data,
+            'data' => $data,
             // The amount of rows there would have been, if it were not for the limits
             'recordsFiltered' => $this->calculateRecordsFiltered() ?? $recordsTotal,
             // Only show this info in dev instance
-            'input'           => $isDev ? $this->request->toArray() : [],
+            'input' => $isDev ? $this->request->toArray() : [],
             // Debug sql queries for optimization
-            'queries'         => $isDev ? DB::getQueryLog() : [],
+            'queries' => $isDev ? DB::getQueryLog() : [],
         ];
 
         if ($isDev) {
@@ -142,7 +132,7 @@ abstract class DatatablesHandler
         return $result;
     }
 
-    protected abstract function calculateRecordsTotal(): int;
+    abstract protected function calculateRecordsTotal(): int;
 
-    protected abstract function calculateRecordsFiltered(): ?int;
+    abstract protected function calculateRecordsFiltered(): ?int;
 }

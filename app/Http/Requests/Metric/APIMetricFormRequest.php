@@ -10,8 +10,6 @@ class APIMetricFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -20,18 +18,16 @@ class APIMetricFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
         return [
-            'id'          => 'int',
-            'model_id'    => 'int|null',
+            'id' => 'int',
+            'model_id' => 'int|null',
             'model_class' => 'string|null',
-            'category'    => Rule::in(Metric::ALL_CATEGORIES),
-            'tag'         => Rule::in(Metric::ALL_TAGS),
-            'value'       => 'int',
+            'category' => Rule::in(Metric::ALL_CATEGORIES),
+            'tag' => Rule::in(Metric::ALL_TAGS),
+            'value' => 'int',
         ];
     }
 }

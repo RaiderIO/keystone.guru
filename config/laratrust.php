@@ -184,7 +184,7 @@ return [
              */
             'abort' => [
                 'code' => 403,
-                'message' => 'User does not have any of the necessary access rights.'
+                'message' => 'User does not have any of the necessary access rights.',
             ],
 
             /**
@@ -197,10 +197,10 @@ return [
                 'url' => '/home',
                 'message' => [
                     'key' => 'error',
-                    'content' => ''
-                ]
-            ]
-        ]
+                    'content' => '',
+                ],
+            ],
+        ],
     ],
 
     'teams' => [
@@ -300,5 +300,5 @@ return [
         |
         */
         'assign_permissions_to_user' => true,
-    ]
+    ],
 ];

@@ -9,8 +9,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * @property int    $id
- * @property int    $model_id
+ * @property int $id
+ * @property int $model_id
  * @property string $model_class
  * @property string $disk
  * @property string $path
@@ -31,6 +31,7 @@ class File extends Model
 
     /**
      * @return bool|null|void
+     *
      * @throws Exception
      */
     public function delete()
@@ -55,19 +56,20 @@ class File extends Model
     {
         return $this->getURL();
         // Unavailable since switching to different Image library - but we don't use it anyways
-//        $iconUrl = '';
-//        // Only if it's an image!
-//        if(Image::format($this->getUrl()) !== null){
-//            // Send as little data as possible, fetch the url, but strip it off the full path
-//            $iconUrl = @parse_url(Image::url($this->getUrl(), 32, 32))['path'];
-//        }
-//        return $iconUrl;
+        //        $iconUrl = '';
+        //        // Only if it's an image!
+        //        if(Image::format($this->getUrl()) !== null){
+        //            // Send as little data as possible, fetch the url, but strip it off the full path
+        //            $iconUrl = @parse_url(Image::url($this->getUrl(), 32, 32))['path'];
+        //        }
+        //        return $iconUrl;
     }
 
     /**
      * Deletes the file from disk
      *
      * @note This does NOT remove the file from the database!
+     *
      * @return bool True if the file was successfully deleted, false if it was not.
      */
     public function deleteFromDisk(): bool
@@ -77,6 +79,7 @@ class File extends Model
 
     /**
      * Get a full path on the file system of this file.
+     *
      * @return string The string containing the file path.
      */
     public function getFullPath(): string
@@ -87,6 +90,7 @@ class File extends Model
 
     /**
      * Get an URL for putting in the url() function in your view.
+     *
      * @return string The string containing the URL.
      */
     public function getURL(): string
@@ -95,16 +99,18 @@ class File extends Model
         if (config('app.env') === 'local') {
             return url($this->path);
         } else {
-            return url('storage/' . $this->path);
+            return url('storage/'.$this->path);
         }
     }
 
     /**
      * Saves a file to the database
-     * @param $uploadedFile UploadedFile The uploaded file element.
-     * @param $model Model The model that wants to save this file.
-     * @param $dir string The directory to save this file in.
+     *
+     * @param  $uploadedFile  UploadedFile The uploaded file element.
+     * @param  $model  Model The model that wants to save this file.
+     * @param  $dir  string The directory to save this file in.
      * @return File The newly saved file in the database.
+     *
      * @throws Exception
      */
     public static function saveFileToDB($uploadedFile, $model, $dir = 'upload'): File
@@ -112,23 +118,23 @@ class File extends Model
         $disk = config('app.env') === 'local' ? 'public_uploads' : 'public';
 
         // Ensure the path exists
-        $storageDir = Storage::disk($disk)->getAdapter()->getPathPrefix() . $dir;
-        if (!is_dir($storageDir)) {
+        $storageDir = Storage::disk($disk)->getAdapter()->getPathPrefix().$dir;
+        if (! is_dir($storageDir)) {
             mkdir($storageDir, 755, true);
         }
 
-        $newFile              = new File();
-        $newFile->model_id    = $model->id;
+        $newFile = new File();
+        $newFile->model_id = $model->id;
         $newFile->model_class = $model::class;
-        $newFile->disk        = $disk;
-        $newFile->path        = $uploadedFile->store($dir, $disk);
-        $saveResult           = $newFile->save();
+        $newFile->disk = $disk;
+        $newFile->path = $uploadedFile->store($dir, $disk);
+        $saveResult = $newFile->save();
 
-        if (!$saveResult) {
+        if (! $saveResult) {
             // Remove the uploaded file from disk
             $newFile->deleteFromDisk();
 
-            throw new Exception("Unable to save file to DB!");
+            throw new Exception('Unable to save file to DB!');
         }
 
         return $newFile;

@@ -7,9 +7,9 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
- * @property int    $id
- * @property int    $floor1_id
- * @property int    $floor2_id
+ * @property int $id
+ * @property int $floor1_id
+ * @property int $floor2_id
  * @property string $direction
  *
  * @mixin Eloquent
@@ -18,10 +18,14 @@ class FloorCoupling extends CacheModel
 {
     use SeederModel;
 
-    public const DIRECTION_NONE  = 'none';
-    public const DIRECTION_UP    = 'up';
-    public const DIRECTION_DOWN  = 'down';
-    public const DIRECTION_LEFT  = 'left';
+    public const DIRECTION_NONE = 'none';
+
+    public const DIRECTION_UP = 'up';
+
+    public const DIRECTION_DOWN = 'down';
+
+    public const DIRECTION_LEFT = 'left';
+
     public const DIRECTION_RIGHT = 'right';
 
     public const ALL = [

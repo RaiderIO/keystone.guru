@@ -44,11 +44,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     {
     }
 
-    /**
-     * @param CreateRouteBody $createRouteBody
-     *
-     * @return DungeonRoute
-     */
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
         $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $this->coordinatesService, $createRouteBody))->build();
@@ -67,9 +62,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     * @param string $combatLogFilePath
-     *
-     * @return CreateRouteBody
      * @throws Exception
      */
     public function getCreateRouteBody(string $combatLogFilePath): CreateRouteBody
@@ -81,7 +73,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             $dungeonRoute = null;
             $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
-            if (!($dungeonRoute instanceof DungeonRoute)) {
+            if (! ($dungeonRoute instanceof DungeonRoute)) {
                 throw new Exception('Unable to generate dungeon route from combat log!');
             }
 
@@ -89,10 +81,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
+            $challengeModeStartEvent = $resultEvents->filter(fn (BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
 
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
+            $challengeModeEndEvent = $resultEvents->filter(fn (BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
             $challengeMode = new CreateRouteChallengeMode(
                 $challengeModeStartEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
@@ -105,22 +97,24 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 $challengeModeStartEvent->getAffixIDs()
             );
 
-            $npcs             = collect();
+            $npcs = collect();
             $npcEngagedEvents = collect();
-            $spells           = collect();
+            $spells = collect();
             foreach ($resultEvents as $resultEvent) {
                 if ($resultEvent instanceof EnemyEngagedResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyEngagedInvalidNpcId($guid->getId());
+
                         continue;
                     }
 
                     $npcEngagedEvents->put($guid->getGuid(), $resultEvent);
-                } else if ($resultEvent instanceof EnemyKilledResultEvent) {
+                } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
+
                         continue;
                     }
 
@@ -142,7 +136,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                             )
                         )
                     );
-                } else if ($resultEvent instanceof SpellCast) {
+                } elseif ($resultEvent instanceof SpellCast) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -179,7 +173,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     *
      * @return void
      */
     private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
@@ -189,29 +182,30 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
         /** @var ChallengeModeRun $challengeModeRun */
         $challengeModeRun = ChallengeModeRun::create([
-            'dungeon_id'       => $dungeonRoute->dungeon_id,
+            'dungeon_id' => $dungeonRoute->dungeon_id,
             'dungeon_route_id' => $dungeonRoute->id,
-            'level'            => $createRouteBody->challengeMode->level,
-            'success'          => $createRouteBody->challengeMode->success,
-            'total_time_ms'    => $createRouteBody->challengeMode->durationMs,
-            'created_at'       => $now,
+            'level' => $createRouteBody->challengeMode->level,
+            'success' => $createRouteBody->challengeMode->success,
+            'total_time_ms' => $createRouteBody->challengeMode->durationMs,
+            'created_at' => $now,
         ]);
 
         $floorByUiMapId = Floor::where('dungeon_id', $dungeonRoute->dungeon_id)
             ->get()
             ->keyBy('ui_map_id');
 
-        $invalidUiMapIds         = [];
+        $invalidUiMapIds = [];
         $enemyPositionAttributes = [];
         foreach ($createRouteBody->npcs as $npc) {
             /** @var Floor $floor */
             $floor = $floorByUiMapId->get($npc->coord->uiMapId);
 
             if ($floor === null) {
-                if (!in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
+                if (! in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
                     $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
                     $invalidUiMapIds[] = $npc->coord->uiMapId;
                 }
+
                 continue;
             }
 
@@ -221,10 +215,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             $enemyPositionAttributes[] = array_merge([
                 'challenge_mode_run_id' => $challengeModeRun->id,
-                'floor_id'              => $floor->id,
-                'npc_id'                => $npc->npcId,
-                'guid'                  => $npc->getUniqueId(),
-                'created_at'            => $now,
+                'floor_id' => $floor->id,
+                'npc_id' => $npc->npcId,
+                'guid' => $npc->getUniqueId(),
+                'created_at' => $now,
             ], $latLng->toArray());
         }
 
@@ -237,28 +231,23 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
         ChallengeModeRunData::create([
             'challenge_mode_run_id' => $challengeModeRun->id,
-            'run_id'                => $createRouteBody->metadata->runId,
-            'correlation_id'        => correlationId(),
-            'post_body'             => json_encode($createRouteBody),
+            'run_id' => $createRouteBody->metadata->runId,
+            'correlation_id' => correlationId(),
+            'post_body' => json_encode($createRouteBody),
         ]);
     }
 
-    /**
-     * @param DungeonRoute|null $dungeonRoute
-     *
-     * @return void
-     */
     private function generateMapIcons(
-        MappingVersion  $mappingVersion,
+        MappingVersion $mappingVersion,
         CreateRouteBody $createRouteBody,
-        ?DungeonRoute   $dungeonRoute = null
+        ?DungeonRoute $dungeonRoute = null
     ): void {
-        $now                 = now();
-        $mapIconAttributes   = [];
-        $polylineAttributes  = [];
+        $now = now();
+        $mapIconAttributes = [];
+        $polylineAttributes = [];
         $brushlineAttributes = [];
 
-        $validNpcIds   = $dungeonRoute->dungeon->getInUseNpcIds();
+        $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
         $previousFloor = null;
         foreach ($createRouteBody->npcs as $npc) {
             // Ignore NPCs that are not in the whitelist
@@ -270,6 +259,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             if ($currentFloor === null) {
                 $this->log->generateMapIconsUnableToFindFloor($npc->getUniqueId());
+
                 continue;
             }
 
@@ -287,27 +277,27 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             $mapIconAttributes[] = array_merge([
                 'mapping_version_id' => $mappingVersion->id,
-                'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
-                'team_id'            => null,
-                'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
-                'comment'            => $comment,
-                'permanent_tooltip'  => 0,
+                'floor_id' => $currentFloor->id,
+                'dungeon_route_id' => optional($dungeonRoute)->id ?? null,
+                'team_id' => null,
+                'map_icon_type_id' => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
+                'comment' => $comment,
+                'permanent_tooltip' => 0,
             ], $latLng->toArray());
 
             if ($hasResolvedEnemy) {
                 $brushlineAttributes[] = [
                     'dungeon_route_id' => optional($dungeonRoute)->id ?? null,
-                    'floor_id'         => $currentFloor->id,
-                    'polyline_id'      => -1,
-                    'created_at'       => $now,
-                    'updated_at'       => $now,
+                    'floor_id' => $currentFloor->id,
+                    'polyline_id' => -1,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
 
                 $polylineAttributes[] = [
-                    'model_class'   => Brushline::class,
-                    'color'         => '#f202fa',
-                    'weight'        => 2,
+                    'model_class' => Brushline::class,
+                    'color' => '#f202fa',
+                    'weight' => 2,
                     'vertices_json' => json_encode([
                         $latLng->toArray(),
                         $npc->getResolvedEnemy()->getLatLng()->toArray(),

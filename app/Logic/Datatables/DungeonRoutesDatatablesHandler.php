@@ -40,10 +40,10 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'));
         // Temp store; it messes with the count
-        $havings        = $query->havings;
+        $havings = $query->havings;
         $query->havings = null;
-        $query->orders  = null;
-        $countResults   = $query->get();
+        $query->orders = null;
+        $countResults = $query->get();
         // Restore
         $query->havings = $havings;
 

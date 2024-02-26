@@ -23,15 +23,15 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     use SavesPolylines;
 
     /**
-     * @param EnemyPatrol|null $enemyPatrol
      * @return EnemyPatrol|Model
+     *
      * @throws Throwable
      */
     public function store(
         CoordinatesServiceInterface $coordinatesService,
-        EnemyPatrolFormRequest      $request,
-        MappingVersion              $mappingVersion,
-        EnemyPatrol                 $enemyPatrol = null
+        EnemyPatrolFormRequest $request,
+        MappingVersion $mappingVersion,
+        ?EnemyPatrol $enemyPatrol = null
     ): EnemyPatrol {
         $validated = $request->validated();
 
@@ -56,7 +56,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 // Couple the patrol to the polyline
                 $saveResult = $enemyPatrol->update([
                     'polyline_id' => $polyline->id,
-                    'floor_id'    => optional($changedFloor)->id ?? $enemyPatrol->floor_id,
+                    'floor_id' => optional($changedFloor)->id ?? $enemyPatrol->floor_id,
                 ]);
 
                 // Load the polyline, so it can be echoed back to the user
@@ -70,7 +70,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     /**
      * @return array|ResponseFactory|Response
      */
-    function delete(Request $request, EnemyPatrol $enemyPatrol)
+    public function delete(Request $request, EnemyPatrol $enemyPatrol)
     {
         try {
             if ($enemyPatrol->delete()) {

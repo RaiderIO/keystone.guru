@@ -8,9 +8,6 @@ class CreateRouteMetadata
     {
     }
 
-    /**
-     * @return CreateRouteMetadata
-     */
     public static function createFromArray(array $body): CreateRouteMetadata
     {
         return new CreateRouteMetadata(

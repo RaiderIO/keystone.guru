@@ -2,20 +2,18 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\AdvancedData;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 final class AdvancedDataTest extends PublicTestCase
 {
-
     /**
-     * @return void
      * @throws \Exception
      */
     #[Test]
@@ -37,32 +35,29 @@ final class AdvancedDataTest extends PublicTestCase
         Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
-    /**
-     * @return void
-     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('AdvancedData')]
     #[DataProvider('parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent(
-        string  $advancedRangeDamageEvent,
-        string  $expectedInfoGUID,
+        string $advancedRangeDamageEvent,
+        string $expectedInfoGUID,
         ?string $expectedOwnerGUID,
-        int     $expectedCurrentHP,
-        int     $expectedMaxHP,
-        int     $expectedAttackPower,
-        int     $expectedSpellPower,
-        int     $expectedArmor,
-        int     $expectedAbsorb,
-        array   $expectedPowerType,
-        array   $expectedCurrentPower,
-        array   $expectedMaxPower,
-        array   $expectedPowerCost,
-        float   $expectedPositionX,
-        float   $expectedPositionY,
-        int     $expectedUiMapId,
-        float   $expectedFacing,
-        int     $expectedLevel
+        int $expectedCurrentHP,
+        int $expectedMaxHP,
+        int $expectedAttackPower,
+        int $expectedSpellPower,
+        int $expectedArmor,
+        int $expectedAbsorb,
+        array $expectedPowerType,
+        array $expectedCurrentPower,
+        array $expectedMaxPower,
+        array $expectedPowerCost,
+        float $expectedPositionX,
+        float $expectedPositionY,
+        int $expectedUiMapId,
+        float $expectedFacing,
+        int $expectedLevel
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
@@ -70,7 +65,7 @@ final class AdvancedDataTest extends PublicTestCase
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
         $parseEventResult = $combatLogEntry->parseEvent();
-        $advancedData     = $parseEventResult->getAdvancedData();
+        $advancedData = $parseEventResult->getAdvancedData();
 
         // Assert
         Assert::assertEquals($expectedInfoGUID, $advancedData->getInfoGuid());

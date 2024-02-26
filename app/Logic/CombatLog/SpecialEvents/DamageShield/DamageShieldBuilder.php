@@ -11,12 +11,11 @@ use Carbon\Carbon;
 
 class DamageShieldBuilder implements SpecialEventBuilderInterface
 {
-
     public static function create(
-        int    $combatLogVersion,
+        int $combatLogVersion,
         Carbon $timestamp,
         string $eventName,
-        array  $parameters,
+        array $parameters,
         string $rawEvent
     ): SpecialEvent {
         return match ($combatLogVersion) {

@@ -12,15 +12,12 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
-class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
+class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 {
-    /** @var int */
     private int $pullIndex;
 
-    /** @var bool */
     private bool $bloodLust = false;
 
-    /** @var int */
     private int $delay = 0;
 
     /** @var Collection|RaidEventPullEnemy[] */
@@ -31,14 +28,14 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateRaidEventPullEnemies(KillZone $killZone, LatLng $previousKillLocation): RaidEventPullInterface
     {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
         $this->bloodLust = $this->options->bloodlust && in_array($killZone->id, explode(',', $this->options->simulate_bloodlust_per_pull));
 
-        $this->pullIndex            = $killZone->index;
+        $this->pullIndex = $killZone->index;
         $this->raidEventPullEnemies = collect();
 
         foreach ($killZone->getEnemies()->groupBy('npc_id') as $npcId => $enemies) {
@@ -56,7 +53,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateDelay(KillZone $killZone, LatLng $previousKillLocation): float
     {
@@ -79,11 +76,6 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return $result;
     }
 
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB): float
     {
         if (optional($latLngA->getFloor())->id !== optional($latLngB->getFloor())->id) {
@@ -99,17 +91,17 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         $pointBIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngB);
 
         $ingameDistanceToPointB = $this->coordinatesService->distanceBetweenPoints(
-                $pointAIngameCoordinates->getX(), $pointBIngameCoordinates->getX(),
-                $pointAIngameCoordinates->getY(), $pointBIngameCoordinates->getY()
-            ) - $this->options->ranged_pull_compensation_yards;
+            $pointAIngameCoordinates->getX(), $pointBIngameCoordinates->getX(),
+            $pointAIngameCoordinates->getY(), $pointBIngameCoordinates->getY()
+        ) - $this->options->ranged_pull_compensation_yards;
 
-        $delayMounted       = 0;
+        $delayMounted = 0;
         $totalMountedFactor = 0;
 
         foreach ($mountFactorsAndSpeeds as $mountFactorAndSpeed) {
             /** @var $mountFactorAndSpeed array{factor: float, speed: int} */
             $totalMountedFactor += $mountFactorAndSpeed['factor'];
-            $delayMounted       += $this->calculateDelayForDistanceMounted(
+            $delayMounted += $this->calculateDelayForDistanceMounted(
                 $ingameDistanceToPointB,
                 $mountFactorAndSpeed['factor'],
                 $mountFactorAndSpeed['speed']
@@ -117,7 +109,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         }
 
         $delayMountCasts = $this->calculateDelayForMountCasts($mountCasts);
-        $delayOnFoot     = $this->calculateDelayForDistanceOnFoot(
+        $delayOnFoot = $this->calculateDelayForDistanceOnFoot(
             $ingameDistanceToPointB * (1 - $totalMountedFactor)
         );
 
@@ -128,8 +120,8 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             );
             if ($delayOnFootWithoutMounting < $delayMounted + $delayOnFoot + $delayMountCasts) {
                 $delayMountCasts = 0;
-                $delayMounted    = 0;
-                $delayOnFoot     = $delayOnFootWithoutMounting;
+                $delayMounted = 0;
+                $delayOnFoot = $delayOnFootWithoutMounting;
             }
         }
 
@@ -137,21 +129,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return $delayMounted + $delayOnFoot + $delayMountCasts;
     }
 
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     public function calculateDelayBetweenPointsOnDifferentFloors(LatLng $latLngA, LatLng $latLngB): float
     {
         return $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB) +
             $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB);
     }
 
-
-    /**
-     * @return float
-     */
     private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(LatLng $latLngA, LatLng $latLngB): float
     {
         $previousKillFloorClosestDungeonFloorSwitchMarker = $latLngA->getFloor()->findClosestFloorSwitchMarker(
@@ -173,7 +156,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self
     {
@@ -195,7 +178,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         LatLng $latLngA, LatLng $latLngB
     ): array {
         // 0% of the time on mounts, 0 mount casts
-        if (!$this->options->use_mounts) {
+        if (! $this->options->use_mounts) {
             return [[], 0];
         }
 
@@ -248,7 +231,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         // then determine if an intersection causes a mount up, or a dismount
         /** @var MountableAreaIntersection[]|Collection $allMountableAreaIntersections */
         $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
-            fn(MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
+            fn (MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
                 $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
                 $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
             ))->values();
@@ -260,11 +243,11 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
         // If we are currently mounted (as in, we finished killing the previous pack, now going to the current pack)
         // Then we also initialize mountCasts to 1, since when we're done killing, we need to cast mount which is 1.5s
-        $isMounted  = $startMountableArea !== null;
-        $mountCasts = (int)$isMounted;
+        $isMounted = $startMountableArea !== null;
+        $mountCasts = (int) $isMounted;
 
         // We start at where we're at now
-        $previousLatLng                     = $latLngA;
+        $previousLatLng = $latLngA;
         $allMountableAreaIntersectionsCount = $allMountableAreaIntersections->count();
 
         $factorsAndSpeeds = [];
@@ -278,18 +261,18 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             if ($isMounted) {
                 $factorsAndSpeeds[] = [
                     'factor' => $distanceBetweenLatLngs / $totalDistance,
-                    'speed'  => $mountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
+                    'speed' => $mountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
                 ];
             }
             // We were not mounted this intersection - mount up for the next one!
             // But only if we have another intersection after this
-            else if ($index !== $allMountableAreaIntersectionsCount - 1) {
+            elseif ($index !== $allMountableAreaIntersectionsCount - 1) {
                 $mountCasts++;
             }
 
             // Since we encountered a new edge of the zone, we're now either mounting or dismounting
             // But not the last point - that's when we reach the enemy and start attacking.
-            $isMounted = !$isMounted;
+            $isMounted = ! $isMounted;
 
             // We are now at the last known intersection point since we just travelled there
             $previousLatLng = $mountableAreaIntersection->getLatLng();
@@ -308,52 +291,34 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
 
             $factorsAndSpeeds[] = [
                 'factor' => $distanceToPack / $totalDistance,
-                'speed'  => $lastMountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
+                'speed' => $lastMountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
             ];
         }
 
         return [$factorsAndSpeeds, $mountCasts];
     }
 
-    /**
-     * @param float $ingameDistance
-     * @return float
-     */
     public function calculateDelayForDistanceOnFoot(float $ingameDistance): float
     {
         return max(0, $ingameDistance) / config('keystoneguru.character.default_movement_speed_yards_second');
     }
 
-    /**
-     * @param int $mountCasts
-     * @return float
-     */
     public function calculateDelayForMountCasts(int $mountCasts): float
     {
-        return (max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds'));
+        return max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds');
     }
 
-    /**
-     * @param float $ingameDistance
-     * @param float $factor
-     * @param int   $speed
-     * @return float
-     */
     public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float
     {
         return max(0, $ingameDistance * $factor) / $speed;
     }
 
-
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         $result = sprintf(
             'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,%senemies=',
             $this->pullIndex,
-            (int)$this->bloodLust,
+            (int) $this->bloodLust,
             $this->delay,
             $this->options->thundering_clear_seconds !== null ?
                 sprintf('mark_duration=%d,', $this->options->thundering_clear_seconds) : ''

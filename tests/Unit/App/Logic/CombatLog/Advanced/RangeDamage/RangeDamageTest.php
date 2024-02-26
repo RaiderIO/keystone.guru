@@ -2,9 +2,6 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\RangeDamage;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
@@ -12,13 +9,14 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 final class RangeDamageTest extends PublicTestCase
 {
-
     /**
-     * @return void
      * @throws \Exception
      */
     #[Test]
@@ -44,7 +42,6 @@ final class RangeDamageTest extends PublicTestCase
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     #[Test]
@@ -53,7 +50,7 @@ final class RangeDamageTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent,
-        int    $expectedSpellId,
+        int $expectedSpellId,
         string $expectedSpellName,
         string $expectedSpellSchool
     ): void {
@@ -73,7 +70,6 @@ final class RangeDamageTest extends PublicTestCase
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     #[Test]
@@ -82,16 +78,16 @@ final class RangeDamageTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent,
-        int    $expectedAmount,
-        int    $expectedRawAmount,
-        int    $expectedOverKill,
-        int    $expectedSchool,
-        int    $expectedResisted,
-        int    $expectedBlocked,
-        int    $expectedAbsorbed,
-        bool   $expectedIsCritical,
-        bool   $expectedIsGlancing,
-        bool   $expectedIsCrushing
+        int $expectedAmount,
+        int $expectedRawAmount,
+        int $expectedOverKill,
+        int $expectedSchool,
+        int $expectedResisted,
+        int $expectedBlocked,
+        int $expectedAbsorbed,
+        bool $expectedIsCritical,
+        bool $expectedIsGlancing,
+        bool $expectedIsCrushing
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);

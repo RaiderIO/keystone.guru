@@ -2,77 +2,77 @@
 
 return [
     'home' => [
-        'keystone_guru'    => 'Keystone.guru',
-        'affixes'          => 'Affixes',
-        'changelog'        => 'Changelog',
-        'routes'           => 'Routes',
+        'keystone_guru' => 'Keystone.guru',
+        'affixes' => 'Affixes',
+        'changelog' => 'Changelog',
+        'routes' => 'Routes',
         'routes_expansion' => ':expansion routes',
 
         'dungeon' => [
-            'explore' => 'Explore'
+            'explore' => 'Explore',
         ],
 
         'dungeonroutes' => [
-            'search'            => 'Search',
-            'popular'           => 'Popular',
+            'search' => 'Search',
+            'popular' => 'Popular',
             'next_week_affixes' => 'Next week\'s affixes',
             'this_week_affixes' => 'This week\'s affixes',
-            'new'               => 'New',
+            'new' => 'New',
 
             'routes_season' => 'Season :season',
-            'season'        => [
-                'popular'           => 'Popular',
+            'season' => [
+                'popular' => 'Popular',
                 'next_week_affixes' => 'Next week\'s affixes',
                 'this_week_affixes' => 'This week\'s affixes',
-                'new'               => 'New',
+                'new' => 'New',
             ],
 
             'discoverdungeon' => [
-                'popular'           => 'Popular',
+                'popular' => 'Popular',
                 'next_week_affixes' => 'Next week\'s affixes',
                 'this_week_affixes' => 'This week\'s affixes',
-                'new'               => 'New',
+                'new' => 'New',
             ],
         ],
 
         'my_profile' => 'My public profile',
-        'my_routes'  => 'My routes',
-        'my_tags'    => 'My tags',
-        'my_teams'   => 'My teams',
-        'overview'   => 'Overview',
-        'new_team'   => 'New team',
-        'edit_team'  => 'Edit team',
-        'join_team'  => 'Join team',
+        'my_routes' => 'My routes',
+        'my_tags' => 'My tags',
+        'my_teams' => 'My teams',
+        'overview' => 'Overview',
+        'new_team' => 'New team',
+        'edit_team' => 'Edit team',
+        'join_team' => 'Join team',
 
         'admin' => [
-            'admin'        => 'Admin',
-            'tools'        => [
-                'admin_tools'               => 'Admin tools',
+            'admin' => 'Admin',
+            'tools' => [
+                'admin_tools' => 'Admin tools',
                 'view_exported_dungeondata' => 'View exported dungeondata',
-                'view_exported_releases'    => 'View exported releases',
-                'select_exception'          => 'Select exception',
-                'mdt_diff'                  => 'MDT diff',
-                'view_mdt_string_contents'  => 'View MDT string contents',
-                'import_npcs'               => 'Import NPCs',
+                'view_exported_releases' => 'View exported releases',
+                'select_exception' => 'Select exception',
+                'mdt_diff' => 'MDT diff',
+                'view_mdt_string_contents' => 'View MDT string contents',
+                'import_npcs' => 'Import NPCs',
             ],
-            'releases'     => 'Releases',
-            'new_release'  => 'New release',
+            'releases' => 'Releases',
+            'new_release' => 'New release',
             'edit_release' => 'Edit release',
 
             'expansions' => [
-                'expansions'     => 'Expansions',
-                'new_expansion'  => 'New expansion',
+                'expansions' => 'Expansions',
+                'new_expansion' => 'New expansion',
                 'edit_expansion' => 'Edit expansion',
             ],
 
             'dungeons' => [
-                'dungeons'     => 'Dungeons',
-                'new_dungeon'  => 'New dungeon',
+                'dungeons' => 'Dungeons',
+                'new_dungeon' => 'New dungeon',
                 'edit_dungeon' => 'Edit :dungeon',
             ],
 
             'floors' => [
-                'new_floor'  => 'New floor',
+                'new_floor' => 'New floor',
                 'edit_floor' => 'Edit floor',
             ],
 
@@ -82,8 +82,8 @@ return [
             ],
 
             'npcs' => [
-                'npcs'     => 'NPCs',
-                'new_npc'  => 'New NPC',
+                'npcs' => 'NPCs',
+                'new_npc' => 'New NPC',
                 'edit_npc' => 'Edit NPC',
             ],
 
@@ -92,8 +92,8 @@ return [
             ],
 
             'spells' => [
-                'spells'     => 'Spells',
-                'new_spell'  => 'New spell',
+                'spells' => 'Spells',
+                'new_spell' => 'New spell',
                 'edit_spell' => 'Edit spell',
             ],
 

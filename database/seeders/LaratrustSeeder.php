@@ -14,8 +14,6 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return  void
      */
     public function run(): void
     {
@@ -34,20 +32,20 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
         $this->command->info('Truncating User, Role and Permission tables');
         $this->truncateLaratrustTables();
 
-        $config        = config('laratrust_seeder.roles_structure');
+        $config = config('laratrust_seeder.roles_structure');
         $mapPermission = collect(config('laratrust_seeder.permissions_map'));
 
         foreach ($config as $key => $modules) {
 
             // Create a new role
-            $role        = Role::firstOrCreate([
-                'name'         => $key,
+            $role = Role::firstOrCreate([
+                'name' => $key,
                 'display_name' => ucwords(str_replace('_', ' ', $key)),
-                'description'  => ucwords(str_replace('_', ' ', $key)),
+                'description' => ucwords(str_replace('_', ' ', $key)),
             ]);
             $permissions = [];
 
-            $this->command->info('Creating Role ' . strtoupper($key));
+            $this->command->info('Creating Role '.strtoupper($key));
 
             // Reading role permission modules
             foreach ($modules as $module => $value) {
@@ -57,12 +55,12 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                     $permissionValue = $mapPermission->get($perm);
 
                     $permissions[] = Permission::firstOrCreate([
-                        'name'         => $permissionValue . '-' . $module,
-                        'display_name' => ucfirst($permissionValue) . ' ' . ucfirst($module),
-                        'description'  => ucfirst($permissionValue) . ' ' . ucfirst($module),
+                        'name' => $permissionValue.'-'.$module,
+                        'display_name' => ucfirst($permissionValue).' '.ucfirst($module),
+                        'description' => ucfirst($permissionValue).' '.ucfirst($module),
                     ])->id;
 
-                    $this->command->info('Creating Permission to ' . $permissionValue . ' for ' . $module);
+                    $this->command->info('Creating Permission to '.$permissionValue.' for '.$module);
                 }
             }
 
@@ -73,12 +71,12 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                 $this->command->info("Creating '{$key}' user");
                 // Create default user for each role
                 $user = User::create([
-                    'name'            => ucwords(str_replace('_', ' ', $key)),
-                    'public_key'      => User::generateRandomPublicKey(),
-                    'echo_color'      => randomHexColor(),
-                    'email'           => $key . '@app.com',
-                    'password'        => bcrypt('password'),
-                    'legal_agreed'    => 1,
+                    'name' => ucwords(str_replace('_', ' ', $key)),
+                    'public_key' => User::generateRandomPublicKey(),
+                    'echo_color' => randomHexColor(),
+                    'email' => $key.'@app.com',
+                    'password' => bcrypt('password'),
+                    'legal_agreed' => 1,
                     'legal_agreed_ms' => -1,
                 ]);
                 $user->attachRole($role);
@@ -90,7 +88,7 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
     /**
      * Truncates all the laratrust tables and the users table
      *
-     * @return    void
+     * @return void
      */
     public function truncateLaratrustTables()
     {

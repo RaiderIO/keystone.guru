@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'ad-free'                 => '@todo ru: .ad-free',
+    'ad-free' => '@todo ru: .ad-free',
     'unlimited-dungeonroutes' => '@todo ru: .unlimited-dungeonroutes',
-    'unlisted-routes'         => '@todo ru: .unlisted-routes',
-    'animated-polylines'      => '@todo ru: .animated-polylines',
-    'advanced-simulation'     => '@todo ru: .advanced-simulation',
-    'ad-free-team-members'     => '@todo ru-RU: .ad-free-team-members',
+    'unlisted-routes' => '@todo ru: .unlisted-routes',
+    'animated-polylines' => '@todo ru: .animated-polylines',
+    'advanced-simulation' => '@todo ru: .advanced-simulation',
+    'ad-free-team-members' => '@todo ru-RU: .ad-free-team-members',
 ];

@@ -36,15 +36,16 @@ class GetReleaseBody extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function handle()
     {
-        $version  = $this->argument('version');
+        $version = $this->argument('version');
         $platform = $this->argument('platform');
 
-        if (!str_starts_with($version, 'v')) {
-            $version = 'v' . $version;
+        if (! str_starts_with($version, 'v')) {
+            $version = 'v'.$version;
         }
 
         /** @var Release $release */

@@ -12,18 +12,13 @@ use Carbon\Carbon;
 class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
 {
     /**
-     * @param int    $combatLogVersion
-     * @param Carbon $timestamp
-     * @param string $eventName
-     * @param array  $parameters
-     * @param string $rawEvent
      * @return SpecialEvent|SpellAbsorbedInterface
      */
     public static function create(
-        int    $combatLogVersion,
+        int $combatLogVersion,
         Carbon $timestamp,
         string $eventName,
-        array  $parameters,
+        array $parameters,
         string $rawEvent
     ): SpecialEvent {
         return match ($combatLogVersion) {

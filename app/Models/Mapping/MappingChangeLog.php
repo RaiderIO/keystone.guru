@@ -9,28 +9,24 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int         $id
- * @property int         $dungeon_id
- * @property int         $model_id
- * @property string      $model_class
- * @property string      $before_model
+ * @property int $id
+ * @property int $dungeon_id
+ * @property int $model_id
+ * @property string $model_class
+ * @property string $before_model
  * @property string|null $after_model
- *
- * @property Carbon      $updated_at
- * @property Carbon      $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @mixin Eloquent
  */
 class MappingChangeLog extends Model
 {
-    use SeederModel;
     use HasGenericModelRelation;
+    use SeederModel;
 
     protected $fillable = ['dungeon_id', 'model_id', 'model_class', 'before_model', 'after_model'];
 
-    /**
-     * @return bool
-     */
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool
     {
         // If there is a more recent mapping change that we should update

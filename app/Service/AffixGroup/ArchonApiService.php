@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\AffixGroup;
 
 use App\Service\AffixGroup\Exceptions\InvalidResponseException;
@@ -11,7 +10,7 @@ class ArchonApiService implements ArchonApiServiceInterface
     use Curl;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getDungeonEaseTierListOverall(): array
     {
@@ -19,7 +18,7 @@ class ArchonApiService implements ArchonApiServiceInterface
 
         $response = json_decode($responseStr, true);
 
-        if (!is_array($response)) {
+        if (! is_array($response)) {
             throw new InvalidResponseException($responseStr);
         }
 

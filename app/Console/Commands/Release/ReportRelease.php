@@ -39,19 +39,20 @@ class ReportRelease extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
     {
-        $result   = false;
-        $version  = $this->argument('version');
+        $result = false;
+        $version = $this->argument('version');
         $platform = $this->argument('platform');
 
         /** @var Release $release */
         if ($version === 'latest') {
             $release = Release::latest()->first();
         } else {
-            if (!str_starts_with($version, 'v')) {
+            if (! str_starts_with($version, 'v')) {
                 $version = sprintf('v%s', $version);
             }
             $release = Release::where('version', $version)->first();
@@ -61,7 +62,7 @@ class ReportRelease extends Command
             $this->info('Not reporting release; it was marked as silent!');
             // Not failed if not necessary
             $result = true;
-        } else if (config('app.type') === 'local' ||
+        } elseif (config('app.type') === 'local' ||
             ReleaseReportLog::where('release_id', $release->id)
                 ->where('platform', $platform)
                 ->doesntExist()
@@ -79,7 +80,7 @@ class ReportRelease extends Command
             // Log this release so that we don't mention things multiple times
             ReleaseReportLog::create([
                 'release_id' => $release->id,
-                'platform'   => $platform,
+                'platform' => $platform,
             ]);
         } else {
             $this->info('Not reporting release; it was already reported in the platform!');
@@ -88,7 +89,7 @@ class ReportRelease extends Command
         }
 
         // If failed, return failed exit code
-        if (!$result) {
+        if (! $result) {
             exit(1);
         }
     }

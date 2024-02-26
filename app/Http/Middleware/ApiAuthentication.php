@@ -1,4 +1,6 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use App\Service\User\UserServiceInterface;
 use Closure;
@@ -19,7 +21,7 @@ class ApiAuthentication
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$this->userService->loginAsUserFromAuthenticationHeader($request)) {
+        if (! $this->userService->loginAsUserFromAuthenticationHeader($request)) {
             return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 

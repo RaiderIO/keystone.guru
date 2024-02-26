@@ -9,8 +9,6 @@ class RouteAttributesSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -18,24 +16,24 @@ class RouteAttributesSeeder extends Seeder implements TableSeederInterface
 
         $routeAttributeAttributes = [
             [
-                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP,
-                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP),
+                'key' => RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP,
+                'name' => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP),
                 'category' => 'class',
             ], [
-                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP,
-                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP),
+                'key' => RouteAttribute::ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP,
+                'name' => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_WARLOCK_GATE_SKIP),
                 'category' => 'class',
             ], [
-                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP,
-                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP),
+                'key' => RouteAttribute::ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP,
+                'name' => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_MAGE_SLOW_FALL_SKIP),
                 'category' => 'class',
             ], [
-                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP,
-                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP),
+                'key' => RouteAttribute::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP,
+                'name' => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_INVISIBILITY_POTION_SKIP),
                 'category' => 'item',
             ], [
-                'key'      => RouteAttribute::ROUTE_ATTRIBUTE_DEATH_SKIP,
-                'name'     => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_DEATH_SKIP),
+                'key' => RouteAttribute::ROUTE_ATTRIBUTE_DEATH_SKIP,
+                'name' => sprintf('routeattributes.%s', RouteAttribute::ROUTE_ATTRIBUTE_DEATH_SKIP),
                 'category' => 'misc',
             ],
         ];

@@ -8,15 +8,14 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int                    $id
- * @property int                    $affix_group_ease_tier_pull_id
- * @property int                    $affix_group_id
- * @property int                    $dungeon_id
- * @property string                 $tier
- *
+ * @property int $id
+ * @property int $affix_group_ease_tier_pull_id
+ * @property int $affix_group_id
+ * @property int $dungeon_id
+ * @property string $tier
  * @property AffixGroupEaseTierPull $affixGroupEaseTierPull
- * @property AffixGroup             $affixGroup
- * @property Dungeon                $dungeon
+ * @property AffixGroup $affixGroup
+ * @property Dungeon $dungeon
  *
  * @mixin Eloquent
  */
@@ -26,25 +25,16 @@ class AffixGroupEaseTier extends CacheModel
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function affixGroupEaseTierPull(): BelongsTo
     {
         return $this->belongsTo(AffixGroupEaseTierPull::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);

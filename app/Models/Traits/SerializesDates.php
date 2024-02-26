@@ -15,9 +15,6 @@ trait SerializesDates
 
     /**
      * Prepare a date for array / JSON serialization.
-     *
-     *
-     * @return string
      */
     protected function serializeDate(DateTimeInterface $date): string
     {
@@ -29,8 +26,6 @@ trait SerializesDates
     }
 
     /**
-     * @param $value
-     *
      * @return void
      */
     public function setCreatedAtAttribute($value)
@@ -43,8 +38,6 @@ trait SerializesDates
     }
 
     /**
-     * @param $value
-     *
      * @return void
      */
     public function setUpdatedAtAttribute($value)

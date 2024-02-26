@@ -2,34 +2,29 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\CombatLogEntry;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 final class CombatLogEntryTest extends PublicTestCase
 {
-
-    /**
-     * @return void
-     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatLogEntry')]
     #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
     public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(
         string $rawEvent,
-        int    $expectedDay,
-        int    $expectedMonth,
-        int    $expectedHour,
-        int    $expectedMinute,
-        int    $expectedSecond,
-        int    $expectedMilliseconds
-    ): void
-    {
+        int $expectedDay,
+        int $expectedMonth,
+        int $expectedHour,
+        int $expectedMinute,
+        int $expectedSecond,
+        int $expectedMilliseconds
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($rawEvent);
 

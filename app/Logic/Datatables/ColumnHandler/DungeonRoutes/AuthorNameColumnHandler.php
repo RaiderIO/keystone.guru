@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AuthorNameColumnHandler extends DatatablesColumnHandler
 {
-
     public function __construct(DatatablesHandler $dtHandler)
     {
         parent::__construct($dtHandler, 'author.name');

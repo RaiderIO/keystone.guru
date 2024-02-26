@@ -10,17 +10,11 @@ use InvalidArgumentException;
  */
 trait ValidatesParameterCount
 {
-    /**
-     * @return int
-     */
     public function getOptionalParameterCount(): int
     {
         return 0;
     }
 
-    /**
-     * @return void
-     */
     public function validateParameters(array $parameters): void
     {
         $parameterCount = count($parameters);

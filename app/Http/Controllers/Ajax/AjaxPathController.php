@@ -28,15 +28,15 @@ class AjaxPathController extends Controller
     use ValidatesFloorId;
 
     /**
-     * @param Path|null $path
      * @return Brushline|Response
+     *
      * @throws AuthorizationException
      */
-    function store(
-        APIPathFormRequest          $request,
+    public function store(
+        APIPathFormRequest $request,
         CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute,
-        ?Path                       $path = null)
+        DungeonRoute $dungeonRoute,
+        ?Path $path = null)
     {
         $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
 
@@ -52,16 +52,16 @@ class AjaxPathController extends Controller
 
         DB::transaction(function () use ($coordinatesService, $path, $dungeonRoute, $validated, &$result) {
             if ($path === null) {
-                $path    = Path::create([
+                $path = Path::create([
                     'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                    'polyline_id'      => -1,
+                    'floor_id' => $validated['floor_id'],
+                    'polyline_id' => -1,
                 ]);
                 $success = $path instanceof Path;
             } else {
                 $success = $path->update([
                     'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
+                    'floor_id' => $validated['floor_id'],
                 ]);
             }
 
@@ -69,7 +69,7 @@ class AjaxPathController extends Controller
                 if ($success) {
                     // Create a new polyline and save it
                     $changedFloor = null;
-                    $polyline     = $this->savePolyline(
+                    $polyline = $this->savePolyline(
                         $coordinatesService,
                         $dungeonRoute->mappingVersion,
                         Polyline::findOrNew($path->polyline_id),
@@ -81,7 +81,7 @@ class AjaxPathController extends Controller
                     // Couple the path to the polyline
                     $path->update([
                         'polyline_id' => $polyline->id,
-                        'floor_id'    => optional($changedFloor)->id ?? $path->floor_id,
+                        'floor_id' => optional($changedFloor)->id ?? $path->floor_id,
                     ]);
 
                     // Load the polyline so it can be echoed back to the user
@@ -112,9 +112,10 @@ class AjaxPathController extends Controller
 
     /**
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
     {
         $dungeonRoute = $path->dungeonRoute;
 

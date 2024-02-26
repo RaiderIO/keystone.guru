@@ -19,8 +19,8 @@ use Illuminate\Support\Collection;
 
 class Save extends Command
 {
-    use SavesArrayToJsonFile;
     use ExecutesShellCommands;
+    use SavesArrayToJsonFile;
 
     /**
      * The name and signature of the console command.
@@ -58,12 +58,11 @@ class Save extends Command
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
 
         // If we should copy the result to another folder..
-        if (!empty($mappingBackupDir)) {
+        if (! empty($mappingBackupDir)) {
             $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d H:i:s'));
 
-
             $tmpZippedFilePath = '/tmp';
-            $zippedFileName    = 'mapping.gz';
+            $zippedFileName = 'mapping.gz';
             $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
             $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
 
@@ -137,7 +136,7 @@ class Save extends Command
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param  $dungeonDataDir  string
      */
     private function saveNpcs(string $dungeonDataDir)
     {
@@ -155,7 +154,7 @@ class Save extends Command
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param  $dungeonDataDir  string
      */
     private function saveSpells(string $dungeonDataDir)
     {
@@ -170,7 +169,7 @@ class Save extends Command
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param  $dungeonDataDir  string
      */
     private function saveDungeonData(string $dungeonDataDir)
     {
@@ -200,10 +199,6 @@ class Save extends Command
         }
     }
 
-    /**
-     *
-     * @return void
-     */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
@@ -216,11 +211,11 @@ class Save extends Command
             // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
             // for each and every re-import
             $demoRoute->setHidden(['id', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
-                                   'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
-                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
+                'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
+                'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
-                              'pridefulEnemies', 'mapicons']);
+                'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
+                'pridefulEnemies', 'mapicons']);
 
             // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
             // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -289,10 +284,6 @@ class Save extends Command
         $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
 
-    /**
-     *
-     * @return void
-     */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
         $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', $dungeon->id)->get()->values();
@@ -308,16 +299,12 @@ class Save extends Command
         $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
-    /**
-     *
-     * @return void
-     */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
-        $enemyPacks   = $floor->enemyPacksForExport->values();
+        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemyPacks = $floor->enemyPacksForExport->values();
         $enemyPatrols = $floor->enemyPatrolsForExport->values();
         /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values();
@@ -332,23 +319,23 @@ class Save extends Command
             });
 
         /** @var \Illuminate\Database\Eloquent\Collection $mapIcons */
-        $mapIcons        = $floor->mapIconsForExport->values();
-        $mountableAreas  = $floor->mountableAreasForExport->values();
-        $floorUnions     = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values();
+        $mapIcons = $floor->mapIconsForExport->values();
+        $mountableAreas = $floor->mountableAreasForExport->values();
+        $floorUnions = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values();
         $floorUnionAreas = $floor->floorUnionAreasForExport->values();
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.
         $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
 
-        $result['enemies']                      = $enemies;
-        $result['enemy_packs']                  = $enemyPacks;
-        $result['enemy_patrols']                = $enemyPatrols;
+        $result['enemies'] = $enemies;
+        $result['enemy_packs'] = $enemyPacks;
+        $result['enemy_patrols'] = $enemyPatrols;
         $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
-        $result['map_icons']                    = $mapIcons;
-        $result['mountable_areas']              = $mountableAreas;
-        $result['floor_unions']                 = $floorUnions;
-        $result['floor_union_areas']            = $floorUnionAreas;
+        $result['map_icons'] = $mapIcons;
+        $result['mountable_areas'] = $mountableAreas;
+        $result['floor_unions'] = $floorUnions;
+        $result['floor_union_areas'] = $floorUnionAreas;
 
         foreach ($result as $category => $categoryData) {
             // Save enemies, packs, patrols, markers on a per-floor basis

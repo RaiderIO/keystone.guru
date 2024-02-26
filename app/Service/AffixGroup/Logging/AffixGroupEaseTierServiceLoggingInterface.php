@@ -4,7 +4,6 @@ namespace App\Service\AffixGroup\Logging;
 
 interface AffixGroupEaseTierServiceLoggingInterface
 {
-
     public function parseTierListUnknownAffixGroup(string $affixGroupString): void;
 
     public function parseTierListParseTierStart(string $affixGroupString, string $tier, int $count): void;

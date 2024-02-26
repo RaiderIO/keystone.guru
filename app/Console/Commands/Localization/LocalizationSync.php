@@ -6,8 +6,9 @@ use Illuminate\Console\Command;
 
 /**
  * Class LocalizationSync
- * @package App\Console\Commands\Localization
+ *
  * @author imbrish
+ *
  * @since 29/09/2016
  * @see https://gist.github.com/imbrish/204e3b85cadfd8d6db0369d6469eb814
  */
@@ -44,13 +45,12 @@ class LocalizationSync extends Command
      */
     public function handle()
     {
-        $baseLang   = $this->argument('base');
+        $baseLang = $this->argument('base');
         $targetLang = $this->argument('target');
 
-
-        $langDir   = resource_path() . DIRECTORY_SEPARATOR . 'lang';
-        $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
-        $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
+        $langDir = resource_path().DIRECTORY_SEPARATOR.'lang';
+        $baseDir = $langDir.DIRECTORY_SEPARATOR.$baseLang;
+        $targetDir = $langDir.DIRECTORY_SEPARATOR.$targetLang;
 
         $this->scanDir($baseLang, $targetLang, $baseDir, $targetDir);
 
@@ -64,12 +64,13 @@ class LocalizationSync extends Command
                 continue;
             }
 
-            $basePath   = $baseDir . DIRECTORY_SEPARATOR . $name;
-            $targetPath = $targetDir . DIRECTORY_SEPARATOR . $name;
+            $basePath = $baseDir.DIRECTORY_SEPARATOR.$name;
+            $targetPath = $targetDir.DIRECTORY_SEPARATOR.$name;
 
             // Ensure dirs are created if we found one
             if (is_dir($basePath)) {
                 $this->scanDir($baseLang, $targetLang, $basePath, $targetPath);
+
                 // Don't parse the dir as a file so stop here
                 continue;
             }
@@ -80,6 +81,7 @@ class LocalizationSync extends Command
 
                 if ($lemmas === false) {
                     $this->error("Parsing failed while reading '$targetLang/$name'");
+
                     continue;
                 }
             } else {
@@ -87,11 +89,12 @@ class LocalizationSync extends Command
                 $lemmas = [];
             }
 
-            $base   = file_get_contents($basePath);
+            $base = file_get_contents($basePath);
             $result = $this->parse($targetLang, $base, $lemmas);
 
             if ($result === false) {
                 $this->error("Parsing failed while syncing '$baseLang/$name'");
+
                 continue;
             }
 
@@ -110,13 +113,13 @@ class LocalizationSync extends Command
      * If lemmas are given substitute them in the content
      * Otherwise extract lemmas from content
      *
-     * @param false|array $lemmas
+     * @param  false|array  $lemmas
      * @return string
      */
     public function parse(string $targetLang, string $content, $lemmas = false)
     {
-        $result      = $lemmas === false ? [] : '';
-        $tree        = [null];
+        $result = $lemmas === false ? [] : '';
+        $tree = [null];
         $expects_key = false;
 
         while (strlen($content) > 0) {
@@ -133,7 +136,7 @@ class LocalizationSync extends Command
             ) {
                 $segment = $match[0];
             } // array opening
-            else if (preg_match('#^\[#', $content, $match)) {
+            elseif (preg_match('#^\[#', $content, $match)) {
                 if ($expects_key) {
                     return false;
                 }
@@ -142,7 +145,7 @@ class LocalizationSync extends Command
 
                 $expects_key = true;
             } // array closing
-            else if (preg_match('#^]#', $content, $match)) {
+            elseif (preg_match('#^]#', $content, $match)) {
                 // there are no more open array, including top level
                 if (count($tree) < 1) {
                     return false;
@@ -152,14 +155,14 @@ class LocalizationSync extends Command
 
                 array_pop($tree);
             } // single or double quoted string
-            else if (preg_match('#^(")((?:[^"\\\\]|\\\\.)*)"#', $content, $match)
+            elseif (preg_match('#^(")((?:[^"\\\\]|\\\\.)*)"#', $content, $match)
                 || preg_match("#^(')((?:[^'\\\\]|\\\\.)*)'#", $content, $match)
             ) {
                 if ($expects_key) {
                     $segment = $match[0];
 
                     // add key to tree structure
-                    $tree[]      = $match[2];
+                    $tree[] = $match[2];
                     $expects_key = false;
                 } else {
                     // there is no key to assign the value to
@@ -173,11 +176,11 @@ class LocalizationSync extends Command
                     if ($lemmas === false) {
                         $result[$key] = $match[2];
                     } // replace value with matching, non-empty lemma
-                    else if (array_key_exists($key, $lemmas) && strlen((string) $lemmas[$key]) > 0) {
-                        $segment = $match[1] . $lemmas[$key] . $match[1];
+                    elseif (array_key_exists($key, $lemmas) && strlen((string) $lemmas[$key]) > 0) {
+                        $segment = $match[1].$lemmas[$key].$match[1];
                     } // mark value as not specified
                     else {
-                        $segment = $match[1] . '@todo ' . $targetLang . ': ' . $key . $match[1];
+                        $segment = $match[1].'@todo '.$targetLang.': '.$key.$match[1];
                     }
 
                     array_pop($tree);

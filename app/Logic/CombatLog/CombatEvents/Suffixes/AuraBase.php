@@ -11,24 +11,17 @@ abstract class AuraBase extends Suffix
 
     private int $amount;
 
-    /**
-     * @return string
-     */
     public function getAuraType(): string
     {
         return $this->auraType;
     }
 
-    /**
-     * @return int
-     */
     public function getAmount(): int
     {
         return $this->amount;
     }
 
     /**
-     * @param array $parameters
      * @return HasParameters|$this
      */
     public function setParameters(array $parameters): HasParameters
@@ -43,17 +36,11 @@ abstract class AuraBase extends Suffix
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOptionalParameterCount(): int
     {
         return 1;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 2;

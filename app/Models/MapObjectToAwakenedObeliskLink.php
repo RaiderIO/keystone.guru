@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int     $id
- * @property int     $source_map_object_id
- * @property string  $source_map_object_class_name
- * @property int     $target_map_icon_type_id
- * @property int     $target_map_icon_seasonal_index
- *
- * @property Model   $sourcemapobject
+ * @property int $id
+ * @property int $source_map_object_id
+ * @property string $source_map_object_class_name
+ * @property int $target_map_icon_type_id
+ * @property int $target_map_icon_seasonal_index
+ * @property Model $sourcemapobject
  * @property MapIcon $targetmapicon
  *
  * @mixin Eloquent
@@ -21,20 +20,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class MapObjectToAwakenedObeliskLink extends Model
 {
     public $timestamps = false;
-    public $visible    = ['target_map_icon_type_id', 'target_map_icon_seasonal_index'];
-    public $fillable   = ['source_map_object_id', 'source_map_object_class_name', 'target_map_icon_type_id', 'target_map_icon_seasonal_index'];
 
-    /**
-     * @return HasOne
-     */
+    public $visible = ['target_map_icon_type_id', 'target_map_icon_seasonal_index'];
+
+    public $fillable = ['source_map_object_id', 'source_map_object_class_name', 'target_map_icon_type_id', 'target_map_icon_seasonal_index'];
+
     public function sourcemapobject(): HasOne
     {
         return $this->hasOne($this->source_map_object_class_name, 'id', $this->source_map_object_id);
     }
 
-    /**
-     * @return HasOne
-     */
     public function targetmapicon(): HasOne
     {
         return $this->hasOne(MapIcon::class)

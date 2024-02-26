@@ -23,7 +23,6 @@ class DungeonExploreController extends Controller
     }
 
     /**
-     *
      * @return mixed
      */
     public function viewDungeon(Request $request, Dungeon $dungeon)
@@ -34,22 +33,21 @@ class DungeonExploreController extends Controller
             ->first();
 
         return redirect()->route('dungeon.explore.view.floor', [
-            'dungeon'    => $dungeon,
+            'dungeon' => $dungeon,
             'floorIndex' => optional($defaultFloor)->index ?? '1',
         ]);
     }
 
     /**
-     *
      * @return Application|Factory|View|RedirectResponse
      */
     public function viewDungeonFloor(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        string                     $floorIndex = '1')
+        Dungeon $dungeon,
+        string $floorIndex = '1')
     {
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
@@ -65,21 +63,21 @@ class DungeonExploreController extends Controller
                 ->first();
 
             return redirect()->route('dungeon.explore.view.floor', [
-                'dungeon'    => $dungeon,
+                'dungeon' => $dungeon,
                 'floorIndex' => optional($defaultFloor)->index ?? '1',
             ]);
         } else {
-            if ($floor->index !== (int)$floorIndex) {
+            if ($floor->index !== (int) $floorIndex) {
                 return redirect()->route('dungeon.explore.view.floor', [
-                    'dungeon'    => $dungeon,
+                    'dungeon' => $dungeon,
                     'floorIndex' => $floor->index,
                 ]);
             }
 
             return view('dungeon.explore.view', [
-                'dungeon'    => $dungeon,
-                'floor'      => $floor,
-                'title'      => __($dungeon->name),
+                'dungeon' => $dungeon,
+                'floor' => $floor,
+                'title' => __($dungeon->name),
                 'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
             ]);
         }

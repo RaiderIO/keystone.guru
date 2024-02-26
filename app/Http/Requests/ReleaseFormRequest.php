@@ -16,7 +16,7 @@ class ReleaseFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::user()->hasRole("admin");
+        return Auth::user()->hasRole('admin');
     }
 
     /**

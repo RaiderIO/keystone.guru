@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 /**
- * @property int      $id
- * @property int      $user_id
- * @property int      $model_id
- * @property string   $model_class
- * @property string   $session_id
+ * @property int $id
+ * @property int $user_id
+ * @property int $model_id
+ * @property string $model_class
+ * @property string $session_id
  * @property int|null $source
- * @property string   $created_at
- * @property string   $updated_at
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @mixin Eloquent
  */
@@ -33,7 +33,7 @@ class PageView extends Model
 
     /**
      * @return bool True if this PageView is recent enough to be considered 'current', false if it is not and a new view
-     * can be inserted instead.
+     *              can be inserted instead.
      */
     public function isRecent(): bool
     {
@@ -45,10 +45,10 @@ class PageView extends Model
 
     /**
      * Tracks a view for this model. The view may not track if there's a recent view, and we're still in the same 'session'.
-     * @param int|null $source
+     *
      * @return bool True if the page view was tracked, false if it was not.
      */
-    public static function trackPageView(int $modelId, string $modelClass, int $source = null): bool
+    public static function trackPageView(int $modelId, string $modelClass, ?int $source = null): bool
     {
         $result = false;
 
@@ -59,14 +59,14 @@ class PageView extends Model
         $mostRecentPageView = PageView::getMostRecentPageView($modelId, $modelClass);
 
         // Only if the view may be counted
-        if ($mostRecentPageView === null || !$mostRecentPageView->isRecent()) {
+        if ($mostRecentPageView === null || ! $mostRecentPageView->isRecent()) {
             // Create a new view and save it
             PageView::create([
-                'user_id'     => $userId,
-                'model_id'    => $modelId,
+                'user_id' => $userId,
+                'model_id' => $modelId,
                 'model_class' => $modelClass,
-                'session_id'  => $sessionId,
-                'source'      => $source,
+                'session_id' => $sessionId,
+                'source' => $source,
             ]);
 
             $result = true;
@@ -81,8 +81,9 @@ class PageView extends Model
 
     /**
      * Checks if the view may be counted or if it shouldn't be counted because a previously existing view is too recent.
-     * @param $modelId int
-     * @param $modelClass string
+     *
+     * @param  $modelId  int
+     * @param  $modelClass  string
      * @return PageView|null The most recent page view, or null if none was found.
      */
     private static function getMostRecentPageView(int $modelId, string $modelClass): ?PageView

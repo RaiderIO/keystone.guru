@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Models\DungeonRoute\DungeonRoute;
@@ -10,8 +9,9 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 
 /**
  * Class MapContextDungeonRoute
- * @package App\Logic\MapContext
+ *
  * @author  Wouter
+ *
  * @since   06/08/2020
  *
  * @property DungeonRoute $context
@@ -21,11 +21,11 @@ class MapContextDungeonRoute extends MapContext
     use DungeonRouteProperties;
 
     public function __construct(
-        CacheServiceInterface       $cacheService,
+        CacheServiceInterface $cacheService,
         CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute,
-        Floor                       $floor,
-        ?string                     $mapFacadeStyle = null
+        DungeonRoute $dungeonRoute,
+        Floor $floor,
+        ?string $mapFacadeStyle = null
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $floor, $dungeonRoute->mappingVersion, $mapFacadeStyle);
     }

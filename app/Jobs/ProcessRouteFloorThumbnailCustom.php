@@ -12,19 +12,13 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
 {
     /**
      * Create a new job instance.
-     *
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRouteThumbnailJob  $dungeonRouteThumbnailJob
-     * @param DungeonRoute              $dungeonRoute
-     * @param int                       $floorIndex
-     * @param int                       $attempts
      */
     public function __construct(
-        ThumbnailServiceInterface        $thumbnailService,
+        ThumbnailServiceInterface $thumbnailService,
         private readonly DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
-        DungeonRoute                     $dungeonRoute,
-        int                              $floorIndex,
-        int                              $attempts = 0
+        DungeonRoute $dungeonRoute,
+        int $floorIndex,
+        int $attempts = 0
     ) {
         parent::__construct($thumbnailService, $dungeonRoute, $floorIndex, $attempts);
 
@@ -51,7 +45,7 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
             )
         );
 
-        if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
+        if ((int) config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
             $result = $this->thumbnailService->createThumbnailCustom(
                 $this->dungeonRoute,
                 $this->floorIndex,
@@ -64,7 +58,7 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
                 $this->dungeonRouteThumbnailJob->quality
             );
 
-            if (!$result) {
+            if (! $result) {
                 Log::channel('scheduler')->warning(sprintf('Error refreshing thumbnail, attempt %d', $this->attempts));
 
                 // If there were errors, try again

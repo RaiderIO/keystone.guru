@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\Npc\NpcEnemyForcesFormRequest;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
@@ -19,18 +18,17 @@ class NpcEnemyForcesController extends Controller
     public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
     {
         return view('admin.npcenemyforces.edit', [
-            'npc'            => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }
-
 
     public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
     {
         $npcEnemyForces->update($request->validated());
 
         return view('admin.npcenemyforces.edit', [
-            'npc'            => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }

@@ -22,7 +22,7 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function failedValidation(Validator $validator)
     {
@@ -32,7 +32,6 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
         );
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -41,9 +40,9 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'offset'    => 'integer|required',
-            'limit'     => 'integer|required',
-            'title'     => 'string',
+            'offset' => 'integer|required',
+            'limit' => 'integer|required',
+            'title' => 'string',
             'expansion' => [Rule::in(
                 Expansion::active()
                     ->get()

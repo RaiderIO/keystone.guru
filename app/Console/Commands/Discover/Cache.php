@@ -38,12 +38,10 @@ class Cache extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int
     {
-        $async = (bool)$this->option('async');
+        $async = (bool) $this->option('async');
 
         if ($async) {
             $this->info('Caching Discover pages async');
@@ -83,7 +81,7 @@ class Cache extends Command
                 $discoverService->popularUsersByDungeon($dungeon);
 
                 foreach (optional($currentSeason)->affixgroups ?? [] as $affixGroup) {
-//                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
+                    //                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
                     $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup);
                     $discoverService->newByDungeonAndAffixGroup($dungeon, $affixGroup);
                     $discoverService->popularUsersByDungeonAndAffixGroup($dungeon, $affixGroup);

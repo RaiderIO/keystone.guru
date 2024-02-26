@@ -33,9 +33,6 @@ class DeleteExpiredJobs extends Command
         parent::__construct();
     }
 
-    /**
-     * @return int
-     */
     public function handle(): int
     {
         $count = 0;

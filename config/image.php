@@ -1,7 +1,5 @@
 <?php
 
-
-
 return [
     /*
     |--------------------------------------------------------------------------
@@ -130,7 +128,7 @@ return [
     | The expires headers that are sent when sending image.
     |
     */
-    'serve_expires' => (3600*24*31),
+    'serve_expires' => (3600 * 24 * 31),
     /*
     |--------------------------------------------------------------------------
     | Write image
@@ -165,7 +163,7 @@ return [
     | Proxy expires
     |--------------------------------------------------------------------------
     |
-    | The expires headers that are sent when proxying image. Defaults to 
+    | The expires headers that are sent when proxying image. Defaults to
     | serve_expires
     |
     */
@@ -245,7 +243,7 @@ return [
     | is -1, the image is cached forever.
     |
     */
-    'proxy_cache_expiration' => 60*24,
+    'proxy_cache_expiration' => 60 * 24,
     /*
     |--------------------------------------------------------------------------
     | Proxy temporary path

@@ -3,7 +3,6 @@
 namespace App\Console\Commands\MDT;
 
 use App\Logic\MDT\Conversion;
-use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use Exception;
@@ -38,29 +37,30 @@ class ExportMapping extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      * @throws Exception
      */
     public function handle(MDTMappingExportServiceInterface $mappingExportService): int
     {
-        $expansion    = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
+        $expansion = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
         $targetFolder = $this->argument('targetFolder');
 
         foreach ($expansion->dungeons as $dungeon) {
-            if (!$dungeon->enemies()->exists()) {
+            if (! $dungeon->enemies()->exists()) {
                 $this->comment(sprintf('Skipping %s, no enemies found', __($dungeon->name)));
+
                 continue;
             }
 
             $dungeon->load('currentMappingVersion');
             if ($dungeon->currentMappingVersion === null) {
                 $this->comment(sprintf('Skipping %s, no current mapping version found', __($dungeon->name)));
+
                 continue;
             }
 
             $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->currentMappingVersion);
 
-            if (!Conversion::hasMDTDungeonName($dungeon->key)) {
+            if (! Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
             } else {
                 $fileName = sprintf('%s/%s.lua', $targetFolder, Conversion::getMDTDungeonName($dungeon->key));

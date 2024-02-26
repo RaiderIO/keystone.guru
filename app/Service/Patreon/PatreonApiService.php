@@ -12,9 +12,7 @@ class PatreonApiService implements PatreonApiServiceInterface
     {
     }
 
-
     /**
-     * @param string $accessToken
      * @return array{errors: array|null, included: array|null}|null
      */
     public function getIdentity(string $accessToken): ?array
@@ -24,17 +22,17 @@ class PatreonApiService implements PatreonApiServiceInterface
 
         try {
             $identityResponse = $this->getApiClient($accessToken)->get_data(
-                sprintf('identity?include=memberships,memberships.currently_entitled_tiers' .
-                    '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified' .
+                sprintf('identity?include=memberships,memberships.currently_entitled_tiers'.
+                    '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified'.
                     '&%s=email,currently_entitled_amount_cents,lifetime_support_cents,last_charge_status,patron_status,last_charge_date,pledge_relationship_start',
                     urlencode('fields[user]'),
                     urlencode('fields[member]')
                 )
             );
 
-            if (!isset($identityResponse['errors'])) {
+            if (! isset($identityResponse['errors'])) {
 
-                if (!isset($identityResponse['included'])) {
+                if (! isset($identityResponse['included'])) {
                     $this->log->getIdentityIncludedNotFound();
                 } else {
                     // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
@@ -55,8 +53,6 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @param string $accessToken
-     * @return array|null
      * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
      */
     public function getCampaignTiersAndBenefits(string $accessToken): ?array
@@ -80,9 +76,7 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $result;
     }
 
-
     /**
-     * @param string $accessToken
      * @return array|null Null whenever we couldn't authenticate with the refreshToken provided
      */
     public function getCampaignMembers(string $accessToken): ?array
@@ -105,9 +99,7 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $result;
     }
 
-
     /**
-     * @param string $refreshToken
      * @return array{errors: ?array, access_token: string, refresh_token: string, expires_in: int, scope: string, token_type: string, version: string}
      */
     public function getAccessTokenFromRefreshToken(string $refreshToken): array
@@ -116,8 +108,6 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @param string $code
-     * @param string $redirectUrl
      * @return array{errors: ?array, access_token: string, refresh_token: string, expires_in: int, scope: string, token_type: string, version: string}
      */
     public function getAccessTokenFromCode(string $code, string $redirectUrl): array
@@ -125,14 +115,11 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $this->getOAuthClient()->get_tokens($code, $redirectUrl);
     }
 
-    /**
-     * @return array
-     */
     private function getAllPages(API $apiClient, string $suffix): array
     {
         $resultData = [];
 
-        $next  = $suffix;
+        $next = $suffix;
         $count = 0;
         do {
             $this->log->getAllPagesPageNr($count);
@@ -145,7 +132,7 @@ class PatreonApiService implements PatreonApiServiceInterface
             if ($requestResult === null) {
                 $next = null;
                 $this->log->getAllPagesUnknownResponse($originalResponse);
-            } else if (!isset($requestResult['errors'])) {
+            } elseif (! isset($requestResult['errors'])) {
                 // No errors - continue fetching pages
                 $resultData = array_merge($resultData, $requestResult['data']);
 
@@ -162,27 +149,21 @@ class PatreonApiService implements PatreonApiServiceInterface
         } while ($next !== null);
 
         // Assign the data back to the last request and pretend that THAT's all the data there is
-        if (!empty($resultData)) {
+        if (! empty($resultData)) {
             $requestResult['data'] = $resultData;
         }
 
         return $requestResult ?? [];
     }
 
-    /**
-     * @return OAuth
-     */
     private function getOAuthClient(): OAuth
     {
-        $client_id     = config('keystoneguru.patreon.oauth.client_id');
+        $client_id = config('keystoneguru.patreon.oauth.client_id');
         $client_secret = config('keystoneguru.patreon.oauth.secret');
 
         return new OAuth($client_id, $client_secret);
     }
 
-    /**
-     * @return API
-     */
     private function getApiClient(string $accessToken): API
     {
         return new API($accessToken);

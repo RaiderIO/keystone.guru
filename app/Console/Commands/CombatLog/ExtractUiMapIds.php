@@ -22,7 +22,6 @@ class ExtractUiMapIds extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(CombatLogServiceInterface $combatLogService): int
     {
@@ -30,12 +29,9 @@ class ExtractUiMapIds extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractUiMapIds($combatLogService, $filePath));
+        return $this->parseCombatLogRecursively($filePath, fn (string $filePath) => $this->extractUiMapIds($combatLogService, $filePath));
     }
 
-    /**
-     * @return int
-     */
     private function extractUiMapIds(CombatLogServiceInterface $combatLogService, string $filePath): int
     {
         if (($uiMapIds = $combatLogService->getUiMapIds($filePath))->isNotEmpty()) {

@@ -33,9 +33,6 @@ class CreateMissingFloors extends Command
         parent::__construct();
     }
 
-    /**
-     * @return int
-     */
     public function handle(): int
     {
         /** @var Collection|Dungeon[] $dungeons */
@@ -49,7 +46,7 @@ class CreateMissingFloors extends Command
 
             // Bit of a hack to get the correct translation key..
             $dungeonTranslationKey = explode('.', $dungeon->name)[2];
-            $floorsTranslationKey  = sprintf('dungeons.%s.%s.floors', $dungeon->expansion->shortname, $dungeonTranslationKey);
+            $floorsTranslationKey = sprintf('dungeons.%s.%s.floors', $dungeon->expansion->shortname, $dungeonTranslationKey);
 
             $translatedFloors = __($floorsTranslationKey, [], 'en-US');
 
@@ -60,9 +57,9 @@ class CreateMissingFloors extends Command
 
                 Floor::create([
                     'dungeon_id' => $dungeon->id,
-                    'name'       => $floorKey,
-                    'index'      => $index,
-                    'default'    => $index === 1,
+                    'name' => $floorKey,
+                    'index' => $index,
+                    'default' => $index === 1,
                 ]);
 
                 $this->comment(sprintf('-- Added new floor %s', __($floorKey, [], 'en-US')));

@@ -22,7 +22,6 @@ class RefreshDiscoverCache implements ShouldQueue
         $this->queue = sprintf('%s-%s-long-running', config('app.type'), config('app.env'));
     }
 
-
     /**
      * @throws Exception
      */

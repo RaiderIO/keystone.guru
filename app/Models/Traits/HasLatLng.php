@@ -8,34 +8,24 @@ use App\Models\Floor\Floor;
 /**
  * @property float|null $lat
  * @property float|null $lng
- *
  * @property Floor|null $floor
  */
 trait HasLatLng
 {
-    /**
-     * @return bool
-     */
     public function hasValidLatLng(): bool
     {
         return $this->lat !== null && $this->lng !== null && $this->floor !== null;
     }
 
-    /**
-     * @return LatLng
-     */
     public function getLatLng(): LatLng
     {
         return new LatLng($this->lat, $this->lng, $this->floor);
     }
 
-    /**
-     * @return self
-     */
     public function setLatLng(LatLng $latLng): self
     {
-        $this->lat      = $latLng->getLat();
-        $this->lng      = $latLng->getLng();
+        $this->lat = $latLng->getLat();
+        $this->lng = $latLng->getLng();
         $this->floor_id = optional($latLng->getFloor())->id;
 
         return $this;

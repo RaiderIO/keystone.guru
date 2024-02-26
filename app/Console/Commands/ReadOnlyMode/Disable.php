@@ -7,8 +7,9 @@ use Illuminate\Console\Command;
 
 /**
  * Class Aggregate
- * @package App\Console\Commands\Localization
+ *
  * @author Wouter
+ *
  * @since 16/02/2023
  */
 class Disable extends Command

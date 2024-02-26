@@ -6,7 +6,6 @@ use App\Logging\StructuredLoggingInterface;
 
 interface CombatLogSplitServiceLoggingInterface extends StructuredLoggingInterface
 {
-
     public function splitCombatLogOnChallengeModesStart(string $filePath): void;
 
     public function splitCombatLogOnChallengeModesNoChallengeModesFound(): void;

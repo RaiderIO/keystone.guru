@@ -2,20 +2,16 @@
 
 namespace Tests\Unit\App\Logic\Structs;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\Structs\LatLng;
 use App\Service\Coordinates\CoordinatesService;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 final class LatLngTest extends PublicTestCase
 {
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('LatLng')]
     #[DataProvider('scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider')]
@@ -24,10 +20,10 @@ final class LatLngTest extends PublicTestCase
         LatLng $expected
     ): void {
         // Arrange
-        $currentCenter  = new LatLng(50, 50);
+        $currentCenter = new LatLng(50, 50);
         $currentMapSize = 100;
-        $targetCenter   = new LatLng(100, 100);
-        $targetMapSize  = 200;
+        $targetCenter = new LatLng(100, 100);
+        $targetMapSize = 200;
 
         // Act
         $result = $latLng->scale($currentCenter, $currentMapSize, $targetCenter, $targetMapSize);
@@ -37,9 +33,6 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
-    /**
-     * @return array
-     */
     public static function scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider(): array
     {
         return [
@@ -54,11 +47,6 @@ final class LatLngTest extends PublicTestCase
         ];
     }
 
-
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('LatLng')]
     #[DataProvider('scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider')]
@@ -67,11 +55,10 @@ final class LatLngTest extends PublicTestCase
         LatLng $expected
     ): void {
         // Arrange
-        $currentCenter  = new LatLng(-181.69, 273.31);
+        $currentCenter = new LatLng(-181.69, 273.31);
         $currentMapSize = 200;
-        $targetCenter   = new LatLng(CoordinatesService::MAP_MAX_LAT / 2, CoordinatesService::MAP_MAX_LNG / 2);
-        $targetMapSize  = CoordinatesService::MAP_SIZE;
-
+        $targetCenter = new LatLng(CoordinatesService::MAP_MAX_LAT / 2, CoordinatesService::MAP_MAX_LNG / 2);
+        $targetMapSize = CoordinatesService::MAP_SIZE;
 
         // Act
         $result = $latLng->scale($currentCenter, $currentMapSize, $targetCenter, $targetMapSize);
@@ -81,9 +68,6 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
-    /**
-     * @return array
-     */
     public static function scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider(): array
     {
         return [
@@ -94,16 +78,12 @@ final class LatLngTest extends PublicTestCase
         ];
     }
 
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('LatLng')]
     #[DataProvider('rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider')]
     public function rotate_givenPositiveMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
-        int    $rotation,
+        int $rotation,
         LatLng $expected
     ): void {
         // Arrange
@@ -117,9 +97,6 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
-    /**
-     * @return array
-     */
     public static function rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider(): array
     {
         return [
@@ -138,23 +115,19 @@ final class LatLngTest extends PublicTestCase
         ];
     }
 
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('LatLng2')]
     #[DataProvider('rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider')]
     public function rotate_givenScaledMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
-        int    $rotation,
+        int $rotation,
         LatLng $expected
     ): void {
         // Arrange
-        $currentCenter  = new LatLng(50, 50);
+        $currentCenter = new LatLng(50, 50);
         $currentMapSize = 100;
-        $targetCenter   = new LatLng(100, 100);
-        $targetMapSize  = 200;
+        $targetCenter = new LatLng(100, 100);
+        $targetMapSize = 200;
 
         // Act
         $result = $latLng->scale($currentCenter, $currentMapSize, $targetCenter, $targetMapSize)
@@ -165,9 +138,6 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
-    /**
-     * @return array
-     */
     public static function rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider(): array
     {
         return [

@@ -10,9 +10,8 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
     {
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setReadOnly(bool $readOnly): bool
     {
@@ -20,10 +19,10 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function isReadOnly(): bool
     {
-        return $this->cacheService->has('read_only_mode') && (bool)$this->cacheService->get('read_only_mode') === true;
+        return $this->cacheService->has('read_only_mode') && (bool) $this->cacheService->get('read_only_mode') === true;
     }
 }

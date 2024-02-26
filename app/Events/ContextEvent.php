@@ -21,8 +21,8 @@ abstract class ContextEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @param $context Model
-     * @param $user User
+     * @param  $context  Model
+     * @param  $user  User
      * @return void
      */
     public function __construct(protected Model $_context, protected User $_user)
@@ -40,9 +40,9 @@ abstract class ContextEvent implements ShouldBroadcast
 
         if ($this->_context instanceof DungeonRoute) {
             $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->getRouteKey()));
-        } else if ($this->_context instanceof LiveSession) {
+        } elseif ($this->_context instanceof LiveSession) {
             $result[] = new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->getRouteKey()));
-        } else if ($this->_context instanceof Dungeon) {
+        } elseif ($this->_context instanceof Dungeon) {
             $result[] = new PresenceChannel(sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->_context->getRouteKey()));
         }
 
@@ -52,16 +52,16 @@ abstract class ContextEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            '__name'            => $this->broadcastAs(),
+            '__name' => $this->broadcastAs(),
             'context_route_key' => $this->_context->getRouteKey(),
-            'context_class'     => $this->_context::class,
-            'user'              => [
-                'color'      => $this->_user->echo_color,
-                'name'       => $this->_user->name,
+            'context_class' => $this->_context::class,
+            'user' => [
+                'color' => $this->_user->echo_color,
+                'name' => $this->_user->name,
                 'public_key' => $this->_user->public_key,
             ],
         ];
     }
 
-    public abstract function broadcastAs(): string;
+    abstract public function broadcastAs(): string;
 }

@@ -14,16 +14,15 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int         $id
- * @property int         $user_id
- * @property int         $tag_category_id
- * @property int         $model_id
- * @property string      $model_class
- * @property string      $name
+ * @property int $id
+ * @property int $user_id
+ * @property int $tag_category_id
+ * @property int $model_id
+ * @property string $model_class
+ * @property string $name
  * @property string|null $color
- * @property Carbon      $updated_at
- * @property Carbon      $created_at
- *
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  * @property TagCategory $tagCategory
  *
  * @method Builder unique(?int $tagCategoryId)
@@ -36,16 +35,12 @@ class Tag extends Model
 
     protected $visible = ['id', 'name', 'color'];
 
-    /**
-     * @return BelongsTo
-     */
     public function tagCategory(): BelongsTo
     {
         return $this->belongsTo(TagCategory::class);
     }
 
     /**
-     * @param int|null $categoryId
      * @return Builder
      */
     public function scopeUnique(Builder $query, ?int $categoryId = null)
@@ -57,9 +52,6 @@ class Tag extends Model
         return $query->groupBy('name');
     }
 
-    /**
-     * @return Collection
-     */
     public function getUsage(): Collection
     {
         $result = new Collection();
@@ -76,9 +68,6 @@ class Tag extends Model
         return $result;
     }
 
-    /**
-     * @return Tag
-     */
     public static function saveFromRequest(TagFormRequest $request, int $tagCategoryId): Tag
     {
         // Bit strange - but required with multiple forms existing on the profile page
@@ -87,12 +76,12 @@ class Tag extends Model
         // Save the tag we're trying to add
         $tag = new Tag();
         // Technically we can fetch the user_id by going through the model but that's just too much work and slow
-        $tag->user_id         = Auth::id();
+        $tag->user_id = Auth::id();
         $tag->tag_category_id = $tagCategoryId;
-        $tag->model_id        = null;
-        $tag->model_class     = null;
-        $tag->name            = $name;
-        $tag->color           = null;
+        $tag->model_id = null;
+        $tag->model_class = null;
+        $tag->name = $name;
+        $tag->color = null;
 
         $tag->save();
 

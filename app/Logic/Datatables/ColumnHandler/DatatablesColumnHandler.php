@@ -14,27 +14,19 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class DatatablesColumnHandler
 {
-
-    /** @var string|null */
     private readonly ?string $columnData;
 
-    public function __construct(private readonly DatatablesHandler $dtHandler, private readonly string $columnName, string $columnData = null)
+    public function __construct(private readonly DatatablesHandler $dtHandler, private readonly string $columnName, ?string $columnData = null)
     {
         // If not set, just copy the column name
         $this->columnData = $columnData ?? $this->columnName;
     }
 
     /**
-     * @param $columnData
-     * @param $order
-     * @param $generalSearch
      * @return mixed
      */
-    protected abstract function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
+    abstract protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
 
-    /**
-     * @return DatatablesHandler
-     */
     public function getDtHandler(): DatatablesHandler
     {
         return $this->dtHandler;
@@ -57,20 +49,20 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     *
      * @return $this
+     *
      * @throws Exception
      */
     public function applyToBuilder(Builder $subBuilder): self
     {
         $request = $this->dtHandler->getRequest();
 
-        if (!$request->exists('columns')) {
+        if (! $request->exists('columns')) {
             throw new Exception('Unable to find columns parameter in Request parameters');
         }
 
-        $columns       = $request->get('columns');
-        $order         = ($request->get('order', []))[0];
+        $columns = $request->get('columns');
+        $order = ($request->get('order', []))[0];
         $generalSearch = ($request->get('search'))['value'];
 
         // Find the column we should handle
@@ -79,7 +71,7 @@ abstract class DatatablesColumnHandler
         $columnIndex = -1;
         foreach ($columns as $index => $value) {
             if ($value['name'] === $this->columnName) {
-                $column      = $value;
+                $column = $value;
                 $columnIndex = $index;
                 break;
             }
@@ -94,7 +86,6 @@ abstract class DatatablesColumnHandler
             $this->applyFilter($subBuilder, $column, $order, $generalSearch);
             // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
-
 
         return $this;
     }
