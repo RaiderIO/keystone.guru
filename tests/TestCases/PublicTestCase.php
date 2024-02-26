@@ -5,7 +5,7 @@ namespace Tests\TestCases;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
-class PublicTestCase extends TestCase
+final class PublicTestCase extends TestCase
 {
     /**
      * @param string $originalClassName

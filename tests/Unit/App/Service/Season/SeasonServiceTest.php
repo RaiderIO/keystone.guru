@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Tests\TestCases\PublicTestCase;
 
-class SeasonServiceTest extends PublicTestCase
+final class SeasonServiceTest extends PublicTestCase
 {
     /** @var Collection|array{start: Carbon, affix_group_count: int} */
     private readonly Collection $seasonAttributes;
@@ -36,7 +36,7 @@ class SeasonServiceTest extends PublicTestCase
         parent::__construct($name, $data, $dataName);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

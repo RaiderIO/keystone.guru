@@ -2,23 +2,24 @@
 
 namespace Tests\Feature\App\Service\AffixGroup;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class AffixGroupEaseTierServiceTest extends PublicTestCase
+final class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
-    public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull()
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull(): void
     {
         // Arrange
         $affixGroupId = 124;
@@ -68,13 +69,12 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
-    public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError()
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError(): void
     {
         // Arrange
         $response = $this->getResponse('response_unknown_affix');
@@ -109,13 +109,12 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
-    public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError()
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError(): void
     {
         // Arrange
         $response = $this->getResponse('response_unknown_dungeon');
@@ -144,13 +143,12 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
-    public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull()
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull(): void
     {
         // Arrange
         $response               = $this->getResponse();
@@ -187,13 +185,12 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
-    public function parseTierList_GivenSameResponse_ShouldReturnNull()
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenSameResponse_ShouldReturnNull(): void
     {
         // Arrange
         $response               = $this->getResponse();

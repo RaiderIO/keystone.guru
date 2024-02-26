@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\RangeDamage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
@@ -11,20 +14,20 @@ use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class RangeDamageTest extends PublicTestCase
+final class RangeDamageTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group RangeDamage
-     * @dataProvider parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('RangeDamage')]
+    #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -41,19 +44,19 @@ class RangeDamageTest extends PublicTestCase
     }
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group RangeDamage
-     * @dataProvider parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('RangeDamage')]
+    #[DataProvider('parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent,
         int    $expectedSpellId,
         string $expectedSpellName,
         string $expectedSpellSchool
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -70,13 +73,13 @@ class RangeDamageTest extends PublicTestCase
     }
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group RangeDamage
-     * @dataProvider parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('RangeDamage')]
+    #[DataProvider('parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent,
         int    $expectedAmount,
@@ -89,7 +92,7 @@ class RangeDamageTest extends PublicTestCase
         bool   $expectedIsCritical,
         bool   $expectedIsGlancing,
         bool   $expectedIsCrushing
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -112,7 +115,7 @@ class RangeDamageTest extends PublicTestCase
         Assert::assertEquals($expectedIsCrushing, $damageEvent->isCrushing());
     }
 
-    public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -129,7 +132,7 @@ class RangeDamageTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -146,7 +149,7 @@ class RangeDamageTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [

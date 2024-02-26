@@ -2,21 +2,24 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\ChallengeModeStart;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class ChallengeModeStartTest extends PublicTestCase
+final class ChallengeModeStartTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
-     * @group CombatLog
-     * @group ChallengeModeStart
-     * @dataProvider parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('ChallengeModeStart')]
+    #[DataProvider('parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider')]
     public function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent(
         string $challengeModeStartEvent,
         string $expectedZoneName,
@@ -24,7 +27,7 @@ class ChallengeModeStartTest extends PublicTestCase
         int $expectedChallengeModeId,
         int $expectedKeystoneLevel,
         array $expectedAffixIds
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($challengeModeStartEvent);
 
@@ -41,7 +44,7 @@ class ChallengeModeStartTest extends PublicTestCase
         Assert::assertEquals($expectedAffixIds, $parseEventResult->getAffixIDs());
     }
 
-    public function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider(): array
     {
         return [
             [
