@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\ChallengeModeStart;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
@@ -11,12 +14,12 @@ class ChallengeModeStartTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
-     * @group CombatLog
-     * @group ChallengeModeStart
-     * @dataProvider parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('ChallengeModeStart')]
+    #[DataProvider('parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider')]
     public function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent(
         string $challengeModeStartEvent,
         string $expectedZoneName,

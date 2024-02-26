@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Logic\Structs;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\Structs\LatLng;
 use App\Service\Coordinates\CoordinatesService;
 use PHPUnit\Framework\Assert;
@@ -10,12 +13,12 @@ use Tests\TestCases\PublicTestCase;
 class LatLngTest extends PublicTestCase
 {
     /**
-     * @test
-     * @group LatLng
      *
      * @return void
-     * @dataProvider scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider
      */
+    #[Test]
+    #[Group('LatLng')]
+    #[DataProvider('scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider')]
     public function scale_givenPositiveMapCoordinates_shouldScaleLatLng(
         LatLng $latLng,
         LatLng $expected
@@ -53,12 +56,12 @@ class LatLngTest extends PublicTestCase
 
 
     /**
-     * @test
-     * @group LatLng
      *
      * @return void
-     * @dataProvider scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider
      */
+    #[Test]
+    #[Group('LatLng')]
+    #[DataProvider('scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider')]
     public function scale_givenRealisticMapCoordinates_shouldScaleLatLng(
         LatLng $latLng,
         LatLng $expected
@@ -92,12 +95,12 @@ class LatLngTest extends PublicTestCase
     }
 
     /**
-     * @test
-     * @group LatLng
      *
      * @return void
-     * @dataProvider rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider
      */
+    #[Test]
+    #[Group('LatLng')]
+    #[DataProvider('rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider')]
     public function rotate_givenPositiveMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
         int    $rotation,
@@ -136,12 +139,12 @@ class LatLngTest extends PublicTestCase
     }
 
     /**
-     * @test
-     * @group LatLng2
      *
      * @return void
-     * @dataProvider rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider
      */
+    #[Test]
+    #[Group('LatLng2')]
+    #[DataProvider('rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider')]
     public function rotate_givenScaledMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
         int    $rotation,

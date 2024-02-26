@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Logic\MDT;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\MDT\Conversion;
 use App\Models\Dungeon;
 use App\Models\Expansion;
@@ -12,11 +15,11 @@ class ConversionTest extends TestCase
     /**
      * A basic test example.
      *
-     * @test
      * @return void
-     * @dataProvider checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider
-     * @group
      */
+    #[Test]
+    #[DataProvider('checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider')]
+    #[Group('')]
     public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey)
     {
         // Test

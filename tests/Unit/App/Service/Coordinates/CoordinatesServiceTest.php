@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Service\Coordinates;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
@@ -14,11 +17,11 @@ class CoordinatesServiceTest extends PublicTestCase
     /**
      * Scenario: Tests that the ingame location
      *
-     * @test
      * @return void
-     * @dataProvider checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider
-     * @group
      */
+    #[Test]
+    #[DataProvider('checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider')]
+    #[Group('')]
     public function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn(LatLng $latLng, IngameXY $expected)
     {
         // Arrange

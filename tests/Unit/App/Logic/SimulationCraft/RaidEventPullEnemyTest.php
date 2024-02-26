@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\App\Logic\SimulationCraft;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\SimulationCraft\RaidEventPullEnemy;
 use App\Models\Enemy;
 use Tests\Unit\Fixtures\Traits\CreatesEnemy;
@@ -29,10 +31,10 @@ class RaidEventPullEnemyTest extends TestCase
     private const ENEMY_INDEX_IN_PULL = 1;
 
     /**
-     * @test
      * @return void
-     * @group SimulationCraft
      */
+    #[Test]
+    #[Group('SimulationCraft')]
     public function toString_GivenNormalNpc_ShouldReturnRegularString()
     {
         // Arrange
@@ -47,10 +49,10 @@ class RaidEventPullEnemyTest extends TestCase
     }
 
     /**
-     * @test
      * @return void
-     * @group SimulationCraft
      */
+    #[Test]
+    #[Group('SimulationCraft')]
     public function toString_GivenShroudedNpc_ShouldReturnBountyString()
     {
         // Arrange
@@ -68,10 +70,10 @@ class RaidEventPullEnemyTest extends TestCase
     }
 
     /**
-     * @test
      * @return void
-     * @group SimulationCraft
      */
+    #[Test]
+    #[Group('SimulationCraft')]
     public function toString_GivenShroudedZulGamuxNpc_ShouldReturnBountyString()
     {
         // Arrange

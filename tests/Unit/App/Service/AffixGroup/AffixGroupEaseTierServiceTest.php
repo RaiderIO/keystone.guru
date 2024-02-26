@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\App\Service\AffixGroup;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
@@ -9,12 +11,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function getTiersHash_GivenNormalResponse_ShouldGenerateExpectedHash()
     {
         // Arrange
@@ -29,12 +30,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function getTiersHash_GivenUnsortedDungeonNamesResponse_ShouldGenerateSameHash()
     {
         // Arrange
@@ -49,12 +49,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function getTiersHash_GivenNormalResponseWithDungeonNameMapping_ShouldGenerateDifferentHash()
     {
         // Arrange
@@ -69,12 +68,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function getTiersHash_GivenDifferentTiersResponse_ShouldGenerateDifferentHash()
     {
         // Arrange

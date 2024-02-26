@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\RangeDamage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
@@ -15,13 +18,13 @@ class RangeDamageTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group RangeDamage
-     * @dataProvider parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('RangeDamage')]
+    #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
     ) {
@@ -41,13 +44,13 @@ class RangeDamageTest extends PublicTestCase
     }
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group RangeDamage
-     * @dataProvider parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('RangeDamage')]
+    #[DataProvider('parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent,
         int    $expectedSpellId,
@@ -70,13 +73,13 @@ class RangeDamageTest extends PublicTestCase
     }
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group RangeDamage
-     * @dataProvider parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('RangeDamage')]
+    #[DataProvider('parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent,
         int    $expectedAmount,

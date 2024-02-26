@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\App\Service\AffixGroup;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use Tests\TestCases\PublicTestCase;
@@ -12,12 +14,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull()
     {
         // Arrange
@@ -68,12 +69,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError()
     {
         // Arrange
@@ -109,12 +109,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError()
     {
         // Arrange
@@ -144,12 +143,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull()
     {
         // Arrange
@@ -187,12 +185,11 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
     }
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group AffixGroupEaseTierService
      */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenSameResponse_ShouldReturnNull()
     {
         // Arrange

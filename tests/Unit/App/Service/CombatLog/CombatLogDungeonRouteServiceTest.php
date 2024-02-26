@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
@@ -10,13 +13,12 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group CombatLogDungeonRouteService
-     * @dataProvider parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider
      */
+    #[Test]
+    #[Group('CombatLogDungeonRouteService')]
+    #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
     public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(string $combatLogPath)
     {
         // Arrange

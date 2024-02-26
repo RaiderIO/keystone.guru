@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\SwingDamage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
@@ -15,13 +18,13 @@ class SwingDamageTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group SwingDamage
-     * @dataProvider parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('SwingDamage')]
+    #[DataProvider('parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent
     ) {
@@ -41,13 +44,13 @@ class SwingDamageTest extends PublicTestCase
     }
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group SwingDamage
-     * @dataProvider parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('SwingDamage')]
+    #[DataProvider('parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent,
         int    $expectedAmount,

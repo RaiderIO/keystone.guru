@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
@@ -11,13 +14,12 @@ class CombatLogServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group CombatLogService
-     * @dataProvider parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider
      */
+    #[Test]
+    #[Group('CombatLogService')]
+    #[DataProvider('parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider')]
     public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors(string $combatLogPath)
     {
         // Arrange

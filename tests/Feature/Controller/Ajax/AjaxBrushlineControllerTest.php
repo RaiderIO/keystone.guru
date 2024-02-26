@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Floor\Floor;
 use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
@@ -10,11 +12,11 @@ use Tests\Feature\Fixtures\PolylineFixtures;
 class AjaxBrushlineControllerTest extends DungeonRouteTestBase
 {
     /**
-     * @test
-     * @group Controller
      *
      * @return void
      */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenNewValidBrushline_shouldReturnBrushline(): void
     {
         // Arrange
@@ -41,11 +43,11 @@ class AjaxBrushlineControllerTest extends DungeonRouteTestBase
     }
 
     /**
-     * @test
-     * @group Controller
      *
      * @return void
      */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenNewEmptyBrushline_shouldReturnFormValidationErrors(): void
     {
         // Arrange
@@ -62,11 +64,11 @@ class AjaxBrushlineControllerTest extends DungeonRouteTestBase
 
 
     /**
-     * @test
-     * @group Controller
      *
      * @return void
      */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenBrushlineWithValidButNotMatchingFloorId_shouldReturnError(): void
     {
         // Arrange
@@ -88,11 +90,11 @@ class AjaxBrushlineControllerTest extends DungeonRouteTestBase
     }
 
     /**
-     * @test
-     * @group Controller
      *
      * @return void
      */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenBrushlineEmptyVertexCount_shouldReturnError(): void
     {
         // Arrange
