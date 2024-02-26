@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Facade;
 use App\Providers\ControllerServiceProvider;
 use App\Providers\HelperServiceProvider;
 use App\Providers\KeystoneGuruServiceProvider;
 use App\Providers\LoggingServiceProvider;
+use Illuminate\Support\Facades\Facade;
 
 return [
 
