@@ -35,7 +35,7 @@ class RaidEventPullEnemyTest extends TestCase
      */
     #[Test]
     #[Group('SimulationCraft')]
-    public function toString_GivenNormalNpc_ShouldReturnRegularString()
+    public function toString_GivenNormalNpc_ShouldReturnRegularString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams();
@@ -53,7 +53,7 @@ class RaidEventPullEnemyTest extends TestCase
      */
     #[Test]
     #[Group('SimulationCraft')]
-    public function toString_GivenShroudedNpc_ShouldReturnBountyString()
+    public function toString_GivenShroudedNpc_ShouldReturnBountyString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams(null, [
@@ -74,7 +74,7 @@ class RaidEventPullEnemyTest extends TestCase
      */
     #[Test]
     #[Group('SimulationCraft')]
-    public function toString_GivenShroudedZulGamuxNpc_ShouldReturnBountyString()
+    public function toString_GivenShroudedZulGamuxNpc_ShouldReturnBountyString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams(null, [

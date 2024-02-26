@@ -20,7 +20,7 @@ class CombatLogServiceTest extends PublicTestCase
     #[Test]
     #[Group('CombatLogService')]
     #[DataProvider('parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider')]
-    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors(string $combatLogPath)
+    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors(string $combatLogPath): void
     {
         // Arrange
         ini_set('memory_limit', '1G');

@@ -27,7 +27,7 @@ class RangeDamageTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -56,7 +56,7 @@ class RangeDamageTest extends PublicTestCase
         int    $expectedSpellId,
         string $expectedSpellName,
         string $expectedSpellSchool
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -92,7 +92,7 @@ class RangeDamageTest extends PublicTestCase
         bool   $expectedIsCritical,
         bool   $expectedIsGlancing,
         bool   $expectedIsCrushing
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 

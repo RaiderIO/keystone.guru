@@ -28,7 +28,7 @@ class CombatLogEntryTest extends PublicTestCase
         int    $expectedMinute,
         int    $expectedSecond,
         int    $expectedMilliseconds
-    )
+    ): void
     {
         // Arrange
         $combatLogEntry = new CombatLogEntry($rawEvent);

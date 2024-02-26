@@ -22,7 +22,7 @@ class CoordinatesServiceTest extends PublicTestCase
     #[Test]
     #[DataProvider('checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider')]
     #[Group('')]
-    public function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn(LatLng $latLng, IngameXY $expected)
+    public function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn(LatLng $latLng, IngameXY $expected): void
     {
         // Arrange
         $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);

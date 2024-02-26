@@ -24,7 +24,7 @@ class GenericDataTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnGenericData_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -54,7 +54,7 @@ class GenericDataTest extends PublicTestCase
         string $expectedDestName,
         string $expectedDestFlags,
         string $expectedDestRaidFlags
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 

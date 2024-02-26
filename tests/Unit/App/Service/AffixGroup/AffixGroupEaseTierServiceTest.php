@@ -16,7 +16,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function getTiersHash_GivenNormalResponse_ShouldGenerateExpectedHash()
+    public function getTiersHash_GivenNormalResponse_ShouldGenerateExpectedHash(): void
     {
         // Arrange
         $response                  = $this->getResponse();
@@ -35,7 +35,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function getTiersHash_GivenUnsortedDungeonNamesResponse_ShouldGenerateSameHash()
+    public function getTiersHash_GivenUnsortedDungeonNamesResponse_ShouldGenerateSameHash(): void
     {
         // Arrange
         $response                  = $this->getResponse('response_unsorted_dungeon_names');
@@ -54,7 +54,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function getTiersHash_GivenNormalResponseWithDungeonNameMapping_ShouldGenerateDifferentHash()
+    public function getTiersHash_GivenNormalResponseWithDungeonNameMapping_ShouldGenerateDifferentHash(): void
     {
         // Arrange
         $response                  = $this->getResponse();
@@ -73,7 +73,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function getTiersHash_GivenDifferentTiersResponse_ShouldGenerateDifferentHash()
+    public function getTiersHash_GivenDifferentTiersResponse_ShouldGenerateDifferentHash(): void
     {
         // Arrange
         $response                  = $this->getResponse('response_different_tiers');

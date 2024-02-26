@@ -19,7 +19,7 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
     #[Test]
     #[Group('CombatLogDungeonRouteService')]
     #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(string $combatLogPath)
+    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(string $combatLogPath): void
     {
         // Arrange
         ini_set('memory_limit', '1G');

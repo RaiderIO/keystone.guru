@@ -19,7 +19,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull()
+    public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull(): void
     {
         // Arrange
         $affixGroupId = 124;
@@ -74,7 +74,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError()
+    public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError(): void
     {
         // Arrange
         $response = $this->getResponse('response_unknown_affix');
@@ -114,7 +114,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError()
+    public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError(): void
     {
         // Arrange
         $response = $this->getResponse('response_unknown_dungeon');
@@ -148,7 +148,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull()
+    public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull(): void
     {
         // Arrange
         $response               = $this->getResponse();
@@ -190,7 +190,7 @@ class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
-    public function parseTierList_GivenSameResponse_ShouldReturnNull()
+    public function parseTierList_GivenSameResponse_ShouldReturnNull(): void
     {
         // Arrange
         $response               = $this->getResponse();

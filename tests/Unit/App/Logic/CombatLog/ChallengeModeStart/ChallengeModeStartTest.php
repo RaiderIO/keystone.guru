@@ -27,7 +27,7 @@ class ChallengeModeStartTest extends PublicTestCase
         int $expectedChallengeModeId,
         int $expectedKeystoneLevel,
         array $expectedAffixIds
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($challengeModeStartEvent);
 

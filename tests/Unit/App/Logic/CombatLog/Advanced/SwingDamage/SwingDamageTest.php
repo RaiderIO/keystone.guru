@@ -27,7 +27,7 @@ class SwingDamageTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);
 
@@ -63,7 +63,7 @@ class SwingDamageTest extends PublicTestCase
         bool   $expectedIsCritical,
         bool   $expectedIsGlancing,
         bool   $expectedIsCrushing
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);
 

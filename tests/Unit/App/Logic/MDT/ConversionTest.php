@@ -20,7 +20,7 @@ class ConversionTest extends TestCase
     #[Test]
     #[DataProvider('checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider')]
     #[Group('')]
-    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey)
+    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey): void
     {
         // Test
         $expansionKey = Conversion::getExpansionName($dungeonKey);
