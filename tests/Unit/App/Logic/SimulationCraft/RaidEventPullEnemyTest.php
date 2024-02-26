@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\App\Logic\SimulationCraft;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\SimulationCraft\RaidEventPullEnemy;
 use App\Models\Enemy;
 use Tests\Unit\Fixtures\Traits\CreatesEnemy;
@@ -13,7 +15,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
-class RaidEventPullEnemyTest extends TestCase
+final class RaidEventPullEnemyTest extends TestCase
 {
     use CreatesNpc;
     use CreatesEnemy;
@@ -29,11 +31,11 @@ class RaidEventPullEnemyTest extends TestCase
     private const ENEMY_INDEX_IN_PULL = 1;
 
     /**
-     * @test
      * @return void
-     * @group SimulationCraft
      */
-    public function toString_GivenNormalNpc_ShouldReturnRegularString()
+    #[Test]
+    #[Group('SimulationCraft')]
+    public function toString_GivenNormalNpc_ShouldReturnRegularString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams();
@@ -47,11 +49,11 @@ class RaidEventPullEnemyTest extends TestCase
     }
 
     /**
-     * @test
      * @return void
-     * @group SimulationCraft
      */
-    public function toString_GivenShroudedNpc_ShouldReturnBountyString()
+    #[Test]
+    #[Group('SimulationCraft')]
+    public function toString_GivenShroudedNpc_ShouldReturnBountyString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams(null, [
@@ -68,11 +70,11 @@ class RaidEventPullEnemyTest extends TestCase
     }
 
     /**
-     * @test
      * @return void
-     * @group SimulationCraft
      */
-    public function toString_GivenShroudedZulGamuxNpc_ShouldReturnBountyString()
+    #[Test]
+    #[Group('SimulationCraft')]
+    public function toString_GivenShroudedZulGamuxNpc_ShouldReturnBountyString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams(null, [

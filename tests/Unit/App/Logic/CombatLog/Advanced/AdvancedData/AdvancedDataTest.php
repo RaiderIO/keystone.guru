@@ -2,26 +2,29 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\AdvancedData;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class AdvancedDataTest extends PublicTestCase
+final class AdvancedDataTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group AdvancedData
-     * @dataProvider parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedData_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -35,12 +38,12 @@ class AdvancedDataTest extends PublicTestCase
     }
 
     /**
-     * @test
      * @return void
-     * @group CombatLog
-     * @group AdvancedData
-     * @dataProvider parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    #[DataProvider('parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent(
         string  $advancedRangeDamageEvent,
         string  $expectedInfoGUID,
@@ -60,7 +63,7 @@ class AdvancedDataTest extends PublicTestCase
         int     $expectedUiMapId,
         float   $expectedFacing,
         int     $expectedLevel
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -89,7 +92,7 @@ class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($expectedLevel, $advancedData->getLevel());
     }
 
-    public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -110,7 +113,7 @@ class AdvancedDataTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [

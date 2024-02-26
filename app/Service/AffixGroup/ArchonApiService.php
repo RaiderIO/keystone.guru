@@ -24,7 +24,7 @@ class ArchonApiService implements ArchonApiServiceInterface
         }
 
         // Temp fix for strange characters being put in front of the affix list
-        $response['encounterTierList']['label'] = trim($response['encounterTierList']['label'], '‍');
+        $response['encounterTierList']['label'] = trim((string) $response['encounterTierList']['label'], '‍');
 
         return $response;
     }

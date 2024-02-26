@@ -185,10 +185,10 @@ class AdvancedDataV9 implements AdvancedDataInterface
         $this->power        = $parameters[4];
         $this->armor        = $parameters[5];
         $this->absorb       = $parameters[6];
-        $this->powerType    = explode('|', $parameters[7]);
-        $this->currentPower = explode('|', $parameters[8]);
-        $this->maxPower     = explode('|', $parameters[9]);
-        $this->powerCost    = explode('|', $parameters[10]);
+        $this->powerType    = explode('|', (string) $parameters[7]);
+        $this->currentPower = explode('|', (string) $parameters[8]);
+        $this->maxPower     = explode('|', (string) $parameters[9]);
+        $this->powerCost    = explode('|', (string) $parameters[10]);
         // https://forums.combatlogforums.com/t/unit-positions-from-combat-log-solved/822
         // Be aware also that the coordinates are rotated 90 degrees for some crazy reason. This means that for the two numbers listed, pos1 and pos2, the following rules apply:
         //

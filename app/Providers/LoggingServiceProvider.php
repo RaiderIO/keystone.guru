@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Logging\StructuredLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
@@ -29,6 +28,8 @@ use App\Service\CombatLog\Logging\MappingVersionCombatFilterLogging;
 use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
+use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use App\Service\Patreon\Logging\PatreonApiServiceLogging;
@@ -37,7 +38,6 @@ use App\Service\Patreon\Logging\PatreonServiceLogging;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
-use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
@@ -67,6 +67,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);
 
         // MDT
+        $this->app->bind(MDTMappingExportServiceLoggingInterface::class, MDTMappingExportServiceLogging::class);
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);
 
         // Patreon

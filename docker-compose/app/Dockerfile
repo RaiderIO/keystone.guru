@@ -1,11 +1,11 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
 ARG uid
 
 # Add nodejs
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \

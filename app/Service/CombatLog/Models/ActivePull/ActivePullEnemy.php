@@ -13,7 +13,7 @@ class ActivePullEnemy
     /**
      * @param Carbon|null $diedAt
      */
-    public function __construct(private string $uniqueId, private int $npcId, private float $x, private float $y, private Carbon $engagedAt, private ?Carbon $diedAt)
+    public function __construct(private readonly string $uniqueId, private readonly int $npcId, private readonly float $x, private readonly float $y, private readonly Carbon $engagedAt, private readonly ?Carbon $diedAt)
     {
     }
 

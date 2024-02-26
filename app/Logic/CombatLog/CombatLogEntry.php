@@ -25,7 +25,7 @@ class CombatLogEntry
 
     private ?BaseEvent $parsedEvent = null;
 
-    public function __construct(private string $rawEvent)
+    public function __construct(private readonly string $rawEvent)
     {
     }
 

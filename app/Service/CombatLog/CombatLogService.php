@@ -27,7 +27,7 @@ use ZipArchive;
 
 class CombatLogService implements CombatLogServiceInterface
 {
-    public function __construct(private SeasonServiceInterface $seasonService, private CombatLogServiceLoggingInterface $log)
+    public function __construct(private readonly SeasonServiceInterface $seasonService, private readonly CombatLogServiceLoggingInterface $log)
     {
     }
 
@@ -331,7 +331,7 @@ class CombatLogService implements CombatLogServiceInterface
         }
 
         foreach ($rawEvents as $rawEvent) {
-            fwrite($fileHandle, $rawEvent);
+            fwrite($fileHandle, (string) $rawEvent);
         }
 
         return true;

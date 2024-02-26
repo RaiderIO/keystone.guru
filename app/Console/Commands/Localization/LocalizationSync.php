@@ -173,7 +173,7 @@ class LocalizationSync extends Command
                     if ($lemmas === false) {
                         $result[$key] = $match[2];
                     } // replace value with matching, non-empty lemma
-                    else if (array_key_exists($key, $lemmas) && strlen($lemmas[$key]) > 0) {
+                    else if (array_key_exists($key, $lemmas) && strlen((string) $lemmas[$key]) > 0) {
                         $segment = $match[1] . $lemmas[$key] . $match[1];
                     } // mark value as not specified
                     else {

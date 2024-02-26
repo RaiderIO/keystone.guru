@@ -65,7 +65,7 @@ abstract class MapContextMappingVersion extends MapContext
 
         return array_merge(parent::getProperties(), [
             // First should be unspecified
-            'faction' => __(strtolower(Faction::where('key', Faction::FACTION_UNSPECIFIED)->first()->name)),
+            'faction' => __(strtolower((string) Faction::where('key', Faction::FACTION_UNSPECIFIED)->first()->name)),
             'npcs'    => $npcs,
         ]);
     }

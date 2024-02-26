@@ -6,7 +6,7 @@ use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 
 class WowToolsService implements WowToolsServiceInterface
 {
-    public function __construct(private WowToolsServiceLoggingInterface $log)
+    public function __construct(private readonly WowToolsServiceLoggingInterface $log)
     {
     }
 

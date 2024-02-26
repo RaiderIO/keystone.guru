@@ -18,7 +18,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     public function __construct()
     {
         // Make sure we don't have a trailing slash in the app_url
-        $appUrl = trim(config('keystoneguru.echo.url'), '/');
+        $appUrl = trim((string) config('keystoneguru.echo.url'), '/');
 
         try {
             $this->_client = new Client([

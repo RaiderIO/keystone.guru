@@ -16,7 +16,7 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
     private bool $challengeModeStarted = false;
 
     /** @var DungeonRouteCombatFilterLoggingInterface */
-    private DungeonRouteCombatFilterLoggingInterface $log;
+    private readonly DungeonRouteCombatFilterLoggingInterface $log;
 
     public function __construct(Collection $resultEvents)
     {

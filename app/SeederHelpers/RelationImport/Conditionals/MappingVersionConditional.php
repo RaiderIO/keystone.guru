@@ -22,10 +22,10 @@ use Illuminate\Support\Collection;
 class MappingVersionConditional implements ConditionalInterface
 {
     /** @var Collection */
-    private Collection $floorCache;
+    private readonly Collection $floorCache;
 
     /** @var Collection */
-    private Collection $dungeonCache;
+    private readonly Collection $dungeonCache;
 
     public function __construct()
     {

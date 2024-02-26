@@ -9,11 +9,11 @@ use Illuminate\Support\Collection;
 
 class ImportStringObjects
 {
-    private Collection $lines;
-    private Collection $paths;
-    private Collection $mapIcons;
+    private readonly Collection $lines;
+    private readonly Collection $paths;
+    private readonly Collection $mapIcons;
 
-    public function __construct(private Collection $warnings, private Collection $errors, private Dungeon $dungeon, private Collection $killZoneAttributes, private array $mdtObjects)
+    public function __construct(private readonly Collection $warnings, private readonly Collection $errors, private readonly Dungeon $dungeon, private readonly Collection $killZoneAttributes, private readonly array $mdtObjects)
     {
         $this->lines    = collect();
         $this->paths    = collect();

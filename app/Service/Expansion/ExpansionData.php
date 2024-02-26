@@ -9,12 +9,12 @@ use Illuminate\Support\Collection;
 class ExpansionData
 {
     /** @var Collection */
-    private Collection $activeDungeons;
+    private readonly Collection $activeDungeons;
 
     /** @var ExpansionSeason */
-    private ExpansionSeason $expansionSeason;
+    private readonly ExpansionSeason $expansionSeason;
 
-    public function __construct(ExpansionServiceInterface $expansionService, private Expansion $expansion, private GameServerRegion $gameServerRegion)
+    public function __construct(ExpansionServiceInterface $expansionService, private readonly Expansion $expansion, private readonly GameServerRegion $gameServerRegion)
     {
         $this->activeDungeons  = $this->expansion->dungeons;
         $this->expansionSeason = new ExpansionSeason($expansionService, $this->expansion, $this->gameServerRegion);

@@ -22,8 +22,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         'The Everbloom'                           => 'Everbloom',
     ];
 
-    public function __construct(private SeasonServiceInterface $seasonService, private AffixGroupEaseTierServiceLoggingInterface $log)
-    {
+    public function __construct(
+        private readonly SeasonServiceInterface                    $seasonService,
+        private readonly AffixGroupEaseTierServiceLoggingInterface $log
+    ) {
     }
 
     /**

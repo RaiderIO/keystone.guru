@@ -9,19 +9,19 @@ class Creature extends Guid
     public const CREATURE_UNIT_TYPE_GAME_OBJECT = 'GameObject';
     public const CREATURE_UNIT_TYPE_VEHICLE     = 'Vehicle';
 
-    private string $unitType;
+    private readonly string $unitType;
 
-    private int $unknown1;
+    private readonly int $unknown1;
 
-    private int $serverId;
+    private readonly int $serverId;
 
-    private int $instanceId;
+    private readonly int $instanceId;
 
-    private int $zoneUID;
+    private readonly int $zoneUID;
 
-    private int $id;
+    private readonly int $id;
 
-    private string $spawnUID;
+    private readonly string $spawnUID;
 
     protected function __construct(string $guid, array $parameters)
     {

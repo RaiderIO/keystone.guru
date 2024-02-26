@@ -41,7 +41,7 @@ class Restore extends Command
             try {
                 if ($changeLog->model_class === Enemy::class) {
                     // This mob was marked as inspiring
-                    if (str_contains($changeLog->after_model, 'inspiring')) {
+                    if (str_contains((string) $changeLog->after_model, 'inspiring')) {
                         $enemy                = Enemy::findOrFail($changeLog->model_id);
                         $enemy->seasonal_type = 'inspiring';
                         $enemy->save();
@@ -49,7 +49,7 @@ class Restore extends Command
                     }
                 } else {
                     // If JSON parsed properly
-                    $properties = json_decode($changeLog->after_model);
+                    $properties = json_decode((string) $changeLog->after_model);
                     if ($properties !== null) {
                         /** @var Model $modelClass */
                         $modelClass = new $changeLog->model_class;

@@ -26,7 +26,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     /** @var Collection|RaidEventPullEnemy[] */
     private Collection $raidEventPullEnemies;
 
-    public function __construct(private CoordinatesServiceInterface $coordinatesService, private SimulationCraftRaidEventsOptions $options)
+    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService, private readonly SimulationCraftRaidEventsOptions $options)
     {
     }
 

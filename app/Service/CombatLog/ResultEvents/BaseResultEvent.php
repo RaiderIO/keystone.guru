@@ -6,7 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 
 abstract class BaseResultEvent
 {
-    public function __construct(private BaseEvent $baseEvent)
+    public function __construct(private readonly BaseEvent $baseEvent)
     {
     }
 

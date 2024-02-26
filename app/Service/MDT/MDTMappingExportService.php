@@ -5,15 +5,21 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
+use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use Illuminate\Support\Collection;
 
 class MDTMappingExportService implements MDTMappingExportServiceInterface
 {
+    public function __construct(private readonly MDTMappingExportServiceLoggingInterface $log)
+    {
+
+    }
 
     /**
      * @inheritDoc
@@ -121,12 +127,23 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     {
         $mapPOIs = [];
 
-        foreach ($mappingVersion->dungeon->floors as $floor) {
+        /** @var Collection|Floor[] $floors */
+        $floors = $mappingVersion->dungeon->floors();
+//        $floors->each(function (Floor $floor) use ($mappingVersion) {
+//            $floor->setRelation('dungeon', $mappingVersion->dungeon);
+//            $floor->load('mapIcons');
+//        });
+
+        foreach ($floors as $floor) {
             $mapPOIsOnFloor = [];
             $mapPOIIndex    = 0;
 
-            foreach ($floor->dungeonfloorswitchmarkers($mappingVersion)->get() as $dungeonFloorSwitchMarker) {
-                /** @var $dungeonFloorSwitchMarker DungeonFloorSwitchMarker */
+            /** @var DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+            $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkers($mappingVersion)
+                ->with(['floor', 'targetFloor'])
+                ->get();
+
+            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
                     'template'        => 'MapLinkPinTemplate',
                     'type'            => 'mapLink',
@@ -136,7 +153,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
             }
 
-            foreach ($floor->mapicons as $mapIcon) {
+            foreach ($floor->mapIcons($mappingVersion)->get() as $mapIcon) {
                 // Skip all map icon types that are not graveyards
                 if ($mapIcon->map_icon_type_id !== MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD]) {
                     continue;
@@ -182,10 +199,21 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             }
         }
 
-        $enemiesByNpcId = $mappingVersion->enemies()->with('enemypatrol')->get()->groupBy('npc_id');
+        $enemiesByNpcId = $mappingVersion
+            ->enemies()
+            ->with(['floor', 'enemyPatrol', 'enemyPack'])
+            ->get()
+            ->groupBy('npc_id');
+
         foreach ($enemiesByNpcId as $npcId => $enemies) {
-            // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
             /** @var Collection|Enemy[] $enemies */
+
+            if (empty($npcId)) {
+                $this->log->getDungeonEnemiesEnemiesWithoutNpcIdFound($enemies->pluck('id')->toArray());
+                continue;
+            }
+
+            // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
             $enemies = $enemies->sort(fn(Enemy $a, Enemy $b) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
@@ -197,6 +225,11 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS] => 1.6,
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
+
+
+            if ($npc === null) {
+                dd($enemies);
+            }
 
             /** @var NpcEnemyForces|null $npcEnemyForces */
             $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->first();
@@ -287,7 +320,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     {
         $lua = [];
         foreach ($translations->unique() as $translation) {
-            $lua[] = sprintf('L["%s"] = "%s"', addslashes($translation), addslashes($translation));
+            $lua[] = sprintf('L["%s"] = "%s"', addslashes((string)$translation), addslashes((string)$translation));
         }
 
         // Add another EOL at the end of it

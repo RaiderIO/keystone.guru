@@ -15,7 +15,7 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
     protected Collection $resultEvents;
 
     /** @var Collection|CombatLogParserInterface[] */
-    private Collection $filters;
+    private readonly Collection $filters;
 
     public function __construct()
     {

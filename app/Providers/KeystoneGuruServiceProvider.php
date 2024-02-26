@@ -242,7 +242,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $currentExpansion       ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
 
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
-            if (!str_starts_with($view->getName(), 'layouts')) {
+            if (!str_starts_with((string) $view->getName(), 'layouts')) {
                 $view->with('viewName', $view->getName());
             }
 

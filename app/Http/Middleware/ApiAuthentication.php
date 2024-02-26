@@ -7,7 +7,7 @@ use Teapot\StatusCode;
 
 class ApiAuthentication
 {
-    public function __construct(private UserServiceInterface $userService)
+    public function __construct(private readonly UserServiceInterface $userService)
     {
     }
 

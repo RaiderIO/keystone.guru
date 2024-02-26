@@ -58,7 +58,7 @@ abstract class DungeonRouteBuilder
 
     private int $killZoneIndex = 1;
 
-    private DungeonRouteBuilderLoggingInterface $log;
+    private readonly DungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
         protected CoordinatesServiceInterface $coordinatesService,

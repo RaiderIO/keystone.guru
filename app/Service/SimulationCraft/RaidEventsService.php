@@ -8,7 +8,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 
 class RaidEventsService implements RaidEventsServiceInterface
 {
-    public function __construct(private CoordinatesServiceInterface $coordinatesService)
+    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService)
     {
     }
 

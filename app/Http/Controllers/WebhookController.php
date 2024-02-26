@@ -31,7 +31,7 @@ class WebhookController extends Controller
             throw new BadRequestException('signature has invalid format');
         }
 
-        $knownSignature = hash_hmac('sha1', $request->getContent(), config('keystoneguru.webhook.github.secret'));
+        $knownSignature = hash_hmac('sha1', $request->getContent(), (string) config('keystoneguru.webhook.github.secret'));
 
         if (!hash_equals($knownSignature, $signatureParts[1])) {
             throw new UnauthorizedException('Could not verify request signature ' . $signatureParts[1]);
@@ -47,7 +47,7 @@ class WebhookController extends Controller
 
         $commits = $request->get('commits');
         $ref     = $request->get('ref');
-        $branch  = str_replace('refs/heads/', '', $ref);
+        $branch  = str_replace('refs/heads/', '', (string) $ref);
 
         // We don't need duplicate messages in Discord since mapping is automatically managed
         if ($branch !== 'mapping') {
@@ -63,12 +63,12 @@ class WebhookController extends Controller
                     // Skip commits that have originally be done on another branch
                     !$commit['distinct'] ||
                     // Skip merge commits
-                    str_starts_with($commit['message'], 'Merge remote-tracking branch')
+                    str_starts_with((string) $commit['message'], 'Merge remote-tracking branch')
                 ) {
                     continue;
                 }
 
-                $lines = explode('\\n', $commit['message']);
+                $lines = explode('\\n', (string) $commit['message']);
 
                 $commitDescription = substr(trim(view('app.commit.commit', [
                     'commit' => $commit,

@@ -30,12 +30,12 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
     /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private string $encodedString;
+    private readonly string $encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
 
-    public function __construct(private CacheServiceInterface $cacheService, private CoordinatesServiceInterface $coordinatesService)
+    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService)
     {
     }
 

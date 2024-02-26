@@ -46,19 +46,19 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     private Collection $validNpcIds;
 
     /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
-    private Collection $accurateEnemySightings;
+    private readonly Collection $accurateEnemySightings;
 
     /** @var Collection|string[] List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
-    private Collection $summonedEnemies;
+    private readonly Collection $summonedEnemies;
 
     /** @var Collection|string[] List of GUIDs for all enemies that we have killed since the start. */
-    private Collection $killedEnemies;
+    private readonly Collection $killedEnemies;
 
     /** @var BaseCombatFilterLoggingInterface */
-    private BaseCombatFilterLoggingInterface $log;
+    private readonly BaseCombatFilterLoggingInterface $log;
 
     public function __construct(/** @var Collection|BaseResultEvent[] */
-        private Collection $resultEvents)
+        private readonly Collection $resultEvents)
     {
         $this->validNpcIds            = collect();
         $this->accurateEnemySightings = collect();

@@ -29,12 +29,12 @@ use Exception;
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 {
-    private CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
+    private readonly CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
-        private SeasonServiceInterface $seasonService,
+        private readonly SeasonServiceInterface $seasonService,
         CoordinatesServiceInterface    $coordinatesService,
-        private CreateRouteBody        $createRouteBody
+        private readonly CreateRouteBody        $createRouteBody
     ) {
         $dungeonRoute = $this->initDungeonRoute();
 

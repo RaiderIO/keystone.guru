@@ -8,20 +8,20 @@ use Illuminate\Support\Collection;
 
 class ImportStringRiftOffsets
 {
-    private Collection $mapIcons;
+    private readonly Collection $mapIcons;
 
-    private Collection $paths;
+    private readonly Collection $paths;
 
     /**
      * @param int|null $seasonalIndex
      */
     public function __construct(
-        private Collection     $warnings,
-        private Dungeon        $dungeon,
-        private MappingVersion $mappingVersion,
-        private ?int           $seasonalIndex,
-        private array          $riftOffsets,
-        private int            $week
+        private readonly Collection     $warnings,
+        private readonly Dungeon        $dungeon,
+        private readonly MappingVersion $mappingVersion,
+        private readonly ?int           $seasonalIndex,
+        private readonly array          $riftOffsets,
+        private readonly int            $week
     ) {
         $this->mapIcons = collect();
         $this->paths    = collect();

@@ -12,19 +12,19 @@ class ImportStringPulls
 {
     private int $enemyForces = 0;
 
-    private Collection $killZoneAttributes;
+    private readonly Collection $killZoneAttributes;
 
     /**
      * @param int|null $seasonalIndex
      */
     public function __construct(
-        private Collection     $warnings,
-        private Collection     $errors,
-        private Dungeon        $dungeon,
-        private MappingVersion $mappingVersion,
-        private bool           $isRouteTeeming,
-        private ?int           $seasonalIndex,
-        private array          $mdtPulls)
+        private readonly Collection     $warnings,
+        private readonly Collection     $errors,
+        private readonly Dungeon        $dungeon,
+        private readonly MappingVersion $mappingVersion,
+        private readonly bool           $isRouteTeeming,
+        private readonly ?int           $seasonalIndex,
+        private readonly array          $mdtPulls)
     {
         $this->killZoneAttributes = collect();
     }

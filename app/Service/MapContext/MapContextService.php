@@ -17,7 +17,7 @@ use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 
 class MapContextService implements MapContextServiceInterface
 {
-    public function __construct(private CacheServiceInterface $cacheService, private CoordinatesServiceInterface $coordinatesService, private OverpulledEnemyServiceInterface $overpulledEnemyService)
+    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly OverpulledEnemyServiceInterface $overpulledEnemyService)
     {
     }
 

@@ -31,7 +31,7 @@ abstract class RelationMapping
     /**
      * RelationMapping constructor.
      */
-    public function __construct(private string $fileName, private string $class, private bool $persistent = false)
+    public function __construct(private readonly string $fileName, private readonly string $class, private readonly bool $persistent = false)
     {
         $this->conditionals            = collect();
         $this->attributeParsers        = collect();

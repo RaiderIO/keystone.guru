@@ -2,23 +2,25 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class CombatLogServiceTest extends PublicTestCase
+final class CombatLogServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group CombatLogService
-     * @dataProvider parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider
      */
-    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors(string $combatLogPath)
+    #[Test]
+    #[Group('CombatLogService')]
+    #[DataProvider('parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider')]
+    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors(string $combatLogPath): void
     {
         // Arrange
         ini_set('memory_limit', '1G');
@@ -38,7 +40,7 @@ class CombatLogServiceTest extends PublicTestCase
         gc_collect_cycles();
     }
 
-    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider(): array
+    public static function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider(): array
     {
         return [
 //            [

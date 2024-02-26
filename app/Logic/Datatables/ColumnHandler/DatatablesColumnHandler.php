@@ -16,9 +16,9 @@ abstract class DatatablesColumnHandler
 {
 
     /** @var string|null */
-    private ?string $columnData;
+    private readonly ?string $columnData;
 
-    public function __construct(private DatatablesHandler $dtHandler, private string $columnName, string $columnData = null)
+    public function __construct(private readonly DatatablesHandler $dtHandler, private readonly string $columnName, string $columnData = null)
     {
         // If not set, just copy the column name
         $this->columnData = $columnData ?? $this->columnName;

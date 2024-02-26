@@ -7,11 +7,11 @@ use App\Service\CombatLog\Filters\BaseCombatLogFilter;
 
 class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
 {
-    private SpecialEventsFilter $specialEventsFilter;
+    private readonly SpecialEventsFilter $specialEventsFilter;
 
-    private CombatFilter $combatFilter;
+    private readonly CombatFilter $combatFilter;
 
-    private SpellFilter $spellFilter;
+    private readonly SpellFilter $spellFilter;
 
     public function __construct()
     {

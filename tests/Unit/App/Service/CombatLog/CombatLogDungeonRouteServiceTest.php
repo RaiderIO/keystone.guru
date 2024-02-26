@@ -2,22 +2,24 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class CombatLogDungeonRouteServiceTest extends PublicTestCase
+final class CombatLogDungeonRouteServiceTest extends PublicTestCase
 {
 
     /**
-     * @test
      *
      * @return void
-     *
-     * @group CombatLogDungeonRouteService
-     * @dataProvider parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider
      */
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(string $combatLogPath)
+    #[Test]
+    #[Group('CombatLogDungeonRouteService')]
+    #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
+    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(string $combatLogPath): void
     {
         // Arrange
         ini_set('memory_limit', '1G');
@@ -40,7 +42,7 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
 
     }
 
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
+    public static function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
     {
         return [
 //            [

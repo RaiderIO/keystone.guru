@@ -36,24 +36,24 @@ class MDTMapPOI implements Arrayable
         self::TYPE_THE_UNDERROT_SKIP,
     ];
 
-    private string $template;
+    private readonly string $template;
 
-    private string $type;
+    private readonly string $type;
 
-    private ?int $target;
+    private readonly ?int $target;
 
-    private ?int $direction;
+    private readonly ?int $direction;
 
-    private ?int $connectionIndex;
+    private readonly ?int $connectionIndex;
 
-    private float $x;
+    private readonly float $x;
 
-    private float $y;
+    private readonly float $y;
 
     /**
      * @throws Exception
      */
-    public function __construct(private int $subLevel, private array $rawMapPOI)
+    public function __construct(private readonly int $subLevel, private array $rawMapPOI)
     {
         $this->template        = $this->rawMapPOI['template'];
         $this->type            = $this->rawMapPOI['type'];

@@ -2,21 +2,24 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\CombatLogEntry;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class CombatLogEntryTest extends PublicTestCase
+final class CombatLogEntryTest extends PublicTestCase
 {
 
     /**
-     * @test
      * @return void
-     * @group CombatLog
-     * @group CombatLogEntry
-     * @dataProvider parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('CombatLogEntry')]
+    #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
     public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(
         string $rawEvent,
         int    $expectedDay,
@@ -25,7 +28,7 @@ class CombatLogEntryTest extends PublicTestCase
         int    $expectedMinute,
         int    $expectedSecond,
         int    $expectedMilliseconds
-    )
+    ): void
     {
         // Arrange
         $combatLogEntry = new CombatLogEntry($rawEvent);
@@ -43,7 +46,7 @@ class CombatLogEntryTest extends PublicTestCase
         Assert::assertEquals($expectedMilliseconds, $combatLogEntry->getParsedTimestamp()->millisecond);
     }
 
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
+    public static function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
     {
         return [
             [

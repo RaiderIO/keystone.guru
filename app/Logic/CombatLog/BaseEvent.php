@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 abstract class BaseEvent
 {
-    public function __construct(private int $combatLogVersion, private Carbon $timestamp, private string $eventName, private string $rawEvent)
+    public function __construct(private readonly int $combatLogVersion, private readonly Carbon $timestamp, private readonly string $eventName, private readonly string $rawEvent)
     {
     }
 

@@ -21,7 +21,7 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
      */
     public function __construct(
         ThumbnailServiceInterface        $thumbnailService,
-        private DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
+        private readonly DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
         DungeonRoute                     $dungeonRoute,
         int                              $floorIndex,
         int                              $attempts = 0

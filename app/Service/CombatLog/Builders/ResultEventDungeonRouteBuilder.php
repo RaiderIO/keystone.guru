@@ -24,13 +24,13 @@ use Illuminate\Support\Collection;
  */
 class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 {
-    private ResultEventDungeonRouteBuilderLoggingInterface $log;
+    private readonly ResultEventDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
         /** @var Collection|BaseResultEvent[] */
-        private Collection          $resultEvents
+        private readonly Collection          $resultEvents
     ) {
         parent::__construct($coordinatesService, $dungeonRoute);
 

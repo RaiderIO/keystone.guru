@@ -11,11 +11,11 @@ use Illuminate\Support\Collection;
 class ExpansionSeasonAffixGroups
 {
     /** @var Collection|Affix[] */
-    private Collection $featuredAffixes;
+    private readonly Collection $featuredAffixes;
 
-    private ?AffixGroup $currentAffixGroup;
+    private readonly ?AffixGroup $currentAffixGroup;
 
-    private ?AffixGroup $nextAffixGroup;
+    private readonly ?AffixGroup $nextAffixGroup;
 
     /** @var Collection */
     private Collection $allAffixGroups;

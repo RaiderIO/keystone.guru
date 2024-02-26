@@ -38,7 +38,7 @@ abstract class Guid implements Stringable
         self::GUID_TYPE_EVADE         => Evade::class,
     ];
 
-    protected function __construct(private string $guid)
+    protected function __construct(private readonly string $guid)
     {
     }
 

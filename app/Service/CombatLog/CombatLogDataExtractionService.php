@@ -20,7 +20,7 @@ use App\Service\Season\SeasonServiceInterface;
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
 
-    public function __construct(private CombatLogServiceInterface $combatLogService, private SeasonServiceInterface $seasonService, private CombatLogDataExtractionServiceLoggingInterface $log)
+    public function __construct(private readonly CombatLogServiceInterface $combatLogService, private readonly SeasonServiceInterface $seasonService, private readonly CombatLogDataExtractionServiceLoggingInterface $log)
     {
     }
 

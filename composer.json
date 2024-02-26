@@ -12,10 +12,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Wotuu/laravel-influxdb"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/Wotuu/laravel4-datatables-package"
         },
         {
@@ -56,23 +52,21 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-lua": "*",
         "ext-zip": "*",
         "akaunting/laravel-language": "^1.0",
-        "barryvdh/laravel-ide-helper": "^2.4",
+        "barryvdh/laravel-ide-helper": "^2.13",
         "beyondcode/laravel-server-timing": "^1.2",
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "fakerphp/faker": "^1.23",
-        "genealabs/laravel-model-caching": "^0.11.1",
-        "geoip2/geoip2": "~2.0",
+        "genealabs/laravel-model-caching": "^0.11.7",
         "graham-campbell/github": "^12.4",
-        "intervention/image": "^2.5",
+        "intervention/image": "^3.4",
         "jenssegers/agent": "^2.6",
-        "laravel-frontend-presets/argon": "^1.0",
         "laravel/framework": "^8.0",
         "laravel/horizon": "^5.0",
         "laravel/socialite": "^5.0",
@@ -84,14 +78,14 @@
         "nnoggie/mythicdungeontools": "4.3.3.5",
         "paquettg/php-html-parser-php-8-fix": "^3.1",
         "patreon/patreon": "^1.0.0",
-        "phlak/semver": "^4.0",
-        "predis/predis": "^1.1",
+        "phlak/semver": "^4.1",
+        "predis/predis": "^2.0",
         "santigarcor/laratrust": "^7.1",
         "shrikeh/teapot": "^2.3",
         "socialiteproviders/battlenet": "^4.1.0",
-        "socialiteproviders/discord": "^4.1.0",
-        "spatie/url": "^1.3",
-        "tray-labs/laravel-influxdb": "dev-master#e0dbca679f297ed5e4d791c429de03704ca2422b",
+        "socialiteproviders/discord": "^4.2.0",
+        "spatie/url": "^2.3",
+        "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
         "yajra/laravel-datatables-oracle": "~9.0",
         "zircote/swagger-php": "^4.8"
@@ -101,7 +95,7 @@
         "deployer/deployer": "^7.3",
         "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^10.0",
         "rector/rector": "^1.0",
         "wotuu/keystone.guru.deployer": "0.1"
     },

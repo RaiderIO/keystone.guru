@@ -13,7 +13,7 @@ class PatreonService implements PatreonServiceInterface
     /** @var User|null */
     private ?User $cachedAdminUser = null;
 
-    public function __construct(private PatreonServiceLoggingInterface $log)
+    public function __construct(private readonly PatreonServiceLoggingInterface $log)
     {
     }
 

@@ -7,7 +7,7 @@ use App\Models\MountableArea;
 
 class MountableAreaIntersection
 {
-    public function __construct(private MountableArea $mountableArea, private LatLng $latLng)
+    public function __construct(private readonly MountableArea $mountableArea, private readonly LatLng $latLng)
     {
     }
 

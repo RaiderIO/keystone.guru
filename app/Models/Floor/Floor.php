@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int                                     $id
@@ -55,8 +54,8 @@ use Illuminate\Support\Facades\Auth;
  * @property Collection|Enemy[]                      $enemies
  * @property Collection|EnemyPack[]                  $enemypacks
  * @property Collection|EnemyPatrol[]                $enemypatrols
- * @property Collection|MapIcon[]                    $mapicons
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
+ * @property Collection|MapIcon[]                    $mapIcons
+ * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkers
  * @property Collection|MountableArea[]              $mountableareas
  * @property Collection|FloorUnion[]                 $floorUnions
  * @property Collection|FloorUnionArea[]             $floorUnionAreas
@@ -172,7 +171,7 @@ class Floor extends CacheModel implements MappingModelInterface
      *
      * @return HasMany
      */
-    public function mapicons(?MappingVersion $mappingVersion = null): HasMany
+    public function mapIcons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
             ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
@@ -183,7 +182,7 @@ class Floor extends CacheModel implements MappingModelInterface
      *
      * @return HasMany
      */
-    public function mountableareas(?MappingVersion $mappingVersion = null): HasMany
+    public function mountableAreas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
             ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
@@ -194,7 +193,7 @@ class Floor extends CacheModel implements MappingModelInterface
      *
      * @return HasMany
      */
-    public function dungeonfloorswitchmarkers(?MappingVersion $mappingVersion = null): HasMany
+    public function dungeonFloorSwitchMarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
             ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
@@ -401,7 +400,8 @@ class Floor extends CacheModel implements MappingModelInterface
         $result = null;
 
         /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
-        $dungeonFloorSwitchMarkers = $this->dungeonfloorswitchmarkers()->where('target_floor_id', $targetFloorId)->get();
+        $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
+            ->where('target_floor_id', $targetFloorId)->get();
 
         if ($dungeonFloorSwitchMarkers->count() > 1) {
             // Find the closest floors switch marker with the same target floor

@@ -37,7 +37,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
             // If filtering
             if (!empty($routeattributes)) {
                 $allRouteAttributeIds = RouteAttribute::all()->pluck('id')->toArray();
-                $routeAttributeIds    = explode(',', $routeattributes);
+                $routeAttributeIds    = explode(',', (string) $routeattributes);
 
                 // Compute the attribute IDs that the user does NOT want
                 $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);

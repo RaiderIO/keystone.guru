@@ -13,9 +13,9 @@ use Illuminate\Support\Collection;
 
 class SpellFilter implements CombatLogParserInterface
 {
-    private Collection $spellsToTrack;
+    private readonly Collection $spellsToTrack;
 
-    public function __construct(private Collection $resultEvents)
+    public function __construct(private readonly Collection $resultEvents)
     {
         $this->spellsToTrack = Spell::where('selectable', true)->get()->pluck('id');
     }
