@@ -271,7 +271,7 @@ class MappingVersion extends Model
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(fn(LatLng $latLng) => $latLng->toArray()));
+        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(LatLng $latLng) => $latLng->toArray()));
 
         return $newFloor;
     }
@@ -391,27 +391,23 @@ class MappingVersion extends Model
         return $this->floorUnionAreas;
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // If we create a new mapping version, we must create a complete copy of the previous mapping and re-save that to the database.
-        static::created(function (MappingVersion $newMappingVersion) {
+        static::created(static function (MappingVersion $newMappingVersion) {
             if ($newMappingVersion->dungeon === null) {
                 return;
             }
-
             /** @var Collection|MappingVersion[] $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
-
             // Nothing to do if we don't have an older mapping version
             if ($existingMappingVersions->count() < 2) {
                 return;
             }
-
             // We must get the previous mapping version - that contains the mapping we want to clone
             $previousMappingVersion = $existingMappingVersions[1];
-
             // Update the existing fields of the old mapping version to the new version
             $newMappingVersion->update([
                 'enemy_forces_required'           => $previousMappingVersion->enemy_forces_required,
@@ -420,7 +416,6 @@ class MappingVersion extends Model
                 'enemy_forces_shrouded_zul_gamux' => $previousMappingVersion->enemy_forces_shrouded_zul_gamux,
                 'timer_max_seconds'               => $previousMappingVersion->timer_max_seconds,
             ]);
-
             $previousMappingVersion->load([
                 'dungeonFloorSwitchMarkers',
                 'enemies',
@@ -432,7 +427,6 @@ class MappingVersion extends Model
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-
             /** @var Collection|MappingModelInterface[] $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
@@ -444,7 +438,6 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->floorUnions)
                 ->merge($previousMappingVersion->floorUnionAreas)
                 ->merge($previousMappingVersion->npcEnemyForces);
-
             $idMapping = collect([
                 DungeonFloorSwitchMarker::class => collect(),
                 Enemy::class                    => collect(),
@@ -456,7 +449,6 @@ class MappingVersion extends Model
                 FloorUnionArea::class           => collect(),
                 NpcEnemyForces::class           => collect(),
             ]);
-
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
                 /** @var CloneForNewMappingVersionNoRelations $model */
@@ -469,7 +461,6 @@ class MappingVersion extends Model
                     'newModel' => $newModel,
                 ]);
             }
-
             // Change enemy packs of new enemies
             foreach ($idMapping->get(Enemy::class) as $enemyRelationCoupling) {
                 /** @var array{oldModel: Enemy, newModel: Enemy} $enemyRelationCoupling */
@@ -499,7 +490,6 @@ class MappingVersion extends Model
                     }
                 }
             }
-
             // Change floor unions of floor union areas
             foreach ($idMapping->get(FloorUnionArea::class) as $floorUnionAreaRelationCoupling) {
                 /** @var array{oldModel: FloorUnionArea, newModel: FloorUnionArea} $floorUnionAreaRelationCoupling */
@@ -519,15 +509,17 @@ class MappingVersion extends Model
         });
 
         // Deleting a mapping version also causes their relations to be deleted (as does creating a mapping version duplicates them)
-        static::deleting(function (MappingVersion $mappingVersion) {
+        static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
             foreach ($mappingVersion->enemyPacks as $enemyPack) {
                 $enemyPack->delete();
             }
+            
             foreach ($mappingVersion->enemyPatrols as $enemyPatrol) {
                 $enemyPatrol->delete();
             }
+            
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
             $mappingVersion->floorUnions()->delete();

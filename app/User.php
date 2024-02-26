@@ -276,6 +276,7 @@ class User extends Authenticatable
             } catch (Exception) {
                 $newOwner = null;
             }
+
             /** @var $team Team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
@@ -301,17 +302,15 @@ class User extends Authenticatable
         return optional(Auth::user())->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete user properly if it gets deleted
-        static::deleting(function (User $user) {
+        static::deleting(static function (User $user) {
             $user->dungeonRoutes()->delete();
             $user->reports()->delete();
-
             $user->patreonUserLink()->delete();
-
             foreach ($user->teams as $team) {
                 // Remove ourselves from the team
                 $team->removeMember($user);
@@ -335,7 +334,6 @@ class User extends Authenticatable
                     logger()->error($exception->getMessage());
                 }
             }
-
             return true;
         });
     }

@@ -51,14 +51,12 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 return null;
             }
 
-            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, function (BaseEvent $parsedEvent) {
+            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (BaseEvent $parsedEvent) {
                 $dungeon = null;
-
                 // Ensure we know the dungeon and verify it
                 if ($parsedEvent instanceof ChallengeModeStart) {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
                 }
-
                 return $dungeon;
             });
         } finally {
@@ -72,14 +70,12 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     {
         $this->log->createMappingVersionFromDungeonOrRaidStart($filePath);
         try {
-            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, function (BaseEvent $parsedEvent) {
+            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (BaseEvent $parsedEvent) {
                 $dungeon = null;
-
                 // Ensure we know the dungeon and verify it
                 if ($parsedEvent instanceof ZoneChange) {
                     $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
                 }
-
                 return $dungeon;
             }, $mappingVersion);
         } finally {

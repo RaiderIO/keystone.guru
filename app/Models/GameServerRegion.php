@@ -70,6 +70,6 @@ class GameServerRegion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_region', fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first());
+        return $cacheService->remember('default_region', static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first());
     }
 }

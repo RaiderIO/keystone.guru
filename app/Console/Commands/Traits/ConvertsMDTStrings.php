@@ -52,6 +52,7 @@ trait ConvertsMDTStrings
                 if (config('app.type') !== 'local') {
                     $cmd = sprintf('%s %s', self::$SUDO, $cmd);
                 }
+
                 $process = new Process(explode(' ', $cmd));
                 $process->run();
 

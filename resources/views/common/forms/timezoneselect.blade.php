@@ -24,6 +24,7 @@ foreach ($regions as $name => $mask) {
         $timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i') . $ampm;
     }
 }
+
 // View
 ?>
 <label for="timezone">

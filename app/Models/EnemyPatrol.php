@@ -91,12 +91,12 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $clonedEnemyPatrol;
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete patrol properly if it gets deleted
-        static::deleting(function (EnemyPatrol $enemyPatrol) {
+        static::deleting(static function (EnemyPatrol $enemyPatrol) {
             if ($enemyPatrol->polyline !== null) {
                 $enemyPatrol->polyline->delete();
             }

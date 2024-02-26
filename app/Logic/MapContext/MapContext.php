@@ -100,7 +100,7 @@ abstract class MapContext
                 ]);
             }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $this->cacheService->remember('static_data', fn() => [
+        $static = $this->cacheService->remember('static_data', static fn() => [
             'spells'                            => Spell::all(),
             'mapIconTypes'                      => MapIconType::all(),
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),

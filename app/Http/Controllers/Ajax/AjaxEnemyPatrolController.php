@@ -81,6 +81,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($enemyPatrol, null);
             }
+
             $result = response()->noContent();
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

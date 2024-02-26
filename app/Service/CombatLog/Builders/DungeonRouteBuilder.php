@@ -67,6 +67,7 @@ abstract class DungeonRouteBuilder
         /** @var DungeonRouteBuilderLoggingInterface $log */
         $log                    = App::make(DungeonRouteBuilderLoggingInterface::class);
         $this->log              = $log;
+
         $this->currentFloor     = null;
         $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
             'floor',
@@ -75,11 +76,11 @@ abstract class DungeonRouteBuilder
             'enemyPatrol',
         ])
             ->get()
-            ->each(function (Enemy $enemy) {
+            ->each(static function (Enemy $enemy) {
                 // Ensure that the kill priority is 0 if it wasn't set
                 $enemy->kill_priority ??= 0;
             })
-            ->sort(fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
+            ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
@@ -155,7 +156,7 @@ abstract class DungeonRouteBuilder
 
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
                 KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
-                $this->killZoneIndex++;
+                ++$this->killZoneIndex;
                 $enemyCount = $killZoneEnemiesAttributes->count();
                 $this->log->createPullInsertedEnemies($enemyCount);
 
@@ -318,11 +319,10 @@ abstract class DungeonRouteBuilder
         // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
         // Therefore, these enemies should be in combat with us regardless
         /** @var Collection|Enemy[] $preferredEnemiesInEngagedGroups */
-        $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(function (Enemy $availableEnemy) use ($preferredGroups) {
+        $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
             if ($availableEnemy->enemy_pack_id === null) {
                 return false;
             }
-
             return $preferredGroups->has($availableEnemy->enemyPack->group);
         });
 
@@ -424,7 +424,7 @@ abstract class DungeonRouteBuilder
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
 
         // Sort descending - higher priorities go first
-        $enemiesByKillPriority = $enemies->groupBy(fn(Enemy $enemy) => $enemy->kill_priority ?? 0)->sortKeysDesc();
+        $enemiesByKillPriority = $enemies->groupBy(static fn(Enemy $enemy) => $enemy->kill_priority ?? 0)->sortKeysDesc();
 
         foreach ($enemiesByKillPriority as $killPriority => $availableEnemies) {
             /** @var Collection|Enemy[] $availableEnemies */

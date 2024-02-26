@@ -33,14 +33,14 @@ class StructuredLogging implements StructuredLoggingInterface
     public function addContext(string $key, ...$context): void
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
-        $this->groupedContexts[$key] = call_user_func_array('array_merge', $context);
-        $this->cachedContext         = call_user_func_array('array_merge', $this->groupedContexts);
+        $this->groupedContexts[$key] = array_merge(...$context);
+        $this->cachedContext         = array_merge(...$this->groupedContexts);
     }
 
     public function removeContext(string $key): void
     {
         unset($this->groupedContexts[$key]);
-        $this->cachedContext = call_user_func_array('array_merge', $this->groupedContexts);
+        $this->cachedContext = array_merge(...$this->groupedContexts);
     }
 
     protected function getChannel(): ?string
@@ -65,6 +65,7 @@ class StructuredLogging implements StructuredLoggingInterface
                 array_merge(['targetKey' => $targetKey], $context)
             );
         }
+
         $this->addContext($targetKey, $context);
         Stopwatch::start($targetKey);
 
@@ -80,7 +81,7 @@ class StructuredLogging implements StructuredLoggingInterface
         if (!isset($this->groupedContexts[$targetKey])) {
             $this->log(
                 Logger::ERROR,
-                sprintf('%s: Unable to end a structured log that wasn\'t started!', __METHOD__),
+                sprintf("%s: Unable to end a structured log that wasn't started!", __METHOD__),
                 array_merge(['targetKey' => $targetKey], $context)
             );
         }

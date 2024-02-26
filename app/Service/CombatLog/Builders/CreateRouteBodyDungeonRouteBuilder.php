@@ -70,6 +70,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
             );
         }
+
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
         $dungeonRoute = DungeonRoute::create([
@@ -114,13 +115,13 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     {
         $filteredNpcs = $this->createRouteBody->npcs->filter(fn(CreateRouteNpc $npc) => $this->validNpcIds->search($npc->npcId) !== false);
 
-        $npcEngagedEvents = $filteredNpcs->map(fn(CreateRouteNpc $npc) => [
+        $npcEngagedEvents = $filteredNpcs->map(static fn(CreateRouteNpc $npc) => [
             'type'      => 'engaged',
             'timestamp' => $npc->getEngagedAt(),
             'npc'       => $npc,
         ]);
 
-        $npcDiedEvents = $filteredNpcs->map(fn(CreateRouteNpc $npc) => [
+        $npcDiedEvents = $filteredNpcs->map(static fn(CreateRouteNpc $npc) => [
             'type'      => 'died',
             // A bit of a hack - but prevent one-shot enemies from having their diedAt event
             // potentially come _before_ engagedAt event due to sorting
@@ -130,10 +131,9 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
         $npcEngagedAndDiedEvents = $npcEngagedEvents
             ->merge($npcDiedEvents)
-            ->sortBy(function (array $event) {
+            ->sortBy(static function (array $event) {
                 /** @var Carbon $timestamp */
                 $timestamp = $event['timestamp'];
-
                 return $timestamp->unix();
             });
 

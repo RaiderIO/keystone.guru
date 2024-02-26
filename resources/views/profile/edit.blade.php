@@ -14,6 +14,7 @@ $menuItems = [
 if (!$isOAuth) {
     $menuItems[] = ['icon' => 'fa-key', 'text' => __('views/profile.edit.change_password'), 'target' => '#change-password'];
 }
+
 $menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('views/profile.edit.privacy'), 'target' => '#privacy'];
 $menuItems[] = ['icon' => 'fa-flag', 'text' => __('views/profile.edit.reports'), 'target' => '#reports'];
 

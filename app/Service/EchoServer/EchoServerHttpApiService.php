@@ -25,12 +25,12 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
                 // You can set any number of default request options.
                 'timeout'  => 2.0,
             ]);
-        } catch (InvalidArgumentException $ex) {
-            report($ex);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            report($invalidArgumentException);
 
             Log::error('Unable to connect to echo server service!');
 
-            throw $ex;
+            throw $invalidArgumentException;
         }
     }
 

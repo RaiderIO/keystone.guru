@@ -64,7 +64,7 @@ class CreateMissingFloors extends Command
 
                 $this->comment(sprintf('-- Added new floor %s', __($floorKey, [], 'en-US')));
 
-                $index++;
+                ++$index;
             }
         }
 

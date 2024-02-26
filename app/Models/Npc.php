@@ -226,7 +226,7 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         $keyLevelFactor = 1;
         // 2 because we start counting up at key level 3 (+2 = 0)
-        for ($i = 2; $i < $keyLevel; $i++) {
+        for ($i = 2; $i < $keyLevel; ++$i) {
             $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
         }
 
@@ -278,12 +278,12 @@ class Npc extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public static function booted()
+    protected static function booted()
     {
         parent::booted();
 
         // Delete Npc properly if it gets deleted
-        static::deleting(function (Npc $npc) {
+        static::deleting(static function (Npc $npc) {
             $npc->npcbolsteringwhitelists()->delete();
             $npc->npcspells()->delete();
             $npc->npcEnemyForces()->delete();

@@ -49,6 +49,7 @@ abstract class AffixGroupBase extends CacheModel
             /** @var $affix Affix */
             $result[] = __($affix->name);
         }
+
         $result = implode(', ', $result);
 
         if ($this->seasonal_index !== null) {

@@ -2,7 +2,7 @@
 /** @var $dungeon \App\Models\Dungeon */
 
 $mappingVersionsSelect = $dungeon->mappingVersions
-    ->mapWithKeys(function (\App\Models\Mapping\MappingVersion $mappingVersion) {
+    ->mapWithKeys(static function (\App\Models\Mapping\MappingVersion $mappingVersion) {
         if ($mappingVersion->merged) {
             return [$mappingVersion->id => sprintf(__('Version %d (readonly)'), $mappingVersion->version)];
         } else {

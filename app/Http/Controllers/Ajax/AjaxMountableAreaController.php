@@ -54,6 +54,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                         broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, Auth::getUser(), $mountableArea));
                     }
                 }
+
                 $result = response()->noContent();
             } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

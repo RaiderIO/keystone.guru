@@ -44,12 +44,12 @@ class AffixGroupEaseTierPull extends CacheModel
     /**
      * @return void
      */
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete AffixGroupEaseTiers properly if it gets deleted
-        static::deleting(function (AffixGroupEaseTierPull $affixGroupEaseTierPull) {
+        static::deleting(static function (AffixGroupEaseTierPull $affixGroupEaseTierPull) {
             $affixGroupEaseTierPull->affixGroupEaseTiers()->delete();
         });
     }

@@ -231,16 +231,18 @@ class CoordinatesService implements CoordinatesServiceInterface
         if ($polygon[0] != $polygon[count($polygon) - 1]) {
             $polygon[] = $polygon[0];
         }
+
         $j        = 0;
         $oddNodes = false;
         $lat      = $latLng->getLat();
         $lng      = $latLng->getLng();
         $n        = count($polygon);
-        for ($i = 0; $i < $n; $i++) {
-            $j++;
+        for ($i = 0; $i < $n; ++$i) {
+            ++$j;
             if ($j == $n) {
                 $j = 0;
             }
+
             if ((($polygon[$i]['lng'] < $lng) && ($polygon[$j]['lng'] >= $lng)) || (($polygon[$j]['lng'] < $lng) && ($polygon[$i]['lng'] >=
                         $lng))) {
                 if ($polygon[$i]['lat'] + ($lng - $polygon[$i]['lng']) / ($polygon[$j]['lng'] - $polygon[$i]['lng']) * ($polygon[$j]['lat'] -

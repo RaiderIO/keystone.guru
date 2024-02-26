@@ -44,7 +44,7 @@ class ReleaseController extends Controller
         $changelog->unsetRelation('changes');
 
         $releaseChangelogChangesAttributes = [];
-        for ($i = 0; $i < count($tickets); $i++) {
+        for ($i = 0; $i < count($tickets); ++$i) {
             // Only filled in rows, but tickets may be null
             if ((int)$categories[$i] !== -1 && strlen((string)$categories[$i]) > 0 && strlen((string)$changes[$i]) > 0) {
                 $releaseChangelogChangesAttributes[] = [
@@ -55,6 +55,7 @@ class ReleaseController extends Controller
                 ];
             }
         }
+
         ReleaseChangelogChange::insert($releaseChangelogChangesAttributes);
 
         $changelog->load('changes');

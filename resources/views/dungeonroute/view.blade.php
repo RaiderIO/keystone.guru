@@ -9,6 +9,7 @@ if (count($affixes) == 0) {
     $affixes         = [-1 => __('views/dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
+
 $dungeon = $dungeonroute->dungeon;
 ?>
 @section('scripts')

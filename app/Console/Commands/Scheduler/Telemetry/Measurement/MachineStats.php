@@ -77,6 +77,7 @@ class MachineStats extends Measurement
 
             $out[$key] = $val;
         }
+
         fclose($fh);
 
         return $out;

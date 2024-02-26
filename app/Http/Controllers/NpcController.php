@@ -151,6 +151,7 @@ class NpcController extends Controller
                         broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
                         $messagesSentToDungeons->push($dungeon->id);
                     }
+
                     if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
                         broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npcBefore));
                         $messagesSentToDungeons->push($dungeon->id);
@@ -166,6 +167,7 @@ class NpcController extends Controller
                     broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
+
                 if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
                     broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
@@ -193,19 +195,17 @@ class NpcController extends Controller
     public function new()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(fn(string $name, int $id) => [$id => __($name)]),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  => Npc::orderByRaw('dungeon_id, name')
                 ->get()
                 ->groupBy('dungeon_id')
-                ->mapWithKeys(function ($value, $key) {
+                ->mapWithKeys(static function ($value, $key) {
                     // Halls of Valor => [npcs]
                     $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
-
                     return [
                         $dungeonName => $value->pluck('name', 'id')
-                            ->map(fn($value, $key) => // Make sure the value is formatted as 'Hymdal (123456)'
-                            sprintf('%s (%s)', $value, $key)),
+                            ->map(static fn($value, $key) => sprintf('%s (%s)', $value, $key)),
                     ];
                 })
                 ->toArray(),
@@ -219,7 +219,7 @@ class NpcController extends Controller
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(fn(string $name, int $id) => [$id => __($name)]),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);

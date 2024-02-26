@@ -17,7 +17,7 @@ class ExtractedDataResult
 
     public function updatedNpc(): void
     {
-        $this->updatedNpcs++;
+        ++$this->updatedNpcs;
     }
 
     public function getUpdatedFloors(): int
@@ -27,7 +27,7 @@ class ExtractedDataResult
 
     public function updatedFloor(): void
     {
-        $this->updatedFloors++;
+        ++$this->updatedFloors;
     }
 
     public function getUpdatedFloorConnections(): int
@@ -37,7 +37,7 @@ class ExtractedDataResult
 
     public function updatedFloorConnection(): void
     {
-        $this->updatedFloorConnections++;
+        ++$this->updatedFloorConnections;
     }
 
     public function hasUpdatedData(): bool

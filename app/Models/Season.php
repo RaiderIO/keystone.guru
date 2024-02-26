@@ -135,12 +135,12 @@ class Season extends CacheModel
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now(), $region);
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
                 'region'    => $region->short,
             ]);
-            throw $ex;
+            throw $exception;
         }
 
         return $result;
@@ -155,12 +155,12 @@ class Season extends CacheModel
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addWeek(), $region);
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
                 'region'    => $region->short,
             ]);
-            throw $ex;
+            throw $exception;
         }
 
         return $result;
@@ -175,9 +175,9 @@ class Season extends CacheModel
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now(), GameServerRegion::getUserOrDefaultRegion());
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
             ]);
             throw new Exception('Error getting current affix group');
         }
@@ -194,9 +194,9 @@ class Season extends CacheModel
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), GameServerRegion::getUserOrDefaultRegion());
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
             ]);
             throw new Exception('Error getting current affix group');
         }
@@ -243,7 +243,7 @@ class Season extends CacheModel
         $startIndex      = $this->affixgroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );
-        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
+        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixgroups->count()) % $this->presets + 1 : 0;
     }

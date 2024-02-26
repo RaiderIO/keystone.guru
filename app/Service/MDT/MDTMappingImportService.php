@@ -208,7 +208,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         try {
             $this->log->importEnemiesStart();
 
-            $currentEnemies = $currentMappingVersion->enemies->keyBy(fn(Enemy $enemy) => $enemy->getUniqueKey());
+            $currentEnemies = $currentMappingVersion->enemies->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey());
 
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
@@ -254,6 +254,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $enemy->$field         = $currentEnemy->$field;
                         $updatedFields[$field] = $currentEnemy->$field;
                     }
+
                     $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($enemy->getUniqueKey(), $updatedFields);
                 } else {
                     $this->log->importEnemiesCannotRecoverPropertiesFromExistingEnemy($enemy->getUniqueKey());
@@ -300,7 +301,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
                 /** @var $mdtEnemiesWithGroupsByEnemyPack Collection|Enemy[] */
                 $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
-                    ->filter(fn(Enemy $enemy) => $enemy->teeming === null && !in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS))
+                    ->filter(static fn(Enemy $enemy) => $enemy->teeming === null && !in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS))
                     ->keyBy('id');
 
                 // Enemies without a group - don't import that group, or no enemies assigned to the group
@@ -312,9 +313,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // We do not re-import the lat/lng from MDT - we allow ourselves to adjust the lat/lng, so we must
                 // fetch the adjusted lat/lng by matching enemies with what we actually saved
                 // 1. Get a list of unique keys which we must look for in the real enemy list
-                $enemiesWithGroupsByEnemyPackUniqueIds = $mdtEnemiesWithGroupsByEnemyPack->map(fn(Enemy $enemy) => $enemy->getUniqueKey());
+                $enemiesWithGroupsByEnemyPackUniqueIds = $mdtEnemiesWithGroupsByEnemyPack->map(static fn(Enemy $enemy) => $enemy->getUniqueKey());
                 // 2. Find the enemies that were saved in the database by key
-                $boundingBoxEnemies = $newMappingVersionEnemies->filter(fn(Enemy $enemy) => $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false);
+                $boundingBoxEnemies = $newMappingVersionEnemies->filter(static fn(Enemy $enemy) => $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false);
 
                 /** @var Enemy $firstEnemy */
                 $firstEnemy = ($boundingBoxEnemies->first() ?? $mdtEnemiesWithGroupsByEnemyPack->first());
@@ -332,6 +333,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 if ($enemyPack === null) {
                     throw new Exception('Unable to save enemy pack!');
                 }
+
                 $this->log->importEnemyPacksSaveNewEnemyPackOK($enemyPack->id, $mdtEnemiesWithGroupsByEnemyPack->count());
 
                 try {
@@ -378,6 +380,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if (!isset($mdtNpcClone['patrol'])) {
                         continue;
                     }
+
                     if (isset($mdtNpcClone['teeming'])) {
                         continue;
                     }
@@ -529,7 +532,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     private function findSavedEnemyFromCloneEnemy(Collection $savedEnemies, int $npcId, int $mdtId): Enemy
     {
-        return $savedEnemies->firstOrFail(fn(Enemy $enemy) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
+        return $savedEnemies->firstOrFail(static fn(Enemy $enemy) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
     }
 
     public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
@@ -537,7 +540,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         $activeFloors = $dungeon->floors()->active()->get();
 
         // First check for mdt_sub_level, if that isn't found just match on our own index
-        return $activeFloors->first(fn(Floor $floor) => $floor->mdt_sub_level === $mdtSubLevel) ?? $activeFloors->first(fn(Floor $floor) => $floor->index === $mdtSubLevel);
+        return $activeFloors->first(static fn(Floor $floor) => $floor->mdt_sub_level === $mdtSubLevel) ?? $activeFloors->first(static fn(Floor $floor) => $floor->index === $mdtSubLevel);
     }
 
     /**
@@ -547,14 +550,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      */
     private function getVerticesBoundingBoxFromEnemies(Collection $enemies): array
     {
-        $minLat = $minLng = 1000;
-        $maxLat = $maxLng = -1000;
-
+        $minLat = 1000;
+        $minLng = 1000;
+        $maxLat = -1000;
+        $maxLng = -1000;
         foreach ($enemies as $enemy) {
             // Find the min and max of lat and lng so we have a nice square
             if ($minLat > $enemy->lat) {
                 $minLat = $enemy->lat;
             }
+
             if ($maxLat < $enemy->lat) {
                 $maxLat = $enemy->lat;
             }
@@ -562,6 +567,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             if ($minLng > $enemy->lng) {
                 $minLng = $enemy->lng;
             }
+
             if ($maxLng < $enemy->lng) {
                 $maxLng = $enemy->lng;
             }

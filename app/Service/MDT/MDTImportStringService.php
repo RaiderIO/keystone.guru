@@ -102,7 +102,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $floorIds = $importStringRiftOffsets->getDungeon()->floors->pluck('id');
 
         try {
-            $seasonalIndexWhere = function (Builder $query) use ($importStringRiftOffsets) {
+            $seasonalIndexWhere = static function (Builder $query) use ($importStringRiftOffsets) {
                 $query->whereNull('seasonal_index')
                     ->orWhere('seasonal_index', $importStringRiftOffsets->getSeasonalIndex() ?? 1);
             };
@@ -213,7 +213,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         $floors = $importStringPulls->getDungeon()->floors;
         /** @var Collection|Enemy[] $enemies */
-        $enemies = $importStringPulls->getMappingVersion()->enemies->each(function (Enemy $enemy) {
+        $enemies = $importStringPulls->getMappingVersion()->enemies->each(static function (Enemy $enemy) {
             $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
         });
 
@@ -291,7 +291,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Save the attributes of this killzone
                 $importStringPulls->addKillZoneAttributes($killZoneAttributes);
 
-                $newPullIndex++;
+                ++$newPullIndex;
             } catch (ImportWarning $warning) {
                 $importStringPulls->getWarnings()->push($warning);
             }
@@ -476,7 +476,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             //                        }
             // </editor-fold>
 
-            $totalEnemiesMatched++;
+            ++$totalEnemiesMatched;
         }
 
         // <editor-fold desc="Prideful">
@@ -610,6 +610,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     if (!isset($object['d'][6])) {
                         $object['d'][6] = 0;
                     }
+
                     $details = array_values($object['d']);
                 } else {
                     $details = $object['d'];
@@ -619,7 +620,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $mdtSubLevel = ((int)$details[2]);
 
                 /** @var Floor $floor */
-                $floor = $floors->first(fn(Floor $floor) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
+                $floor = $floors->first(static fn(Floor $floor) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
 
                 if ($floor === null) {
                     throw new ImportWarning(
@@ -1129,6 +1130,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ];
             $polyLinesAttributes[]  = $line['polyline'];
         }
+
         Brushline::insert($brushLinesAttributes);
 
         $pathsAttributes = [];
@@ -1142,6 +1144,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ];
             $polyLinesAttributes[] = $path['polyline'];
         }
+
         Path::insert($pathsAttributes);
 
         // Load back the brushlines and paths so that we know the IDs
@@ -1152,22 +1155,23 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         foreach ($dungeonRoute->brushlines as $brushLine) {
             $polyLinesAttributes[$polyLineIndex]['model_id'] = $brushLine->id;
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
+
         foreach ($dungeonRoute->paths as $path) {
             $polyLinesAttributes[$polyLineIndex]['model_id'] = $path->id;
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
 
         Polyline::insert($polyLinesAttributes);
 
         // Assign the polylines back to the brushlines/paths
-        $polyLines = Polyline::where(function (Builder $builder) use ($dungeonRoute) {
-            $builder->where(function (Builder $builder) use ($dungeonRoute) {
+        $polyLines = Polyline::where(static function (Builder $builder) use ($dungeonRoute) {
+            $builder->where(static function (Builder $builder) use ($dungeonRoute) {
                 $builder->whereIn('model_id', $dungeonRoute->brushlines->pluck('id'))
                     ->where('model_class', Brushline::class);
-            })->orWhere(function (Builder $builder) use ($dungeonRoute) {
+            })->orWhere(static function (Builder $builder) use ($dungeonRoute) {
                 $builder->whereIn('model_id', $dungeonRoute->paths->pluck('id'))
                     ->where('model_class', Path::class);
             });
@@ -1179,12 +1183,13 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         foreach ($dungeonRoute->brushlines as $brushLine) {
             $brushLine->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
+
         foreach ($dungeonRoute->paths as $path) {
             $path->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
 
         // Assign map objects to the route
@@ -1232,6 +1237,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ];
             $polyLinesAttributes[] = $path['polyline'];
         }
+
         Path::insert($pathsAttributes);
 
         // Get only the paths that have no assigned polyline for this route
@@ -1246,7 +1252,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $polyLinesAttributes[$polyLineIndex]['model_id'] = $path->id;
             $path->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$polyLineIndex]['obelisk_map_icon']->id);
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
 
         Polyline::insert($polyLinesAttributes);
@@ -1262,7 +1268,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         foreach ($paths as $path) {
             $path->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
 
         // Assign awakened obelisks
@@ -1281,7 +1287,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             /** @var MapIcon $obeliskMapIcon */
             $obeliskMapIcon->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$obeliskMapIconIndex]['obelisk_map_icon']->id);
 
-            $obeliskMapIconIndex++;
+            ++$obeliskMapIconIndex;
         }
     }
 

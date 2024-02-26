@@ -38,7 +38,7 @@ class UserController extends Controller
     public function makeadmin(Request $request, User $user)
     {
         $currentUser = Auth::user();
-        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', [])) !== false) {
+        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
             if (!$user->hasRole('admin')) {
                 $user->attachRole('admin');
 

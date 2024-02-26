@@ -76,7 +76,7 @@ class PatreonController extends Controller
                     } else if (!isset($identityResponse['included'])) {
                         Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
                     } else {
-                        $member = collect($identityResponse['included'])->filter(fn(array $included) => $included['type'] === 'member')->first();
+                        $member = collect($identityResponse['included'])->filter(static fn(array $included) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);

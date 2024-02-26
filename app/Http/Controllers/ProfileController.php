@@ -85,6 +85,7 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
+
         $user->theme                 = $request->get('theme');
         $user->echo_color            = $request->get('echo_color', randomHexColor());
         $user->echo_anonymous        = $request->get('echo_anonymous', false);

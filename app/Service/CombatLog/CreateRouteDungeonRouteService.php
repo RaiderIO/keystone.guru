@@ -81,10 +81,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
+            $challengeModeStartEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
 
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
+            $challengeModeEndEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
             $challengeMode = new CreateRouteChallengeMode(
                 $challengeModeStartEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
@@ -156,7 +156,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             }
 
             if ($npcEngagedEvents->isNotEmpty()) {
-                throw new Exception('Found enemies that weren\'t killed!');
+                throw new Exception("Found enemies that weren't killed!");
             }
 
             return new CreateRouteBody(
@@ -318,13 +318,13 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         foreach ($dungeonRoute->brushlines as $brushline) {
             $polylineAttributes[$index]['model_id'] = $brushline->id;
 
-            $index++;
+            ++$index;
         }
 
         Polyline::insert($polylineAttributes);
 
         // Assign the polylines back to the brushlines/paths
-        $polyLines = Polyline::where(function (Builder $builder) use ($dungeonRoute) {
+        $polyLines = Polyline::where(static function (Builder $builder) use ($dungeonRoute) {
             $builder->whereIn('model_id', $dungeonRoute->brushlines->pluck('id'))
                 ->where('model_class', Brushline::class);
         })->orderBy('id')
@@ -334,7 +334,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         foreach ($dungeonRoute->brushlines as $brushline) {
             $brushline->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
     }
 }

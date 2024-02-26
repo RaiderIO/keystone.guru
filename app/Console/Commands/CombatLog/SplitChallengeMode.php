@@ -18,7 +18,7 @@ class SplitChallengeMode extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $description = 'Ensures that a filepath\'s combat logs contain just one challenge mode. If more are found, the combat log is split up.';
+    protected $description = "Ensures that a filepath's combat logs contain just one challenge mode. If more are found, the combat log is split up.";
 
     /**
      * Execute the console command.

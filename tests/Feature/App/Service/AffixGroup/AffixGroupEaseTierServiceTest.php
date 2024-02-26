@@ -142,9 +142,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             null,
             $log
         );
-
         // Act
-        $result = $previousAffixGroupEaseTierPull = null;
+        $result = null;
+        $previousAffixGroupEaseTierPull = null;
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
             $result = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
@@ -179,9 +179,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             null,
             $log
         );
-
         // Act
-        $result = $previousAffixGroupEaseTierPull = null;
+        $result = null;
+        $previousAffixGroupEaseTierPull = null;
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
             $result = $affixGroupEaseTierService->parseTierList($response);

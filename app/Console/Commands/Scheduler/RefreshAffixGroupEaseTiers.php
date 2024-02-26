@@ -44,8 +44,8 @@ class RefreshAffixGroupEaseTiers extends Command
     ): int {
         try {
             $tierLists = $archonApiService->getDungeonEaseTierListOverall();
-        } catch (InvalidResponseException $exception) {
-            $this->error(sprintf('Invalid response: %s', $exception->getMessage()));
+        } catch (InvalidResponseException $invalidResponseException) {
+            $this->error(sprintf('Invalid response: %s', $invalidResponseException->getMessage()));
 
             return -1;
         }

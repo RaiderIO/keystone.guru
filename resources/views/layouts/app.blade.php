@@ -24,6 +24,7 @@ if ($cookieConsent && isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cooki
     // Don't bother the user with it anymore
     $cookieConsent = false;
 }
+
 $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Analytics or not, default = $isProduction
 $analytics ??= $isProduction;
@@ -42,6 +43,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
         setcookie('changelog_release', $latestReleaseSpotlight->id);
     }
 }
+
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
 <head>

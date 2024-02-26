@@ -44,18 +44,18 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
      */
     public function delete(Request $request, FloorUnion $floorUnion)
     {
-        return DB::transaction(function () use ($floorUnion) {
+        return DB::transaction(static function () use ($floorUnion) {
             try {
                 if ($floorUnion->delete()) {
                     if (Auth::check()) {
                         broadcast(new ModelDeletedEvent($floorUnion->floor->dungeon, Auth::getUser(), $floorUnion));
                     }
                 }
+
                 $result = response()->noContent();
             } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
-
             return $result;
         });
     }

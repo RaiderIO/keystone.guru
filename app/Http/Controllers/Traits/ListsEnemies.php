@@ -59,7 +59,7 @@ trait ListsEnemies
                 $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
                 $mdtEnemies = (new MDTDungeon($cacheService, $coordinatesService, $dungeon))->getClonesAsEnemies($this->mappingVersion, $dungeon->floors()->with(['dungeon'])->get());
 
-                $mdtEnemies = $mdtEnemies->filter(fn(Enemy $mdtEnemy) => !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]));
+                $mdtEnemies = $mdtEnemies->filter(static fn(Enemy $mdtEnemy) => !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]));
 
             } // Thrown when Lua hasn't been configured
             catch (Error) {
@@ -69,7 +69,7 @@ trait ListsEnemies
 
         // Post process enemies
         foreach ($enemies as $enemy) {
-            $enemy->npc = $npcs->first(fn($item) => $enemy->npc_id === $item->id);
+            $enemy->npc = $npcs->first(static fn($item) => $enemy->npc_id === $item->id);
 
             if ($enemy->npc !== null) {
                 $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1); // $npcTypes->get(rand(0, 9));//

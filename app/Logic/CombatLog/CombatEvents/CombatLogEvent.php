@@ -52,6 +52,7 @@ class CombatLogEvent extends BaseEvent
     {
         return $this->suffix;
     }
+
     //
     //
     //    /**

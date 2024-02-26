@@ -33,6 +33,7 @@ class ReleaseFormRequest extends FormRequest
         if ($release !== null) {
             $rule->ignore($release->id);
         }
+
         $rules = [
             'version' => ['required', $rule],
         ];

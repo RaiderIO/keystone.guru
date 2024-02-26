@@ -38,6 +38,7 @@ class DungeonFloorsRelationParser implements RelationParserInterface
                 if (!isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
                     $dungeonSpeedrunRequiredNpc['difficulty'] = Dungeon::DIFFICULTY_25_MAN;
                 }
+
                 DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))->insert($dungeonSpeedrunRequiredNpc);
             }
 
@@ -45,6 +46,7 @@ class DungeonFloorsRelationParser implements RelationParserInterface
                 if (!isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
                     $dungeonSpeedrunRequiredNpc['difficulty'] = Dungeon::DIFFICULTY_25_MAN;
                 }
+
                 DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))->insert($dungeonSpeedrunRequiredNpc);
             }
 

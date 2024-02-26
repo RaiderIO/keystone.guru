@@ -95,7 +95,7 @@ class KillZone extends Model
     public function getEnemiesAttribute(): Collection
     {
         return $this->enemiesAttributeCache ?? Enemy::select('enemies.id')
-            ->join('kill_zone_enemies', function (JoinClause $clause) {
+            ->join('kill_zone_enemies', static function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
             })
@@ -106,7 +106,7 @@ class KillZone extends Model
             // Disabling model caching makes this query work - not sure why the cache would break it, but it does
             ->disableCache()
             ->get()
-            ->map(fn(Enemy $enemy) => $enemy->id);
+            ->map(static fn(Enemy $enemy) => $enemy->id);
     }
 
     /**
@@ -144,7 +144,7 @@ class KillZone extends Model
     {
         return $useCache && $this->enemiesCache !== null ?
             $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
-                ->join('kill_zone_enemies', function (JoinClause $clause) {
+                ->join('kill_zone_enemies', static function (JoinClause $clause) {
                     $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
                         ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
                 })
@@ -176,11 +176,12 @@ class KillZone extends Model
                 if (!isset($floorTotals[$enemy->floor_id])) {
                     $floorTotals[$enemy->floor_id] = 0;
                 }
-                $floorTotals[$enemy->floor_id]++;
+
+                ++$floorTotals[$enemy->floor_id];
             }
 
             // Will get a random floor if there's equal counts on multiple floors, that's ok
-            $floorId = array_search(max($floorTotals), $floorTotals);
+            $floorId = array_search(max($floorTotals), $floorTotals, true);
 
             $result = Floor::findOrFail($floorId);
         }
@@ -233,6 +234,7 @@ class KillZone extends Model
             if ($result['latMin'] > $enemy->lat) {
                 $result['latMin'] = $enemy->lat;
             }
+
             if ($result['latMax'] < $enemy->lat) {
                 $result['latMax'] = $enemy->lat;
             }
@@ -240,6 +242,7 @@ class KillZone extends Model
             if ($result['lngMin'] > $enemy->lng) {
                 $result['lngMin'] = $enemy->lng;
             }
+
             if ($result['lngMax'] < $enemy->lng) {
                 $result['lngMax'] = $enemy->lng;
             }
@@ -343,12 +346,12 @@ class KillZone extends Model
         return collect($queryResult);
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete kill zone properly if it gets deleted
-        static::deleting(function (KillZone $item) {
+        static::deleting(static function (KillZone $item) {
             $item->killZoneEnemies()->delete();
         });
     }

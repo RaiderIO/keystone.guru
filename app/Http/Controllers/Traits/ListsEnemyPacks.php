@@ -25,13 +25,15 @@ trait ListsEnemyPacks
         $result = null;
         $fields = ['id', 'floor_id', 'label', 'teeming', 'faction'];
         if ($enemies) {
-            $result = EnemyPack::with(['enemies' => function ($query) use ($teeming) {
+            $result = EnemyPack::with(['enemies' => static function ($query) use ($teeming) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 // Only include teeming enemies when requested
                 if (!$teeming) {
                     $query->whereNull('teeming');
                 }
-                $query->select(['id', 'enemy_pack_id', 'lat', 'lng']); // must select enemy_pack_id, else it won't return results /sadface
+                
+                $query->select(['id', 'enemy_pack_id', 'lat', 'lng']);
+                // must select enemy_pack_id, else it won't return results /sadface
             }]);
         } else {
             $fields[] = 'vertices_json';

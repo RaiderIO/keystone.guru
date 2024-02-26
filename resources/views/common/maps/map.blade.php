@@ -57,6 +57,7 @@ $showAds ??= true;
 if ($embed || $dungeonroute?->demo === 1) {
     $showAds = false;
 }
+
 // No UI on the map
 $noUI            = isset($noUI) && $noUI;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;

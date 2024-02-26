@@ -133,9 +133,11 @@ class AjaxKillZoneController extends Controller
             if (!isset($data['enemies'])) {
                 $data['enemies'] = [];
             }
+
             if (!isset($data['spells'])) {
                 $data['spells'] = [];
             }
+
             $data['id'] = $killZone?->id ?? null;
 
             $result = $this->saveKillZone($dungeonRoute, $data);
@@ -181,7 +183,7 @@ class AjaxKillZoneController extends Controller
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], fn($item) => in_array($item, $validEnemyIds));
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
@@ -200,7 +202,7 @@ class AjaxKillZoneController extends Controller
         }
 
         // May be empty if the user did not send any enemies
-        if (count($killZoneEnemies) > 0) {
+        if ($killZoneEnemies !== []) {
             // Delete existing enemies
             KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
             // Save all new enemies at once

@@ -183,6 +183,7 @@ class AdminToolsController extends Controller
                 if ($npcCandidate->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     $npcCandidate->dangerous = true;
                 }
+
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // 8 since we start the expansion with 8 dungeons usually
                 $npcCandidate->dungeon_id = count($npcData['location']) > 1 ? -1 : $dungeon->id;
@@ -191,6 +192,7 @@ class AdminToolsController extends Controller
                 if ($npcCandidate->base_health <= 0) {
                     $npcCandidate->base_health = 12345;
                 }
+
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
                 $existed = $npcCandidate->exists;
@@ -210,8 +212,8 @@ class AdminToolsController extends Controller
                 // Changed the mapping; so make sure we synchronize it
                 $this->mappingChanged($beforeModel, $npcCandidate);
             }
-        } catch (Exception $ex) {
-            dump($ex);
+        } catch (Exception $exception) {
+            dump($exception);
         } finally {
             dump($log);
         }
@@ -248,8 +250,8 @@ class AdminToolsController extends Controller
     {
         $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
             ->get()
-            ->mapWithKeys(fn(MappingVersion $mappingVersion) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
-            ->groupBy(fn(int $count, string $key) => $count === 0, true);
+            ->mapWithKeys(static fn(MappingVersion $mappingVersion) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
+            ->groupBy(static fn(int $count, string $key) => $count === 0, true);
 
         return view('admin.tools.dungeonroute.mappingversions', [
             'mappingVersionUsage' => collect([
@@ -290,6 +292,7 @@ class AdminToolsController extends Controller
                         $toUpdate[$keyMapping[$key]] = $value;
                     }
                 }
+
                 $npc->update($toUpdate);
 
                 $results[] = sprintf('Changed npc %d fields: %s', $jsonNpc['Id'], json_encode($toUpdate));
@@ -318,12 +321,12 @@ class AdminToolsController extends Controller
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->select('id')
-            ->when($dungeonId !== -1, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId));
+            ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId));
 
         $count = 0;
         foreach ($builder->get() as $dungeonRoute) {
             RefreshEnemyForces::dispatch($dungeonRoute->id);
-            $count++;
+            ++$count;
         }
 
         dd(sprintf('Dispatched %d jobs', $count));
@@ -349,7 +352,7 @@ class AdminToolsController extends Controller
 
         $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->with('dungeon')
-            ->when($dungeonId !== -1, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->orderByDesc('created_at');
 
         $successCount  = 0;
@@ -360,9 +363,9 @@ class AdminToolsController extends Controller
 
             if ($shouldRefresh) {
                 if ($thumbnailService->queueThumbnailRefresh($dungeonRoute)) {
-                    $successCount++;
+                    ++$successCount;
                 } else {
-                    $failureCount++;
+                    ++$failureCount;
                 }
             }
         }
@@ -516,11 +519,10 @@ class AdminToolsController extends Controller
             'mappingVersionsSelect' => MappingVersion::orderBy('dungeon_id')
                 ->get()
                 ->groupBy('dungeon_id')
-                ->mapWithKeys(function (Collection $mappingVersionByDungeon, int $id) {
+                ->mapWithKeys(static function (Collection $mappingVersionByDungeon, int $id) {
                     $dungeon = Dungeon::findOrFail($id);
-
                     return [
-                        __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(fn(MappingVersion $mappingVersion) => [
+                        __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(static fn(MappingVersion $mappingVersion) => [
                             $mappingVersion->id => $mappingVersion->getPrettyName(),
                         ]),
                     ];
@@ -566,8 +568,8 @@ class AdminToolsController extends Controller
             'MaxPlayers', 'WindSettingsID', 'ZmpFileDataID', 'WdtFileDataID', 'NavigationMaxDistance', 'Flags[0]',
             'Flags[1]', 'Flags[2]',
         ];
-        $mapTableHeaderIndexMapName = array_search('MapName_lang', $mapTableHeaders);
-        $mapTableHeaderIndexMapId   = array_search('ID', $mapTableHeaders);
+        $mapTableHeaderIndexMapName = array_search('MapName_lang', $mapTableHeaders, true);
+        $mapTableHeaderIndexMapId   = array_search('ID', $mapTableHeaders, true);
 
         // Parse all Map Group Member TABLE data and convert them to a workable format
         $mapGroupMemberTable                    = $request->get('ui_map_group_member_table_xhr_response');
@@ -575,8 +577,8 @@ class AdminToolsController extends Controller
         $mapGroupMemberTableHeaders             = [
             'ID', 'Name_lang', 'UiMapGroupID', 'UiMapID', 'FloorIndex', 'RelativeHeightIndex',
         ];
-        $mapGroupMemberTableHeaderIndexNameLang = array_search('Name_lang', $mapGroupMemberTableHeaders);
-        $mapGroupMemberTableHeaderIndexUiMapId  = array_search('UiMapID', $mapGroupMemberTableHeaders);
+        $mapGroupMemberTableHeaderIndexNameLang = array_search('Name_lang', $mapGroupMemberTableHeaders, true);
+        $mapGroupMemberTableHeaderIndexUiMapId  = array_search('UiMapID', $mapGroupMemberTableHeaders, true);
 
         // Parse all UI Map Assignment TABLE data and convert them to a workable format
         $uiMapAssignmentTable       = $request->get('ui_map_assignment_table_xhr_response');
@@ -587,13 +589,13 @@ class AdminToolsController extends Controller
             'Region[3]', 'Region[4]', 'Region[5]', 'ID', 'UiMapID', 'OrderIndex', 'MapID', 'AreaID',
             'WMODoodadPlacementID', 'WMOGroupID',
         ];
-        $uiMapAssignmentTableHeaderIndexMapId      = array_search('MapID', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexUiMapId    = array_search('UiMapID', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexOrderIndex = array_search('OrderIndex', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMinX       = array_search('Region[0]', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMinY       = array_search('Region[1]', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders);
-        $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders);
+        $uiMapAssignmentTableHeaderIndexMapId      = array_search('MapID', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexUiMapId    = array_search('UiMapID', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexOrderIndex = array_search('OrderIndex', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMinX       = array_search('Region[0]', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMinY       = array_search('Region[1]', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders, true);
 
         /** @var Collection|Dungeon[] $allDungeons */
         //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
@@ -633,6 +635,7 @@ class AdminToolsController extends Controller
 
                 continue;
             }
+
             foreach ($uiMapAssignmentTableParsed as $uiMapAssignmentRow) {
                 if ((int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMapId] === $dungeon->map_id &&
                     (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexOrderIndex] === 0) {
@@ -866,6 +869,7 @@ class AdminToolsController extends Controller
                 if ($npc->dungeon_id !== -1) {
                     $npc->setEnemyForces($value);
                 }
+
                 break;
             // Teeming is deprecated pretty much
             //            case 'mismatched_enemy_forces_teeming':

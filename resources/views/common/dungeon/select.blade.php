@@ -28,11 +28,13 @@ if (!isset($dungeons)) {
     if ($selected === null && $allowSeasonSelection) {
         $selected = sprintf('season-%d', $currentSeason->id);
     }
+
     // Build a list of seasons that we use to make selections of
     $seasons = [];
     if ($nextSeason !== null) {
         $seasons[] = $nextSeason;
     }
+
     $seasons[] = $currentSeason;
 
     // Show a selector to only show all dungeons in a specific season
@@ -48,7 +50,7 @@ if (!isset($dungeons)) {
     }
 
     if ($showExpansions) {
-        $validExpansions = $allExpansions->when(!$ignoreGameVersion, fn(\Illuminate\Support\Collection $collection) => $collection->filter(fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($currentUserGameVersion)));
+        $validExpansions = $allExpansions->when(!$ignoreGameVersion, static fn(\Illuminate\Support\Collection $collection) => $collection->filter(static fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($currentUserGameVersion)));
 
         foreach ($validExpansions as $expansion) {
             $key                                                         = sprintf('expansion-%d', $expansion->id);
@@ -64,13 +66,14 @@ if (!isset($dungeons)) {
     if ($showSeasons) {
         foreach ($seasons as $season) {
             $dungeonsSelect[__($season->name)] = $season->dungeons
-                ->mapWithKeys(fn(\App\Models\Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)])
+                ->mapWithKeys(static fn(\App\Models\Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)])
                 ->toArray();
         }
     }
 
     $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
 }
+
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 
 
@@ -83,12 +86,12 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
 
     if ($expansion->active || !$activeOnly) {
         $dungeonsOfExpansionFiltered = $dungeonsOfExpansion
-            ->when(!$ignoreGameVersion, fn(\Illuminate\Support\Collection $collection) => $collection->filter(fn(\App\Models\Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id));
+            ->when(!$ignoreGameVersion, static fn(\Illuminate\Support\Collection $collection) => $collection->filter(static fn(\App\Models\Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id));
 
         // Only if there's something to display for this expansion
         if ($dungeonsOfExpansionFiltered->isNotEmpty()) {
             $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansionFiltered
-                ->mapWithKeys(fn(\App\Models\Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
+                ->mapWithKeys(static fn(\App\Models\Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
         }
     }
 }

@@ -81,6 +81,7 @@ class WowheadService implements WowheadServiceInterface
         if ($ini == 0) {
             return '';
         }
+
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
 

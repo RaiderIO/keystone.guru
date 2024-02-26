@@ -48,7 +48,7 @@ class DiscoverService extends BaseDiscoverService
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
             // It also applies a big penalty for routes that do not belong to the current season
-            ->when($currentSeasonAffixGroups->isNotEmpty(), function (Builder $builder) use ($currentSeasonAffixGroups) {
+            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use ($currentSeasonAffixGroups) {
                 $builder
                     ->selectRaw(
                         sprintf(
@@ -72,9 +72,9 @@ class DiscoverService extends BaseDiscoverService
                 DungeonRouteAffixGroup::query()
                     ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
                     ->groupBy('dungeon_route_id'),
-                'ag', function (JoinClause $joinClause) {
-                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
-            })
+                'ag', static function (JoinClause $joinClause) {
+                    $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
+                })
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);
             })

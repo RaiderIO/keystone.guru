@@ -76,7 +76,7 @@ class LiveSession extends Model
     public function getEnemies(): Collection
     {
         return Enemy::select('enemies.*')
-            ->join('overpulled_enemies', function (JoinClause $clause) {
+            ->join('overpulled_enemies', static function (JoinClause $clause) {
                 $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
                     ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
             })
@@ -103,12 +103,12 @@ class LiveSession extends Model
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function (LiveSession $item) {
+        static::deleting(static function (LiveSession $item) {
             $item->overpulledenemies()->delete();
         });
     }

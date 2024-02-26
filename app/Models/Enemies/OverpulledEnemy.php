@@ -56,7 +56,7 @@ class OverpulledEnemy extends Model
     {
         /** @var Enemy $result */
         $result = Enemy::select('enemies.*')
-            ->join('overpulled_enemies', function (JoinClause $clause) {
+            ->join('overpulled_enemies', static function (JoinClause $clause) {
                 $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
                     ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
             })

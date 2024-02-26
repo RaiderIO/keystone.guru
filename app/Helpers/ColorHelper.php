@@ -5,11 +5,10 @@
  */
 function hsv2rgb($h, $s, $v): array
 {
-    $f = function ($n, $k = null) use ($h, $s, $v) {
+    $f = static function ($n, $k = null) use ($h, $s, $v) {
         if ($k === null) {
             $k = ($n + $h / 60) % 6;
         }
-
         return $v - $v * $s * max(min($k, 4 - $k, 1), 0);
     };
 
@@ -45,7 +44,7 @@ function hex2rgb($hex): array
         throw new Exception('Invalid hex value');
     }
 
-    return array_map(fn($p) => hexdec($p), $parts);
+    return array_map(static fn($p) => hexdec($p), $parts);
 }
 
 /**

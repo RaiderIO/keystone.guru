@@ -47,9 +47,10 @@ class CombatLogEntry
 
         try {
             $this->parsedTimestamp = Carbon::createFromFormat(self::DATE_FORMAT, $matches[1]);
-        } catch (InvalidFormatException $exception) {
-            throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $exception->getCode(), $exception);
+        } catch (InvalidFormatException $invalidFormatException) {
+            throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $invalidFormatException->getCode(), $invalidFormatException);
         }
+
         $eventData     = $matches[2];
         $mayParseEvent = empty($eventWhiteList);
 

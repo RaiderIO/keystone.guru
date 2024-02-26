@@ -21,7 +21,7 @@ class Counter
     {
         // Resuming a paused timer
         if (isset(self::$counters[$counterName])) {
-            self::$counters[$counterName]++;
+            ++self::$counters[$counterName];
         } // Create a new timer instead; user wants to discard what was there
         else {
             self::$counters[$counterName] = 1;

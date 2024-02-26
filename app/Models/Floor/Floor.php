@@ -272,9 +272,9 @@ class Floor extends CacheModel implements MappingModelInterface
         }
 
         // Either grab the facade floor, or grab the requested floor _as long as it's not the facade floor_, otherwise return the default floor
-        return $builder->where(fn(Builder $builder) => $builder->when($useFacade, fn(Builder $builder) => $builder->where('facade', 1)
-            ->orWhere('default', 1))->when(!$useFacade, fn(Builder $builder) => $builder->where('facade', 0)
-            ->where(function (Builder $builder) use ($floorIndex) {
+        return $builder->where(static fn(Builder $builder) => $builder->when($useFacade, static fn(Builder $builder) => $builder->where('facade', 1)
+            ->orWhere('default', 1))->when(!$useFacade, static fn(Builder $builder) => $builder->where('facade', 0)
+            ->where(static function (Builder $builder) use ($floorIndex) {
                 // Either try to resolve the actual floor, or revert to the default if not found
                 $builder->where('index', $floorIndex)
                     ->orWhere('default', 1);
@@ -286,7 +286,7 @@ class Floor extends CacheModel implements MappingModelInterface
     {
         $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 
-        return $builder->where(function (Builder $builder) {
+        return $builder->where(static function (Builder $builder) {
             $builder->where('facade', 1)
                 ->orWhere('default', 1);
         })->orderByDesc($useFacade ? 'facade' : 'default')
@@ -336,7 +336,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): Floor
     {
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
-            ->when($dungeonId !== null, fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->firstOrFail();
     }
 

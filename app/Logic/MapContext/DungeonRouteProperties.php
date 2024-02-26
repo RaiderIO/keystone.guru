@@ -70,12 +70,12 @@ trait DungeonRouteProperties
             'paths'                    => $dungeonRoute->mapContextPaths($coordinatesService, $useFacade),
             'brushlines'               => $dungeonRoute->mapContextBrushlines($coordinatesService, $useFacade),
             'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
-            'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(fn(DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) => [
+            'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(static fn(DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) => [
                 'enemy_id'         => $drEnemyRaidMarker->enemy_id,
                 'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
             ]),
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'            => $dungeonRoute->affixes->map(fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(fn(string $name) => __($name, [], 'en-US')),
+            'uniqueAffixes'            => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(static fn(string $name) => __($name, [], 'en-US')),
         ];
     }
 }

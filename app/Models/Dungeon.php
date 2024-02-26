@@ -601,15 +601,15 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0;
                 }
             }
-        } catch (Exception $ex) {
-            dd($ex);
+        } catch (Exception $exception) {
+            dd($exception);
         }
 
         // Calculate which ones are unmapped
         $unmappedCount = 0;
         foreach ($npcs as $id => $npc) {
             if (!$npc) {
-                $unmappedCount++;
+                ++$unmappedCount;
             }
         }
 
@@ -664,14 +664,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->hasMany(Floor::class)
             ->select('floors.*')
             ->join('dungeons', 'floors.dungeon_id', 'dungeons.id')
-            ->where(function (Builder $builder) use ($useFacade) {
-                $builder->when(!$useFacade, function (Builder $builder) {
+            ->where(static function (Builder $builder) use ($useFacade) {
+                $builder->when(!$useFacade, static function (Builder $builder) {
                     $builder->where('facade', 0);
-                })->when($useFacade, function (Builder $builder) use ($useFacade) {
-                    $builder->where(function (Builder $builder) use ($useFacade) {
+                })->when($useFacade, static function (Builder $builder) use ($useFacade) {
+                    $builder->where(static function (Builder $builder) use ($useFacade) {
                         $builder->where('facade_enabled', true)
                             ->where('facade', $useFacade);
-                    })->orWhere(function (Builder $builder) {
+                    })->orWhere(static function (Builder $builder) {
                         $builder->where('facade_enabled', false)
                             ->where('facade', 0);
                     });
@@ -688,7 +688,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany(Npc::class)
-            ->when($includeGlobalNpcs, function (Builder $builder) {
+            ->when($includeGlobalNpcs, static function (Builder $builder) {
                 $builder->orWhere('dungeon_id', -1);
             });
     }
@@ -711,7 +711,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
-            ->where(fn(Builder $builder) => $builder
+            ->where(static fn(Builder $builder) => $builder
                 ->whereNull('dungeon_route_id'));
     }
 
@@ -779,7 +779,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     public function getFacadeFloor(): ?Floor
     {
-        return $this->floors->first(fn(Floor $floor) => $floor->facade);
+        return $this->floors->first(static fn(Floor $floor) => $floor->facade);
     }
 
     /**
@@ -829,7 +829,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('npc_type_id', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
             ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
-                fn(Builder $builder) => $builder
+                static fn(Builder $builder) => $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
                     ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id))
             ->groupBy('enemies.npc_id');

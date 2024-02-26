@@ -60,12 +60,12 @@ class Brushline extends Model
         return $this->belongsTo(Floor::class);
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete Brushline properly if it gets deleted
-        static::deleting(function (Brushline $brushline) {
+        static::deleting(static function (Brushline $brushline) {
             $brushline->polyline()->delete();
         });
     }

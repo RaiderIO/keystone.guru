@@ -81,7 +81,7 @@ trait HasLinkedAwakenedObelisk
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function ($item) {
+        static::deleting(static function ($item) {
             /** @var $item HasLinkedAwakenedObelisk */
             $item->linkedawakenedobelisks()->delete();
         });

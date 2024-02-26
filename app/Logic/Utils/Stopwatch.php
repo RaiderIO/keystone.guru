@@ -31,7 +31,7 @@ class Stopwatch
         if (isset(self::$timers[$timerName]['end'])) {
             // Add the difference to the start to simulate the pause!
             self::$timers[$timerName]['start'] += (self::_getTime() - self::$timers[$timerName]['end']);
-            self::$timers[$timerName]['count']++;
+            ++self::$timers[$timerName]['count'];
 
             // Remove the pause, it's now applied to the start so it's processed.
             unset(self::$timers[$timerName]['end']);
@@ -82,7 +82,7 @@ class Stopwatch
 
     private static function getElapsedString(string $timerName): string
     {
-        return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : " ($timerName)", StopWatch::elapsed($timerName));
+        return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : sprintf(' (%s)', $timerName), StopWatch::elapsed($timerName));
     }
 
     /**

@@ -197,7 +197,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             }
 
             // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
-            $enemies = $enemies->sort(fn(Enemy $a, Enemy $b) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
+            $enemies = $enemies->sort(static fn(Enemy $a, Enemy $b) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
 
@@ -280,6 +280,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                     foreach ($polylineLatLngs as $vertexLatLng) {
                         $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($vertexLatLng);
                     }
+
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
 
                     // Cache it only if the patrol was tied to a group

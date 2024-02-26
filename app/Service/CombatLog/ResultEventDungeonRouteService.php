@@ -125,8 +125,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             $currentFloor            = null;
 
             $now = Carbon::now()->toDateTimeString();
-
-            $challengeModeStart = $challengeModeEnd = null;
+            $challengeModeStart = null;
+            $challengeModeEnd = null;
 
             foreach ($resultEvents as $resultEvent) {
                 // Track the starts and ends. Don't do anything just yet with this
@@ -135,6 +135,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
                     continue;
                 }
+
                 if ($resultEvent instanceof ChallengeModeEndResultEvent) {
                     $challengeModeEnd = $resultEvent;
 

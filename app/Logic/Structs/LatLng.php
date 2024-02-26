@@ -77,7 +77,7 @@ class LatLng implements Arrayable
         $lng1 = $this->lng - $centerLatLng->lng;
         $lat1 = $this->lat - $centerLatLng->lat;
 
-        $angle = $degrees * (pi() / 180);
+        $angle = $degrees * (M_PI / 180);
 
         $lng2 = $lng1 * cos($angle) - $lat1 * sin($angle);
         $lat2 = $lng1 * sin($angle) + $lat1 * cos($angle);

@@ -144,7 +144,7 @@ class MDTDungeon
             // A bit of a hack, but it works. If we have a floor with a facade in it, we only parse THAT floor
             // since that's the only floor that MDT will have. We will then put the enemies in the correct floors.
             // Pinky promise.
-            $facadeFloors = $floors->filter(fn(Floor $floor) => $floor->facade);
+            $facadeFloors = $floors->filter(static fn(Floor $floor) => $floor->facade);
 
             if ($facadeFloors->isNotEmpty()) {
                 $floors = $facadeFloors;
@@ -191,7 +191,7 @@ class MDTDungeon
                         }
                     }
 
-                    $cloneCount++;
+                    ++$cloneCount;
                 }
             }
 

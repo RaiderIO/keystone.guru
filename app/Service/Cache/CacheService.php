@@ -69,6 +69,7 @@ class CacheService implements CacheServiceInterface
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }
+
                 // If not overridden, get the TTL from config, if it's set anyway
                 try {
                     if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {

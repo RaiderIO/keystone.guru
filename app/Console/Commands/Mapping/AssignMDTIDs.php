@@ -22,7 +22,7 @@ class AssignMDTIDs extends Command
      *
      * @var string
      */
-    protected $description = 'Assigns MDT IDs to a mapping that doesn\'t have them yet.';
+    protected $description = "Assigns MDT IDs to a mapping that doesn't have them yet.";
 
     /**
      * Execute the console command.
@@ -44,7 +44,7 @@ class AssignMDTIDs extends Command
                     continue;
                 }
 
-                if ($enemies->filter(fn(Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
+                if ($enemies->filter(static fn(Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
                     $this->comment(
                         sprintf('- Skipping dungeon %s - already assigned has assigned MDT IDs', __($mappingVersion->dungeon->name, [], 'en-US'))
                     );
@@ -64,7 +64,7 @@ class AssignMDTIDs extends Command
 
                     $enemy->update(['mdt_id' => $index]);
 
-                    $index++;
+                    ++$index;
                 }
             }
 

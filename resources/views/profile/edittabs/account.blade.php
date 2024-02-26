@@ -44,7 +44,8 @@ $deleteConsequences = $user->getDeleteConsequences();
                         ?>
                     {{ sprintf('%s: %s', $teamName, $consequenceText) }}
                 </li>
-                <?php } ?>
+                <?php }
+ ?>
             </ul>
         </div>
     @endif

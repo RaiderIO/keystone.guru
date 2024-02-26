@@ -55,6 +55,7 @@ class ReportRelease extends Command
             if (!str_starts_with($version, 'v')) {
                 $version = sprintf('v%s', $version);
             }
+
             $release = Release::where('version', $version)->first();
         }
 

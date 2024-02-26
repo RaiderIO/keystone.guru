@@ -70,12 +70,12 @@ class PatreonUserLink extends Model
         return Carbon::createFromTimeString($this->expires_at)->isPast();
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function (PatreonUserLink $item) {
+        static::deleting(static function (PatreonUserLink $item) {
             $item->patreonuserbenefits()->delete();
         });
     }

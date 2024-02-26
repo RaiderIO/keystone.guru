@@ -54,6 +54,7 @@ $connectedFloorCandidates = $dungeon->floors;
                         ], isset($floorCoupling) ? $floorCoupling->direction : '', array_merge(['class' => 'form-control selectpicker'], $disabled)) !!}
             </div>
         </div>
-        <?php } ?>
+        <?php }
+ ?>
     </div>
 @endif

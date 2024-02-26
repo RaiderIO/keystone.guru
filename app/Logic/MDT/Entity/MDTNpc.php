@@ -46,6 +46,7 @@ class MDTNpc implements Arrayable
                 $this->clones[$this->index]['sublevel'] = 1;
             }
         }
+
         $this->id = (int)$this->rawMdtNpc['id'];
 
         if (isset($this->rawMdtNpc['spells'])) {
@@ -65,11 +66,13 @@ class MDTNpc implements Arrayable
         if (isset($this->rawMdtNpc['name'])) {
             $this->name = $this->rawMdtNpc['name'];
         }
+
         $this->displayId = (int)$this->rawMdtNpc['displayId'];
         // May not always be set?
         if (isset($this->rawMdtNpc['creatureType'])) {
             $this->creatureType = $this->rawMdtNpc['creatureType'];
         }
+
         $this->level            = (int)$this->rawMdtNpc['level'];
         $this->health           = (int)$this->rawMdtNpc['health'];
         $this->healthPercentage = $this->rawMdtNpc['health_percentage'] ?? null;

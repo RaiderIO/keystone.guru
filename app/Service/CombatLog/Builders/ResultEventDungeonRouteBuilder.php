@@ -142,6 +142,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         /** @var ActivePull $activePull */
                         $activePull = $this->activePullCollection->last();
                     }
+
                     $activePull->addSpell($resultEvent->getSpellId());
 
                     $this->log->buildSpellCast(

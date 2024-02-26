@@ -30,7 +30,7 @@ class APIDungeonRouteController extends Controller
         return new DungeonRouteCollectionResource(
             DungeonRoute::withOnly(['dungeon', 'author', 'killZones', 'affixes'])
                 ->where('author_id', Auth::id())
-                ->when($validated['dungeon_id'] ?? false, function (Builder $builder) use ($validated) {
+                ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
                     $builder->where('dungeon_id', $validated['dungeon_id']);
                 })
                 ->paginate()

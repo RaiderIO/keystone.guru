@@ -52,7 +52,7 @@ class SeasonService implements SeasonServiceInterface
                 ->get();
         }
 
-        return $this->seasonCache->when($expansion !== null, fn(Collection $seasonCache) => $seasonCache->where('expansion_id', $expansion->id));
+        return $this->seasonCache->when($expansion !== null, static fn(Collection $seasonCache) => $seasonCache->where('expansion_id', $expansion->id));
     }
 
     public function getFirstSeason(): Season
@@ -187,7 +187,7 @@ class SeasonService implements SeasonServiceInterface
         $affixGroups          = new Collection();
         $simulatedTime        = $firstSeasonStart->copy();
         $totalWeeksToSimulate = $weeksSinceBeginning + 1;
-        for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
+        for ($i = 0; $i < $totalWeeksToSimulate; ++$i) {
             if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
                 // If we should switch to the next season...
                 if ($simulatedTime->gte($nextSeason->start())) {

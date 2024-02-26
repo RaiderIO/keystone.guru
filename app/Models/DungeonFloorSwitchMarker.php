@@ -86,6 +86,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
 
         return $this->floorCouplingDirection = ($floorCoupling === null ? 'unknown' : $floorCoupling->direction);
     }
+
     //
     //    /**
     //     * @return float

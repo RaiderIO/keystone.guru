@@ -37,6 +37,7 @@ class SpellController extends Controller
         if ($spell === null || $this->isSaveAsNew($request)) {
             $spell = new Spell();
         }
+
         //        else {
         //            $oldId = $spell->id;
         //        }
@@ -52,6 +53,7 @@ class SpellController extends Controller
         foreach ($schools as $school) {
             $mask |= (int)$school;
         }
+
         $spell->schools_mask = $mask;
         $spell->aura         = $request->get('aura', false);
 

@@ -60,9 +60,11 @@ class Restore extends Command
                                 if ($property === 'id' && $changeLog->model_class === MapIcon::class) {
                                     continue;
                                 }
+
                                 $modelClass->$property = $value;
                             }
                         }
+
                         $modelClass->save();
                         $this->info(sprintf('Successfully restored %s -> ID = %s', $changeLog->model_class, $changeLog->model_id));
                     } else {

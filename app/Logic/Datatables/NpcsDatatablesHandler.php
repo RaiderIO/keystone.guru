@@ -20,6 +20,7 @@ class NpcsDatatablesHandler extends DatatablesHandler
 
         $havings        = $query->havings;
         $query->havings = null;
+
         $query->orders  = null;
         $countResults   = $query->get();
         // Restore

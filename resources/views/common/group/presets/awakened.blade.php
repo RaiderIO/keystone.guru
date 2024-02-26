@@ -4,9 +4,10 @@
 /** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
 
 $presets = [];
-for ($i = 0; $i < $season->presets; $i++) {
+for ($i = 0; $i < $season->presets; ++$i) {
     $presets[$i] = __('views/common.group.affixes.seasonal_index_preset', ['count' => $i + 1]);
 }
+
 $shortname = $expansion->shortname;
 ?>
 

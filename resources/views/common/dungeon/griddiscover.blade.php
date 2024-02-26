@@ -18,10 +18,10 @@ $sideOffset = $colCount === 3 ? 1 : 0;
 
 for ($i = 0;
      $i < $rowCount;
-     $i++) { ?>
+     ++$i) { ?>
 <div class="row no-gutters">
         <?php
-    for ($j = 0; $j < $colCount; $j++) {
+    for ($j = 0; $j < $colCount; ++$j) {
         $index = $i * $colCount + $j;
     if ($dungeons->has($index)){
         /** @var \App\Models\Dungeon $dungeon */
@@ -163,7 +163,9 @@ for ($i = 0;
     </div>
         <?php
     }
-    } ?>
+    }
+      ?>
 </div>
-<?php } ?>
+<?php }
+ ?>
 

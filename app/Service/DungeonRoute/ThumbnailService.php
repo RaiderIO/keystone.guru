@@ -164,6 +164,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                             Log::channel('scheduler')->warning('Removing tmp file failure!');
                         }
                     }
+
                     // unlink($tmpScaledFile);
                 }
             }

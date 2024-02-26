@@ -165,9 +165,9 @@ class Team extends Model
                 if ($userRoleKey >= $moderator && ($userRoleKey === $admin || $userRoleKey > $targetUserRoleKey)) {
 
                     // Count down from all roles that exist, starting by the role the user currently has
-                    for ($i = $userRoleKey; $i > 0; $i--) {
+                    for ($i = $userRoleKey; $i > 0; --$i) {
                         // array_search to find key by value
-                        $result[] = array_search($i, $roles);
+                        $result[] = array_search($i, $roles, true);
                     }
                 }
             }
@@ -376,7 +376,7 @@ class Team extends Model
         }
 
         $roles    = TeamUser::ALL_ROLES;
-        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(fn($obj, $key) => $roles[$obj->role])->first();
+        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(static fn($obj, $key) => $roles[$obj->role])->first();
 
         return $newOwner !== null ? $newOwner->user : null;
     }
@@ -388,17 +388,16 @@ class Team extends Model
             ->get();
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete team properly if it gets deleted
-        static::deleting(function (Team $team) {
+        static::deleting(static function (Team $team) {
             // Delete icons
             if ($team->iconfile !== null) {
                 $team->iconfile->delete();
             }
-
             // Remove any ad-free giveaways if the giver was part of this team
             foreach ($team->members as $teamMember) {
                 if ($teamMember->patreonAdFreeGiveaway === null) {
@@ -411,7 +410,6 @@ class Team extends Model
                     $teamMember->patreonAdFreeGiveaway->delete();
                 }
             }
-
             // Delete all tags team tags belonging to our routes
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
                 ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())->delete();

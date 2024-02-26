@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Log;
 
 class RefreshDiscoverCache implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     public int $timeout = 1800;
 
     public function __construct()

@@ -67,6 +67,7 @@ class TeamController extends Controller
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $team->delete();
                     }
+
                     throw $ex;
                 }
             }

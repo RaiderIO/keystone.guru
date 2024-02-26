@@ -22,7 +22,7 @@ class CreateMissing extends Command
      *
      * @var string
      */
-    protected $description = 'Looks into the internal code database for dungeons that haven\'t been added to the database yet and adds them.';
+    protected $description = "Looks into the internal code database for dungeons that haven't been added to the database yet and adds them.";
 
     /**
      * Create a new command instance.

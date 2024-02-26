@@ -58,12 +58,12 @@ class Path extends Model
         return $this->belongsTo(Floor::class);
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete Path properly if it gets deleted
-        static::deleting(function (Path $path) {
+        static::deleting(static function (Path $path) {
             $path->linkedawakenedobelisks()->delete();
             $path->polyline()->delete();
         });

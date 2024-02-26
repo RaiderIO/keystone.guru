@@ -22,5 +22,6 @@ if( isset($dungeon) || isset($expansion) ) {
 </div>
 <?php
 }
+
 // @formatter:on
 ?>

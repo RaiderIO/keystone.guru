@@ -15,8 +15,8 @@ use Illuminate\Support\Collection;
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 {
     public const DUNGEON_NAME_MAPPING = [
-        'Dawn of the Infinite: Galakrond\'s Fall' => 'Galakrond\'s Fall',
-        'Dawn of the Infinite: Murozond\'s Rise'  => 'Murozond\'s Rise',
+        "Dawn of the Infinite: Galakrond's Fall" => "Galakrond's Fall",
+        "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                           => 'Everbloom',
     ];
 
@@ -83,10 +83,9 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 'last_updated_at' => Carbon::now()->toDateTimeString(),
             ]);
 
-            $dungeonList = Dungeon::active()->get()->keyBy(function (Dungeon $dungeon) {
+            $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
                 // Translate the name of the dungeon to English (from a key), and then match it
                 $ksgDungeonName = __($dungeon->name, [], 'en-US');
-
                 return self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName;
             });
 
@@ -206,8 +205,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(fn(string $affixName) => // Find the affix in the list and match by translated name - must be found to continue
-            $affixList->filter(fn(Affix $affix) => __($affix->name, [], 'en-US') === $affixName)->isEmpty());
+            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix) => __($affix->name, [], 'en-US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {
@@ -215,7 +213,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
 
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(fn(Affix $affix) => $affixes->search($affix->key) === false);
+                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(Affix $affix) => $affixes->search($affix->key) === false);
 
                     // If we have found the match, we're done
                     if ($notFoundAffixes->isEmpty()) {

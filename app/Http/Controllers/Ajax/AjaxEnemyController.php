@@ -49,9 +49,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
-
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
             foreach ($activeAuras as $activeAura) {
@@ -66,9 +65,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     }
                 }
             }
-
             $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
-
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
                 $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
@@ -131,6 +128,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                         broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
                     }
                 }
+
                 $result = response()->noContent();
             } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

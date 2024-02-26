@@ -82,11 +82,10 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use ($events) {
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, string $rawEvent) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent(
                 [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START], $combatLogVersion
             );
-
             if ($parsedEvent instanceof ChallengeModeStartEvent) {
                 try {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeId())->firstOrFail();
@@ -102,7 +101,6 @@ class CombatLogService implements CombatLogServiceInterface
                     $parsedEvent->getKeystoneLevel()
                 )));
             }
-
             return $parsedEvent;
         });
 
@@ -118,13 +116,11 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $result = new Collection();
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use ($result) {
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, string $rawEvent) use ($result) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
-
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
             }
-
             return $parsedEvent;
         });
 
@@ -144,12 +140,11 @@ class CombatLogService implements CombatLogServiceInterface
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             $this->parseCombatLogStreaming($combatLogFilePath,
-                function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
+                static function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
                     // If parsing was successful, it generated a dungeonroute, so then construct our filter
                     if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
                         $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
                     }
-
                     $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
                 }
             );
@@ -174,7 +169,7 @@ class CombatLogService implements CombatLogServiceInterface
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
             $this->parseCombatLogStreaming($combatLogFilePath,
-                function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter) {
+                static function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter) {
                     $combatLogDungeonOrRaidFilter->parse($baseEvent, $lineNr);
                 }
             );

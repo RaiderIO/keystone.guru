@@ -235,6 +235,7 @@ class Expansion extends CacheModel
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $this->delete();
                     }
+
                     throw $ex;
                 }
             }

@@ -46,7 +46,7 @@ class KillZoneEnemy extends Model
     {
         /** @var Enemy $result */
         $result = Enemy::select('enemies.*')
-            ->join('kill_zone_enemies', function (JoinClause $clause) {
+            ->join('kill_zone_enemies', static function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
             })

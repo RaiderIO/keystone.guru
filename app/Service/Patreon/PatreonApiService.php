@@ -123,7 +123,8 @@ class PatreonApiService implements PatreonApiServiceInterface
         $count = 0;
         do {
             $this->log->getAllPagesPageNr($count);
-            $requestResult = $originalResponse = $apiClient->get_data($next);
+            $requestResult = $apiClient->get_data($next);
+            $originalResponse = $requestResult;
             // Insane workaround if you get a 4xx error it won't do json_decode
             if (is_string($requestResult)) {
                 $requestResult = json_decode($requestResult, true);
@@ -145,7 +146,8 @@ class PatreonApiService implements PatreonApiServiceInterface
                 $next = null;
                 $this->log->getAllPagesError($requestResult['errors']);
             }
-            $count++;
+
+            ++$count;
         } while ($next !== null);
 
         // Assign the data back to the last request and pretend that THAT's all the data there is

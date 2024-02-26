@@ -33,7 +33,7 @@ class ActivePull
 
     public function getAverageHPPercentAt(Carbon $timestamp): float
     {
-        $inCombatSum = $this->enemiesInCombat->sum(fn(ActivePullEnemy $activePullEnemy) => $activePullEnemy->getHPPercentAt($timestamp));
+        $inCombatSum = $this->enemiesInCombat->sum(static fn(ActivePullEnemy $activePullEnemy) => $activePullEnemy->getHPPercentAt($timestamp));
 
         $totalEnemiesInPull = ($this->enemiesInCombat->count() + $this->enemiesKilled->count());
         if ($totalEnemiesInPull === 0) {
@@ -134,7 +134,7 @@ class ActivePull
 
             $result['lat'] += $killedActivePullEnemy->getResolvedEnemy()->lat;
             $result['lng'] += $killedActivePullEnemy->getResolvedEnemy()->lng;
-            $count++;
+            ++$count;
         }
 
         $result['lat'] /= $count;

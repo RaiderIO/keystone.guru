@@ -485,6 +485,7 @@ class DungeonRouteController extends Controller
                 return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         }
+
         $this->authorize('embed', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {

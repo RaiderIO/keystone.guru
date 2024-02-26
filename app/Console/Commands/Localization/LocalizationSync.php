@@ -80,7 +80,7 @@ class LocalizationSync extends Command
                 $lemmas = $this->parse($targetLang, $target);
 
                 if ($lemmas === false) {
-                    $this->error("Parsing failed while reading '$targetLang/$name'");
+                    $this->error(sprintf('Parsing failed while reading \'%s/%s\'', $targetLang, $name));
 
                     continue;
                 }
@@ -93,7 +93,7 @@ class LocalizationSync extends Command
             $result = $this->parse($targetLang, $base, $lemmas);
 
             if ($result === false) {
-                $this->error("Parsing failed while syncing '$baseLang/$name'");
+                $this->error(sprintf('Parsing failed while syncing \'%s/%s\'', $baseLang, $name));
 
                 continue;
             }
@@ -102,9 +102,9 @@ class LocalizationSync extends Command
             if ($target === false || $target != $result) {
                 file_put_contents($targetPath, $result);
 
-                $this->info("File '$shortTargetPath' synchronized");
+                $this->info(sprintf('File \'%s\' synchronized', $shortTargetPath));
             } else {
-                $this->line("File '$shortTargetPath' already in sync");
+                $this->line(sprintf('File \'%s\' already in sync', $shortTargetPath));
             }
         }
     }

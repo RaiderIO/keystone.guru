@@ -165,6 +165,7 @@ class Save extends Command
         foreach ($spells as $spell) {
             $spell->makeHidden(['icon_url']);
         }
+
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
     }
 
@@ -226,38 +227,48 @@ class Save extends Command
             foreach ($demoRoute->playerspecializations as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->playerraces as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->playerclasses as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->routeattributesraw as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->affixgroups as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->brushlines as $item) {
                 $item->setVisible(['floor_id', 'polyline']);
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->paths as $item) {
                 $item->load(['linkedawakenedobelisks']);
                 $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->killZones as $item) {
                 // Hidden by default to save data
                 $item->makeVisible(['floor_id']);
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->enemyRaidMarkers as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->pridefulEnemies as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->mapicons as $item) {
                 $item->load(['linkedawakenedobelisks']);
                 $item->setVisible([
@@ -272,6 +283,7 @@ class Save extends Command
                 ]);
                 $toHide->add($item);
             }
+
             foreach ($toHide as $item) {
                 /** @var $item Model */
                 $item->makeHidden(['id', 'dungeon_route_id']);
@@ -281,6 +293,7 @@ class Save extends Command
         if ($demoRoutes->count() > 0) {
             $this->info(sprintf('-- Saving %s dungeonroutes', $demoRoutes->count()));
         }
+
         $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
 
@@ -296,6 +309,7 @@ class Save extends Command
         if ($npcs->count() > 0) {
             $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
         }
+
         $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
@@ -311,10 +325,9 @@ class Save extends Command
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
         $dungeonFloorSwitchMarkers
             ->makeHidden(['floorCouplingDirection'])
-            ->map(function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
+            ->map(static function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
                 $dungeonFloorSwitchMarker->direction = $dungeonFloorSwitchMarker->direction === '' ?
                     null : $dungeonFloorSwitchMarker->direction;
-
                 return $dungeonFloorSwitchMarker;
             });
 
@@ -342,6 +355,7 @@ class Save extends Command
             if ($categoryData->count() > 0) {
                 $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
             }
+
             $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }
     }

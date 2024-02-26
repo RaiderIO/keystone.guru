@@ -32,9 +32,9 @@ function initials(string $name): string
 {
     $explode = explode(' ', $name);
     if (count($explode) > 1) {
-        $explode = array_filter($explode, fn($element) => !empty($element));
+        $explode = array_filter($explode, static fn($element) => !empty($element));
 
-        $result = implode('', array_map(fn($element) => $element[0], $explode));
+        $result = implode('', array_map(static fn($element) => $element[0], $explode));
     } else {
         $result = substr($name, 0, 2);
     }
@@ -58,17 +58,16 @@ function str_getcsv_assoc(string $csv_string, string $delimiter = ',', bool $ski
     $enc   = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
     $enc   = preg_replace_callback(
         '/"(.*?)"/s',
-        fn($field) => urlencode(utf8_encode($field[1])),
+        static fn($field) => urlencode(utf8_encode($field[1])),
         (string)$enc
     );
     $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', (string)$enc);
 
     return array_map(
-        function ($line) use ($delimiter, $trim_fields) {
+        static function ($line) use ($delimiter, $trim_fields) {
             $fields = $trim_fields ? array_map('trim', explode($delimiter, $line)) : explode($delimiter, $line);
-
             return array_map(
-                fn($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
+                static fn($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
                 $fields
             );
         },

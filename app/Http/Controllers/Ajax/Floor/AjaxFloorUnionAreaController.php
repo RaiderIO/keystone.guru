@@ -54,6 +54,7 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
                         broadcast(new ModelDeletedEvent($floorUnionArea->floor->dungeon, Auth::getUser(), $floorUnionArea));
                     }
                 }
+
                 $result = response()->noContent();
             } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

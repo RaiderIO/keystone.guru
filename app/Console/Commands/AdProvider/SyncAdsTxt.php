@@ -19,7 +19,7 @@ class SyncAdsTxt extends Command
      *
      * @var string
      */
-    protected $description = 'Syncs our ads.txt with our Ad Provider\'s version of ads.txt';
+    protected $description = "Syncs our ads.txt with our Ad Provider's version of ads.txt";
 
     /**
      * Create a new command instance.

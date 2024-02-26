@@ -97,7 +97,7 @@ class AjaxDungeonRouteController extends Controller
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(function ($query) {
+            ->where(static function ($query) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
@@ -114,7 +114,7 @@ class AjaxDungeonRouteController extends Controller
         $requirements = $request->get('requirements', []);
 
         // Enough enemy forces
-        if (array_search('enough_enemy_forces', $requirements) !== false) {
+        if (array_search('enough_enemy_forces', $requirements, true) !== false) {
             // Clear group by
             $routes = $routes
                 ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
@@ -143,8 +143,8 @@ class AjaxDungeonRouteController extends Controller
             }
 
             // Handle favorites
-            if (array_search('favorite', $requirements) !== false || $request->get('favorites', false)) {
-                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
+            if (array_search('favorite', $requirements, true) !== false || $request->get('favorites', false)) {
+                $routes = $routes->whereHas('favorites', static function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
@@ -241,12 +241,12 @@ class AjaxDungeonRouteController extends Controller
                                      'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-            ->when($expansion !== null, fn(Builder $builder) => $builder->where('dungeons.expansion_id', $expansion->id))
-            ->when($season !== null, fn(Builder $builder) => $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeon_routes.dungeon_id')
+            ->when($expansion !== null, static fn(Builder $builder) => $builder->where('dungeons.expansion_id', $expansion->id))
+            ->when($season !== null, static fn(Builder $builder) => $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeon_routes.dungeon_id')
                 ->where('season_dungeons.season_id', $season->id))
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(function ($query) {
+            ->where(static function ($query) {
                 /** @var $query \Illuminate\Database\Query\Builder */
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
@@ -267,12 +267,12 @@ class AjaxDungeonRouteController extends Controller
         if ($request->has('level')) {
             $split = explode(';', (string)$request->get('level'));
             if (count($split) === 2) {
-                $query->where(function (Builder $query) use ($split) {
+                $query->where(static function (Builder $query) use ($split) {
                     $query->where('level_min', '>=', (int)$split[0])
                         ->where('level_min', '<=', (int)$split[1]);
                 });
 
-                $query->where(function (Builder $query) use ($split) {
+                $query->where(static function (Builder $query) use ($split) {
                     $query->where('level_max', '>=', (int)$split[0])
                         ->where('level_max', '<=', (int)$split[1]);
                 });
@@ -325,7 +325,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Disable some checks when we're local - otherwise we'd get no routes at all
-        $query->when(config('app.env') !== 'local', function (Builder $builder) {
+        $query->when(config('app.env') !== 'local', static function (Builder $builder) {
             $builder->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
 //                ->where('demo', 0)
                 ->where('dungeons.active', 1);
@@ -374,7 +374,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Apply an offset and a limit by default for all subsequent queries
-        $closure = function (Builder $builder) use ($offset, $limit) {
+        $closure = static function (Builder $builder) use ($offset, $limit) {
             $builder->offset($offset)->limit($limit);
         };
 
@@ -393,6 +393,7 @@ class AjaxDungeonRouteController extends Controller
                 } else {
                     $result = $discoverService->popular();
                 }
+
                 break;
             case 'thisweek':
                 if ($currentAffixGroup !== null) {
@@ -402,6 +403,7 @@ class AjaxDungeonRouteController extends Controller
                         $result = $discoverService->popularByAffixGroup($affixGroup = $currentAffixGroup);
                     }
                 }
+
                 break;
             case 'nextweek':
                 if ($currentAffixGroup !== null) {
@@ -411,6 +413,7 @@ class AjaxDungeonRouteController extends Controller
                         $result = $discoverService->popularByAffixGroup($affixGroup = $expansionService->getNextAffixGroup($expansion, $region));
                     }
                 }
+
                 break;
             case 'new':
                 if ($dungeon instanceof Dungeon) {
@@ -418,6 +421,7 @@ class AjaxDungeonRouteController extends Controller
                 } else {
                     $result = $discoverService->new();
                 }
+
                 break;
         }
 
@@ -516,6 +520,7 @@ class AjaxDungeonRouteController extends Controller
         if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
             $dungeonRoute->published_at = date('Y-m-d H:i:s', time());
         }
+
         $dungeonRoute->save();
 
         return response()->noContent();
@@ -683,6 +688,7 @@ class AjaxDungeonRouteController extends Controller
                 // Don't expose vertices
                 $enemyPackEnemies = true;
             }
+
             $result['enemypack'] = $this->listEnemyPacks((int)$request->get('floor'), $enemyPackEnemies, $teeming);
         }
 
