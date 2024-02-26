@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDungeonRouteNamespaceInUserReportsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,4 +23,4 @@ class UpdateDungeonRouteNamespaceInUserReportsTable extends Migration
     {
         DB::update('UPDATE `user_reports` SET `model_class` = "App\Models\DungeonRoute" WHERE `model_class` = "App\Models\DungeonRoute\DungeonRoute"');
     }
-}
+};

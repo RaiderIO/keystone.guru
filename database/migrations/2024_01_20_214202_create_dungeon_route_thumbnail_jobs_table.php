@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDungeonRouteThumbnailJobsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,4 +28,4 @@ class CreateDungeonRouteThumbnailJobsTable extends Migration
     {
         Schema::dropIfExists('dungeon_route_thumbnail_jobs');
     }
-}
+};

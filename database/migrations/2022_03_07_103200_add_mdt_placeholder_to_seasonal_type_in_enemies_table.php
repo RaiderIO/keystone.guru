@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddMdtPlaceholderToSeasonalTypeInEnemiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,4 +23,4 @@ class AddMdtPlaceholderToSeasonalTypeInEnemiesTable extends Migration
     {
         DB::statement("ALTER TABLE enemies CHANGE COLUMN seasonal_type seasonal_type ENUM('awakened', 'inspiring', 'prideful', 'tormented', 'encrypted') NULL DEFAULT NULL");
     }
-}
+};

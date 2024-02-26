@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class ConvertEnemyIdIntoNpcIdAndMdtIdInOverpulledEnemiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -38,4 +38,4 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInOverpulledEnemiesTable extends Migration
                 SET `overpulled_enemies`.`npc_id` = null, `overpulled_enemies`.`mdt_id` = null;
         ');
     }
-}
+};

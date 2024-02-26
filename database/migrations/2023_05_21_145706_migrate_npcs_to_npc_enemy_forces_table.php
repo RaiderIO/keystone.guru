@@ -5,7 +5,7 @@ use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Illuminate\Database\Migrations\Migration;
 
-class MigrateNpcsToNpcEnemyForcesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -48,4 +48,4 @@ class MigrateNpcsToNpcEnemyForcesTable extends Migration
 
         DB::table('npc_enemy_forces')->truncate();
     }
-}
+};

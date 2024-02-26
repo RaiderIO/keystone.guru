@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateLocaleFromShortToLongNotationInUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -25,4 +25,4 @@ class UpdateLocaleFromShortToLongNotationInUsersTable extends Migration
         DB::update('UPDATE `users` SET `locale` = "en" WHERE `locale` = "en-US"');
         DB::update('UPDATE `users` SET `locale` = "ru" WHERE `locale` = "ru-RU"');
     }
-}
+};
