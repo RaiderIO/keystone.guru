@@ -15,12 +15,12 @@ use App\Http\Controllers\Api\V1\APIDungeonRouteThumbnailJobController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['prefix' => 'v1'], function () {
-    Route::group(['prefix' => 'combatlog'], function () {
+Route::prefix('v1')->group(function () {
+    Route::prefix('combatlog')->group(function () {
         Route::post('route', (new APICombatLogController())->createRoute(...))->name('api.v1.combatlog.route.create');
     });
 
-    Route::group(['prefix' => 'route'], function () {
+    Route::prefix('route')->group(function () {
         Route::get('/', (new APIDungeonRouteController())->list(...))->name('api.v1.route.list');
 
         Route::post('/{dungeonRoute}/thumbnail', (new APIDungeonRouteController())->createThumbnails(...))->name('api.v1.route.thumbnail.create');
@@ -29,7 +29,7 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     // Static data
-    Route::group(['prefix' => 'dungeon'], function () {
+    Route::prefix('dungeon')->group(function () {
         Route::get('/', (new APIDungeonController())->list(...))->name('api.v1.combatlog.dungeon.list');
     });
 });

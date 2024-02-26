@@ -70,7 +70,7 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', (new WebhookController())->github(...))->name('webhook.github');
 
-Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger']], function () {
+Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger')->group(function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));
 
@@ -124,21 +124,21 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('search', (new DungeonRouteDiscoverController())->search(...))->name('dungeonroutes.search');
 
     // Game version toggle
-    Route::group(['prefix' => 'gameversion'], function () {
+    Route::prefix('gameversion')->group(function () {
         Route::get('/{gameVersion}', (new GameVersionController())->update(...))->name('gameversion.update');
     });
 
     // Profile routes
-    Route::group(['prefix' => 'routes'], function () {
+    Route::prefix('routes')->group(function () {
         Route::get('/', (new DungeonRouteDiscoverController())->discover(...))->name('dungeonroutes');
-        Route::group(['prefix' => '{expansion}'], function () {
+        Route::prefix('{expansion}')->group(function () {
             Route::get('/', (new DungeonRouteDiscoverController())->discoverExpansion(...))->name('dungeonroutes.expansion');
             Route::get('popular', (new DungeonRouteDiscoverController())->discoverpopular(...))->name('dungeonroutes.popular');
             Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverthisweek(...))->name('dungeonroutes.thisweek');
             Route::get('affixes/next', (new DungeonRouteDiscoverController())->discovernextweek(...))->name('dungeonroutes.nextweek');
             Route::get('new', (new DungeonRouteDiscoverController())->discovernew(...))->name('dungeonroutes.new');
 
-            Route::group(['prefix' => 'season/{season}'], function () {
+            Route::prefix('season/{season}')->group(function () {
                 Route::get('/', (new DungeonRouteDiscoverController())->discoverSeason(...))->name('dungeonroutes.season');
                 Route::get('popular', (new DungeonRouteDiscoverController())->discoverSeasonPopular(...))->name('dungeonroutes.season.popular');
                 Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverSeasonThisWeek(...))->name('dungeonroutes.season.thisweek');
@@ -146,7 +146,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('new', (new DungeonRouteDiscoverController())->discoverSeasonNew(...))->name('dungeonroutes.season.new');
             });
 
-            Route::group(['prefix' => '{dungeon}'], function () {
+            Route::prefix('{dungeon}')->group(function () {
                 Route::get('/', (new DungeonRouteDiscoverController())->discoverdungeon(...))->name('dungeonroutes.discoverdungeon');
                 Route::get('popular', (new DungeonRouteDiscoverController())->discoverdungeonpopular(...))->name('dungeonroutes.discoverdungeon.popular');
                 Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverdungeonthisweek(...))->name('dungeonroutes.discoverdungeon.thisweek');
@@ -157,10 +157,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     });
 
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
-    Route::group(['prefix' => 'explore'], function () {
+    Route::prefix('explore')->group(function () {
         Route::get('/', (new DungeonExploreController())->list(...))->name('dungeon.explore.list');
 
-        Route::group(['prefix' => '{dungeon}'], function () {
+        Route::prefix('{dungeon}')->group(function () {
             Route::get('/', (new DungeonExploreController())->viewDungeon(...))->name('dungeon.explore.view');
             Route::get('/{floorIndex}', (new DungeonExploreController())->viewDungeonFloor(...))->name('dungeon.explore.view.floor');
         });
@@ -170,10 +170,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
     Route::get('team/invite/{invitecode}', (new TeamController())->invite(...))->name('team.invite');
 
     // May not be logged in - we have anonymous routes
-    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
+    Route::prefix('/route/{dungeon}/{dungeonroute}')->group(function () {
         Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.editnotitle');
 
-        Route::group(['prefix' => '{title?}'], function () {
+        Route::prefix('{title?}')->group(function () {
             // Upgrade the mapping of a route
             Route::get('upgrade', (new DungeonRouteController())->upgrade(...))->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
@@ -182,7 +182,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             // Submit a patch for your own dungeon route
             Route::patch('edit', (new DungeonRouteController())->update(...))->name('dungeonroute.update');
 
-            Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+            Route::middleware('auth', 'role:user|admin')->group(function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
                 Route::get('live', (new LiveSessionController())->create(...))->name('dungeonroute.livesession.create');
                 Route::get('live/{livesession}', (new LiveSessionController())->view(...))->name('dungeonroute.livesession.view');
@@ -198,12 +198,12 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-    Route::group(['prefix' => '{dungeonroute}'], function () {
+    Route::prefix('{dungeonroute}')->group(function () {
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
         Route::get('edit/{floorindex}', (new DungeonRouteLegacyController())->editfloor(...));
 
-        Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+        Route::middleware('auth', 'role:user|admin')->group(function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
             Route::get('live/{livesession}', (new LiveSessionLegacyController())->view(...));
             Route::get('live/{livesession}/{floorIndex}', (new LiveSessionLegacyController())->viewfloor(...));
@@ -215,11 +215,11 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-    Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
+    Route::middleware('auth', 'role:user|admin')->group(function () {
         Route::get('patreon-unlink', (new PatreonController())->unlink(...))->name('patreon.unlink');
 
         // Profile routes
-        Route::group(['prefix' => 'profile'], function () {
+        Route::prefix('profile')->group(function () {
             Route::get('/', (new ProfileController())->edit(...))->name('profile.edit');
             Route::get('routes', (new ProfileController())->routes(...))->name('profile.routes');
             Route::get('favorites', (new ProfileController())->favorites(...))->name('profile.favorites');
@@ -232,7 +232,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
 
         Route::get('teams', (new TeamController())->list(...))->name('team.list');
-        Route::group(['prefix' => 'team'], function () {
+        Route::prefix('team')->group(function () {
             Route::get('new', (new TeamController())->new(...))->name('team.new');
             Route::get('{team}', (new TeamController())->edit(...))->name('team.edit');
             Route::delete('{team}', (new TeamController())->delete(...))->name('team.delete');
@@ -244,15 +244,15 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-    Route::group(['middleware' => ['auth', 'role:admin']], function () {
+    Route::middleware('auth', 'role:admin')->group(function () {
         // Only admins may view a list of profiles
         Route::get('profiles', (new ProfileController())->list(...))->name('profile.list');
 
         Route::get('phpinfo', (new SiteController())->phpinfo(...))->name('misc.phpinfo');
 
-        Route::group(['prefix' => 'admin'], function () {
+        Route::prefix('admin')->group(function () {
             // Dungeons
-            Route::group(['prefix' => 'dungeon'], function () {
+            Route::prefix('dungeon')->group(function () {
                 Route::get('new', (new DungeonController())->new(...))->name('admin.dungeon.new');
                 Route::get('{dungeon}', (new DungeonController())->edit(...))->name('admin.dungeon.edit');
 
@@ -260,24 +260,24 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::patch('{dungeon}', (new DungeonController())->update(...))->name('admin.dungeon.update');
 
                 // Mapping versions
-                Route::group(['prefix' => '{dungeon}/mappingversion'], function () {
+                Route::prefix('{dungeon}/mappingversion')->group(function () {
                     Route::get('new', (new MappingVersionController())->savenew(...))->name('admin.mappingversion.new');
                     Route::get('{mappingVersion}/delete', (new MappingVersionController())->delete(...))->name('admin.mappingversion.delete');
                 });
 
                 // Floors
-                Route::group(['prefix' => '{dungeon}/floor'], function () {
+                Route::prefix('{dungeon}/floor')->group(function () {
                     Route::get('new', (new FloorController())->new(...))->name('admin.floor.new');
 
                     Route::post('new', (new FloorController())->savenew(...))->name('admin.floor.savenew');
 
-                    Route::group(['prefix' => '{floor}'], function () {
+                    Route::prefix('{floor}')->group(function () {
                         Route::get('/', (new FloorController())->edit(...))->name('admin.floor.edit');
                         Route::patch('/', (new FloorController())->update(...))->name('admin.floor.update');
                         Route::get('mapping', (new FloorController())->mapping(...))->name('admin.floor.edit.mapping');
 
                         // Speedrun required npcs
-                        Route::group(['prefix' => 'speedrunrequirednpcs'], function () {
+                        Route::prefix('speedrunrequirednpcs')->group(function () {
                             Route::get('{difficulty}/new', (new DungeonSpeedrunRequiredNpcsController())->new(...))->name('admin.dungeonspeedrunrequirednpc.new');
                             Route::post('{difficulty}/new', (new DungeonSpeedrunRequiredNpcsController())->savenew(...))->name('admin.dungeonspeedrunrequirednpc.savenew');
                             Route::get('{difficulty}/{dungeonspeedrunrequirednpc}', (new DungeonSpeedrunRequiredNpcsController())->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
@@ -288,7 +288,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::get('dungeons', (new DungeonController())->list(...))->name('admin.dungeons');
 
             // Expansions
-            Route::group(['prefix' => 'expansion'], function () {
+            Route::prefix('expansion')->group(function () {
                 Route::get('new', (new ExpansionController())->new(...))->name('admin.expansion.new');
                 Route::get('{expansion}', (new ExpansionController())->edit(...))->name('admin.expansion.edit');
 
@@ -298,7 +298,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::get('expansions', (new ExpansionController())->list(...))->name('admin.expansions');
 
             // Releases
-            Route::group(['prefix' => 'release'], function () {
+            Route::prefix('release')->group(function () {
                 Route::get('new', (new ReleaseController())->new(...))->name('admin.release.new');
                 Route::get('{release}', (new ReleaseController())->edit(...))->name('admin.release.edit');
 
@@ -309,16 +309,16 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             });
 
             // NPCs
-            Route::group(['prefix' => 'npc'], function () {
+            Route::prefix('npc')->group(function () {
                 Route::get('new', (new NpcController())->new(...))->name('admin.npc.new');
 
                 Route::post('new', (new NpcController())->savenew(...))->name('admin.npc.savenew');
 
-                Route::group(['prefix' => '{npc}'], function () {
+                Route::prefix('{npc}')->group(function () {
                     Route::get('/', (new NpcController())->edit(...))->name('admin.npc.edit');
                     Route::patch('/', (new NpcController())->update(...))->name('admin.npc.update');
 
-                    Route::group(['prefix' => 'npcEnemyForces/{npcEnemyForces}'], function () {
+                    Route::prefix('npcEnemyForces/{npcEnemyForces}')->group(function () {
                         Route::get('/', (new NpcEnemyForcesController())->edit(...))->name('admin.npcenemyforces.edit');
                         Route::patch('/', (new NpcEnemyForcesController())->update(...))->name('admin.npcenemyforces.update');
                     });
@@ -328,7 +328,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::get('npcs', (new NpcController())->list(...))->name('admin.npcs');
 
             // Spells
-            Route::group(['prefix' => 'spell'], function () {
+            Route::prefix('spell')->group(function () {
                 Route::get('new', (new SpellController())->new(...))->name('admin.spell.new');
                 Route::get('{spell}', (new SpellController())->edit(...))->name('admin.spell.edit');
 
@@ -337,7 +337,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             });
             Route::get('spells', (new SpellController())->list(...))->name('admin.spells');
 
-            Route::group(['prefix' => 'user'], function () {
+            Route::prefix('user')->group(function () {
                 Route::post('{user}/makeadmin', (new UserController())->makeadmin(...))->name('admin.user.makeadmin');
                 Route::post('{user}/makeuser', (new UserController())->makeuser(...))->name('admin.user.makeuser');
                 Route::delete('{user}/delete', (new UserController())->delete(...))->name('admin.user.delete');
@@ -347,7 +347,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
             Route::get('userreports', (new UserReportController())->list(...))->name('admin.userreports');
 
-            Route::group(['prefix' => 'tools'], function () {
+            Route::prefix('tools')->group(function () {
                 Route::get('/', (new AdminToolsController())->index(...))->name('admin.tools');
 
                 Route::get('/combatlog', (new AdminToolsController())->combatlog(...))->name('admin.combatlog');
@@ -372,7 +372,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 Route::get('thumbnails/regenerate', (new AdminToolsController())->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
                 Route::post('thumbnails/regenerate', (new AdminToolsController())->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
 
-                Route::group(['prefix' => 'mdt'], function () {
+                Route::prefix('mdt')->group(function () {
                     // View string contents
                     Route::get('string', (new AdminToolsController())->mdtview(...))->name('admin.tools.mdt.string.view');
                     Route::post('string', (new AdminToolsController())->mdtviewsubmit(...))->name('admin.tools.mdt.string.submit');
@@ -413,10 +413,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-    Route::group(['prefix' => 'ajax', 'middleware' => 'ajax'], function () {
+    Route::prefix('ajax')->middleware('ajax')->group(function () {
         Route::get('refresh-csrf', (new AjaxSiteController())->refreshCsrf(...))->name('api.refresh_csrf');
 
-        Route::group(['prefix' => 'tag'], function () {
+        Route::prefix('tag')->group(function () {
             Route::get('/', (new AjaxTagController())->all(...))->name('ajax.tag.all');
             Route::get('/{category}', (new AjaxTagController())->list(...))->name('ajax.tag.list');
             Route::post('/', (new AjaxTagController())->store(...))->name('ajax.tag.create');
@@ -440,21 +440,21 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         Route::post('/profile/legal', (new AjaxProfileController())->legalAgree(...));
 
         // Metrics
-        Route::group(['prefix' => 'metric'], function () {
+        Route::prefix('metric')->group(function () {
             Route::post('/', (new AjaxMetricController())->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', (new AjaxMetricController())->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });
 
         // Must be an admin to perform these actions
-        Route::group(['middleware' => ['auth', 'role:admin']], function () {
-            Route::group(['prefix' => 'admin'], function () {
+        Route::middleware('auth', 'role:admin')->group(function () {
+            Route::prefix('admin')->group(function () {
 
                 Route::get('/user', (new AjaxUserController())->list(...));
                 Route::get('/npc', (new AjaxNpcController())->list(...));
 
                 Route::post('/thumbnail/{dungeonroute}/refresh', (new AjaxDungeonRouteController())->refreshThumbnail(...));
 
-                Route::group(['prefix' => 'mappingVersion/{mappingVersion}'], function () {
+                Route::prefix('mappingVersion/{mappingVersion}')->group(function () {
                     Route::patch('/', (new AjaxMappingVersionController())->store(...));
 
                     Route::post('/enemy', (new AjaxEnemyController())->store(...));
@@ -498,12 +498,12 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             Route::put('/user/{user}/patreon/benefits', (new UserController())->storePatreonBenefits(...));
         });
 
-        Route::group(['prefix' => 'dungeonRoute'], function () {
+        Route::prefix('dungeonRoute')->group(function () {
             Route::post('/data', (new AjaxDungeonRouteController())->getDungeonRoutesData(...));
         });
 
         // May be performed without being logged in (sandbox functionality)
-        Route::group(['prefix' => '{dungeonRoute}'], function () {
+        Route::prefix('{dungeonRoute}')->group(function () {
 
             Route::post('/brushline', (new AjaxBrushlineController())->store(...))->name('ajax.dungeonroute.brushline.create');
             Route::put('/brushline/{brushline}', (new AjaxBrushlineController())->store(...))->name('ajax.dungeonroute.brushline.update');
@@ -535,8 +535,8 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
 
         // Must be logged in to perform these actions
-        Route::group(['middleware' => ['auth', 'role:user|admin']], function () {
-            Route::group(['prefix' => '{dungeonRoute}'], function () {
+        Route::middleware('auth', 'role:user|admin')->group(function () {
+            Route::prefix('{dungeonRoute}')->group(function () {
                 Route::patch('/', (new AjaxDungeonRouteController())->store(...))->name('api.dungeonroute.update');
                 Route::patch('/pullgradient', (new AjaxDungeonRouteController())->storePullGradient(...))->name('api.dungeonroute.pullgradient.update');
                 Route::delete('/', (new AjaxDungeonRouteController())->delete(...))->name('api.dungeonroute.delete');
@@ -551,7 +551,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
                 Route::post('/migrate/{seasonalType}', (new AjaxDungeonRouteController())->migrateToSeasonalType(...));
 
-                Route::group(['prefix' => '/live/{liveSession}'], function () {
+                Route::prefix('/live/{liveSession}')->group(function () {
                     Route::delete('/', (new AjaxLiveSessionController())->delete(...));
 
                     Route::post('/overpulledenemy', (new AjaxOverpulledEnemyController())->store(...));
@@ -559,13 +559,13 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
                 });
             });
 
-            Route::group(['prefix' => 'echo'], function () {
+            Route::prefix('echo')->group(function () {
                 // Echo controller misc
                 Route::get('{dungeonRoute}/members', (new AjaxEchoController())->members(...));
             });
 
             // Teams
-            Route::group(['prefix' => 'team/{team}'], function () {
+            Route::prefix('team/{team}')->group(function () {
                 Route::put('/changedefaultrole', (new AjaxTeamController())->changeDefaultRole(...));
                 Route::put('/changerole', (new AjaxTeamController())->changeRole(...));
                 Route::post('/route/{dungeonroute}', (new AjaxTeamController())->addRoute(...));
@@ -579,7 +579,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
             });
 
             // User
-            Route::group(['prefix' => 'user/{publicKey}'], function () {
+            Route::prefix('user/{publicKey}')->group(function () {
                 Route::put('/', (new AjaxUserController())->store(...));
             });
         });
@@ -590,10 +590,10 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
 
     // View any dungeon route (catch all)
 
-    Route::group(['prefix' => '/route/{dungeon}/{dungeonroute}'], function () {
+    Route::prefix('/route/{dungeon}/{dungeonroute}')->group(function () {
         Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.viewnotitle');
 
-        Route::group(['prefix' => '{title?}'], function () {
+        Route::prefix('{title?}')->group(function () {
             Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.view');
             Route::get('present/', (new DungeonRouteController())->present(...))->name('dungeonroute.present');
             Route::get('present/{floorindex}', (new DungeonRouteController())->presentFloor(...))->name('dungeonroute.present.floor');
@@ -607,7 +607,7 @@ Route::group(['middleware' => ['viewcachebuster', 'language', 'debugbarmessagelo
         });
     });
 
-    Route::group(['prefix' => '{dungeonroute}'], function () {
+    Route::prefix('{dungeonroute}')->group(function () {
         Route::get('/', (new DungeonRouteLegacyController())->viewold(...))->name('dungeonroute.viewold');
         Route::get('embed/', (new DungeonRouteLegacyController())->embedold(...));
         Route::get('embed/{floorindex}', (new DungeonRouteLegacyController())->embedold(...));
