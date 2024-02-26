@@ -74,7 +74,7 @@ class GenericDataTest extends PublicTestCase
         Assert::assertEquals($expectedDestRaidFlags, $genericData->getDestRaidFlags());
     }
 
-    public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -91,7 +91,7 @@ class GenericDataTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidGenericData_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidGenericData_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [

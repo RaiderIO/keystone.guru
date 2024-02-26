@@ -38,7 +38,7 @@ class CoordinatesServiceTest extends PublicTestCase
     /**
      * @return array
      */
-    public function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider(): array
+    public static function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider(): array
     {
         return [
             [

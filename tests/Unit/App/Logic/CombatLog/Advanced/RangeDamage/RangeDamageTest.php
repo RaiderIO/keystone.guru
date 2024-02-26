@@ -115,7 +115,7 @@ class RangeDamageTest extends PublicTestCase
         Assert::assertEquals($expectedIsCrushing, $damageEvent->isCrushing());
     }
 
-    public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -132,7 +132,7 @@ class RangeDamageTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidRangeEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -149,7 +149,7 @@ class RangeDamageTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [

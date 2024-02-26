@@ -44,7 +44,7 @@ class ChallengeModeStartTest extends PublicTestCase
         Assert::assertEquals($expectedAffixIds, $parseEventResult->getAffixIDs());
     }
 
-    public function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider(): array
     {
         return [
             [

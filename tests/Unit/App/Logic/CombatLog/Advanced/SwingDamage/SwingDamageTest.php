@@ -86,7 +86,7 @@ class SwingDamageTest extends PublicTestCase
         Assert::assertEquals($expectedIsCrushing, $damageEvent->isCrushing());
     }
 
-    public function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -97,7 +97,7 @@ class SwingDamageTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
     {
         return [
             [

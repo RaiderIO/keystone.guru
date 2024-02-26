@@ -92,7 +92,7 @@ class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($expectedLevel, $advancedData->getLevel());
     }
 
-    public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -113,7 +113,7 @@ class AdvancedDataTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [

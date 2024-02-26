@@ -32,7 +32,7 @@ class ConversionTest extends TestCase
     /**
      * @return array
      */
-    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
+    public static function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
     {
         $expansions = [
             Expansion::EXPANSION_CATACLYSM,

@@ -42,7 +42,7 @@ class CombatLogDungeonRouteServiceTest extends PublicTestCase
 
     }
 
-    public function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
+    public static function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
     {
         return [
 //            [

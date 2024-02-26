@@ -40,7 +40,7 @@ class CombatLogServiceTest extends PublicTestCase
         gc_collect_cycles();
     }
 
-    public function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider(): array
+    public static function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider(): array
     {
         return [
 //            [

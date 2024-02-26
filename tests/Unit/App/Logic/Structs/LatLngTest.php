@@ -40,7 +40,7 @@ class LatLngTest extends PublicTestCase
     /**
      * @return array
      */
-    public function scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider(): array
+    public static function scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider(): array
     {
         return [
             [
@@ -84,7 +84,7 @@ class LatLngTest extends PublicTestCase
     /**
      * @return array
      */
-    public function scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider(): array
+    public static function scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider(): array
     {
         return [
             [
@@ -120,7 +120,7 @@ class LatLngTest extends PublicTestCase
     /**
      * @return array
      */
-    public function rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider(): array
+    public static function rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider(): array
     {
         return [
             // Top left to top right
@@ -168,7 +168,7 @@ class LatLngTest extends PublicTestCase
     /**
      * @return array
      */
-    public function rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider(): array
+    public static function rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider(): array
     {
         return [
             // Top left to top right
