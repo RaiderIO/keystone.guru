@@ -10,7 +10,7 @@ use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class AffixGroupEaseTierServiceTest extends PublicTestCase
+final class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
 
     /**

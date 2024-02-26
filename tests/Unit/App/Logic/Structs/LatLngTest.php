@@ -10,7 +10,7 @@ use App\Service\Coordinates\CoordinatesService;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class LatLngTest extends PublicTestCase
+final class LatLngTest extends PublicTestCase
 {
     /**
      *

@@ -9,7 +9,7 @@ use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class CombatLogDungeonRouteServiceTest extends PublicTestCase
+final class CombatLogDungeonRouteServiceTest extends PublicTestCase
 {
 
     /**

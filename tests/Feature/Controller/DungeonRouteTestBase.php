@@ -5,7 +5,7 @@ namespace Tests\Feature\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use Tests\TestCases\AjaxPublicTestCase;
 
-class DungeonRouteTestBase extends AjaxPublicTestCase
+final class DungeonRouteTestBase extends AjaxPublicTestCase
 {
     protected DungeonRoute $dungeonRoute;
 

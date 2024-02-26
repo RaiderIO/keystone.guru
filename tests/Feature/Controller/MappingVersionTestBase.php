@@ -6,7 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use Tests\TestCases\AjaxPublicTestCase;
 
-class MappingVersionTestBase extends AjaxPublicTestCase
+final class MappingVersionTestBase extends AjaxPublicTestCase
 {
     protected MappingVersion $mappingVersion;
 

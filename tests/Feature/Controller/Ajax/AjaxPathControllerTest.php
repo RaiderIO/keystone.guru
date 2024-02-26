@@ -9,7 +9,7 @@ use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 use Tests\Feature\Fixtures\PolylineFixtures;
 
-class AjaxPathControllerTest extends DungeonRouteTestBase
+final class AjaxPathControllerTest extends DungeonRouteTestBase
 {
     /**
      *

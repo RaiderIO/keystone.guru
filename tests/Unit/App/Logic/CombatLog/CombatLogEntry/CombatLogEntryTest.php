@@ -10,7 +10,7 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class CombatLogEntryTest extends PublicTestCase
+final class CombatLogEntryTest extends PublicTestCase
 {
 
     /**

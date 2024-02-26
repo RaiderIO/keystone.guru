@@ -14,7 +14,7 @@ use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class RangeDamageTest extends PublicTestCase
+final class RangeDamageTest extends PublicTestCase
 {
 
     /**

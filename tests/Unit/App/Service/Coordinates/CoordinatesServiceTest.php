@@ -12,7 +12,7 @@ use App\Service\Coordinates\CoordinatesService;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class CoordinatesServiceTest extends PublicTestCase
+final class CoordinatesServiceTest extends PublicTestCase
 {
     /**
      * Scenario: Tests that the ingame location

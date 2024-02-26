@@ -11,7 +11,7 @@ use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
 use Tests\TestCases\PublicTestCase;
 
-class AdvancedDataTest extends PublicTestCase
+final class AdvancedDataTest extends PublicTestCase
 {
 
     /**

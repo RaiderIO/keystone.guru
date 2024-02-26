@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Tests\TestCases\PublicTestCase;
 
-class SeasonServiceTest extends PublicTestCase
+final class SeasonServiceTest extends PublicTestCase
 {
     /** @var Collection|array{start: Carbon, affix_group_count: int} */
     private readonly Collection $seasonAttributes;

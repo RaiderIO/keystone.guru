@@ -4,7 +4,7 @@ namespace Tests\TestCases;
 
 use App\User;
 
-class AjaxPublicTestCase extends PublicTestCase
+final class AjaxPublicTestCase extends PublicTestCase
 {
     protected function setUp(): void
     {

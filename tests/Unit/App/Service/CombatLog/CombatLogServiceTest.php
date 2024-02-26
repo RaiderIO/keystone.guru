@@ -10,7 +10,7 @@ use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
-class CombatLogServiceTest extends PublicTestCase
+final class CombatLogServiceTest extends PublicTestCase
 {
 
     /**

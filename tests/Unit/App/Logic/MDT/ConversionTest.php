@@ -10,7 +10,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use Tests\TestCase;
 
-class ConversionTest extends TestCase
+final class ConversionTest extends TestCase
 {
     /**
      * A basic test example.

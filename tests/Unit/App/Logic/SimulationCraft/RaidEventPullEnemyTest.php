@@ -15,7 +15,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
-class RaidEventPullEnemyTest extends TestCase
+final class RaidEventPullEnemyTest extends TestCase
 {
     use CreatesNpc;
     use CreatesEnemy;
