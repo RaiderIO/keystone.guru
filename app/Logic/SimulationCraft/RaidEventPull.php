@@ -78,7 +78,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
     public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB): float
     {
-        if (optional($latLngA->getFloor())->id !== optional($latLngB->getFloor())->id) {
+        if ($latLngA->getFloor()?->id !== $latLngB->getFloor()?->id) {
             throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
         }
 

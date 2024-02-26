@@ -38,7 +38,7 @@ class AjaxPathController extends Controller
         DungeonRoute $dungeonRoute,
         ?Path $path = null)
     {
-        $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
         $this->authorize('addPath', $dungeonRoute);
@@ -81,7 +81,7 @@ class AjaxPathController extends Controller
                     // Couple the path to the polyline
                     $path->update([
                         'polyline_id' => $polyline->id,
-                        'floor_id' => optional($changedFloor)->id ?? $path->floor_id,
+                        'floor_id' => $changedFloor?->id ?? $path->floor_id,
                     ]);
 
                     // Load the polyline so it can be echoed back to the user

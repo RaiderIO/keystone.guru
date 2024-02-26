@@ -34,7 +34,7 @@ class DungeonExploreController extends Controller
 
         return redirect()->route('dungeon.explore.view.floor', [
             'dungeon' => $dungeon,
-            'floorIndex' => optional($defaultFloor)->index ?? '1',
+            'floorIndex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -64,7 +64,7 @@ class DungeonExploreController extends Controller
 
             return redirect()->route('dungeon.explore.view.floor', [
                 'dungeon' => $dungeon,
-                'floorIndex' => optional($defaultFloor)->index ?? '1',
+                'floorIndex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int) $floorIndex) {

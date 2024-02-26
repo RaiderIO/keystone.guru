@@ -771,21 +771,21 @@ class AdminToolsController extends Controller
                     // Match enemy forces
                     /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
-                    if (optional($npcEnemyForces)->enemy_forces !== $mdtNpc->getCount()) {
+                    if ($npcEnemyForces?->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), optional($npcEnemyForces)->enemy_forces),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => optional($npcEnemyForces)->enemy_forces, 'new' => $mdtNpc->getCount()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npcEnemyForces?->enemy_forces),
+                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces, 'new' => $mdtNpc->getCount()]
                             )
                         );
                     }
 
                     // Match enemy forces teeming
-                    if (optional($npcEnemyForces)->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
+                    if ($npcEnemyForces?->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
                             new ImportWarning('mismatched_enemy_forces_teeming',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), optional($npcEnemyForces)->enemy_forces_teeming),
-                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => optional($npcEnemyForces)->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npcEnemyForces?->enemy_forces_teeming),
+                                ['mdt_npc' => (object) $mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
                             )
                         );
                     }

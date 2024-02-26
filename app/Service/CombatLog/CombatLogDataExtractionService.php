@@ -132,9 +132,9 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                         // Calculate the base health based on the current key level + current max hp
                         $newBaseHealth = (int) ($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
                             $currentKeyLevel,
-                            optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                            optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                            optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                            $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
+                            $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
+                            $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
                         ));
 
                         if ($npc->base_health !== $newBaseHealth) {

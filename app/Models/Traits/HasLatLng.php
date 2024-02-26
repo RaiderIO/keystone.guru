@@ -26,7 +26,7 @@ trait HasLatLng
     {
         $this->lat = $latLng->getLat();
         $this->lng = $latLng->getLng();
-        $this->floor_id = optional($latLng->getFloor())->id;
+        $this->floor_id = $latLng->getFloor()?->id;
 
         return $this;
     }

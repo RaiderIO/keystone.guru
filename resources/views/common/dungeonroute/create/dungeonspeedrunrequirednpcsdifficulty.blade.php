@@ -42,7 +42,7 @@ $dungeonroute ??= null;
              \App\Models\Dungeon::DIFFICULTY_10_MAN => __('dungeons.difficulty.1'),
              \App\Models\Dungeon::DIFFICULTY_25_MAN => __('dungeons.difficulty.2'),
          ],
-         optional($dungeonroute)->dungeon_speedrun_required_npc_mode ?? \App\Models\Dungeon::DIFFICULTY_25_MAN,
+         $dungeonroute?->dungeon_speedrun_required_npc_mode ?? \App\Models\Dungeon::DIFFICULTY_25_MAN,
          ['id' => $id, 'class' => 'form-control selectpicker'])
      !!}
 </div>

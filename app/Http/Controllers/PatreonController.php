@@ -49,7 +49,7 @@ class PatreonController extends Controller
 
                 // Save new tokens to database
                 // Delete existing patreon data, if any
-                optional($user->patreonUserLink)->delete();
+                $user->patreonUserLink?->delete();
 
                 $patreonUserLinkAttributes = [
                     'user_id' => $user->id,

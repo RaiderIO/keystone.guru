@@ -74,8 +74,8 @@ class MappingService implements MappingServiceInterface
 
         return MappingVersion::create([
             'dungeon_id' => $dungeon->id,
-            'mdt_mapping_hash' => optional($currentMappingVersion)->mdt_mapping_hash ?? '',
-            'version' => (++optional($currentMappingVersion)->version) ?? 1,
+            'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? '',
+            'version' => (++$currentMappingVersion?->version) ?? 1,
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
@@ -88,7 +88,7 @@ class MappingService implements MappingServiceInterface
     {
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
-        $newMappingVersionVersion = (optional($currentMappingVersion)->version ?? 0) + 1;
+        $newMappingVersionVersion = ($currentMappingVersion?->version ?? 0) + 1;
 
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([

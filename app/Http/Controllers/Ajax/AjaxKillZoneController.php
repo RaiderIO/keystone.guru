@@ -124,7 +124,7 @@ class AjaxKillZoneController extends Controller
      */
     public function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, ?KillZone $killZone = null): KillZone
     {
-        $dungeonRoute = optional($killZone)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
 
         try {
             $data = $request->validated();
@@ -136,7 +136,7 @@ class AjaxKillZoneController extends Controller
             if (! isset($data['spells'])) {
                 $data['spells'] = [];
             }
-            $data['id'] = optional($killZone)->id ?? null;
+            $data['id'] = $killZone?->id ?? null;
 
             $result = $this->saveKillZone($dungeonRoute, $data);
         } catch (Exception) {

@@ -80,7 +80,7 @@ class Cache extends Command
                 $discoverService->newByDungeon($dungeon);
                 $discoverService->popularUsersByDungeon($dungeon);
 
-                foreach (optional($currentSeason)->affixgroups ?? [] as $affixGroup) {
+                foreach ($currentSeason?->affixgroups ?? [] as $affixGroup) {
                     //                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
                     $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup);
                     $discoverService->newByDungeonAndAffixGroup($dungeon, $affixGroup);

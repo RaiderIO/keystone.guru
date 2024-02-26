@@ -93,6 +93,6 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
 
     public function getDungeonId(): ?int
     {
-        return optional($this->floor)->dungeon_id ?? null;
+        return $this->floor?->dungeon_id ?? null;
     }
 }

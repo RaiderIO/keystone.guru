@@ -210,7 +210,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 // Handle spells and the actual creation of pulls
                 /** @var $firstActivePull ActivePull|null */
                 $firstActivePull = $this->activePullCollection->first();
-                $firstActivePullCompleted = optional($firstActivePull)->isCompleted() ?? false;
+                $firstActivePullCompleted = $firstActivePull?->isCompleted() ?? false;
                 foreach ($this->activePullCollection as $pullIndex => $activePull) {
                     /** @var $activePull ActivePull */
                     if ($activePull->isCompleted()) {

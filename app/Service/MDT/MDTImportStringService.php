@@ -898,7 +898,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $errors,
             $dungeon,
             $dungeon->currentMappingVersion,
-            optional($affixGroup)->hasAffix(Affix::AFFIX_TEEMING) ?? false,
+            $affixGroup?->hasAffix(Affix::AFFIX_TEEMING) ?? false,
             null,
             $decoded['value']['pulls']
         ));
@@ -912,15 +912,15 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ));
 
         $currentSeason = $this->seasonService->getCurrentSeason($dungeon->expansion);
-        $currentAffixGroupForDungeon = optional($currentSeason)->getCurrentAffixGroup();
+        $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
 
         return new ImportStringDetails(
             $warnings,
             $errors,
             $dungeon,
-            collect([optional($affixGroup)->getTextAttribute() ?? '']),
+            collect([$affixGroup?->getTextAttribute() ?? '']),
             $affixGroup !== null && $currentAffixGroupForDungeon !== null &&
-            $affixGroup->id === optional($currentAffixGroupForDungeon)->id,
+            $affixGroup->id === $currentAffixGroupForDungeon?->id,
             $importStringPulls->getKillZoneAttributes()->count(),
             $importStringObjects->getPaths()->count(),
             $importStringObjects->getLines()->count(),

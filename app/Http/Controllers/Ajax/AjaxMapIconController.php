@@ -31,7 +31,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     {
         /** @var MapIcon $beforeModel */
         /** @var MapIcon $afterModel */
-        return optional($beforeModel)->dungeon_route_id === null || optional($afterModel)->dungeon_route_id === null;
+        return $beforeModel?->dungeon_route_id === null || $afterModel?->dungeon_route_id === null;
     }
 
     /**
@@ -47,9 +47,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         ?DungeonRoute $dungeonRoute,
         ?MapIcon $mapIcon = null): MapIcon
     {
-        $dungeonRoute = optional($mapIcon)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $mapIcon?->dungeonRoute ?? $dungeonRoute;
         $validated = $request->validated();
-        $validated['dungeon_route_id'] = optional($dungeonRoute)->id;
+        $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
         $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
@@ -83,7 +83,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 $mapIcon->load('mappingVersion');
 
                 $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                    optional($dungeonRoute)->mappingVersion ?? $mapIcon->mappingVersion,
+                    $dungeonRoute?->mappingVersion ?? $mapIcon->mappingVersion,
                     $mapIcon->getLatLng()
                 );
 

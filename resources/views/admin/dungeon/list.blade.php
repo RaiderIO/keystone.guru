@@ -80,9 +80,9 @@
                          style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>
-                <td>{{ optional($mappingVersion)->enemy_forces_required }} </td>
-                <td>{{ optional($mappingVersion)->enemy_forces_required_teeming }}</td>
-                <td data-order="{{optional($mappingVersion)->timer_max_seconds}}">{{ gmdate('i:s', optional($mappingVersion)->timer_max_seconds) }}</td>
+                <td>{{ $mappingVersion?->enemy_forces_required }} </td>
+                <td>{{ $mappingVersion?->enemy_forces_required_teeming }}</td>
+                <td data-order="{{$mappingVersion?->timer_max_seconds}}">{{ gmdate('i:s', $mappingVersion?->timer_max_seconds) }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.dungeon.edit', ['dungeon' => $dungeon->slug]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.list.edit') }}

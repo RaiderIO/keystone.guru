@@ -136,7 +136,7 @@ class Team extends Model
         /** @var TeamUser $teamUser */
         $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
 
-        return optional($teamUser)->role;
+        return $teamUser?->role;
     }
 
     /**

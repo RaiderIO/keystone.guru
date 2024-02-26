@@ -39,7 +39,7 @@ class AjaxBrushlineController extends Controller
         DungeonRoute $dungeonRoute,
         ?Brushline $brushline = null
     ) {
-        $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
         $this->authorize('addBrushline', $dungeonRoute);
@@ -82,7 +82,7 @@ class AjaxBrushlineController extends Controller
                     // Couple the path to the polyline
                     $brushline->update([
                         'polyline_id' => $polyline->id,
-                        'floor_id' => optional($changedFloor)->id ?? $brushline->floor_id,
+                        'floor_id' => $changedFloor?->id ?? $brushline->floor_id,
                     ]);
 
                     // Load the polyline, so it can be echoed back to the user

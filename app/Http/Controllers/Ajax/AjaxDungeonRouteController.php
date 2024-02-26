@@ -343,7 +343,7 @@ class AjaxDungeonRouteController extends Controller
             $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => optional($season)->getCurrentAffixGroupInRegion($userRegion) ?? $expansionService->getCurrentAffixGroup($expansion, $userRegion),
+                'currentAffixGroup' => $season?->getCurrentAffixGroupInRegion($userRegion) ?? $expansionService->getCurrentAffixGroup($expansion, $userRegion),
                 'dungeonroutes' => $result,
                 'showAffixes' => true,
                 'showDungeonImage' => true,

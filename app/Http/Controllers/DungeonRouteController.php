@@ -64,7 +64,7 @@ class DungeonRouteController extends Controller
             'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title' => $dungeonroute->getTitleSlug(),
-            'floorindex' => optional($defaultFloor)->index ?? '1',
+            'floorindex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -123,7 +123,7 @@ class DungeonRouteController extends Controller
                 'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title' => $dungeonroute->getTitleSlug(),
-                'floorindex' => optional($defaultFloor)->index ?? '1',
+                'floorindex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int) $floorIndex) {
@@ -161,7 +161,7 @@ class DungeonRouteController extends Controller
             'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title' => $dungeonroute->getTitleSlug(),
-            'floorindex' => optional($defaultFloor)->index ?? '1',
+            'floorindex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -218,7 +218,7 @@ class DungeonRouteController extends Controller
                 'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title' => $dungeonroute->getTitleSlug(),
-                'floorindex' => optional($defaultFloor)->index ?? '1',
+                'floorindex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int) $floorIndex) {
@@ -396,7 +396,7 @@ class DungeonRouteController extends Controller
             'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title' => $dungeonroute->getTitleSlug(),
-            'floorindex' => optional($defaultFloor)->index ?? '1',
+            'floorindex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -444,7 +444,7 @@ class DungeonRouteController extends Controller
                 'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title' => $dungeonroute->getTitleSlug(),
-                'floorindex' => optional($defaultFloor)->index ?? '1',
+                'floorindex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int) $floorIndex) {

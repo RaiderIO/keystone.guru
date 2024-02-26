@@ -101,7 +101,7 @@ class LiveSessionController extends Controller
             $dungeonroute,
             $title,
             $livesession,
-            optional($defaultFloor)->index ?? '1'
+            $defaultFloor?->index ?? '1'
         );
     }
 

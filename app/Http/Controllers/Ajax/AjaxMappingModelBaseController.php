@@ -35,7 +35,7 @@ abstract class AjaxMappingModelBaseController extends Controller
      */
     protected function storeModel(?MappingVersion $mappingVersion, array $validated, string $modelClass, ?MappingModelInterface $model = null, ?Closure $onSaveSuccess = null): Model
     {
-        $validated['mapping_version_id'] = optional($mappingVersion)->id;
+        $validated['mapping_version_id'] = $mappingVersion?->id;
 
         /** @var Model $modelClass */
         return DB::transaction(function () use ($validated, $modelClass, $model, $onSaveSuccess) {

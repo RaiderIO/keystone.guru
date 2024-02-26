@@ -34,7 +34,7 @@ class DiscoverService extends BaseDiscoverService
         $this->ensureExpansion();
 
         // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
-        $currentSeasonAffixGroups = optional($this->season)->affixgroups ??
+        $currentSeasonAffixGroups = $this->season?->affixgroups ??
             // This can cause issues when we're in between seasons between different regions, but a minor issue
             optional($this->expansionService->getCurrentSeason($this->expansion, GameServerRegion::getUserOrDefaultRegion()))->affixgroups ??
             collect();

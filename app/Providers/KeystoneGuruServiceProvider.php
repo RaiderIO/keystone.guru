@@ -481,7 +481,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $currentSeason = $regionViewVariables['currentSeason'];
             $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
 
-            $view->with('isThundering', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
+            $view->with('isThundering', $currentAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
         });
 
         view()->composer('common.modal.simulateoptions.default', function (View $view) use ($viewService, &$userOrDefaultRegion) {
@@ -504,7 +504,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
-            $view->with('isShrouded', optional($currentAffixGroup)->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
+            $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
         });
 
         // Profile pages

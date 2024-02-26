@@ -33,7 +33,7 @@ $connectedFloorCandidates = $dungeon->floors;
                 $floorCoupling = $floorCouplings->where('floor1_id', $floor->id)->where('floor2_id', $connectedFloorCandidate->id)->first();
             }
 
-            $disabled = $connectedFloorCandidate->id === optional($floor)->id ? ['disabled' => 'disabled'] : [];
+            $disabled = $connectedFloorCandidate->id === $floor?->id ? ['disabled' => 'disabled'] : [];
             ?>
         <div class="row mb-3">
             <div class="col-2">

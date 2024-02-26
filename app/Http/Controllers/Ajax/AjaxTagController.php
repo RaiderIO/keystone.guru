@@ -87,7 +87,7 @@ class AjaxTagController extends Controller
             $tag->model_class = $tagCategory->model_class;
             $tag->name = $tagName;
             // Will be null if no similar tag is found which is fine
-            $tag->color = optional($similarTag)->color;
+            $tag->color = $similarTag?->color;
 
             if ($tag->save()) {
                 $result = $tag;

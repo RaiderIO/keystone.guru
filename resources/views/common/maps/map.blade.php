@@ -54,7 +54,7 @@ $zoomToContents ??= false;
 // Show ads or not
 $showAds ??= true;
 // If this is an embedded route, do not show ads
-if ($embed || optional($dungeonroute)->demo === 1) {
+if ($embed || $dungeonroute?->demo === 1) {
     $showAds = false;
 }
 // No UI on the map
@@ -114,8 +114,8 @@ if ($isAdmin) {
 
     @include('common.general.statemanager', [
         'echo' => $echo,
-        'patreonBenefits' => optional($user)->getPatreonBenefits() ?? collect(),
-        'userData' => optional($user)->makeVisible('map_facade_style'),
+        'patreonBenefits' => $user?->getPatreonBenefits() ?? collect(),
+        'userData' => $user?->makeVisible('map_facade_style'),
         'mapContext' => $mapContext->getProperties(),
     ])
     <script>

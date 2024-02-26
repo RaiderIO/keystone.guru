@@ -11,7 +11,7 @@
  * @var $edit bool
  */
 $echo        ??= false;
-$mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
+$mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 ?>
 <nav id="map_header"

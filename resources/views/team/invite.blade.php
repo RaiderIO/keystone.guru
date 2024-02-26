@@ -13,7 +13,7 @@ $member ??= false;
     @include('common.general.linkpreview', [
         'title' => sprintf(__('views/team.invite.linkpreview_title'), $team->name),
         'description' => sprintf(__('views/team.invite.linkpreview_description'), $team->name),
-        'image' => optional($team->iconfile)->getURL()
+        'image' => $team->iconfile?->getURL()
     ])
 @endsection
 

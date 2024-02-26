@@ -54,7 +54,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $result = $affixGroupEaseTierService->parseTierList($response);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
-            optional($result)->delete();
+            $result?->delete();
         }
 
         // Assert
@@ -91,7 +91,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $result = $affixGroupEaseTierService->parseTierList($response);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
-            optional($result)->delete();
+            $result?->delete();
         }
 
         // Assert
@@ -121,7 +121,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $result = $affixGroupEaseTierService->parseTierList($response);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
-            optional($result)->delete();
+            $result?->delete();
         }
 
         // Assert
@@ -150,8 +150,8 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $result = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
-            optional($previousAffixGroupEaseTierPull)->delete();
-            optional($result)->delete();
+            $previousAffixGroupEaseTierPull?->delete();
+            $result?->delete();
         }
 
         // Assert
@@ -187,8 +187,8 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $result = $affixGroupEaseTierService->parseTierList($response);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
-            optional($previousAffixGroupEaseTierPull)->delete();
-            optional($result)->delete();
+            $previousAffixGroupEaseTierPull?->delete();
+            $result?->delete();
         }
 
         // Assert

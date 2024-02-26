@@ -197,7 +197,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
 
     public function getDungeonId(): ?int
     {
-        return optional($this->floor)->dungeon_id ?? null;
+        return $this->floor?->dungeon_id ?? null;
     }
 
     public function getUniqueKey(): string

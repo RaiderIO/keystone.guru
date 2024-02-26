@@ -14,7 +14,7 @@ class GameVersionService implements GameVersionServiceInterface
      */
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void
     {
-        optional($user)->update(['game_version_id' => $gameVersion->id]);
+        $user?->update(['game_version_id' => $gameVersion->id]);
 
         // Unit tests and artisan commands don't like this
         if (! app()->runningInConsole()) {

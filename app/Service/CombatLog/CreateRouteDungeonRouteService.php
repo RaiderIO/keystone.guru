@@ -255,7 +255,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 continue;
             }
 
-            $currentFloor = optional($npc->getResolvedEnemy())->floor ?? $previousFloor;
+            $currentFloor = $npc->getResolvedEnemy()?->floor ?? $previousFloor;
 
             if ($currentFloor === null) {
                 $this->log->generateMapIconsUnableToFindFloor($npc->getUniqueId());
@@ -278,7 +278,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $mapIconAttributes[] = array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id' => $currentFloor->id,
-                'dungeon_route_id' => optional($dungeonRoute)->id ?? null,
+                'dungeon_route_id' => $dungeonRoute?->id ?? null,
                 'team_id' => null,
                 'map_icon_type_id' => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
                 'comment' => $comment,
@@ -287,7 +287,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             if ($hasResolvedEnemy) {
                 $brushlineAttributes[] = [
-                    'dungeon_route_id' => optional($dungeonRoute)->id ?? null,
+                    'dungeon_route_id' => $dungeonRoute?->id ?? null,
                     'floor_id' => $currentFloor->id,
                     'polyline_id' => -1,
                     'created_at' => $now,

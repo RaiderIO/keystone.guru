@@ -56,7 +56,7 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
             <h5>
                 {{ __('views/common.modal.routeadminsettings.challenge_mode_run_data') }}
             </h5>
-            @if(optional($challengeModeRun)->challengeModeRunData !== null)
+            @if($challengeModeRun?->challengeModeRunData !== null)
                 @include('common.general.modeltable', ['model' => $challengeModeRun->challengeModeRunData, 'exclude' => ['post_body']])
                 {{ Form::textarea('post_body', json_encode(json_decode($challengeModeRun->challengeModeRunData->post_body), JSON_PRETTY_PRINT), ['class' => 'form-control w-100', 'readonly' => 'readonly']) }}
             @else

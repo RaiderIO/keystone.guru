@@ -150,7 +150,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 ->where('dungeon_id', $dungeon->id)
                 ->first();
 
-            $result = optional($affixGroupEaseTier)->tier;
+            $result = $affixGroupEaseTier?->tier;
         }
 
         return $result;

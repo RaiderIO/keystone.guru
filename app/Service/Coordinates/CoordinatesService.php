@@ -95,7 +95,7 @@ class CoordinatesService implements CoordinatesServiceInterface
             $targetFloor = null;
 
             // If we're forcing the translation on a certain floor, check if this floor union matches that forced floor
-            if ($floorUnion->target_floor_id === optional($forceFloor)->id) {
+            if ($floorUnion->target_floor_id === $forceFloor?->id) {
                 $targetFloor = $forceFloor;
             } else {
                 // Otherwise, check if the floor union area contains the target point, then we use this floor union's

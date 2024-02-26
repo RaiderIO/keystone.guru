@@ -216,8 +216,8 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
                 $npcId, $activePullEnemy->getX(), $activePullEnemy->getY(),
-                optional($previousPullLatLng)->getLat(),
-                optional($previousPullLatLng)->getLng(),
+                $previousPullLatLng?->getLat(),
+                $previousPullLatLng?->getLng(),
                 $preferredGroups->toArray()
             );
 
@@ -391,7 +391,7 @@ abstract class DungeonRouteBuilder
 
         if ($closestEnemy->getEnemy() === null) {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                optional($closestEnemy)->id,
+                $closestEnemy?->id,
                 $closestEnemy->getDistanceBetweenEnemies(),
                 $closestEnemy->getDistanceBetweenLastPullAndEnemy()
             );
@@ -470,7 +470,7 @@ abstract class DungeonRouteBuilder
         }
 
         $this->log->findClosestEnemyAndDistanceFromListResult(
-            optional($closestEnemy->getEnemy())->id,
+            $closestEnemy->getEnemy()?->id,
             $closestEnemy->getDistanceBetweenEnemies(),
             $closestEnemy->getDistanceBetweenLastPullAndEnemy()
         );
