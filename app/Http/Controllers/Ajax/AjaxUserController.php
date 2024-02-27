@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Requests\User\UserFormRequest;
 use App\Logic\Datatables\UsersDatatablesHandler;
-use App\User;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;

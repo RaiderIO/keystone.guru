@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
-use App\User;
+use App\Models\User;
 use Carbon\CarbonInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;

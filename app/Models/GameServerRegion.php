@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;

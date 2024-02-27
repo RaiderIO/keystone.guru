@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DungeonRoutePolicy

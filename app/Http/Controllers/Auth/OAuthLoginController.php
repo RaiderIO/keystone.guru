@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Role;
-use App\User;
+use App\Models\User;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

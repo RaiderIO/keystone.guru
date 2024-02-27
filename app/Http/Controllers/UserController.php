@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
