@@ -37,7 +37,7 @@ class ExpansionController extends Controller
      *
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('admin.expansion.edit');
     }
@@ -45,7 +45,7 @@ class ExpansionController extends Controller
     /**
      * @return Factory|View
      */
-    public function edit(Request $request, Expansion $expansion)
+    public function edit(Request $request, Expansion $expansion): View
     {
         return view('admin.expansion.edit', ['expansion' => $expansion]);
     }
@@ -72,7 +72,7 @@ class ExpansionController extends Controller
      *
      * @throws Exception
      */
-    public function savenew(ExpansionFormRequest $request)
+    public function savenew(ExpansionFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $expansion = $this->store($request);
@@ -88,7 +88,7 @@ class ExpansionController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.expansion.list', ['expansions' => Expansion::all()]);
     }

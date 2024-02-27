@@ -116,7 +116,7 @@ class LocalizationSync extends Command
      * @param  false|array  $lemmas
      * @return string
      */
-    public function parse(string $targetLang, string $content, $lemmas = false)
+    public function parse(string $targetLang, string $content, $lemmas = false): string
     {
         $result = $lemmas === false ? [] : '';
         $tree = [null];

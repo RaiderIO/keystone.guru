@@ -17,7 +17,7 @@ class CreateRouteNpcChronologicalRule implements Rule
      * @param  string  $attribute
      * @param  mixed  $value
      */
-    public function passes($attribute, $value): bool
+    public function passes(string $attribute, $value): bool
     {
         foreach ($value as $index => $npc) {
             $engagedAt = $npc['engagedAt'] ?? null;

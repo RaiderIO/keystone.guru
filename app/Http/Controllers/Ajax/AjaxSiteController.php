@@ -11,7 +11,7 @@ class AjaxSiteController extends Controller
     /**
      * @return JsonResponse
      */
-    public function refreshCsrf(Request $request)
+    public function refreshCsrf(Request $request): JsonResponse
     {
         session()->regenerate();
 

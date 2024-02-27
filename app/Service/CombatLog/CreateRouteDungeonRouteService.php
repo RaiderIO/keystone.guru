@@ -175,7 +175,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     /**
      * @return void
      */
-    private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
+    private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute): void
     {
         // Insert a run
         $now = Carbon::now();

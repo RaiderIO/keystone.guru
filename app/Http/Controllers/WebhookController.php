@@ -20,7 +20,7 @@ class WebhookController extends Controller
      *
      * @see https://dev.to/ryan1/how-to-validate-github-webhooks-with-laravel-and-php-2he1
      */
-    protected function validateGithubWebhook(Request $request)
+    protected function validateGithubWebhook(Request $request): void
     {
         if (($signature = $request->headers->get('X-Hub-Signature')) == null) {
             throw new BadRequestException('Header not set');
@@ -42,7 +42,7 @@ class WebhookController extends Controller
     /**
      * @return Response
      */
-    public function github(Request $request, DiscordApiServiceInterface $discordApiService)
+    public function github(Request $request, DiscordApiServiceInterface $discordApiService): Response
     {
         $this->validateGithubWebhook($request);
 

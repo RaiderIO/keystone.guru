@@ -36,7 +36,7 @@ class DungeonRouteController extends Controller
     /**
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('dungeonroute.new');
     }
@@ -44,7 +44,7 @@ class DungeonRouteController extends Controller
     /**
      * @return Factory|View
      */
-    public function newtemporary()
+    public function newtemporary(): View
     {
         return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all()]);
     }
@@ -300,7 +300,7 @@ class DungeonRouteController extends Controller
         Dungeon $dungeon,
         DungeonRoute $dungeonroute,
         string $title,
-        string $seasonalType)
+        string $seasonalType): RedirectResponse
     {
         $this->authorize('migrate', $dungeonroute);
 
@@ -370,7 +370,7 @@ class DungeonRouteController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title)
+    public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title): RedirectResponse
     {
         // Regardless of the result, try to claim the route
         $dungeonroute->claim(Auth::id());
@@ -476,7 +476,7 @@ class DungeonRouteController extends Controller
     public function embed(
         EmbedFormRequest $request,
         MapContextServiceInterface $mapContextService,
-        $dungeonroute,
+        DungeonRoute $dungeonroute,
         string $floorIndex = '1')
     {
         if (! is_numeric($floorIndex)) {
@@ -563,7 +563,7 @@ class DungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService)
+    public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService): RedirectResponse
     {
         // Store it and show the edit page
         $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
@@ -583,7 +583,7 @@ class DungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
+    public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): RedirectResponse
     {
         // Store it and show the edit page
         $dungeonroute = $this->storetemporary($request, $seasonService, $expansionService);
@@ -606,7 +606,7 @@ class DungeonRouteController extends Controller
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function upgrade(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title)
+    public function upgrade(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title): RedirectResponse
     {
         $this->authorize('edit', $dungeonroute);
 

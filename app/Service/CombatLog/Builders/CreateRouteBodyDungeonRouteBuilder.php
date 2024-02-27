@@ -243,7 +243,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     /**
      * @return void
      */
-    private function determineSpellsCastBetween(ActivePull $activePull, ?Carbon $lastDiedAt = null)
+    private function determineSpellsCastBetween(ActivePull $activePull, ?Carbon $lastDiedAt = null): void
     {
         $firstEngagedAt = null;
         foreach ($activePull->getEnemiesKilled() as $killedEnemy) {

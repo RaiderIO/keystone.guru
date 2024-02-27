@@ -29,7 +29,7 @@ class CombatLogDataExtractionServiceLogging extends StructuredLogging implements
     /**
      * @return void
      */
-    public function extractDataAddedNewFloorConnection(int $previousFloorId, int $currentFloorId)
+    public function extractDataAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

@@ -17,7 +17,7 @@ class DungeonExploreController extends Controller
     /**
      * @return mixed
      */
-    public function list(Request $request)
+    public function list(Request $request): \Illuminate\View\View
     {
         return view('dungeon.explore.list');
     }
@@ -25,7 +25,7 @@ class DungeonExploreController extends Controller
     /**
      * @return mixed
      */
-    public function viewDungeon(Request $request, Dungeon $dungeon)
+    public function viewDungeon(Request $request, Dungeon $dungeon): RedirectResponse
     {
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)

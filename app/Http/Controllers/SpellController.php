@@ -21,7 +21,7 @@ class SpellController extends Controller
      *
      * @return bool
      */
-    private function isSaveAsNew(Request $request)
+    private function isSaveAsNew(Request $request): bool
     {
         return $request->get('submit', 'submit') !== 'Submit';
     }
@@ -77,7 +77,7 @@ class SpellController extends Controller
      *
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('admin.spell.edit', [
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
@@ -88,7 +88,7 @@ class SpellController extends Controller
     /**
      * @return Factory|View
      */
-    public function edit(Request $request, Spell $spell)
+    public function edit(Request $request, Spell $spell): View
     {
         return view('admin.spell.edit', [
             'spell' => $spell,
@@ -125,7 +125,7 @@ class SpellController extends Controller
      *
      * @throws Exception
      */
-    public function savenew(SpellFormRequest $request)
+    public function savenew(SpellFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $spell = $this->store($request);
@@ -141,7 +141,7 @@ class SpellController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.spell.list', ['models' => Spell::all()]);
     }

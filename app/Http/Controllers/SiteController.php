@@ -27,7 +27,7 @@ class SiteController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function test()
+    public function test(): View
     {
         return view('misc.test');
     }
@@ -37,7 +37,7 @@ class SiteController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index(CoverageServiceInterface $coverageService, SeasonService $seasonService)
+    public function index(CoverageServiceInterface $coverageService, SeasonService $seasonService): View
     {
         if (Auth::check()) {
             $season = null;
@@ -58,7 +58,7 @@ class SiteController extends Controller
     /**
      * @return RedirectResponse|Redirector
      */
-    public function home(Request $request)
+    public function home(Request $request): RedirectResponse
     {
         return redirect('/', 301);
     }
@@ -66,7 +66,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function credits(Request $request)
+    public function credits(Request $request): View
     {
         return view('misc.credits');
     }
@@ -74,7 +74,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function about(Request $request)
+    public function about(Request $request): View
     {
         return view('misc.about');
     }
@@ -82,7 +82,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function privacy(Request $request)
+    public function privacy(Request $request): View
     {
         return view('legal.privacy');
     }
@@ -90,7 +90,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function terms(Request $request)
+    public function terms(Request $request): View
     {
         return view('legal.terms');
     }
@@ -98,7 +98,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function cookies(Request $request)
+    public function cookies(Request $request): View
     {
         return view('legal.cookies');
     }
@@ -119,7 +119,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function health(Request $request)
+    public function health(Request $request): View
     {
         return view('misc.health');
     }
@@ -127,7 +127,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function mapping(Request $request)
+    public function mapping(Request $request): View
     {
         return view('misc.mapping');
     }
@@ -135,7 +135,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function timetest(Request $request)
+    public function timetest(Request $request): View
     {
         return view('misc.timetest');
     }
@@ -151,7 +151,7 @@ class SiteController extends Controller
         SeasonService $seasonService,
         ExpansionService $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService
-    ) {
+    ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
         return view('misc.affixes', [
@@ -173,7 +173,7 @@ class SiteController extends Controller
     /**
      * @return Factory|View
      */
-    public function status(Request $request)
+    public function status(Request $request): View
     {
         return view('misc.status');
     }
@@ -181,7 +181,7 @@ class SiteController extends Controller
     /**
      * @return Application|Redirector|RedirectResponse
      */
-    public function dungeonroutes(Request $request)
+    public function dungeonroutes(Request $request): RedirectResponse
     {
         return redirect(route('dungeonroutes'), 301);
     }
@@ -194,7 +194,7 @@ class SiteController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function embed(Request $request, DungeonRoute $dungeonRoute)
+    public function embed(Request $request, DungeonRoute $dungeonRoute): View
     {
         return view('misc.embed', ['model' => $dungeonRoute, 'parameters' => $request->all()]);
     }

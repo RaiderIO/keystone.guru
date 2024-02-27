@@ -27,7 +27,7 @@ class FloorController extends Controller
      *
      * @throws Exception
      */
-    public function store(FloorFormRequest $request, Dungeon $dungeon, ?Floor $floor = null)
+    public function store(FloorFormRequest $request, Dungeon $dungeon, ?Floor $floor = null): Floor
     {
         $beforeFloor = $floor === null ? null : clone $floor;
 
@@ -76,7 +76,7 @@ class FloorController extends Controller
     /**
      * @return Factory|View
      */
-    public function new(Request $request, Dungeon $dungeon)
+    public function new(Request $request, Dungeon $dungeon): View
     {
         return view('admin.floor.edit', [
             'dungeon' => $dungeon,
@@ -152,7 +152,7 @@ class FloorController extends Controller
      *
      * @throws Exception
      */
-    public function savenew(FloorFormRequest $request, Dungeon $dungeon)
+    public function savenew(FloorFormRequest $request, Dungeon $dungeon): RedirectResponse
     {
         // Store it and show the edit page
         $floor = $this->store($request, $dungeon);

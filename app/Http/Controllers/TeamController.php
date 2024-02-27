@@ -84,7 +84,7 @@ class TeamController extends Controller
     /**
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('team.new');
     }
@@ -94,7 +94,7 @@ class TeamController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function edit(Request $request, Team $team)
+    public function edit(Request $request, Team $team): View
     {
         $this->authorize('edit', $team);
 
@@ -114,7 +114,7 @@ class TeamController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function delete(Request $request, Team $team)
+    public function delete(Request $request, Team $team): RedirectResponse
     {
         $this->authorize('delete', $team);
 
@@ -151,7 +151,7 @@ class TeamController extends Controller
      *
      * @throws Exception
      */
-    public function savenew(TeamFormRequest $request)
+    public function savenew(TeamFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $team = $this->store($request);
@@ -167,7 +167,7 @@ class TeamController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         $user = Auth::user();
 
@@ -221,7 +221,7 @@ class TeamController extends Controller
      *
      * @return RedirectResponse
      */
-    public function createtag(TagFormRequest $request)
+    public function createtag(TagFormRequest $request): RedirectResponse
     {
         $error = [];
 

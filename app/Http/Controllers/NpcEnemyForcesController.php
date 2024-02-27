@@ -15,7 +15,7 @@ class NpcEnemyForcesController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
+    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
     {
         return view('admin.npcenemyforces.edit', [
             'npc' => $npc,
@@ -23,7 +23,7 @@ class NpcEnemyForcesController extends Controller
         ]);
     }
 
-    public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
+    public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
     {
         $npcEnemyForces->update($request->validated());
 

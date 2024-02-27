@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
@@ -25,7 +26,7 @@ class UserController extends Controller
      *
      * @return Factory
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.user.list', [
             'patreonBenefits' => PatreonBenefit::all(),
@@ -35,7 +36,7 @@ class UserController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function makeadmin(Request $request, User $user)
+    public function makeadmin(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
         if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
@@ -58,7 +59,7 @@ class UserController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function makeuser(Request $request, User $user)
+    public function makeuser(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
         if ($currentUser !== null && $currentUser->name === 'Admin') {
@@ -126,7 +127,7 @@ class UserController extends Controller
     /**
      * @return Application|ResponseFactory|Response
      */
-    public function storePatreonBenefits(Request $request, User $user)
+    public function storePatreonBenefits(Request $request, User $user): Response
     {
         $newPatreonBenefitIds = $request->get('patreonBenefits', []);
 

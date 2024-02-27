@@ -27,7 +27,7 @@ class ProfileController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function edit(Request $request)
+    public function edit(Request $request): \Illuminate\View\View
     {
         return view('profile.edit');
     }
@@ -35,7 +35,7 @@ class ProfileController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function view(Request $request, User $user)
+    public function view(Request $request, User $user): \Illuminate\View\View
     {
         return view('profile.view', ['user' => $user]);
     }
@@ -43,7 +43,7 @@ class ProfileController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function routes(Request $request)
+    public function routes(Request $request): RedirectResponse
     {
         return redirect()->route('home');
     }
@@ -51,7 +51,7 @@ class ProfileController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function favorites(Request $request)
+    public function favorites(Request $request): \Illuminate\View\View
     {
         return view('profile.favorites');
     }
@@ -59,7 +59,7 @@ class ProfileController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function tags(Request $request)
+    public function tags(Request $request): \Illuminate\View\View
     {
         return view('profile.tags');
     }
@@ -69,7 +69,7 @@ class ProfileController extends Controller
      *
      * @throws Exception
      */
-    public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
+    public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
     {
         // Allow username change once!
         if ($user->isOAuth()) {
@@ -167,7 +167,7 @@ class ProfileController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function updatePrivacy(Request $request, User $user)
+    public function updatePrivacy(Request $request, User $user): RedirectResponse
     {
         $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
 
@@ -183,7 +183,7 @@ class ProfileController extends Controller
     /**
      * @return Factory|View
      */
-    public function changepassword(Request $request)
+    public function changepassword(Request $request): \Illuminate\View\View
     {
         $currentPw = $request->get('current_password');
         $newPassword = $request->get('new_password');
@@ -221,7 +221,7 @@ class ProfileController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function createtag(TagFormRequest $request)
+    public function createtag(TagFormRequest $request): \Illuminate\View\View
     {
         $error = [];
 
@@ -245,7 +245,7 @@ class ProfileController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function list(Request $request)
+    public function list(Request $request): \Illuminate\View\View
     {
         return view('profile.list');
     }
@@ -255,7 +255,7 @@ class ProfileController extends Controller
      *
      * @throws Exception
      */
-    public function delete(Request $request)
+    public function delete(Request $request): RedirectResponse
     {
         if (Auth::getUser()->hasRole('admin')) {
             throw new Exception(__('controller.profile.flash.admins_cannot_delete_themselves'));

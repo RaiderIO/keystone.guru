@@ -29,7 +29,7 @@ class LiveSessionController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
+    public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
     {
         $this->authorize('view', $dungeonroute);
 

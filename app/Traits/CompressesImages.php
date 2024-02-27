@@ -24,7 +24,7 @@ trait CompressesImages
      *
      * @throws Exception
      */
-    private function _compressPng(string $pathToPngFile, int $maxQuality = 90)
+    private function _compressPng(string $pathToPngFile, int $maxQuality = 90): string
     {
         if (! file_exists($pathToPngFile)) {
             throw new Exception('File does not exist: '.$pathToPngFile);

@@ -259,7 +259,7 @@ class User extends Authenticatable
      * @param  string  $token
      * @return void
      */
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification(string $token): void
     {
         $this->notify(new CustomPasswordResetEmail($token));
     }

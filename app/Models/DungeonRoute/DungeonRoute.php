@@ -1379,7 +1379,7 @@ class DungeonRoute extends Model
      *
      * @throws Exception
      */
-    private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
+    private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): void
     {
         if ($this->affixgroups()->count() === 0) {
             // Fallback to the current expansion's

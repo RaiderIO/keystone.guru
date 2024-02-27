@@ -19,7 +19,7 @@ class AjaxMetricController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function store(APIMetricFormRequest $request, MetricServiceInterface $metricService)
+    public function store(APIMetricFormRequest $request, MetricServiceInterface $metricService): Response
     {
         $validated = $request->validated();
 
@@ -31,7 +31,7 @@ class AjaxMetricController extends Controller
     /**
      * @return Response
      */
-    public function storeDungeonRoute(APIDungeonRouteMetricFormRequest $request, DungeonRoute $dungeonRoute, MetricServiceInterface $metricService)
+    public function storeDungeonRoute(APIDungeonRouteMetricFormRequest $request, DungeonRoute $dungeonRoute, MetricServiceInterface $metricService): Response
     {
         $validated = $request->validated();
 

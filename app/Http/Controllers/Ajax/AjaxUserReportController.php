@@ -57,7 +57,7 @@ class AjaxUserReportController
     /**
      * @return Response
      */
-    public function dungeonrouteStore(UserReportFormRequest $request, DungeonRoute $dungeonroute)
+    public function dungeonrouteStore(UserReportFormRequest $request, DungeonRoute $dungeonroute): Response
     {
         if (! $this->store($request, $dungeonroute)) {
             abort(500, __('controller.apiuserreport.error.unable_to_save_report'));
@@ -69,7 +69,7 @@ class AjaxUserReportController
     /**
      * @return Response
      */
-    public function enemyStore(UserReportFormRequest $request, Enemy $enemy)
+    public function enemyStore(UserReportFormRequest $request, Enemy $enemy): Response
     {
         if (! $this->store($request, $enemy)) {
             abort(500, __('controller.apiuserreport.error.unable_to_save_report'));

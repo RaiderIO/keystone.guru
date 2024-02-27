@@ -23,7 +23,7 @@ class AjaxPridefulEnemyController extends Controller
      *
      * @throws Exception
      */
-    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): PridefulEnemy
     {
         $this->authorize('edit', $dungeonRoute);
 

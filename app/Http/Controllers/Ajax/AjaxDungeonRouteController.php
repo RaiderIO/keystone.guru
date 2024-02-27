@@ -450,7 +450,7 @@ class AjaxDungeonRouteController extends Controller
         ExpansionServiceInterface $expansionService,
         ThumbnailServiceInterface $thumbnailService,
         ?DungeonRoute $dungeonRoute = null
-    ) {
+    ): DungeonRoute {
         $this->authorize('edit', $dungeonRoute);
 
         if ($dungeonRoute === null) {
@@ -470,7 +470,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute)
+    public function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute): Response
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -490,7 +490,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function delete(Request $request, DungeonRoute $dungeonRoute)
+    public function delete(Request $request, DungeonRoute $dungeonRoute): Response
     {
         $this->authorize('delete', $dungeonRoute);
 
@@ -506,7 +506,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute)
+    public function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute): Response
     {
         $this->authorize('publish', $dungeonRoute);
 
@@ -531,7 +531,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team)
+    public function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team): Response
     {
         $this->authorize('clone', $dungeonRoute);
 
@@ -557,7 +557,7 @@ class AjaxDungeonRouteController extends Controller
         Request $request,
         DungeonRoute $dungeonRoute,
         string $seasonalType
-    ) {
+    ): Response {
         $this->authorize('migrate', $dungeonRoute);
 
         $dungeonRoute->migrateToSeasonalType($expansionService, $seasonalType);
@@ -617,7 +617,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function favorite(Request $request, DungeonRoute $dungeonRoute)
+    public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
     {
         $this->authorize('favorite', $dungeonRoute);
 
@@ -635,7 +635,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute)
+    public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response
     {
         $this->authorize('favorite', $dungeonRoute);
 

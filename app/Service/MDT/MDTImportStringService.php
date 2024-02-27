@@ -1050,7 +1050,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * @return void
      */
-    private function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute)
+    private function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute): void
     {
         $dungeonRoute->update(['enemy_forces' => $importStringPulls->getEnemyForces()]);
 
@@ -1114,7 +1114,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * @return void
      */
-    private function applyObjectsToDungeonRoute(ImportStringObjects $importStringObjects, DungeonRoute $dungeonRoute)
+    private function applyObjectsToDungeonRoute(ImportStringObjects $importStringObjects, DungeonRoute $dungeonRoute): void
     {
         $now = now();
         $polyLinesAttributes = [];
@@ -1206,7 +1206,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * @return void
      */
-    private function applyRiftOffsetsToDungeonRoute(ImportStringRiftOffsets $importStringRiftOffsets, DungeonRoute $dungeonRoute)
+    private function applyRiftOffsetsToDungeonRoute(ImportStringRiftOffsets $importStringRiftOffsets, DungeonRoute $dungeonRoute): void
     {
         $now = now();
 

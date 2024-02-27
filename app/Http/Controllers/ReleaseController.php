@@ -94,7 +94,7 @@ class ReleaseController extends Controller
      *
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('admin.release.edit', [
             'categories' => ReleaseChangelogCategory::all(),
@@ -104,7 +104,7 @@ class ReleaseController extends Controller
     /**
      * @return Factory|View
      */
-    public function edit(Request $request, Release $release)
+    public function edit(Request $request, Release $release): View
     {
         return view('admin.release.edit', [
             'release' => $release,
@@ -134,7 +134,7 @@ class ReleaseController extends Controller
      *
      * @throws Exception
      */
-    public function savenew(ReleaseFormRequest $request)
+    public function savenew(ReleaseFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $release = $this->store($request);
@@ -150,7 +150,7 @@ class ReleaseController extends Controller
      *
      * @return Factory
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.release.list', ['models' => Release::orderBy('id', 'desc')->get()]);
     }
@@ -158,7 +158,7 @@ class ReleaseController extends Controller
     /**
      * @return Factory|View
      */
-    public function view(Release $release)
+    public function view(Release $release): View
     {
         return view('release.view', ['release' => $release]);
     }
