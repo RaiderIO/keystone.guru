@@ -35,7 +35,6 @@ class GetReleaseBody extends Command
     /**
      * Execute the console command.
      *
-     * @return void
      *
      * @throws Exception
      */

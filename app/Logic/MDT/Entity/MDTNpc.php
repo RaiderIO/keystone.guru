@@ -87,9 +87,6 @@ class MDTNpc implements Arrayable
         }
     }
 
-    /**
-     * @return bool
-     */
     private function recur_ksort(&$array): bool
     {
         foreach ($array as &$value) {

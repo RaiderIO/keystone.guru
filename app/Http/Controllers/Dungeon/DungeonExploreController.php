@@ -14,17 +14,11 @@ use Illuminate\Http\Request;
 
 class DungeonExploreController extends Controller
 {
-    /**
-     * @return mixed
-     */
     public function list(Request $request): \Illuminate\View\View
     {
         return view('dungeon.explore.list');
     }
 
-    /**
-     * @return mixed
-     */
     public function viewDungeon(Request $request, Dungeon $dungeon): RedirectResponse
     {
         /** @var Floor $defaultFloor */

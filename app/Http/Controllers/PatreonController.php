@@ -15,8 +15,6 @@ class PatreonController extends Controller
 {
     /**
      * Unlinks the user from Patreon.
-     *
-     * @return RedirectResponse
      */
     public function unlink(Request $request): RedirectResponse
     {
@@ -30,8 +28,6 @@ class PatreonController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     *
-     * @return RedirectResponse
      */
     public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService): RedirectResponse
     {

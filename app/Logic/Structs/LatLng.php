@@ -48,9 +48,6 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function scale(LatLng $currentMapCenter, int $currentMapSize, LatLng $targetMapCenter, int $targetMapSize): self
     {
         $currentMapSizeLat = $currentMapSize;

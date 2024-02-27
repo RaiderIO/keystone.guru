@@ -130,7 +130,6 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */
@@ -147,8 +146,6 @@ class ReleaseController extends Controller
 
     /**
      * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory
      */
     public function list(): View
     {

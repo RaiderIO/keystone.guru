@@ -40,8 +40,6 @@ class LocalizationSync extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle(): int
     {
@@ -114,7 +112,6 @@ class LocalizationSync extends Command
      * Otherwise extract lemmas from content
      *
      * @param  false|array  $lemmas
-     * @return string
      */
     public function parse(string $targetLang, string $content, $lemmas = false): string
     {

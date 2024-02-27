@@ -29,9 +29,6 @@ class DungeonRouteDiscoverController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function discover(ExpansionService $expansionService): RedirectResponse
     {
         return redirect()->route('dungeonroutes.expansion', [
@@ -275,7 +272,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      * @throws Exception
@@ -326,7 +322,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      */
@@ -344,7 +339,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      */
@@ -368,7 +362,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      */
@@ -392,7 +385,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      */
@@ -413,7 +405,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      */
@@ -435,7 +426,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      * @throws Exception
@@ -477,7 +467,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      * @throws Exception
@@ -519,7 +508,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory
      *
      * @throws AuthorizationException
      */

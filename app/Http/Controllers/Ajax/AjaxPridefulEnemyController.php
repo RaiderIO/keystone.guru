@@ -19,7 +19,6 @@ use Teapot\StatusCode\Http;
 class AjaxPridefulEnemyController extends Controller
 {
     /**
-     * @return PridefulEnemy
      *
      * @throws Exception
      */

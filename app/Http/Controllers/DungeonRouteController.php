@@ -290,7 +290,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -367,9 +366,6 @@ class DungeonRouteController extends Controller
         }
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title): RedirectResponse
     {
         // Regardless of the result, try to claim the route
@@ -468,7 +464,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param  DungeonRoute  $dungeonroute
      * @return Application|Factory|View
      *
      * @throws AuthorizationException
@@ -559,7 +554,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */
@@ -579,7 +573,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */
@@ -599,8 +592,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param  DungeonRouteFormRequest  $request
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      * @throws InvalidArgumentException

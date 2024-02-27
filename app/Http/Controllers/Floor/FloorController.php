@@ -23,7 +23,6 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @return Floor
      *
      * @throws Exception
      */
@@ -148,7 +147,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */

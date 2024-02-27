@@ -360,7 +360,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * @return void
      *
      * @throws Exception
      */
@@ -461,7 +460,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * @return void
      *
      * @throws Exception
      */

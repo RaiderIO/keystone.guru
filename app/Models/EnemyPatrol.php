@@ -73,9 +73,6 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $this->floor?->dungeon_id ?? null;
     }
 
-    /**
-     * @return Model
-     */
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol
     {
         /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */

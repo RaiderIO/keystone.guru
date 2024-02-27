@@ -32,8 +32,6 @@ class TagCategory extends Model
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     *
-     * @return string
      */
     public function getRouteKeyName(): string
     {

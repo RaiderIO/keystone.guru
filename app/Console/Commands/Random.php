@@ -33,8 +33,6 @@ class Random extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(CombatLogSplitServiceInterface $combatLogSplitService): int
     {

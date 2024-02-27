@@ -40,9 +40,6 @@ class ProfileController extends Controller
         return view('profile.view', ['user' => $user]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function routes(Request $request): RedirectResponse
     {
         return redirect()->route('home');
@@ -65,7 +62,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */
@@ -164,9 +160,6 @@ class ProfileController extends Controller
         return redirect()->route('profile.edit');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function updatePrivacy(Request $request, User $user): RedirectResponse
     {
         $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
@@ -251,7 +244,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */

@@ -240,9 +240,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         }
     }
 
-    /**
-     * @return void
-     */
     private function determineSpellsCastBetween(ActivePull $activePull, ?Carbon $lastDiedAt = null): void
     {
         $firstEngagedAt = null;

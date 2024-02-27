@@ -18,8 +18,6 @@ class SpellController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     *
-     * @return bool
      */
     private function isSaveAsNew(Request $request): bool
     {
@@ -121,7 +119,6 @@ class SpellController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */

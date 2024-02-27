@@ -440,7 +440,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return DungeonRoute
      *
      * @throws AuthorizationException
      */
@@ -466,7 +465,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -486,7 +484,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws Exception
      */
@@ -502,7 +499,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws Exception
      */
@@ -527,7 +523,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -613,7 +608,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws Exception
      */
@@ -631,7 +625,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws Exception
      */

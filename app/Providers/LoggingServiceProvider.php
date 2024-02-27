@@ -42,9 +42,6 @@ use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
 {
-    /**
-     * @return void
-     */
     public function register(): void
     {
         parent::register();

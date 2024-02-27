@@ -12,8 +12,6 @@ class LiveSessionPolicy
 
     /**
      * Determine whether the user can create a tag.
-     *
-     * @return bool
      */
     public function view(User $user, LiveSession $liveSession): bool
     {

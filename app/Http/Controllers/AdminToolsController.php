@@ -387,9 +387,6 @@ class AdminToolsController extends Controller
         return view('admin.tools.mdt.string');
     }
 
-    /**
-     * @return JsonResponse
-     */
     public function mdtviewsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService): JsonResponse
     {
         return response()->json(
@@ -823,9 +820,6 @@ class AdminToolsController extends Controller
         return view('admin.tools.mdt.diff', ['warnings' => $warnings]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function dropCache(Request $request, CacheServiceInterface $cacheService): RedirectResponse
     {
         ini_set('max_execution_time', -1);
@@ -903,7 +897,6 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @return mixed
      *
      * @throws Exception
      */

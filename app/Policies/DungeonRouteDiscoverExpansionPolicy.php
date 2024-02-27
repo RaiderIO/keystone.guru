@@ -12,8 +12,6 @@ class DungeonRouteDiscoverExpansionPolicy
 
     /**
      * Determine whether the user can view the dungeon.
-     *
-     * @return mixed
      */
     public function view(?User $user, Expansion $expansion): bool
     {

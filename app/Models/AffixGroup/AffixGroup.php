@@ -48,9 +48,6 @@ class AffixGroup extends AffixGroupBase
         return $this->hasMany(AffixGroupEaseTier::class);
     }
 
-    /**
-     * @return void
-     */
     public static function findMatchingAffixGroupsForAffixIds(Season $season, Collection $affixIds): Collection
     {
         $result = collect();

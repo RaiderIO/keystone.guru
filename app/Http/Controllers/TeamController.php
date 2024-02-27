@@ -110,7 +110,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -147,7 +146,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */
@@ -218,8 +216,6 @@ class TeamController extends Controller
 
     /**
      * Creates a tag from the tag manager
-     *
-     * @return RedirectResponse
      */
     public function createtag(TagFormRequest $request): RedirectResponse
     {

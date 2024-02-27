@@ -27,8 +27,6 @@ class Restore extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {

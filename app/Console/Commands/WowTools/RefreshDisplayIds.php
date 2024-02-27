@@ -35,8 +35,6 @@ class RefreshDisplayIds extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle(WowToolsServiceInterface $wowToolsService): void
     {

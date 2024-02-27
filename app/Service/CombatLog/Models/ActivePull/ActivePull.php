@@ -64,9 +64,6 @@ class ActivePull
         return $this->spellsCast;
     }
 
-    /**
-     * @return $this
-     */
     public function enemyKilled(string $uniqueId): ActivePull
     {
         /** @var ActivePullEnemy $activePullEnemy */
@@ -83,9 +80,6 @@ class ActivePull
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function addSpell(int $spellId): ActivePull
     {
         // Do not add duplicate spells to the same pull
@@ -96,9 +90,6 @@ class ActivePull
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
     {
         $this->enemiesInCombat->put($activePullEnemy->getUniqueId(), $activePullEnemy);

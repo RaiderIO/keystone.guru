@@ -15,7 +15,6 @@ use Illuminate\Http\Response;
 class AjaxMetricController extends Controller
 {
     /**
-     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -28,9 +27,6 @@ class AjaxMetricController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * @return Response
-     */
     public function storeDungeonRoute(APIDungeonRouteMetricFormRequest $request, DungeonRoute $dungeonRoute, MetricServiceInterface $metricService): Response
     {
         $validated = $request->validated();

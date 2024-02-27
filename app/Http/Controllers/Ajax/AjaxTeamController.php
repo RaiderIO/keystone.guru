@@ -27,7 +27,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws AuthorizationException
      */

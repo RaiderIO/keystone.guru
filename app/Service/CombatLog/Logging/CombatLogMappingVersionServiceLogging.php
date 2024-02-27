@@ -86,9 +86,6 @@ class CombatLogMappingVersionServiceLogging extends StructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    /**
-     * @return void
-     */
     public function createMappingVersionFromCombatLogNewEnemy(int $floorId, int $npcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());

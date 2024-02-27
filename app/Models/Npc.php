@@ -243,9 +243,6 @@ class Npc extends CacheModel implements MappingModelInterface
         return round($keyLevelFactor * 100) / 100;
     }
 
-    /**
-     * @return void
-     */
     public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
         $thundering = $thundering && $keyLevel >= 10;

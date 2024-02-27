@@ -1047,9 +1047,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         return $dungeonRoute;
     }
 
-    /**
-     * @return void
-     */
     private function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute): void
     {
         $dungeonRoute->update(['enemy_forces' => $importStringPulls->getEnemyForces()]);
@@ -1111,9 +1108,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index]);
     }
 
-    /**
-     * @return void
-     */
     private function applyObjectsToDungeonRoute(ImportStringObjects $importStringObjects, DungeonRoute $dungeonRoute): void
     {
         $now = now();
@@ -1203,9 +1197,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         MapIcon::insert($mapIconsAttributes);
     }
 
-    /**
-     * @return void
-     */
     private function applyRiftOffsetsToDungeonRoute(ImportStringRiftOffsets $importStringRiftOffsets, DungeonRoute $dungeonRoute): void
     {
         $now = now();
@@ -1295,7 +1286,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * Sets the encoded string to be staged for translation to a DungeonRoute.
      *
      * @param  $encodedString  string The MDT encoded string.
-     * @return $this
      */
     public function setEncodedString(string $encodedString): self
     {

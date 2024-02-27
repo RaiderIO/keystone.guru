@@ -33,8 +33,6 @@ class SyncAdsTxt extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(AdProviderServiceInterface $nitroPayService): int
     {

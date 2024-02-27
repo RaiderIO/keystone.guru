@@ -103,7 +103,6 @@ class DungeonController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */

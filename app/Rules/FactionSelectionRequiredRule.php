@@ -31,7 +31,6 @@ class FactionSelectionRequiredRule implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
      * @param  mixed  $value
      */
     public function passes(string $attribute, $value): bool

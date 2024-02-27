@@ -25,7 +25,6 @@ use Teapot\StatusCode;
 class LiveSessionController extends Controller
 {
     /**
-     * @return RedirectResponse
      *
      * @throws AuthorizationException
      */

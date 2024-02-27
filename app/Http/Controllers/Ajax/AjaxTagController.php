@@ -102,7 +102,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -120,7 +119,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Response
      *
      * @throws AuthorizationException
      * @throws Exception

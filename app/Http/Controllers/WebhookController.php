@@ -14,7 +14,6 @@ class WebhookController extends Controller
      * Validate an incoming github webhook
      *
      *
-     * @return void
      *
      * @throws BadRequestException|UnauthorizedException
      *
@@ -39,9 +38,6 @@ class WebhookController extends Controller
         }
     }
 
-    /**
-     * @return Response
-     */
     public function github(Request $request, DiscordApiServiceInterface $discordApiService): Response
     {
         $this->validateGithubWebhook($request);

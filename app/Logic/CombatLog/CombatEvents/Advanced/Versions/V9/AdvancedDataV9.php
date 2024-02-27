@@ -148,9 +148,6 @@ class AdvancedDataV9 implements AdvancedDataInterface
         return $this->level;
     }
 
-    /**
-     * @return self
-     */
     public function setParameters(array $parameters): HasParameters
     {
         $this->infoGuid = Guid::createFromGuidString($parameters[0]);

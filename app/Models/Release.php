@@ -170,7 +170,6 @@ class Release extends CacheModel
     }
 
     /**
-     * @return \PHLAK\SemVer\Version
      *
      * @throws InvalidVersionException
      */

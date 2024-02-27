@@ -27,9 +27,6 @@ class StructuredLogging implements StructuredLoggingInterface
         }
     }
 
-    /**
-     * @param  array  $context
-     */
     public function addContext(string $key, array ...$context): void
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it

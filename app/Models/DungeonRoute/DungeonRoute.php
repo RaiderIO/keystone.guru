@@ -1375,7 +1375,6 @@ class DungeonRoute extends Model
      * Ensure we have an affix group at all times
      *
      *
-     * @return void
      *
      * @throws Exception
      */

@@ -103,8 +103,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -179,9 +177,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap services.
-     *
-     *
-     * @return void
      */
     public function boot(
         ViewServiceInterface $viewService,

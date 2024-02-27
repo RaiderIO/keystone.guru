@@ -67,9 +67,6 @@ class ImportStringPulls
         return $this->mdtPulls;
     }
 
-    /**
-     * @return $this
-     */
     public function addEnemyForces(int $amount): self
     {
         $this->enemyForces += $amount;

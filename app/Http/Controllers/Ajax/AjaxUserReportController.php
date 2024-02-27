@@ -54,9 +54,6 @@ class AjaxUserReportController
         return $saveResult;
     }
 
-    /**
-     * @return Response
-     */
     public function dungeonrouteStore(UserReportFormRequest $request, DungeonRoute $dungeonroute): Response
     {
         if (! $this->store($request, $dungeonroute)) {
@@ -66,9 +63,6 @@ class AjaxUserReportController
         return response()->noContent();
     }
 
-    /**
-     * @return Response
-     */
     public function enemyStore(UserReportFormRequest $request, Enemy $enemy): Response
     {
         if (! $this->store($request, $enemy)) {

@@ -7,9 +7,6 @@ use Illuminate\Http\Response;
 
 trait ValidatesFloorId
 {
-    /**
-     * @return void
-     */
     public function validateFloorId(int $floorId, int $dungeonId): ?Response
     {
         if (Floor::findOrFail($floorId)->dungeon_id !== $dungeonId) {

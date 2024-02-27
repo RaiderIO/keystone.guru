@@ -38,7 +38,6 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws MissingArgumentException
      */

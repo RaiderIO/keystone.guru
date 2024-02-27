@@ -67,9 +67,6 @@ class GenericDataAll implements GenericDataInterface
         return $this->destRaidFlags;
     }
 
-    /**
-     * @return self
-     */
     public function setParameters(array $parameters): HasParameters
     {
         $this->validateParameters($parameters);

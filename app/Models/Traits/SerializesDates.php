@@ -25,9 +25,6 @@ trait SerializesDates
         return $date->format(self::$SERIALIZED_DATE_TIME_FORMAT);
     }
 
-    /**
-     * @return void
-     */
     public function setCreatedAtAttribute($value): void
     {
         if (is_string($value)) {
@@ -37,9 +34,6 @@ trait SerializesDates
         }
     }
 
-    /**
-     * @return void
-     */
     public function setUpdatedAtAttribute($value): void
     {
         if (is_string($value)) {

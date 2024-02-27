@@ -23,8 +23,6 @@ class UserController extends Controller
 {
     /**
      * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory
      */
     public function list(): View
     {
@@ -33,9 +31,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function makeadmin(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
@@ -56,9 +51,6 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function makeuser(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();

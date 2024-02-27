@@ -34,9 +34,6 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $difficulty): RedirectResponse
     {
         $validated = $request->validated();
@@ -51,9 +48,6 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         return redirect()->route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function delete(Request $request, Dungeon $dungeon, Floor $floor, int $difficulty, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc): RedirectResponse
     {
         try {

@@ -12,8 +12,6 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can view the dungeon route.
-     *
-     * @return mixed
      */
     public function view(?User $user, DungeonRoute $dungeonroute): bool
     {
@@ -148,8 +146,6 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can delete the dungeon route.
-     *
-     * @return mixed
      */
     public function delete(User $user, DungeonRoute $dungeonroute): bool
     {
@@ -159,8 +155,6 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can restore the dungeon route.
-     *
-     * @return mixed
      */
     public function restore(User $user, DungeonRoute $dungeonroute): bool
     {
@@ -170,8 +164,6 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can permanently delete the dungeon route.
-     *
-     * @return mixed
      */
     public function forceDelete(User $user, DungeonRoute $dungeonroute): bool
     {

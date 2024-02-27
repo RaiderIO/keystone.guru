@@ -28,9 +28,6 @@ class NpcController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     *
-     *
-     * @return bool
      */
     private function isSaveAsNew(Request $request): bool
     {
@@ -251,7 +248,6 @@ class NpcController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */

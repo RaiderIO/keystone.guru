@@ -18,7 +18,6 @@ class DevCacheService extends CacheService
 
     /**
      * @param  Closure|mixed  $value
-     * @param  string|null  $ttl
      *
      * @throws InvalidArgumentException
      */
@@ -35,7 +34,6 @@ class DevCacheService extends CacheService
 
     /**
      * @param  Closure|mixed  $value
-     * @param  string|null  $ttl
      */
     public function remember(string $key, $value, ?string $ttl = null): mixed
     {

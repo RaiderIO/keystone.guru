@@ -68,7 +68,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      *
      * @throws Exception
      */

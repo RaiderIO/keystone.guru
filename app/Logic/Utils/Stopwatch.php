@@ -9,9 +9,6 @@ class Stopwatch
      */
     private static array $timers = [];
 
-    /**
-     * @return mixed
-     */
     private static function _getTime(): float
     {
         return microtime(true);

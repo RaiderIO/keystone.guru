@@ -20,7 +20,6 @@ class DungeonRouteThumbnailJobCollectionResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray(Request $request): array
