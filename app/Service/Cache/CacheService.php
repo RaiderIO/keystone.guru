@@ -31,13 +31,11 @@ class CacheService implements CacheServiceInterface
     /**
      * Remembers a value with a specific key if a condition is met
      *
-     * @param Closure|mixed            $value
-     * @param string|null|DateInterval $ttl
+     * @param Closure|mixed $value
      * @return Closure|mixed|null
      *
-     * @throws InvalidArgumentException
      */
-    public function rememberWhen(bool $condition, string $key, $value, $ttl = null): mixed
+    public function rememberWhen(bool $condition, string $key, $value, ?string $ttl = null): mixed
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
@@ -49,10 +47,10 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param Closure|mixed            $value
-     * @param string|null|DateInterval $ttl
+     * @param Closure|mixed $value
+     * @return mixed
      */
-    public function remember(string $key, $value, $ttl = null): mixed
+    public function remember(string $key, $value, ?string $ttl = null): mixed
     {
         $result = null;
 
@@ -96,11 +94,12 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string|null|DateInterval $ttl
+     * @param string|null $ttl
      *
+     * @return bool
      * @throws InvalidArgumentException
      */
-    public function set(string $key, $object, $ttl = null): bool
+    public function set(string $key, $object, ?string $ttl = null): bool
     {
         return Cache::set($key, $object, $ttl);
     }

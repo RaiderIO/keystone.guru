@@ -2,31 +2,27 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class JsonStringCountRule implements Rule
+class JsonStringCountRule implements ValidationRule
 {
     public function __construct(private readonly int $count)
     {
     }
 
     /**
-     * Determine if the validation rule passes.
-     *
-     * @param mixed $value
+     * @param string  $attribute
+     * @param mixed   $value
+     * @param Closure $fail
+     * @return void
      */
-    public function passes(string $attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $decoded = json_decode((string)$value, true);
 
-        return is_array($decoded) && count($decoded) >= $this->count;
-    }
-
-    /**
-     * Get the validation error message.
-     */
-    public function message(): string
-    {
-        return __('rules.json_string_count_rule.message', ['count' => $this->count]);
+        if (!is_array($decoded) || count($decoded) < $this->count) {
+            $fail(__('rules.json_string_count_rule.message', ['count' => $this->count]));
+        }
     }
 }

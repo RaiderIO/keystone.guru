@@ -3,17 +3,19 @@
 namespace App\Rules;
 
 use App\Models\MapIconType;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Auth;
 
-class MapIconTypeRoleCheckRule implements Rule
+class MapIconTypeRoleCheckRule implements ValidationRule
 {
     /**
-     * Determine if the validation rule passes.
-     *
-     * @param mixed $value
+     * @param string  $attribute
+     * @param mixed   $value
+     * @param Closure $fail
+     * @return void
      */
-    public function passes(string $attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if ($value !== null) {
             /** @var MapIconType $mapIconType */
@@ -21,18 +23,10 @@ class MapIconTypeRoleCheckRule implements Rule
 
             // Only allow admins to save admin_only icons
             if ($mapIconType === null || $mapIconType->admin_only && !(Auth::check() && Auth::user()->hasRole('admin'))) {
-                return false;
+                $fail(__('rules.map_icon_type_role_check_rule.message'));
             }
         }
-
-        return true;
     }
 
-    /**
-     * Get the validation error message.
-     */
-    public function message(): string
-    {
-        return __('rules.map_icon_type_role_check_rule.message');
-    }
+
 }
