@@ -19,7 +19,7 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
-use App\User;
+use App\Models\User;
 
 $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dungeonRoute) {
     // Shouldn't happen - but it may if the route was deleted and someone left their browser window open

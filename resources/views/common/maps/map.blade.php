@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\User                                  $user
+ * @var \App\Models\User                                  $user
  * @var \App\Logic\MapContext\MapContext           $mapContext
  * @var \App\Models\Dungeon                        $dungeon
  * @var \App\Models\Floor\Floor                    $floor
@@ -44,8 +44,8 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
-$mapFacadeStyle                   ??= \App\User::getCurrentUserMapFacadeStyle();
-$useFacade                        = $mapFacadeStyle === \App\User::MAP_FACADE_STYLE_FACADE;
+$mapFacadeStyle                   ??= \App\Models\User::getCurrentUserMapFacadeStyle();
+$useFacade                        = $mapFacadeStyle === \App\Models\User::MAP_FACADE_STYLE_FACADE;
 
 // Allow echo to be overridden
 $echo           ??= Auth::check() && !$sandboxMode;

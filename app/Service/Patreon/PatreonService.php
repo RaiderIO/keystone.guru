@@ -6,7 +6,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
-use App\User;
+use App\Models\User;
 
 class PatreonService implements PatreonServiceInterface
 {

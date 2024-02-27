@@ -3,7 +3,7 @@
 namespace App\Events\Model;
 
 use App\Events\ContextEvent;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class ContextModelEvent extends ContextEvent

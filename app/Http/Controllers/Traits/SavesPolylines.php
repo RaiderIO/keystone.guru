@@ -14,7 +14,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 

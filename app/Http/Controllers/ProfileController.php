@@ -9,7 +9,7 @@ use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
-use App\User;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;

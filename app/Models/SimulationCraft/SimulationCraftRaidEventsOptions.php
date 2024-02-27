@@ -6,7 +6,7 @@ use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\GeneratesPublicKey;
-use App\User;
+use App\Models\User;
 use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;

@@ -2,7 +2,7 @@
 
 namespace App\Models\Patreon;
 
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;

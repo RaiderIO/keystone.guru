@@ -17,7 +17,7 @@ use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
