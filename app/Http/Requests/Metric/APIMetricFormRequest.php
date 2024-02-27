@@ -22,12 +22,12 @@ class APIMetricFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'int',
-            'model_id' => 'int|null',
+            'id'          => 'int',
+            'model_id'    => 'int|null',
             'model_class' => 'string|null',
-            'category' => Rule::in(Metric::ALL_CATEGORIES),
-            'tag' => Rule::in(Metric::ALL_TAGS),
-            'value' => 'int',
+            'category'    => Rule::in(Metric::ALL_CATEGORIES),
+            'tag'         => Rule::in(Metric::ALL_TAGS),
+            'value'       => 'int',
         ];
     }
 }

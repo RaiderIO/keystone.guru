@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $name
+ * @property int                       $id
+ * @property string                    $name
  * @property Collection|DungeonRoute[] $dungeonRoutes
  *
  * @mixin Eloquent
@@ -38,10 +38,10 @@ class PublishedState extends CacheModel
     public const WORLD = 'world';
 
     public const ALL = [
-        self::UNPUBLISHED => 1,
-        self::TEAM => 2,
+        self::UNPUBLISHED     => 1,
+        self::TEAM            => 2,
         self::WORLD_WITH_LINK => 3,
-        self::WORLD => 4,
+        self::WORLD           => 4,
     ];
 
     public function dungeonRoutes(): HasMany

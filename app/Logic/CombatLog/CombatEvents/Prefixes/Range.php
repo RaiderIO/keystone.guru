@@ -31,8 +31,8 @@ class Range extends Prefix
     {
         parent::setParameters($parameters);
 
-        $this->spellId = $parameters[0];
-        $this->spellName = $parameters[1];
+        $this->spellId     = $parameters[0];
+        $this->spellName   = $parameters[1];
         $this->spellSchool = $parameters[2];
 
         return $this;

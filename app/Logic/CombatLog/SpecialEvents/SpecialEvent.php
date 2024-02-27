@@ -99,34 +99,34 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
     private const SPECIAL_EVENT_CLASS_MAPPING = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION => CombatLogVersion::class,
-        self::SPECIAL_EVENT_ZONE_CHANGE => ZoneChange::class,
-        self::SPECIAL_EVENT_MAP_CHANGE => MapChange::class,
+        self::SPECIAL_EVENT_ZONE_CHANGE        => ZoneChange::class,
+        self::SPECIAL_EVENT_MAP_CHANGE         => MapChange::class,
 
         self::SPECIAL_EVENT_CHALLENGE_MODE_START => ChallengeModeStart::class,
-        self::SPECIAL_EVENT_CHALLENGE_MODE_END => ChallengeModeEnd::class,
+        self::SPECIAL_EVENT_CHALLENGE_MODE_END   => ChallengeModeEnd::class,
 
         self::SPECIAL_EVENT_ENCOUNTER_START => EncounterStart::class,
-        self::SPECIAL_EVENT_ENCOUNTER_END => EncounterEnd::class,
+        self::SPECIAL_EVENT_ENCOUNTER_END   => EncounterEnd::class,
 
         self::SPECIAL_EVENT_COMBATANT_INFO => CombatantInfo::class,
-        self::SPECIAL_EVENT_PARTY_KILL => PartyKill::class,
+        self::SPECIAL_EVENT_PARTY_KILL     => PartyKill::class,
 
-        self::SPECIAL_EVENT_UNIT_DESTROYED => UnitDestroyed::class,
-        self::SPECIAL_EVENT_UNIT_DIED => UnitDied::class,
+        self::SPECIAL_EVENT_UNIT_DESTROYED  => UnitDestroyed::class,
+        self::SPECIAL_EVENT_UNIT_DIED       => UnitDied::class,
         self::SPECIAL_EVENT_UNIT_DISSIPATES => UnitDissipates::class,
 
-        self::SPECIAL_EVENT_SPELL_ABSORBED => SpellAbsorbedBuilder::class,
+        self::SPECIAL_EVENT_SPELL_ABSORBED       => SpellAbsorbedBuilder::class,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE => EnvironmentalDamageBuilder::class,
-        self::SPECIAL_EVENT_DAMAGE_SPLIT => DamageSplit::class,
+        self::SPECIAL_EVENT_DAMAGE_SPLIT         => DamageSplit::class,
         self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED => DamageShieldMissedBuilder::class,
-        self::SPECIAL_EVENT_DAMAGE_SHIELD => DamageShieldBuilder::class,
-        self::SPECIAL_EVENT_SPELL_RESURRECT => SpellResurrect::class,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD        => DamageShieldBuilder::class,
+        self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
 
-        self::SPECIAL_EVENT_EMOTE => Emote::class,
+        self::SPECIAL_EVENT_EMOTE           => Emote::class,
         self::SPECIAL_EVENT_ENCHANT_APPLIED => EnchantApplied::class,
         self::SPECIAL_EVENT_ENCHANT_REMOVED => EnchantRemoved::class,
 
-        self::SPECIAL_EVENT_WORLD_MARKER_PLACED => WorldMarkerPlaced::class,
+        self::SPECIAL_EVENT_WORLD_MARKER_PLACED  => WorldMarkerPlaced::class,
         self::SPECIAL_EVENT_WORLD_MARKER_REMOVED => WorldMarkerRemoved::class,
     ];
 
@@ -151,10 +151,10 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
      * @throws Exception
      */
     public static function createFromEventName(
-        int $combatLogVersion,
+        int    $combatLogVersion,
         Carbon $timestamp,
         string $eventName,
-        array $parameters,
+        array  $parameters,
         string $rawEvent
     ): SpecialEvent {
         foreach (self::SPECIAL_EVENT_CLASS_MAPPING as $specialEvent => $className) {

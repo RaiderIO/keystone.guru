@@ -31,7 +31,7 @@ class Counter
     /**
      * Echoes a timer into the webpage for debugging purposes
      *
-     * @param  string  $counterName  The name of the timer that you want to echo.
+     * @param string $counterName The name of the timer that you want to echo.
      */
     public static function dump(string $counterName = 'default'): void
     {

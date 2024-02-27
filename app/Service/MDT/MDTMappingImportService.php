@@ -89,8 +89,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
         return md5(
             json_encode([
-                'counts' => $mdtDungeon->getDungeonTotalCount(),
-                'npcs' => $mdtDungeon->getMDTNPCs()->toArray(),
+                'counts'             => $mdtDungeon->getDungeonTotalCount(),
+                'npcs'               => $mdtDungeon->getMDTNPCs()->toArray(),
                 'floorSwitchMarkers' => $mdtDungeon->getMDTMapPOIs()->toArray(),
             ])
         );
@@ -107,11 +107,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importDungeonTotalCounts($mdtDungeon->getMDTDungeonID(), $totalCount['normal'], $totalCount['teeming']);
 
             if ($dungeon->update([
-                'mdt_id' => $mdtDungeon->getMDTDungeonID(),
-            ]) && $newMappingVersion->update([
-                'enemy_forces_required' => $totalCount['normal'],
-                'enemy_forces_required_teeming' => $totalCount['teeming'],
-            ])) {
+                    'mdt_id' => $mdtDungeon->getMDTDungeonID(),
+                ]) && $newMappingVersion->update([
+                    'enemy_forces_required'         => $totalCount['normal'],
+                    'enemy_forces_required_teeming' => $totalCount['teeming'],
+                ])) {
                 $this->log->importDungeonOK();
             } else {
                 $this->log->importDungeonFailed();
@@ -142,14 +142,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $npc->id = $mdtNpc->getId();
                 // Allow manual override to -1
-                $npc->dungeon_id = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
-                $npc->display_id = $mdtNpc->getDisplayId();
+                $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
+                $npc->display_id        = $mdtNpc->getDisplayId();
                 $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
-                $npc->name = $mdtNpc->getName();
-                $npc->base_health = $mdtNpc->getHealth();
+                $npc->name              = $mdtNpc->getName();
+                $npc->base_health       = $mdtNpc->getHealth();
                 $npc->health_percentage = $mdtNpc->getHealthPercentage();
-                $npc->npc_type_id = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
-                $npc->truesight = $mdtNpc->getStealthDetect();
+                $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
+                $npc->truesight         = $mdtNpc->getStealthDetect();
 
                 try {
                     if ($newlyCreated ? $npc->save() : $npc->update()) {
@@ -162,9 +162,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             } else {
                                 // Create new enemy forces for this NPC for this new mapping version
                                 NpcEnemyForces::create([
-                                    'mapping_version_id' => $newMappingVersion->id,
-                                    'npc_id' => $npc->id,
-                                    'enemy_forces' => $mdtNpc->getCount(),
+                                    'mapping_version_id'   => $newMappingVersion->id,
+                                    'npc_id'               => $npc->id,
+                                    'enemy_forces'         => $mdtNpc->getCount(),
                                     'enemy_forces_teeming' => null,
                                 ]);
 
@@ -177,7 +177,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             $newMappingVersion->update([
                                 'enemy_forces_shrouded' => $mdtNpc->getCount(),
                             ]);
-                        } elseif ($npc->isShroudedZulGamux()) {
+                        } else if ($npc->isShroudedZulGamux()) {
                             $newMappingVersion->update([
                                 'enemy_forces_shrouded_zul_gamux' => $mdtNpc->getCount(),
                             ]);
@@ -200,15 +200,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     private function importEnemies(
         Mappingversion $currentMappingVersion,
         MappingVersion $newMappingVersion,
-        MDTDungeon $mdtDungeon,
-        Dungeon $dungeon,
-        bool $forceImport = false): Collection
+        MDTDungeon     $mdtDungeon,
+        Dungeon        $dungeon,
+        bool           $forceImport = false): Collection
     {
         // Get a list of new enemies and save them
         try {
             $this->log->importEnemiesStart();
 
-            $currentEnemies = $currentMappingVersion->enemies->keyBy(static fn (Enemy $enemy) => $enemy->getUniqueKey());
+            $currentEnemies = $currentMappingVersion->enemies->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey());
 
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
@@ -237,7 +237,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 unset($enemy->enemy_id);
 
                 // Is group ID - we handle this later on
-                $enemy->enemy_pack_id = null;
+                $enemy->enemy_pack_id      = null;
                 $enemy->mapping_version_id = $newMappingVersion->id;
 
                 $currentEnemy = $currentEnemies->get($enemy->getUniqueKey());
@@ -245,13 +245,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $fields = ['teeming', 'faction', 'required', 'skippable', 'kill_priority'];
                     // We ignore MDT's position - we want to keep agency in the location we place enemies still
                     // since we value VERY MUCH the enemy location being accurate to where they are in-game
-                    if (! $forceImport) {
+                    if (!$forceImport) {
                         $fields = array_merge($fields, ['floor_id', 'lat', 'lng']);
                     }
 
                     $updatedFields = [];
                     foreach ($fields as $field) {
-                        $enemy->$field = $currentEnemy->$field;
+                        $enemy->$field         = $currentEnemy->$field;
                         $updatedFields[$field] = $currentEnemy->$field;
                     }
 
@@ -295,13 +295,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             // Conserve the enemy_pack_id
             $mdtEnemiesWithGroups = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
-            $mdtEnemyPacks = $mdtEnemiesWithGroups->groupBy('enemy_pack_id');
+            $mdtEnemyPacks        = $mdtEnemiesWithGroups->groupBy('enemy_pack_id');
 
             // Save enemy packs
             foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
                 /** @var $mdtEnemiesWithGroupsByEnemyPack Collection|Enemy[] */
                 $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
-                    ->filter(static fn (Enemy $enemy) => $enemy->teeming === null && ! in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS))
+                    ->filter(static fn(Enemy $enemy) => $enemy->teeming === null && !in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS))
                     ->keyBy('id');
 
                 // Enemies without a group - don't import that group, or no enemies assigned to the group
@@ -313,22 +313,22 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // We do not re-import the lat/lng from MDT - we allow ourselves to adjust the lat/lng, so we must
                 // fetch the adjusted lat/lng by matching enemies with what we actually saved
                 // 1. Get a list of unique keys which we must look for in the real enemy list
-                $enemiesWithGroupsByEnemyPackUniqueIds = $mdtEnemiesWithGroupsByEnemyPack->map(static fn (Enemy $enemy) => $enemy->getUniqueKey());
+                $enemiesWithGroupsByEnemyPackUniqueIds = $mdtEnemiesWithGroupsByEnemyPack->map(static fn(Enemy $enemy) => $enemy->getUniqueKey());
                 // 2. Find the enemies that were saved in the database by key
-                $boundingBoxEnemies = $newMappingVersionEnemies->filter(static fn (Enemy $enemy) => $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false);
+                $boundingBoxEnemies = $newMappingVersionEnemies->filter(static fn(Enemy $enemy) => $enemiesWithGroupsByEnemyPackUniqueIds->search($enemy->getUniqueKey()) !== false);
 
                 /** @var Enemy $firstEnemy */
                 $firstEnemy = ($boundingBoxEnemies->first() ?? $mdtEnemiesWithGroupsByEnemyPack->first());
 
                 $enemyPack = EnemyPack::create([
                     'mapping_version_id' => $newMappingVersion->id,
-                    'floor_id' => $firstEnemy->floor_id,
-                    'group' => $groupIndex,
-                    'teeming' => null,
-                    'faction' => Faction::FACTION_ANY,
-                    'label' => sprintf('Imported from MDT - group %d', $groupIndex),
+                    'floor_id'           => $firstEnemy->floor_id,
+                    'group'              => $groupIndex,
+                    'teeming'            => null,
+                    'faction'            => Faction::FACTION_ANY,
+                    'label'              => sprintf('Imported from MDT - group %d', $groupIndex),
                     // 3. Create a new bounding box according to the new enemies lat/lngs
-                    'vertices_json' => json_encode($this->getVerticesBoundingBoxFromEnemies($boundingBoxEnemies)),
+                    'vertices_json'      => json_encode($this->getVerticesBoundingBoxFromEnemies($boundingBoxEnemies)),
                 ]);
                 if ($enemyPack === null) {
                     throw new Exception('Unable to save enemy pack!');
@@ -375,7 +375,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             foreach ($mdtNPCs as $mdtNPC) {
                 foreach ($mdtNPC->getRawMdtNpc()['clones'] as $mdtCloneIndex => $mdtNpcClone) {
-                    if (! isset($mdtNpcClone['patrol'])) {
+                    if (!isset($mdtNpcClone['patrol'])) {
                         continue;
                     }
 
@@ -394,8 +394,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $vertices = [];
                     foreach ($mdtNpcClone['patrol'] as $xy) {
-                        $latLng = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
-                        $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
+                        $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
+                        $latLng     = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
                         $vertices[] = $latLng->toArray();
                     }
 
@@ -404,12 +404,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     // Polyline
                     $polyLine = Polyline::create([
-                        'model_id' => -1,
-                        'model_class' => EnemyPatrol::class,
-                        'color' => '#003280',
+                        'model_id'       => -1,
+                        'model_class'    => EnemyPatrol::class,
+                        'color'          => '#003280',
                         'color_animated' => null,
-                        'weight' => 2,
-                        'vertices_json' => json_encode($vertices),
+                        'weight'         => 2,
+                        'vertices_json'  => json_encode($vertices),
                     ]);
                     if ($polyLine !== null) {
                         $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
@@ -420,10 +420,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     // Enemy patrols
                     $enemyPatrol = EnemyPatrol::create([
                         'mapping_version_id' => $newMappingVersion->id,
-                        'floor_id' => $savedEnemy->floor_id,
-                        'polyline_id' => $polyLine->id,
-                        'teeming' => null,
-                        'faction' => Faction::FACTION_ANY,
+                        'floor_id'           => $savedEnemy->floor_id,
+                        'polyline_id'        => $polyLine->id,
+                        'teeming'            => null,
+                        'faction'            => Faction::FACTION_ANY,
                     ]);
                     if ($enemyPatrol !== null) {
                         $this->log->importEnemyPatrolsSaveNewEnemyPatrol($enemyPatrol->id);
@@ -477,13 +477,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 // Recover them from the previous mapping version
                 $dungeonFloorSwitchMarkerIdMapping = [];
-                $newDungeonFloorSwitchMarkers = [];
+                $newDungeonFloorSwitchMarkers      = [];
 
                 foreach ($currentMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                     /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
-                    $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion($newMappingVersion);
+                    $newDungeonFloorSwitchMarker                                      = $dungeonFloorSwitchMarker->cloneForNewMappingVersion($newMappingVersion);
                     $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
-                    $newDungeonFloorSwitchMarkers[] = $newDungeonFloorSwitchMarker;
+                    $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
                 }
 
                 // Restore the links between the floor switches
@@ -507,8 +507,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
                         'mapping_version_id' => $newMappingVersion->id,
-                        'floor_id' => $floor->id,
-                        'target_floor_id' => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
+                        'floor_id'           => $floor->id,
+                        'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
                     ], $latLng->toArray()));
                     if ($dungeonFloorSwitchMarker !== null) {
                         $this->log->importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(
@@ -528,7 +528,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
     private function findSavedEnemyFromCloneEnemy(Collection $savedEnemies, int $npcId, int $mdtId): Enemy
     {
-        return $savedEnemies->firstOrFail(static fn (Enemy $enemy) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
+        return $savedEnemies->firstOrFail(static fn(Enemy $enemy) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
     }
 
     public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
@@ -536,13 +536,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         $activeFloors = $dungeon->floors()->active()->get();
 
         // First check for mdt_sub_level, if that isn't found just match on our own index
-        return $activeFloors->first(static fn (Floor $floor) => $floor->mdt_sub_level === $mdtSubLevel) ?? $activeFloors->first(static fn (Floor $floor) => $floor->index === $mdtSubLevel);
+        return $activeFloors->first(static fn(Floor $floor) => $floor->mdt_sub_level === $mdtSubLevel) ?? $activeFloors->first(static fn(Floor $floor) => $floor->index === $mdtSubLevel);
     }
 
     /**
      * Get a bounding box which encompasses all passed enemies
      *
-     * @param  Collection|Enemy[]  $enemies
+     * @param Collection|Enemy[] $enemies
      */
     private function getVerticesBoundingBoxFromEnemies(Collection $enemies): array
     {
@@ -571,10 +571,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
         // Expand the box a bit
         $padding = 1;
-        $minLat -= $padding;
-        $minLng -= $padding;
-        $maxLat += $padding;
-        $maxLng += $padding;
+        $minLat  -= $padding;
+        $minLng  -= $padding;
+        $maxLat  += $padding;
+        $maxLng  += $padding;
 
         // Create a box
         return [

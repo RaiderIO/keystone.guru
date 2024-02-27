@@ -19,7 +19,7 @@ final class CombatLogServiceTest extends PublicTestCase
     {
         // Arrange
         ini_set('memory_limit', '1G');
-        $log = LoggingFixtures::createCombatLogServiceLogging($this);
+        $log              = LoggingFixtures::createCombatLogServiceLogging($this);
         $combatLogService = ServiceFixtures::getCombatLogServiceMock($this, $log);
 
         // Act

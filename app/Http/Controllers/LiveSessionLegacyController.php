@@ -12,21 +12,21 @@ class LiveSessionLegacyController extends Controller
     public function view(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession): RedirectResponse
     {
         return redirect()->route('dungeonroute.livesession.view', [
-            'dungeon' => $dungeonroute->dungeon,
+            'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title' => $dungeonroute->getTitleSlug(),
-            'livesession' => $livesession,
+            'title'        => $dungeonroute->getTitleSlug(),
+            'livesession'  => $livesession,
         ]);
     }
 
     public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex): RedirectResponse
     {
         return redirect()->route('dungeonroute.livesession.view', [
-            'dungeon' => $dungeonroute->dungeon,
+            'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title' => $dungeonroute->getTitleSlug(),
-            'livesession' => $livesession,
-            'floorindex' => $floorIndex,
+            'title'        => $dungeonroute->getTitleSlug(),
+            'livesession'  => $livesession,
+            'floorindex'   => $floorIndex,
         ]);
     }
 }

@@ -146,20 +146,20 @@ class SiteController extends Controller
      * @throws Exception
      */
     public function affixes(
-        Request $request,
-        DiscoverServiceInterface $discoverService,
-        SeasonService $seasonService,
-        ExpansionService $expansionService,
+        Request                          $request,
+        DiscoverServiceInterface         $discoverService,
+        SeasonService                    $seasonService,
+        ExpansionService                 $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService
     ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
-            'expansion' => $currentExpansion,
-            'seasonService' => $seasonService,
-            'offset' => max(min((int) $request->get('offset', 0), 10), -20),
-            'dungeonroutes' => [
+            'expansion'               => $currentExpansion,
+            'seasonService'           => $seasonService,
+            'offset'                  => max(min((int)$request->get('offset', 0), 10), -20),
+            'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
                     ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),

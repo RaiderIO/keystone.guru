@@ -19,10 +19,10 @@ final class CombatLogDungeonRouteServiceTest extends PublicTestCase
         // Arrange
         ini_set('memory_limit', '1G');
         $combatLogServiceLog = LoggingFixtures::createCombatLogServiceLogging($this);
-        $combatLogService = ServiceFixtures::getCombatLogServiceMock($this, $combatLogServiceLog);
+        $combatLogService    = ServiceFixtures::getCombatLogServiceMock($this, $combatLogServiceLog);
 
         $combatLogDungeonRouteServiceLog = LoggingFixtures::createCombatLogDungeonRouteServiceLogging($this);
-        $combatLogDungeonRouteService = ServiceFixtures::getResultEventDungeonRouteServiceMock(
+        $combatLogDungeonRouteService    = ServiceFixtures::getResultEventDungeonRouteServiceMock(
             $this,
             $combatLogService,
             $combatLogDungeonRouteServiceLog

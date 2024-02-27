@@ -27,16 +27,16 @@ class EnemyPatrolFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'int',
-            'mapping_version_id' => ['required', 'int', Rule::exists(MappingVersion::class, 'id')],
-            'floor_id' => ['required', 'int', Rule::exists(Floor::class, 'id')],
-            'polyline_id' => ['nullable', Rule::exists(Polyline::class, 'id')],
-            'teeming' => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],
-            'faction' => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
-            'polyline.color' => 'string',
+            'id'                      => 'int',
+            'mapping_version_id'      => ['required', 'int', Rule::exists(MappingVersion::class, 'id')],
+            'floor_id'                => ['required', 'int', Rule::exists(Floor::class, 'id')],
+            'polyline_id'             => ['nullable', Rule::exists(Polyline::class, 'id')],
+            'teeming'                 => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],
+            'faction'                 => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
+            'polyline.color'          => 'string',
             'polyline.color_animated' => 'nullable|string',
-            'polyline.weight' => 'int',
-            'polyline.vertices_json' => [
+            'polyline.weight'         => 'int',
+            'polyline.vertices_json'  => [
                 'json',
                 new JsonStringCountRule(2),
             ],

@@ -19,16 +19,16 @@ final class SeasonServiceTest extends PublicTestCase
     {
         $this->seasonAttributes = collect([
             [
-                'start' => Carbon::createFromDate(2018, 9, 4),
+                'start'             => Carbon::createFromDate(2018, 9, 4),
                 'affix_group_count' => 12,
             ], [
-                'start' => Carbon::createFromDate(2019, 01, 23),
+                'start'             => Carbon::createFromDate(2019, 01, 23),
                 'affix_group_count' => 10,
             ], [
-                'start' => Carbon::createFromDate(2019, 07, 10),
+                'start'             => Carbon::createFromDate(2019, 07, 10),
                 'affix_group_count' => 8,
             ], [
-                'start' => Carbon::createFromDate(2020, 01, 21),
+                'start'             => Carbon::createFromDate(2020, 01, 21),
                 'affix_group_count' => 6,
             ],
         ]);

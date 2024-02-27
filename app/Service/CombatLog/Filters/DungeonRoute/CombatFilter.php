@@ -21,7 +21,7 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         parent::__construct($resultEvents);
 
         /** @var DungeonRouteCombatFilterLoggingInterface $log */
-        $log = App::make(DungeonRouteCombatFilterLoggingInterface::class);
+        $log       = App::make(DungeonRouteCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -36,7 +36,7 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         }
 
         // If it hasn't started yet, we don't process anything
-        if (! $this->challengeModeStarted) {
+        if (!$this->challengeModeStarted) {
             return false;
         }
 

@@ -23,11 +23,11 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 abstract class MapContextMappingVersion extends MapContext
 {
     public function __construct(
-        CacheServiceInterface $cacheService,
+        CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
-        Dungeon $dungeon,
-        Floor $floor,
-        MappingVersion $mappingVersion)
+        Dungeon                     $dungeon,
+        Floor                       $floor,
+        MappingVersion              $mappingVersion)
     {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
     }
@@ -54,12 +54,12 @@ abstract class MapContextMappingVersion extends MapContext
     public function getProperties(): array
     {
         // Get or set the NPCs
-        $npcs = $this->cacheService->remember(sprintf('npcs_%s', $this->context->id), fn () => Npc::whereIn('dungeon_id', [$this->context->id, -1])->get()->map(static fn ($npc) => ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id])->values(), config('keystoneguru.cache.npcs.ttl'));
+        $npcs = $this->cacheService->remember(sprintf('npcs_%s', $this->context->id), fn() => Npc::whereIn('dungeon_id', [$this->context->id, -1])->get()->map(static fn($npc) => ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id])->values(), config('keystoneguru.cache.npcs.ttl'));
 
         return array_merge(parent::getProperties(), [
             // First should be unspecified
-            'faction' => __(strtolower((string) Faction::where('key', Faction::FACTION_UNSPECIFIED)->first()->name)),
-            'npcs' => $npcs,
+            'faction' => __(strtolower((string)Faction::where('key', Faction::FACTION_UNSPECIFIED)->first()->name)),
+            'npcs'    => $npcs,
         ]);
     }
 }

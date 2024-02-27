@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $key
- * @property string $name
- * @property int $faction_id
- * @property Faction $faction
+ * @property int        $id
+ * @property string     $key
+ * @property string     $name
+ * @property int        $faction_id
+ * @property Faction    $faction
  * @property Collection $classes
  * @property Collection $specializations
  *

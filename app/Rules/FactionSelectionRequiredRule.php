@@ -34,7 +34,7 @@ class FactionSelectionRequiredRule implements ValidationRule
         $dungeonId = $this->request->get('dungeon_id');
         $factionId = $this->request->get('faction_id');
 
-        $result = ! empty($value);
+        $result = !empty($value);
         /** @var Collection|Dungeon[] $factionSelectionRequired */
         $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
@@ -42,7 +42,7 @@ class FactionSelectionRequiredRule implements ValidationRule
             $result = in_array(intval($factionId), [Faction::ALL[Faction::FACTION_ALLIANCE], Faction::ALL[Faction::FACTION_HORDE]]);
         }
 
-        if (! $result) {
+        if (!$result) {
             $fail(__('rules.faction_selection_required_rule.message'));
         }
     }

@@ -9,14 +9,14 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property int $dungeon_id
- * @property int $model_id
- * @property string $model_class
- * @property string $before_model
+ * @property int         $id
+ * @property int         $dungeon_id
+ * @property int         $model_id
+ * @property string      $model_class
+ * @property string      $before_model
  * @property string|null $after_model
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon      $updated_at
+ * @property Carbon      $created_at
  *
  * @mixin Eloquent
  */

@@ -29,7 +29,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
      */
     public function __construct()
     {
-        $this->cacheService = App::make(CacheServiceInterface::class);
+        $this->cacheService     = App::make(CacheServiceInterface::class);
         $this->expansionService = App::make(ExpansionService::class);
     }
 

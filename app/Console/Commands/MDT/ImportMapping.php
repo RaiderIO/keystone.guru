@@ -44,7 +44,7 @@ class ImportMapping extends Command
     public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService): void
     {
         $dungeonKey = $this->argument('dungeon');
-        $force = (bool) $this->option('force');
+        $force      = (bool)$this->option('force');
 
         if (is_numeric($dungeonKey)) {
             // If it's an ID we should treat it as a season instead

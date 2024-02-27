@@ -2,67 +2,67 @@
 
 return [
     'death_knight' => [
-        'blood' => 'Blood',
-        'frost' => 'Frost',
+        'blood'  => 'Blood',
+        'frost'  => 'Frost',
         'unholy' => 'Unholy',
     ],
     'demon_hunter' => [
-        'havoc' => 'Havoc',
+        'havoc'     => 'Havoc',
         'vengeance' => 'Vengeance',
     ],
-    'druid' => [
-        'balance' => 'Balance',
-        'feral' => 'Feral',
-        'guardian' => 'Guardian',
+    'druid'        => [
+        'balance'     => 'Balance',
+        'feral'       => 'Feral',
+        'guardian'    => 'Guardian',
         'restoration' => 'Restoration',
     ],
-    'evoker' => [
-        'devastation' => 'Devastation',
+    'evoker'       => [
+        'devastation'  => 'Devastation',
         'preservation' => 'Preservation',
     ],
-    'hunter' => [
+    'hunter'       => [
         'beast_mastery' => 'Beast Mastery',
-        'marksman' => 'Marksman',
-        'survival' => 'Survival',
+        'marksman'      => 'Marksman',
+        'survival'      => 'Survival',
     ],
-    'mage' => [
+    'mage'         => [
         'arcane' => 'Arcane',
-        'fire' => 'Fire',
-        'frost' => 'Frost',
+        'fire'   => 'Fire',
+        'frost'  => 'Frost',
     ],
-    'monk' => [
+    'monk'         => [
         'brewmaster' => 'Brewmaster',
         'mistweaver' => 'Mistweaver',
         'windwalker' => 'Windwalker',
     ],
-    'paladin' => [
-        'holy' => 'Holy',
-        'protection' => 'Protection',
+    'paladin'      => [
+        'holy'        => 'Holy',
+        'protection'  => 'Protection',
         'retribution' => 'Retribution',
     ],
-    'priest' => [
+    'priest'       => [
         'discipline' => 'Discipline',
-        'holy' => 'Holy',
-        'shadow' => 'Shadow',
+        'holy'       => 'Holy',
+        'shadow'     => 'Shadow',
     ],
-    'rogue' => [
+    'rogue'        => [
         'assassination' => 'Assassination',
-        'outlaw' => 'Outlaw',
-        'subtlety' => 'Subtlety',
+        'outlaw'        => 'Outlaw',
+        'subtlety'      => 'Subtlety',
     ],
-    'shaman' => [
-        'elemental' => 'Elemental',
+    'shaman'       => [
+        'elemental'   => 'Elemental',
         'enhancement' => 'Enhancement',
         'restoration' => 'Restoration',
     ],
-    'warlock' => [
-        'affliction' => 'Affliction',
-        'demonology' => 'Demonology',
+    'warlock'      => [
+        'affliction'  => 'Affliction',
+        'demonology'  => 'Demonology',
         'destruction' => 'Destruction',
     ],
-    'warrior' => [
-        'arms' => 'Arms',
-        'fury' => 'Fury',
+    'warrior'      => [
+        'arms'       => 'Arms',
+        'fury'       => 'Fury',
         'protection' => 'Protection',
     ],
 ];

@@ -21,7 +21,7 @@ class AffixResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->affix_id,
+            'id'   => $this->affix_id,
             'name' => __($this->name, [], 'en-US'),
         ];
     }

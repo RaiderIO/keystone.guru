@@ -16,7 +16,7 @@ class CreateRouteNpcChronologicalRule implements ValidationRule
     {
         foreach ($value as $index => $npc) {
             $engagedAt = $npc['engagedAt'] ?? null;
-            $diedAt = $npc['diedAt'] ?? null;
+            $diedAt    = $npc['diedAt'] ?? null;
 
             if ($engagedAt === null || $diedAt === null) {
                 $this->failedNpcIndices[] = $index;
@@ -25,14 +25,14 @@ class CreateRouteNpcChronologicalRule implements ValidationRule
             }
 
             $engagedAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $engagedAt);
-            $diedAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $diedAt);
+            $diedAtCarbon    = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $diedAt);
 
             if ($diedAtCarbon->isBefore($engagedAtCarbon)) {
                 $this->failedNpcIndices[] = $index;
             }
         }
 
-        if (! empty($this->failedNpcIndices)) {
+        if (!empty($this->failedNpcIndices)) {
             $fail(__('rules.create_route_npc_chronological_rule.message', ['npcs' => implode(', ', $this->failedNpcIndices)]));
         }
     }

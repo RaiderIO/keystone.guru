@@ -20,22 +20,22 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $floor_id
- * @property string $color
- * @property string $description
- * @property int $index
- * @property float $lat
- * @property float $lng
- * @property DungeonRoute $dungeonRoute
- * @property Floor $floor
- * @property Collection|int[] $enemies
+ * @property int                        $id
+ * @property int                        $dungeon_route_id
+ * @property int                        $floor_id
+ * @property string                     $color
+ * @property string                     $description
+ * @property int                        $index
+ * @property float                      $lat
+ * @property float                      $lng
+ * @property DungeonRoute               $dungeonRoute
+ * @property Floor                      $floor
+ * @property Collection|int[]           $enemies
  * @property Collection|KillZoneEnemy[] $killZoneEnemies
  * @property Collection|KillZoneSpell[] $killZoneSpells
- * @property Collection|Spell[] $spells
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Collection|Spell[]         $spells
+ * @property Carbon                     $updated_at
+ * @property Carbon                     $created_at
  *
  * @mixin Eloquent
  */
@@ -74,9 +74,9 @@ class KillZone extends Model
 
     protected $casts = [
         'floor_id' => 'integer',
-        'index' => 'integer',
-        'lat' => 'float',
-        'lng' => 'float',
+        'index'    => 'integer',
+        'lat'      => 'float',
+        'lng'      => 'float',
     ];
 
     /** @var Collection|int[]|null */
@@ -106,7 +106,7 @@ class KillZone extends Model
             // Disabling model caching makes this query work - not sure why the cache would break it, but it does
             ->disableCache()
             ->get()
-            ->map(static fn (Enemy $enemy) => $enemy->id);
+            ->map(static fn(Enemy $enemy) => $enemy->id);
     }
 
     /**
@@ -173,7 +173,7 @@ class KillZone extends Model
         if ($result === null && $this->killZoneEnemies()->count() > 0) {
             $floorTotals = [];
             foreach ($this->getEnemies($useCache) as $enemy) {
-                if (! isset($floorTotals[$enemy->floor_id])) {
+                if (!isset($floorTotals[$enemy->floor_id])) {
                     $floorTotals[$enemy->floor_id] = 0;
                 }
 
@@ -338,7 +338,7 @@ class KillZone extends Model
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
               and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
-            ", ['teeming' => (int) $teeming, 'kill_zone_id' => $this->id]);
+            ", ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
 
         return collect($queryResult);
     }

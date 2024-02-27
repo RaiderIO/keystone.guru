@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $model_id
- * @property int $model_class
- * @property int $user_id
+ * @property int    $id
+ * @property int    $model_id
+ * @property int    $model_class
+ * @property int    $user_id
  * @property string $username For anonymous users
  * @property string $category
  * @property string $message
- * @property bool $contact_ok
+ * @property bool   $contact_ok
  * @property string $status
- * @property User $author
+ * @property User   $author
  *
  * @mixin Eloquent
  */

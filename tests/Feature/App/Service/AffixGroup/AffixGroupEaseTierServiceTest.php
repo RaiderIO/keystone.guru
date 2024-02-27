@@ -18,9 +18,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     {
         // Arrange
         $affixGroupId = 124;
-        $response = $this->getResponse();
+        $response     = $this->getResponse();
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
@@ -69,7 +69,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $response = $this->getResponse('response_unknown_affix');
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
@@ -105,7 +105,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $response = $this->getResponse('response_unknown_dungeon');
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
@@ -133,21 +133,21 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull(): void
     {
         // Arrange
-        $response = $this->getResponse();
+        $response               = $this->getResponse();
         $responseDifferentAffix = $this->getResponse('response_different_affix');
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
             $log
         );
         // Act
-        $result = null;
+        $result                         = null;
         $previousAffixGroupEaseTierPull = null;
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
-            $result = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
+            $result                         = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
             $previousAffixGroupEaseTierPull?->delete();
@@ -173,18 +173,18 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $response = $this->getResponse();
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
             $log
         );
         // Act
-        $result = null;
+        $result                         = null;
         $previousAffixGroupEaseTierPull = null;
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
-            $result = $affixGroupEaseTierService->parseTierList($response);
+            $result                         = $affixGroupEaseTierService->parseTierList($response);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
             $previousAffixGroupEaseTierPull?->delete();

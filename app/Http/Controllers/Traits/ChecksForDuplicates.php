@@ -16,8 +16,8 @@ use Teapot\StatusCode\Http;
 trait ChecksForDuplicates
 {
     /**
-     * @param  array  $fields  Additional fields to check on for duplicates.
-     * @param  bool  $abort  True to abort, false to return true|false upon completion.
+     * @param array $fields Additional fields to check on for duplicates.
+     * @param bool  $abort True to abort, false to return true|false upon completion.
      * @return bool False if no duplicate was found, true if there was a duplicate.
      */
     public function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
@@ -27,7 +27,7 @@ trait ChecksForDuplicates
         // Round it like MySql does, otherwise we get strange rounding errors and it won't detect it as a duplicate
         /** @var Eloquent $modelClass */
         $modelClass = $candidate::class;
-        $query = $modelClass::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
+        $query      = $modelClass::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
             ->where('lng', round($candidate->lng, 2, PHP_ROUND_HALF_EVEN));
 
         foreach ($fields as $field) {

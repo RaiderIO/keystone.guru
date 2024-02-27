@@ -18,12 +18,12 @@ final class CombatLogEntryTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
     public function parseEvent_ShouldParseTimestamp_GivenRawLogLine(
         string $rawEvent,
-        int $expectedDay,
-        int $expectedMonth,
-        int $expectedHour,
-        int $expectedMinute,
-        int $expectedSecond,
-        int $expectedMilliseconds
+        int    $expectedDay,
+        int    $expectedMonth,
+        int    $expectedHour,
+        int    $expectedMinute,
+        int    $expectedSecond,
+        int    $expectedMilliseconds
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($rawEvent);

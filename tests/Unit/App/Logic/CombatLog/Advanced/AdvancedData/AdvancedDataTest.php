@@ -40,24 +40,24 @@ final class AdvancedDataTest extends PublicTestCase
     #[Group('AdvancedData')]
     #[DataProvider('parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent(
-        string $advancedRangeDamageEvent,
-        string $expectedInfoGUID,
+        string  $advancedRangeDamageEvent,
+        string  $expectedInfoGUID,
         ?string $expectedOwnerGUID,
-        int $expectedCurrentHP,
-        int $expectedMaxHP,
-        int $expectedAttackPower,
-        int $expectedSpellPower,
-        int $expectedArmor,
-        int $expectedAbsorb,
-        array $expectedPowerType,
-        array $expectedCurrentPower,
-        array $expectedMaxPower,
-        array $expectedPowerCost,
-        float $expectedPositionX,
-        float $expectedPositionY,
-        int $expectedUiMapId,
-        float $expectedFacing,
-        int $expectedLevel
+        int     $expectedCurrentHP,
+        int     $expectedMaxHP,
+        int     $expectedAttackPower,
+        int     $expectedSpellPower,
+        int     $expectedArmor,
+        int     $expectedAbsorb,
+        array   $expectedPowerType,
+        array   $expectedCurrentPower,
+        array   $expectedMaxPower,
+        array   $expectedPowerCost,
+        float   $expectedPositionX,
+        float   $expectedPositionY,
+        int     $expectedUiMapId,
+        float   $expectedFacing,
+        int     $expectedLevel
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
@@ -65,7 +65,7 @@ final class AdvancedDataTest extends PublicTestCase
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
         $parseEventResult = $combatLogEntry->parseEvent();
-        $advancedData = $parseEventResult->getAdvancedData();
+        $advancedData     = $parseEventResult->getAdvancedData();
 
         // Assert
         Assert::assertEquals($expectedInfoGUID, $advancedData->getInfoGuid());

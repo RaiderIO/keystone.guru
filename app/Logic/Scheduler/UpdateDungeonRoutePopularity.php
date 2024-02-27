@@ -44,9 +44,9 @@ class UpdateDungeonRoutePopularity
                 * IF(FIND_IN_SET(dungeon_routes.mapping_version_id, latest_mapping_version_ids.ids) > 1, 1, :outOfDateMappingVersionPenalty)
             WHERE dungeon_routes.id = page_views.model_id
         ', [
-            'modelClass' => DungeonRoute::class,
-            'popularityDate' => now()->subDays(config('keystoneguru.discover.service.popular_days'))->toDateTimeString(),
-            'popularityFalloffDays' => config('keystoneguru.discover.service.popular_falloff_days'),
+            'modelClass'                     => DungeonRoute::class,
+            'popularityDate'                 => now()->subDays(config('keystoneguru.discover.service.popular_days'))->toDateTimeString(),
+            'popularityFalloffDays'          => config('keystoneguru.discover.service.popular_falloff_days'),
             'outOfDateMappingVersionPenalty' => config('keystoneguru.discover.service.popular_out_of_date_mapping_version_penalty'),
         ]);
 
