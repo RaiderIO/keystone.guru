@@ -22,7 +22,6 @@ trait ListsEnemyPacks
     public function listEnemyPacks(int $floorId, bool $enemies = true, bool $teeming = false): Collection
     {
         /** @var Builder $result */
-        $result = null;
         $fields = ['id', 'floor_id', 'label', 'teeming', 'faction'];
         if ($enemies) {
             $result = EnemyPack::with(['enemies' => static function ($query) use ($teeming) {
@@ -31,7 +30,7 @@ trait ListsEnemyPacks
                 if (!$teeming) {
                     $query->whereNull('teeming');
                 }
-                
+
                 $query->select(['id', 'enemy_pack_id', 'lat', 'lng']);
                 // must select enemy_pack_id, else it won't return results /sadface
             }]);

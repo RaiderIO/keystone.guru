@@ -287,7 +287,7 @@ class AjaxKillZoneController extends Controller
                 $dungeonRoute->load('killZones');
                 $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
                 // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                $dungeonRoute->touch(null);
 
                 $result = ['enemy_forces' => $dungeonRoute->enemy_forces];
             } catch (\Exception) {

@@ -96,13 +96,14 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "deployer/deployer": "^7.3",
+        "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",
         "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.3",
         "phpunit/phpunit": "^10.0",
         "rector/rector": "^1.0",
-        "wotuu/keystone.guru.deployer": "0.1",
-        "nunomaduro/collision": "^6.3",
-        "spatie/laravel-ignition": "^1.4"
+        "spatie/laravel-ignition": "^1.4",
+        "wotuu/keystone.guru.deployer": "0.1"
     },
     "autoload": {
         "classmap": [
