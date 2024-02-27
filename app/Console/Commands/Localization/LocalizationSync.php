@@ -40,10 +40,8 @@ class LocalizationSync extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $baseLang   = $this->argument('base');
         $targetLang = $this->argument('target');
@@ -114,9 +112,8 @@ class LocalizationSync extends Command
      * Otherwise extract lemmas from content
      *
      * @param false|array $lemmas
-     * @return string
      */
-    public function parse(string $targetLang, string $content, $lemmas = false)
+    public function parse(string $targetLang, string $content, $lemmas = false): string
     {
         $result      = $lemmas === false ? [] : '';
         $tree        = [null];

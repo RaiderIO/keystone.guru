@@ -103,10 +103,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         // Bind the interface to the actual service
         $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
@@ -179,9 +177,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap services.
-     *
-     *
-     * @return void
      */
     public function boot(
         ViewServiceInterface               $viewService,
@@ -189,7 +184,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService,
         GameVersionServiceInterface        $gameVersionService
-    ) {
+    ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
             if (app()->runningInConsole()) {
@@ -297,7 +292,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'dungeonroute.discover.season.overview',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             /** @var Expansion $expansion */
-            $expansion = $view->getData()['expansion'];
+            $expansion           = $view->getData()['expansion'];
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
@@ -328,12 +323,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], static function (View $view) {
             $routeKeyLevelDefault = '10;15';
             $routeKeyLevel        = $_COOKIE['route_key_level'] ?? $routeKeyLevelDefault;
-            $explode = explode(';', $routeKeyLevel);
+            $explode              = explode(';', $routeKeyLevel);
             if (count($explode) !== 2) {
                 $routeKeyLevel = $routeKeyLevelDefault;
                 $explode       = explode(';', $routeKeyLevel);
             }
-            
+
             $view->with('routeKeyLevelFrom', $explode[0]);
             $view->with('routeKeyLevelTo', $explode[1]);
         });

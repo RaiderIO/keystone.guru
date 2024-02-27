@@ -27,11 +27,9 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return Response
-     *
      * @throws AuthorizationException
      */
-    public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team)
+    public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team): Response
     {
         $this->authorize('change-default-role', $team);
 
@@ -195,7 +193,7 @@ class AjaxTeamController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function removeAdFreeGiveaway(Request $request, Team $team, User $user)
+    public function removeAdFreeGiveaway(Request $request, Team $team, User $user): Response
     {
         $this->authorize('can-ad-free-giveaway', $team);
 

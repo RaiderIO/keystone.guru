@@ -165,7 +165,7 @@ class Team extends Model
                 if ($userRoleKey >= $moderator && ($userRoleKey === $admin || $userRoleKey > $targetUserRoleKey)) {
 
                     // Count down from all roles that exist, starting by the role the user currently has
-                    for ($i = $userRoleKey; $i > 0; --$i) {
+                    for ($i = $userRoleKey; $i > 0; $i--) {
                         // array_search to find key by value
                         $result[] = array_search($i, $roles, true);
                     }

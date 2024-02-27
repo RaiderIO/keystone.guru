@@ -28,11 +28,8 @@ class NpcController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     *
-     *
-     * @return bool
      */
-    private function isSaveAsNew(Request $request)
+    private function isSaveAsNew(Request $request): bool
     {
         return $request->get('submit', 'submit') !== 'Submit';
     }
@@ -203,6 +200,7 @@ class NpcController extends Controller
                 ->mapWithKeys(static function ($value, $key) {
                     // Halls of Valor => [npcs]
                     $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+
                     return [
                         $dungeonName => $value->pluck('name', 'id')
                             ->map(static fn($value, $key) => sprintf('%s (%s)', $value, $key)),
@@ -215,7 +213,7 @@ class NpcController extends Controller
     /**
      * @return Factory|View
      */
-    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
+    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc): View
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
@@ -250,11 +248,9 @@ class NpcController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function savenew(NpcFormRequest $request)
+    public function savenew(NpcFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $npc = $this->store($request);
@@ -270,7 +266,7 @@ class NpcController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.npc.list', ['models' => Npc::all()]);
     }

@@ -28,7 +28,7 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         Log::channel('scheduler')->info(
             sprintf(

@@ -11,10 +11,8 @@ class ProfileFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         /** @var User $user */
         $user = Auth::user();
@@ -24,10 +22,8 @@ class ProfileFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'avatar'           => 'image|mimes:png|max:256',

@@ -51,7 +51,6 @@ class LoginController extends Controller
     /**
      * Get the failed login response instance.
      *
-     * @return Response
      *
      * @throws ValidationException
      */

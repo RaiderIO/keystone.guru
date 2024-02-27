@@ -35,11 +35,10 @@ class GetReleaseBody extends Command
     /**
      * Execute the console command.
      *
-     * @return void
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $version  = $this->argument('version');
         $platform = $this->argument('platform');

@@ -4,12 +4,13 @@ namespace App\Rules;
 
 use App\Models\Dungeon;
 use App\Models\Faction;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class FactionSelectionRequiredRule implements Rule
+class FactionSelectionRequiredRule implements ValidationRule
 {
     /**
      * The request control provider instance.
@@ -29,12 +30,12 @@ class FactionSelectionRequiredRule implements Rule
     }
 
     /**
-     * Determine if the validation rule passes.
-     *
-     * @param string $attribute
-     * @param mixed  $value
+     * @param string  $attribute
+     * @param mixed   $value
+     * @param Closure $fail
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $dungeonId = $this->request->get('dungeon_id');
         $factionId = $this->request->get('faction_id');
@@ -47,14 +48,10 @@ class FactionSelectionRequiredRule implements Rule
             $result = in_array(intval($factionId), [Faction::ALL[Faction::FACTION_ALLIANCE], Faction::ALL[Faction::FACTION_HORDE]]);
         }
 
-        return $result;
+        if (!$result) {
+            $fail(__('rules.faction_selection_required_rule.message'));
+        }
     }
 
-    /**
-     * Get the validation error message.
-     */
-    public function message(): string
-    {
-        return __('rules.faction_selection_required_rule.message');
-    }
+
 }

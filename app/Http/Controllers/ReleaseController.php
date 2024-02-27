@@ -44,7 +44,7 @@ class ReleaseController extends Controller
         $changelog->unsetRelation('changes');
 
         $releaseChangelogChangesAttributes = [];
-        for ($i = 0; $i < count($tickets); ++$i) {
+        for ($i = 0; $i < count($tickets); $i++) {
             // Only filled in rows, but tickets may be null
             if ((int)$categories[$i] !== -1 && strlen((string)$categories[$i]) > 0 && strlen((string)$changes[$i]) > 0) {
                 $releaseChangelogChangesAttributes[] = [
@@ -94,7 +94,7 @@ class ReleaseController extends Controller
      *
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('admin.release.edit', [
             'categories' => ReleaseChangelogCategory::all(),
@@ -104,7 +104,7 @@ class ReleaseController extends Controller
     /**
      * @return Factory|View
      */
-    public function edit(Request $request, Release $release)
+    public function edit(Request $request, Release $release): View
     {
         return view('admin.release.edit', [
             'release'    => $release,
@@ -130,11 +130,9 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function savenew(ReleaseFormRequest $request)
+    public function savenew(ReleaseFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $release = $this->store($request);
@@ -147,10 +145,8 @@ class ReleaseController extends Controller
 
     /**
      * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.release.list', ['models' => Release::orderBy('id', 'desc')->get()]);
     }
@@ -158,7 +154,7 @@ class ReleaseController extends Controller
     /**
      * @return Factory|View
      */
-    public function view(Release $release)
+    public function view(Release $release): View
     {
         return view('release.view', ['release' => $release]);
     }

@@ -7,10 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->integer('team_id')->nullable(true)->change();
@@ -20,10 +18,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         DungeonRoute::query()->whereNull('team_id')->update(['team_id' => -1]);
         Schema::table('dungeon_routes', function (Blueprint $table) {

@@ -7,16 +7,14 @@ use App\Logic\Utils\Stopwatch;
 use Closure;
 use Debugbar;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DebugBarMessageLogger
 {
     /**
      * Handle an incoming request.
-     *
-     * @param Request $request
-     * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
 

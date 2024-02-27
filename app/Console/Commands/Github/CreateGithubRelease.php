@@ -40,12 +40,11 @@ class CreateGithubRelease extends GithubReleaseCommand
     /**
      * Execute the console command.
      *
-     * @return void
      *
      * @throws MissingArgumentException
      * @throws Throwable
      */
-    public function handle()
+    public function handle(): void
     {
         $version = $this->argument('version');
         $release = $this->findReleaseByVersion($version);

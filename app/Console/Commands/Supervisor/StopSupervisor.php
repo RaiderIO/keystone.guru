@@ -35,10 +35,8 @@ class StopSupervisor extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $appType = config('app.type');
         // Local environments don't call it local, but empty instead

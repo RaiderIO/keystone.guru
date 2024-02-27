@@ -65,8 +65,8 @@ abstract class DungeonRouteBuilder
         protected DungeonRoute                $dungeonRoute
     ) {
         /** @var DungeonRouteBuilderLoggingInterface $log */
-        $log                    = App::make(DungeonRouteBuilderLoggingInterface::class);
-        $this->log              = $log;
+        $log       = App::make(DungeonRouteBuilderLoggingInterface::class);
+        $this->log = $log;
 
         $this->currentFloor     = null;
         $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
@@ -156,7 +156,7 @@ abstract class DungeonRouteBuilder
 
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
                 KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
-                ++$this->killZoneIndex;
+                $this->killZoneIndex++;
                 $enemyCount = $killZoneEnemiesAttributes->count();
                 $this->log->createPullInsertedEnemies($enemyCount);
 
@@ -323,6 +323,7 @@ abstract class DungeonRouteBuilder
             if ($availableEnemy->enemy_pack_id === null) {
                 return false;
             }
+
             return $preferredGroups->has($availableEnemy->enemyPack->group);
         });
 

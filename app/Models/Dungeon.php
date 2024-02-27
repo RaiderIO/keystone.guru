@@ -609,7 +609,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         $unmappedCount = 0;
         foreach ($npcs as $id => $npc) {
             if (!$npc) {
-                ++$unmappedCount;
+                $unmappedCount++;
             }
         }
 

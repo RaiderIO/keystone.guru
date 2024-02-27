@@ -9,11 +9,10 @@ return new class extends Migration {
     /**
      * Run the migrations.
      *
-     * @return void
      *
      * @throws BindingResolutionException
      */
-    public function up()
+    public function up(): void
     {
         $rows = DB::select('
             SELECT * FROM affix_group_ease_tier_pulls;
@@ -42,10 +41,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         /** @noinspection SqlWithoutWhere */
         DB::update('

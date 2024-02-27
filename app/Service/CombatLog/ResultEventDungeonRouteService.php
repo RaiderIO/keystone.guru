@@ -124,9 +124,9 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             $enemyPositionAttributes = [];
             $currentFloor            = null;
 
-            $now = Carbon::now()->toDateTimeString();
+            $now                = Carbon::now()->toDateTimeString();
             $challengeModeStart = null;
-            $challengeModeEnd = null;
+            $challengeModeEnd   = null;
 
             foreach ($resultEvents as $resultEvent) {
                 // Track the starts and ends. Don't do anything just yet with this

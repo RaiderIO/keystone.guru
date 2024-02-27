@@ -6,10 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('affix_group_ease_tier_pulls', function (Blueprint $table) {
             $table->dropColumn('source_url');
@@ -18,10 +16,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('affix_group_ease_tier_pulls', function (Blueprint $table) {
             $table->string('source_url')->after('id');

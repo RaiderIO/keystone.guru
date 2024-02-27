@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_speedrun_required_npcs', function (Blueprint $table) {
             $table->integer('mode')->after('npc5_id');
@@ -28,10 +26,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_speedrun_required_npcs', function (Blueprint $table) {
             $table->dropColumn('mode');

@@ -36,11 +36,10 @@ class FetchHealth extends Command
     /**
      * Execute the console command.
      *
-     * @return void
      *
      * @throws Exception
      */
-    public function handle(WowheadServiceInterface $wowheadService)
+    public function handle(WowheadServiceInterface $wowheadService): void
     {
         $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
 

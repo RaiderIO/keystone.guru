@@ -33,10 +33,8 @@ class Random extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(CombatLogSplitServiceInterface $combatLogSplitService)
+    public function handle(CombatLogSplitServiceInterface $combatLogSplitService): int
     {
         dd($combatLogSplitService->splitCombatLogOnChallengeModes(
             base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')

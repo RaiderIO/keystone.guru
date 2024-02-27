@@ -191,7 +191,7 @@ class MDTDungeon
                         }
                     }
 
-                    ++$cloneCount;
+                    $cloneCount++;
                 }
             }
 

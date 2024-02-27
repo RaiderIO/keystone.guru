@@ -15,14 +15,6 @@ class ModelDeletedEvent extends ContextEvent
 
     private readonly string $modelName;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param  $context  Model
-     * @param  $user  User
-     * @param  $model  Model
-     * @return void
-     */
     public function __construct(Model $context, User $user, Model $model)
     {
         // Don't save Model here because serialization will fail due to object being deleted

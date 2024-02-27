@@ -60,6 +60,7 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
                     $addition = min(0.99999, ($guid->getId() + hexdec($guid->getSpawnUID())) / 10000000000000);
                 }
             }
+
             return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs() + $addition;
         });
     }

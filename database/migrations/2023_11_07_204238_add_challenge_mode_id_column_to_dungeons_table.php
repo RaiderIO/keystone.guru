@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->integer('challenge_mode_id')->after('map_id')->nullable()->default(null);
@@ -21,10 +19,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->dropColumn('challenge_mode_id');

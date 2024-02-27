@@ -237,8 +237,8 @@ class CoordinatesService implements CoordinatesServiceInterface
         $lat      = $latLng->getLat();
         $lng      = $latLng->getLng();
         $n        = count($polygon);
-        for ($i = 0; $i < $n; ++$i) {
-            ++$j;
+        for ($i = 0; $i < $n; $i++) {
+            $j++;
             if ($j == $n) {
                 $j = 0;
             }

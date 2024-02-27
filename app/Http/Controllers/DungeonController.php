@@ -51,7 +51,7 @@ class DungeonController extends Controller
     /**
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         $dungeons            = Dungeon::all()->keyBy('key');
         $availableKeysSelect = collect();
@@ -77,7 +77,7 @@ class DungeonController extends Controller
     /**
      * @return Factory|View
      */
-    public function edit(Request $request, Dungeon $dungeon)
+    public function edit(Request $request, Dungeon $dungeon): View
     {
         return view('admin.dungeon.edit', [
             'expansions' => Expansion::all()->pluck('name', 'id'),
@@ -103,11 +103,9 @@ class DungeonController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function savenew(DungeonFormRequest $request)
+    public function savenew(DungeonFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $dungeon = $this->store($request);
@@ -123,7 +121,7 @@ class DungeonController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.dungeon.list', [
             'models' => Dungeon::with(['mappingVersions'])

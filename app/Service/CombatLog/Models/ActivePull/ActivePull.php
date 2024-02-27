@@ -64,9 +64,6 @@ class ActivePull
         return $this->spellsCast;
     }
 
-    /**
-     * @return $this
-     */
     public function enemyKilled(string $uniqueId): ActivePull
     {
         /** @var ActivePullEnemy $activePullEnemy */
@@ -83,9 +80,6 @@ class ActivePull
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function addSpell(int $spellId): ActivePull
     {
         // Do not add duplicate spells to the same pull
@@ -96,9 +90,6 @@ class ActivePull
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
     {
         $this->enemiesInCombat->put($activePullEnemy->getUniqueId(), $activePullEnemy);
@@ -134,7 +125,7 @@ class ActivePull
 
             $result['lat'] += $killedActivePullEnemy->getResolvedEnemy()->lat;
             $result['lng'] += $killedActivePullEnemy->getResolvedEnemy()->lng;
-            ++$count;
+            $count++;
         }
 
         $result['lat'] /= $count;

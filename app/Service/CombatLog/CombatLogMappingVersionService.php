@@ -57,6 +57,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 if ($parsedEvent instanceof ChallengeModeStart) {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
                 }
+
                 return $dungeon;
             });
         } finally {
@@ -76,6 +77,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 if ($parsedEvent instanceof ZoneChange) {
                     $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
                 }
+
                 return $dungeon;
             }, $mappingVersion);
         } finally {

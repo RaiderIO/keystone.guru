@@ -11,9 +11,6 @@ class Swing extends Prefix
         return 0;
     }
 
-    /**
-     * @return self
-     */
     public function setParameters(array $parameters): HasParameters
     {
         return $this;

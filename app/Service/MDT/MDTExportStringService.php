@@ -214,7 +214,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
                 // For this enemy, kill this clone
                 $pull[$mdtNpcIndex][] = $enemy->mdt_id;
-                ++$enemiesAdded;
+                $enemiesAdded++;
             }
 
             // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty

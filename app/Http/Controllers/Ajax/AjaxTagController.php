@@ -102,11 +102,9 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Response
-     *
      * @throws AuthorizationException
      */
-    public function updateAll(APITagUpdateFormRequest $request, Tag $tag)
+    public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
     {
         $this->authorize('edit', $tag);
 
@@ -120,12 +118,10 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Response
-     *
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function deleteAll(Request $request, Tag $tag)
+    public function deleteAll(Request $request, Tag $tag): Response
     {
         $this->authorize('delete', $tag);
 

@@ -72,7 +72,7 @@ class RedisClearIdleKeys extends Command
                 }
             }
 
-            ++$i;
+            $i++;
             if ($i % 1000 === 0) {
                 Log::channel('scheduler')->info(sprintf('Scan count %d... (deleted %d keys)', $i, $deletedKeysCount));
                 $deletedKeysCount = 0;

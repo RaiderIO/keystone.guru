@@ -267,7 +267,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             // We were not mounted this intersection - mount up for the next one!
             // But only if we have another intersection after this
             else if ($index !== $allMountableAreaIntersectionsCount - 1) {
-                ++$mountCasts;
+                $mountCasts++;
             }
 
             // Since we encountered a new edge of the zone, we're now either mounting or dismounting

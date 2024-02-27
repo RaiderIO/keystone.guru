@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Traits;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use Exception;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 trait ListsMapIcons

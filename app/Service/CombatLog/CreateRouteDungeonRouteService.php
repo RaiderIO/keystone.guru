@@ -172,10 +172,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         }
     }
 
-    /**
-     * @return void
-     */
-    private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
+    private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute): void
     {
         // Insert a run
         $now = Carbon::now();
@@ -318,7 +315,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         foreach ($dungeonRoute->brushlines as $brushline) {
             $polylineAttributes[$index]['model_id'] = $brushline->id;
 
-            ++$index;
+            $index++;
         }
 
         Polyline::insert($polylineAttributes);
@@ -334,7 +331,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         foreach ($dungeonRoute->brushlines as $brushline) {
             $brushline->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
 
-            ++$polyLineIndex;
+            $polyLineIndex++;
         }
     }
 }

@@ -10,11 +10,11 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode\Http;
 
@@ -22,20 +22,15 @@ class UserController extends Controller
 {
     /**
      * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.user.list', [
             'patreonBenefits' => PatreonBenefit::all(),
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function makeadmin(Request $request, User $user)
+    public function makeadmin(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
         if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
@@ -55,10 +50,7 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function makeuser(Request $request, User $user)
+    public function makeuser(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
         if ($currentUser !== null && $currentUser->name === 'Admin') {
@@ -126,7 +118,7 @@ class UserController extends Controller
     /**
      * @return Application|ResponseFactory|Response
      */
-    public function storePatreonBenefits(Request $request, User $user)
+    public function storePatreonBenefits(Request $request, User $user): Response
     {
         $newPatreonBenefitIds = $request->get('patreonBenefits', []);
 

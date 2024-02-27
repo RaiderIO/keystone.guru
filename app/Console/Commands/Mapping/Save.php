@@ -38,10 +38,8 @@ class Save extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Drop all caches for all models - otherwise it may produce some strange results
         $this->call('modelCache:clear');
@@ -328,6 +326,7 @@ class Save extends Command
             ->map(static function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
                 $dungeonFloorSwitchMarker->direction = $dungeonFloorSwitchMarker->direction === '' ?
                     null : $dungeonFloorSwitchMarker->direction;
+
                 return $dungeonFloorSwitchMarker;
             });
 

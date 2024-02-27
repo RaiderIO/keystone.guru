@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Teapot\StatusCode\Http;
 
 class ReadOnlyMode
@@ -15,10 +16,8 @@ class ReadOnlyMode
 
     /**
      * Handle an incoming request.
-     *
-     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         if ($request->method() !== 'GET' && $this->readOnlyModeService->isReadOnly()) {
             return response('Service Unavailable - site is in read-only mode', Http::SERVICE_UNAVAILABLE);

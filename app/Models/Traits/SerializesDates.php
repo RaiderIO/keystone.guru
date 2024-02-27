@@ -25,10 +25,7 @@ trait SerializesDates
         return $date->format(self::$SERIALIZED_DATE_TIME_FORMAT);
     }
 
-    /**
-     * @return void
-     */
-    public function setCreatedAtAttribute($value)
+    public function setCreatedAtAttribute($value): void
     {
         if (is_string($value)) {
             $this->attributes['created_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
@@ -37,10 +34,7 @@ trait SerializesDates
         }
     }
 
-    /**
-     * @return void
-     */
-    public function setUpdatedAtAttribute($value)
+    public function setUpdatedAtAttribute($value): void
     {
         if (is_string($value)) {
             $this->attributes['updated_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);

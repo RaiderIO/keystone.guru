@@ -39,11 +39,10 @@ class RefreshOutdatedThumbnails extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws Exception
      */
-    public function handle(ThumbnailServiceInterface $thumbnailService)
+    public function handle(ThumbnailServiceInterface $thumbnailService): int
     {
         Log::channel('scheduler')->debug('>> Finding thumbnails');
 

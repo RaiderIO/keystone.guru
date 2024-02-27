@@ -66,6 +66,7 @@ function str_getcsv_assoc(string $csv_string, string $delimiter = ',', bool $ski
     return array_map(
         static function ($line) use ($delimiter, $trim_fields) {
             $fields = $trim_fields ? array_map('trim', explode($delimiter, $line)) : explode($delimiter, $line);
+
             return array_map(
                 static fn($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
                 $fields

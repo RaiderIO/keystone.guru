@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Service\User\UserServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Teapot\StatusCode;
 
 class ApiAuthentication
@@ -15,11 +16,8 @@ class ApiAuthentication
 
     /**
      * Handle an incoming request.
-     *
-     *
-     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         if (!$this->userService->loginAsUserFromAuthenticationHeader($request)) {
             return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);

@@ -17,7 +17,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     public const DUNGEON_NAME_MAPPING = [
         "Dawn of the Infinite: Galakrond's Fall" => "Galakrond's Fall",
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
-        'The Everbloom'                           => 'Everbloom',
+        'The Everbloom'                          => 'Everbloom',
     ];
 
     public function __construct(
@@ -86,6 +86,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
                 // Translate the name of the dungeon to English (from a key), and then match it
                 $ksgDungeonName = __($dungeon->name, [], 'en-US');
+
                 return self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName;
             });
 

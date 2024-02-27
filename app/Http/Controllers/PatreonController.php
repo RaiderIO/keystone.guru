@@ -15,10 +15,8 @@ class PatreonController extends Controller
 {
     /**
      * Unlinks the user from Patreon.
-     *
-     * @return RedirectResponse
      */
-    public function unlink(Request $request)
+    public function unlink(Request $request): RedirectResponse
     {
         // If it was linked, delete it
         optional(Auth::user()->patreonUserLink)->delete();
@@ -30,10 +28,8 @@ class PatreonController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     *
-     * @return RedirectResponse
      */
-    public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService)
+    public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService): RedirectResponse
     {
         $state = $request->get('state');
         $code  = $request->get('code');

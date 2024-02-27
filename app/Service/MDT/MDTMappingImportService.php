@@ -360,11 +360,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * @return void
-     *
      * @throws Exception
      */
-    private function importEnemyPatrols(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, Collection $savedEnemies)
+    private function importEnemyPatrols(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, Collection $savedEnemies): void
     {
         try {
             $this->log->importEnemyPatrolsStart();
@@ -461,11 +459,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * @return void
-     *
      * @throws Exception
      */
-    private function importDungeonFloorSwitchMarkers(MappingVersion $currentMappingVersion, MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon)
+    private function importDungeonFloorSwitchMarkers(MappingVersion $currentMappingVersion, MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon): void
     {
         try {
             $this->log->importDungeonFloorSwitchMarkersStart();

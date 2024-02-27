@@ -4,20 +4,22 @@ namespace App\Rules;
 
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class CreateRouteNpcChronologicalRule implements Rule
+class CreateRouteNpcChronologicalRule implements ValidationRule
 {
     /** @var array|int[] */
     private array $failedNpcIndices = [];
 
     /**
-     * Determine if the validation rule passes.
-     *
-     * @param string $attribute
-     * @param mixed  $value
+     * @param string  $attribute
+     * @param mixed   $value
+     * @param Closure $fail
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         foreach ($value as $index => $npc) {
             $engagedAt = $npc['engagedAt'] ?? null;
@@ -37,14 +39,8 @@ class CreateRouteNpcChronologicalRule implements Rule
             }
         }
 
-        return empty($this->failedNpcIndices);
-    }
-
-    /**
-     * Get the validation error message.
-     */
-    public function message(): string
-    {
-        return __('rules.create_route_npc_chronological_rule.message', ['npcs' => implode(', ', $this->failedNpcIndices)]);
+        if (!empty($this->failedNpcIndices)) {
+            $fail(__('rules.create_route_npc_chronological_rule.message', ['npcs' => implode(', ', $this->failedNpcIndices)]));
+        }
     }
 }

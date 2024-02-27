@@ -66,7 +66,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, static function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $updateAttributes = [];
-            $teamId = $validated['team_id'];
+            $teamId           = $validated['team_id'];
             if ($teamId !== null) {
                 $team = Team::find($teamId);
                 if ($team !== null && $team->isUserCollaborator(Auth::user())) {

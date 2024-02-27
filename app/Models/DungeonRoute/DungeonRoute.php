@@ -1240,6 +1240,7 @@ class DungeonRoute extends Model
                     return false; // break
                 }
             }
+
             return true;
         });
 
@@ -1346,14 +1347,14 @@ class DungeonRoute extends Model
             // Do not update the updated_at time - triggering a refresh of the thumbnails
             $this->timestamps = false;
             if ($source === self::PAGE_VIEW_SOURCE_VIEW_ROUTE) {
-                ++$this->views;
+                $this->views++;
             }
 
             if ($source === self::PAGE_VIEW_SOURCE_VIEW_EMBED) {
-                ++$this->views_embed;
+                $this->views_embed++;
             }
 
-            ++$this->popularity;
+            $this->popularity++;
             $this->update(['views', 'views_embed', 'popularity']);
         }
 
@@ -1374,11 +1375,10 @@ class DungeonRoute extends Model
      * Ensure we have an affix group at all times
      *
      *
-     * @return void
      *
      * @throws Exception
      */
-    private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
+    private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): void
     {
         if ($this->affixgroups()->count() === 0) {
             // Fallback to the current expansion's
@@ -1443,15 +1443,15 @@ class DungeonRoute extends Model
             foreach ($dungeonRoute->brushlines as $brushline) {
                 $brushline->delete();
             }
-            
+
             foreach ($dungeonRoute->paths as $path) {
                 $path->delete();
             }
-            
+
             foreach ($dungeonRoute->killZones as $killZone) {
                 $killZone->delete();
             }
-            
+
             $dungeonRoute->mapicons()->delete();
             $dungeonRoute->pridefulEnemies()->delete();
             // External

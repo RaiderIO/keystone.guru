@@ -9,9 +9,6 @@ class Stopwatch
      */
     private static array $timers = [];
 
-    /**
-     * @return mixed
-     */
     private static function _getTime(): float
     {
         return microtime(true);
@@ -31,7 +28,7 @@ class Stopwatch
         if (isset(self::$timers[$timerName]['end'])) {
             // Add the difference to the start to simulate the pause!
             self::$timers[$timerName]['start'] += (self::_getTime() - self::$timers[$timerName]['end']);
-            ++self::$timers[$timerName]['count'];
+            self::$timers[$timerName]['count']++;
 
             // Remove the pause, it's now applied to the start so it's processed.
             unset(self::$timers[$timerName]['end']);

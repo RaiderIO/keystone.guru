@@ -49,7 +49,7 @@ class AdminToolsController extends Controller
     /**
      * @return Factory|View
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.tools.list');
     }
@@ -108,7 +108,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function npcimport()
+    public function npcimport(): View
     {
         return view('admin.tools.npcimport.import');
     }
@@ -222,7 +222,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function dungeonroute()
+    public function dungeonroute(): View
     {
         return view('admin.tools.dungeonroute.view');
     }
@@ -230,7 +230,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function dungeonroutesubmit(Request $request)
+    public function dungeonroutesubmit(Request $request): View
     {
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
@@ -246,7 +246,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function dungeonrouteMappingVersions()
+    public function dungeonrouteMappingVersions(): View
     {
         $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
             ->get()
@@ -264,7 +264,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function enemyforcesimport()
+    public function enemyforcesimport(): View
     {
         return view('admin.tools.enemyforces.import');
     }
@@ -307,7 +307,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function enemyforcesrecalculate()
+    public function enemyforcesrecalculate(): View
     {
         return view('admin.tools.enemyforces.recalculate');
     }
@@ -326,7 +326,7 @@ class AdminToolsController extends Controller
         $count = 0;
         foreach ($builder->get() as $dungeonRoute) {
             RefreshEnemyForces::dispatch($dungeonRoute->id);
-            ++$count;
+            $count++;
         }
 
         dd(sprintf('Dispatched %d jobs', $count));
@@ -335,7 +335,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function thumbnailsregenerate()
+    public function thumbnailsregenerate(): View
     {
         return view('admin.tools.thumbnails.regenerate');
     }
@@ -343,7 +343,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function thumbnailsregeneratesubmit(Request $request, ThumbnailService $thumbnailService)
+    public function thumbnailsregeneratesubmit(Request $request, ThumbnailService $thumbnailService): View
     {
         set_time_limit(3600);
 
@@ -363,9 +363,9 @@ class AdminToolsController extends Controller
 
             if ($shouldRefresh) {
                 if ($thumbnailService->queueThumbnailRefresh($dungeonRoute)) {
-                    ++$successCount;
+                    $successCount++;
                 } else {
-                    ++$failureCount;
+                    $failureCount++;
                 }
             }
         }
@@ -382,15 +382,12 @@ class AdminToolsController extends Controller
     /**
      * @return Factory|
      */
-    public function mdtview()
+    public function mdtview(): View
     {
         return view('admin.tools.mdt.string');
     }
 
-    /**
-     * @return JsonResponse
-     */
-    public function mdtviewsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService)
+    public function mdtviewsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService): JsonResponse
     {
         return response()->json(
             $mdtImportStringService
@@ -402,7 +399,7 @@ class AdminToolsController extends Controller
     /**
      * @return Factory|
      */
-    public function mdtviewasdungeonroute()
+    public function mdtviewasdungeonroute(): View
     {
         return view('admin.tools.mdt.string', ['asDungeonroute' => true]);
     }
@@ -445,7 +442,7 @@ class AdminToolsController extends Controller
     /**
      * @return Factory|
      */
-    public function mdtviewasstring()
+    public function mdtviewasstring(): View
     {
         return view('admin.tools.mdt.dungeonroute');
     }
@@ -493,7 +490,7 @@ class AdminToolsController extends Controller
     /**
      * @return Factory|
      */
-    public function mdtdungeonmappinghash()
+    public function mdtdungeonmappinghash(): View
     {
         return view('admin.tools.mdt.dungeonmappinghash');
     }
@@ -521,6 +518,7 @@ class AdminToolsController extends Controller
                 ->groupBy('dungeon_id')
                 ->mapWithKeys(static function (Collection $mappingVersionByDungeon, int $id) {
                     $dungeon = Dungeon::findOrFail($id);
+
                     return [
                         __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(static fn(MappingVersion $mappingVersion) => [
                             $mappingVersion->id => $mappingVersion->getPrettyName(),
@@ -546,7 +544,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function importingamecoordinates()
+    public function importingamecoordinates(): View
     {
         return view('admin.tools.wowtools.importingamecoordinates');
     }
@@ -731,7 +729,7 @@ class AdminToolsController extends Controller
     public function mdtdiff(
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService
-    ) {
+    ): View {
         $warnings = new Collection();
         $npcs     = Npc::with(['enemies', 'type'])->get();
 
@@ -822,10 +820,7 @@ class AdminToolsController extends Controller
         return view('admin.tools.mdt.diff', ['warnings' => $warnings]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function dropCache(Request $request, CacheServiceInterface $cacheService)
+    public function dropCache(Request $request, CacheServiceInterface $cacheService): RedirectResponse
     {
         ini_set('max_execution_time', -1);
 
@@ -892,7 +887,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function exportreleases(Request $request)
+    public function exportreleases(Request $request): View
     {
         Artisan::call('release:save');
 
@@ -902,11 +897,9 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @return mixed
-     *
      * @throws Exception
      */
-    public function exportdungeondata(Request $request)
+    public function exportdungeondata(Request $request): View
     {
         Artisan::call('mapping:save');
 
@@ -916,7 +909,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function exceptionselect(Request $request)
+    public function exceptionselect(Request $request): View
     {
         return view('admin.tools.exception.select');
     }

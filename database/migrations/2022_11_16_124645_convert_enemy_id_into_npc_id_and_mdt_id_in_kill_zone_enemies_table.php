@@ -5,10 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         // Get rid of all enemies assigned to pulls that have since been deleted
         DB::delete('
@@ -28,10 +26,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         DB::update('
             UPDATE `kill_zone_enemies`

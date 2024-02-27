@@ -60,11 +60,10 @@ class Telemetry extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): int
     {
         $points = [];
 

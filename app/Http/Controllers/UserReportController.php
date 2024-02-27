@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserReport;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 
 class UserReportController extends Controller
 {
@@ -12,7 +13,7 @@ class UserReportController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         $userReports = UserReport::where('status', 0)->get();
         // Ugly way of loading this relationship, eager loading with dynamic relations don't work!

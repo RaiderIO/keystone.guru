@@ -23,13 +23,13 @@ class RatingColumnHandler extends DatatablesColumnHandler
     protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
 
-        $rating = $columnData['search']['value'];
-//        if (!empty($rating)) {
-            //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
-            //                /** @var $query Builder */
-            //                $query->whereIn('affix_groups.id', $affixIds);
-            //            });
-//        }
+        //        $rating = $columnData['search']['value'];
+        //        if (!empty($rating)) {
+        //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
+        //                /** @var $query Builder */
+        //                $query->whereIn('affix_groups.id', $affixIds);
+        //            });
+        //        }
 
         // Only order
         if ($order !== null) {

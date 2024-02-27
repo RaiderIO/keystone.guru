@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('seasons', function (Blueprint $table) {
             $table->integer('start_affix_group_index')->after('affix_group_count')->default(0);
@@ -19,10 +17,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('seasons', function (Blueprint $table) {
             $table->dropColumn('start_affix_group_index');

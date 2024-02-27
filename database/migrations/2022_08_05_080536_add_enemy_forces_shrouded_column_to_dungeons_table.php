@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->integer('enemy_forces_shrouded_zul_gamux')->default(0)->after('enemy_forces_required_teeming');
@@ -20,10 +18,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->dropColumn('enemy_forces_shrouded_zul_gamux');

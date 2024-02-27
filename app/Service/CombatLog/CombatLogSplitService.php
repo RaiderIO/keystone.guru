@@ -191,7 +191,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
             $this->log->generateTargetCombatLogFileNameAttempt($saveFilePath);
             // While we have a zip file that already exists, someone may have done two
             // the same dungeons of the same key level
-            ++$count;
+            $count++;
         } while (file_exists(str_replace('.txt', '.zip', $saveFilePath)));
 
         return $saveFilePath;

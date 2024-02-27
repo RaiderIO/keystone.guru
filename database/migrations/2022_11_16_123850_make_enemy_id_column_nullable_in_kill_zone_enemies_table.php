@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('kill_zone_enemies', function (Blueprint $table) {
             $table->integer('enemy_id')->default(null)->nullable()->change();
@@ -19,10 +17,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('kill_zone_enemies', function (Blueprint $table) {
             $table->integer('enemy_id')->default(-1)->nullable(false)->change();

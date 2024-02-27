@@ -6,10 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         // Don't do anything - this should already be done and the result committed to repository
         if (config('app.env') !== 'mapping') {
@@ -30,10 +28,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         // Don't do anything - this should already be done and the result committed to repository
         if (config('app.env') !== 'mapping') {

@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('affix_group_ease_tier_pulls', function (Blueprint $table) {
             $table->string('tiers_hash')->after('current_affixes');
@@ -20,10 +18,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('affix_group_ease_tier_pulls', function (Blueprint $table) {
             $table->dropColumn('tiers_hash');

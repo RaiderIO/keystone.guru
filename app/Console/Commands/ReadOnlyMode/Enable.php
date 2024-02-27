@@ -40,10 +40,8 @@ class Enable extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService)
+    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService): int
     {
         if ($readOnlyModeService->setReadOnly(true)) {
             $this->info('Site is now read-only');

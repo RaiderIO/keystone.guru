@@ -438,7 +438,7 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->floorUnions)
                 ->merge($previousMappingVersion->floorUnionAreas)
                 ->merge($previousMappingVersion->npcEnemyForces);
-            $idMapping = collect([
+            $idMapping       = collect([
                 DungeonFloorSwitchMarker::class => collect(),
                 Enemy::class                    => collect(),
                 EnemyPack::class                => collect(),
@@ -515,11 +515,11 @@ class MappingVersion extends Model
             foreach ($mappingVersion->enemyPacks as $enemyPack) {
                 $enemyPack->delete();
             }
-            
+
             foreach ($mappingVersion->enemyPatrols as $enemyPatrol) {
                 $enemyPatrol->delete();
             }
-            
+
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
             $mappingVersion->floorUnions()->delete();

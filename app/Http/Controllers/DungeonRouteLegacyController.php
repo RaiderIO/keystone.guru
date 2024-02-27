@@ -15,10 +15,7 @@ use Illuminate\Http\Request;
  */
 class DungeonRouteLegacyController extends Controller
 {
-    /**
-     * @return RedirectResponse
-     */
-    public function viewold(Request $request, DungeonRoute $dungeonroute)
+    public function viewold(Request $request, DungeonRoute $dungeonroute): RedirectResponse
     {
         return redirect()->route('dungeonroute.view', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -27,10 +24,7 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function edit(Request $request, DungeonRoute $dungeonroute)
+    public function edit(Request $request, DungeonRoute $dungeonroute): RedirectResponse
     {
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -39,10 +33,7 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
+    public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex): RedirectResponse
     {
         return redirect()->route('dungeonroute.edit.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -52,10 +43,7 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function embedold(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
+    public function embedold(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1'): RedirectResponse
     {
         return redirect()->route('dungeonroute.embed', array_merge([
             'dungeon'      => $dungeonroute->dungeon,
@@ -65,10 +53,7 @@ class DungeonRouteLegacyController extends Controller
         ], $request->all()));
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function viewfloorold(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
+    public function viewfloorold(Request $request, DungeonRoute $dungeonroute, string $floorIndex): RedirectResponse
     {
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -78,10 +63,7 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function previewold(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
+    public function previewold(Request $request, DungeonRoute $dungeonroute, string $floorIndex): RedirectResponse
     {
         return redirect()->route('dungeonroute.preview', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -91,10 +73,7 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function cloneold(Request $request, DungeonRoute $dungeonroute)
+    public function cloneold(Request $request, DungeonRoute $dungeonroute): RedirectResponse
     {
         return redirect()->route('dungeonroute.clone', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -103,10 +82,7 @@ class DungeonRouteLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function claimold(Request $request, DungeonRoute $dungeonroute)
+    public function claimold(Request $request, DungeonRoute $dungeonroute): RedirectResponse
     {
         return redirect()->route('dungeonroute.claim', [
             'dungeon'      => $dungeonroute->dungeon,

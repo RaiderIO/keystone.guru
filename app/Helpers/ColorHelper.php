@@ -9,6 +9,7 @@ function hsv2rgb($h, $s, $v): array
         if ($k === null) {
             $k = ($n + $h / 60) % 6;
         }
+
         return $v - $v * $s * max(min($k, 4 - $k, 1), 0);
     };
 

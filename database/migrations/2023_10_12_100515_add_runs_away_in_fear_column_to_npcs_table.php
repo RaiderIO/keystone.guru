@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('npcs', function (Blueprint $table) {
             $table->boolean('runs_away_in_fear')->after('sanguine')->default(0);
@@ -19,10 +17,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('npcs', function (Blueprint $table) {
             $table->dropColumn('runs_away_in_fear');

@@ -56,6 +56,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
             } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
+
             return $result;
         });
     }

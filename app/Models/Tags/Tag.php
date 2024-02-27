@@ -40,10 +40,7 @@ class Tag extends Model
         return $this->belongsTo(TagCategory::class);
     }
 
-    /**
-     * @return Builder
-     */
-    public function scopeUnique(Builder $query, ?int $categoryId = null)
+    public function scopeUnique(Builder $query, ?int $categoryId = null): Builder
     {
         if ($categoryId !== null) {
             $query = $query->where('tag_category_id', $categoryId);

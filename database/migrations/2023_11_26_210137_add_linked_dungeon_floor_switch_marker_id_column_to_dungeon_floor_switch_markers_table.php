@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_floor_switch_markers', function (Blueprint $table) {
             $table->integer('linked_dungeon_floor_switch_marker_id')->after('target_floor_id')->nullable();
@@ -21,10 +19,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_floor_switch_markers', function (Blueprint $table) {
             $table->dropColumn('linked_dungeon_floor_switch_marker_id');

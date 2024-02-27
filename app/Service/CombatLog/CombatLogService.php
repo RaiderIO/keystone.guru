@@ -101,6 +101,7 @@ class CombatLogService implements CombatLogServiceInterface
                     $parsedEvent->getKeystoneLevel()
                 )));
             }
+
             return $parsedEvent;
         });
 
@@ -121,6 +122,7 @@ class CombatLogService implements CombatLogServiceInterface
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
             }
+
             return $parsedEvent;
         });
 

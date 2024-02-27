@@ -26,9 +26,6 @@ class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
         $this->addFilter($this->spellFilter);
     }
 
-    /**
-     * @return void
-     */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self
     {
         $this->combatFilter->setValidNpcIds($dungeonRoute->dungeon->getInUseNpcIds());

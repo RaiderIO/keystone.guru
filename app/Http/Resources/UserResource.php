@@ -16,10 +16,9 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'public_key' => $this->public_key,

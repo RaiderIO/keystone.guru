@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('enemies', function (Blueprint $table) {
             $table->integer('enemy_patrol_id')->nullable()->default(null)->after('enemy_pack_id');
@@ -21,10 +19,8 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('enemies', function (Blueprint $table) {
             $table->dropIndex(['enemy_patrol_id']);

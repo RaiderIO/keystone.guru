@@ -19,14 +19,11 @@ abstract class ContextEvent implements ShouldBroadcast
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
+
     /**
      * Create a new event instance.
-     *
-     * @param  $context  Model
-     * @param  $user  User
-     * @return void
      */
-    public function __construct(protected Model $_context, protected User $_user)
+    public function __construct(protected Model $context, protected User $user)
     {
     }
 
@@ -39,12 +36,12 @@ abstract class ContextEvent implements ShouldBroadcast
     {
         $result = [];
 
-        if ($this->_context instanceof DungeonRoute) {
-            $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->getRouteKey()));
-        } else if ($this->_context instanceof LiveSession) {
-            $result[] = new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->_context->getRouteKey()));
-        } else if ($this->_context instanceof Dungeon) {
-            $result[] = new PresenceChannel(sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->_context->getRouteKey()));
+        if ($this->context instanceof DungeonRoute) {
+            $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->getRouteKey()));
+        } else if ($this->context instanceof LiveSession) {
+            $result[] = new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->context->getRouteKey()));
+        } else if ($this->context instanceof Dungeon) {
+            $result[] = new PresenceChannel(sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->context->getRouteKey()));
         }
 
         return $result;
@@ -54,12 +51,12 @@ abstract class ContextEvent implements ShouldBroadcast
     {
         return [
             '__name'            => $this->broadcastAs(),
-            'context_route_key' => $this->_context->getRouteKey(),
-            'context_class'     => $this->_context::class,
+            'context_route_key' => $this->context->getRouteKey(),
+            'context_class'     => $this->context::class,
             'user'              => [
-                'color'      => $this->_user->echo_color,
-                'name'       => $this->_user->name,
-                'public_key' => $this->_user->public_key,
+                'color'      => $this->user->echo_color,
+                'name'       => $this->user->name,
+                'public_key' => $this->user->public_key,
             ],
         ];
     }

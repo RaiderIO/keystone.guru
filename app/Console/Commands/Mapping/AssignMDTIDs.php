@@ -26,10 +26,8 @@ class AssignMDTIDs extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         /** @var Collection|MappingVersion[] $mappingVersions */
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();
@@ -64,7 +62,7 @@ class AssignMDTIDs extends Command
 
                     $enemy->update(['mdt_id' => $index]);
 
-                    ++$index;
+                    $index++;
                 }
             }
 

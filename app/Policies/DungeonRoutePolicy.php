@@ -12,10 +12,8 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can view the dungeon route.
-     *
-     * @return mixed
      */
-    public function view(?User $user, DungeonRoute $dungeonroute)
+    public function view(?User $user, DungeonRoute $dungeonroute): bool
     {
         // Everyone can view dungeon routes (for now)
         if (!$dungeonroute->mayUserView($user)) {
@@ -148,10 +146,8 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can delete the dungeon route.
-     *
-     * @return mixed
      */
-    public function delete(User $user, DungeonRoute $dungeonroute)
+    public function delete(User $user, DungeonRoute $dungeonroute): bool
     {
         // Only the admin may delete routes
         return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
@@ -159,10 +155,8 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can restore the dungeon route.
-     *
-     * @return mixed
      */
-    public function restore(User $user, DungeonRoute $dungeonroute)
+    public function restore(User $user, DungeonRoute $dungeonroute): bool
     {
         // Only authors or if the user is an admin
         return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
@@ -170,10 +164,8 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can permanently delete the dungeon route.
-     *
-     * @return mixed
      */
-    public function forceDelete(User $user, DungeonRoute $dungeonroute)
+    public function forceDelete(User $user, DungeonRoute $dungeonroute): bool
     {
         return $user->hasRole('admin');
     }

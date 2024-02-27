@@ -177,7 +177,7 @@ class KillZone extends Model
                     $floorTotals[$enemy->floor_id] = 0;
                 }
 
-                ++$floorTotals[$enemy->floor_id];
+                $floorTotals[$enemy->floor_id]++;
             }
 
             // Will get a random floor if there's equal counts on multiple floors, that's ok
@@ -261,9 +261,6 @@ class KillZone extends Model
     /**
      * Calculate the bounding box of all enemies that this pull kills, take the north edge of that bounding box
      * and return the middle of that edge as a lat/lng.
-     *
-     *
-     * @return array|null
      */
     public function getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(int $boundingBoxMargin): ?LatLng
     {

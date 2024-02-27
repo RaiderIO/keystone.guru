@@ -40,10 +40,8 @@ class Aggregate extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle(MetricServiceInterface $metricService)
+    public function handle(MetricServiceInterface $metricService): int
     {
         if ($metricService->aggregateMetrics()) {
             $this->info('Successfully aggregated metrics');

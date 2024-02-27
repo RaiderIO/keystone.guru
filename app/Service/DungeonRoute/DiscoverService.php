@@ -73,8 +73,8 @@ class DiscoverService extends BaseDiscoverService
                     ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
                     ->groupBy('dungeon_route_id'),
                 'ag', static function (JoinClause $joinClause) {
-                    $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
-                })
+                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
+            })
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);
             })
