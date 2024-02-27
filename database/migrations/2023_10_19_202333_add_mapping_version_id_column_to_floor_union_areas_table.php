@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('floor_union_areas', function (Blueprint $table) {
             $table->integer('mapping_version_id')->after('id');
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('floor_union_areas', function (Blueprint $table) {
             $table->dropColumn('mapping_version_id');

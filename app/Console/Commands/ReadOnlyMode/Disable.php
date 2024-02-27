@@ -43,7 +43,7 @@ class Disable extends Command
      *
      * @return mixed
      */
-    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService)
+    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService): int
     {
         if ($readOnlyModeService->setReadOnly(false)) {
             $this->info('Site is no longer read-only');

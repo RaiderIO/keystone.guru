@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('floors', function (Blueprint $table) {
             $table->integer('enemy_engagement_max_range')->default(150)->after('max_enemy_size');
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('floors', function (Blueprint $table) {
             $table->dropColumn('enemy_engagement_max_range');

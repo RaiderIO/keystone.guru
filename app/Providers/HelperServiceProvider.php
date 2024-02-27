@@ -11,7 +11,7 @@ class HelperServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         require_once app_path('Helpers/CustomHelper.php');
         require_once app_path('Helpers/ColorHelper.php');
@@ -22,7 +22,7 @@ class HelperServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

@@ -9,7 +9,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         DB::update('UPDATE `users` SET `locale` = "en-US" WHERE `locale` = "en"');
         DB::update('UPDATE `users` SET `locale` = "ru-RU" WHERE `locale` = "ru"');
@@ -20,7 +20,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         DB::update('UPDATE `users` SET `locale` = "en" WHERE `locale` = "en-US"');
         DB::update('UPDATE `users` SET `locale` = "ru" WHERE `locale` = "ru-RU"');

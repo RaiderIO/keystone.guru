@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('mountable_areas', function (Blueprint $table) {
             $table->integer('speed')->after('floor_id')->nullable(true);
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('mountable_areas', function (Blueprint $table) {
             $table->dropColumn('speed');

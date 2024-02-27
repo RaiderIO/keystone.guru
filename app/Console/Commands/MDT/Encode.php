@@ -40,7 +40,7 @@ class Encode extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info($this->encode($this->argument('string')));
     }

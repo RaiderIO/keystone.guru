@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('npcs', function (Blueprint $table) {
             $table->integer('display_id')->nullable()->default(null)->after('npc_class_id');
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('npcs', function (Blueprint $table) {
             $table->dropColumn('display_id');

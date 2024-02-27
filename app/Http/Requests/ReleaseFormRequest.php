@@ -14,7 +14,7 @@ class ReleaseFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Auth::user()->hasRole('admin');
     }
@@ -24,7 +24,7 @@ class ReleaseFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         /** @var Release $release */
         $release = $this->route()->parameter('release');

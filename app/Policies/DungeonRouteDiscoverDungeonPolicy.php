@@ -15,7 +15,7 @@ class DungeonRouteDiscoverDungeonPolicy
      *
      * @return mixed
      */
-    public function view(?User $user, Dungeon $dungeon)
+    public function view(?User $user, Dungeon $dungeon): bool
     {
         return $dungeon->active && $dungeon->expansion->active;
     }

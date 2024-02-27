@@ -29,7 +29,7 @@ class AssignMDTIDs extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         /** @var Collection|MappingVersion[] $mappingVersions */
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();

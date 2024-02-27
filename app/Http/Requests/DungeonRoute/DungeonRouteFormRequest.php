@@ -16,7 +16,7 @@ class DungeonRouteFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true; // Auth::user()->hasRole(["user", "admin"]);
     }
@@ -26,7 +26,7 @@ class DungeonRouteFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             'dungeon_route_title' => 'nullable|string|max:80',

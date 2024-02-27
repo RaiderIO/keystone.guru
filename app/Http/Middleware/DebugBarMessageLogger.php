@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
 use Closure;
@@ -16,7 +17,7 @@ class DebugBarMessageLogger
      * @param  Request  $request
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
 

@@ -28,7 +28,7 @@ class RefreshEnemyForces implements ShouldQueue
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $dungeonRoute = DungeonRoute::find($this->dungeonRouteId);
         if ($dungeonRoute) {

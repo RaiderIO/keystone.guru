@@ -13,7 +13,7 @@ class MigrateToSeasonalTypeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true; // Auth::user()->hasRole(["user", "admin"]);
     }
@@ -23,7 +23,7 @@ class MigrateToSeasonalTypeRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'seasonal_type' => Rule::in(Affix::SEASONAL_AFFIXES),

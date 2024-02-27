@@ -43,7 +43,7 @@ class Enable extends Command
      *
      * @return mixed
      */
-    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService)
+    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService): int
     {
         if ($readOnlyModeService->setReadOnly(true)) {
             $this->info('Site is now read-only');

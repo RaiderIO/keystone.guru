@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('enemy_patrols', function (Blueprint $table) {
             $table->integer('polyline_id')->nullable()->default(null)->change();
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('enemy_patrols', function (Blueprint $table) {
             $table->integer('polyline_id')->nullable(false)->default(-1)->change();

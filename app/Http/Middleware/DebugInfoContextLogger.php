@@ -10,7 +10,7 @@ use Log;
 
 class DebugInfoContextLogger
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
         $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
 

@@ -106,7 +106,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         // Bind the interface to the actual service
         $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
@@ -189,7 +189,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface $mappingService,
         GameVersionServiceInterface $gameVersionService
-    ) {
+    ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (! app()->runningUnitTests()) {
             if (app()->runningInConsole()) {

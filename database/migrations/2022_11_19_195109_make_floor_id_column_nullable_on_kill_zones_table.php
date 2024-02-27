@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('kill_zones', function (Blueprint $table) {
             $table->integer('floor_id')->nullable()->default(null)->change();
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('kill_zones', function (Blueprint $table) {
             $table->integer('floor_id')->nullable(false)->default(0)->change();

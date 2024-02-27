@@ -23,7 +23,7 @@ class DungeonCollectionResource extends ResourceCollection
      * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return ['data' => $this->collection->map(static fn (Dungeon $dungeon) => new DungeonResource($dungeon))];
     }

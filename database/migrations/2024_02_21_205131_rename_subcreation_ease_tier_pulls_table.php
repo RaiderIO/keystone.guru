@@ -10,7 +10,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::rename('subcreation_ease_tier_pulls', 'affix_group_ease_tier_pulls');
     }
@@ -20,7 +20,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::rename('affix_group_ease_tier_pulls', 'subcreation_ease_tier_pulls');
     }

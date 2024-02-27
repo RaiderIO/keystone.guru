@@ -60,7 +60,7 @@ class TagPolicy
     /**
      * @return bool|mixed
      */
-    public function delete(User $user, Tag $tag)
+    public function delete(User $user, Tag $tag): bool
     {
         return $this->edit($user, $tag);
     }

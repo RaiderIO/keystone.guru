@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('game_versions', function (Blueprint $table) {
             $table->boolean('has_seasons')->default(0)->after('description');
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('game_versions', function (Blueprint $table) {
             $table->dropColumn('has_seasons');

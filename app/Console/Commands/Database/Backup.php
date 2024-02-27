@@ -26,7 +26,7 @@ class Backup extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Backup MySql database if the environment asks for it!
         $backupDir = config('keystoneguru.db_backup_dir');

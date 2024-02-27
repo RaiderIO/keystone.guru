@@ -36,7 +36,7 @@ class GetCurrentRelease extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->line(Release::latest()->first()->version);
     }

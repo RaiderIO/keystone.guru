@@ -39,7 +39,7 @@ class GetReleaseBody extends Command
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $version = $this->argument('version');
         $platform = $this->argument('platform');

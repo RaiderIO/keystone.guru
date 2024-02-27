@@ -40,7 +40,7 @@ class DeleteExpiredDungeonRoutes extends Command
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): int
     {
         $dungeonRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
             ->whereRaw('expires_at < NOW()')

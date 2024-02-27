@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
      *
      * @throws Throwable
      */
-    public function run(CacheServiceInterface $cacheService)
+    public function run(CacheServiceInterface $cacheService): void
     {
         self::$running = true;
 

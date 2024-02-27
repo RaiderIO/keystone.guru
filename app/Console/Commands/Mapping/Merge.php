@@ -38,7 +38,7 @@ class Merge extends Command
      *
      * @throws MissingArgumentException
      */
-    public function handle(MappingService $mappingService)
+    public function handle(MappingService $mappingService): int
     {
         $username = config('keystoneguru.github_username');
         $repository = config('keystoneguru.github_repository');

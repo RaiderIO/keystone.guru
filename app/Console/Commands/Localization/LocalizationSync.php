@@ -43,7 +43,7 @@ class LocalizationSync extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $baseLang = $this->argument('base');
         $targetLang = $this->argument('target');

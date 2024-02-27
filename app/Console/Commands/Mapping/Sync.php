@@ -30,7 +30,7 @@ class Sync extends Command
      *
      * @return int
      */
-    public function handle(MappingService $mappingService)
+    public function handle(MappingService $mappingService): int
     {
         Log::channel('scheduler')->debug('>> Synchronizing mapping');
         $force = (bool) $this->option('force');

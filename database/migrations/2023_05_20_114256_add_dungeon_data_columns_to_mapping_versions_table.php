@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('mapping_versions', function (Blueprint $table) {
             $table->integer('timer_max_seconds')->after('version')->default(0);
@@ -27,7 +27,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('mapping_versions', function (Blueprint $table) {
             $table->dropColumn('enemy_forces_required');

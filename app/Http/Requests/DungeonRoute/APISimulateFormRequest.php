@@ -12,7 +12,7 @@ class APISimulateFormRequest extends DungeonRouteFormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'key_level' => 'required|int|max:40',

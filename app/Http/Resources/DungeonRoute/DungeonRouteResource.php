@@ -27,7 +27,7 @@ class DungeonRouteResource extends JsonResource
      * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         $thumbnailUrls = [];
         foreach ($this->dungeon->floors()->where('facade', 0)->get() as $floor) {

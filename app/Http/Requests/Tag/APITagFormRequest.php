@@ -14,7 +14,7 @@ class APITagFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Auth::user()->hasRole('user') || Auth::user()->hasRole('admin');
     }
@@ -24,7 +24,7 @@ class APITagFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'category' => [Rule::in(TagCategory::all()->pluck(['name']))],

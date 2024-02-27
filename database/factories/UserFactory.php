@@ -19,7 +19,7 @@ class UserFactory extends Factory
      */
     protected static ?string $password;
 
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => fake()->name(),

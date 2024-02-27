@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('mapping_versions', function (Blueprint $table) {
             $table->string('mdt_mapping_hash')->nullable()->default(null)->after('version');
@@ -24,7 +24,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('mapping_versions', function (Blueprint $table) {
             $table->dropIndex(['mdt_mapping_hash']);

@@ -41,7 +41,7 @@ class Save extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Drop all caches for all models - otherwise it may produce some strange results
         $this->call('modelCache:clear');

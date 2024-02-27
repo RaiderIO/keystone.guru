@@ -14,7 +14,7 @@ class ProfileFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         /** @var User $user */
         $user = Auth::user();
@@ -27,7 +27,7 @@ class ProfileFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'avatar' => 'image|mimes:png|max:256',

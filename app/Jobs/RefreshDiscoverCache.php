@@ -28,7 +28,7 @@ class RefreshDiscoverCache implements ShouldQueue
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         Log::channel('scheduler')->info('Started caching discover routes pages');
 

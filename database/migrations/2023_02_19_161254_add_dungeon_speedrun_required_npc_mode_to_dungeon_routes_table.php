@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->integer('dungeon_speedrun_required_npcs_mode')->nullable()->after('pull_gradient_apply_always');
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->dropColumn('dungeon_speedrun_required_npcs_mode');

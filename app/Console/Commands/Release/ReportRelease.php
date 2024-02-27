@@ -42,7 +42,7 @@ class ReportRelease extends Command
      *
      * @throws Exception
      */
-    public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
+    public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService): void
     {
         $result = false;
         $version = $this->argument('version');

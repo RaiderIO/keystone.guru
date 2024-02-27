@@ -16,7 +16,7 @@ class PublishFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -26,7 +26,7 @@ class PublishFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'published_state' => ['required', Rule::in(array_keys(PublishedState::ALL))],

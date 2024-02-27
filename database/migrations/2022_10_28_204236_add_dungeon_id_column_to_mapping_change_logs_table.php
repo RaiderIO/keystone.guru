@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('mapping_change_logs', function (Blueprint $table) {
             $table->integer('dungeon_id')->after('id')->nullable(true);
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('mapping_change_logs', function (Blueprint $table) {
             $table->dropColumn('dungeon_id');

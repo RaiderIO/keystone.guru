@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('affix_group_ease_tiers', function (Blueprint $table) {
             // These indices are not necessary
@@ -26,7 +26,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('affix_group_ease_tiers', function (Blueprint $table) {
             $table->renameColumn('affix_group_ease_tier_pull_id', 'subcreation_ease_tier_pull_id');

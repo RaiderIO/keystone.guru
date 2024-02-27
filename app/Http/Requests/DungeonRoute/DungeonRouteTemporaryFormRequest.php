@@ -14,7 +14,7 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true; // Auth::user()->hasRole(["user", "admin"]);
     }
@@ -24,7 +24,7 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             // Only active dungeons are allowed

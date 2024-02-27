@@ -15,7 +15,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::rename('paid_tiers', 'patreon_benefits');
         Schema::rename('patreon_data', 'patreon_user_links');
@@ -55,7 +55,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::rename('patreon_benefits', 'paid_tiers');
         Schema::rename('patreon_user_links', 'patreon_data');

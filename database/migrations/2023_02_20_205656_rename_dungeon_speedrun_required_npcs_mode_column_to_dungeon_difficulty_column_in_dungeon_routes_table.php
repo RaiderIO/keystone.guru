@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->renameColumn('dungeon_speedrun_required_npcs_mode', 'dungeon_difficulty');
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->renameColumn('dungeon_difficulty', 'dungeon_speedrun_required_npcs_mode');

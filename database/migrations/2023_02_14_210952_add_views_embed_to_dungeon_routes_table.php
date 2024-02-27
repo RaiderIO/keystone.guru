@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             // No need for an index - not searching on this column
@@ -24,7 +24,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->dropColumn('views_embed');

@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('simulation_craft_raid_events_options', function (Blueprint $table) {
             $table->dropColumn('thundering');
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('simulation_craft_raid_events_options', function (Blueprint $table) {
             $table->boolean('thundering')->after('affix');

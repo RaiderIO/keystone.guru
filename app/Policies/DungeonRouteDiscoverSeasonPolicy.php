@@ -15,7 +15,7 @@ class DungeonRouteDiscoverSeasonPolicy
      *
      * @return mixed
      */
-    public function view(?User $user, Season $season)
+    public function view(?User $user, Season $season): bool
     {
         return $season->expansion->active;
     }

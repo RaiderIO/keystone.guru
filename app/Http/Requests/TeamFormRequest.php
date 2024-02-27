@@ -14,7 +14,7 @@ class TeamFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Auth::check();
     }
@@ -24,7 +24,7 @@ class TeamFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         /** @var Team $team */
         $team = $this->route()->parameter('team');

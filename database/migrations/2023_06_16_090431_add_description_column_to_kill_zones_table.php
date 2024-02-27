@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('kill_zones', function (Blueprint $table) {
             $table->string('description')->nullable()->default(null)->after('color');
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('kill_zones', function (Blueprint $table) {
             $table->dropColumn('description');

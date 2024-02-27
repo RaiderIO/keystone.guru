@@ -9,7 +9,7 @@ class APIDungeonRouteFormRequest extends DungeonRouteFormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         // Cannot change these two once edited

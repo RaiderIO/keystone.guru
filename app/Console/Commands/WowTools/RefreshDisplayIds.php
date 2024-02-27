@@ -38,7 +38,7 @@ class RefreshDisplayIds extends Command
      *
      * @return void
      */
-    public function handle(WowToolsServiceInterface $wowToolsService)
+    public function handle(WowToolsServiceInterface $wowToolsService): void
     {
         /** @var Collection|Npc[] $npcsToRefresh */
         $npcsToRefresh = Npc::whereNull('display_id')->get();

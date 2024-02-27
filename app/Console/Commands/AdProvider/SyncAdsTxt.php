@@ -36,7 +36,7 @@ class SyncAdsTxt extends Command
      *
      * @return int
      */
-    public function handle(AdProviderServiceInterface $nitroPayService)
+    public function handle(AdProviderServiceInterface $nitroPayService): int
     {
         //        $nitroPayUserId = config('keystoneguru.nitro_pay.user_id');
         //

@@ -23,7 +23,7 @@ class AffixCollectionResource extends ResourceCollection
      * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return $this->collection->map(static fn (Affix $affix) => new AffixResource($affix));
     }

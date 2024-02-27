@@ -14,7 +14,7 @@ class ExpansionFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Auth::user()->hasRole('admin');
     }
@@ -24,7 +24,7 @@ class ExpansionFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         /** @var Expansion $expansion */
         $expansion = $this->route()->parameter('expansion');

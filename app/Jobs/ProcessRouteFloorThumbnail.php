@@ -30,7 +30,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         Log::channel('scheduler')->info(
             sprintf('Started processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)

@@ -42,7 +42,7 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
      *
      * @throws MissingArgumentException
      */
-    public function handle()
+    public function handle(): int
     {
         $result = 0;
 

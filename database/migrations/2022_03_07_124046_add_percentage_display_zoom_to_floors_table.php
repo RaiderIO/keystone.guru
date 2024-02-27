@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('floors', function (Blueprint $table) {
             $table->integer('percentage_display_zoom')->after('max_enemy_size')->nullable(true)->default(null);
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('floors', function (Blueprint $table) {
             $table->dropColumn('percentage_display_zoom');
