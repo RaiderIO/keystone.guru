@@ -42,18 +42,18 @@ class SpellController extends Controller
 
         $spellBefore = clone $spell;
 
-        $spell->id = $request->get('id');
+        $spell->id          = $request->get('id');
         $spell->dispel_type = $request->get('dispel_type');
-        $spell->icon_name = $request->get('icon_name');
-        $spell->name = $request->get('name');
-        $schools = $request->get('schools', []);
-        $mask = 0;
+        $spell->icon_name   = $request->get('icon_name');
+        $spell->name        = $request->get('name');
+        $schools            = $request->get('schools', []);
+        $mask               = 0;
         foreach ($schools as $school) {
-            $mask |= (int) $school;
+            $mask |= (int)$school;
         }
 
         $spell->schools_mask = $mask;
-        $spell->aura = $request->get('aura', false);
+        $spell->aura         = $request->get('aura', false);
 
         if ($spell->save()) {
             //            if ($oldId > 0) {
@@ -79,7 +79,7 @@ class SpellController extends Controller
     {
         return view('admin.spell.edit', [
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools' => Spell::ALL_SCHOOLS,
+            'schools'     => Spell::ALL_SCHOOLS,
         ]);
     }
 
@@ -89,9 +89,9 @@ class SpellController extends Controller
     public function edit(Request $request, Spell $spell): View
     {
         return view('admin.spell.edit', [
-            'spell' => $spell,
+            'spell'       => $spell,
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools' => Spell::ALL_SCHOOLS,
+            'schools'     => Spell::ALL_SCHOOLS,
         ]);
     }
 

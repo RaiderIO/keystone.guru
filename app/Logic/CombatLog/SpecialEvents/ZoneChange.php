@@ -29,8 +29,8 @@ class ZoneChange extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->zoneId = $parameters[0];
-        $this->zoneName = $parameters[1];
+        $this->zoneId       = $parameters[0];
+        $this->zoneName     = $parameters[1];
         $this->difficultyId = $parameters[2];
 
         return $this;

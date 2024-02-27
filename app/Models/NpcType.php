@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $type
+ * @property int              $id
+ * @property string           $type
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
@@ -41,16 +41,16 @@ class NpcType extends CacheModel
     public const UNCATEGORIZED = 11;
 
     public const ALL = [
-        'Aberration' => self::ABERRATION,
-        'Beast' => self::BEAST,
-        'Critter' => self::CRITTER,
-        'Demon' => self::DEMON,
-        'Dragonkin' => self::DRAGONKIN,
-        'Elemental' => self::ELEMENTAL,
-        'Giant' => self::GIANT,
-        'Humanoid' => self::HUMANOID,
-        'Mechanical' => self::MECHANICAL,
-        'Undead' => self::UNDEAD,
+        'Aberration'    => self::ABERRATION,
+        'Beast'         => self::BEAST,
+        'Critter'       => self::CRITTER,
+        'Demon'         => self::DEMON,
+        'Dragonkin'     => self::DRAGONKIN,
+        'Elemental'     => self::ELEMENTAL,
+        'Giant'         => self::GIANT,
+        'Humanoid'      => self::HUMANOID,
+        'Mechanical'    => self::MECHANICAL,
+        'Undead'        => self::UNDEAD,
         'Uncategorized' => self::UNCATEGORIZED,
     ];
 

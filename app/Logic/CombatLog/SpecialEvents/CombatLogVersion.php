@@ -49,12 +49,12 @@ class CombatLogVersion extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->version = $parameters[0];
+        $this->version            = $parameters[0];
         $this->advancedLogEnabled = $parameters[2];
-        $this->buildVersion = $parameters[4];
-        $this->projectID = $parameters[6];
+        $this->buildVersion       = $parameters[4];
+        $this->projectID          = $parameters[6];
 
-        if (! isset(CombatLogVersionConstant::ALL[$this->version])) {
+        if (!isset(CombatLogVersionConstant::ALL[$this->version])) {
             throw new Exception(sprintf('Unable to find combat log version %d!', $this->version));
         }
 

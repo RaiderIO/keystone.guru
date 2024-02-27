@@ -10,6 +10,6 @@ class CombatLogVersion
 
     public const ALL = [
         self::CLASSIC => 1,
-        self::RETAIL => 2,
+        self::RETAIL  => 2,
     ];
 }

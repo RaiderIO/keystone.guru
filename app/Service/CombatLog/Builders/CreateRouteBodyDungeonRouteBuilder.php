@@ -33,15 +33,15 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
     public function __construct(
         private readonly SeasonServiceInterface $seasonService,
-        CoordinatesServiceInterface $coordinatesService,
-        private readonly CreateRouteBody $createRouteBody
+        CoordinatesServiceInterface             $coordinatesService,
+        private readonly CreateRouteBody        $createRouteBody
     ) {
         $dungeonRoute = $this->initDungeonRoute();
 
         parent::__construct($coordinatesService, $dungeonRoute);
 
         /** @var CreateRouteBodyDungeonRouteBuilderLoggingInterface $log */
-        $log = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
+        $log       = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -74,16 +74,16 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
         $dungeonRoute = DungeonRoute::create([
-            'public_key' => DungeonRoute::generateRandomPublicKey(),
-            'author_id' => Auth::id() ?? -1,
-            'dungeon_id' => $dungeon->id,
+            'public_key'         => DungeonRoute::generateRandomPublicKey(),
+            'author_id'          => Auth::id() ?? -1,
+            'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $currentMappingVersion->id,
-            'faction_id' => Faction::ALL[Faction::FACTION_UNSPECIFIED],
+            'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
-            'title' => __($dungeon->name),
-            'level_min' => $this->createRouteBody->challengeMode->level,
-            'level_max' => $this->createRouteBody->challengeMode->level,
-            'expires_at' => $this->createRouteBody->settings->temporary ? Carbon::now()->addHours(
+            'title'              => __($dungeon->name),
+            'level_min'          => $this->createRouteBody->challengeMode->level,
+            'level_max'          => $this->createRouteBody->challengeMode->level,
+            'expires_at'         => $this->createRouteBody->settings->temporary ? Carbon::now()->addHours(
                 config('keystoneguru.sandbox_dungeon_route_expires_hours')
             )->toDateTimeString() : null,
         ]);
@@ -94,7 +94,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         // Find the correct affix groups that match the affix combination the dungeon was started with
         $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
         if ($currentSeasonForDungeon !== null) {
-            $affixIds = collect($this->createRouteBody->challengeMode->affixes);
+            $affixIds            = collect($this->createRouteBody->challengeMode->affixes);
             $eligibleAffixGroups = AffixGroup::where('season_id', $currentSeasonForDungeon->id)->get();
             foreach ($eligibleAffixGroups as $eligibleAffixGroup) {
                 // If the affix group's affixes are all in $affixIds
@@ -102,7 +102,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                     // Couple the affix group to the newly created dungeon route
                     DungeonRouteAffixGroup::create([
                         'dungeon_route_id' => $dungeonRoute->id,
-                        'affix_group_id' => $eligibleAffixGroup->id,
+                        'affix_group_id'   => $eligibleAffixGroup->id,
                     ]);
                 }
             }
@@ -113,20 +113,20 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
     private function buildKillZones(): void
     {
-        $filteredNpcs = $this->createRouteBody->npcs->filter(fn (CreateRouteNpc $npc) => $this->validNpcIds->search($npc->npcId) !== false);
+        $filteredNpcs = $this->createRouteBody->npcs->filter(fn(CreateRouteNpc $npc) => $this->validNpcIds->search($npc->npcId) !== false);
 
-        $npcEngagedEvents = $filteredNpcs->map(static fn (CreateRouteNpc $npc) => [
-            'type' => 'engaged',
+        $npcEngagedEvents = $filteredNpcs->map(static fn(CreateRouteNpc $npc) => [
+            'type'      => 'engaged',
             'timestamp' => $npc->getEngagedAt(),
-            'npc' => $npc,
+            'npc'       => $npc,
         ]);
 
-        $npcDiedEvents = $filteredNpcs->map(static fn (CreateRouteNpc $npc) => [
-            'type' => 'died',
+        $npcDiedEvents = $filteredNpcs->map(static fn(CreateRouteNpc $npc) => [
+            'type'      => 'died',
             // A bit of a hack - but prevent one-shot enemies from having their diedAt event
             // potentially come _before_ engagedAt event due to sorting
             'timestamp' => $npc->getDiedAt()->addSecond(),
-            'npc' => $npc,
+            'npc'       => $npc,
         ]);
 
         $npcEngagedAndDiedEvents = $npcEngagedEvents
@@ -170,18 +170,18 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($activePull === null) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePull();
-                } elseif ($activePull->isCompleted()) {
+                } else if ($activePull->isCompleted()) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePullChainPullCompleted();
                 } // Check if we need to account for chain pulling
-                elseif (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
+                else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
                     <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
                 }
 
                 $activePullEnemy = $this->createActivePullEnemy($event['npc']);
-                $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
                     $activePullEnemy,
                     $this->activePullCollection->getInCombatGroups()
                 );
@@ -198,7 +198,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
                 $activePull->enemyEngaged($activePullEnemy);
-            } elseif ($event['type'] === 'died') {
+            } else if ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
                 foreach ($this->activePullCollection as $activePull) {
                     /** @var $activePull ActivePull */
@@ -210,12 +210,12 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
                 // Handle spells and the actual creation of pulls
                 /** @var $firstActivePull ActivePull|null */
-                $firstActivePull = $this->activePullCollection->first();
+                $firstActivePull          = $this->activePullCollection->first();
                 $firstActivePullCompleted = $firstActivePull?->isCompleted() ?? false;
                 foreach ($this->activePullCollection as $pullIndex => $activePull) {
                     /** @var $activePull ActivePull */
                     if ($activePull->isCompleted()) {
-                        if (! $firstActivePullCompleted) {
+                        if (!$firstActivePullCompleted) {
                             // Chain pulls are NEVER completed before the original pull! If they ARE, then it wasn't a
                             // chain pull but more like a delayed pull into a big one
                             $firstActivePull->merge($activePull);
@@ -255,7 +255,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
                     $activePull->addSpell($spell->spellId);
                 }
-            } elseif ($spell->getCastAt()->isAfter($firstEngagedAt)) {
+            } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
                 $activePull->addSpell($spell->spellId);
             }
         }

@@ -31,8 +31,8 @@ class CacheService implements CacheServiceInterface
     /**
      * Remembers a value with a specific key if a condition is met
      *
-     * @param  Closure|mixed  $value
-     * @param  string|null|DateInterval  $ttl
+     * @param Closure|mixed            $value
+     * @param string|null|DateInterval $ttl
      * @return Closure|mixed|null
      *
      * @throws InvalidArgumentException
@@ -41,7 +41,7 @@ class CacheService implements CacheServiceInterface
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
-        } elseif ($value instanceof Closure) {
+        } else if ($value instanceof Closure) {
             $value = $value();
         }
 
@@ -49,15 +49,15 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param  Closure|mixed  $value
-     * @param  string|null|DateInterval  $ttl
+     * @param Closure|mixed            $value
+     * @param string|null|DateInterval $ttl
      */
     public function remember(string $key, $value, $ttl = null): mixed
     {
         $result = null;
 
         // If we should ignore the cache, of if it's found
-        if (! $this->cacheEnabled || ($result = $this->get($key)) === null) {
+        if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
 
             // Get the result by calling the closure
             if ($value instanceof Closure) {
@@ -96,7 +96,7 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param  string|null|DateInterval  $ttl
+     * @param string|null|DateInterval $ttl
      *
      * @throws InvalidArgumentException
      */

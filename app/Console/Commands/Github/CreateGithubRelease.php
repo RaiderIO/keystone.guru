@@ -52,7 +52,7 @@ class CreateGithubRelease extends GithubReleaseCommand
         if ($release !== null) {
             $this->info(sprintf('>> Creating Github release for %s', $release->version));
 
-            $username = config('keystoneguru.github_username');
+            $username   = config('keystoneguru.github_username');
             $repository = config('keystoneguru.github_repository');
 
             /** @var Repo $githubRepoClient */
@@ -71,8 +71,8 @@ class CreateGithubRelease extends GithubReleaseCommand
             try {
                 $githubRepoClient->releases()->create($username, $repository, [
                     'tag_name' => $release->version,
-                    'name' => $release->version,
-                    'body' => $body,
+                    'name'     => $release->version,
+                    'body'     => $body,
                 ]);
                 $this->info(sprintf('Successfully created GitHub release %s', $release->version));
 

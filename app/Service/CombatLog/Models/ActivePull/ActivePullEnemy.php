@@ -72,7 +72,7 @@ class ActivePullEnemy
             return 0;
         }
 
-        $timeAliveMS = $this->getEngagedAt()->diffInMilliseconds($this->getDiedAt());
+        $timeAliveMS  = $this->getEngagedAt()->diffInMilliseconds($this->getDiedAt());
         $snapshotAtMS = $this->getEngagedAt()->diffInMilliseconds($carbon);
 
         // timeAliveMS = 30000

@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int $id The ID of this timewalking event.
- * @property int $expansion_id
- * @property int $season_id
- * @property string $key
- * @property string $name
- * @property Carbon $start
- * @property int $start_duration_weeks
- * @property int $week_interval
+ * @property int       $id The ID of this timewalking event.
+ * @property int       $expansion_id
+ * @property int       $season_id
+ * @property string    $key
+ * @property string    $name
+ * @property Carbon    $start
+ * @property int       $start_duration_weeks
+ * @property int       $week_interval
  * @property Expansion $expansion
  *
  * @mixin Eloquent

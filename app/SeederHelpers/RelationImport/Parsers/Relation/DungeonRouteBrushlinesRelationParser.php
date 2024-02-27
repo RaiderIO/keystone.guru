@@ -41,7 +41,7 @@ class DungeonRouteBrushlinesRelationParser implements RelationParserInterface
             $brushline->save();
 
             $polyline['model_class'] = $brushline::class;
-            $polyline['model_id'] = $brushline->id;
+            $polyline['model_id']    = $brushline->id;
 
             // Insert polyline, while capturing the result and coupling to the brushline
             $brushline->polyline_id = Polyline::insertGetId($polyline);

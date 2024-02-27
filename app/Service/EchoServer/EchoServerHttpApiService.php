@@ -16,14 +16,14 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     public function __construct()
     {
         // Make sure we don't have a trailing slash in the app_url
-        $appUrl = trim((string) config('keystoneguru.echo.url'), '/');
+        $appUrl = trim((string)config('keystoneguru.echo.url'), '/');
 
         try {
             $this->_client = new Client([
                 // Base URI is used with relative requests
                 'base_uri' => sprintf('%s:%s', $appUrl, config('keystoneguru.echo.port')),
                 // You can set any number of default request options.
-                'timeout' => 2.0,
+                'timeout'  => 2.0,
             ]);
         } catch (InvalidArgumentException $invalidArgumentException) {
             report($invalidArgumentException);
@@ -48,7 +48,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
                 ['query' => ['auth_key' => config('keystoneguru.echo.client.key')]]
             );
             if ($response->getStatusCode() === StatusCode::OK) {
-                $result = json_decode((string) $response->getBody(), true);
+                $result = json_decode((string)$response->getBody(), true);
             } else {
                 throw new Exception(sprintf('Unable to perform request to %s, retrieved status code %s', $uri, $response->getStatusCode()));
             }

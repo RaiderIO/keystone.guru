@@ -3,7 +3,7 @@
 return [
     'explore' => [
         'list' => [
-            'title' => 'Explore',
+            'title'  => 'Explore',
             'header' => 'Explore dungeon',
         ],
     ],

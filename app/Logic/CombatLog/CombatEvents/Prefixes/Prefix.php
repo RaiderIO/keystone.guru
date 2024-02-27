@@ -36,11 +36,11 @@ abstract class Prefix implements HasParameters
 
     private const PREFIX_CLASS_MAPPING = [
         self::PREFIX_SWING_DAMAGE_LANDED_SUPPORT => SwingDamageLandedSupport::class,
-        self::PREFIX_SWING => Swing::class,
-        self::PREFIX_RANGE => Range::class,
-        self::PREFIX_SPELL => Spell::class,
-        self::PREFIX_SPELL_PERIODIC => SpellPeriodic::class,
-        self::PREFIX_SPELL_BUILDING => SpellBuilding::class,
+        self::PREFIX_SWING                       => Swing::class,
+        self::PREFIX_RANGE                       => Range::class,
+        self::PREFIX_SPELL                       => Spell::class,
+        self::PREFIX_SPELL_PERIODIC              => SpellPeriodic::class,
+        self::PREFIX_SPELL_BUILDING              => SpellBuilding::class,
     ];
 
     public function __construct(protected int $combatLogVersion)

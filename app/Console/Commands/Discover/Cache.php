@@ -41,7 +41,7 @@ class Cache extends Command
      */
     public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int
     {
-        $async = (bool) $this->option('async');
+        $async = (bool)$this->option('async');
 
         if ($async) {
             $this->info('Caching Discover pages async');

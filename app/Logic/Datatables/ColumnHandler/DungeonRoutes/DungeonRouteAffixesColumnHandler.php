@@ -24,8 +24,8 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
     {
 
         $affixes = $columnData['search']['value'];
-        if (! empty($affixes)) {
-            $affixIds = explode(',', (string) $affixes);
+        if (!empty($affixes)) {
+            $affixIds = explode(',', (string)$affixes);
 
             $subBuilder->whereHas('affixes', static function ($query) use (&$affixIds) {
                 /** @var $query Builder */

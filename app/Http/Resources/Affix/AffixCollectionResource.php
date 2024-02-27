@@ -24,6 +24,6 @@ class AffixCollectionResource extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return $this->collection->map(static fn (Affix $affix) => new AffixResource($affix));
+        return $this->collection->map(static fn(Affix $affix) => new AffixResource($affix));
     }
 }

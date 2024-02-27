@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $raid_marker_id
- * @property int $enemy_id
+ * @property int          $id
+ * @property int          $dungeon_route_id
+ * @property int          $raid_marker_id
+ * @property int          $enemy_id
  * @property DungeonRoute $dungeonRoute
- * @property RaidMarker $raidMarker
- * @property Enemy $enemy
+ * @property RaidMarker   $raidMarker
+ * @property Enemy        $enemy
  *
  * @mixin Eloquent
  */

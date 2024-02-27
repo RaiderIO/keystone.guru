@@ -61,11 +61,11 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':60,1',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':60,1',
             'bindings',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
-            'read_only_mode' => ReadOnlyMode::class,
-            'authentication' => ApiAuthentication::class,
+            'read_only_mode'            => ReadOnlyMode::class,
+            'authentication'            => ApiAuthentication::class,
         ],
     ];
 
@@ -77,17 +77,17 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewareAliases = [
-        'auth' => Authenticate::class,
-        'auth.basic' => AuthenticateWithBasicAuth::class,
-        'bindings' => SubstituteBindings::class,
-        'can' => Authorize::class,
-        'guest' => RedirectIfAuthenticated::class,
-        'throttle' => ThrottleRequests::class,
-        'ajax' => OnlyAjax::class,
-        'viewcachebuster' => ViewCacheBuster::class,
-        'legal_agreed' => LegalAgreed::class,
-        'debugbarmessagelogger' => DebugBarMessageLogger::class,
+        'auth'                      => Authenticate::class,
+        'auth.basic'                => AuthenticateWithBasicAuth::class,
+        'bindings'                  => SubstituteBindings::class,
+        'can'                       => Authorize::class,
+        'guest'                     => RedirectIfAuthenticated::class,
+        'throttle'                  => ThrottleRequests::class,
+        'ajax'                      => OnlyAjax::class,
+        'viewcachebuster'           => ViewCacheBuster::class,
+        'legal_agreed'              => LegalAgreed::class,
+        'debugbarmessagelogger'     => DebugBarMessageLogger::class,
         'debug_info_context_logger' => DebugInfoContextLogger::class,
-        'read_only_mode' => ReadOnlyMode::class,
+        'read_only_mode'            => ReadOnlyMode::class,
     ];
 }

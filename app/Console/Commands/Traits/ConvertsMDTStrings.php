@@ -30,12 +30,12 @@ trait ConvertsMDTStrings
     private function shouldErrorLog(string $string): bool
     {
         // Check if it's a base64 encoded string - ish
-        return (bool) preg_match('%^![a-zA-Z0-9/+()]*={0,2}$%', $string);
+        return (bool)preg_match('%^![a-zA-Z0-9/+()]*={0,2}$%', $string);
     }
 
     /**
-     * @param  bool  $encode  True to encode, false to decode it.
-     * @param  string  $string  The string you want to encode/decode.
+     * @param bool   $encode True to encode, false to decode it.
+     * @param string $string The string you want to encode/decode.
      */
     private function transform(bool $encode, string $string): ?string
     {
@@ -57,7 +57,7 @@ trait ConvertsMDTStrings
                 $process->run();
 
                 // executes after the command finishes
-                if (! $process->isSuccessful()) {
+                if (!$process->isSuccessful()) {
                     $errorOutput = trim($process->getErrorOutput());
 
                     // Give output to the artisan command
@@ -66,7 +66,7 @@ trait ConvertsMDTStrings
                     // Only interested in decode - we're really only interested if it wasn't encoded, which would indicate some issue
                     // with either the string or a new format the tool I use can't handle. We don't care for things that aren't
                     // MDT strings - they should be ignored
-                    if (! $encode && $this->shouldErrorLog($string)) {
+                    if (!$encode && $this->shouldErrorLog($string)) {
                         logger()->error($errorOutput, [
                             'string' => $string,
                         ]);

@@ -16,14 +16,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $user_id
- * @property string $public_key
- * @property User $user
- * @property DungeonRoute $dungeonroute
+ * @property int                          $id
+ * @property int                          $dungeon_route_id
+ * @property int                          $user_id
+ * @property string                       $public_key
+ * @property User                         $user
+ * @property DungeonRoute                 $dungeonroute
  * @property Collection|OverpulledEnemy[] $overpulledenemies
- * @property Carbon $expires_at
+ * @property Carbon                       $expires_at
  *
  * @mixin Eloquent
  */

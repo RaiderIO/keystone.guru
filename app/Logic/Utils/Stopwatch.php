@@ -49,7 +49,7 @@ class Stopwatch
         // Timer is already running at this point, grab the time as quick as we can
         $now = self::_getTime();
         // Prevent double pauses overwriting the first pause
-        if (! isset(self::$timers[$timerName]['end'])) {
+        if (!isset(self::$timers[$timerName]['end'])) {
             self::$timers[$timerName]['end'] = $now;
         }
     }
@@ -63,7 +63,7 @@ class Stopwatch
     public static function elapsed(string $timerName = 'default'): float
     {
         // We've now ended, grab time asap
-        $now = self::_getTime();
+        $now        = self::_getTime();
         $timerStart = $now;
         // If timer is not set just return 0
         if (isset(self::$timers[$timerName])) {
@@ -85,7 +85,7 @@ class Stopwatch
     /**
      * Echoes a timer into the webpage for debugging purposes
      *
-     * @param  string  $timerName  The name of the timer that you want to echo.
+     * @param string $timerName The name of the timer that you want to echo.
      */
     public static function dump(string $timerName = 'default'): void
     {

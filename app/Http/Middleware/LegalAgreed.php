@@ -14,7 +14,7 @@ class LegalAgreed
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && ! Auth::user()->legal_agreed) {
+        if (Auth::check() && !Auth::user()->legal_agreed) {
             return response('You must agree to the terms for service to proceed.', 403);
         }
 

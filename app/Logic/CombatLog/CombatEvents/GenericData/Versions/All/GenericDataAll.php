@@ -71,14 +71,14 @@ class GenericDataAll implements GenericDataInterface
     {
         $this->validateParameters($parameters);
 
-        $this->sourceGuid = Guid::createFromGuidString($parameters[0]);
-        $this->sourceName = $parameters[1];
-        $this->sourceFlags = $parameters[2];
+        $this->sourceGuid      = Guid::createFromGuidString($parameters[0]);
+        $this->sourceName      = $parameters[1];
+        $this->sourceFlags     = $parameters[2];
         $this->sourceRaidFlags = $parameters[3];
-        $this->destGuid = Guid::createFromGuidString($parameters[4]);
-        $this->destName = $parameters[5];
-        $this->destFlags = $parameters[6];
-        $this->destRaidFlags = $parameters[7];
+        $this->destGuid        = Guid::createFromGuidString($parameters[4]);
+        $this->destName        = $parameters[5];
+        $this->destFlags       = $parameters[6];
+        $this->destRaidFlags   = $parameters[7];
 
         return $this;
     }

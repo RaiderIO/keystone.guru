@@ -49,11 +49,11 @@ class Heal extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->amount = $parameters[0];
+        $this->amount      = $parameters[0];
         $this->overHealing = $parameters[1];
-        $this->absorbed = $parameters[2];
-        $this->critical = $parameters[3];
-        $this->unknown1 = $parameters[4];
+        $this->absorbed    = $parameters[2];
+        $this->critical    = $parameters[3];
+        $this->unknown1    = $parameters[4];
 
         return $this;
     }
