@@ -42,27 +42,23 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         194181,
     ];
 
-    /** @var Collection|BaseResultEvent[] */
-    private Collection $resultEvents;
-
     /** @var Collection|int[] A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
     /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
-    private Collection $accurateEnemySightings;
+    private readonly Collection $accurateEnemySightings;
 
     /** @var Collection|string[] List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
-    private Collection $summonedEnemies;
+    private readonly Collection $summonedEnemies;
 
     /** @var Collection|string[] List of GUIDs for all enemies that we have killed since the start. */
-    private Collection $killedEnemies;
+    private readonly Collection $killedEnemies;
 
-    /** @var BaseCombatFilterLoggingInterface */
-    private BaseCombatFilterLoggingInterface $log;
+    private readonly BaseCombatFilterLoggingInterface $log;
 
-    public function __construct(Collection $resultEvents)
+    public function __construct(/** @var Collection|BaseResultEvent[] */
+        private readonly Collection $resultEvents)
     {
-        $this->resultEvents           = $resultEvents;
         $this->validNpcIds            = collect();
         $this->accurateEnemySightings = collect();
         $this->summonedEnemies        = collect();
@@ -73,20 +69,11 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $this->log = $log;
     }
 
-    /**
-     * @param Collection $validNpcIds
-     */
     public function setValidNpcIds(Collection $validNpcIds): void
     {
         $this->validNpcIds = $validNpcIds;
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // If a unit has died/is defeated
@@ -174,11 +161,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         return false;
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     *
-     * @return bool
-     */
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
     {
         // We skip all non-advanced combat log events, we need positional information of NPCs.
@@ -202,25 +184,20 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         return true;
 
-//        // We skip all non-advanced combat log events, we need positional information of NPCs.
-//        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
-//            return false;
-//        }
-//
-//        // The info GUID is the GUID for which the advanced data is valid for
-//        // So if the info GUID is for an enemy we're 100% interested in this info
-//        $infoGuid = $combatLogEvent->getAdvancedData()->getInfoGuid();
-//        // Ignore events that did not originate from
-//        return !($combatLogEvent->getGenericData()->getSourceGuid() instanceof Creature) &&
-//            $infoGuid instanceof Creature &&
-//            $infoGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
+        //        // We skip all non-advanced combat log events, we need positional information of NPCs.
+        //        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+        //            return false;
+        //        }
+        //
+        //        // The info GUID is the GUID for which the advanced data is valid for
+        //        // So if the info GUID is for an enemy we're 100% interested in this info
+        //        $infoGuid = $combatLogEvent->getAdvancedData()->getInfoGuid();
+        //        // Ignore events that did not originate from
+        //        return !($combatLogEvent->getGenericData()->getSourceGuid() instanceof Creature) &&
+        //            $infoGuid instanceof Creature &&
+        //            $infoGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
     }
 
-    /**
-     * @param AdvancedDataInterface $advancedData
-     *
-     * @return string|null
-     */
     private function hasAdvancedDataNewGuid(AdvancedDataInterface $advancedData): ?string
     {
         $guid = $advancedData->getInfoGuid();
@@ -247,11 +224,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         return null;
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     *
-     * @return bool
-     */
     private function hasDeathAuraApplied(BaseEvent $combatLogEvent): bool
     {
         return false;
@@ -273,11 +245,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         //        ]);
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     *
-     * @return bool
-     */
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool
     {
         if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {

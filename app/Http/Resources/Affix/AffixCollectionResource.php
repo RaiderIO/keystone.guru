@@ -11,8 +11,8 @@ use JsonSerializable;
 /**
  * Class AffixCollectionResource
  *
- * @package App\Http\Resources
  * @author Wouter
+ *
  * @since 31/07/2023
  */
 class AffixCollectionResource extends ResourceCollection
@@ -20,14 +20,10 @@ class AffixCollectionResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
-        return $this->collection->map(function (Affix $affix) {
-            return new AffixResource($affix);
-        });
+        return $this->collection->map(static fn(Affix $affix) => new AffixResource($affix));
     }
 }

@@ -79,7 +79,9 @@ class CommonMapsMap extends InlineCode {
             this._setupLabelToggle();
 
             // Sharing
-            $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
+            if (getState().getMapContext().getDungeon().mdt_supported) {
+                $('#share_modal').on('show.bs.modal', this._fetchMdtExportString.bind(this));
+            }
 
             // MDT clones button
             $('#map_enemy_visuals_map_mdt_clones_to_enemies').bind('change', function () {

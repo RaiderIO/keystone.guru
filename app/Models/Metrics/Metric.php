@@ -16,9 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $created_at
  *
- *
- * @package App\Models\Metrics
  * @author Wouter
+ *
  * @since 14/02/2023
  *
  * @mixin Eloquent
@@ -33,7 +32,8 @@ class Metric extends Model
         self::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
     ];
 
-    public const TAG_MDT_COPY_VIEW  = 'view';
+    public const TAG_MDT_COPY_VIEW = 'view';
+
     public const TAG_MDT_COPY_EMBED = 'embed';
 
     public const ALL_TAGS = [

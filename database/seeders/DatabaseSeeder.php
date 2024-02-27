@@ -56,11 +56,10 @@ class DatabaseSeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * @param CacheServiceInterface $cacheService
-     * @return void
+     *
      * @throws Throwable
      */
-    public function run(CacheServiceInterface $cacheService)
+    public function run(CacheServiceInterface $cacheService): void
     {
         self::$running = true;
 
@@ -121,10 +120,6 @@ class DatabaseSeeder extends Seeder
         self::$running = false;
     }
 
-    /**
-     * @param string $className
-     * @return bool
-     */
     private function prepareTempTableForModel(string $className): bool
     {
         /** @var Model $instance */
@@ -139,8 +134,6 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * @param string $className
-     * @return bool
      * @throws Throwable
      */
     private function applyTempTableForModel(string $className): bool
@@ -152,17 +145,13 @@ class DatabaseSeeder extends Seeder
         $tableNameNew = sprintf('%s%s', $tableNameOld, self::TEMP_TABLE_SUFFIX);
 
         // Remove contents from old table, replace it with contents from new table
-//        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
+        //        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
         DB::table($tableNameOld)->truncate();
 
         return DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s;', $tableNameOld, $tableNameNew));
-//        });
+        //        });
     }
 
-    /**
-     * @param string $className
-     * @return bool
-     */
     private function cleanupTempTableForModel(string $className): bool
     {
         /** @var Model $instance */
@@ -173,10 +162,6 @@ class DatabaseSeeder extends Seeder
         return DB::statement(sprintf('DROP TABLE %s;', $tableNameNew));
     }
 
-    /**
-     * @param string $className
-     * @return string
-     */
     public static function getTempTableName(string $className): string
     {
         $result = Str::snake(Str::pluralStudly(class_basename($className)));

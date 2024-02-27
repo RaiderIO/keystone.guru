@@ -23,18 +23,15 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     use SavesPolylines;
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param EnemyPatrolFormRequest      $request
-     * @param MappingVersion              $mappingVersion
-     * @param EnemyPatrol|null            $enemyPatrol
      * @return EnemyPatrol|Model
+     *
      * @throws Throwable
      */
     public function store(
         CoordinatesServiceInterface $coordinatesService,
         EnemyPatrolFormRequest      $request,
         MappingVersion              $mappingVersion,
-        EnemyPatrol                 $enemyPatrol = null
+        ?EnemyPatrol                $enemyPatrol = null
     ): EnemyPatrol {
         $validated = $request->validated();
 
@@ -59,7 +56,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 // Couple the patrol to the polyline
                 $saveResult = $enemyPatrol->update([
                     'polyline_id' => $polyline->id,
-                    'floor_id'    => optional($changedFloor)->id ?? $enemyPatrol->floor_id,
+                    'floor_id'    => $changedFloor?->id ?? $enemyPatrol->floor_id,
                 ]);
 
                 // Load the polyline, so it can be echoed back to the user
@@ -71,11 +68,9 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request     $request
-     * @param EnemyPatrol $enemyPatrol
      * @return array|ResponseFactory|Response
      */
-    function delete(Request $request, EnemyPatrol $enemyPatrol)
+    public function delete(Request $request, EnemyPatrol $enemyPatrol)
     {
         try {
             if ($enemyPatrol->delete()) {
@@ -86,8 +81,9 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($enemyPatrol, null);
             }
+
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

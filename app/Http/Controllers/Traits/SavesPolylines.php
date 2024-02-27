@@ -14,20 +14,14 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 trait SavesPolylines
 {
     /**
-     * @param CoordinatesServiceInterface                                                      $coordinatesService
-     * @param MappingVersion                                                                   $mappingVersion
-     * @param Polyline                                                                         $polyline
-     * @param Model                                                                            $ownerModel
      * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
-     * @param Floor|null                                                                       $changedFloor
-     * @return Polyline
      */
     private function savePolyline(
         CoordinatesServiceInterface $coordinatesService,
@@ -59,7 +53,7 @@ trait SavesPolylines
             'id' => $polyline->id,
         ], [
             'model_id'       => $ownerModel->id,
-            'model_class'    => get_class($ownerModel),
+            'model_class'    => $ownerModel::class,
             'color'          => $data['color'] ?? '#f00',
             'color_animated' => Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ? $data['color_animated'] : null,
             'weight'         => (int)$data['weight'] ?? 2,

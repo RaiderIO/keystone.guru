@@ -8,19 +8,11 @@ use Patreon\OAuth;
 
 class PatreonApiService implements PatreonApiServiceInterface
 {
-    private PatreonApiServiceLoggingInterface $log;
-
-    /**
-     * @param PatreonApiServiceLoggingInterface $log
-     */
-    public function __construct(PatreonApiServiceLoggingInterface $log)
+    public function __construct(private readonly PatreonApiServiceLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
-
     /**
-     * @param string $accessToken
      * @return array{errors: array|null, included: array|null}|null
      */
     public function getIdentity(string $accessToken): ?array
@@ -61,8 +53,6 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @param string $accessToken
-     * @return array|null
      * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
      */
     public function getCampaignTiersAndBenefits(string $accessToken): ?array
@@ -86,9 +76,7 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $result;
     }
 
-
     /**
-     * @param string $accessToken
      * @return array|null Null whenever we couldn't authenticate with the refreshToken provided
      */
     public function getCampaignMembers(string $accessToken): ?array
@@ -111,9 +99,7 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $result;
     }
 
-
     /**
-     * @param string $refreshToken
      * @return array{errors: ?array, access_token: string, refresh_token: string, expires_in: int, scope: string, token_type: string, version: string}
      */
     public function getAccessTokenFromRefreshToken(string $refreshToken): array
@@ -122,8 +108,6 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @param string $code
-     * @param string $redirectUrl
      * @return array{errors: ?array, access_token: string, refresh_token: string, expires_in: int, scope: string, token_type: string, version: string}
      */
     public function getAccessTokenFromCode(string $code, string $redirectUrl): array
@@ -131,11 +115,6 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $this->getOAuthClient()->get_tokens($code, $redirectUrl);
     }
 
-    /**
-     * @param API $apiClient
-     * @param string $suffix
-     * @return array
-     */
     private function getAllPages(API $apiClient, string $suffix): array
     {
         $resultData = [];
@@ -144,7 +123,8 @@ class PatreonApiService implements PatreonApiServiceInterface
         $count = 0;
         do {
             $this->log->getAllPagesPageNr($count);
-            $requestResult = $originalResponse = $apiClient->get_data($next);
+            $requestResult    = $apiClient->get_data($next);
+            $originalResponse = $requestResult;
             // Insane workaround if you get a 4xx error it won't do json_decode
             if (is_string($requestResult)) {
                 $requestResult = json_decode($requestResult, true);
@@ -159,13 +139,14 @@ class PatreonApiService implements PatreonApiServiceInterface
 
                 $next = isset($requestResult['links']['next']) ?
                     // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
-                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode($requestResult['meta']['pagination']['cursors']['next'])) :
+                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string)$requestResult['meta']['pagination']['cursors']['next'])) :
                     null;
             } else {
                 // Found an error - just stop it now
                 $next = null;
                 $this->log->getAllPagesError($requestResult['errors']);
             }
+
             $count++;
         } while ($next !== null);
 
@@ -177,9 +158,6 @@ class PatreonApiService implements PatreonApiServiceInterface
         return $requestResult ?? [];
     }
 
-    /**
-     * @return OAuth
-     */
     private function getOAuthClient(): OAuth
     {
         $client_id     = config('keystoneguru.patreon.oauth.client_id');
@@ -188,10 +166,6 @@ class PatreonApiService implements PatreonApiServiceInterface
         return new OAuth($client_id, $client_secret);
     }
 
-    /**
-     * @param string $accessToken
-     * @return API
-     */
     private function getApiClient(string $accessToken): API
     {
         return new API($accessToken);

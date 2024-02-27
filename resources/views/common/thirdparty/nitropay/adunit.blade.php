@@ -5,19 +5,19 @@
 /** @var bool $map */
 
 $id   = 'nitropay-' . $id;
-$type = $type ?? 'responsive';
-$map  = $map ?? false;
+$type ??= 'responsive';
+$map  ??= false;
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 
 $defaultReportAdPosition = [
-    'responsive'       => 'top-right',
-    'header'           => 'bottom-right',
-    'footer'           => 'top-right',
-    'footer_map_right' => 'top-right',
+    'responsive'        => 'top-right',
+    'header'            => 'bottom-right',
+    'footer'            => 'top-right',
+    'footer_map_right'  => 'top-right',
     'sidebar_map_right' => 'top-right',
 ];
 
-$reportAdPosition = $reportAdPosition ?? $defaultReportAdPosition[$type];
+$reportAdPosition ??= $defaultReportAdPosition[$type];
 
 // If we're on mobile, anchor ads do not have a report button so don't render it
 $hasAdControls = !($isMobile && ($type === 'header' || $type === 'footer'));
@@ -62,7 +62,7 @@ if ($isMobile) {
                 // Add a css class to the pulls sidebar so that we know the ads have loaded and its height can be adjusted accordingly
                 // The height will stay normal if an adblocker is enabled as a result
                 let pullsSidebar = document.getElementById(`pulls_sidebar`);
-                if( pullsSidebar !== null ) {
+                if (pullsSidebar !== null) {
                     let existingClasses = pullsSidebar.getAttribute('class');
                     if (!existingClasses.includes('ad_loaded')) {
                         pullsSidebar.setAttribute('class', `${existingClasses} ad_loaded`);
@@ -113,7 +113,7 @@ if ($isMobile) {
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
                  style="min-height: 90px;"
-                @endif
+            @endif
         ></div>
         @if( $isMobile )
             <script type="text/javascript">
@@ -161,7 +161,7 @@ if ($isMobile) {
         <div id="{{ $id }}" class="ad_block_me"
              @if(!$isMobile)
                  style="min-height: {{ $height }}px;"
-                @endif
+            @endif
         ></div>
 
         @if( $isMobile )

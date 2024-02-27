@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Logic\Structs\LatLng;
-use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -12,7 +10,6 @@ use App\Models\Traits\HasGenericModelRelation;
 use App\Models\Traits\HasVertices;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id
@@ -22,26 +19,21 @@ use Illuminate\Support\Collection;
  * @property string|null $color_animated
  * @property int         $weight
  * @property string      $vertices_json JSON encoded vertices
- *
  * @property Model       $model
  *
  * @mixin Eloquent
  */
-class Polyline extends Model implements MappingModelCloneableInterface, ConvertsVerticesInterface
+class Polyline extends Model implements ConvertsVerticesInterface, MappingModelCloneableInterface
 {
     use HasGenericModelRelation;
     use HasVertices;
 
     public $timestamps = false;
-    public $visible    = ['color', 'color_animated', 'weight', 'vertices_json'];
-    public $fillable   = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
 
-    /**
-     * @param MappingVersion             $mappingVersion
-     * @param MappingModelInterface|null $newParent
-     *
-     * @return Polyline
-     */
+    public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
+
+    public $fillable = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Polyline
     {
         /** @var Polyline|MappingModelInterface $clone */

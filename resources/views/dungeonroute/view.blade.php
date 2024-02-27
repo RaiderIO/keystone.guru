@@ -9,6 +9,7 @@ if (count($affixes) == 0) {
     $affixes         = [-1 => __('views/dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
+
 $dungeon = $dungeonroute->dungeon;
 ?>
 @section('scripts')
@@ -22,7 +23,7 @@ $dungeon = $dungeonroute->dungeon;
     <?php
     $defaultDescription = $dungeonroute->author === null ?
         sprintf(__('views/dungeonroute.view.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name))
-        : sprintf(__('views/dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), optional($dungeonroute->author)->name);
+        : sprintf(__('views/dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author?->name);
     ?>
     @include('common.general.linkpreview', [
         'title' => sprintf(__('views/dungeonroute.view.linkpreview_title'), $dungeonroute->title),
@@ -51,7 +52,7 @@ $dungeon = $dungeonroute->dungeon;
                 'share' => [
                     'link' => !$dungeonroute->isSandbox(),
                     'embed' => !$dungeonroute->isSandbox(),
-                    'mdt-export' => true,
+                    'mdt-export' => $dungeon->mdt_supported,
                     'publish' => false,
                 ]
             ],

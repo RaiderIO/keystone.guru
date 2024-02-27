@@ -9,25 +9,11 @@ use Illuminate\Support\Collection;
 
 class APIDungeonRouteControllerService implements APIDungeonRouteControllerServiceInterface
 {
-
-    private ThumbnailServiceInterface $thumbnailService;
-
-    /**
-     * @param ThumbnailServiceInterface $thumbnailService
-     */
-    public function __construct(ThumbnailServiceInterface $thumbnailService)
+    public function __construct(private readonly ThumbnailServiceInterface $thumbnailService)
     {
-        $this->thumbnailService = $thumbnailService;
     }
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param int|null     $viewportWidth
-     * @param int|null     $viewportHeight
-     * @param int|null     $imageWidth
-     * @param int|null     $imageHeight
-     * @param int|null     $zoomLevel
-     * @param int|null     $quality
      * @return Collection|DungeonRouteThumbnailJob[]
      */
     public function createThumbnails(DungeonRoute $dungeonRoute,

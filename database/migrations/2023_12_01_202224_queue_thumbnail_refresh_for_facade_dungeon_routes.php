@@ -5,8 +5,7 @@ use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 
-class QueueThumbnailRefreshForFacadeDungeonRoutes extends Migration
-{
+return new class extends Migration {
     private $thumbnailService;
 
     public function __construct()
@@ -16,10 +15,8 @@ class QueueThumbnailRefreshForFacadeDungeonRoutes extends Migration
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         DungeonRoute::select('dungeon_routes.*')
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
@@ -33,11 +30,9 @@ class QueueThumbnailRefreshForFacadeDungeonRoutes extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         // No going back
     }
-}
+};

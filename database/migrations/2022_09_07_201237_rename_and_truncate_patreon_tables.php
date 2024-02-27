@@ -7,15 +7,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameAndTruncatePatreonTables extends Migration
-{
+return new class extends Migration {
     /**
      * This is after re-doing the patreon integration. To strip everyone of (no longer paid for) benefits, we get rid of
      * all the data and ask everyone to re-link their accounts with Patreon.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::rename('paid_tiers', 'patreon_benefits');
         Schema::rename('patreon_data', 'patreon_user_links');
@@ -52,13 +49,11 @@ class RenameAndTruncatePatreonTables extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::rename('patreon_benefits', 'paid_tiers');
         Schema::rename('patreon_user_links', 'patreon_data');
         Schema::rename('patreon_user_benefits', 'patreon_tiers');
     }
-}
+};

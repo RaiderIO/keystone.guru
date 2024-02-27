@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
@@ -39,10 +38,10 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
     /**
      * Execute the console command.
      *
-     * @return int
+     *
      * @throws MissingArgumentException
      */
-    public function handle()
+    public function handle(): int
     {
         $result = 0;
 
@@ -66,9 +65,9 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
 
             // Only gets the first page - but good enough
             foreach ($githubPullRequestClient->all($username, $repository, ['state' => 'open', 'labels' => 'release']) as $githubPullRequest) {
-                if (strpos($githubPullRequest['head']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) === 0 &&
+                if (str_starts_with((string)$githubPullRequest['head']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
                     $githubPullRequest['head']['ref'] === $sourceBranch &&
-                    strpos($githubPullRequest['base']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) === 0 &&
+                    str_starts_with((string)$githubPullRequest['base']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
                     $githubPullRequest['base']['ref'] === $targetBranch) {
                     $existingPullRequestId = $githubPullRequest['number'];
                     break;
@@ -104,14 +103,13 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
 
             // Add labels to the pull request
             // The library I'm using cannot do this yet - do it later?
-//            if ($existingPullRequestId !== 0) {
-//
-//                /** @var Issue $githubIssueClient */
-//                $githubIssueClient = GitHub::issues();
-//
-//                $githubIssueClient->
-//            }
-
+            //            if ($existingPullRequestId !== 0) {
+            //
+            //                /** @var Issue $githubIssueClient */
+            //                $githubIssueClient = GitHub::issues();
+            //
+            //                $githubIssueClient->
+            //            }
 
         } else {
             $this->error(sprintf('Unable to find release %s', $version));

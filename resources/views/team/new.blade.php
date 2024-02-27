@@ -1,6 +1,6 @@
 <?php
 // Checks if you're already a member or not
-$member = $member ?? false;
+$member ??= false;
 ?>
 @extends('layouts.sitepage', ['title' => __('views/team.new.title')])
 @section('header-title', __('views/team.new.header'))

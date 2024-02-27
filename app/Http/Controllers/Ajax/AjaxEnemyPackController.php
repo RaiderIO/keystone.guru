@@ -17,13 +17,11 @@ use Throwable;
 class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
-     * @param EnemyPackFormRequest $request
-     * @param MappingVersion       $mappingVersion
-     * @param EnemyPack|null       $enemyPack
      * @return EnemyPack|Model
+     *
      * @throws Throwable
      */
-    public function store(EnemyPackFormRequest $request, MappingVersion $mappingVersion, EnemyPack $enemyPack = null): EnemyPack
+    public function store(EnemyPackFormRequest $request, MappingVersion $mappingVersion, ?EnemyPack $enemyPack = null): EnemyPack
     {
         $validated = $request->validated();
 
@@ -31,15 +29,12 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request   $request
-     * @param EnemyPack $enemyPack
-     * @return Response
      * @throws Exception
      * @throws Throwable
      */
     public function delete(Request $request, EnemyPack $enemyPack): Response
     {
-        return DB::transaction(function () use ($request, $enemyPack) {
+        return DB::transaction(function () use ($enemyPack) {
             if ($enemyPack->delete()) {
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($enemyPack, null);

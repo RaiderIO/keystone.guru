@@ -2,31 +2,23 @@
 
 namespace App\Service\TimewalkingEvent;
 
-
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
-use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class TimewalkingEventService implements TimewalkingEventServiceInterface
 {
-    /** @var SeasonService */
-    private $seasonService;
-
-    public function __construct(SeasonServiceInterface $seasonService)
+    public function __construct(private readonly SeasonServiceInterface $seasonService)
     {
-        $this->seasonService = $seasonService;
     }
 
     /**
-     * @param Carbon $date
-     * @return TimewalkingEvent|null
      * @TODO Support user regions?
      */
-    function getActiveTimewalkingEventAt(Carbon $date): ?TimewalkingEvent
+    public function getActiveTimewalkingEventAt(Carbon $date): ?TimewalkingEvent
     {
         $result = null;
 
@@ -54,12 +46,9 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
     }
 
     /**
-     * @param Expansion $expansion
-     * @param Carbon $date
-     * @return AffixGroup|null
      * @TODO Support user regions?
      */
-    function getAffixGroupAt(Expansion $expansion, Carbon $date): ?AffixGroup
+    public function getAffixGroupAt(Expansion $expansion, Carbon $date): ?AffixGroup
     {
         $timewalkingEvent = $this->getActiveTimewalkingEventAt($date);
         if ($timewalkingEvent === null) {
@@ -90,5 +79,4 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
 
         return $result;
     }
-
 }

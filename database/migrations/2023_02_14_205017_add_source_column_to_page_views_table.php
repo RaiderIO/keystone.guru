@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSourceColumnToPageViewsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('page_views', function (Blueprint $table) {
             $table->integer('source')->after('session_id')->nullable();
@@ -20,13 +17,11 @@ class AddSourceColumnToPageViewsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('page_views', function (Blueprint $table) {
             $table->dropColumn('source');
         });
     }
-}
+};

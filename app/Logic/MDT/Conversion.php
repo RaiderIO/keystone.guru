@@ -18,8 +18,8 @@ use Exception;
 
 class Conversion
 {
-    const EXPANSION_NAME_MAPPING = [
-        Expansion::EXPANSION_CLASSIC      => null,
+    public const EXPANSION_NAME_MAPPING = [
+        Expansion::EXPANSION_CLASSIC      => 'ClassicEra',
         Expansion::EXPANSION_TBC          => null,
         Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
         Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',
@@ -31,8 +31,35 @@ class Conversion
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight', // DF S1 has MoP/WoD dungeons under here
     ];
 
-    const DUNGEON_NAME_MAPPING = [
-        Expansion::EXPANSION_WOTLK => [
+    public const DUNGEON_NAME_MAPPING = [
+        Expansion::EXPANSION_CLASSIC => [
+            Dungeon::DUNGEON_BLACKFATHOM_DEEPS           => 'BlackfathomDeeps',
+            Dungeon::DUNGEON_BLACKROCK_DEPTHS            => 'BlackrockDepths',
+            Dungeon::DUNGEON_DEADMINES                   => 'Deadmines',
+            Dungeon::DUNGEON_DIRE_MAUL_WEST              => 'DireMaulWest',
+            Dungeon::DUNGEON_DIRE_MAUL_NORTH             => 'DireMaulNorth',
+            Dungeon::DUNGEON_DIRE_MAUL_EAST              => 'DireMaulEast',
+            Dungeon::DUNGEON_GNOMEREGAN                  => 'Gnomeregan',
+            Dungeon::DUNGEON_LOWER_BLACKROCK_SPIRE       => 'LowerBlackrockSpire',
+            Dungeon::DUNGEON_MARAUDON                    => 'Maraudon',
+            Dungeon::DUNGEON_RAGEFIRE_CHASM              => 'RagefireChasm',
+            Dungeon::DUNGEON_RAZORFEN_DOWNS              => 'RazorfenDowns',
+            Dungeon::DUNGEON_RAZORFEN_KRAUL              => 'RazorfenKraul',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_ARMORY    => 'ScarletMonasteryArmory',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_CATHEDRAL => 'ScarletMonasteryCathedral',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_LIBRARY   => 'ScarletMonasteryLibrary',
+            Dungeon::DUNGEON_SCARLET_MONASTERY_GRAVEYARD => 'ScarletMonasteryGraveyard',
+            Dungeon::DUNGEON_SCHOLOMANCE                 => 'Scholomance',
+            Dungeon::DUNGEON_SHADOWFANG_KEEP             => 'ShadowfangKeep',
+            Dungeon::DUNGEON_STRATHOLME                  => 'Stratholme',
+            Dungeon::DUNGEON_THE_STOCKADE                => 'TheStockade',
+            Dungeon::DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   => 'TheTempleOfAtalHakkar',
+            Dungeon::DUNGEON_ULDAMAN                     => 'Uldaman',
+            Dungeon::DUNGEON_UPPER_BLACKROCK_SPIRE       => 'UpperBlackrockSpire',
+            Dungeon::DUNGEON_WAILING_CAVERNS             => 'WailingCaverns',
+            Dungeon::DUNGEON_ZUL_FARRAK                  => 'ZulFarrak',
+        ],
+        Expansion::EXPANSION_WOTLK   => [
             Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
             Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
             Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
@@ -50,17 +77,17 @@ class Conversion
         ],
 
         Expansion::EXPANSION_CATACLYSM => [
-//            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
+            //            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
         ],
 
         Expansion::EXPANSION_MOP => [
-//            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
         ],
 
         Expansion::EXPANSION_WOD => [
-//            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
-//            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
-//            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+            //            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
+            //            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
+            //            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
         ],
 
         Expansion::EXPANSION_LEGION => [
@@ -140,21 +167,12 @@ class Conversion
 
     /**
      * Rounds a number to the nearest two decimals.
-     *
-     * @param $nr
-     *
-     * @return float
      */
     private static function round($nr): float
     {
         return ((int)($nr * 100)) / 100;
     }
 
-    /**
-     * @param string $dungeonKey
-     *
-     * @return string|null
-     */
     public static function getExpansionName(string $dungeonKey): ?string
     {
         $result = null;
@@ -168,19 +186,13 @@ class Conversion
         return $result;
     }
 
-    /**
-     * @param string $dungeonKey
-     *
-     * @return string|null
-     */
     public static function getMDTExpansionName(string $dungeonKey): ?string
     {
         return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)] ?? null;
     }
 
     /**
-     * @param $dungeonKey string
-     *
+     * @param  $dungeonKey  string
      * @return bool True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -189,8 +201,7 @@ class Conversion
     }
 
     /**
-     * @param $dungeonKey string
-     *
+     * @param  $dungeonKey  string
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -208,9 +219,8 @@ class Conversion
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
      *
-     * @param $mdtDungeonId int
+     * @param  $mdtDungeonId  int
      *
-     * @return Dungeon
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
     public static function convertMDTDungeonIDToDungeon(int $mdtDungeonId): Dungeon
@@ -227,8 +237,6 @@ class Conversion
      * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
      *
      * @param array{x: float, y: float} $xy
-     * @param Floor|null                $floor
-     * @return LatLng
      */
     public static function convertMDTCoordinateToLatLng(array $xy, ?Floor $floor = null): LatLng
     {
@@ -239,10 +247,6 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
-     *
-     * @param LatLng $latLng
-     *
-     * @return array
      */
     public static function convertLatLngToMDTCoordinateString(LatLng $latLng): array
     {
@@ -255,10 +259,6 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
-     *
-     * @param LatLng $latLng
-     *
-     * @return array
      */
     public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {
@@ -268,11 +268,7 @@ class Conversion
     /**
      * Convert a MDT week to a matching affix group
      *
-     * @param SeasonService $seasonService
-     * @param Dungeon       $dungeon
-     * @param int           $mdtWeek
      *
-     * @return AffixGroup|null
      * @throws Exception
      */
     public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
@@ -297,11 +293,6 @@ class Conversion
         return $affixGroup;
     }
 
-    /**
-     * @param AffixGroup $affixGroup
-     *
-     * @return int
-     */
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
         // We need to figure out which week it is in the rotation

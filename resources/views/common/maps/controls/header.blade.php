@@ -10,8 +10,9 @@
  * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
  * @var $edit bool
  */
-$echo        = $echo ?? false;
-$mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
+$echo        ??= false;
+$mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
+$showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
@@ -236,7 +237,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
                 @endif
 
 
-                @if(!empty($show['share']))
+                @if($showShare)
                     <li class="nav-item">
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
@@ -261,7 +262,7 @@ $mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
 
 @isset($dungeonroute)
 
-    @if(!empty($show['share']))
+    @if($showShare)
         @component('common.general.modal', ['id' => 'share_modal'])
             @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
         @endcomponent

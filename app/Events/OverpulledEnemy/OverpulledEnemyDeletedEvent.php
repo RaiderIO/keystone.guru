@@ -4,26 +4,18 @@ namespace App\Events\OverpulledEnemy;
 
 use App\Events\ContextEvent;
 use App\Models\Enemies\OverpulledEnemy;
-use App\User;
+use App\Models\Enemy;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class OverpulledEnemyDeletedEvent extends ContextEvent
 {
-    /** @var int */
     protected int $enemy_id;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param $context Model
-     * @param $user User
-     * @param $overpulledEnemy OverpulledEnemy
-     * @return void
-     */
-    public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy)
+    public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
     {
         // Don't save Model here because serialization will fail due to object being deleted
-        $this->enemy_id = $overpulledEnemy->enemy_id;
+        $this->enemy_id = $enemy->id;
         parent::__construct($context, $user);
     }
 

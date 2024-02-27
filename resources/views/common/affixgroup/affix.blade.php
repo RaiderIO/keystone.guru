@@ -1,8 +1,8 @@
 <?php
 /** @var $affix \App\Models\Affix */
-$media = $media ?? 'lg';
-$showText = $showText ?? true;
-$dungeon = $dungeon ?? null;
+$media    ??= 'lg';
+$showText ??= true;
+$dungeon  ??= null;
 ?>
 
 <div class="row no-gutters mt-2 ">

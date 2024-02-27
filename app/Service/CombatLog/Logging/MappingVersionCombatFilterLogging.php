@@ -3,13 +3,11 @@
 namespace App\Service\CombatLog\Logging;
 
 use App\Logging\StructuredLogging;
-use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
 
 class MappingVersionCombatFilterLogging extends StructuredLogging implements MappingVersionCombatFilterLoggingInterface
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function parseZoneChangeFound(int $lineNr): void
     {

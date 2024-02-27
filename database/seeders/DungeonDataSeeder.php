@@ -87,7 +87,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     /**
      * Run the database seeds.
      *
-     * @return void
      * @throws Exception
      */
     public function run(): void
@@ -106,7 +105,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     private function importDungeonMapping(): void
@@ -137,6 +135,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             // Only folders which have the correct shortname
             if (Expansion::where('shortname', $rootDirChildBaseName)->first() === null) {
                 $this->command->warn(sprintf('- Unable to find expansion %s', $rootDirChildBaseName));
+
                 continue;
             }
 
@@ -185,7 +184,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     private function importDungeonRoutes(): void
@@ -224,9 +222,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         }
     }
 
-    /**
-     * @return void
-     */
     private function resetImportedModels(): void
     {
         // Init the place where we store all models so we can insert them all at once
@@ -235,9 +230,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         }
     }
 
-    /**
-     * @return void
-     */
     private function flushModels(): void
     {
         foreach ($this->importedModels as $class => $models) {
@@ -258,10 +250,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @param string  $rootDir
-     * @param string  $filePath
-     * @param integer $depth
-     *
      * @throws Exception
      */
     private function parseRawFile(string $rootDir, string $filePath, int $depth = 1): void
@@ -295,10 +283,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @param string          $filePath
-     * @param RelationMapping $mapping
-     *
      * @return int The amount of models loaded from the file
+     *
      * @throws Exception
      */
     private function loadModelsFromFile(string $filePath, RelationMapping $mapping): int
@@ -390,6 +376,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             else {
                 $modelsToSave->push($modelData);
                 $updatedModels++;
+
                 continue;
             }
 
@@ -421,8 +408,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Bulk save the models that did not need any post-attribute parsing
         if ($modelsToSave->isNotEmpty()) {
+            /** @var Collection $importedModels */
+            $importedModels = $this->importedModels->get($mapping->getClass());
             $this->importedModels->put($mapping->getClass(),
-                $this->importedModels->get($mapping->getClass())->merge($modelsToSave)
+                $importedModels->merge($modelsToSave)
             );
         }
 

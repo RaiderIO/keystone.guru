@@ -7,29 +7,17 @@ use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
-class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOutputInterface
+class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollectionInterface
 {
-    private CoordinatesServiceInterface $coordinatesService;
-
-    private SimulationCraftRaidEventsOptions $options;
-
     /** @var Collection|RaidEventPull[] */
     private Collection $raidEventPulls;
 
-    /**
-     * @param CoordinatesServiceInterface      $coordinatesService
-     * @param SimulationCraftRaidEventsOptions $options
-     */
-    public function __construct(
-        CoordinatesServiceInterface      $coordinatesService,
-        SimulationCraftRaidEventsOptions $options
-    ) {
-        $this->coordinatesService = $coordinatesService;
-        $this->options            = $options;
+    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService, private readonly SimulationCraftRaidEventsOptions $options)
+    {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateRaidEvents(): RaidEventsCollectionInterface
     {
@@ -45,7 +33,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
                 continue;
             }
 
-            $previousKillLocation  = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
+            $previousKillLocation = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
 
             $this->raidEventPulls->push(
                 (new RaidEventPull($this->coordinatesService, $this->options))
@@ -59,7 +47,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toString(): string
     {

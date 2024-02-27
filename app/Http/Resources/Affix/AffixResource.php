@@ -13,19 +13,16 @@ use JsonSerializable;
  */
 class AffixResource extends JsonResource
 {
-
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id'   => $this->affix_id,
-            'name' => __($this->name, [], 'en')
+            'name' => __($this->name, [], 'en-US'),
         ];
     }
 }

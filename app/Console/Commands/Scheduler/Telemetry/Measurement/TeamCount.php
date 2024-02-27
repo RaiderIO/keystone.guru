@@ -2,16 +2,15 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
-
 use App\Models\Team;
 use InfluxDB\Point;
 
 class TeamCount extends Measurement
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function getPoints(): array
+    public function getPoints(): array
     {
         return [
             new Point(

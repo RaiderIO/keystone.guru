@@ -10,7 +10,7 @@ class Update extends Command
 {
     use ExecutesShellCommands;
 
-    const COMPILE = [
+    public const COMPILE = [
         'live'    => true,
         'local'   => false,
         'mapping' => true,
@@ -18,7 +18,7 @@ class Update extends Command
         'testing' => true,
     ];
 
-    const COMPILE_AS = [
+    public const COMPILE_AS = [
         'live'    => 'production',
         'local'   => 'dev',
         'mapping' => 'production',
@@ -26,7 +26,7 @@ class Update extends Command
         'testing' => 'dev',
     ];
 
-    const OPTIMIZE = [
+    public const OPTIMIZE = [
         'live'    => true,
         'local'   => false,
         'mapping' => true,
@@ -48,8 +48,6 @@ class Update extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -100,7 +98,7 @@ class Update extends Command
 
             $this->shell([
                 // Write current version to file
-                'git rev-list HEAD -1 > version'
+                'git rev-list HEAD -1 > version',
             ]);
         }
 
@@ -114,7 +112,7 @@ class Update extends Command
             $this->call('supervisor:start');
         }
 
-        // Refresh the subcreation ease tiers (for a first run to populate the data)
+        // Refresh the affix group ease tiers (for a first run to populate the data)
         $this->call('affixgroupeasetiers:refresh');
         // Dispatch the refreshing of the discovery cache - this can take up to 5 minutes and can be done in the background
         RefreshDiscoverCache::dispatch();

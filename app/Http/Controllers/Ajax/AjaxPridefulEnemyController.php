@@ -19,13 +19,9 @@ use Teapot\StatusCode\Http;
 class AjaxPridefulEnemyController extends Controller
 {
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Enemy $enemy
-     * @return PridefulEnemy
      * @throws Exception
      */
-    function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): PridefulEnemy
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -56,13 +52,11 @@ class AjaxPridefulEnemyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Enemy $enemy
      * @return Response|ResponseFactory
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -76,7 +70,7 @@ class AjaxPridefulEnemyController extends Controller
             $dungeonRoute->touch();
 
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

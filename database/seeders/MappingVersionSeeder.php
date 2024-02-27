@@ -13,16 +13,14 @@ use Illuminate\Support\Collection;
 /**
  * The Mapping Versions are loaded from mapping_versions.json using the DungeonDataSeeder after this initial seed.
  *
- * @package Database\Seeders
  * @author Wouter
+ *
  * @since 30/10/2022
  */
 class MappingVersionSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -31,6 +29,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
 
         if (MappingVersion::count() !== 0) {
             $this->command->comment('NOT adding Mapping Versions - initial seed has already happened');
+
             return;
         }
 
@@ -83,9 +82,9 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
         }
 
         /**
-        // This works initially as well?
-        UPDATE `dungeon_routes`
-        SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
+         * // This works initially as well?
+         * UPDATE `dungeon_routes`
+         * SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
          */
         $this->command->info('Coupling dungeon routes to latest mapping version.. ');
         $count = 0;

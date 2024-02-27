@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Models\DungeonRoute\DungeonRoute;
@@ -10,8 +9,9 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 
 /**
  * Class MapContextDungeonRoute
- * @package App\Logic\MapContext
+ *
  * @author  Wouter
+ *
  * @since   06/08/2020
  *
  * @property DungeonRoute $context
@@ -47,7 +47,7 @@ class MapContextDungeonRoute extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->mappingVersion, false) ?? [];
+        return $this->listEnemies($this->cacheService, $this->coordinatesService, $this->mappingVersion, false) ?? [];
     }
 
     public function getEchoChannelName(): string

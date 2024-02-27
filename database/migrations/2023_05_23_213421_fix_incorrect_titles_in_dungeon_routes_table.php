@@ -6,14 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class FixIncorrectTitlesInDungeonRoutesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         $output = new ConsoleOutput();
         DungeonRoute::with(['dungeon' => function (BelongsTo $query) {
@@ -33,10 +30,8 @@ class FixIncorrectTitlesInDungeonRoutesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
     }
-}
+};

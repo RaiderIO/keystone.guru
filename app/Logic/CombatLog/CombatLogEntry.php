@@ -7,6 +7,7 @@ use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Error;
 use Exception;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -20,24 +21,17 @@ class CombatLogEntry
         'Everyone within 10 yards will be consumed!',
     ];
 
-    private string $rawEvent;
-
     private ?Carbon $parsedTimestamp = null;
 
     private ?BaseEvent $parsedEvent = null;
 
-    /**
-     * @param string $rawEvent
-     */
-    public function __construct(string $rawEvent)
+    public function __construct(private readonly string $rawEvent)
     {
-        $this->rawEvent = $rawEvent;
     }
 
     /**
      * @param array $eventWhiteList Empty to return all events
-     * @param int   $combatLogVersion
-     * @return BaseEvent|null
+     *
      * @throws Exception
      */
     public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL): ?BaseEvent
@@ -53,11 +47,12 @@ class CombatLogEntry
 
         try {
             $this->parsedTimestamp = Carbon::createFromFormat(self::DATE_FORMAT, $matches[1]);
-        } catch (InvalidFormatException $exception) {
-            throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $exception->getCode(), $exception);
+        } catch (InvalidFormatException $invalidFormatException) {
+            throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $invalidFormatException->getCode(), $invalidFormatException);
         }
-        $eventData             = $matches[2];
-        $mayParseEvent         = empty($eventWhiteList);
+
+        $eventData     = $matches[2];
+        $mayParseEvent = empty($eventWhiteList);
 
         if (!$mayParseEvent) {
             foreach ($eventWhiteList as $whiteListedName) {
@@ -84,7 +79,7 @@ class CombatLogEntry
                     $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
 
-            } catch (\Error|Exception $exception) {
+            } catch (Error|Exception $exception) {
                 echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
 
                 throw $exception;
@@ -94,9 +89,6 @@ class CombatLogEntry
         return $this->parsedEvent;
     }
 
-    /**
-     * @return string
-     */
     public function getRawEvent(): string
     {
         return $this->rawEvent;
@@ -104,16 +96,13 @@ class CombatLogEntry
 
     /**
      * @return Carbon|null Can be null if accessed before event was parsed, or if event was part of RAW_EVENT_IGNORE
-     * and it didn't have any timestamp as a result.
+     *                     and it didn't have any timestamp as a result.
      */
     public function getParsedTimestamp(): ?Carbon
     {
         return $this->parsedTimestamp;
     }
 
-    /**
-     * @return BaseEvent|null
-     */
     public function getParsedEvent(): ?BaseEvent
     {
         return $this->parsedEvent;

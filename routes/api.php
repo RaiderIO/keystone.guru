@@ -15,21 +15,17 @@ use App\Http\Controllers\Api\V1\APIDungeonRouteThumbnailJobController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['prefix' => 'v1'], function () {
-    Route::group(['prefix' => 'combatlog'], function () {
-        Route::post('route', [APICombatLogController::class, 'createRoute'])->name('api.v1.combatlog.route.create');
+Route::prefix('v1')->group(static function () {
+    Route::prefix('combatlog')->group(static function () {
+        Route::post('route', (new APICombatLogController())->createRoute(...))->name('api.v1.combatlog.route.create');
     });
-
-    Route::group(['prefix' => 'route'], function () {
-        Route::get('/', [APIDungeonRouteController::class, 'list'])->name('api.v1.route.list');
-
-        Route::post('/{dungeonRoute}/thumbnail', [APIDungeonRouteController::class, 'createThumbnails'])->name('api.v1.route.thumbnail.create');
-
-        Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', [APIDungeonRouteThumbnailJobController::class, 'get'])->name('api.v1.thumbnailjob.get');
+    Route::prefix('route')->group(static function () {
+        Route::get('/', (new APIDungeonRouteController())->list(...))->name('api.v1.route.list');
+        Route::post('/{dungeonRoute}/thumbnail', (new APIDungeonRouteController())->createThumbnails(...))->name('api.v1.route.thumbnail.create');
+        Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', (new APIDungeonRouteThumbnailJobController())->get(...))->name('api.v1.thumbnailjob.get');
     });
-
     // Static data
-    Route::group(['prefix' => 'dungeon'], function () {
-        Route::get('/', [APIDungeonController::class, 'list'])->name('api.v1.combatlog.dungeon.list');
+    Route::prefix('dungeon')->group(static function () {
+        Route::get('/', (new APIDungeonController())->list(...))->name('api.v1.combatlog.dungeon.list');
     });
 });

@@ -6,23 +6,23 @@ use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
-class AdvancedDataTest extends PublicTestCase
+final class AdvancedDataTest extends PublicTestCase
 {
-
     /**
-     * @test
-     * @param string $advancedRangeDamageEvent
-     * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group AdvancedData
-     * @dataProvider parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedData_GivenAdvancedRangeDamageEvent(
         string $advancedRangeDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
@@ -35,40 +35,37 @@ class AdvancedDataTest extends PublicTestCase
         Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
-    /**
-     * @test
-     * @return void
-     * @group CombatLog
-     * @group AdvancedData
-     * @dataProvider parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider
-     */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('AdvancedData')]
+    #[DataProvider('parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent(
-        string  $advancedRangeDamageEvent,
-        string  $expectedInfoGUID,
+        string $advancedRangeDamageEvent,
+        string $expectedInfoGUID,
         ?string $expectedOwnerGUID,
-        int     $expectedCurrentHP,
-        int     $expectedMaxHP,
-        int     $expectedAttackPower,
-        int     $expectedSpellPower,
-        int     $expectedArmor,
-        int     $expectedAbsorb,
-        array   $expectedPowerType,
-        array   $expectedCurrentPower,
-        array   $expectedMaxPower,
-        array   $expectedPowerCost,
-        float   $expectedPositionX,
-        float   $expectedPositionY,
-        int     $expectedUiMapId,
-        float   $expectedFacing,
-        int     $expectedLevel
-    ) {
+        int $expectedCurrentHP,
+        int $expectedMaxHP,
+        int $expectedAttackPower,
+        int $expectedSpellPower,
+        int $expectedArmor,
+        int $expectedAbsorb,
+        array $expectedPowerType,
+        array $expectedCurrentPower,
+        array $expectedMaxPower,
+        array $expectedPowerCost,
+        float $expectedPositionX,
+        float $expectedPositionY,
+        int $expectedUiMapId,
+        float $expectedFacing,
+        int $expectedLevel
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
         $parseEventResult = $combatLogEntry->parseEvent();
-        $advancedData     = $parseEventResult->getAdvancedData();
+        $advancedData = $parseEventResult->getAdvancedData();
 
         // Assert
         Assert::assertEquals($expectedInfoGUID, $advancedData->getInfoGuid());
@@ -90,7 +87,7 @@ class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($expectedLevel, $advancedData->getLevel());
     }
 
-    public function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -111,7 +108,7 @@ class AdvancedDataTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
             [

@@ -8,8 +8,6 @@ trait SavesStringToTempDisk
     private static string $TMP_FILE_BASE_DIR = '/dev/shm/keystone.guru';
 
     /**
-     * @param string $subFolder
-     * @param string $string
      * @return string|null The resulting file name or
      */
     private function saveFile(string $subFolder, string $string): ?string
@@ -23,7 +21,7 @@ trait SavesStringToTempDisk
 
             do {
                 // Generate a file name
-                $fileName = sprintf('%s/%d', $targetDir, rand());
+                $fileName = sprintf('%s/%d', $targetDir, random_int(0, mt_getrandmax()));
             } while (file_exists($fileName));
 
             // Save to disk

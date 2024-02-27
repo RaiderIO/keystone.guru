@@ -15,7 +15,6 @@ use Illuminate\Support\Collection;
  * @property string                     $key
  * @property string                     $name
  * @property string                     $color
- *
  * @property Collection|CharacterRace[] $races
  * @property Collection|DungeonRoute[]  $dungeonRoutes
  *
@@ -23,36 +22,36 @@ use Illuminate\Support\Collection;
  */
 class Faction extends CacheModel
 {
-    use SeederModel;
     use HasIconFile;
+    use SeederModel;
 
-    public    $timestamps = false;
-    public    $hidden     = ['icon_file_id', 'pivot'];
-    public    $fillable   = ['id', 'icon_file_id', 'key', 'name', 'color'];
-    protected $with       = ['iconfile'];
+    public $timestamps = false;
 
-    const FACTION_ANY         = 'any';
-    const FACTION_UNSPECIFIED = 'unspecified';
-    const FACTION_HORDE       = 'horde';
-    const FACTION_ALLIANCE    = 'alliance';
+    public $hidden = ['icon_file_id', 'pivot'];
 
-    const ALL = [
+    public $fillable = ['id', 'icon_file_id', 'key', 'name', 'color'];
+
+    protected $with = ['iconfile'];
+
+    public const FACTION_ANY = 'any';
+
+    public const FACTION_UNSPECIFIED = 'unspecified';
+
+    public const FACTION_HORDE = 'horde';
+
+    public const FACTION_ALLIANCE = 'alliance';
+
+    public const ALL = [
         self::FACTION_UNSPECIFIED => 1,
         self::FACTION_HORDE       => 2,
         self::FACTION_ALLIANCE    => 3,
     ];
 
-    /**
-     * @return HasMany
-     */
     public function races(): HasMany
     {
         return $this->hasMany(CharacterRace::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);

@@ -31,6 +31,11 @@ class CommonMapsEmbedtopbar extends InlineCode {
      * @private
      */
     _fetchMdtExportStringAndCopy() {
+        if (!this.options.mdtStringCopyEnabled) {
+            console.log(`Not exporting MDT string - not enabled for dungeon`);
+            return;
+        }
+
         $.ajax({
             type: 'GET',
             url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,

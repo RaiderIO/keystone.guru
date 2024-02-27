@@ -1,7 +1,7 @@
 <?php
 /** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
-$dungeonroute = $dungeonroute ?? null;
-$publicKey    = optional($dungeonroute)->public_key ?? 'auto';
+$dungeonroute ??= null;
+$publicKey    = $dungeonroute?->public_key ?? 'auto';
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/report', 'options' => [

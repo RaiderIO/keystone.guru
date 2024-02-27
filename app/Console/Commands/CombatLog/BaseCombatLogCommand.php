@@ -8,11 +8,6 @@ abstract class BaseCombatLogCommand extends Command
 {
     /**
      * Parse combat logs recursively if $filePath is a folder. $callback is called for each combat log found.
-     *
-     * @param string   $filePath
-     * @param callable $callback
-     *
-     * @return int
      */
     protected function parseCombatLogRecursively(string $filePath, callable $callback): int
     {

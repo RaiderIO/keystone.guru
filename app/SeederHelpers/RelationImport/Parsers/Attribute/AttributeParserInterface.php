@@ -9,12 +9,5 @@ use App\SeederHelpers\RelationImport\Parsers\ParserInterface;
  */
 interface AttributeParserInterface extends ParserInterface
 {
-    /**
-     * @param string $modelClassName
-     * @param array $modelData
-     * @param string $name
-     * @param mixed $value
-     * @return array
-     */
-    public function parseAttribute(string $modelClassName, array $modelData, string $name, $value): array;
+    public function parseAttribute(string $modelClassName, array $modelData, string $name, mixed $value): array;
 }

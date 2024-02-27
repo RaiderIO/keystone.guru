@@ -11,24 +11,17 @@ use Illuminate\Support\Collection;
 class ExpansionSeasonAffixGroups
 {
     /** @var Collection|Affix[] */
-    private Collection $featuredAffixes;
+    private readonly Collection $featuredAffixes;
 
-    private ?AffixGroup $currentAffixGroup;
+    private readonly ?AffixGroup $currentAffixGroup;
 
-    private ?AffixGroup $nextAffixGroup;
+    private readonly ?AffixGroup $nextAffixGroup;
 
-    /** @var Collection */
     private Collection $allAffixGroups;
 
-    /**
-     * @param ExpansionServiceInterface $expansionService
-     * @param Expansion                 $expansion
-     * @param GameServerRegion          $gameServerRegion
-     * @param ExpansionSeason           $expansionSeason
-     */
     public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion, ExpansionSeason $expansionSeason)
     {
-        $this->featuredAffixes   = optional($expansionSeason->getSeason())->getFeaturedAffixes() ?? collect();
+        $this->featuredAffixes   = $expansionSeason->getSeason()?->getFeaturedAffixes() ?? collect();
         $this->currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $gameServerRegion);
         $this->nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
 
@@ -49,17 +42,11 @@ class ExpansionSeasonAffixGroups
         return $this->featuredAffixes;
     }
 
-    /**
-     * @return AffixGroup|null
-     */
     public function getCurrentAffixGroup(): ?AffixGroup
     {
         return $this->currentAffixGroup;
     }
 
-    /**
-     * @return AffixGroup|null
-     */
     public function getNextAffixGroup(): ?AffixGroup
     {
         return $this->nextAffixGroup;

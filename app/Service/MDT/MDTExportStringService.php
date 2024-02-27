@@ -20,8 +20,9 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This file handles any and all conversion from DungeonRoutes to MDT Export strings and vice versa.
- * @package App\Service\MDT
+ *
  * @author Wouter
+ *
  * @since 09/11/2022
  */
 class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
@@ -29,31 +30,16 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /** @var int How far away do we create notes in MDT */
     private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
-    /** @var $encodedString string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private string $encodedString;
+    /** @var string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
+    private readonly string $encodedString;
 
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
 
-    private CacheServiceInterface $cacheService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
-    /**
-     * @param CacheServiceInterface       $cacheService
-     * @param CoordinatesServiceInterface $coordinatesService
-     */
-    public function __construct(CacheServiceInterface $cacheService, CoordinatesServiceInterface $coordinatesService)
+    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService)
     {
-        $this->cacheService       = $cacheService;
-        $this->coordinatesService = $coordinatesService;
     }
 
-
-    /**
-     * @param Collection $warnings
-     * @return array
-     */
     private function extractObjects(Collection $warnings): array
     {
         $result = [];
@@ -79,7 +65,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
-                    5 => $mapIcon->comment ?? __(optional($mapIcon->mapicontype)->name) ?? '',
+                    5 => $mapIcon->comment ?? __($mapIcon->mapicontype?->name) ?? '',
                 ],
             ];
         }
@@ -90,14 +76,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         foreach ($lines as $line) {
             /** @var Path|Brushline $line */
-
             $mdtLine = [
                 'd' => [
                     1 => $line->polyline->weight,
                     2 => 1,
                     3 => $line->floor->mdt_sub_level ?? $line->floor->index,
                     4 => true,
-                    5 => strpos($line->polyline->color, '#') === 0 ? substr($line->polyline->color, 1) : $line->polyline->color,
+                    5 => str_starts_with($line->polyline->color, '#') ? substr($line->polyline->color, 1) : $line->polyline->color,
                     6 => -8,
                     7 => true,
                 ],
@@ -148,7 +133,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $floor  = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
-            if( $this->dungeonRoute->dungeon->facade_enabled ) {
+            if ($this->dungeonRoute->dungeon->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
                     $latLng
@@ -173,8 +158,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     }
 
     /**
-     * @param Collection $warnings
-     * @return array
      * @throws InvalidArgumentException
      */
     private function extractPulls(MappingVersion $mappingVersion, Collection $warnings): array
@@ -214,7 +197,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!in_array(optional($enemy->npc->classification)->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
+                    if (!in_array($enemy->npc->classification?->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
                         $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                             sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                             ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
@@ -243,7 +226,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 continue;
             }
 
-            $pull['color'] = strpos($killZone->color, '#') === 0 ? substr($killZone->color, 1) : $killZone->color;
+            $pull['color'] = str_starts_with($killZone->color, '#') ? substr($killZone->color, 1) : $killZone->color;
 
             $result[$pullIndex++] = $pull;
         }
@@ -251,16 +234,14 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         return $result;
     }
 
-
     /**
      * Gets the MDT encoded string based on the currently set DungeonRoute.
-     * @param Collection $warnings
-     * @return string
+     *
      * @throws Exception
      */
     public function getEncodedString(Collection $warnings): string
     {
-//        $lua = $this->_getLua();
+        //        $lua = $this->_getLua();
 
         $mdtObject = [
             //
@@ -295,7 +276,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             return $this->encode($mdtObject);
         } catch (Exception $exception) {
             // Encoding issue - adjust the title and try again
-            if (str_contains($exception->getMessage(), "call to lua function [string &quot;line&quot;]")) {
+            if (str_contains($exception->getMessage(), 'call to lua function [string &quot;line&quot;]')) {
                 $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->dungeonRoute->title);
 
                 // If stripping ascii characters worked in changing the title somehow
@@ -343,7 +324,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /**
      * Sets a dungeon route to be staged for encoding to an encoded string.
      *
-     * @param $dungeonRoute DungeonRoute
+     * @param  $dungeonRoute  DungeonRoute
      * @return $this Returns self to allow for chaining.
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self

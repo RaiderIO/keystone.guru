@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\DungeonRoute;
 
 use App\Models\AffixGroup\AffixGroupBase;
@@ -14,8 +13,6 @@ class DevDiscoverService extends BaseDiscoverService
 {
     /**
      * Gets a builder that provides a template for popular routes.
-     *
-     * @return Builder
      */
     private function popularBuilder(): Builder
     {
@@ -41,8 +38,6 @@ class DevDiscoverService extends BaseDiscoverService
 
     /**
      * Gets a builder that provides a template for popular routes.
-     *
-     * @return Builder
      */
     private function newBuilder(): Builder
     {
@@ -68,154 +63,136 @@ class DevDiscoverService extends BaseDiscoverService
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popular(): Collection
+    public function popular(): Collection
     {
         return $this->popularBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularGroupedByDungeon(): Collection
+    public function popularGroupedByDungeon(): Collection
     {
         return $this->popularBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularByAffixGroup(AffixGroupBase $affixGroup): Collection
+    public function popularByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
+    public function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularByDungeon(Dungeon $dungeon): Collection
+    public function popularByDungeon(Dungeon $dungeon): Collection
     {
         return $this->popularBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
+    public function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
+    {
+        return $this->popularBuilder()->get();
+    }
+
+    public function popularBySeason(Season $season): Collection
+    {
+        return $this->popularBuilder()->get();
+    }
+
+    public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
     {
         return $this->popularBuilder()->get();
     }
 
     /**
-     * @param Season $season
-     * @return Collection
+     * {@inheritDoc}
      */
-    function popularBySeason(Season $season): Collection
-    {
-        return $this->popularBuilder()->get();
-    }
-
-    /**
-     * @param Season $season
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
-    {
-        return $this->popularBuilder()->get();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function new(): Collection
+    public function new(): Collection
     {
         return $this->newBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function newByAffixGroup(AffixGroupBase $affixGroup): Collection
+    public function newByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function newByDungeon(Dungeon $dungeon): Collection
+    public function newByDungeon(Dungeon $dungeon): Collection
     {
         return $this->newBuilder()->get();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
+    public function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    public function newBySeason(Season $season): Collection
+    {
+        return $this->newBuilder()->get();
+    }
+
+    public function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
     {
         return $this->newBuilder()->get();
     }
 
     /**
-     * @param Season $season
-     * @return Collection
+     * {@inheritDoc}
      */
-    function newBySeason(Season $season): Collection
-    {
-        return $this->newBuilder()->get();
-    }
-
-    /**
-     * @param Season $season
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
-    {
-        return $this->newBuilder()->get();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function popularUsers(): Collection
+    public function popularUsers(): Collection
     {
         // TODO: Implement popularUsers() method.
         return collect();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection
+    public function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByAffixGroup() method.
         return collect();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularUsersByDungeon(Dungeon $dungeon): Collection
+    public function popularUsersByDungeon(Dungeon $dungeon): Collection
     {
         // TODO: Implement popularUsersByDungeon() method.
         return collect();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
+    public function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
         // TODO: Implement popularUsersByDungeonAndAffixGroup() method.
         return collect();

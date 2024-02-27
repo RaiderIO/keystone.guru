@@ -10,6 +10,7 @@ use App\Logic\Datatables\ColumnHandler\Npc\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
@@ -32,7 +33,7 @@ class AjaxNpcController extends Controller
             $this->mappingChanged($npc, null);
 
             $result = response()->noContent();
-        } catch (\Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -40,9 +41,9 @@ class AjaxNpcController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function list(Request $request)
     {
@@ -51,12 +52,13 @@ class AjaxNpcController extends Controller
             ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
             ->groupBy('npcs.id');
-//            ->leftJoin('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-//            ->whereColumn('enemies.mapping_version_id', 'mapping_versions.id')
-//            ->groupBy('npcs.id', 'mapping_versions.dungeon_id')
-//            ->orderByDesc('mapping_versions.version');
+        //            ->leftJoin('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
+        //            ->whereColumn('enemies.mapping_version_id', 'mapping_versions.id')
+        //            ->groupBy('npcs.id', 'mapping_versions.dungeon_id')
+        //            ->orderByDesc('mapping_versions.version');
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
+
         return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
             new IdColumnHandler($datatablesHandler),
             new NameColumnHandler($datatablesHandler),

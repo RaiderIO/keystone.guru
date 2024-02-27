@@ -22,14 +22,11 @@ use Teapot\StatusCode\Http;
 class AjaxOverpulledEnemyController extends Controller
 {
     /**
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param LiveSession $liveSession
      * @return array
+     *
      * @throws AuthorizationException
      */
-    function store(
+    public function store(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonRoute,
@@ -68,14 +65,11 @@ class AjaxOverpulledEnemyController extends Controller
     }
 
     /**
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function delete(
+    public function delete(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonroute,
@@ -100,13 +94,13 @@ class AjaxOverpulledEnemyController extends Controller
                     ->first();
 
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy, $enemy));
                 }
 
                 // Optionally don't calculate the return value
                 $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

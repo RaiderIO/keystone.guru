@@ -147,6 +147,14 @@ return [
                 'processes'  => 2,
                 'tries'      => 3,
             ],
+            'supervisor-long-running'  => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-production-long-running', env('APP_TYPE'))],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 1,
+                'timeout'    => 0,
+            ],
             'supervisor-thumbnail'     => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
@@ -170,6 +178,14 @@ return [
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 3,
+            ],
+            'supervisor-long-running'  => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-local-long-running', env('APP_TYPE'))],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 1,
+                'timeout'    => 0,
             ],
             'supervisor-thumbnail'     => [
                 'connection' => 'redis',

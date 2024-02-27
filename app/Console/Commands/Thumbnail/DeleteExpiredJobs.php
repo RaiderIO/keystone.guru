@@ -33,24 +33,20 @@ class DeleteExpiredJobs extends Command
         parent::__construct();
     }
 
-    /**
-     * @return int
-     */
     public function handle(): int
     {
         $count = 0;
 
         DungeonRouteThumbnailJob::where('status', '<>', DungeonRouteThumbnailJob::STATUS_EXPIRED)
-        ->where('created_at', '<', Carbon::now()->subSeconds(
-            config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')
-        ))->chunk(100, function (Collection $rows) use (&$count) {
-            /** @var Collection|DungeonRouteThumbnailJob[] $rows */
-            foreach ($rows as $row) {
-                $row->expire();
-            }
-
-            $count += $rows->count();
-        });
+            ->where('created_at', '<', Carbon::now()->subSeconds(
+                config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')
+            ))->chunk(100, static function (Collection $rows) use (&$count) {
+                /** @var Collection|DungeonRouteThumbnailJob[] $rows */
+                foreach ($rows as $row) {
+                    $row->expire();
+                }
+                $count += $rows->count();
+            });
 
         $this->info(sprintf('Cleaned up %d thumbnail jobs', $count));
 

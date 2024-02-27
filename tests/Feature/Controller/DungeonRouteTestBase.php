@@ -5,11 +5,11 @@ namespace Tests\Feature\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use Tests\TestCases\AjaxPublicTestCase;
 
-class DungeonRouteTestBase extends AjaxPublicTestCase
+abstract class DungeonRouteTestBase extends AjaxPublicTestCase
 {
     protected DungeonRoute $dungeonRoute;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -20,12 +20,10 @@ class DungeonRouteTestBase extends AjaxPublicTestCase
         $this->dungeonRoute->save();
     }
 
-
     protected function tearDown(): void
     {
         $this->dungeonRoute->delete();
 
         parent::tearDown();
     }
-
 }

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
  * @property string     $timezone
  * @property int        $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string     $reset_hours_offset
- *
  * @property Collection $users
  *
  * @mixin Eloquent
@@ -27,18 +26,23 @@ class GameServerRegion extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable   = ['short', 'name', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
-    public    $timestamps = false;
+    protected $fillable = ['short', 'name', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
 
-    const AMERICAS = 'us';
-    const EUROPE   = 'eu';
-    const CHINA    = 'cn';
-    const TAIWAN   = 'tw';
-    const KOREA    = 'kr';
+    public $timestamps = false;
 
-    const DEFAULT_REGION = GameServerRegion::AMERICAS;
+    public const AMERICAS = 'us';
 
-    const ALL = [
+    public const EUROPE = 'eu';
+
+    public const CHINA = 'cn';
+
+    public const TAIWAN = 'tw';
+
+    public const KOREA = 'kr';
+
+    public const DEFAULT_REGION = GameServerRegion::AMERICAS;
+
+    public const ALL = [
         self::AMERICAS => 1,
         self::EUROPE   => 2,
         self::CHINA    => 3,
@@ -46,9 +50,6 @@ class GameServerRegion extends CacheModel
         self::KOREA    => 5,
     ];
 
-    /**
-     * @return HasMany
-     */
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
@@ -69,8 +70,6 @@ class GameServerRegion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_region', function () {
-            return GameServerRegion::where('short', self::DEFAULT_REGION)->first();
-        });
+        return $cacheService->remember('default_region', static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first());
     }
 }

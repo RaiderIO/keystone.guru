@@ -8,10 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
-use App\Http\Requests\Brushline\APIBrushlineUpdateFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Floor\Floor;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -22,6 +20,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
+use Throwable;
 
 class AjaxBrushlineController extends Controller
 {
@@ -29,21 +28,18 @@ class AjaxBrushlineController extends Controller
     use ValidatesFloorId;
 
     /**
-     * @param APIBrushlineFormRequest     $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param DungeonRoute                $dungeonRoute
-     * @param Brushline|null              $brushline
      * @return Brushline|Response
+     *
      * @throws AuthorizationException
-     * @throws \Throwable
+     * @throws Throwable
      */
-    function store(
+    public function store(
         APIBrushlineFormRequest     $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
         ?Brushline                  $brushline = null
     ) {
-        $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
         $this->authorize('addBrushline', $dungeonRoute);
@@ -86,7 +82,7 @@ class AjaxBrushlineController extends Controller
                     // Couple the path to the polyline
                     $brushline->update([
                         'polyline_id' => $polyline->id,
-                        'floor_id'    => optional($changedFloor)->id ?? $brushline->floor_id,
+                        'floor_id'    => $changedFloor?->id ?? $brushline->floor_id,
                     ]);
 
                     // Load the polyline, so it can be echoed back to the user
@@ -100,11 +96,11 @@ class AjaxBrushlineController extends Controller
                     // Touch the route so that the thumbnail gets updated
                     $dungeonRoute->touch();
                 } else {
-                    throw new \Exception(__('controller.brushline.error.unable_to_save_brushline'));
+                    throw new Exception(__('controller.brushline.error.unable_to_save_brushline'));
                 }
 
                 $result = $brushline;
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         });
@@ -113,13 +109,11 @@ class AjaxBrushlineController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Brushline    $brushline
      * @return Response|ResponseFactory
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
         $dungeonRoute = $brushline->dungeonRoute;
 
@@ -139,7 +133,7 @@ class AjaxBrushlineController extends Controller
             } else {
                 $result = response(__('controller.brushline.error.unable_to_delete_brushline'), Http::INTERNAL_SERVER_ERROR);
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

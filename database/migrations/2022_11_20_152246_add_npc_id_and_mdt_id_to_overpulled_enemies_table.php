@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNpcIdAndMdtIdToOverpulledEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('overpulled_enemies', function (Blueprint $table) {
             $table->integer('mdt_id')->default(null)->nullable()->after('kill_zone_id');
@@ -23,10 +20,8 @@ class AddNpcIdAndMdtIdToOverpulledEnemiesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('overpulled_enemies', function (Blueprint $table) {
             $table->index(['npc_id', 'mdt_id']);
@@ -35,4 +30,4 @@ class AddNpcIdAndMdtIdToOverpulledEnemiesTable extends Migration
             $table->dropColumn('npc_id');
         });
     }
-}
+};

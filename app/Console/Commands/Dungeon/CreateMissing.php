@@ -22,7 +22,7 @@ class CreateMissing extends Command
      *
      * @var string
      */
-    protected $description = 'Looks into the internal code database for dungeons that haven\'t been added to the database yet and adds them.';
+    protected $description = "Looks into the internal code database for dungeons that haven't been added to the database yet and adds them.";
 
     /**
      * Create a new command instance.
@@ -34,9 +34,6 @@ class CreateMissing extends Command
         parent::__construct();
     }
 
-    /**
-     * @return int
-     */
     public function handle(): int
     {
         /** @var Collection|Expansion[] $expansions */
@@ -61,7 +58,7 @@ class CreateMissing extends Command
                 $expansion = $expansions->get($expansionKey);
 
                 $nameTranslationKey = sprintf('dungeons.%s.%s.name', $expansionKey, $dungeonKey);
-                $nameTranslated     = __($nameTranslationKey, [], 'en');
+                $nameTranslated     = __($nameTranslationKey, [], 'en-US');
 
                 Dungeon::create([
                     'expansion_id'      => $expansion->id,

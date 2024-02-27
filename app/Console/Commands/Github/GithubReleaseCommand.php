@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Console\Commands\Github;
 
 use App\Models\Release;
@@ -8,16 +7,12 @@ use Illuminate\Console\Command;
 
 abstract class GithubReleaseCommand extends Command
 {
-    /**
-     * @param string|null $version
-     * @return Release|null
-     */
     public function findReleaseByVersion(?string $version): ?Release
     {
         if ($version === null) {
             $release = Release::latest()->disableCache()->first();
         } else {
-            if (substr($version, 0, 1) !== 'v') {
+            if (!str_starts_with($version, 'v')) {
                 $version = 'v' . $version;
             }
 

@@ -1,11 +1,11 @@
 <?php
 /** @var $name string */
 /** @var $type string Can be warning, info, danger */
-$name      = $name ?? 'default';
-$type      = $type ?? '';
-$dismiss   = $dismiss ?? true;
-$rootClass = $rootClass ?? '';
-$align = $align ?? 'left';
+$name      ??= 'default';
+$type      ??= '';
+$dismiss   ??= true;
+$rootClass ??= '';
+$align     ??= 'left';
 ?>
 @if(!isAlertDismissed($name))
     <div class="alert alert-{{ $type }} text-{{$align}} mt-4 {{ $dismiss ? 'alert-dismissable' : '' }} {{ $rootClass }}"

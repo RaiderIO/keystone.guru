@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Patreon\PatreonUserLink;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonServiceInterface;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,30 +13,23 @@ use Session;
 
 class PatreonController extends Controller
 {
-
     /**
      * Unlinks the user from Patreon.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
-    public function unlink(Request $request)
+    public function unlink(Request $request): RedirectResponse
     {
         // If it was linked, delete it
         optional(Auth::user()->patreonUserLink)->delete();
 
         Session::flash('status', __('controller.patreon.flash.unlink_successful'));
+
         return redirect()->route('profile.edit', ['#patreon']);
     }
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     * @param Request $request
-     * @param PatreonApiServiceInterface $patreonApiService
-     * @param PatreonServiceInterface $patreonService
-     * @return RedirectResponse
      */
-    public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService)
+    public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService): RedirectResponse
     {
         $state = $request->get('state');
         $code  = $request->get('code');
@@ -52,7 +45,7 @@ class PatreonController extends Controller
 
                 // Save new tokens to database
                 // Delete existing patreon data, if any
-                optional($user->patreonUserLink)->delete();
+                $user->patreonUserLink?->delete();
 
                 $patreonUserLinkAttributes = [
                     'user_id'       => $user->id,
@@ -79,9 +72,7 @@ class PatreonController extends Controller
                     } else if (!isset($identityResponse['included'])) {
                         Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
                     } else {
-                        $member = collect($identityResponse['included'])->filter(function (array $included) {
-                            return $included['type'] === 'member';
-                        })->first();
+                        $member = collect($identityResponse['included'])->filter(static fn(array $included) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
@@ -107,11 +98,6 @@ class PatreonController extends Controller
         return redirect()->route('profile.edit', ['#patreon']);
     }
 
-    /**
-     * @param array $attributes
-     * @param User $user
-     * @return PatreonUserLink
-     */
     private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
     {
         $existingPatreonUserLink = PatreonUserLink::where('email', $attributes['email'])->first();
@@ -136,10 +122,8 @@ class PatreonController extends Controller
     /**
      * This route is called after a) the user has clicked the link button, b) given the app permission to read their Patron data
      * c) this route is called to give me their info
-     *
-     * @param $request
      */
-    function oauth_redirect($request)
+    public function oauth_redirect($request)
     {
 
     }

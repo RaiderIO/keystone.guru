@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode\Http;
 
@@ -22,25 +22,18 @@ class UserController extends Controller
 {
     /**
      * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.user.list', [
             'patreonBenefits' => PatreonBenefit::all(),
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param User $user
-     * @return RedirectResponse
-     */
-    public function makeadmin(Request $request, User $user)
+    public function makeadmin(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
-        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', [])) !== false) {
+        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
             if (!$user->hasRole('admin')) {
                 $user->attachRole('admin');
 
@@ -57,12 +50,7 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @param Request $request
-     * @param User $user
-     * @return RedirectResponse
-     */
-    public function makeuser(Request $request, User $user)
+    public function makeuser(Request $request, User $user): RedirectResponse
     {
         $currentUser = Auth::user();
         if ($currentUser !== null && $currentUser->name === 'Admin') {
@@ -77,28 +65,18 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @param Request $request
-     * @param User $user
-     * @return RedirectResponse
-     */
     public function delete(Request $request, User $user): RedirectResponse
     {
         try {
             $user->delete();
             Session::flash('status', __('controller.user.flash.account_deleted_successfully'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             Session::flash('warning', __('controller.user.flash.account_deletion_error'));
         }
 
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @param Request $request
-     * @param User $user
-     * @return RedirectResponse
-     */
     public function grantAllBenefits(Request $request, User $user): RedirectResponse
     {
         try {
@@ -130,7 +108,7 @@ class UserController extends Controller
             }
 
             Session::flash('status', __('controller.user.flash.all_benefits_granted_successfully'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             Session::flash('warning', __('controller.user.flash.error_granting_all_benefits'));
         }
 
@@ -138,11 +116,9 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return Application|ResponseFactory|Response
      */
-    public function storePatreonBenefits(Request $request, User $user)
+    public function storePatreonBenefits(Request $request, User $user): Response
     {
         $newPatreonBenefitIds = $request->get('patreonBenefits', []);
 

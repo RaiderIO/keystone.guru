@@ -8,7 +8,7 @@ if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
 }
 
-$id = $id ?? 'affixes';
+$id ??= 'affixes';
 ?>
 <script>
     let _affixGroups{{ $id }} = {!! $affixgroups !!};

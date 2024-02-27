@@ -3,21 +3,21 @@
 namespace Tests\Unit\App\Logic\MDT;
 
 use App\Logic\MDT\Conversion;
-use App\Models\Dungeon;
 use App\Models\Expansion;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class ConversionTest extends TestCase
+final class ConversionTest extends TestCase
 {
     /**
      * A basic test example.
-     *
-     * @test
-     * @return void
-     * @dataProvider checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider
-     * @group
      */
-    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey)
+    #[Test]
+    #[DataProvider('checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider')]
+    #[Group('')]
+    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey): void
     {
         // Test
         $expansionKey = Conversion::getExpansionName($dungeonKey);
@@ -26,10 +26,7 @@ class ConversionTest extends TestCase
         $this->assertEquals($expansionKey, $expectedExpansionKey);
     }
 
-    /**
-     * @return array
-     */
-    public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
+    public static function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
     {
         $expansions = [
             Expansion::EXPANSION_CATACLYSM,
@@ -37,7 +34,7 @@ class ConversionTest extends TestCase
             Expansion::EXPANSION_LEGION,
             Expansion::EXPANSION_BFA,
             Expansion::EXPANSION_SHADOWLANDS,
-            Expansion::EXPANSION_DRAGONFLIGHT
+            Expansion::EXPANSION_DRAGONFLIGHT,
         ];
 
         $result = [];
@@ -46,6 +43,7 @@ class ConversionTest extends TestCase
                 $result[] = [$dungeonKey, $expansion];
             }
         }
+
         return $result;
     }
 }

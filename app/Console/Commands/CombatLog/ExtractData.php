@@ -22,32 +22,20 @@ class ExtractData extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     *
-     * @param CombatLogDataExtractionServiceInterface $combatLogDataExtractionService
-     *
-     * @return int
      */
     public function handle(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService): int
     {
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogDataExtractionService) {
-            return $this->extractData($combatLogDataExtractionService, $filePath);
-        });
+        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath));
     }
 
-    /**
-     * @param CombatLogDataExtractionServiceInterface $combatLogDataExtractionService
-     * @param string                                  $filePath
-     *
-     * @return int
-     */
     private function extractData(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
         $result = $combatLogDataExtractionService->extractData($filePath);
-        if( $result->hasUpdatedData() ) {
+        if ($result->hasUpdatedData()) {
             $this->info(
                 sprintf(
                     'Updated %d floors, %d floor connections, %d npcs',

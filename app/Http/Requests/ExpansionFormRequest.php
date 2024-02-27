@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Expansion;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,20 +11,16 @@ class ExpansionFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return \Auth::user()->hasRole("admin");
+        return Auth::user()->hasRole('admin');
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         /** @var Expansion $expansion */
         $expansion = $this->route()->parameter('expansion');
@@ -36,6 +33,7 @@ class ExpansionFormRequest extends FormRequest
         if ($expansion === null) {
             $rules['icon'] = 'required|image|mimes:png|max:128';
         }
+
         return $rules;
     }
 }

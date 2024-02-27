@@ -9,8 +9,6 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {

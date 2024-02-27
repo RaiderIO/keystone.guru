@@ -6,6 +6,7 @@ use App\Models\Release;
 use App\Models\ReleaseReportLog;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Reddit\RedditApiService;
+use Exception;
 use Illuminate\Console\Command;
 
 class ReportRelease extends Command
@@ -37,12 +38,10 @@ class ReportRelease extends Command
     /**
      * Execute the console command.
      *
-     * @param DiscordApiService $discordApiService
-     * @param RedditApiService $redditApiService
-     * @return void
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
+    public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService): void
     {
         $result   = false;
         $version  = $this->argument('version');
@@ -52,9 +51,10 @@ class ReportRelease extends Command
         if ($version === 'latest') {
             $release = Release::latest()->first();
         } else {
-            if (substr($version, 0, 1) !== 'v') {
+            if (!str_starts_with($version, 'v')) {
                 $version = sprintf('v%s', $version);
             }
+
             $release = Release::where('version', $version)->first();
         }
 
@@ -67,20 +67,15 @@ class ReportRelease extends Command
                 ->where('platform', $platform)
                 ->doesntExist()
         ) {
-            switch ($platform) {
-                case 'reddit':
-                    $result = $redditApiService->createPost(
-                        config('keystoneguru.reddit_subreddit'),
-                        $release->getFormattedTitle(),
-                        $release->reddit_body
-                    );
-                    break;
-                case 'discord':
-                    $result = $discordApiService->sendEmbeds(config('keystoneguru.webhook.discord.new_release.url'), $release->getDiscordEmbeds());
-                    break;
-                default:
-                    throw new \Exception(sprintf('Unsupported platform %s', $platform));
-            }
+            $result = match ($platform) {
+                'reddit' => $redditApiService->createPost(
+                    config('keystoneguru.reddit_subreddit'),
+                    $release->getFormattedTitle(),
+                    $release->reddit_body
+                ),
+                'discord' => $discordApiService->sendEmbeds(config('keystoneguru.webhook.discord.new_release.url'), $release->getDiscordEmbeds()),
+                default => throw new Exception(sprintf('Unsupported platform %s', $platform)),
+            };
 
             // Log this release so that we don't mention things multiple times
             ReleaseReportLog::create([

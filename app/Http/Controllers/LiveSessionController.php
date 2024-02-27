@@ -10,7 +10,7 @@ use App\Models\LiveSession;
 use App\Models\Team;
 use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
-use App\User;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -25,24 +25,17 @@ use Teapot\StatusCode;
 class LiveSessionController extends Controller
 {
     /**
-     * @param Request                           $request
-     * @param Dungeon                           $dungeon
-     * @param DungeonRoute                      $dungeonroute
-     * @param string|null                       $title
-     * @param EchoServerHttpApiServiceInterface $echoServerHttpApiService
-     *
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
-    public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
+    public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
     {
         $this->authorize('view', $dungeonroute);
 
         $liveSession = LiveSession::create([
-           'dungeon_route_id' => $dungeonroute->id,
-           'user_id'          => Auth::id(),
-           'public_key'       => LiveSession::generateRandomPublicKey(),
-       ]);
+            'dungeon_route_id' => $dungeonroute->id,
+            'user_id'          => Auth::id(),
+            'public_key'       => LiveSession::generateRandomPublicKey(),
+        ]);
 
         // If the team is set for this route, invite all team members that are currently viewing this route to join
         $user = Auth::user();
@@ -85,14 +78,8 @@ class LiveSessionController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param DungeonRoute               $dungeonroute
-     * @param string|null                $title
-     * @param LiveSession                $livesession
-     *
      * @return Application|Factory|View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function view(
@@ -104,6 +91,7 @@ class LiveSessionController extends Controller
         LiveSession                $livesession)
     {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
+
         return $this->viewfloor(
             $request,
             $mapContextService,
@@ -111,20 +99,13 @@ class LiveSessionController extends Controller
             $dungeonroute,
             $title,
             $livesession,
-            optional($defaultFloor)->index ?? '1'
+            $defaultFloor?->index ?? '1'
         );
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param DungeonRoute               $dungeonroute
-     * @param string|null                $title
-     * @param LiveSession                $livesession
-     * @param string                     $floorIndex
-     *
      * @return Application|Factory|View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function viewfloor(
@@ -139,7 +120,7 @@ class LiveSessionController extends Controller
         $this->authorize('view', $dungeonroute);
         try {
             $this->authorize('view', $livesession);
-        } catch (AuthorizationException $ex) {
+        } catch (AuthorizationException) {
             abort(StatusCode::GONE);
         }
 

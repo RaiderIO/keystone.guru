@@ -23,20 +23,18 @@ use Illuminate\Support\Collection;
  * @property float                       $lng
  * @property float                       $size
  * @property float                       $rotation
- *
  * @property MappingVersion              $mappingVersion
  * @property Floor                       $floor
  * @property Floor                       $targetFloor
- *
  * @property Collection|FloorUnionArea[] $floorUnionAreas
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
+class FloorUnion extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
-    use SeederModel;
-    use HasLatLng;
     use CloneForNewMappingVersionNoRelations;
+    use HasLatLng;
+    use SeederModel;
 
     public $timestamps = false;
 
@@ -66,41 +64,26 @@ class FloorUnion extends CacheModel implements MappingModelInterface, MappingMod
         'rotation'           => 'float',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function targetFloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class, 'target_floor_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function floorUnionAreas(): HasMany
     {
         return $this->hasMany(FloorUnionArea::class);
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;

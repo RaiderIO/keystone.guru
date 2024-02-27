@@ -3,7 +3,8 @@ name: Mapping Deploy
 
 on:
   push:
-    branches: development
+    branches:
+      - development
 
 jobs:
   deploy:
@@ -11,10 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        if: github.actor == 'Wotuu'
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          php_version: "7.4"
+          php_version: "8.2"
           args: "--ignore-platform-req=ext-lua --ignore-platform-req=ext-zip --ignore-platform-req=ext-pcntl"
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.DEPLOYER_PAT }}"} }'

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Models\Floor\Floor;
@@ -8,13 +7,12 @@ use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
 /**
  * Class MapContextLiveSession
- * @package App\Logic\MapContext
+ *
  * @author  Wouter
+ *
  * @since   13/05/2021
  *
  * @property LiveSession $context
@@ -23,17 +21,13 @@ class MapContextLiveSession extends MapContext
 {
     use DungeonRouteProperties;
 
-    private OverpulledEnemyServiceInterface $overpulledEnemyService;
-
     public function __construct(
-        CacheServiceInterface           $cacheService,
-        CoordinatesServiceInterface     $coordinatesService,
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        LiveSession                     $liveSession,
-        Floor                           $floor)
+        CacheServiceInterface                   $cacheService,
+        CoordinatesServiceInterface             $coordinatesService,
+        private OverpulledEnemyServiceInterface $overpulledEnemyService,
+        LiveSession                             $liveSession,
+        Floor                                   $floor)
     {
-        $this->overpulledEnemyService = $overpulledEnemyService;
-
         parent::__construct($cacheService, $coordinatesService, $liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
     }
 
@@ -54,7 +48,7 @@ class MapContextLiveSession extends MapContext
 
     public function getEnemies(): array
     {
-        return $this->listEnemies($this->mappingVersion, false) ?? [];
+        return $this->listEnemies($this->cacheService, $this->coordinatesService, $this->mappingVersion, false) ?? [];
     }
 
     public function getEchoChannelName(): string
@@ -77,5 +71,4 @@ class MapContextLiveSession extends MapContext
             'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
         ]);
     }
-
 }

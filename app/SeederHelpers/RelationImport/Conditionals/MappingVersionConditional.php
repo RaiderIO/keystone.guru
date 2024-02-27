@@ -1,11 +1,9 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Conditionals;
 
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Models\Mapping\MappingVersion;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
 use Exception;
 use Illuminate\Support\Collection;
@@ -15,17 +13,15 @@ use Illuminate\Support\Collection;
  * the one that currently exists in the database, we may import it. Otherwise, we shouldn't import it.
  *
  *
- * @package App\SeederHelpers\RelationImport\Conditionals
  * @author Wouter
+ *
  * @since 27/10/2022
  */
 class MappingVersionConditional implements ConditionalInterface
 {
-    /** @var Collection */
-    private Collection $floorCache;
+    private readonly Collection $floorCache;
 
-    /** @var Collection */
-    private Collection $dungeonCache;
+    private readonly Collection $dungeonCache;
 
     public function __construct()
     {
@@ -34,9 +30,6 @@ class MappingVersionConditional implements ConditionalInterface
     }
 
     /**
-     * @param RelationMapping $relationMapping
-     * @param array $modelData
-     * @return bool
      * @throws Exception
      */
     public function shouldParseModel(RelationMapping $relationMapping, array $modelData): bool
@@ -44,29 +37,25 @@ class MappingVersionConditional implements ConditionalInterface
         // This class no longer seems necessary - we always truncate and re-populate the seed
         return true;
 
-        if (isset($modelData['dungeon_id'])) {
-            $dungeon = $this->getDungeonById($modelData['dungeon_id']);
-        } else if (isset($modelData['floor_id'])) {
-            $dungeon = $this->getDungeonById($this->getFloorById($modelData['floor_id'])->dungeon_id);
-        } else {
-            throw new Exception(sprintf('Unable to find dungeon in model data! %s', json_encode($modelData)));
-        }
-
-        // Initial import of mapping that does not have mapping versions yet..
-        if (!isset($modelData['mapping_version_id'])) {
-            return true;
-        }
-
-        $modelMappingVersion = MappingVersion::findOrFail($modelData['mapping_version_id']);
-
-        // Only import this model if it's a version upgrade
-        return $modelMappingVersion->version > $dungeon->currentMappingVersion->version;
+        //        if (isset($modelData['dungeon_id'])) {
+        //            $dungeon = $this->getDungeonById($modelData['dungeon_id']);
+        //        } else if (isset($modelData['floor_id'])) {
+        //            $dungeon = $this->getDungeonById($this->getFloorById($modelData['floor_id'])->dungeon_id);
+        //        } else {
+        //            throw new Exception(sprintf('Unable to find dungeon in model data! %s', json_encode($modelData)));
+        //        }
+        //
+        //        // Initial import of mapping that does not have mapping versions yet..
+        //        if (!isset($modelData['mapping_version_id'])) {
+        //            return true;
+        //        }
+        //
+        //        $modelMappingVersion = MappingVersion::findOrFail($modelData['mapping_version_id']);
+        //
+        //        // Only import this model if it's a version upgrade
+        //        return $modelMappingVersion->version > $dungeon->currentMappingVersion->version;
     }
 
-    /**
-     * @param int $id
-     * @return Floor
-     */
     private function getFloorById(int $id): Floor
     {
         if ($this->floorCache->has($id)) {
@@ -79,10 +68,6 @@ class MappingVersionConditional implements ConditionalInterface
         return $floor;
     }
 
-    /**
-     * @param int $id
-     * @return Dungeon
-     */
     private function getDungeonById(int $id): Dungeon
     {
         if ($this->dungeonCache->has($id)) {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\DungeonRoute;
 
 use App\Models\AffixGroup\AffixGroupBase;
@@ -13,34 +12,29 @@ use Illuminate\Support\Collection;
 interface DiscoverServiceInterface
 {
     /**
-     * @param int $limit
      * @return $this
      */
-    function withLimit(int $limit): self;
+    public function withLimit(int $limit): self;
 
     /**
-     * @param Closure $closure
      * @return $this
      */
-    function withBuilder(Closure $closure): self;
+    public function withBuilder(Closure $closure): self;
 
     /**
-     * @param Season|null $season
      * @return $this
      */
-    function withSeason(?Season $season): self;
+    public function withSeason(?Season $season): self;
 
     /**
-     * @param Expansion $expansion
      * @return $this
      */
-    function withExpansion(Expansion $expansion): self;
+    public function withExpansion(Expansion $expansion): self;
 
     /**
-     * @param bool $enabled
      * @return $this
      */
-    function withCache(bool $enabled): self;
+    public function withCache(bool $enabled): self;
 
     /*
     |--------------------------------------------------------------------------
@@ -50,90 +44,34 @@ interface DiscoverServiceInterface
     | The result of these queries should be a list of DungeonRoutes.
     |
     */
-    /**
-     * @return Collection
-     */
-    function popular(): Collection;
 
-    /**
-     * @return Collection
-     */
-    function popularGroupedByDungeon(): Collection;
+    public function popular(): Collection;
 
-    /**
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularByAffixGroup(AffixGroupBase $affixGroup): Collection;
+    public function popularGroupedByDungeon(): Collection;
 
-    /**
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection;
+    public function popularByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param Dungeon $dungeon
-     * @return Collection
-     */
-    function popularByDungeon(Dungeon $dungeon): Collection;
+    public function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param Dungeon $dungeon
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
+    public function popularByDungeon(Dungeon $dungeon): Collection;
 
-    /**
-     * @param Season $season
-     * @return Collection
-     */
-    function popularBySeason(Season $season): Collection;
+    public function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param Season $season
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
+    public function popularBySeason(Season $season): Collection;
 
-    /**
-     * @return Collection
-     */
-    function new(): Collection;
+    public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function newByAffixGroup(AffixGroupBase $affixGroup): Collection;
+    public function new(): Collection;
 
-    /**
-     * @param Dungeon $dungeon
-     * @return Collection
-     */
-    function newByDungeon(Dungeon $dungeon): Collection;
+    public function newByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param Dungeon $dungeon
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
+    public function newByDungeon(Dungeon $dungeon): Collection;
 
-    /**
-     * @param Season $season
-     * @return Collection
-     */
-    function newBySeason(Season $season): Collection;
+    public function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param Season $season
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
+    public function newBySeason(Season $season): Collection;
+
+    public function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
 
     /*
     |--------------------------------------------------------------------------
@@ -143,27 +81,12 @@ interface DiscoverServiceInterface
     | The result of these queries should be a list of users
     |
     */
-    /**
-     * @return Collection
-     */
-    function popularUsers(): Collection;
 
-    /**
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection;
+    public function popularUsers(): Collection;
 
-    /**
-     * @param Dungeon $dungeon
-     * @return Collection
-     */
-    function popularUsersByDungeon(Dungeon $dungeon): Collection;
+    public function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
-    /**
-     * @param Dungeon $dungeon
-     * @param AffixGroupBase $affixGroup
-     * @return Collection
-     */
-    function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
+    public function popularUsersByDungeon(Dungeon $dungeon): Collection;
+
+    public function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 }

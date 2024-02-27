@@ -4,7 +4,7 @@ namespace App\Events\LiveSession;
 
 use App\Events\ContextEvent;
 use App\Models\LiveSession;
-use App\User;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Support\Collection;
@@ -12,23 +12,20 @@ use Illuminate\Support\Str;
 
 /**
  * Class InviteEvent
- * @package App\Events\LiveSession
+ *
  * @author Wouter
+ *
  * @since 14/05/2021
  *
- * @property LiveSession $_context
+ * @property LiveSession $context
  */
 class InviteEvent extends ContextEvent
 {
-    /** @var array */
     protected array $invitees;
 
     /**
      * Create a new event instance.
      *
-     * @param LiveSession $liveSession
-     * @param User $user
-     * @param Collection $invitees
      * @return void
      */
     public function __construct(LiveSession $liveSession, User $user, Collection $invitees)
@@ -46,7 +43,7 @@ class InviteEvent extends ContextEvent
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
+            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->dungeonroute->getRouteKey())),
         ];
     }
 
@@ -56,10 +53,10 @@ class InviteEvent extends ContextEvent
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
             'invitees' => $this->invitees,
             'url'      => route('dungeonroute.livesession.view', [
-                'dungeon'      => $this->_context->dungeonroute->dungeon,
-                'title'        => Str::slug($this->_context->dungeonroute->title),
-                'dungeonroute' => $this->_context->dungeonroute,
-                'livesession'  => $this->_context,
+                'dungeon'      => $this->context->dungeonroute->dungeon,
+                'title'        => Str::slug($this->context->dungeonroute->title),
+                'dungeonroute' => $this->context->dungeonroute,
+                'livesession'  => $this->context,
             ]),
         ]);
     }

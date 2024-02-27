@@ -24,9 +24,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float               $lat
  * @property float               $lng
  * @property string              $comment
- * @property boolean             $permanent_tooltip
+ * @property bool                $permanent_tooltip
  * @property int                 $seasonal_index
- *
  * @property MappingVersion|null $mappingVersion
  * @property Floor               $floor
  * @property DungeonRoute|null   $dungeonRoute
@@ -34,11 +33,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MapIcon extends Model implements MappingModelInterface, MappingModelCloneableInterface
+class MapIcon extends Model implements MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
-    use HasLinkedAwakenedObelisk;
     use HasLatLng;
+    use HasLinkedAwakenedObelisk;
 
     protected $visible = [
         'id',
@@ -68,8 +67,10 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
         'permanent_tooltip',
         'seasonal_index',
     ];
-    protected $appends  = ['linked_awakened_obelisk_id', 'is_admin'];
-    protected $casts    = [
+
+    protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
+
+    protected $casts = [
         'mapping_version_id'         => 'integer',
         'floor_id'                   => 'integer',
         'dungeon_route_id'           => 'integer',
@@ -84,50 +85,32 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
 
     protected $with = ['mapicontype', 'linkedawakenedobelisks'];
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function mapicontype(): BelongsTo
     {
         // Need the foreign key for some reason
         return $this->belongsTo(MapIconType::class, 'map_icon_type_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return bool
-     */
     public function getIsAdminAttribute(): bool
     {
         return $this->dungeon_route_id === null;
     }
 
-    /**
-     * @return bool
-     */
     public function isAwakenedObelisk(): bool
     {
         return in_array($this->map_icon_type_id, [
@@ -138,11 +121,8 @@ class MapIcon extends Model implements MappingModelInterface, MappingModelClonea
         ]);
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
-        return optional($this->floor)->dungeon_id ?? null;
+        return $this->floor?->dungeon_id ?? null;
     }
 }

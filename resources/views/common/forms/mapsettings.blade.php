@@ -1,5 +1,5 @@
 <?php
-$mapFacadeStyleChecked            = \App\User::getCurrentUserMapFacadeStyle() === \App\User::MAP_FACADE_STYLE_FACADE;
+$mapFacadeStyleChecked            = \App\Models\User::getCurrentUserMapFacadeStyle() === \App\Models\User::MAP_FACADE_STYLE_FACADE;
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
 $mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $mapUnkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';

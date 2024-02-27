@@ -7,16 +7,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $model_class
- *
- * @property Model $model
+ * @property Model  $model
  *
  * @mixin Model
  */
 trait HasGenericModelRelation
 {
-    /**
-     * @return HasOne
-     */
     public function model(): HasOne
     {
         return $this->hasOne($this->model_class, 'id', 'model_id');

@@ -6,22 +6,10 @@ use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 
 class WowToolsService implements WowToolsServiceInterface
 {
-    /** @var WowToolsServiceLoggingInterface */
-    private WowToolsServiceLoggingInterface $log;
-
-    /**
-     * @param WowToolsServiceLoggingInterface $log
-     */
-    public function __construct(WowToolsServiceLoggingInterface $log)
+    public function __construct(private readonly WowToolsServiceLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
-
-    /**
-     * @param int $npcId
-     * @return int|null
-     */
     public function getDisplayId(int $npcId): ?int
     {
         $this->log->getDisplayIdRequestStart($npcId);

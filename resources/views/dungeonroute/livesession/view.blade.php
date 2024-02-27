@@ -10,6 +10,7 @@ if (count($affixes) == 0) {
     $affixes         = [-1 => __('views/dungeonroute.livesession.view.any')];
     $selectedAffixes = -1;
 }
+
 $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 ?>
 @section('scripts')
@@ -42,7 +43,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                 'share' => [
                     'link' => !$dungeonroute->isSandbox(),
                     'embed' => !$dungeonroute->isSandbox(),
-                    'mdt-export' => true,
+                    'mdt-export' => $dungeon->mdt_supported,
                     'publish' => false,
                 ]
             ],

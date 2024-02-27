@@ -16,51 +16,31 @@ class Missed extends Suffix
 
     private bool $critical;
 
-    /**
-     * @return string
-     */
     public function getMissType(): string
     {
         return $this->missType;
     }
 
-    /**
-     * @return bool
-     */
     public function isOffHand(): bool
     {
         return $this->isOffHand;
     }
 
-    /**
-     * @return int
-     */
     public function getAmountMissed(): int
     {
         return $this->amountMissed;
     }
 
-    /**
-     * @return int
-     */
     public function getUnknown1(): int
     {
         return $this->unknown1;
     }
 
-    /**
-     * @return bool
-     */
     public function isCritical(): bool
     {
         return $this->critical;
     }
 
-
-    /**
-     * @param array $parameters
-     * @return HasParameters
-     */
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -71,30 +51,25 @@ class Missed extends Suffix
         if (isset($parameters[2])) {
             $this->amountMissed = $parameters[2];
         }
+
         // May be set for absorbs
         if (isset($parameters[3])) {
-            $this->unknown1     = $parameters[3];
+            $this->unknown1 = $parameters[3];
         }
+
         // May be set for absorbs
         if (isset($parameters[4])) {
-            $this->critical     = $parameters[4] !== 'nil';
+            $this->critical = $parameters[4] !== 'nil';
         }
 
         return $this;
     }
 
-
-    /**
-     * @return int
-     */
     public function getOptionalParameterCount(): int
     {
         return 3;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 5;

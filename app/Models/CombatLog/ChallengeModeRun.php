@@ -5,7 +5,9 @@ namespace App\Models\CombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -19,16 +21,14 @@ use Illuminate\Support\Collection;
  * @property bool                       $success
  * @property int                        $total_time_ms
  * @property bool                       $duplicate
- *
  * @property Carbon                     $created_at
- *
  * @property Dungeon                    $dungeon
  * @property DungeonRoute               $dungeonRoute
  * @property ChallengeModeRunData       $challengeModeRunData
  * @property Collection|EnemyPosition[] $enemyPositions
  *
- * @package App\Models\CombatLog
  * @author Wouter
+ *
  * @since 02/06/2023
  *
  * @mixin Eloquent
@@ -50,44 +50,31 @@ class ChallengeModeRun extends Model
     ];
 
     protected $with = [
-        'challengeModeRunData'
+        'challengeModeRunData',
     ];
 
-    /**
-     * @return HasOne
-     */
     public function dungeon(): HasOne
     {
         return $this->hasOne(Dungeon::class);
     }
 
-    /**
-     * @return HasOne
-     */
     public function dungeonRoute(): HasOne
     {
         return $this->hasOne(DungeonRoute::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function enemyPositions(): HasMany
     {
         return $this->hasMany(EnemyPosition::class);
     }
 
-    /**
-     * @return HasOne
-     */
     public function challengeModeRunData(): HasOne
     {
         return $this->hasOne(ChallengeModeRunData::class);
     }
 
     /**
-     * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getFormattedElapsedTime(): string
     {
@@ -101,7 +88,7 @@ class ChallengeModeRun extends Model
         $seconds      = floor($milliseconds / 1000);
         $milliseconds -= ($seconds * 1000);
 
-        $interval = \Carbon\CarbonInterval::create(
+        $interval = CarbonInterval::create(
             0,
             0,
             0,

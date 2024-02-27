@@ -5,7 +5,7 @@
 /** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
 /** @var $allFactions \Illuminate\Support\Collection|\App\Models\Faction[] */
 
-$factions = $factions ?? $allFactions;
+$factions ??= $allFactions;
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
@@ -21,7 +21,7 @@ $factions = $factions ?? $allFactions;
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->key) }} {
+        .{{ strtolower($faction->key) }}  {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -43,7 +43,7 @@ $factions = $factions ?? $allFactions;
 
 
             <?php
-                // @formatter:off
+            // @formatter:off
                 // This piece of code (which does not format well at all, hence manual formatting) makes sure that if
                 // we had an existing dungeon route we load their defaults, if we submitted something but failed to
                 // validate its contents, we restore the sent data back to the form
@@ -62,10 +62,12 @@ $factions = $factions ?? $allFactions;
                 foreach (old('specialization', '') as $oldSpecialization) {
                     $newSpecializations[] = ['id' => $oldSpecialization];
                 }
+
                 $newClasses = [];
                 foreach (old('class', '') as $oldClass) {
                     $newClasses[] = ['id' => $oldClass];
                 }
+
                 $newRaces = [];
                 foreach (old('race', '') as $oldRace) {
                     $newRaces[] = ['id' => $oldRace];
@@ -77,23 +79,27 @@ $factions = $factions ?? $allFactions;
             _oldClasses = {!! json_encode($newClasses)  !!};
             _oldRaces = {!! json_encode($newRaces)  !!};
 
-            <?php } ?>
+<?php }
+                 ?>
 
 
             <?php
             /** If collapseSelector is set, only load this when we're actually opening the collapseSelector to speed up loading. */
             if( isset($collapseSelector) ){ ?>
             $('{{$collapseSelector}}').on('shown.bs.collapse', function () {
-                <?php } ?>
+                <?php }
+             ?>
                 let composition = _inlineManager.getInlineCode('common/group/composition');
                 composition._loadDungeonRouteDefaults();
 
                 <?php if( isset($collapseSelector) ){ ?>
             });
-            <?php } ?>
+            <?php }
+             ?>
 
-            <?php
+<?php
             }
+
             // @formatter:on
             ?>
         });
@@ -119,7 +125,7 @@ $factions = $factions ?? $allFactions;
     @endisset
 </div>
 <div class="row">
-    <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
+    <?php for($i = 1; $i <= config('keystoneguru.party_size'); ++$i){ ?>
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
@@ -142,5 +148,6 @@ $factions = $factions ?? $allFactions;
             </select>
         </div>
     </div>
-    <?php } ?>
+    <?php }
+             ?>
 </div>

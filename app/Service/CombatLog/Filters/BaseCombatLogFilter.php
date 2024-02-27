@@ -15,17 +15,16 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
     protected Collection $resultEvents;
 
     /** @var Collection|CombatLogParserInterface[] */
-    private Collection $filters;
+    private readonly Collection $filters;
 
     public function __construct()
     {
         $this->resultEvents = collect();
-        $this->filters = collect();
+        $this->filters      = collect();
 
     }
 
     /**
-     * @param CombatLogParserInterface $combatLogParser
      * @return void
      */
     protected function addFilter(CombatLogParserInterface $combatLogParser)
@@ -33,12 +32,6 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
         $this->filters->push($combatLogParser);
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         $result = false;
@@ -55,10 +48,10 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
-        return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
+        return $this->resultEvents->sortBy(static function (BaseResultEvent $baseResultEvent) {
             // Add some CONSISTENT (not necessarily accurate) numbers so that events with the same timestamp are sorted
             // consistently instead of "randomly" causing all kinds of issues
-            $addition = 0;
+            $addition  = 0;
             $baseEvent = $baseResultEvent->getBaseEvent();
             if ($baseEvent instanceof AdvancedCombatLogEvent) {
                 $guid = $baseEvent->getAdvancedData()->getInfoGuid();

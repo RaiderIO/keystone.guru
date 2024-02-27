@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpVoidFunctionResultUsedInspection */
+<?php
+
+/** @noinspection PhpVoidFunctionResultUsedInspection */
 
 namespace App\Http\Controllers\Ajax;
 
@@ -25,7 +27,6 @@ use Teapot\StatusCode\Http;
 class AjaxTagController extends Controller
 {
     /**
-     * @param Request $request
      * @return Tag[]|Collection
      */
     public function all(Request $request)
@@ -34,8 +35,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param TagCategory $category
      * @return Tag[]|Collection
      */
     public function list(Request $request, TagCategory $category)
@@ -44,9 +43,8 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param APITagFormRequest $request
-     *
      * @return Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function store(APITagFormRequest $request)
@@ -89,7 +87,7 @@ class AjaxTagController extends Controller
             $tag->model_class     = $tagCategory->model_class;
             $tag->name            = $tagName;
             // Will be null if no similar tag is found which is fine
-            $tag->color = optional($similarTag)->color;
+            $tag->color = $similarTag?->color;
 
             if ($tag->save()) {
                 $result = $tag;
@@ -104,12 +102,9 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param APITagUpdateFormRequest $request
-     * @param Tag $tag
-     * @return Response
      * @throws AuthorizationException
      */
-    public function updateAll(APITagUpdateFormRequest $request, Tag $tag)
+    public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
     {
         $this->authorize('edit', $tag);
 
@@ -123,13 +118,10 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Tag $tag
-     * @return Response
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function deleteAll(Request $request, Tag $tag)
+    public function deleteAll(Request $request, Tag $tag): Response
     {
         $this->authorize('delete', $tag);
 
@@ -143,10 +135,8 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Tag $tag
-     *
      * @return array|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function delete(Request $request, Tag $tag)

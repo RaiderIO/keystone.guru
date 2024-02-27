@@ -7,29 +7,30 @@
 /** @var $latestReleaseSpotlight \App\Models\Release */
 
 // Show ads or not
-$showAds = $showAds ?? true;
+$showAds ??= true;
 $user    = \Illuminate\Support\Facades\Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
-$showLegalModal = $showLegalModal ?? true;
-$showSpotlight  = $showSpotlight ?? true;
+$showLegalModal ??= true;
+$showSpotlight  ??= true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
 // Any additional parameters to pass to the login/register blade
-$loginParams    = $loginParams ?? [];
-$registerParams = $registerParams ?? [];
+$loginParams    ??= [];
+$registerParams ??= [];
 // Show cookie consent
-$cookieConsent = $cookieConsent ?? true;
+$cookieConsent ??= true;
 // If user already approved of the cookie..
 if ($cookieConsent && isset($_COOKIE['cookieconsent_status']) && $_COOKIE['cookieconsent_status'] === 'dismiss') {
     // Don't bother the user with it anymore
     $cookieConsent = false;
 }
+
 $devCacheBuster = config('app.env') === 'local' ? '?t=' . time() : '';
 // Analytics or not, default = $isProduction
-$analytics = $analytics ?? $isProduction;
+$analytics ??= $isProduction;
 
-$bodyClass = $bodyClass ?? '';
-$rootClass = $rootClass ?? '';
+$bodyClass ??= '';
+$rootClass ??= '';
 
 // Bit of a hack to do this here - but for now this works
 $showSpotlightRelease = false;
@@ -42,6 +43,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
         setcookie('changelog_release', $latestReleaseSpotlight->id);
     }
 }
+
 ?><!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
 <head>

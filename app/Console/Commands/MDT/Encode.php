@@ -8,8 +8,8 @@ use Illuminate\Console\Command;
 
 class Encode extends Command
 {
-    use ExecutesShellCommands;
     use ConvertsMDTStrings;
+    use ExecutesShellCommands;
 
     /**
      * The name and signature of the console command.
@@ -37,10 +37,8 @@ class Encode extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info($this->encode($this->argument('string')));
     }

@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Dungeon;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DungeonRouteDiscoverDungeonPolicy
@@ -12,12 +12,8 @@ class DungeonRouteDiscoverDungeonPolicy
 
     /**
      * Determine whether the user can view the dungeon.
-     *
-     * @param User|null $user
-     * @param Dungeon $dungeon
-     * @return mixed
      */
-    public function view(?User $user, Dungeon $dungeon)
+    public function view(?User $user, Dungeon $dungeon): bool
     {
         return $dungeon->active && $dungeon->expansion->active;
     }

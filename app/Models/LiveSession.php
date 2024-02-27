@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
-use App\User;
+use App\Models\User;
 use Carbon\CarbonInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -16,16 +16,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $user_id
- * @property string $public_key
- *
- * @property User $user
- * @property DungeonRoute $dungeonroute
+ * @property int                          $id
+ * @property int                          $dungeon_route_id
+ * @property int                          $user_id
+ * @property string                       $public_key
+ * @property User                         $user
+ * @property DungeonRoute                 $dungeonroute
  * @property Collection|OverpulledEnemy[] $overpulledenemies
- *
- * @property Carbon $expires_at
+ * @property Carbon                       $expires_at
  *
  * @mixin Eloquent
  */
@@ -48,16 +46,12 @@ class LiveSession extends Model
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     * @return string
      */
     public function getRouteKeyName(): string
     {
         return 'public_key';
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -65,17 +59,12 @@ class LiveSession extends Model
 
     /**
      * Get the dungeon route that this live session is attached to.
-     *
-     * @return BelongsTo
      */
     public function dungeonroute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function overpulledenemies(): HasMany
     {
         return $this->hasMany(OverpulledEnemy::class);
@@ -87,7 +76,7 @@ class LiveSession extends Model
     public function getEnemies(): Collection
     {
         return Enemy::select('enemies.*')
-            ->join('overpulled_enemies', function (JoinClause $clause) {
+            ->join('overpulled_enemies', static function (JoinClause $clause) {
                 $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
                     ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
             })
@@ -98,38 +87,28 @@ class LiveSession extends Model
             ->get();
     }
 
-    /**
-     * @return bool
-     */
     public function isExpired(): bool
     {
         return $this->expires_at !== null && Carbon::createFromTimeString($this->expires_at)->isPast();
     }
 
-    /**
-     * @return int|null
-     */
     public function getExpiresInSeconds(): ?int
     {
         return $this->expires_at === null ? null : Carbon::createFromTimeString($this->expires_at)->diffInSeconds(now());
     }
 
-    /**
-     * @return string|null
-     */
     public function getExpiresInHoursSeconds(): ?string
     {
         return $this->expires_at === null ? null :
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
-
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete route properly if it gets deleted
-        static::deleting(function (LiveSession $item) {
+        static::deleting(static function (LiveSession $item) {
             $item->overpulledenemies()->delete();
         });
     }

@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     // This is really only to give some admins more power than other admins - there's no point in changing this for nefarious reasons
     'super_admins' => [
@@ -237,7 +236,6 @@ return [
             'popular'                                     => [
                 'ttl' => '2 hours',
             ],
-
 
             //            'popular' => [
             //                'ttl'       => '5 min',

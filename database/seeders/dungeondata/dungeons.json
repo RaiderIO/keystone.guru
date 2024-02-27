@@ -13,6 +13,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 1,
@@ -52,6 +53,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 1,
         "floor_count": 7,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 2,
@@ -289,6 +291,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 8,
@@ -416,6 +419,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 13,
@@ -455,6 +459,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 14,
@@ -494,6 +499,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 15,
@@ -533,6 +539,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 17,
@@ -643,6 +650,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 19,
@@ -906,6 +914,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 25,
@@ -1016,6 +1025,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 28,
@@ -1055,6 +1065,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 8,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 29,
@@ -1340,6 +1351,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 37,
@@ -1379,6 +1391,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 38,
@@ -1489,6 +1502,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 41,
@@ -1564,6 +1578,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 43,
@@ -1603,6 +1618,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 44,
@@ -1642,6 +1658,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 45,
@@ -1717,6 +1734,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 47,
@@ -1756,6 +1774,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 48,
@@ -1831,6 +1850,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 50,
@@ -1870,6 +1890,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 51,
@@ -1945,6 +1966,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 7,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 53,
@@ -2195,6 +2217,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 1,
         "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 60,
@@ -2397,6 +2420,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 65,
@@ -2472,6 +2496,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 67,
@@ -2582,6 +2607,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 70,
@@ -2657,6 +2683,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 72,
@@ -2696,6 +2723,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 73,
@@ -2841,6 +2869,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 77,
@@ -2951,6 +2980,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 80,
@@ -2990,6 +3020,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 81,
@@ -3065,6 +3096,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 83,
@@ -3140,6 +3172,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 85,
@@ -3285,6 +3318,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 89,
@@ -3395,6 +3429,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 92,
@@ -3581,6 +3616,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 101,
@@ -3726,6 +3762,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 97,
@@ -3871,6 +3908,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 174,
@@ -3910,6 +3948,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 175,
@@ -3949,6 +3988,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 105,
@@ -3988,6 +4028,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 106,
@@ -4133,6 +4174,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 110,
@@ -4172,6 +4214,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 111,
@@ -4282,6 +4325,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 114,
@@ -4357,6 +4401,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 116,
@@ -4396,6 +4441,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 117,
@@ -4471,6 +4517,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 119,
@@ -4510,6 +4557,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 120,
@@ -4549,6 +4597,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 121,
@@ -4588,6 +4637,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 122,
@@ -4663,6 +4713,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 124,
@@ -4702,6 +4753,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 125,
@@ -4741,6 +4793,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 126,
@@ -4921,6 +4974,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 131,
@@ -4960,6 +5014,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 132,
@@ -4999,6 +5054,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 133,
@@ -5109,6 +5165,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 136,
@@ -5184,6 +5241,7 @@
         "speedrun_enabled": 1,
         "facade_enabled": 0,
         "floor_count": 8,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 176,
@@ -5499,6 +5557,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 184,
@@ -5538,6 +5597,7 @@
         "speedrun_enabled": 1,
         "facade_enabled": 0,
         "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 138,
@@ -6146,6 +6206,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 185,
@@ -6207,6 +6268,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 187,
@@ -6246,6 +6308,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 188,
@@ -6285,6 +6348,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 189,
@@ -6324,6 +6388,7 @@
         "speedrun_enabled": 1,
         "facade_enabled": 0,
         "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 167,
@@ -7107,6 +7172,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 190,
@@ -7146,6 +7212,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 144,
@@ -7256,6 +7323,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 147,
@@ -7331,6 +7399,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 149,
@@ -7406,6 +7475,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 151,
@@ -7481,6 +7551,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 153,
@@ -7520,6 +7591,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 154,
@@ -7595,6 +7667,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 156,
@@ -7775,6 +7848,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 161,
@@ -7850,6 +7924,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 163,
@@ -7960,6 +8035,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 166,
@@ -7999,6 +8075,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 173,
@@ -8038,6 +8115,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 191,
@@ -8148,6 +8226,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 194,
@@ -8223,6 +8302,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 196,
@@ -8298,6 +8378,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 199,
@@ -8408,6 +8489,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 204,
@@ -8553,6 +8635,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 208,
@@ -8798,6 +8881,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 214,
@@ -8873,6 +8957,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 216,
@@ -8912,6 +8997,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 217,
@@ -8951,6 +9037,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 218,
@@ -8990,6 +9077,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 219,
@@ -9029,6 +9117,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 220,
@@ -9068,6 +9157,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 221,
@@ -9107,6 +9197,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 222,
@@ -9146,6 +9237,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 223,
@@ -9303,6 +9395,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 7,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 227,
@@ -9559,6 +9652,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 234,
@@ -9634,6 +9728,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 236,
@@ -9673,6 +9768,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 242,
@@ -9865,6 +9961,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 238,
@@ -9940,6 +10037,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 240,
@@ -9979,6 +10077,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 241,
@@ -10018,6 +10117,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 198,
@@ -10057,6 +10157,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 202,
@@ -10132,6 +10233,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 246,
@@ -10207,6 +10309,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 1,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 248,
@@ -10304,6 +10407,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 0,
         "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 250,
@@ -10414,6 +10518,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 1,
         "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 253,
@@ -10659,6 +10764,7 @@
         "speedrun_enabled": 0,
         "facade_enabled": 1,
         "floor_count": 8,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 258,

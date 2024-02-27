@@ -38,10 +38,10 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
     /**
      * Execute the console command.
      *
-     * @return int
+     *
      * @throws MissingArgumentException
      */
-    public function handle()
+    public function handle(): int
     {
         $result = 0;
 
@@ -62,7 +62,7 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
 
             // Only gets the first page - but good enough
             foreach ($githubIssueClient->all($username, $repository, ['filter' => 'all', 'state' => 'all', 'labels' => 'release']) as $githubIssue) {
-                if (strpos($githubIssue['title'], $issueTitle) === 0 && !isset($githubIssue['pull_request'])) {
+                if (str_starts_with((string)$githubIssue['title'], $issueTitle) && !isset($githubIssue['pull_request'])) {
                     $existingIssueId = $githubIssue['number'];
                     break;
                 }
@@ -91,7 +91,6 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
                 $this->info(sprintf('Successfully updated GitHub issue %s', $version));
                 $result = 2;
             }
-
 
         } else {
             $this->error(sprintf('Unable to find release %s', $version));

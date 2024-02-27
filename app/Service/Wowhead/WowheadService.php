@@ -20,11 +20,6 @@ class WowheadService implements WowheadServiceInterface
 
     private const HEALTH_IDENTIFYING_TOKEN = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
 
-    /**
-     * @param GameVersion $gameVersion
-     * @param Npc         $npc
-     * @return int|null
-     */
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int
     {
         $response = $this->curlGet(
@@ -41,11 +36,12 @@ class WowheadService implements WowheadServiceInterface
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (strpos($line, self::HEALTH_IDENTIFYING_TOKEN) === false) {
+            if (!str_contains($line, self::HEALTH_IDENTIFYING_TOKEN)) {
                 continue;
             }
 
             // Extract the html we want to parse
+            /** @noinspection HtmlUnknownAttribute */
             $html = sprintf('<table %s</table>', $this->getStringBetween($line, '<table', '</table>'));
 
             // Find the health value from this little html
@@ -61,14 +57,14 @@ class WowheadService implements WowheadServiceInterface
                     if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
                         $grabNext = true;
                     } else if ($grabNext) {
-                        $possibleHealth = (int)str_replace(',', '', $td->innerHtml);
+                        $possibleHealth = (int)str_replace(',', '', (string)$td->innerHtml);
                         if ($possibleHealth > 0) {
                             $health = $possibleHealth;
                             break;
                         }
                     }
                 }
-            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException $e) {
+            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException) {
             }
         }
 
@@ -76,9 +72,6 @@ class WowheadService implements WowheadServiceInterface
     }
 
     /**
-     * @param string $string
-     * @param string $start
-     * @param string $end
      * @return false|string
      */
     private function getStringBetween(string $string, string $start, string $end)
@@ -88,6 +81,7 @@ class WowheadService implements WowheadServiceInterface
         if ($ini == 0) {
             return '';
         }
+
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
 

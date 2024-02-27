@@ -23,10 +23,6 @@ class CreateMappingVersion extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     *
-     * @param CombatLogMappingVersionServiceInterface $combatLogMappingVersionService
-     *
-     * @return int
      */
     public function handle(CombatLogMappingVersionServiceInterface $combatLogMappingVersionService): int
     {
@@ -38,18 +34,9 @@ class CreateMappingVersion extends BaseCombatLogCommand
             $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
         }
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath)
-        use ($combatLogMappingVersionService, $mappingVersion) {
-            return $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath, $mappingVersion);
-        });
+        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath, $mappingVersion));
     }
 
-    /**
-     * @param CombatLogMappingVersionServiceInterface $combatLogMappingVersionService
-     * @param string                                  $filePath
-     * @param MappingVersion|null                     $mappingVersion
-     * @return int
-     */
     private function createMappingVersionFromCombatLog(
         CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
         string                                  $filePath,
@@ -71,7 +58,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
                 '- %s mapping version %s (%s, %d, %d enemies)',
                 $hasMappingVersion ? 'Updated' : 'Created',
                 $mappingVersion->version,
-                __($mappingVersion->dungeon->name, [], 'en'),
+                __($mappingVersion->dungeon->name, [], 'en-US'),
                 $mappingVersion->id,
                 $mappingVersion->enemies()->count(),
             )

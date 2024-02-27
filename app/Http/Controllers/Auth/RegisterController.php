@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\GameServerRegion;
 use App\Role;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Session;
@@ -48,11 +51,8 @@ class RegisterController extends Controller
 
     /**
      * Get a validator for an incoming registration request.
-     *
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name'                  => 'required|alpha_dash|max:32|unique:users',
@@ -68,11 +68,8 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     *
-     * @param array $data
-     * @return User
      */
-    protected function create(array $data)
+    protected function create(array $data): User
     {
         // Attach User role to any new user
         $userRole = Role::where('name', 'user')->first();
@@ -97,8 +94,8 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param Request $request
-     * @return Response
+     * @return Application|RedirectResponse|Response|Redirector
+     *
      * @throws ValidationException
      */
     public function register(Request $request)
@@ -107,7 +104,7 @@ class RegisterController extends Controller
         $validator = $this->validator($request->all());
         try {
             $validator->validate();
-        } catch (ValidationException $ex) {
+        } catch (ValidationException) {
             // We always want to redirect to /register, even if you tried to register from modal anywhere on the side
             return redirect('/register')->withInput()->withErrors($validator->messages()->getMessages());
         }

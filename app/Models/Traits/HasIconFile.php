@@ -10,22 +10,18 @@ use Illuminate\Http\UploadedFile;
 
 /**
  * @property File $iconfile
- * @property int $icon_file_id
+ * @property int  $icon_file_id
  *
  * @mixin Model
  */
 trait HasIconFile
 {
-    /**
-     * @return HasOne
-     */
     public function iconfile(): HasOne
     {
-        return $this->hasOne(File::class, 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(File::class, 'model_id')->where('model_class', $this::class);
     }
 
     /**
-     * @param UploadedFile $file
      * @throws Exception
      */
     public function saveUploadedFile(UploadedFile $file)

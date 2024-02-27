@@ -10,34 +10,21 @@ class ZoneChange extends SpecialEvent
 
     private string $difficultyId;
 
-    /**
-     * @return int
-     */
     public function getZoneId(): int
     {
         return $this->zoneId;
     }
 
-    /**
-     * @return string
-     */
     public function getZoneName(): string
     {
         return $this->zoneName;
     }
 
-    /**
-     * @return string
-     */
     public function getDifficultyId(): string
     {
         return $this->difficultyId;
     }
 
-    /**
-     * @param array $parameters
-     * @return self
-     */
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);
@@ -49,9 +36,6 @@ class ZoneChange extends SpecialEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 3;

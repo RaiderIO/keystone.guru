@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAffixGroupCountToSeasonsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('seasons', function (Blueprint $table) {
             $table->integer('affix_group_count')->after('presets');
@@ -20,13 +17,11 @@ class AddAffixGroupCountToSeasonsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('seasons', function (Blueprint $table) {
             $table->dropColumn('affix_group_count');
         });
     }
-}
+};

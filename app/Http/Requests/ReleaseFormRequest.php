@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Release;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,20 +11,16 @@ class ReleaseFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return \Auth::user()->hasRole("admin");
+        return Auth::user()->hasRole('admin');
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         /** @var Release $release */
         $release = $this->route()->parameter('release');
@@ -32,9 +29,11 @@ class ReleaseFormRequest extends FormRequest
         if ($release !== null) {
             $rule->ignore($release->id);
         }
+
         $rules = [
             'version' => ['required', $rule],
         ];
+
         return $rules;
     }
 }

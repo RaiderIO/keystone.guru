@@ -14,18 +14,15 @@ use JsonSerializable;
  */
 class AffixGroupResource extends JsonResource
 {
-
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
-            'affixes' => new AffixCollectionResource($this->affixes)
+            'affixes' => new AffixCollectionResource($this->affixes),
         ];
     }
 }

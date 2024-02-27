@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
+use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLogging;
@@ -26,6 +28,8 @@ use App\Service\CombatLog\Logging\MappingVersionCombatFilterLogging;
 use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
+use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use App\Service\Patreon\Logging\PatreonApiServiceLogging;
@@ -38,12 +42,12 @@ use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
 {
-    /**
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
         parent::register();
+
+        // AffixGroup
+        $this->app->bind(AffixGroupEaseTierServiceLoggingInterface::class, AffixGroupEaseTierServiceLogging::class);
 
         // Combat log
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
@@ -60,6 +64,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);
 
         // MDT
+        $this->app->bind(MDTMappingExportServiceLoggingInterface::class, MDTMappingExportServiceLogging::class);
         $this->app->bind(MDTMappingImportServiceLoggingInterface::class, MDTMappingImportServiceLogging::class);
 
         // Patreon
@@ -69,5 +74,4 @@ class LoggingServiceProvider extends ServiceProvider
         // Wow Tools
         $this->app->bind(WowToolsServiceLoggingInterface::class, WowToolsServiceLogging::class);
     }
-
 }

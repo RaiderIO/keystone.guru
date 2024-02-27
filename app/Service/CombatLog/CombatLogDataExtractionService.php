@@ -19,31 +19,12 @@ use App\Service\Season\SeasonServiceInterface;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
-
-    private CombatLogServiceInterface $combatLogService;
-
-    private SeasonServiceInterface $seasonService;
-
-    private CombatLogDataExtractionServiceLoggingInterface $log;
-
-    /**
-     * @param CombatLogServiceInterface                      $combatLogService
-     * @param SeasonServiceInterface                         $seasonService
-     * @param CombatLogDataExtractionServiceLoggingInterface $log
-     */
-    public function __construct(
-        CombatLogServiceInterface                      $combatLogService,
-        SeasonServiceInterface                         $seasonService,
-        CombatLogDataExtractionServiceLoggingInterface $log
-    )
+    public function __construct(private readonly CombatLogServiceInterface $combatLogService, private readonly SeasonServiceInterface $seasonService, private readonly CombatLogDataExtractionServiceLoggingInterface $log)
     {
-        $this->combatLogService = $combatLogService;
-        $this->seasonService    = $seasonService;
-        $this->log              = $log;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function extractData(string $filePath): ExtractedDataResult
     {
@@ -60,8 +41,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
         $result = new ExtractedDataResult();
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
-        use ($targetFilePath, &$result, &$dungeon, &$currentFloor, &$checkedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
+        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use (&$result, &$dungeon, &$currentFloor, &$checkedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
@@ -72,7 +52,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
                 return $parsedEvent;
             }
-
 
             // One way or another, enforce we extract the dungeon from the combat log
             if ($parsedEvent instanceof ChallengeModeStart) {
@@ -92,16 +71,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     $currentKeyAffixGroup = $affixGroups->first();
                 }
 
-                $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
-            }
-
-            else if ($parsedEvent instanceof ZoneChange) {
-                if( $currentKeyLevel !== 1 ) {
+                $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en-US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
+            } else if ($parsedEvent instanceof ZoneChange) {
+                if ($currentKeyLevel !== 1) {
                     $this->log->extractDataSetZoneFailedChallengeModeActive();
                 } else {
                     $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
 
-                    $this->log->extractDataSetZone(__($dungeon->name, [], 'en'));
+                    $this->log->extractDataSetZone(__($dungeon->name, [], 'en-US'));
                 }
             }
 
@@ -155,14 +132,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                         // Calculate the base health based on the current key level + current max hp
                         $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
                                 $currentKeyLevel,
-                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                                optional($currentKeyAffixGroup)->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
+                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
+                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
                             ));
 
                         if ($npc->base_health !== $newBaseHealth) {
                             $npc->update([
-                                'base_health' => $newBaseHealth
+                                'base_health' => $newBaseHealth,
                             ]);
 
                             $result->updatedNpc();

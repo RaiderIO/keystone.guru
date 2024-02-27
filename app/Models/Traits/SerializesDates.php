@@ -15,10 +15,6 @@ trait SerializesDates
 
     /**
      * Prepare a date for array / JSON serialization.
-     *
-     * @param DateTimeInterface $date
-     *
-     * @return string
      */
     protected function serializeDate(DateTimeInterface $date): string
     {
@@ -29,12 +25,7 @@ trait SerializesDates
         return $date->format(self::$SERIALIZED_DATE_TIME_FORMAT);
     }
 
-    /**
-     * @param $value
-     *
-     * @return void
-     */
-    public function setCreatedAtAttribute($value)
+    public function setCreatedAtAttribute($value): void
     {
         if (is_string($value)) {
             $this->attributes['created_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
@@ -43,12 +34,7 @@ trait SerializesDates
         }
     }
 
-    /**
-     * @param $value
-     *
-     * @return void
-     */
-    public function setUpdatedAtAttribute($value)
+    public function setUpdatedAtAttribute($value): void
     {
         if (is_string($value)) {
             $this->attributes['updated_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);

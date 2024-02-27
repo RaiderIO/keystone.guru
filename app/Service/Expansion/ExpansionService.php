@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Expansion;
 
 use App\Models\AffixGroup\AffixGroup;
@@ -14,7 +13,7 @@ use Illuminate\Support\Collection;
 class ExpansionService implements ExpansionServiceInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getExpansionAt(Carbon $carbon, GameServerRegion $gameServerRegion): ?Expansion
     {
@@ -28,24 +27,20 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCurrentExpansion(GameServerRegion $gameServerRegion): Expansion
     {
         return $this->getExpansionAt(Carbon::now(), $gameServerRegion);
     }
 
-    /**
-     * @param GameServerRegion $gameServerRegion
-     * @return Expansion|null
-     */
     public function getNextExpansion(GameServerRegion $gameServerRegion): ?Expansion
     {
         return $this->getExpansionAt(Carbon::now()->addWeeks(4), $gameServerRegion);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getData(Expansion $expansion, GameServerRegion $gameServerRegion): ExpansionData
     {
@@ -53,7 +48,7 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCurrentSeason(Expansion $expansion, GameServerRegion $gameServerRegion): ?Season
     {
@@ -61,7 +56,7 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getNextSeason(Expansion $expansion, GameServerRegion $gameServerRegion): ?Season
     {
@@ -69,7 +64,7 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getActiveDungeons(Expansion $expansion): Collection
     {
@@ -77,7 +72,8 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @throws Exception
      */
     public function getCurrentAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
@@ -86,7 +82,8 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @throws Exception
      */
     public function getNextAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup
@@ -95,7 +92,7 @@ class ExpansionService implements ExpansionServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCurrentSeasonAffixGroups(Expansion $expansion, GameServerRegion $gameServerRegion): Collection
     {

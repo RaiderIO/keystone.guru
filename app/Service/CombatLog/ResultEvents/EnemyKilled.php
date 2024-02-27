@@ -8,9 +8,6 @@ use App\Logic\CombatLog\SpecialEvents\GenericSpecialEvent;
 
 class EnemyKilled extends BaseResultEvent
 {
-    /**
-     * @return Creature
-     */
     public function getGuid(): Creature
     {
         /** @var GenericSpecialEvent|AdvancedCombatLogEvent $baseEvent */
