@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
-use App\User;
+use App\Models\User;
 use InfluxDB\Point;
 
 class UserCount extends Measurement

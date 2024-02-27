@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Team;
 use App\Models\TeamUser;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TeamPolicy

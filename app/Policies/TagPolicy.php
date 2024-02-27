@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
 

@@ -3,7 +3,7 @@
 namespace App\Service\GameVersion;
 
 use App\Models\GameVersion\GameVersion;
-use App\User;
+use App\Models\User;
 
 interface GameVersionServiceInterface
 {

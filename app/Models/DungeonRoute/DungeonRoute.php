@@ -45,7 +45,7 @@ use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Eloquent;
 use Exception;

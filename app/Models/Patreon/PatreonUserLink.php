@@ -2,7 +2,7 @@
 
 namespace App\Models\Patreon;
 
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -2,7 +2,7 @@
 
 namespace Tests\TestCases;
 
-use App\User;
+use App\Models\User;
 
 abstract class AjaxPublicTestCase extends PublicTestCase
 {

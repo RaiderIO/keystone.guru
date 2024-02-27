@@ -10,7 +10,7 @@ use App\Models\LiveSession;
 use App\Models\Team;
 use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
-use App\User;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;

@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\SeederModel;
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;

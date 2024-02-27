@@ -7,7 +7,7 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;

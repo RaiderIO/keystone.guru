@@ -4,7 +4,7 @@ namespace App\Events\OverpulledEnemy;
 
 use App\Events\ContextEvent;
 use App\Models\Enemies\OverpulledEnemy;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class OverpulledEnemyDeletedEvent extends ContextEvent
