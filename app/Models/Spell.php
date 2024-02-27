@@ -9,14 +9,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $category
  * @property string $icon_name
  * @property string $name
  * @property string $dispel_type
- * @property int    $schools_mask
- * @property bool   $aura
- * @property bool   $selectable
+ * @property int $schools_mask
+ * @property bool $aura
+ * @property bool $selectable
  * @property string $icon_url
  *
  * @mixin Eloquent
@@ -49,12 +49,12 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public const ALL_SCHOOLS = [
         'Physical' => self::SCHOOL_PHYSICAL,
-        'Holy'     => self::SCHOOL_HOLY,
-        'Fire'     => self::SCHOOL_FIRE,
-        'Nature'   => self::SCHOOL_NATURE,
-        'Frost'    => self::SCHOOL_FROST,
-        'Shadow'   => self::SCHOOL_SHADOW,
-        'Arcane'   => self::SCHOOL_ARCANE,
+        'Holy' => self::SCHOOL_HOLY,
+        'Fire' => self::SCHOOL_FIRE,
+        'Nature' => self::SCHOOL_NATURE,
+        'Frost' => self::SCHOOL_FROST,
+        'Shadow' => self::SCHOOL_SHADOW,
+        'Arcane' => self::SCHOOL_ARCANE,
     ];
 
     public const DISPEL_TYPE_MAGIC = 'Magic';

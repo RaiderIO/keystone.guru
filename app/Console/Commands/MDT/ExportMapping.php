@@ -41,11 +41,11 @@ class ExportMapping extends Command
      */
     public function handle(MDTMappingExportServiceInterface $mappingExportService): int
     {
-        $expansion    = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
+        $expansion = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
         $targetFolder = $this->argument('targetFolder');
 
         foreach ($expansion->dungeons as $dungeon) {
-            if (!$dungeon->enemies()->exists()) {
+            if (! $dungeon->enemies()->exists()) {
                 $this->comment(sprintf('Skipping %s, no enemies found', __($dungeon->name)));
 
                 continue;
@@ -60,7 +60,7 @@ class ExportMapping extends Command
 
             $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->currentMappingVersion);
 
-            if (!Conversion::hasMDTDungeonName($dungeon->key)) {
+            if (! Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
             } else {
                 $fileName = sprintf('%s/%s.lua', $targetFolder, Conversion::getMDTDungeonName($dungeon->key));

@@ -73,7 +73,7 @@ class AjaxTagController extends Controller
         $this->authorize('create-tag', [$tagCategory, $model]);
 
         //
-        if (!$model->hasTag($tagCategory->id, $tagName)) {
+        if (! $model->hasTag($tagCategory->id, $tagName)) {
             // Get the first tag that has the same name, under the same user, with the same category
             /** @var Tag $similarTag */
             $similarTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->where('tag_category_id', $tagCategory->id)->first();
@@ -81,11 +81,11 @@ class AjaxTagController extends Controller
             // Save the tag we're trying to add
             $tag = new Tag();
             // Technically we can fetch the user_id by going through the model but that's just too much work and slow
-            $tag->user_id         = Auth::id();
+            $tag->user_id = Auth::id();
             $tag->tag_category_id = $tagCategory->id;
-            $tag->model_id        = $model->id;
-            $tag->model_class     = $tagCategory->model_class;
-            $tag->name            = $tagName;
+            $tag->model_id = $model->id;
+            $tag->model_class = $tagCategory->model_class;
+            $tag->name = $tagName;
             // Will be null if no similar tag is found which is fine
             $tag->color = $similarTag?->color;
 

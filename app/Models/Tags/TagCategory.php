@@ -7,7 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $name
  * @property string $model_class
  *
@@ -25,7 +25,7 @@ class TagCategory extends Model
 
     public const ALL = [
         self::DUNGEON_ROUTE_PERSONAL => 1,
-        self::DUNGEON_ROUTE_TEAM     => 2,
+        self::DUNGEON_ROUTE_TEAM => 2,
     ];
 
     protected $fillable = ['id', 'name', 'model_class'];

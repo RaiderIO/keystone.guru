@@ -16,17 +16,17 @@ class DungeonResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
     {
         return [
-            'id'               => $this->id,
-            'expansion_id'     => $this->expansion_id,
-            'name'             => __($this->name, [], 'en-US'),
-            'slug'             => $this->slug,
-            'key'              => $this->key,
+            'id' => $this->id,
+            'expansion_id' => $this->expansion_id,
+            'name' => __($this->name, [], 'en-US'),
+            'slug' => $this->slug,
+            'key' => $this->key,
             'speedrun_enabled' => $this->speedrun_enabled,
         ];
     }

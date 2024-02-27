@@ -25,7 +25,7 @@ class ExpansionController extends Controller
         }
 
         // Something went wrong with saving
-        if (!$expansion->saveFromRequest($request, 'expansions')) {
+        if (! $expansion->saveFromRequest($request, 'expansions')) {
             abort(500, __('controller.expansion.flash.unable_to_save_expansion'));
         }
 

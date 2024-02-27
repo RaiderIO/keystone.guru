@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return mixed
      *
      * @throws Throwable
@@ -58,13 +58,13 @@ class Handler extends ExceptionHandler
             if ($e instanceof ModelNotFoundException) {
                 return response()->json([
                     'message' => __('exceptions.handler.api_model_not_found', [
-                        'ids'   => implode(', ', $e->getIds()),
+                        'ids' => implode(', ', $e->getIds()),
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
-            } else if ($e instanceof NotFoundHttpException) {
+            } elseif ($e instanceof NotFoundHttpException) {
                 return response()->json(['message' => __('exceptions.handler.api_route_not_found')], StatusCode::NOT_FOUND);
-            } else if (!config('app.debug')) {
+            } elseif (! config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
             }
         }
@@ -75,7 +75,7 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return mixed
      */
     protected function unauthenticated($request, AuthenticationException $exception)

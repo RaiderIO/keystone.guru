@@ -77,13 +77,13 @@ class HealAbsorbed extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->extraGUID      = Guid::createFromGuidString($parameters[0]);
-        $this->extraName      = $parameters[1];
-        $this->extraFlags     = $parameters[2];
+        $this->extraGUID = Guid::createFromGuidString($parameters[0]);
+        $this->extraName = $parameters[1];
+        $this->extraFlags = $parameters[2];
         $this->extraRaidFlags = $parameters[3];
-        $this->extraSpellId   = $parameters[4];
+        $this->extraSpellId = $parameters[4];
         $this->extraSpellName = $parameters[5];
-        $this->extraSchool    = $parameters[6];
+        $this->extraSchool = $parameters[6];
         $this->absorbedAmount = $parameters[7];
 
         if (isset($parameters[8])) {

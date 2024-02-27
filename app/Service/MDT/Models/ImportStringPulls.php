@@ -15,13 +15,13 @@ class ImportStringPulls
     private readonly Collection $killZoneAttributes;
 
     public function __construct(
-        private readonly Collection     $warnings,
-        private readonly Collection     $errors,
-        private readonly Dungeon        $dungeon,
+        private readonly Collection $warnings,
+        private readonly Collection $errors,
+        private readonly Dungeon $dungeon,
         private readonly MappingVersion $mappingVersion,
-        private readonly bool           $isRouteTeeming,
-        private readonly ?int           $seasonalIndex,
-        private readonly array          $mdtPulls)
+        private readonly bool $isRouteTeeming,
+        private readonly ?int $seasonalIndex,
+        private readonly array $mdtPulls)
     {
         $this->killZoneAttributes = collect();
     }

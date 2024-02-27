@@ -23,6 +23,6 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
      */
     public function isReadOnly(): bool
     {
-        return $this->cacheService->has('read_only_mode') && (bool)$this->cacheService->get('read_only_mode') === true;
+        return $this->cacheService->has('read_only_mode') && (bool) $this->cacheService->get('read_only_mode') === true;
     }
 }

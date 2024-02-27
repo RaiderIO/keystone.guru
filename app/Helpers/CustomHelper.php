@@ -20,7 +20,7 @@ function correlationId(): string
  */
 function isAlertDismissed(string $id): bool
 {
-    return isset($_COOKIE['alert-dismiss-' . $id]);
+    return isset($_COOKIE['alert-dismiss-'.$id]);
 }
 
 /**
@@ -32,9 +32,9 @@ function initials(string $name): string
 {
     $explode = explode(' ', $name);
     if (count($explode) > 1) {
-        $explode = array_filter($explode, static fn($element) => !empty($element));
+        $explode = array_filter($explode, static fn ($element) => ! empty($element));
 
-        $result = implode('', array_map(static fn($element) => $element[0], $explode));
+        $result = implode('', array_map(static fn ($element) => $element[0], $explode));
     } else {
         $result = substr($name, 0, 2);
     }
@@ -55,19 +55,20 @@ function isValidBase64(string $string): bool
  */
 function str_getcsv_assoc(string $csv_string, string $delimiter = ',', bool $skip_empty_lines = true, bool $trim_fields = true)
 {
-    $enc   = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
-    $enc   = preg_replace_callback(
+    $enc = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
+    $enc = preg_replace_callback(
         '/"(.*?)"/s',
-        static fn($field) => urlencode(utf8_encode($field[1])),
-        (string)$enc
+        static fn ($field) => urlencode(utf8_encode($field[1])),
+        (string) $enc
     );
-    $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', (string)$enc);
+    $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', (string) $enc);
 
     return array_map(
         static function ($line) use ($delimiter, $trim_fields) {
             $fields = $trim_fields ? array_map('trim', explode($delimiter, $line)) : explode($delimiter, $line);
+
             return array_map(
-                static fn($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
+                static fn ($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
                 $fields
             );
         },

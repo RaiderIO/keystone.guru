@@ -27,7 +27,7 @@ class ExtractData extends BaseCombatLogCommand
     {
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath));
+        return $this->parseCombatLogRecursively($filePath, fn (string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath));
     }
 
     private function extractData(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService, string $filePath): int

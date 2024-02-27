@@ -42,15 +42,15 @@ class AjaxKillZoneController extends Controller
 
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
         // Prevent someone from updating different killzones than they are allowed to
-        if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
+        if ($killZone->dungeonRoute !== null && ! $killZone->dungeonRoute->isSandbox()) {
             $this->authorize('edit', $killZone->dungeonRoute);
         }
 
         $this->authorize('addKillZone', $dungeonroute);
 
-        if (!$killZone->exists) {
+        if (! $killZone->exists) {
             $killZone = KillZone::create($data);
-            $success  = $killZone instanceof KillZone;
+            $success = $killZone instanceof KillZone;
         } else {
             $success = $killZone->update($data);
         }
@@ -61,9 +61,9 @@ class AjaxKillZoneController extends Controller
                 $killZone->killZoneEnemies()->delete();
 
                 // Store them, but only if the enemies are part of the same dungeon as the dungeonroute
-                $validEnemyIds   = [];
+                $validEnemyIds = [];
                 $killZoneEnemies = [];
-                $enemyModels     = $dungeonroute->mappingVersion->enemies()->whereIn('id', $enemyIds)->get();
+                $enemyModels = $dungeonroute->mappingVersion->enemies()->whereIn('id', $enemyIds)->get();
                 foreach ($enemyIds as $enemyId) {
                     /** @var Enemy $enemy */
                     $enemy = $enemyModels->where('id', $enemyId)->first();
@@ -75,10 +75,10 @@ class AjaxKillZoneController extends Controller
                     // Assign kill zone to each passed enemy
                     $killZoneEnemies[] = [
                         'kill_zone_id' => $killZone->id,
-                        'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
-                        'mdt_id'       => $enemy->mdt_id,
+                        'npc_id' => $enemy->mdt_npc_id ?? $enemy->npc_id,
+                        'mdt_id' => $enemy->mdt_id,
                     ];
-                    $validEnemyIds[]   = $enemyId;
+                    $validEnemyIds[] = $enemyId;
                 }
 
                 // Bulk insert
@@ -95,7 +95,7 @@ class AjaxKillZoneController extends Controller
                 foreach ($spellIds as $spellId) {
                     $spellsAttributes[] = [
                         'kill_zone_id' => $killZone->id,
-                        'spell_id'     => $spellId,
+                        'spell_id' => $spellId,
                     ];
                 }
 
@@ -130,11 +130,11 @@ class AjaxKillZoneController extends Controller
             $data = $request->validated();
             // Make sure that if we're unsetting all enemies from the killzone, it's handled differently
             // than mass-updating and not wanting to update the enemies at all
-            if (!isset($data['enemies'])) {
+            if (! isset($data['enemies'])) {
                 $data['enemies'] = [];
             }
 
-            if (!isset($data['spells'])) {
+            if (! isset($data['spells'])) {
                 $data['spells'] = [];
             }
 
@@ -175,24 +175,24 @@ class AjaxKillZoneController extends Controller
 
         // Save enemy data at once and not one by one - it's slow
         $killZoneEnemies = [];
-        $enemies         = $dungeonRoute->mappingVersion->enemies->keyBy('id');
-        $validEnemyIds   = $enemies->pluck('id')->toArray();
+        $enemies = $dungeonRoute->mappingVersion->enemies->keyBy('id');
+        $validEnemyIds = $enemies->pluck('id')->toArray();
 
         // Insert new enemies based on what was sent
         foreach ($validated['killzones'] ?? [] as $killZoneData) {
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item) => in_array($item, $validEnemyIds));
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn ($item) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
                         /** @var Enemy $enemy */
-                        $enemy             = $enemies->get($killZoneDataEnemyId);
+                        $enemy = $enemies->get($killZoneDataEnemyId);
                         $killZoneEnemies[] = [
                             'kill_zone_id' => $killZoneData['id'],
-                            'npc_id'       => $enemy->npc_id,
-                            'mdt_id'       => $enemy->mdt_id,
+                            'npc_id' => $enemy->npc_id,
+                            'mdt_id' => $enemy->mdt_id,
                         ];
                     }
                 }
@@ -226,7 +226,7 @@ class AjaxKillZoneController extends Controller
     {
         $dungeonRoute = $killZone->dungeonRoute;
 
-        if (!$dungeonRoute->isSandbox()) {
+        if (! $dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonRoute);
         }
@@ -268,7 +268,7 @@ class AjaxKillZoneController extends Controller
 
         if ($validated['confirm'] === 'yes') {
             try {
-                $killZones       = $dungeonRoute->killZones;
+                $killZones = $dungeonRoute->killZones;
                 $pridefulEnemies = $dungeonRoute->pridefulEnemies;
 
                 $dungeonRoute->killZones()->delete();

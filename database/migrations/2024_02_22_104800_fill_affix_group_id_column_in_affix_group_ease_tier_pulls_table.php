@@ -5,7 +5,8 @@ use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -23,7 +24,7 @@ return new class extends Migration {
         $affixGroupEaseTierService = app()->make(AffixGroupEaseTierServiceInterface::class);
 
         foreach ($rows as $row) {
-            $row = (array)$row;
+            $row = (array) $row;
 
             $affixGroup = $affixGroupEaseTierService->getAffixGroupByString($row['current_affixes']);
             if ($affixGroup === null) {
@@ -34,7 +35,7 @@ return new class extends Migration {
                 UPDATE affix_group_ease_tier_pulls SET affix_group_id = :affixGroupId WHERE id = :id
             ', [
                     'affixGroupId' => $affixGroup->id,
-                    'id'           => $row['id'],
+                    'id' => $row['id'],
                 ]);
             }
         }

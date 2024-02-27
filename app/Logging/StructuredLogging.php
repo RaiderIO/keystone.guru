@@ -28,13 +28,13 @@ class StructuredLogging implements StructuredLoggingInterface
     }
 
     /**
-     * @param array $context
+     * @param  array  $context
      */
     public function addContext(string $key, ...$context): void
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
         $this->groupedContexts[$key] = array_merge(...$context);
-        $this->cachedContext         = array_merge(...$this->groupedContexts);
+        $this->cachedContext = array_merge(...$this->groupedContexts);
     }
 
     public function removeContext(string $key): void
@@ -78,7 +78,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
         $this->log(Logger::INFO, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
 
-        if (!isset($this->groupedContexts[$targetKey])) {
+        if (! isset($this->groupedContexts[$targetKey])) {
             $this->log(
                 Logger::ERROR,
                 sprintf("%s: Unable to end a structured log that wasn't started!", __METHOD__),
@@ -128,7 +128,7 @@ class StructuredLogging implements StructuredLoggingInterface
     {
         $levelName = Logger::getLevelName($level);
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
-        $fixedLength  = 7;
+        $fixedLength = 7;
         $startPadding = str_repeat(' ', $fixedLength - strlen($levelName));
 
         $messageWithContextCounts = trim(sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0]));

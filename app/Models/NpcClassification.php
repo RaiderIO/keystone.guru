@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int              $id
- * @property string           $name
- * @property string           $key
- * @property string           $color
+ * @property int $id
+ * @property string $name
+ * @property string $key
+ * @property string $color
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
@@ -35,11 +35,11 @@ class NpcClassification extends CacheModel
     public const NPC_CLASSIFICATION_RARE = 'rare';
 
     public const ALL = [
-        self::NPC_CLASSIFICATION_NORMAL     => 1,
-        self::NPC_CLASSIFICATION_ELITE      => 2,
-        self::NPC_CLASSIFICATION_BOSS       => 3,
+        self::NPC_CLASSIFICATION_NORMAL => 1,
+        self::NPC_CLASSIFICATION_ELITE => 2,
+        self::NPC_CLASSIFICATION_BOSS => 3,
         self::NPC_CLASSIFICATION_FINAL_BOSS => 4,
-        self::NPC_CLASSIFICATION_RARE       => 5,
+        self::NPC_CLASSIFICATION_RARE => 5,
     ];
 
     /**

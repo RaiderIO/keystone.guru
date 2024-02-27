@@ -101,6 +101,7 @@ class CombatLogService implements CombatLogServiceInterface
                     $parsedEvent->getKeystoneLevel()
                 )));
             }
+
             return $parsedEvent;
         });
 
@@ -121,6 +122,7 @@ class CombatLogService implements CombatLogServiceInterface
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
             }
+
             return $parsedEvent;
         });
 
@@ -131,12 +133,12 @@ class CombatLogService implements CombatLogServiceInterface
      * @throws Exception
      */
     public function getResultEventsForChallengeMode(
-        string        $combatLogFilePath,
+        string $combatLogFilePath,
         ?DungeonRoute &$dungeonRoute = null
     ): Collection {
         try {
             $this->log->getResultEventsStart($combatLogFilePath);
-            $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
+            $dungeonRouteFilter = (new DungeonRouteFilter($this->seasonService));
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             $this->parseCombatLogStreaming($combatLogFilePath,
@@ -185,7 +187,7 @@ class CombatLogService implements CombatLogServiceInterface
      */
     public function extractCombatLog(string $filePath): ?string
     {
-        if (!Str::endsWith($filePath, '.zip')) {
+        if (! Str::endsWith($filePath, '.zip')) {
             return null;
         }
 
@@ -199,7 +201,7 @@ class CombatLogService implements CombatLogServiceInterface
             }
 
             $storageDestinationPath = '/tmp';
-            if (!File::exists($storageDestinationPath)) {
+            if (! File::exists($storageDestinationPath)) {
                 File::makeDirectory($storageDestinationPath, 0755, true);
             }
 
@@ -258,11 +260,11 @@ class CombatLogService implements CombatLogServiceInterface
         $targetFilePath = $extractedFilePath ?? $filePath;
 
         $handle = fopen($targetFilePath, 'r');
-        if (!$handle) {
+        if (! $handle) {
             throw new InvalidArgumentException(sprintf('Unable to read file %s', $targetFilePath));
         }
 
-        $lineNr   = 0;
+        $lineNr = 0;
         $rawEvent = '';
         try {
             $this->log->parseCombatLogParseEventsStart();
@@ -295,7 +297,7 @@ class CombatLogService implements CombatLogServiceInterface
         }
 
         foreach ($rawEvents as $rawEvent) {
-            fwrite($fileHandle, (string)$rawEvent);
+            fwrite($fileHandle, (string) $rawEvent);
         }
 
         return true;

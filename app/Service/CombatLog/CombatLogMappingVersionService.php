@@ -45,7 +45,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 $this->log->createMappingVersionFromChallengeModeNoChallengeModesFound();
 
                 return null;
-            } else if ($challengeModeCount > 1) {
+            } elseif ($challengeModeCount > 1) {
                 $this->log->createMappingVersionFromChallengeModeMultipleChallengeModesFound();
 
                 return null;
@@ -57,6 +57,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 if ($parsedEvent instanceof ChallengeModeStart) {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
                 }
+
                 return $dungeon;
             });
         } finally {
@@ -76,6 +77,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 if ($parsedEvent instanceof ZoneChange) {
                     $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
                 }
+
                 return $dungeon;
             }, $mappingVersion);
         } finally {
@@ -86,22 +88,22 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     }
 
     private function createMappingVersionFromCombatLog(
-        string          $filePath,
-        callable        $extractDungeonCallable,
+        string $filePath,
+        callable $extractDungeonCallable,
         ?MappingVersion $mappingVersion = null
     ): ?MappingVersion {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
         $hasExistingMappingVersion = $mappingVersion !== null;
 
-        $now            = Carbon::now();
+        $now = Carbon::now();
         $mappingVersion ??= MappingVersion::create([
-            'dungeon_id'            => -1,
-            'version'               => 1,
+            'dungeon_id' => -1,
+            'version' => 1,
             'enemy_forces_required' => 0,
-            'timer_max_seconds'     => 0,
-            'updated_at'            => $now,
-            'created_at'            => $now,
+            'timer_max_seconds' => 0,
+            'updated_at' => $now,
+            'created_at' => $now,
         ]);
 
         /** @var Dungeon|null $dungeon */
@@ -115,7 +117,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
-            $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
+            $parsedEvent = $combatLogEntry->parseEvent([], $combatLogVersion);
 
             if ($combatLogEntry->getParsedTimestamp() === null) {
                 $this->log->createMappingVersionFromCombatLogTimestampNotSet();
@@ -166,7 +168,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
                 $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
-            } else if ($currentFloor === null) {
+            } elseif ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
                 return $parsedEvent;
@@ -176,7 +178,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
 
                 if ($guid instanceof Creature) {
-                    if (!$npcs->has($guid->getId())) {
+                    if (! $npcs->has($guid->getId())) {
                         $this->log->createMappingVersionFromCombatLogUnableToFindNpc($currentFloor->id, $guid->getId());
 
                         return $parsedEvent;
@@ -199,11 +201,11 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     );
 
                     Enemy::create(array_merge([
-                        'floor_id'           => $currentFloor->id,
+                        'floor_id' => $currentFloor->id,
                         'mapping_version_id' => $mappingVersion->id,
-                        'npc_id'             => $guid->getId(),
-                        'required'           => 0,
-                        'skippable'          => 0,
+                        'npc_id' => $guid->getId(),
+                        'required' => 0,
+                        'skippable' => 0,
                     ], $latLng->toArray()));
 
                     $this->log->createMappingVersionFromCombatLogNewEnemy($currentFloor->id, $guid->getId());

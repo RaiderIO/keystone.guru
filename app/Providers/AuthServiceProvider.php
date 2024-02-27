@@ -28,14 +28,14 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Dungeon::class      => DungeonRouteDiscoverDungeonPolicy::class,
-        Expansion::class    => DungeonRouteDiscoverExpansionPolicy::class,
-        Season::class       => DungeonRouteDiscoverSeasonPolicy::class,
+        Dungeon::class => DungeonRouteDiscoverDungeonPolicy::class,
+        Expansion::class => DungeonRouteDiscoverExpansionPolicy::class,
+        Season::class => DungeonRouteDiscoverSeasonPolicy::class,
         DungeonRoute::class => DungeonRoutePolicy::class,
-        LiveSession::class  => LiveSessionPolicy::class,
-        Tag::class          => TagPolicy::class,
-        TagCategory::class  => TagCategoryPolicy::class,
-        Team::class         => TeamPolicy::class,
+        LiveSession::class => LiveSessionPolicy::class,
+        Tag::class => TagPolicy::class,
+        TagCategory::class => TagCategoryPolicy::class,
+        Team::class => TeamPolicy::class,
     ];
 
     /**

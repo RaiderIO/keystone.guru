@@ -13,12 +13,12 @@ class OnlyAjax
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->ajax()) {
+        if (! $request->ajax()) {
             return response('Forbidden', 403);
         }
 

@@ -19,19 +19,19 @@ class WowToolsService implements WowToolsServiceInterface
             $ch = curl_init();
 
             curl_setopt_array($ch, [
-                CURLOPT_URL            => sprintf('https://wow.tools/db/creature_api.php?id=%d', $npcId),
+                CURLOPT_URL => sprintf('https://wow.tools/db/creature_api.php?id=%d', $npcId),
                 CURLOPT_RETURNTRANSFER => 1,
             ]);
 
-            $requestResult = (array)json_decode(curl_exec($ch), true);
+            $requestResult = (array) json_decode(curl_exec($ch), true);
 
             if (isset($requestResult['error'])) {
                 $this->log->getDisplayIdRequestError($requestResult['error']);
             } else {
-                if (!isset($requestResult['CreatureDisplayInfoID[0]'])) {
+                if (! isset($requestResult['CreatureDisplayInfoID[0]'])) {
                     $this->log->getDisplayIdRequestResultUnableFindCreateDisplayInfoID();
                 } else {
-                    $result = (int)$requestResult['CreatureDisplayInfoID[0]'];
+                    $result = (int) $requestResult['CreatureDisplayInfoID[0]'];
                     $this->log->getDisplayIdRequestResult($result);
                 }
             }

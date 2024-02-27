@@ -16,12 +16,12 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int      $id
- * @property int      $mapping_version_id
- * @property int      $floor_id
+ * @property int $id
+ * @property int $mapping_version_id
+ * @property int $floor_id
  * @property int|null $speed
- * @property string   $vertices_json
- * @property Floor    $floor
+ * @property string $vertices_json
+ * @property Floor $floor
  *
  * @mixin Eloquent
  */

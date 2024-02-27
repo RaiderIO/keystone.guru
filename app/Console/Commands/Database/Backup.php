@@ -30,7 +30,7 @@ class Backup extends Command
     {
         // Backup MySql database if the environment asks for it!
         $backupDir = config('keystoneguru.db_backup_dir');
-        if (!empty($backupDir)) {
+        if (! empty($backupDir)) {
             $this->info('Backing up MySQL database...');
 
             $this->shell([

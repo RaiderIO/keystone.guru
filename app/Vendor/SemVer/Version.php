@@ -36,7 +36,7 @@ class Version extends \PHLAK\SemVer\Version
      *
      * Examples: 'v1', 'v1.2', 'v1-beta.4', 'v1.3+007'
      *
-     * @param string $version Version string
+     * @param  string  $version  Version string
      * @return self This Version object
      *
      * @throws InvalidVersionException
@@ -45,18 +45,18 @@ class Version extends \PHLAK\SemVer\Version
     {
         $semverRegex = '/^v?(?<major>\d+)(?:\.(?<minor>\d+)(?:\.(?<patch>\d+))?)?(?:-(?<pre_release>[0-9A-Za-z-.]+))?(?:\+(?<build>[0-9A-Za-z-.]+)?)?$/';
 
-        if (!preg_match($semverRegex, $version, $matches)) {
+        if (! preg_match($semverRegex, $version, $matches)) {
             throw new InvalidVersionException('Invalid semantic version string provided');
         }
 
         $version = sprintf('%s.%s.%s', $matches['major'], $matches['minor'] ?? 0, $matches['patch'] ?? 0);
 
-        if (!empty($matches['pre_release'])) {
-            $version .= '-' . $matches['pre_release'];
+        if (! empty($matches['pre_release'])) {
+            $version .= '-'.$matches['pre_release'];
         }
 
-        if (!empty($matches['build'])) {
-            $version .= '+' . $matches['build'];
+        if (! empty($matches['build'])) {
+            $version .= '+'.$matches['build'];
         }
 
         return new self($version);

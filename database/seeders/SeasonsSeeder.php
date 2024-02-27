@@ -27,86 +27,86 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
 
         $seasonAttributes = [
             [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
-                'seasonal_affix_id'       => 6,
-                'index'                   => 1,
-                'start'                   => '2018-09-04 00:00:00',
-                'presets'                 => 3,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_BFA),
+                'seasonal_affix_id' => 6,
+                'index' => 1,
+                'start' => '2018-09-04 00:00:00',
+                'presets' => 3,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 0,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
-                'seasonal_affix_id'       => 16,
-                'index'                   => 2,
-                'start'                   => '2019-01-23 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_BFA),
+                'seasonal_affix_id' => 16,
+                'index' => 2,
+                'start' => '2019-01-23 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 4,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
-                'seasonal_affix_id'       => 17,
-                'index'                   => 3,
-                'start'                   => '2019-07-10 00:00:00',
-                'presets'                 => 3,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_BFA),
+                'seasonal_affix_id' => 17,
+                'index' => 3,
+                'start' => '2019-07-10 00:00:00',
+                'presets' => 3,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 8,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
-                'seasonal_affix_id'       => 18,
-                'index'                   => 4,
-                'start'                   => '2020-01-21 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_BFA),
+                'seasonal_affix_id' => 18,
+                'index' => 4,
+                'start' => '2020-01-21 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 0,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
-                'seasonal_affix_id'       => 22,
-                'index'                   => 1,
-                'start'                   => '2020-12-08 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
+                'seasonal_affix_id' => 22,
+                'index' => 1,
+                'start' => '2020-12-08 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 11,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
-                'seasonal_affix_id'       => 23,
-                'index'                   => 2,
-                'start'                   => '2021-07-06 00:00:00',
-                'presets'                 => 2,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
+                'seasonal_affix_id' => 23,
+                'index' => 2,
+                'start' => '2021-07-06 00:00:00',
+                'presets' => 2,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 4,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_LEGION),
-                'seasonal_affix_id'       => 25,
-                'index'                   => 1,
-                'start'                   => '2021-12-28 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_LEGION),
+                'seasonal_affix_id' => 25,
+                'index' => 1,
+                'start' => '2021-12-28 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 0,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_LEGION)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_LEGION)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
-                'seasonal_affix_id'       => 26,
-                'index'                   => 3,
-                'start'                   => '2022-03-01 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
+                'seasonal_affix_id' => 26,
+                'index' => 3,
+                'start' => '2022-03-01 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 2,
-                'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
+                'dungeons' => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
-                'seasonal_affix_id'       => 26,
-                'index'                   => 4,
-                'start'                   => '2022-08-02 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 12,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
+                'seasonal_affix_id' => 26,
+                'index' => 4,
+                'start' => '2022-08-02 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 12,
                 'start_affix_group_index' => 0,
-                'dungeons'                => Dungeon::select('dungeons.*')
+                'dungeons' => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('key', [
                         Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
@@ -120,14 +120,14 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                     ])->orderBy('expansions.released_at')
                     ->get(),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
-                'seasonal_affix_id'       => 26,
-                'index'                   => 1,
-                'start'                   => '2022-12-12 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 10,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id' => 26,
+                'index' => 1,
+                'start' => '2022-12-12 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 10,
                 'start_affix_group_index' => 3,
-                'dungeons'                => Dungeon::select('dungeons.*')
+                'dungeons' => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('key', [
                         Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
@@ -141,14 +141,14 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                     ])->orderBy('expansions.released_at')
                     ->get(),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
-                'seasonal_affix_id'       => null,
-                'index'                   => 2,
-                'start'                   => '2023-05-08 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 10,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id' => null,
+                'index' => 2,
+                'start' => '2023-05-08 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 10,
                 'start_affix_group_index' => 4,
-                'dungeons'                => Dungeon::select('dungeons.*')
+                'dungeons' => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [
                         Dungeon::DUNGEON_HALLS_OF_INFUSION,
@@ -162,14 +162,14 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                     ])->orderBy('expansions.released_at')
                     ->get(),
             ], [
-                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
-                'seasonal_affix_id'       => null,
-                'index'                   => 3,
-                'start'                   => '2023-11-13 00:00:00',
-                'presets'                 => 0,
-                'affix_group_count'       => 10,
+                'expansion_id' => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id' => null,
+                'index' => 3,
+                'start' => '2023-11-13 00:00:00',
+                'presets' => 0,
+                'affix_group_count' => 10,
                 'start_affix_group_index' => 1,
-                'dungeons'                => Dungeon::select('dungeons.*')
+                'dungeons' => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [
                         Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
@@ -186,7 +186,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
         ];
 
         $seasonDungeonAttributes = [];
-        $seasonId                = 1;
+        $seasonId = 1;
         foreach ($seasonAttributes as &$season) {
             /** @var Dungeon[] $dungeons */
             $dungeons = $season['dungeons'];
@@ -194,7 +194,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
 
             foreach ($dungeons as $dungeon) {
                 $seasonDungeonAttributes[] = [
-                    'season_id'  => $seasonId,
+                    'season_id' => $seasonId,
                     'dungeon_id' => $dungeon->id,
                 ];
             }

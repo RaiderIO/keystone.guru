@@ -31,7 +31,7 @@ class SeasonService implements SeasonServiceInterface
     public function __construct(
         private ExpansionService $expansionService
     ) {
-        $this->seasonCache      = collect();
+        $this->seasonCache = collect();
         $this->firstSeasonCache = null;
     }
 
@@ -52,7 +52,7 @@ class SeasonService implements SeasonServiceInterface
                 ->get();
         }
 
-        return $this->seasonCache->when($expansion !== null, static fn(Collection $seasonCache) => $seasonCache->where('expansion_id', $expansion->id));
+        return $this->seasonCache->when($expansion !== null, static fn (Collection $seasonCache) => $seasonCache->where('expansion_id', $expansion->id));
     }
 
     public function getFirstSeason(): Season
@@ -102,12 +102,12 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @param Expansion|null $expansion The expansion you want the current season for - or null to get it for the current expansion.
+     * @param  Expansion|null  $expansion  The expansion you want the current season for - or null to get it for the current expansion.
      * @return Season|null The season that's currently active, or null if none is active at this time.
      */
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        $region    ??= GameServerRegion::getUserOrDefaultRegion();
+        $region ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         return $this->getSeasonAt(Carbon::now(), $region, $expansion);
@@ -115,7 +115,7 @@ class SeasonService implements SeasonServiceInterface
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        $region    ??= GameServerRegion::getUserOrDefaultRegion();
+        $region ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         return $expansion->nextSeason($region);
@@ -130,7 +130,7 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int
     {
-        $season      = $this->getSeasonAt($date, $region, $expansion);
+        $season = $this->getSeasonAt($date, $region, $expansion);
         $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {
@@ -171,7 +171,7 @@ class SeasonService implements SeasonServiceInterface
         $firstSeasonStart = $currentSeason->start();
 
         // Ensure that we cannot go beyond the start of the first season - there's nothing before that
-        $beginDate           = Carbon::now()->addWeeks($iterationOffset * $affixesToDisplay)->maximum($firstSeasonStart);
+        $beginDate = Carbon::now()->addWeeks($iterationOffset * $affixesToDisplay)->maximum($firstSeasonStart);
         $weeksSinceBeginning = $currentSeason->getWeeksSinceStartAt($beginDate);
 
         /** @var CacheServiceInterface $cacheService */
@@ -184,16 +184,16 @@ class SeasonService implements SeasonServiceInterface
         // Since seasons may start/end at any time during the iteration of affix groups, we need to start at the
         // beginning and add affixes. Once we've simulated everything in the past up until and including the current
         // iteration, we can take off 12 affix groups and return those as those are the affixes we should display!
-        $affixGroups          = new Collection();
-        $simulatedTime        = $firstSeasonStart->copy();
+        $affixGroups = new Collection();
+        $simulatedTime = $firstSeasonStart->copy();
         $totalWeeksToSimulate = $weeksSinceBeginning + 1;
-        for ($i = 0; $i < $totalWeeksToSimulate; ++$i) {
+        for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
             if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
                 // If we should switch to the next season...
                 if ($simulatedTime->gte($nextSeason->start())) {
                     // Move to the next season
                     $currentSeason = $nextSeason;
-                    $nextSeason    = $seasons->shift();
+                    $nextSeason = $seasons->shift();
                 }
             }
 

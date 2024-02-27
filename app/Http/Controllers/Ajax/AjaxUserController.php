@@ -27,7 +27,7 @@ class AjaxUserController
             /** @var $user User */
             $user->makeVisible(['id', 'name', 'email', 'created_at', 'patreonUserLink', 'roles_string', 'routes']);
             $user->roles_string = $user->roles->pluck(['display_name'])->join(', ');
-            $user->routes       = $user->dungeonRoutes()->count();
+            $user->routes = $user->dungeonRoutes()->count();
             $user->unsetRelation('roles')->unsetRelation('dungeonroutes');
         }
 

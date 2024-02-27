@@ -24,7 +24,7 @@ class DungeonRouteResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
@@ -37,19 +37,19 @@ class DungeonRouteResource extends JsonResource
         $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];
 
         return [
-            'dungeon_id'            => $this->dungeon_id,
-            'public_key'            => $this->public_key,
-            'title'                 => $this->title,
-            'pulls'                 => $this->killZones->count(),
-            'enemy_forces'          => $this->enemy_forces,
+            'dungeon_id' => $this->dungeon_id,
+            'public_key' => $this->public_key,
+            'title' => $this->title,
+            'pulls' => $this->killZones->count(),
+            'enemy_forces' => $this->enemy_forces,
             'enemy_forces_required' => $this->dungeon->currentMappingVersion->enemy_forces_required,
-            'expires_at'            => $this->expires_at,
-            'author'                => new UserResource($this->author),
-            'affix_groups'          => new AffixGroupCollectionResource($this->affixes),
-            'links'                 => [
-                'view'       => route('dungeonroute.view', $dungeonRouteUrlParams),
-                'edit'       => route('dungeonroute.edit', $dungeonRouteUrlParams),
-                'embed'      => route('dungeonroute.embed', $dungeonRouteUrlParams),
+            'expires_at' => $this->expires_at,
+            'author' => new UserResource($this->author),
+            'affix_groups' => new AffixGroupCollectionResource($this->affixes),
+            'links' => [
+                'view' => route('dungeonroute.view', $dungeonRouteUrlParams),
+                'edit' => route('dungeonroute.edit', $dungeonRouteUrlParams),
+                'embed' => route('dungeonroute.embed', $dungeonRouteUrlParams),
                 'thumbnails' => $thumbnailUrls,
             ],
         ];

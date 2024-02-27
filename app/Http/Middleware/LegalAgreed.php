@@ -11,12 +11,12 @@ class LegalAgreed
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && !Auth::user()->legal_agreed) {
+        if (Auth::check() && ! Auth::user()->legal_agreed) {
             return response('You must agree to the terms for service to proceed.', 403);
         }
 

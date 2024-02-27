@@ -45,7 +45,7 @@ class Missed extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->missType  = $parameters[0];
+        $this->missType = $parameters[0];
         $this->isOffHand = $parameters[1] !== 'nil';
         // May be set for absorbs, blocks
         if (isset($parameters[2])) {

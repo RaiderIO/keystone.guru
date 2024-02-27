@@ -43,7 +43,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             $beforeModel = $model === null ? null : clone $model;
 
             if ($model === null) {
-                $model   = $modelClass::create($validated);
+                $model = $modelClass::create($validated);
                 $success = $model instanceof $modelClass;
             } else {
                 $success = $model->update($validated);

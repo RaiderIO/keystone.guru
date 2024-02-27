@@ -13,8 +13,8 @@ class ImportStringDetails implements Arrayable
     private ?string $faction = null;
 
     /**
-     * @param ImportWarning|Collection $warnings
-     * @param Collection|string[]      $affixes
+     * @param  ImportWarning|Collection  $warnings
+     * @param  Collection|string[]  $affixes
      */
     public function __construct(private readonly Collection $warnings, private readonly Collection $errors, private readonly Dungeon $dungeon, private readonly Collection $affixes, private readonly bool $hasThisWeeksAffixGroup, private readonly int $pulls, private readonly int $paths, private readonly int $lines, private readonly int $notes, private readonly int $enemyForces, private readonly int $enemyForcesMax)
     {
@@ -91,17 +91,17 @@ class ImportStringDetails implements Arrayable
     public function toArray(): array
     {
         return [
-            'dungeon'                    => __($this->dungeon->name),
-            'affixes'                    => $this->affixes,
+            'dungeon' => __($this->dungeon->name),
+            'affixes' => $this->affixes,
             'has_this_weeks_affix_group' => $this->hasThisWeeksAffixGroup,
-            'pulls'                      => $this->pulls,
-            'paths'                      => $this->paths,
-            'lines'                      => $this->lines,
-            'notes'                      => $this->notes,
-            'enemy_forces'               => $this->enemyForces,
-            'enemy_forces_max'           => $this->enemyForcesMax,
-            'warnings'                   => $this->warnings,
-            'errors'                     => $this->errors,
+            'pulls' => $this->pulls,
+            'paths' => $this->paths,
+            'lines' => $this->lines,
+            'notes' => $this->notes,
+            'enemy_forces' => $this->enemyForces,
+            'enemy_forces_max' => $this->enemyForcesMax,
+            'warnings' => $this->warnings,
+            'errors' => $this->errors,
         ];
     }
 }

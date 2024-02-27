@@ -50,12 +50,12 @@ class MapChange extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->uiMapID   = $parameters[0];
+        $this->uiMapID = $parameters[0];
         $this->uiMapName = $parameters[1];
-        $this->xMax      = $parameters[4] * -1;
-        $this->xMin      = $parameters[5] * -1;
-        $this->yMax      = $parameters[2];
-        $this->yMin      = $parameters[3];
+        $this->xMax = $parameters[4] * -1;
+        $this->xMin = $parameters[5] * -1;
+        $this->yMax = $parameters[2];
+        $this->yMin = $parameters[3];
 
         return $this;
     }
