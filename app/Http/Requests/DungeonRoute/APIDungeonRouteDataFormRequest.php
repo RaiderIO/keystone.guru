@@ -21,7 +21,7 @@ class APIDungeonRouteDataFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'public_keys'   => 'array',
+            'public_keys' => 'array',
             'public_keys.*' => Rule::exists('dungeon_routes', 'public_key'),
         ];
     }

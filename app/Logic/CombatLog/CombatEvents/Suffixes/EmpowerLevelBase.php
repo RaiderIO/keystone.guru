@@ -17,7 +17,7 @@ abstract class EmpowerLevelBase extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->powerLevel = (int)$parameters[0];
+        $this->powerLevel = (int) $parameters[0];
 
         return $this;
     }

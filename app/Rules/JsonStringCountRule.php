@@ -11,17 +11,11 @@ class JsonStringCountRule implements ValidationRule
     {
     }
 
-    /**
-     * @param string  $attribute
-     * @param mixed   $value
-     * @param Closure $fail
-     * @return void
-     */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $decoded = json_decode((string)$value, true);
+        $decoded = json_decode((string) $value, true);
 
-        if (!is_array($decoded) || count($decoded) < $this->count) {
+        if (! is_array($decoded) || count($decoded) < $this->count) {
             $fail(__('rules.json_string_count_rule.message', ['count' => $this->count]));
         }
     }

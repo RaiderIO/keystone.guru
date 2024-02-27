@@ -1,23 +1,23 @@
 <?php
 
 return [
-    'commit'  => [
-        'added'    => [
+    'commit' => [
+        'added' => [
             'added' => 'Добавлен',
         ],
         'modified' => [
             'modified' => 'Изменено',
         ],
-        'removed'  => [
+        'removed' => [
             'removed' => 'Удалено',
         ],
     ],
     'release' => [
         'discord_footer' => [
-            'home'        => 'Главная',
-            'changelog'   => 'Список изменений',
-            'affixes'     => 'Аффиксы',
-            'patreon'     => 'Patreon',
+            'home' => 'Главная',
+            'changelog' => 'Список изменений',
+            'affixes' => 'Аффиксы',
+            'patreon' => 'Patreon',
             'get_started' => 'Начать',
         ],
     ],

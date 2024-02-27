@@ -17,14 +17,14 @@ class MappingVersionFactory extends Factory
         $dungeon = Dungeon::with('currentMappingVersion')->inRandomOrder()->first();
 
         return [
-            'dungeon_id'                      => $dungeon->id,
-            'version'                         => $dungeon->currentMappingVersion->version + 1,
-            'enemy_forces_required'           => 350,
-            'enemy_forces_required_teeming'   => null,
-            'enemy_forces_shrouded'           => 9,
+            'dungeon_id' => $dungeon->id,
+            'version' => $dungeon->currentMappingVersion->version + 1,
+            'enemy_forces_required' => 350,
+            'enemy_forces_required_teeming' => null,
+            'enemy_forces_shrouded' => 9,
             'enemy_forces_shrouded_zul_gamux' => 27,
-            'timer_max_seconds'               => 1800,
-            'mdt_mapping_hash'                => null,
+            'timer_max_seconds' => 1800,
+            'mdt_mapping_hash' => null,
         ];
     }
 }

@@ -24,7 +24,7 @@ abstract class ContextModelEvent extends ContextEvent
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
-            'model'       => $this->model,
+            'model' => $this->model,
             'model_class' => $this->model::class,
         ]);
     }

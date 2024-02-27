@@ -8,8 +8,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Models\User;
+use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -69,10 +69,10 @@ class ProfileController extends Controller
         // Allow username change once!
         if ($user->isOAuth()) {
             // When the user may change the username
-            if ($request->has('name') && !$user->changed_username) {
+            if ($request->has('name') && ! $user->changed_username) {
                 // Only when the user's name has actually changed
                 if ($user->name !== $request->get('name')) {
-                    $user->name             = $request->get('name');
+                    $user->name = $request->get('name');
                     $user->changed_username = true;
                 }
             }
@@ -81,11 +81,11 @@ class ProfileController extends Controller
             $user->email = $request->get('email');
         }
 
-        $user->theme                 = $request->get('theme');
-        $user->echo_color            = $request->get('echo_color', randomHexColor());
-        $user->echo_anonymous        = $request->get('echo_anonymous', false);
+        $user->theme = $request->get('theme');
+        $user->echo_color = $request->get('echo_color', randomHexColor());
+        $user->echo_anonymous = $request->get('echo_anonymous', false);
         $user->game_server_region_id = $request->get('game_server_region_id');
-        $user->timezone              = $request->get('timezone');
+        $user->timezone = $request->get('timezone');
 
         // Check if these things already exist or not, if so notify the user that they couldn't be saved
         $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->count() > 0;
@@ -99,7 +99,7 @@ class ProfileController extends Controller
         }
 
         // Only when no duplicates are found!
-        if (!$emailExists && !$nameExists) {
+        if (! $emailExists && ! $nameExists) {
             if ($user->save()) {
 
                 // Handle changing of avatar if the user did so
@@ -126,7 +126,7 @@ class ProfileController extends Controller
                             $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
                             /** @var DungeonRoute $context */
                             $context = DungeonRoute::where('public_key', $routeKey)->first();
-                        } else if (str_contains($name, 'live-session')) {
+                        } elseif (str_contains($name, 'live-session')) {
                             $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
                             /** @var LiveSession $context */
                             $context = LiveSession::where('public_key', $routeKey)->first();
@@ -163,7 +163,7 @@ class ProfileController extends Controller
     {
         $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
 
-        if (!$user->save()) {
+        if (! $user->save()) {
             abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
         } else {
             Session::flash('status', __('controller.profile.flash.privacy_settings_updated'));
@@ -177,8 +177,8 @@ class ProfileController extends Controller
      */
     public function changepassword(Request $request): \Illuminate\View\View
     {
-        $currentPw          = $request->get('current_password');
-        $newPassword        = $request->get('new_password');
+        $currentPw = $request->get('current_password');
+        $newPassword = $request->get('new_password');
         $newPasswordConfirm = $request->get('new_password-confirm');
 
         $user = Auth::getUser();
@@ -219,7 +219,7 @@ class ProfileController extends Controller
 
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
 
-        if (!Tag::where('name', $request->get('tag_name_new'))
+        if (! Tag::where('name', $request->get('tag_name_new'))
             ->where('user_id', Auth::id())
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {

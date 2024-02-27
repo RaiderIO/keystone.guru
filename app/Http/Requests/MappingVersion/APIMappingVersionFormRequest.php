@@ -20,11 +20,11 @@ class APIMappingVersionFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'enemy_forces_required'           => 'int',
-            'enemy_forces_required_teeming'   => 'int|nullable',
-            'enemy_forces_shrouded'           => 'int|nullable',
+            'enemy_forces_required' => 'int',
+            'enemy_forces_required_teeming' => 'int|nullable',
+            'enemy_forces_shrouded' => 'int|nullable',
             'enemy_forces_shrouded_zul_gamux' => 'int|nullable',
-            'timer_max_seconds'               => 'int',
+            'timer_max_seconds' => 'int',
         ];
     }
 }

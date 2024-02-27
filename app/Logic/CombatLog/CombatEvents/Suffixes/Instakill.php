@@ -18,7 +18,7 @@ class Instakill extends Suffix
         parent::setParameters($parameters);
 
         if (isset($parameters[0])) {
-            $this->unconsciousOnDeath = (bool)$parameters[0];
+            $this->unconsciousOnDeath = (bool) $parameters[0];
         }
 
         return $this;

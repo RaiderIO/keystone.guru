@@ -11,10 +11,10 @@ class MachineStats extends Measurement
      */
     public function getPoints(): array
     {
-        $cpuLoadAvg     = sys_getloadavg();
-        $memStats       = $this->getMemStats();
-        $totalDiskSpace = (int)disk_total_space('/');
-        $usedDiskSpace  = (int)($totalDiskSpace - disk_free_space('/'));
+        $cpuLoadAvg = sys_getloadavg();
+        $memStats = $this->getMemStats();
+        $totalDiskSpace = (int) disk_total_space('/');
+        $usedDiskSpace = (int) ($totalDiskSpace - disk_free_space('/'));
 
         $tags = array_merge($this->getTags(), ['server' => 'maisie']);
 
@@ -34,8 +34,8 @@ class MachineStats extends Measurement
                 null,
                 $tags,
                 [
-                    'total'        => $memStats['MemTotal'],
-                    'used'         => $memStats['MemTotal'] - $memStats['MemAvailable'],
+                    'total' => $memStats['MemTotal'],
+                    'used' => $memStats['MemTotal'] - $memStats['MemAvailable'],
                     'used_percent' => round((($memStats['MemTotal'] - $memStats['MemAvailable']) / $memStats['MemTotal']) * 100, 2),
                 ],
                 time()
@@ -46,8 +46,8 @@ class MachineStats extends Measurement
                 null,
                 $tags,
                 [
-                    'total'        => $totalDiskSpace,
-                    'used'         => $totalDiskSpace,
+                    'total' => $totalDiskSpace,
+                    'used' => $totalDiskSpace,
                     'used_percent' => round(($usedDiskSpace / $totalDiskSpace) * 100, 2),
                 ],
                 time()
@@ -61,18 +61,18 @@ class MachineStats extends Measurement
      */
     public function getMemStats(): array
     {
-        $fh          = fopen('/proc/meminfo', 'r');
-        $out         = [];
+        $fh = fopen('/proc/meminfo', 'r');
+        $out = [];
         $multipliers = ['kb' => 1024, 'mb' => 1024 * 1024, 'gb' => 1024 * 1024 * 1024, 'tb' => 1024 * 1024 * 1024 * 1024];
 
         while ($line = fgets($fh)) {
             [$key, $val] = explode(':', $line, 2);
-            $val   = trim($val);
+            $val = trim($val);
             $chunk = explode(' ', $val, 2);
-            $val   = intval($chunk[0]);
+            $val = intval($chunk[0]);
             if (count($chunk) > 1) {
                 $suffix = strtolower($chunk[1]);
-                $val    *= $multipliers[$suffix] ?? 1;
+                $val *= $multipliers[$suffix] ?? 1;
             }
 
             $out[$key] = $val;

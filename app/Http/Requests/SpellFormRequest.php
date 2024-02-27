@@ -23,13 +23,13 @@ class SpellFormRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'id'          => 'required',
-            'name'        => 'required|string',
-            'icon_name'   => 'required|string',
+            'id' => 'required',
+            'name' => 'required|string',
+            'icon_name' => 'required|string',
             'dispel_type' => Rule::in(Spell::ALL_DISPEL_TYPES),
-            'schools'     => 'array',
-            'schools.*'   => Rule::in(Spell::ALL_SCHOOLS),
-            'aura'        => 'boolean',
+            'schools' => 'array',
+            'schools.*' => Rule::in(Spell::ALL_SCHOOLS),
+            'aura' => 'boolean',
         ];
 
         return $rules;

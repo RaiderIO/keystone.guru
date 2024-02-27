@@ -43,7 +43,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             // Insert - not create. Skip all the boot static things - those will mess this up
             $mappingVersionId = MappingVersion::insertGetId([
                 'dungeon_id' => $dungeon->id,
-                'version'    => 1,
+                'version' => 1,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);

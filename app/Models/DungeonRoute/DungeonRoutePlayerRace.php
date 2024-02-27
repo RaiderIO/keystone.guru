@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                 $id
- * @property int                                 $dungeon_route_id
- * @property int                                 $character_race_id
- * @property int                                 $index
- * @property DungeonRoute                        $dungeonRoute
- * @property CharacterRace                       $characterRace
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $character_race_id
+ * @property int $index
+ * @property DungeonRoute $dungeonRoute
+ * @property CharacterRace $characterRace
  * @property Collection|DungeonRoutePlayerRace[] $races
  *
  * @mixin Eloquent

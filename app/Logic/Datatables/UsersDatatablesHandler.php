@@ -18,11 +18,11 @@ class UsersDatatablesHandler extends DatatablesHandler
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('SQL_CALC_FOUND_ROWS *')->getValue($this->builder->getGrammar()));
 
-        $havings        = $query->havings;
+        $havings = $query->havings;
         $query->havings = null;
 
         $query->orders = null;
-        $countResults  = $query->get();
+        $countResults = $query->get();
         // Restore
         $query->havings = $havings;
 

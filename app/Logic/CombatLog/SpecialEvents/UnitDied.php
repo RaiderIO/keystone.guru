@@ -22,7 +22,7 @@ class UnitDied extends GenericSpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->unconsciousOnDeath = (bool)$parameters[8];
+        $this->unconsciousOnDeath = (bool) $parameters[8];
 
         return $this;
     }

@@ -54,7 +54,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
             $dungeonRoute = null;
             $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
-            if (!($dungeonRoute instanceof DungeonRoute)) {
+            if (! ($dungeonRoute instanceof DungeonRoute)) {
                 throw new Exception('Unable to generate dungeon route from combat log!');
             }
 
@@ -114,7 +114,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param  Collection|BaseResultEvent[]  $resultEvents
      */
     private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
@@ -122,11 +122,11 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             $this->log->saveEnemyPositionFromResultEventsStart();
             // Save each enemy
             $enemyPositionAttributes = [];
-            $currentFloor            = null;
+            $currentFloor = null;
 
-            $now                = Carbon::now()->toDateTimeString();
+            $now = Carbon::now()->toDateTimeString();
             $challengeModeStart = null;
-            $challengeModeEnd   = null;
+            $challengeModeEnd = null;
 
             foreach ($resultEvents as $resultEvent) {
                 // Track the starts and ends. Don't do anything just yet with this
@@ -150,7 +150,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 }
 
                 // Only looking for points of engagement
-                if (!($resultEvent instanceof EnemyEngagedResultEvent) || $currentFloor === null) {
+                if (! ($resultEvent instanceof EnemyEngagedResultEvent) || $currentFloor === null) {
                     continue;
                 }
 
@@ -164,22 +164,22 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
                 $enemyPositionAttributes[] = array_merge([
                     'challenge_mode_run_id' => null,
-                    'floor_id'              => $currentFloor->id,
-                    'npc_id'                => $resultEvent->getGuid()->getId(),
-                    'guid'                  => $resultEvent->getGuid()->getGuid(),
-                    'created_at'            => $now,
+                    'floor_id' => $currentFloor->id,
+                    'npc_id' => $resultEvent->getGuid()->getId(),
+                    'guid' => $resultEvent->getGuid()->getGuid(),
+                    'created_at' => $now,
                 ], $latLng->toArray());
             }
 
             // Insert a run
             /** @var ChallengeModeRun $challengeModeRun */
             $challengeModeRun = ChallengeModeRun::create([
-                'dungeon_id'       => $dungeonRoute->dungeon_id,
+                'dungeon_id' => $dungeonRoute->dungeon_id,
                 'dungeon_route_id' => $dungeonRoute->id,
-                'level'            => $challengeModeStart->getChallengeModeStartEvent()->getKeystoneLevel(),
-                'success'          => $challengeModeEnd->getChallengeModeEndEvent()->getSuccess(),
-                'total_time_ms'    => $challengeModeEnd->getChallengeModeEndEvent()->getTotalTimeMS(),
-                'created_at'       => $now,
+                'level' => $challengeModeStart->getChallengeModeStartEvent()->getKeystoneLevel(),
+                'success' => $challengeModeEnd->getChallengeModeEndEvent()->getSuccess(),
+                'total_time_ms' => $challengeModeEnd->getChallengeModeEndEvent()->getTotalTimeMS(),
+                'created_at' => $now,
             ]);
 
             // Couple the run to the attributes we generated before
@@ -200,25 +200,25 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param  Collection|BaseResultEvent[]  $resultEvents
      */
     private function generateMapIconsFromEvents(
         MappingVersion $mappingVersion,
-        Collection     $resultEvents,
-        ?DungeonRoute  $dungeonRoute = null
+        Collection $resultEvents,
+        ?DungeonRoute $dungeonRoute = null
     ): void {
-        $currentFloor      = null;
+        $currentFloor = null;
         $mapIconAttributes = collect();
         foreach ($resultEvents as $resultEvent) {
             if ($resultEvent instanceof MapChangeResultEvent) {
                 $currentFloor = $resultEvent->getFloor();
 
                 continue;
-            } else if ($currentFloor === null) {
+            } elseif ($currentFloor === null) {
                 continue;
-            } else if ($resultEvent instanceof ChallengeModeEndResultEvent) {
+            } elseif ($resultEvent instanceof ChallengeModeEndResultEvent) {
                 break;
-            } else if (!($resultEvent->getBaseEvent() instanceof AdvancedCombatLogEvent)) {
+            } elseif (! ($resultEvent->getBaseEvent() instanceof AdvancedCombatLogEvent)) {
                 // Non-advanced combat logs don't have the info we need
                 continue;
             }
@@ -234,9 +234,9 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 )
             );
 
-            $comment    = '';
+            $comment = '';
             $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
-            $destGuid   = $combatLogEvent->getGenericData()->getDestGuid();
+            $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
             if ($sourceGuid instanceof Creature && $sourceGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
                 $comment = sprintf(
                     '%s: source (%s): %s -> %s @ %s,%s',
@@ -247,7 +247,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                     $combatLogEvent->getAdvancedData()->getPositionX(),
                     $combatLogEvent->getAdvancedData()->getPositionY(),
                 );
-            } else if ($destGuid instanceof Creature) {
+            } elseif ($destGuid instanceof Creature) {
                 $comment = sprintf(
                     '%s: dest (%s): %s -> %s @ %s,%s',
                     $combatLogEvent->getTimestamp()->toDateTimeString('millisecond'),
@@ -261,12 +261,12 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
             $mapIconAttributes->push(array_merge([
                 'mapping_version_id' => $mappingVersion->id,
-                'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => $dungeonRoute?->id ?? null,
-                'team_id'            => null,
-                'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
-                'comment'            => $comment,
-                'permanent_tooltip'  => 0,
+                'floor_id' => $currentFloor->id,
+                'dungeon_route_id' => $dungeonRoute?->id ?? null,
+                'team_id' => null,
+                'map_icon_type_id' => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
+                'comment' => $comment,
+                'permanent_tooltip' => 0,
             ], $latLng->toArray()));
         }
 

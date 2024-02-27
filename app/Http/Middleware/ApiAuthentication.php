@@ -19,7 +19,7 @@ class ApiAuthentication
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$this->userService->loginAsUserFromAuthenticationHeader($request)) {
+        if (! $this->userService->loginAsUserFromAuthenticationHeader($request)) {
             return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 

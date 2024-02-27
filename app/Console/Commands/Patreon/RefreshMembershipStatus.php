@@ -38,8 +38,8 @@ class RefreshMembershipStatus extends Command
     public function handle(PatreonApiService $patreonApiService, PatreonServiceInterface $patreonService): int
     {
         $campaignBenefits = $patreonService->loadCampaignBenefits($patreonApiService);
-        $campaignTiers    = $patreonService->loadCampaignTiers($patreonApiService);
-        $members          = $patreonService->loadCampaignMembers($patreonApiService);
+        $campaignTiers = $patreonService->loadCampaignTiers($patreonApiService);
+        $members = $patreonService->loadCampaignMembers($patreonApiService);
 
         if ($campaignBenefits === null ||
             $campaignTiers === null ||

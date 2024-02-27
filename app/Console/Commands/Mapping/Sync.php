@@ -31,7 +31,7 @@ class Sync extends Command
     public function handle(MappingService $mappingService): int
     {
         Log::channel('scheduler')->debug('>> Synchronizing mapping');
-        $force = (bool)$this->option('force');
+        $force = (bool) $this->option('force');
 
         if ($mappingService->shouldSynchronizeMapping() || $force) {
             if ($this->call('mapping:save') === 0 &&

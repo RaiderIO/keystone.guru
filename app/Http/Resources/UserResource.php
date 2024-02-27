@@ -22,9 +22,9 @@ class UserResource extends JsonResource
     {
         return [
             'public_key' => $this->public_key,
-            'name'       => $this->name,
-            'links'      => [
-                'view'   => route('profile.view', ['user' => $this]),
+            'name' => $this->name,
+            'links' => [
+                'view' => route('profile.view', ['user' => $this]),
                 'avatar' => $this->iconfile?->getURL(),
             ],
         ];

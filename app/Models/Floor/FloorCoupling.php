@@ -7,9 +7,9 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
- * @property int    $id
- * @property int    $floor1_id
- * @property int    $floor2_id
+ * @property int $id
+ * @property int $floor1_id
+ * @property int $floor2_id
  * @property string $direction
  *
  * @mixin Eloquent

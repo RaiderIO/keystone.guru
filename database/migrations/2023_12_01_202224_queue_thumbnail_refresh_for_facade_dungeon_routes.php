@@ -5,7 +5,8 @@ use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 
-return new class extends Migration {
+return new class extends Migration
+{
     private $thumbnailService;
 
     public function __construct()

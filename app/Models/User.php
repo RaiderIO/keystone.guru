@@ -4,16 +4,13 @@ namespace App\Models;
 
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\Tags\Tag;
-use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
-use App\Models\UserReport;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,36 +24,36 @@ use Illuminate\Support\Facades\Auth;
 use Laratrust\Traits\LaratrustUserTrait;
 
 /**
- * @property int                       $id
- * @property string                    $public_key
- * @property int                       $game_server_region_id
- * @property int                       $patreon_user_link_id
- * @property int                       $game_version_id
- * @property string                    $name
- * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string                    $email
- * @property string                    $locale
- * @property string                    $theme
- * @property string                    $echo_color
- * @property bool                      $echo_anonymous
- * @property bool                      $changed_username
- * @property string                    $timezone
- * @property string                    $map_facade_style
- * @property string                    $password
- * @property string                    $raw_patreon_response_data
- * @property bool                      $legal_agreed
- * @property int                       $legal_agreed_ms
- * @property bool                      $analytics_cookie_opt_out
- * @property PatreonUserLink           $patreonUserLink
- * @property GameServerRegion          $gameServerRegion
- * @property GameVersion               $gameVersion
- * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
- * @property bool                      $is_admin
+ * @property int $id
+ * @property string $public_key
+ * @property int $game_server_region_id
+ * @property int $patreon_user_link_id
+ * @property int $game_version_id
+ * @property string $name
+ * @property string $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string $email
+ * @property string $locale
+ * @property string $theme
+ * @property string $echo_color
+ * @property bool $echo_anonymous
+ * @property bool $changed_username
+ * @property string $timezone
+ * @property string $map_facade_style
+ * @property string $password
+ * @property string $raw_patreon_response_data
+ * @property bool $legal_agreed
+ * @property int $legal_agreed_ms
+ * @property bool $analytics_cookie_opt_out
+ * @property PatreonUserLink $patreonUserLink
+ * @property GameServerRegion $gameServerRegion
+ * @property GameVersion $gameVersion
+ * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
+ * @property bool $is_admin
  * @property DungeonRoute[]|Collection $dungeonRoutes
- * @property UserReport[]|Collection   $reports
- * @property Team[]|Collection         $teams
- * @property Role[]|Collection         $roles
- * @property Tag[]|Collection          $tags
+ * @property UserReport[]|Collection $reports
+ * @property Team[]|Collection $teams
+ * @property Role[]|Collection $roles
+ * @property Tag[]|Collection $tags
  *
  * @mixin Eloquent
  */
@@ -195,7 +192,7 @@ class User extends Authenticatable
         $result = $this->hasRole('admin');
 
         // If we weren't an admin, check patreon data
-        if (!$result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
+        if (! $result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
             $result = $this->patreonUserLink->patreonbenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
         }
 
@@ -210,7 +207,7 @@ class User extends Authenticatable
         // Admins have all patreon benefits
         if ($this->hasRole('admin')) {
             $result = collect(array_keys(PatreonBenefit::ALL));
-        } else if (isset($this->patreonUserLink)) {
+        } elseif (isset($this->patreonUserLink)) {
             $result = $this->patreonUserLink->patreonbenefits->pluck(['key']);
         } else {
             $result = collect();
@@ -248,7 +245,7 @@ class User extends Authenticatable
      */
     public function getRemainingRouteCount(): int
     {
-        return (int)max(0,
+        return (int) max(0,
             config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
         );
     }
@@ -276,19 +273,19 @@ class User extends Authenticatable
 
             /** @var $team Team */
             $teams['teams'][$team->name] = [
-                'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
+                'result' => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
                 'new_owner' => $newOwner,
             ];
         }
 
         return array_merge($teams, [
-            'patreon'       => [
+            'patreon' => [
                 'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
                 'delete_count' => ($this->dungeonRoutes()->count() - $this->dungeonRoutes()->isSandbox()->count()),
             ],
-            'reports'       => [
+            'reports' => [
                 'delete_count' => ($this->reports()->where('status', 0)->count()),
             ],
         ]);
@@ -313,7 +310,7 @@ class User extends Authenticatable
                 $team->removeMember($user);
 
                 /** @var $team Team */
-                if (!$team->isUserAdmin($user)) {
+                if (! $team->isUserAdmin($user)) {
                     continue;
                 }
 

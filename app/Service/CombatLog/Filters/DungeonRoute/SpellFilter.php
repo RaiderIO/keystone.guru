@@ -22,11 +22,11 @@ class SpellFilter implements CombatLogParserInterface
 
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+        if (! ($combatLogEvent instanceof AdvancedCombatLogEvent)) {
             return false;
         }
 
-        if (!($combatLogEvent->getPrefix() instanceof SpellPrefix) || !($combatLogEvent->getSuffix() instanceof CastSuccess)) {
+        if (! ($combatLogEvent->getPrefix() instanceof SpellPrefix) || ! ($combatLogEvent->getSuffix() instanceof CastSuccess)) {
             return false;
         }
 

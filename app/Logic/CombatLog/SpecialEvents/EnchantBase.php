@@ -38,8 +38,8 @@ abstract class EnchantBase extends SpecialEvent
         parent::setParameters($parameters);
 
         $this->spellName = $parameters[0];
-        $this->itemId    = (int)$parameters[1];
-        $this->itemName  = $parameters[2];
+        $this->itemId = (int) $parameters[1];
+        $this->itemName = $parameters[2];
 
         return $this;
     }

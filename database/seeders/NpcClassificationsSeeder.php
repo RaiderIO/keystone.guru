@@ -16,29 +16,29 @@ class NpcClassificationsSeeder extends Seeder implements TableSeederInterface
 
         $npcClassificationAttributes = [
             [
-                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
-                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_NORMAL),
-                'key'   => NpcClassification::NPC_CLASSIFICATION_NORMAL,
+                'id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+                'name' => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_NORMAL),
+                'key' => NpcClassification::NPC_CLASSIFICATION_NORMAL,
                 'color' => 'white',
             ], [
-                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
-                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE),
-                'key'   => NpcClassification::NPC_CLASSIFICATION_ELITE,
+                'id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+                'name' => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE),
+                'key' => NpcClassification::NPC_CLASSIFICATION_ELITE,
                 'color' => 'yellow',
             ], [
-                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_BOSS),
-                'key'   => NpcClassification::NPC_CLASSIFICATION_BOSS,
+                'id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                'name' => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_BOSS),
+                'key' => NpcClassification::NPC_CLASSIFICATION_BOSS,
                 'color' => 'red',
             ], [
-                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS),
-                'key'   => NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS,
+                'id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+                'name' => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS),
+                'key' => NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS,
                 'color' => 'red',
             ], [
-                'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
-                'name'  => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_RARE),
-                'key'   => NpcClassification::NPC_CLASSIFICATION_RARE,
+                'id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+                'name' => sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_RARE),
+                'key' => NpcClassification::NPC_CLASSIFICATION_RARE,
                 'color' => 'red',
             ],
         ];

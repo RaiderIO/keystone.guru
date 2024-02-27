@@ -24,6 +24,6 @@ class DungeonRouteCollectionResource extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return ['data' => $this->collection->map(static fn(DungeonRoute $dungeonRoute) => new DungeonRouteResource($dungeonRoute))];
+        return ['data' => $this->collection->map(static fn (DungeonRoute $dungeonRoute) => new DungeonRouteResource($dungeonRoute))];
     }
 }

@@ -9,10 +9,10 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int        $id The ID of this Affix.
- * @property int        $affix_id
- * @property int        $affix_group_id
- * @property Affix      $affix
+ * @property int $id The ID of this Affix.
+ * @property int $affix_id
+ * @property int $affix_group_id
+ * @property Affix $affix
  * @property AffixGroup $affixgroup
  *
  * @mixin Eloquent

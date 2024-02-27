@@ -30,17 +30,17 @@ class Commit extends Command
     public function handle(): int
     {
         $this->shell([
-            sprintf('cd %s; ' .
+            sprintf('cd %s; '.
                 // Commit current changes
-                'git add database/seeders/dungeondata/* && ' .
-                'git commit -m "Automated commit for mapping updates"; ' .
+                'git add database/seeders/dungeondata/* && '.
+                'git commit -m "Automated commit for mapping updates"; '.
                 // Merge development into mapping
-                'git checkout . && ' .
-                'git clean -f && ' .
-                'git checkout development && ' .
-                'git pull && ' .
-                'git checkout mapping && ' .
-                'git merge development && ' .
+                'git checkout . && '.
+                'git clean -f && '.
+                'git checkout development && '.
+                'git pull && '.
+                'git checkout mapping && '.
+                'git merge development && '.
                 // Push all changes
                 'git push', base_path()),
         ]);

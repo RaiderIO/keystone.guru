@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 /**
- * @property int      $id
- * @property int      $user_id
- * @property int      $model_id
- * @property string   $model_class
- * @property string   $session_id
+ * @property int $id
+ * @property int $user_id
+ * @property int $model_id
+ * @property string $model_class
+ * @property string $session_id
  * @property int|null $source
- * @property string   $created_at
- * @property string   $updated_at
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @mixin Eloquent
  */
@@ -59,14 +59,14 @@ class PageView extends Model
         $mostRecentPageView = PageView::getMostRecentPageView($modelId, $modelClass);
 
         // Only if the view may be counted
-        if ($mostRecentPageView === null || !$mostRecentPageView->isRecent()) {
+        if ($mostRecentPageView === null || ! $mostRecentPageView->isRecent()) {
             // Create a new view and save it
             PageView::create([
-                'user_id'     => $userId,
-                'model_id'    => $modelId,
+                'user_id' => $userId,
+                'model_id' => $modelId,
                 'model_class' => $modelClass,
-                'session_id'  => $sessionId,
-                'source'      => $source,
+                'session_id' => $sessionId,
+                'source' => $source,
             ]);
 
             $result = true;

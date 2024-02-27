@@ -21,11 +21,11 @@ class MapContextDungeonRoute extends MapContext
     use DungeonRouteProperties;
 
     public function __construct(
-        CacheServiceInterface       $cacheService,
+        CacheServiceInterface $cacheService,
         CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute,
-        Floor                       $floor,
-        ?string                     $mapFacadeStyle = null
+        DungeonRoute $dungeonRoute,
+        Floor $floor,
+        ?string $mapFacadeStyle = null
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $floor, $dungeonRoute->mappingVersion, $mapFacadeStyle);
     }

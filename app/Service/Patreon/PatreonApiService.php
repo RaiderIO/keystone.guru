@@ -22,17 +22,17 @@ class PatreonApiService implements PatreonApiServiceInterface
 
         try {
             $identityResponse = $this->getApiClient($accessToken)->get_data(
-                sprintf('identity?include=memberships,memberships.currently_entitled_tiers' .
-                    '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified' .
+                sprintf('identity?include=memberships,memberships.currently_entitled_tiers'.
+                    '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified'.
                     '&%s=email,currently_entitled_amount_cents,lifetime_support_cents,last_charge_status,patron_status,last_charge_date,pledge_relationship_start',
                     urlencode('fields[user]'),
                     urlencode('fields[member]')
                 )
             );
 
-            if (!isset($identityResponse['errors'])) {
+            if (! isset($identityResponse['errors'])) {
 
-                if (!isset($identityResponse['included'])) {
+                if (! isset($identityResponse['included'])) {
                     $this->log->getIdentityIncludedNotFound();
                 } else {
                     // Bit ugly but otherwise I'd need the broad 'campaigns.members[email]' permission which I don't need/want
@@ -119,11 +119,11 @@ class PatreonApiService implements PatreonApiServiceInterface
     {
         $resultData = [];
 
-        $next  = $suffix;
+        $next = $suffix;
         $count = 0;
         do {
             $this->log->getAllPagesPageNr($count);
-            $requestResult    = $apiClient->get_data($next);
+            $requestResult = $apiClient->get_data($next);
             $originalResponse = $requestResult;
             // Insane workaround if you get a 4xx error it won't do json_decode
             if (is_string($requestResult)) {
@@ -133,13 +133,13 @@ class PatreonApiService implements PatreonApiServiceInterface
             if ($requestResult === null) {
                 $next = null;
                 $this->log->getAllPagesUnknownResponse($originalResponse);
-            } else if (!isset($requestResult['errors'])) {
+            } elseif (! isset($requestResult['errors'])) {
                 // No errors - continue fetching pages
                 $resultData = array_merge($resultData, $requestResult['data']);
 
                 $next = isset($requestResult['links']['next']) ?
                     // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
-                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string)$requestResult['meta']['pagination']['cursors']['next'])) :
+                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string) $requestResult['meta']['pagination']['cursors']['next'])) :
                     null;
             } else {
                 // Found an error - just stop it now
@@ -151,7 +151,7 @@ class PatreonApiService implements PatreonApiServiceInterface
         } while ($next !== null);
 
         // Assign the data back to the last request and pretend that THAT's all the data there is
-        if (!empty($resultData)) {
+        if (! empty($resultData)) {
             $requestResult['data'] = $resultData;
         }
 
@@ -160,7 +160,7 @@ class PatreonApiService implements PatreonApiServiceInterface
 
     private function getOAuthClient(): OAuth
     {
-        $client_id     = config('keystoneguru.patreon.oauth.client_id');
+        $client_id = config('keystoneguru.patreon.oauth.client_id');
         $client_secret = config('keystoneguru.patreon.oauth.secret');
 
         return new OAuth($client_id, $client_secret);

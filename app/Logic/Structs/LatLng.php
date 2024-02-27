@@ -104,7 +104,7 @@ class LatLng implements Arrayable
     }
 
     /**
-     * @param array{lat: float, lng: float} $latLng
+     * @param  array{lat: float, lng: float}  $latLng
      */
     public static function fromArray(array $latLng, ?Floor $floor = null): LatLng
     {

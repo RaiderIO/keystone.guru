@@ -26,7 +26,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
      */
     public function handle(CombatLogMappingVersionServiceInterface $combatLogMappingVersionService): int
     {
-        $filePath         = $this->argument('filePath');
+        $filePath = $this->argument('filePath');
         $mappingVersionId = $this->option('mappingVersion');
 
         $mappingVersion = null;
@@ -34,17 +34,17 @@ class CreateMappingVersion extends BaseCombatLogCommand
             $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
         }
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath, $mappingVersion));
+        return $this->parseCombatLogRecursively($filePath, fn (string $filePath) => $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath, $mappingVersion));
     }
 
     private function createMappingVersionFromCombatLog(
         CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
-        string                                  $filePath,
-        ?MappingVersion                         $mappingVersion = null): int
+        string $filePath,
+        ?MappingVersion $mappingVersion = null): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        if (!str_contains($filePath, '_events.txt')) {
+        if (! str_contains($filePath, '_events.txt')) {
             $this->comment(sprintf('- Skipping non-events file %s', $filePath));
 
             return 0;
