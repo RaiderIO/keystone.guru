@@ -17,11 +17,11 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
     public function calculateHealth(SimulationCraftRaidEventsOptions $options, Npc $npc): int
     {
         return $npc->calculateHealthForKey(
-            $options->key_level,
-            $options->affix === SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED,
-            $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL,
-            $options->isThunderingAffixActive()
-        ) * ($this->options->hp_percent / 100);
+                $options->key_level,
+                $options->affix === SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED,
+                $options->affix === SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL,
+                $options->isThunderingAffixActive()
+            ) * ($this->options->hp_percent / 100);
     }
 
     /**
@@ -33,9 +33,9 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
 
         if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
             $name = sprintf('BOUNTY1_%s', $name);
-        } elseif ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
+        } else if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
             $name = sprintf('BOUNTY3_%s', $name);
-        } elseif ($this->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+        } else if ($this->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
             $name = sprintf('BOSS_%s', $name);
         }
 

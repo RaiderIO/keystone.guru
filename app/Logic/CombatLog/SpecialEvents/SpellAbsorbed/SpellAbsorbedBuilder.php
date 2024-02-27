@@ -15,10 +15,10 @@ class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
      * @return SpecialEvent|SpellAbsorbedInterface
      */
     public static function create(
-        int $combatLogVersion,
+        int    $combatLogVersion,
         Carbon $timestamp,
         string $eventName,
-        array $parameters,
+        array  $parameters,
         string $rawEvent
     ): SpecialEvent {
         return match ($combatLogVersion) {

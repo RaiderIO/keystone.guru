@@ -31,14 +31,15 @@ class CacheService implements CacheServiceInterface
     /**
      * Remembers a value with a specific key if a condition is met
      *
-     * @param  Closure|mixed  $value
+     * @param Closure|mixed $value
      * @return Closure|mixed|null
+     *
      */
     public function rememberWhen(bool $condition, string $key, $value, ?string $ttl = null): mixed
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
-        } elseif ($value instanceof Closure) {
+        } else if ($value instanceof Closure) {
             $value = $value();
         }
 
@@ -46,14 +47,15 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param  Closure|mixed  $value
+     * @param Closure|mixed $value
+     * @return mixed
      */
     public function remember(string $key, $value, ?string $ttl = null): mixed
     {
         $result = null;
 
         // If we should ignore the cache, of if it's found
-        if (! $this->cacheEnabled || ($result = $this->get($key)) === null) {
+        if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
 
             // Get the result by calling the closure
             if ($value instanceof Closure) {
@@ -92,6 +94,9 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
+     * @param string|null $ttl
+     *
+     * @return bool
      * @throws InvalidArgumentException
      */
     public function set(string $key, $object, ?string $ttl = null): bool

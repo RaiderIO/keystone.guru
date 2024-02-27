@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property int $character_class_id
- * @property int $icon_file_id
- * @property string $key
- * @property string $name
+ * @property int        $id
+ * @property int        $character_class_id
+ * @property int        $icon_file_id
+ * @property string     $key
+ * @property string     $name
  * @property Collection $specializations
  *
  * @mixin Eloquent

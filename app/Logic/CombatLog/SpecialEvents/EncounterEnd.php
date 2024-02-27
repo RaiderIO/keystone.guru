@@ -29,7 +29,7 @@ class EncounterEnd extends EncounterBase
     {
         parent::setParameters($parameters);
 
-        $this->success = $parameters[4];
+        $this->success     = $parameters[4];
         $this->fightTimeMS = $parameters[5];
 
         return $this;

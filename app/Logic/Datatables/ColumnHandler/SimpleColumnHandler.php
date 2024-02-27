@@ -23,7 +23,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
             $searchValue = $columnData['search']['value'] ?? $generalSearch;
-            if (! empty($searchValue)) {
+            if (!empty($searchValue)) {
                 $subBuilder->orWhere($this->getColumnData(), 'LIKE', sprintf('%%%s%%', $searchValue));
             }
         }
@@ -31,7 +31,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         // If we should order
         if ($columnData['orderable'] === 'true') {
             // Order on this column?
-            if (! is_null($order)) {
+            if (!is_null($order)) {
                 // Order either asc or desc, nothing else
                 $subBuilder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }

@@ -50,14 +50,14 @@ class ChallengeModeStart extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->zoneName = $parameters[0];
-        $this->instanceID = $parameters[1];
+        $this->zoneName        = $parameters[0];
+        $this->instanceID      = $parameters[1];
         $this->challengeModeID = $parameters[2];
-        $this->keystoneLevel = $parameters[3];
+        $this->keystoneLevel   = $parameters[3];
 
         $affixIds = array_slice($parameters, 4);
         foreach ($affixIds as $affixId) {
-            $this->affixIDs[] = (int) str_replace(['[', ']'], '', (string) $affixId);
+            $this->affixIDs[] = (int)str_replace(['[', ']'], '', (string)$affixId);
         }
 
         return $this;

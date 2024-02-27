@@ -33,8 +33,8 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         /** @var Dungeon|null $dungeon */
         $dungeon = null;
         /** @var Floor|null $currentFloor */
-        $currentFloor = null;
-        $checkedNpcIds = collect();
+        $currentFloor    = null;
+        $checkedNpcIds   = collect();
         $currentKeyLevel = 1;
         /** @var AffixGroup|null $currentKeyAffixGroup */
         $currentKeyAffixGroup = null;
@@ -45,7 +45,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
-            $parsedEvent = $combatLogEntry->parseEvent([], $combatLogVersion);
+            $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
 
             if ($combatLogEntry->getParsedTimestamp() === null) {
                 $this->log->extractDataTimestampNotSet();
@@ -72,7 +72,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 }
 
                 $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en-US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
-            } elseif ($parsedEvent instanceof ZoneChange) {
+            } else if ($parsedEvent instanceof ZoneChange) {
                 if ($currentKeyLevel !== 1) {
                     $this->log->extractDataSetZoneFailedChallengeModeActive();
                 } else {
@@ -130,12 +130,12 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                         $this->log->extractDataNpcNotFound($guid->getId());
                     } else {
                         // Calculate the base health based on the current key level + current max hp
-                        $newBaseHealth = (int) ($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-                            $currentKeyLevel,
-                            $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                            $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                            $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
-                        ));
+                        $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
+                                $currentKeyLevel,
+                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
+                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
+                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                            ));
 
                         if ($npc->base_health !== $newBaseHealth) {
                             $npc->update([

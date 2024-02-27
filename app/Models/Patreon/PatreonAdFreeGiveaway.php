@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int $id
- * @property int $giver_user_id
- * @property int $receiver_user_id
+ * @property int    $id
+ * @property int    $giver_user_id
+ * @property int    $receiver_user_id
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *

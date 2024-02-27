@@ -24,8 +24,8 @@ trait HasLatLng
 
     public function setLatLng(LatLng $latLng): self
     {
-        $this->lat = $latLng->getLat();
-        $this->lng = $latLng->getLng();
+        $this->lat      = $latLng->getLat();
+        $this->lng      = $latLng->getLng();
         $this->floor_id = $latLng->getFloor()?->id;
 
         return $this;

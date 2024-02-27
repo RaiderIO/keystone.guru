@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $dungeon_route_id
- * @property int $user_id
+ * @property int          $id
+ * @property int          $dungeon_route_id
+ * @property int          $user_id
  * @property DungeonRoute $dungeonRoute
- * @property User $user
+ * @property User         $user
  *
  * @mixin Eloquent
  */

@@ -33,7 +33,7 @@ class DungeonRouteCount extends Measurement
                 $this->getTags(),
                 // Merge the published states with the 'all' and 'temporary' fields
                 array_merge([
-                    'all' => DungeonRoute::count(),
+                    'all'       => DungeonRoute::count(),
                     'temporary' => DungeonRoute::where('author_id', '<=', 0)->count(),
                 ], $publishedStateFields),
                 time()

@@ -15,21 +15,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int|null $mapping_version_id
- * @property int $floor_id
- * @property int|null $dungeon_route_id
- * @property int|null $team_id
- * @property int $map_icon_type_id
- * @property float $lat
- * @property float $lng
- * @property string $comment
- * @property bool $permanent_tooltip
- * @property int $seasonal_index
+ * @property int                 $id
+ * @property int|null            $mapping_version_id
+ * @property int                 $floor_id
+ * @property int|null            $dungeon_route_id
+ * @property int|null            $team_id
+ * @property int                 $map_icon_type_id
+ * @property float               $lat
+ * @property float               $lng
+ * @property string              $comment
+ * @property bool                $permanent_tooltip
+ * @property int                 $seasonal_index
  * @property MappingVersion|null $mappingVersion
- * @property Floor $floor
- * @property DungeonRoute|null $dungeonRoute
- * @property MapIconType $mapicontype
+ * @property Floor               $floor
+ * @property DungeonRoute|null   $dungeonRoute
+ * @property MapIconType         $mapicontype
  *
  * @mixin Eloquent
  */
@@ -71,15 +71,15 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
 
     protected $casts = [
-        'mapping_version_id' => 'integer',
-        'floor_id' => 'integer',
-        'dungeon_route_id' => 'integer',
-        'team_id' => 'integer',
-        'map_icon_type_id' => 'integer',
-        'lat' => 'float',
-        'lng' => 'float',
-        'permanent_tooltip' => 'integer',
-        'seasonal_index' => 'integer',
+        'mapping_version_id'         => 'integer',
+        'floor_id'                   => 'integer',
+        'dungeon_route_id'           => 'integer',
+        'team_id'                    => 'integer',
+        'map_icon_type_id'           => 'integer',
+        'lat'                        => 'float',
+        'lng'                        => 'float',
+        'permanent_tooltip'          => 'integer',
+        'seasonal_index'             => 'integer',
         'linked_awakened_obelisk_id' => 'integer',
     ];
 

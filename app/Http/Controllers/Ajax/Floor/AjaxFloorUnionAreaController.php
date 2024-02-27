@@ -26,8 +26,8 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
      */
     public function store(
         FloorUnionAreaFormRequest $request,
-        MappingVersion $mappingVersion,
-        ?FloorUnionArea $floorUnionArea = null
+        MappingVersion            $mappingVersion,
+        ?FloorUnionArea           $floorUnionArea = null
     ): FloorUnionArea {
         $validated = $request->validated();
 

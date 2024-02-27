@@ -6,7 +6,7 @@ return [
         'Admin',
     ],
 
-    'db_backup_dir' => env('DB_BACKUP_DIR'),
+    'db_backup_dir'      => env('DB_BACKUP_DIR'),
     'mapping_backup_dir' => env('MAPPING_BACKUP_DIR'),
 
     'github_username' => 'Wotuu',
@@ -19,12 +19,12 @@ return [
         /** // https://wowpedia.fandom.com/wiki/Movement */
         'default_movement_speed_yards_second' => 7,
         'mounted_movement_speed_yards_second' => 14,
-        'mount_cast_time_seconds' => 1.5,
+        'mount_cast_time_seconds'             => 1.5,
     ],
 
     'keystone' => [
-        'timer' => [
-            'plustwofactor' => 0.8,
+        'timer'  => [
+            'plustwofactor'   => 0.8,
             'plusthreefactor' => 0.6,
         ],
         'levels' => [
@@ -32,40 +32,40 @@ return [
             'max' => 30,
         ],
 
-        'scaling_factor' => 1.08,
+        'scaling_factor'         => 1.08,
         'scaling_factor_past_10' => 1.10,
     ],
 
     'cache' => [
-        'npcs' => [
+        'npcs'                   => [
             'ttl' => '1 hour',
         ],
-        'dungeonData' => [
+        'dungeonData'            => [
             'ttl' => '1 hour',
         ],
-        'static_data' => [
+        'static_data'            => [
             'ttl' => '1 day',
         ],
-        'mdt' => [
+        'mdt'                    => [
             'ttl' => '1 day',
         ],
         'displayed_affix_groups' => [
             'ttl' => '15 minutes',
         ],
-        'global_view_variables' => [
+        'global_view_variables'  => [
             'ttl' => '1 hour',
         ],
-        'default_region' => [
+        'default_region'         => [
             'ttl' => '1 week',
         ],
     ],
 
-    'echo' => [
-        'url' => env('LARAVEL_ECHO_SERVER_URL'),
-        'port' => env('LARAVEL_ECHO_SERVER_PORT'),
+    'echo'                                       => [
+        'url'    => env('LARAVEL_ECHO_SERVER_URL'),
+        'port'   => env('LARAVEL_ECHO_SERVER_PORT'),
         'client' => [
             'app_id' => env('LARAVEL_ECHO_SERVER_CLIENT_APP_ID'),
-            'key' => env('LARAVEL_ECHO_SERVER_CLIENT_KEY'),
+            'key'    => env('LARAVEL_ECHO_SERVER_CLIENT_KEY'),
         ],
 
         'randomsuffixes' => [
@@ -113,13 +113,13 @@ return [
     ],
 
     /** The minimum size for enemies for floors if none was set */
-    'min_enemy_size_default' => 12,
+    'min_enemy_size_default'                     => 12,
 
     /** The maximum size for enemies for floors if none was set */
-    'max_enemy_size_default' => 26,
+    'max_enemy_size_default'                     => 26,
 
     /** When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up */
-    'enemy_engagement_max_range_default' => 150,
+    'enemy_engagement_max_range_default'         => 150,
 
     /** The range after which we start considering patrols too */
     'enemy_engagement_max_range_patrols_default' => 50,
@@ -128,51 +128,51 @@ return [
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something
      */
-    'mapping_commit_after_change_hours' => 1,
+    'mapping_commit_after_change_hours'          => 1,
 
     /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
-    'party_size' => 5,
+    'party_size'                                 => 5,
 
     /**
      * Limits on the relationships that a DungeonRoute can have to ensure performance.
      */
-    'dungeon_route_limits' => [
+    'dungeon_route_limits'                       => [
         'kill_zones' => 50,
         'brushlines' => 50,
-        'paths' => 50,
-        'map_icons' => 50,
+        'paths'      => 50,
+        'map_icons'  => 50,
     ],
 
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
-    'registered_user_dungeonroute_limit' => 999,
+    'registered_user_dungeonroute_limit'         => 999,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins' => 30,
+    'view_time_threshold_mins'                   => 30,
 
-    'thumbnail' => [
+    'thumbnail'                           => [
         /**
          * A secret key that must be provided to get access to the preview routes (no other auth available)
          */
-        'preview_secret' => env('THUMBNAIL_PREVIEW_SECRET'),
+        'preview_secret'        => env('THUMBNAIL_PREVIEW_SECRET'),
 
         /**
          * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
          */
-        'refresh_min' => 30,
+        'refresh_min'           => 30,
 
         /**
          * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
          */
-        'refresh_anyways_days' => 30,
+        'refresh_anyways_days'  => 30,
 
         /**
          * The amount of hours where a thumbnail refresh must be in the queue for before it is re-queued
@@ -182,7 +182,7 @@ return [
         /**
          * The maximum attempts a thumbnail generation can take before it is failed and not queued again
          */
-        'max_attempts' => 3,
+        'max_attempts'          => 3,
     ],
 
     /**
@@ -194,46 +194,46 @@ return [
     /**
      * Prideful enemy variables
      */
-    'prideful' => [
+    'prideful'                            => [
         'npc_id' => 173729,
-        'count' => 5,
+        'count'  => 5,
     ],
-    'shrouded' => [
-        'npc_id' => 189878,
+    'shrouded'                            => [
+        'npc_id'           => 189878,
         'npc_id_zul_gamux' => 190128,
     ],
 
     /**
      * For the discover section of the site - this controls various variables
      */
-    'discover' => [
+    'discover'                            => [
         /** Limits for how much dungeonroutes to display on certain pages */
-        'limits' => [
-            'overview' => 12,
-            'category' => 24,
+        'limits'   => [
+            'overview'       => 12,
+            'category'       => 24,
             'affix_overview' => 12,
-            'search' => 24,
-            'per_dungeon' => 4,
+            'search'         => 24,
+            'per_dungeon'    => 4,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [
             'count' => 12,
         ],
-        'service' => [
+        'service'  => [
             /** Redis prefix */
-            'cache_prefix' => 'discover',
+            'cache_prefix'                                => 'discover',
 
             /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
-            'popular_days' => 7,
+            'popular_days'                                => 7,
 
             /** The amount of days a route can be old before the popularity counter will drop off to 0 */
-            'popular_falloff_days' => 30,
+            'popular_falloff_days'                        => 30,
 
             /** The penalty that is applied when the mapping version is out of date. This is multiplicative. */
             'popular_out_of_date_mapping_version_penalty' => 0.25,
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
-            'popular' => [
+            'popular'                                     => [
                 'ttl' => '2 hours',
             ],
 
@@ -304,7 +304,7 @@ return [
 
     'webhook' => [
         'github' => [
-            'url' => env('DISCORD_GITHUB_WEBHOOK'),
+            'url'    => env('DISCORD_GITHUB_WEBHOOK'),
             'secret' => env('GITHUB_WEBHOOK_SECRET'),
         ],
 
@@ -316,13 +316,13 @@ return [
     ],
 
     'patreon' => [
-        'oauth' => [
+        'oauth'             => [
             'client_id' => env('PATREON_CLIENT_ID'),
-            'secret' => env('PATREON_CLIENT_SECRET'),
+            'secret'    => env('PATREON_CLIENT_SECRET'),
             // https://docs.patreon.com/#scopes
-            'scope' => 'identity identity[email] identity.memberships campaigns',
+            'scope'     => 'identity identity[email] identity.memberships campaigns',
         ],
-        'campaign_id' => env('PATREON_CAMPAIGN_ID'),
+        'campaign_id'       => env('PATREON_CAMPAIGN_ID'),
         // The amount of ad-free giveaways that one may have in total
         'ad_free_giveaways' => 4,
     ],
@@ -330,10 +330,10 @@ return [
     'reddit' => [
         'oauth' => [
             'client_id' => env('REDDIT_CLIENT_ID'),
-            'secret' => env('REDDIT_SECRET_KEY'),
+            'secret'    => env('REDDIT_SECRET_KEY'),
         ],
         // Used for creating release posts under the Keystoneguru user
-        'api' => [
+        'api'   => [
             'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
         ],
     ],
@@ -350,15 +350,15 @@ return [
     'api' => [
         'dungeon_route' => [
             'thumbnail' => [
-                'default_viewport_width' => 768,
-                'default_viewport_height' => 512,
-                'default_image_width' => 384,
-                'default_image_height' => 256,
-                'default_zoom_level' => 1,
-                'default_quality' => 90,
+                'default_viewport_width'            => 768,
+                'default_viewport_height'           => 512,
+                'default_image_width'               => 384,
+                'default_image_height'              => 256,
+                'default_zoom_level'                => 1,
+                'default_quality'                   => 90,
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,
-                'expiration_time_seconds' => 86400,
+                'expiration_time_seconds'           => 86400,
             ],
         ],
     ],

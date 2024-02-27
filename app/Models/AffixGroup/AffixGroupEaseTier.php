@@ -8,14 +8,14 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $affix_group_ease_tier_pull_id
- * @property int $affix_group_id
- * @property int $dungeon_id
- * @property string $tier
+ * @property int                    $id
+ * @property int                    $affix_group_ease_tier_pull_id
+ * @property int                    $affix_group_id
+ * @property int                    $dungeon_id
+ * @property string                 $tier
  * @property AffixGroupEaseTierPull $affixGroupEaseTierPull
- * @property AffixGroup $affixGroup
- * @property Dungeon $dungeon
+ * @property AffixGroup             $affixGroup
+ * @property Dungeon                $dungeon
  *
  * @mixin Eloquent
  */

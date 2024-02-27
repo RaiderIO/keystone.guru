@@ -32,12 +32,12 @@ class OutputResultEvents extends BaseCombatLogCommand
     {
         ini_set('memory_limit', '2G');
 
-        $filePath = $this->argument('filePath');
-        $force = (bool) $this->option('force');
-        $dungeonOrRaid = (bool) $this->option('dungeonOrRaid');
+        $filePath      = $this->argument('filePath');
+        $force         = (bool)$this->option('force');
+        $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
-            if (! str_contains($filePath, '.zip')) {
+            if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('Skipping file %s (not a .zip file)', $filePath));
 
                 return 0;
@@ -49,15 +49,15 @@ class OutputResultEvents extends BaseCombatLogCommand
 
     private function outputResultEvents(
         CombatLogServiceInterface $combatLogService,
-        string $filePath,
-        bool $force = false,
-        bool $dungeonOrRaid = false
+        string                    $filePath,
+        bool                      $force = false,
+        bool                      $dungeonOrRaid = false
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
-        if (! $force && file_exists($resultingFile)) {
+        if (!$force && file_exists($resultingFile)) {
             $this->info(sprintf('Skipping %s - events already generated', $filePath));
 
             $result = 1;
@@ -68,7 +68,7 @@ class OutputResultEvents extends BaseCombatLogCommand
                 $resultEvents = $combatLogService->getResultEventsForChallengeMode($filePath);
             }
 
-            $result = file_put_contents($resultingFile, $resultEvents->map(fn (BaseResultEvent $resultEvent) => // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+            $result = file_put_contents($resultingFile, $resultEvents->map(fn(BaseResultEvent $resultEvent) => // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
             trim($resultEvent->getBaseEvent()->getRawEvent()))->implode(PHP_EOL));
 
             if ($result) {

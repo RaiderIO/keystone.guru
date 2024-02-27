@@ -8,8 +8,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property bool $merged
+ * @property int    $id
+ * @property bool   $merged
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *

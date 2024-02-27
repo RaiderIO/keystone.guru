@@ -12,15 +12,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
 /**
- * @property int $id
- * @property int $mapping_version_id
- * @property int $floor_id
- * @property int $polyline_id
- * @property string $teeming
- * @property string $faction
+ * @property int            $id
+ * @property int            $mapping_version_id
+ * @property int            $floor_id
+ * @property int            $polyline_id
+ * @property string         $teeming
+ * @property string         $faction
  * @property MappingVersion $mappingVersion
- * @property Floor $floor
- * @property Polyline $polyline
+ * @property Floor          $floor
+ * @property Polyline       $polyline
  *
  * @mixin Eloquent
  */
@@ -45,8 +45,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 
     protected $casts = [
         'mapping_version_id' => 'integer',
-        'floor_id' => 'integer',
-        'polyline_id' => 'integer',
+        'floor_id'           => 'integer',
+        'polyline_id'        => 'integer',
     ];
 
     public function mappingVersion(): BelongsTo
@@ -75,9 +75,9 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol
     {
         /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
-        $clonedEnemyPatrol = clone $this;
-        $clonedEnemyPatrol->exists = false;
-        $clonedEnemyPatrol->id = null;
+        $clonedEnemyPatrol                     = clone $this;
+        $clonedEnemyPatrol->exists             = false;
+        $clonedEnemyPatrol->id                 = null;
         $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
         $clonedEnemyPatrol->save();
 

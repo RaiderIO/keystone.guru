@@ -15,7 +15,7 @@ class RaidMarkersSeeder extends Seeder implements TableSeederInterface
         $raidMarkerAttributes = [];
         foreach (RaidMarker::ALL as $raidMarkerName => $id) {
             $raidMarkerAttributes[] = [
-                'id' => $id,
+                'id'   => $id,
                 'name' => $raidMarkerName,
             ];
         }

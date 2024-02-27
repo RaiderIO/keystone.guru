@@ -52,11 +52,11 @@ class InviteEvent extends ContextEvent
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
             'invitees' => $this->invitees,
-            'url' => route('dungeonroute.livesession.view', [
-                'dungeon' => $this->context->dungeonroute->dungeon,
-                'title' => Str::slug($this->context->dungeonroute->title),
+            'url'      => route('dungeonroute.livesession.view', [
+                'dungeon'      => $this->context->dungeonroute->dungeon,
+                'title'        => Str::slug($this->context->dungeonroute->title),
                 'dungeonroute' => $this->context->dungeonroute,
-                'livesession' => $this->context,
+                'livesession'  => $this->context,
             ]),
         ]);
     }

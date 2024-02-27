@@ -42,12 +42,12 @@ class MDTNpc implements Arrayable
 
         // Correct clones that don't have a sublevel set
         foreach ($this->clones as $this->index => $clone) {
-            if (! isset($clone['sublevel'])) {
+            if (!isset($clone['sublevel'])) {
                 $this->clones[$this->index]['sublevel'] = 1;
             }
         }
 
-        $this->id = (int) $this->rawMdtNpc['id'];
+        $this->id = (int)$this->rawMdtNpc['id'];
 
         if (isset($this->rawMdtNpc['spells'])) {
             // #1760
@@ -58,23 +58,23 @@ class MDTNpc implements Arrayable
             $this->spells = [];
         }
 
-        $this->scale = (float) $this->rawMdtNpc['scale'];
+        $this->scale         = (float)$this->rawMdtNpc['scale'];
         $this->stealthDetect = isset($this->rawMdtNpc['stealthDetect']) && $this->rawMdtNpc['stealthDetect'];
-        $this->countTeeming = isset($this->rawMdtNpc['teemingCount']) ? (int) $this->rawMdtNpc['teemingCount'] : -1;
-        $this->count = (int) $this->rawMdtNpc['count'];
+        $this->countTeeming  = isset($this->rawMdtNpc['teemingCount']) ? (int)$this->rawMdtNpc['teemingCount'] : -1;
+        $this->count         = (int)$this->rawMdtNpc['count'];
         // May not always be set?
         if (isset($this->rawMdtNpc['name'])) {
             $this->name = $this->rawMdtNpc['name'];
         }
 
-        $this->displayId = (int) $this->rawMdtNpc['displayId'];
+        $this->displayId = (int)$this->rawMdtNpc['displayId'];
         // May not always be set?
         if (isset($this->rawMdtNpc['creatureType'])) {
             $this->creatureType = $this->rawMdtNpc['creatureType'];
         }
 
-        $this->level = (int) $this->rawMdtNpc['level'];
-        $this->health = (int) $this->rawMdtNpc['health'];
+        $this->level            = (int)$this->rawMdtNpc['level'];
+        $this->health           = (int)$this->rawMdtNpc['health'];
         $this->healthPercentage = $this->rawMdtNpc['health_percentage'] ?? null;
 
         if (isset($this->rawMdtNpc['characteristics'])) {
@@ -116,7 +116,7 @@ class MDTNpc implements Arrayable
     public function isValid(): bool
     {
         // Skip emissaries
-        return ! $this->isEmissary();
+        return !$this->isEmissary();
     }
 
     public function getIndex(): int
@@ -202,19 +202,19 @@ class MDTNpc implements Arrayable
     public function toArray(): array
     {
         return [
-            'index' => $this->getIndex(),
-            'clones' => $this->getClones(),
-            'id' => $this->getId(),
-            'spells' => $this->getSpells(),
-            'scale' => $this->getScale(),
-            'stealthDetect' => $this->getStealthDetect(),
-            'countTeeming' => $this->getCountTeeming(),
-            'count' => $this->getCount(),
-            'name' => $this->getName(),
-            'displayId' => $this->getDisplayId(),
-            'creatureType' => $this->getCreatureType(),
-            'level' => $this->getLevel(),
-            'health' => $this->getHealth(),
+            'index'           => $this->getIndex(),
+            'clones'          => $this->getClones(),
+            'id'              => $this->getId(),
+            'spells'          => $this->getSpells(),
+            'scale'           => $this->getScale(),
+            'stealthDetect'   => $this->getStealthDetect(),
+            'countTeeming'    => $this->getCountTeeming(),
+            'count'           => $this->getCount(),
+            'name'            => $this->getName(),
+            'displayId'       => $this->getDisplayId(),
+            'creatureType'    => $this->getCreatureType(),
+            'level'           => $this->getLevel(),
+            'health'          => $this->getHealth(),
             'characteristics' => $this->getCharacteristics(),
         ];
     }
