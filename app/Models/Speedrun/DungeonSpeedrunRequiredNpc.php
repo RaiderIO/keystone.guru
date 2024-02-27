@@ -11,18 +11,18 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int      $id
- * @property int      $floor_id
- * @property int      $npc_id
- * @property int      $npc2_id
- * @property int      $npc3_id
- * @property int      $npc4_id
- * @property int      $npc5_id
- * @property int      $difficulty
- * @property int      $count
- * @property Dungeon  $dungeon
- * @property Floor    $floor
- * @property Npc      $npc
+ * @property int $id
+ * @property int $floor_id
+ * @property int $npc_id
+ * @property int $npc2_id
+ * @property int $npc3_id
+ * @property int $npc4_id
+ * @property int $npc5_id
+ * @property int $difficulty
+ * @property int $count
+ * @property Dungeon $dungeon
+ * @property Floor $floor
+ * @property Npc $npc
  * @property Npc|null $npc2
  * @property Npc|null $npc3
  * @property Npc|null $npc4
@@ -97,7 +97,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
     public function getDisplayText(): string
     {
         $parts = [];
-        $npcs  = [
+        $npcs = [
             $this->npc,
             $this->npc2,
             $this->npc3,

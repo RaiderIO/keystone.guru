@@ -24,11 +24,11 @@ class FloorUnionAreaFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                 => 'required:int',
+            'id' => 'required:int',
             'mapping_version_id' => ['required', Rule::exists(MappingVersion::class, 'id')],
-            'floor_id'           => ['required', Rule::exists(Floor::class, 'id')],
-            'floor_union_id'     => ['nullable', Rule::exists(FloorUnion::class, 'id')],
-            'vertices'           => 'required:array',
+            'floor_id' => ['required', Rule::exists(Floor::class, 'id')],
+            'floor_union_id' => ['nullable', Rule::exists(FloorUnion::class, 'id')],
+            'vertices' => 'required:array',
         ];
     }
 }

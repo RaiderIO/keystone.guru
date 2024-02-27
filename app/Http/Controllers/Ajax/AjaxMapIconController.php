@@ -42,19 +42,19 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      */
     public function store(
         CoordinatesServiceInterface $coordinatesService,
-        MapIconFormRequest          $request,
-        ?MappingVersion             $mappingVersion,
-        ?DungeonRoute               $dungeonRoute,
-        ?MapIcon                    $mapIcon = null): MapIcon
+        MapIconFormRequest $request,
+        ?MappingVersion $mappingVersion,
+        ?DungeonRoute $dungeonRoute,
+        ?MapIcon $mapIcon = null): MapIcon
     {
-        $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute;
-        $validated                     = $request->validated();
+        $dungeonRoute = $mapIcon?->dungeonRoute ?? $dungeonRoute;
+        $validated = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
         $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
         if ($dungeonRoute === null) {
-            if (!$isUserAdmin) {
+            if (! $isUserAdmin) {
                 throw new Exception('Unable to save map icon!');
             }
         } // We're editing a map comment for the user, carry on
@@ -66,12 +66,12 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, static function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $updateAttributes = [];
-            $teamId           = $validated['team_id'];
+            $teamId = $validated['team_id'];
             if ($teamId !== null) {
                 $team = Team::find($teamId);
                 if ($team !== null && $team->isUserCollaborator(Auth::user())) {
                     $updateAttributes = [
-                        'team_id'          => $teamId,
+                        'team_id' => $teamId,
                         'dungeon_route_id' => null,
                     ];
                 }
@@ -86,8 +86,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 );
 
                 $updateAttributes = array_merge($updateAttributes, [
-                    'lat'      => $latLng->getLat(),
-                    'lng'      => $latLng->getLng(),
+                    'lat' => $latLng->getLat(),
+                    'lng' => $latLng->getLng(),
                     'floor_id' => $latLng->getFloor()->id,
                 ]);
 
@@ -120,10 +120,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
-        if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
+        if (! $isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
             return response(null, StatusCode::FORBIDDEN);
         } // We're editing a map icon for the user, carry on
-        else if ($dungeonRoute !== null) {
+        elseif ($dungeonRoute !== null) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             $this->authorize('edit', $dungeonRoute);
         }
@@ -159,9 +159,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      */
     public function adminStore(
         CoordinatesServiceInterface $coordinatesService,
-        MapIconFormRequest          $request,
-        MappingVersion              $mappingVersion,
-        ?MapIcon                    $mapIcon = null): MapIcon
+        MapIconFormRequest $request,
+        MappingVersion $mappingVersion,
+        ?MapIcon $mapIcon = null): MapIcon
     {
         return $this->store($coordinatesService, $request, $mappingVersion, null, $mapIcon);
     }

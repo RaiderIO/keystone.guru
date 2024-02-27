@@ -12,16 +12,16 @@ class UserService implements UserServiceInterface
 
     public function loginAsUserFromAuthenticationHeader(Request $request): bool
     {
-        if (!$request->hasHeader('Authorization')) {
+        if (! $request->hasHeader('Authorization')) {
             return false;
         }
 
         $authentication = $request->header('Authorization');
-        if (!Str::startsWith($authentication, 'Basic')) {
+        if (! Str::startsWith($authentication, 'Basic')) {
             return false;
         }
 
-        $base64     = Str::replace('Basic ', '', $authentication);
+        $base64 = Str::replace('Basic ', '', $authentication);
         $usernamePw = base64_decode($base64);
         if ($usernamePw === false) {
             return false;

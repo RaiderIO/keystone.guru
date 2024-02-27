@@ -21,19 +21,19 @@ use Illuminate\Support\Facades\Auth;
 trait SavesPolylines
 {
     /**
-     * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
+     * @param  array{color: string, color_animated: string, weight: int, vertices_json: string}  $data
      */
     private function savePolyline(
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion              $mappingVersion,
-        Polyline                    $polyline,
-        Model                       $ownerModel,
-        array                       $data,
-        ?Floor                      &$changedFloor
+        MappingVersion $mappingVersion,
+        Polyline $polyline,
+        Model $ownerModel,
+        array $data,
+        ?Floor &$changedFloor
     ): Polyline {
         // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
         if ($mappingVersion->dungeon->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
-            $vertices     = json_decode($data['vertices_json'], true);
+            $vertices = json_decode($data['vertices_json'], true);
             $realVertices = [];
             foreach ($vertices as $vertex) {
                 $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
@@ -43,7 +43,7 @@ trait SavesPolylines
                 );
 
                 $realVertices[] = $latLng->toArray();
-                $changedFloor   = $latLng->getFloor();
+                $changedFloor = $latLng->getFloor();
             }
 
             $data['vertices_json'] = json_encode($realVertices);
@@ -52,12 +52,12 @@ trait SavesPolylines
         return Polyline::updateOrCreate([
             'id' => $polyline->id,
         ], [
-            'model_id'       => $ownerModel->id,
-            'model_class'    => $ownerModel::class,
-            'color'          => $data['color'] ?? '#f00',
+            'model_id' => $ownerModel->id,
+            'model_class' => $ownerModel::class,
+            'color' => $data['color'] ?? '#f00',
             'color_animated' => Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ? $data['color_animated'] : null,
-            'weight'         => (int)$data['weight'] ?? 2,
-            'vertices_json'  => $data['vertices_json'] ?? '{}',
+            'weight' => (int) $data['weight'] ?? 2,
+            'vertices_json' => $data['vertices_json'] ?? '{}',
         ]);
     }
 }

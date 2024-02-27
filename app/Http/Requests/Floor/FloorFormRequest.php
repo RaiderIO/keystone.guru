@@ -21,18 +21,18 @@ class FloorFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'active'                             => ['nullable', 'bool'],
-            'default'                            => ['nullable', 'bool'],
-            'facade'                             => ['nullable', 'bool'],
-            'name'                               => ['required', 'string'],
-            'index'                              => ['required', 'integer'],
-            'mdt_sub_level'                      => ['nullable', 'integer'],
-            'ui_map_id'                          => ['required', 'integer'],
-            'min_enemy_size'                     => ['nullable', 'integer'],
-            'max_enemy_size'                     => ['nullable', 'integer'],
-            'enemy_engagement_max_range'         => ['nullable', 'integer'],
+            'active' => ['nullable', 'bool'],
+            'default' => ['nullable', 'bool'],
+            'facade' => ['nullable', 'bool'],
+            'name' => ['required', 'string'],
+            'index' => ['required', 'integer'],
+            'mdt_sub_level' => ['nullable', 'integer'],
+            'ui_map_id' => ['required', 'integer'],
+            'min_enemy_size' => ['nullable', 'integer'],
+            'max_enemy_size' => ['nullable', 'integer'],
+            'enemy_engagement_max_range' => ['nullable', 'integer'],
             'enemy_engagement_max_range_patrols' => ['nullable', 'integer'],
-            'percentage_display_zoom'            => ['nullable', 'integer'],
+            'percentage_display_zoom' => ['nullable', 'integer'],
         ];
     }
 }

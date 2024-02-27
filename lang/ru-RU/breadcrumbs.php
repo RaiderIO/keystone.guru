@@ -2,10 +2,10 @@
 
 return [
     'home' => [
-        'keystone_guru'    => 'Keystone.guru',
-        'affixes'          => 'Аффиксы',
-        'changelog'        => 'История изменений',
-        'routes'           => 'Маршруты',
+        'keystone_guru' => 'Keystone.guru',
+        'affixes' => 'Аффиксы',
+        'changelog' => 'История изменений',
+        'routes' => 'Маршруты',
         'routes_expansion' => ':expansion маршруты',
 
         'dungeon' => [
@@ -13,66 +13,66 @@ return [
         ],
 
         'dungeonroutes' => [
-            'search'            => 'Поиск',
-            'popular'           => 'Популярные',
+            'search' => 'Поиск',
+            'popular' => 'Популярные',
             'next_week_affixes' => 'Аффиксы следующей недели',
             'this_week_affixes' => 'Текущие Аффиксы',
-            'new'               => 'Новые',
+            'new' => 'Новые',
 
             'routes_season' => '@todo ru-RU: .home.dungeonroutes.routes_season',
-            'season'        => [
-                'popular'           => '@todo ru-RU: .home.dungeonroutes.season.popular',
+            'season' => [
+                'popular' => '@todo ru-RU: .home.dungeonroutes.season.popular',
                 'next_week_affixes' => '@todo ru-RU: .home.dungeonroutes.season.next_week_affixes',
                 'this_week_affixes' => '@todo ru-RU: .home.dungeonroutes.season.this_week_affixes',
-                'new'               => '@todo ru-RU: .home.dungeonroutes.season.new',
+                'new' => '@todo ru-RU: .home.dungeonroutes.season.new',
             ],
 
             'discoverdungeon' => [
-                'popular'           => 'Популярные',
+                'popular' => 'Популярные',
                 'next_week_affixes' => 'Аффиксы следующей недели',
                 'this_week_affixes' => 'Текущие Аффиксы',
-                'new'               => 'Новые',
+                'new' => 'Новые',
             ],
         ],
 
         'my_profile' => 'Мой профиль',
-        'my_routes'  => 'Мои маршруты',
-        'my_tags'    => 'Мои теги',
-        'my_teams'   => 'Моя команда',
-        'overview'   => 'Обзор',
-        'new_team'   => 'Новая команда',
-        'edit_team'  => 'Редактировать команду',
-        'join_team'  => 'Присоединиться к команде',
+        'my_routes' => 'Мои маршруты',
+        'my_tags' => 'Мои теги',
+        'my_teams' => 'Моя команда',
+        'overview' => 'Обзор',
+        'new_team' => 'Новая команда',
+        'edit_team' => 'Редактировать команду',
+        'join_team' => 'Присоединиться к команде',
 
         'admin' => [
-            'admin'        => 'Администратор',
-            'tools'        => [
-                'admin_tools'               => 'Инструменты администратора',
+            'admin' => 'Администратор',
+            'tools' => [
+                'admin_tools' => 'Инструменты администратора',
                 'view_exported_dungeondata' => 'Просмотреть экспортированные данные подземелий',
-                'view_exported_releases'    => 'Посмотреть экспортированные релизы',
-                'select_exception'          => 'Выбрать исключения',
-                'mdt_diff'                  => 'Отличия MDT',
-                'view_mdt_string_contents'  => 'Просмотр содержимого строк MDT',
-                'import_npcs'               => 'Импортировать НПЦ',
+                'view_exported_releases' => 'Посмотреть экспортированные релизы',
+                'select_exception' => 'Выбрать исключения',
+                'mdt_diff' => 'Отличия MDT',
+                'view_mdt_string_contents' => 'Просмотр содержимого строк MDT',
+                'import_npcs' => 'Импортировать НПЦ',
             ],
-            'releases'     => 'Релиз',
-            'new_release'  => 'Новый релиз',
+            'releases' => 'Релиз',
+            'new_release' => 'Новый релиз',
             'edit_release' => 'Редактировать релиз',
 
             'expansions' => [
-                'expansions'     => 'Дополнение',
-                'new_expansion'  => 'Новое дополнение',
+                'expansions' => 'Дополнение',
+                'new_expansion' => 'Новое дополнение',
                 'edit_expansion' => 'Редактировать дополнение',
             ],
 
             'dungeons' => [
-                'dungeons'     => 'Подземелье',
-                'new_dungeon'  => 'Новое подземелье',
+                'dungeons' => 'Подземелье',
+                'new_dungeon' => 'Новое подземелье',
                 'edit_dungeon' => 'редактировать подземелье',
             ],
 
             'floors' => [
-                'new_floor'  => 'Этаж',
+                'new_floor' => 'Этаж',
                 'edit_floor' => 'редактировать этаж',
             ],
 
@@ -82,8 +82,8 @@ return [
             ],
 
             'npcs' => [
-                'npcs'     => 'НПЦ',
-                'new_npc'  => 'Новый НПЦ',
+                'npcs' => 'НПЦ',
+                'new_npc' => 'Новый НПЦ',
                 'edit_npc' => 'Редактировать НПЦ',
             ],
 
@@ -92,8 +92,8 @@ return [
             ],
 
             'spells' => [
-                'spells'     => 'Способность',
-                'new_spell'  => 'Новая способность',
+                'spells' => 'Способность',
+                'new_spell' => 'Новая способность',
                 'edit_spell' => 'Редактировать способность',
             ],
 

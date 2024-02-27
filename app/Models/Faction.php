@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                        $id
- * @property int                        $icon_file_id
- * @property string                     $key
- * @property string                     $name
- * @property string                     $color
+ * @property int $id
+ * @property int $icon_file_id
+ * @property string $key
+ * @property string $name
+ * @property string $color
  * @property Collection|CharacterRace[] $races
- * @property Collection|DungeonRoute[]  $dungeonRoutes
+ * @property Collection|DungeonRoute[] $dungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -43,8 +43,8 @@ class Faction extends CacheModel
 
     public const ALL = [
         self::FACTION_UNSPECIFIED => 1,
-        self::FACTION_HORDE       => 2,
-        self::FACTION_ALLIANCE    => 3,
+        self::FACTION_HORDE => 2,
+        self::FACTION_ALLIANCE => 3,
     ];
 
     public function races(): HasMany

@@ -12,15 +12,15 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                         $id
- * @property int                         $user_id
- * @property string                      $email
+ * @property int $id
+ * @property int $user_id
+ * @property string $email
  * @property string                      scope
- * @property string                      $access_token
- * @property string                      $refresh_token
- * @property string                      $version
- * @property string                      $expires_at
- * @property User                        $user
+ * @property string $access_token
+ * @property string $refresh_token
+ * @property string $version
+ * @property string $expires_at
+ * @property User $user
  * @property Collection|PatreonBenefit[] $patreonbenefits
  *
  * @mixin Eloquent

@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
                     /** @var TableSeederInterface $seederClass */
                     $affectedModelClasses = $seederClass::getAffectedModelClasses();
                     foreach ($affectedModelClasses as $affectedModel) {
-                        $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
+                        $prepareFailed = ! $prepareFailed && ! $this->prepareTempTableForModel($affectedModel);
                     }
 
                     if ($prepareFailed) {
@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
 
                     $applyFailed = false;
                     foreach ($affectedModelClasses as $affectedModelClass) {
-                        $applyFailed = !$applyFailed && !$this->applyTempTableForModel($affectedModelClass);
+                        $applyFailed = ! $applyFailed && ! $this->applyTempTableForModel($affectedModelClass);
                     }
 
                     if ($applyFailed) {
@@ -105,7 +105,7 @@ class DatabaseSeeder extends Seeder
                 } finally {
                     $cleanupFailed = false;
                     foreach ($affectedModelClasses as $affectedModelClass) {
-                        $cleanupFailed = !$cleanupFailed && !$this->cleanupTempTableForModel($affectedModelClass);
+                        $cleanupFailed = ! $cleanupFailed && ! $this->cleanupTempTableForModel($affectedModelClass);
                     }
 
                     if ($cleanupFailed) {

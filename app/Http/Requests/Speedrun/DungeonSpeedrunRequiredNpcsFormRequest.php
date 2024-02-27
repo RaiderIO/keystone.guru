@@ -32,14 +32,14 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
         $npcIdsWithNullable = array_merge($npcIds, [-1]);
 
         return [
-            'floor_id'   => Rule::in(Floor::all('id')->pluck('id')->toArray()),
-            'npc_id'     => Rule::in($npcIds),
-            'npc2_id'    => Rule::in($npcIdsWithNullable),
-            'npc3_id'    => Rule::in($npcIdsWithNullable),
-            'npc4_id'    => Rule::in($npcIdsWithNullable),
-            'npc5_id'    => Rule::in($npcIdsWithNullable),
+            'floor_id' => Rule::in(Floor::all('id')->pluck('id')->toArray()),
+            'npc_id' => Rule::in($npcIds),
+            'npc2_id' => Rule::in($npcIdsWithNullable),
+            'npc3_id' => Rule::in($npcIdsWithNullable),
+            'npc4_id' => Rule::in($npcIdsWithNullable),
+            'npc5_id' => Rule::in($npcIdsWithNullable),
             'difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
-            'count'      => 'required|int',
+            'count' => 'required|int',
         ];
     }
 }

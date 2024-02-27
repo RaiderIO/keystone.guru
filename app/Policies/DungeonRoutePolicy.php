@@ -16,7 +16,7 @@ class DungeonRoutePolicy
     public function view(?User $user, DungeonRoute $dungeonroute): bool
     {
         // Everyone can view dungeon routes (for now)
-        if (!$dungeonroute->mayUserView($user)) {
+        if (! $dungeonroute->mayUserView($user)) {
             return $this->deny(__('policy.view_route_not_published'));
         }
 
@@ -31,7 +31,7 @@ class DungeonRoutePolicy
     public function present(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
-        if (!$dungeonroute->mayUserView($user)) {
+        if (! $dungeonroute->mayUserView($user)) {
             return $this->deny(__('policy.present_route_not_published'));
         }
 
@@ -56,7 +56,7 @@ class DungeonRoutePolicy
     public function embed(?User $user, DungeonRoute $dungeonroute)
     {
         // Everyone can view dungeon routes (for now)
-        if (!$dungeonroute->mayUserView($user)) {
+        if (! $dungeonroute->mayUserView($user)) {
             return $this->deny(__('policy.embed_route_not_published'));
         }
 
@@ -74,7 +74,7 @@ class DungeonRoutePolicy
      */
     public function publish(User $user, DungeonRoute $dungeonroute)
     {
-        if (!$dungeonroute->hasKilledAllRequiredEnemies()) {
+        if (! $dungeonroute->hasKilledAllRequiredEnemies()) {
             return $this->deny(__('policy.publish_not_all_required_enemies_killed'));
         }
 
@@ -100,7 +100,7 @@ class DungeonRoutePolicy
      */
     public function rate(User $user, DungeonRoute $dungeonroute)
     {
-        return !$dungeonroute->isOwnedByUser();
+        return ! $dungeonroute->isOwnedByUser();
     }
 
     /**

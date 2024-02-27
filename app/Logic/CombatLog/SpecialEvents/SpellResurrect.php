@@ -36,8 +36,8 @@ class SpellResurrect extends GenericSpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->spellId     = $parameters[8];
-        $this->spellName   = $parameters[9];
+        $this->spellId = $parameters[8];
+        $this->spellName = $parameters[9];
         $this->spellSchool = $parameters[10];
 
         return $this;

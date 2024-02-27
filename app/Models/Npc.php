@@ -15,30 +15,30 @@ use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 /**
- * @property int                                 $id
- * @property int                                 $dungeon_id
- * @property int                                 $classification_id
- * @property int                                 $npc_type_id
- * @property int                                 $npc_class_id
- * @property int                                 $display_id
- * @property string                              $name
- * @property int                                 $base_health
- * @property int|null                            $health_percentage Null = 100% health
- * @property string                              $aggressiveness
- * @property bool                                $dangerous
- * @property bool                                $truesight
- * @property bool                                $bursting
- * @property bool                                $bolstering
- * @property bool                                $sanguine
- * @property bool                                $runs_away_in_fear
- * @property bool                                $hyper_respawn
- * @property Dungeon                             $dungeon
- * @property NpcClassification                   $classification
- * @property NpcType                             $type
- * @property NpcClass                            $class
- * @property NpcEnemyForces|null                 $enemyForces
- * @property NpcEnemyForces[]|Collection         $npcEnemyForces
- * @property Enemy[]|Collection                  $enemies
+ * @property int $id
+ * @property int $dungeon_id
+ * @property int $classification_id
+ * @property int $npc_type_id
+ * @property int $npc_class_id
+ * @property int $display_id
+ * @property string $name
+ * @property int $base_health
+ * @property int|null $health_percentage Null = 100% health
+ * @property string $aggressiveness
+ * @property bool $dangerous
+ * @property bool $truesight
+ * @property bool $bursting
+ * @property bool $bolstering
+ * @property bool $sanguine
+ * @property bool $runs_away_in_fear
+ * @property bool $hyper_respawn
+ * @property Dungeon $dungeon
+ * @property NpcClassification $classification
+ * @property NpcType $type
+ * @property NpcClass $class
+ * @property NpcEnemyForces|null $enemyForces
+ * @property NpcEnemyForces[]|Collection $npcEnemyForces
+ * @property Enemy[]|Collection $enemies
  * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
  *
  * @mixin Eloquent
@@ -156,8 +156,8 @@ class Npc extends CacheModel implements MappingModelInterface
         if ($npcEnemyForces === null) {
             $npcEnemyForces = NpcEnemyForces::create([
                 'mapping_version_id' => ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id,
-                'npc_id'             => $this->id,
-                'enemy_forces'       => $enemyForces,
+                'npc_id' => $this->id,
+                'enemy_forces' => $enemyForces,
             ]);
         } else {
             $npcEnemyForces->update([
@@ -232,7 +232,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
         if ($fortified && $this->isAffectedByFortified()) {
             $keyLevelFactor *= 1.2;
-        } else if ($tyrannical && $this->isAffectedByTyrannical()) {
+        } elseif ($tyrannical && $this->isAffectedByTyrannical()) {
             $keyLevelFactor *= 1.3;
         }
 
@@ -264,11 +264,11 @@ class Npc extends CacheModel implements MappingModelInterface
             $mappingVersions = $this->dungeon?->mappingVersions ?? MappingVersion::all();
             foreach ($mappingVersions as $mappingVersion) {
                 $result = $result && NpcEnemyForces::create([
-                        'npc_id'               => $this->id,
-                        'mapping_version_id'   => $mappingVersion->id,
-                        'enemy_forces'         => $existingEnemyForces ?? 0,
-                        'enemy_forces_teeming' => null,
-                    ]);
+                    'npc_id' => $this->id,
+                    'mapping_version_id' => $mappingVersion->id,
+                    'enemy_forces' => $existingEnemyForces ?? 0,
+                    'enemy_forces_teeming' => null,
+                ]);
             }
         }
 

@@ -17,16 +17,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                   $id
- * @property int                   $icon_file_id
- * @property int                   $active
- * @property string                $name
- * @property string                $shortname
- * @property string                $color
- * @property Carbon                $released_at
- * @property Carbon                $created_at
- * @property Carbon                $updated_at
- * @property Collection|Dungeon[]  $dungeons
+ * @property int $id
+ * @property int $icon_file_id
+ * @property int $active
+ * @property string $name
+ * @property string $shortname
+ * @property string $color
+ * @property Carbon $released_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Collection|Dungeon[] $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
  *
  * @mixin Eloquent
@@ -70,15 +70,15 @@ class Expansion extends CacheModel
     public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
     public const ALL = [
-        self::EXPANSION_CLASSIC      => 'Classic',
-        self::EXPANSION_TBC          => 'The Burning Crusade',
-        self::EXPANSION_WOTLK        => 'Wrath of the Lich King',
-        self::EXPANSION_CATACLYSM    => 'Cataclysm',
-        self::EXPANSION_MOP          => 'Mists of Pandaria',
-        self::EXPANSION_WOD          => 'Warlords of Draenor',
-        self::EXPANSION_LEGION       => 'Legion',
-        self::EXPANSION_BFA          => 'Battle for Azeroth',
-        self::EXPANSION_SHADOWLANDS  => 'Shadowlands',
+        self::EXPANSION_CLASSIC => 'Classic',
+        self::EXPANSION_TBC => 'The Burning Crusade',
+        self::EXPANSION_WOTLK => 'Wrath of the Lich King',
+        self::EXPANSION_CATACLYSM => 'Cataclysm',
+        self::EXPANSION_MOP => 'Mists of Pandaria',
+        self::EXPANSION_WOD => 'Warlords of Draenor',
+        self::EXPANSION_LEGION => 'Legion',
+        self::EXPANSION_BFA => 'Battle for Azeroth',
+        self::EXPANSION_SHADOWLANDS => 'Shadowlands',
         self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
     ];
 
@@ -199,7 +199,7 @@ class Expansion extends CacheModel
     public function showDiscoverRoutesCardDungeonImage(): bool
     {
         // So far we only have dungeon wallpapers for Shadowlands :(
-        return !in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
+        return ! in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
     }
 
     /**
@@ -215,10 +215,10 @@ class Expansion extends CacheModel
         $file = $request->file('icon');
 
         $this->icon_file_id = -1;
-        $this->active       = $request->get('active');
-        $this->name         = $request->get('name');
-        $this->shortname    = $request->get('shortname');
-        $this->color        = $request->get('color');
+        $this->active = $request->get('active');
+        $this->name = $request->get('name');
+        $this->shortname = $request->get('shortname');
+        $this->color = $request->get('color');
 
         // Update or insert it
         if ($this->save()) {

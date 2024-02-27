@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class MapIconTypeRoleCheckRule implements ValidationRule
 {
-    /**
-     * @param string  $attribute
-     * @param mixed   $value
-     * @param Closure $fail
-     * @return void
-     */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if ($value !== null) {
@@ -22,11 +16,9 @@ class MapIconTypeRoleCheckRule implements ValidationRule
             $mapIconType = MapIconType::where('id', $value)->first();
 
             // Only allow admins to save admin_only icons
-            if ($mapIconType === null || $mapIconType->admin_only && !(Auth::check() && Auth::user()->hasRole('admin'))) {
+            if ($mapIconType === null || $mapIconType->admin_only && ! (Auth::check() && Auth::user()->hasRole('admin'))) {
                 $fail(__('rules.map_icon_type_role_check_rule.message'));
             }
         }
     }
-
-
 }

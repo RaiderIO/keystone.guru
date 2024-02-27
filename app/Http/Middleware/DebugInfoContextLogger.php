@@ -20,7 +20,7 @@ class DebugInfoContextLogger
 
         if ($dungeonRoute instanceof DungeonRoute) {
             $context = array_merge($context, [
-                'publicKey'        => $dungeonRoute->public_key,
+                'publicKey' => $dungeonRoute->public_key,
                 'mappingVersionId' => $dungeonRoute->mapping_version_id,
             ]);
         }
@@ -29,7 +29,7 @@ class DebugInfoContextLogger
 
         // @TODO use structured logging?
         logger()->debug('DebugInfoContextLogger::handle', [
-            'url'    => $request->url(),
+            'url' => $request->url(),
             'method' => $request->method(),
         ]);
 

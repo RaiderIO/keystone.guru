@@ -32,7 +32,7 @@ class PatreonController extends Controller
     public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService): RedirectResponse
     {
         $state = $request->get('state');
-        $code  = $request->get('code');
+        $code = $request->get('code');
 
         // If session was not expired
         if (csrf_token() === $state) {
@@ -40,7 +40,7 @@ class PatreonController extends Controller
             $redirect_uri = route('patreon.link');
 
             $tokens = $patreonApiService->getAccessTokenFromCode($code, $redirect_uri);
-            if (!isset($tokens['error'])) {
+            if (! isset($tokens['error'])) {
                 $user = Auth::user();
 
                 // Save new tokens to database
@@ -48,12 +48,12 @@ class PatreonController extends Controller
                 $user->patreonUserLink?->delete();
 
                 $patreonUserLinkAttributes = [
-                    'user_id'       => $user->id,
-                    'scope'         => $tokens['scope'],
-                    'access_token'  => $tokens['access_token'],
+                    'user_id' => $user->id,
+                    'scope' => $tokens['scope'],
+                    'access_token' => $tokens['access_token'],
                     'refresh_token' => $tokens['refresh_token'],
-                    'version'       => $tokens['version'],
-                    'expires_at'    => date('Y-m-d H:i:s', time() + $tokens['expires_in']),
+                    'version' => $tokens['version'],
+                    'expires_at' => date('Y-m-d H:i:s', time() + $tokens['expires_in']),
                 ];
 
                 // Special case for the admin user - since the service needs this account to exist we need to just create
@@ -64,15 +64,15 @@ class PatreonController extends Controller
                 } else {
                     // Fetch info we need to construct the PatreonData object/be able to link paid benefits
                     $campaignBenefits = $patreonService->loadCampaignBenefits($patreonApiService);
-                    $campaignTiers    = $patreonService->loadCampaignTiers($patreonApiService);
+                    $campaignTiers = $patreonService->loadCampaignTiers($patreonApiService);
 
                     $identityResponse = $patreonApiService->getIdentity($tokens['access_token']);
                     if (isset($identityResponse['errors'])) {
                         Session::flash('warning', __('controller.patreon.flash.patreon_error_occurred'));
-                    } else if (!isset($identityResponse['included'])) {
+                    } elseif (! isset($identityResponse['included'])) {
                         Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
                     } else {
-                        $member = collect($identityResponse['included'])->filter(static fn(array $included) => $included['type'] === 'member')->first();
+                        $member = collect($identityResponse['included'])->filter(static fn (array $included) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);

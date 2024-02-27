@@ -17,13 +17,13 @@ class TagCategorySeeder extends Seeder implements TableSeederInterface
 
         $tagCategories = [
             TagCategory::DUNGEON_ROUTE_PERSONAL => DungeonRoute::class,
-            TagCategory::DUNGEON_ROUTE_TEAM     => DungeonRoute::class,
+            TagCategory::DUNGEON_ROUTE_TEAM => DungeonRoute::class,
         ];
 
         $tagCategoryAttributes = [];
         foreach ($tagCategories as $tagCategory => $class) {
             $tagCategoryAttributes[] = [
-                'name'        => $tagCategory,
+                'name' => $tagCategory,
                 'model_class' => $class,
             ];
         }

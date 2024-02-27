@@ -26,21 +26,21 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         $npcs = $npcService->getNpcsForDropdown($dungeon, true)->toArray();
 
         return view('admin.dungeonspeedrunrequirednpc.new', [
-            'dungeon'            => $dungeon,
-            'floor'              => $floor,
-            'npcIds'             => $npcs,
+            'dungeon' => $dungeon,
+            'floor' => $floor,
+            'npcIds' => $npcs,
             'npcIdsWithNullable' => ['-1' => __('controller.dungeonspeedrunrequirednpcs.no_linked_npc')] + $npcs,
-            'difficulty'         => $difficulty,
+            'difficulty' => $difficulty,
         ]);
     }
 
     public function savenew(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $difficulty): RedirectResponse
     {
-        $validated            = $request->validated();
-        $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
-        $validated['npc3_id'] = (int)$validated['npc3_id'] === -1 ? null : $validated['npc3_id'];
-        $validated['npc4_id'] = (int)$validated['npc4_id'] === -1 ? null : $validated['npc4_id'];
-        $validated['npc5_id'] = (int)$validated['npc5_id'] === -1 ? null : $validated['npc5_id'];
+        $validated = $request->validated();
+        $validated['npc2_id'] = (int) $validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
+        $validated['npc3_id'] = (int) $validated['npc3_id'] === -1 ? null : $validated['npc3_id'];
+        $validated['npc4_id'] = (int) $validated['npc4_id'] === -1 ? null : $validated['npc4_id'];
+        $validated['npc5_id'] = (int) $validated['npc5_id'] === -1 ? null : $validated['npc5_id'];
         DungeonSpeedrunRequiredNpc::create($validated);
 
         Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_added_successfully'));

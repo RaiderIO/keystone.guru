@@ -26,8 +26,8 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      */
     public function store(
         MountableAreaFormRequest $request,
-        MappingVersion           $mappingVersion,
-        ?MountableArea           $mountableArea = null): MountableArea
+        MappingVersion $mappingVersion,
+        ?MountableArea $mountableArea = null): MountableArea
     {
         $validated = $request->validated();
 

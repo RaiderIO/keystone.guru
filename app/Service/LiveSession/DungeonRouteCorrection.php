@@ -17,7 +17,7 @@ class DungeonRouteCorrection
     public function __construct(LiveSession $liveSession)
     {
         $this->obsoleteEnemies = collect();
-        $this->enemyForces     = $liveSession->dungeonroute->enemy_forces;
+        $this->enemyForces = $liveSession->dungeonroute->enemy_forces;
     }
 
     public function getObsoleteEnemies(): Collection
@@ -51,7 +51,7 @@ class DungeonRouteCorrection
     {
         return [
             'obsolete_enemy_ids' => $this->obsoleteEnemies,
-            'enemy_forces'       => $this->enemyForces,
+            'enemy_forces' => $this->enemyForces,
         ];
     }
 }

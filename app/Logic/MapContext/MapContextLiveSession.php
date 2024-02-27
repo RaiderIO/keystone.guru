@@ -22,11 +22,11 @@ class MapContextLiveSession extends MapContext
     use DungeonRouteProperties;
 
     public function __construct(
-        CacheServiceInterface                   $cacheService,
-        CoordinatesServiceInterface             $coordinatesService,
+        CacheServiceInterface $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
         private OverpulledEnemyServiceInterface $overpulledEnemyService,
-        LiveSession                             $liveSession,
-        Floor                                   $floor)
+        LiveSession $liveSession,
+        Floor $floor)
     {
         parent::__construct($cacheService, $coordinatesService, $liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
     }
@@ -65,10 +65,10 @@ class MapContextLiveSession extends MapContext
             $this->context->dungeonroute
         ), [
             'liveSessionPublicKey' => $this->context->public_key,
-            'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),
-            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
-            'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
+            'expiresInSeconds' => $this->context->getExpiresInSeconds(),
+            'overpulledEnemies' => $this->context->getEnemies()->pluck('id'),
+            'obsoleteEnemies' => $routeCorrection->getObsoleteEnemies(),
+            'enemyForcesOverride' => $routeCorrection->getEnemyForces(),
         ]);
     }
 }

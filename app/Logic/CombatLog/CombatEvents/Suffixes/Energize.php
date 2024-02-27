@@ -41,9 +41,9 @@ class Energize extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->amount       = $parameters[0];
+        $this->amount = $parameters[0];
         $this->overEnergize = $parameters[1];
-        $this->powerType    = $parameters[2];
+        $this->powerType = $parameters[2];
 
         if (isset($parameters[3])) {
             $this->maxPower = $parameters[3];

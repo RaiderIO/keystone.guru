@@ -20,9 +20,9 @@ class OverpulledEnemyDeletedFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'enemy_ids'   => 'required|array',
+            'enemy_ids' => 'required|array',
             'enemy_ids.*' => 'numeric',
-            'no_result'   => 'nullable|int',
+            'no_result' => 'nullable|int',
         ];
     }
 }

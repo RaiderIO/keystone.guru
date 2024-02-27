@@ -21,11 +21,11 @@ class DungeonResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'               => $this->id,
-            'expansion_id'     => $this->expansion_id,
-            'name'             => __($this->name, [], 'en-US'),
-            'slug'             => $this->slug,
-            'key'              => $this->key,
+            'id' => $this->id,
+            'expansion_id' => $this->expansion_id,
+            'name' => __($this->name, [], 'en-US'),
+            'slug' => $this->slug,
+            'key' => $this->key,
             'speedrun_enabled' => $this->speedrun_enabled,
         ];
     }

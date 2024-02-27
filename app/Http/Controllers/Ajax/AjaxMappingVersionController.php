@@ -12,7 +12,7 @@ class AjaxMappingVersionController extends Controller
     {
         $updateResult = $mappingVersion->update($request->validated());
 
-        if (!$updateResult) {
+        if (! $updateResult) {
             abort(500);
         }
 

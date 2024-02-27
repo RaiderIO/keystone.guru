@@ -5,7 +5,8 @@ use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -22,9 +23,9 @@ return new class extends Migration {
             foreach ($allNpcs->whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id]) as $npc) {
                 /** @var Npc $npc */
                 NpcEnemyForces::create([
-                    'npc_id'               => $npc->id,
-                    'mapping_version_id'   => $mappingVersion->id,
-                    'enemy_forces'         => $npc->enemy_forces > 0 ? $npc->enemy_forces : 0,
+                    'npc_id' => $npc->id,
+                    'mapping_version_id' => $mappingVersion->id,
+                    'enemy_forces' => $npc->enemy_forces > 0 ? $npc->enemy_forces : 0,
                     'enemy_forces_teeming' => $npc->enemy_forces_teeming > 0 ? $npc->enemy_forces_teeming : null,
                 ]);
             }

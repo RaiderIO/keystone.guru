@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $character_class_specialization_id
- * @property int          $index
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $character_class_specialization_id
+ * @property int $index
  * @property DungeonRoute $dungeonRoute
  *
  * @mixin Eloquent

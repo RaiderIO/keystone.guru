@@ -32,7 +32,7 @@ class FloorController extends Controller
         $validated = $request->validated();
 
         if ($floor === null) {
-            $floor   = Floor::create(array_merge([
+            $floor = Floor::create(array_merge([
                 'dungeon_id' => $dungeon->id,
             ], $validated));
             $success = $floor instanceof Floor;
@@ -90,8 +90,8 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.edit', [
-                'dungeon'        => $dungeon,
-                'floor'          => $floor,
+                'dungeon' => $dungeon,
+                'floor' => $floor,
                 'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get(),
             ]);
         } else {
@@ -105,10 +105,10 @@ class FloorController extends Controller
      * @return Application|Factory|View|RedirectResponse
      */
     public function mapping(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        Floor                      $floor)
+        Dungeon $dungeon,
+        Floor $floor)
     {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));
@@ -117,8 +117,8 @@ class FloorController extends Controller
             $dungeon = $floor->dungeon->load('floors');
 
             return view('admin.floor.mapping', [
-                'floor'          => $floor,
-                'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $floor, $mappingVersion),
+                'floor' => $floor,
+                'mapContext' => $mapContextService->createMapContextMappingVersionEdit($dungeon, $floor, $mappingVersion),
                 'mappingVersion' => $mappingVersion,
             ]);
         } else {
@@ -158,7 +158,7 @@ class FloorController extends Controller
 
         return redirect()->route('admin.floor.edit', [
             'dungeon' => $dungeon,
-            'floor'   => $floor,
+            'floor' => $floor,
         ]);
     }
 }

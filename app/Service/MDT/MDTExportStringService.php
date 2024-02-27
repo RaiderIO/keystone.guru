@@ -93,8 +93,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 $mdtLine['d'][7] = true;
             }
 
-            $vertexIndex            = 1;
-            $verticesLatLngs        = $line->polyline->getDecodedLatLngs($line->floor);
+            $vertexIndex = 1;
+            $verticesLatLngs = $line->polyline->getDecodedLatLngs($line->floor);
             $previousMdtCoordinates = null;
 
             foreach ($verticesLatLngs as $vertexLatLng) {
@@ -126,11 +126,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         // For each killzone, ensure we extract the comments into something MDT understands
         foreach ($this->dungeonRoute->killZones as $killZone) {
-            if (!isset($killZone->description)) {
+            if (! isset($killZone->description)) {
                 continue;
             }
 
-            $floor  = $killZone->getDominantFloor();
+            $floor = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
             if ($this->dungeonRoute->dungeon->facade_enabled) {
@@ -176,8 +176,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $pull = [];
 
             // Lua is 1 based, not 0 based
-            $enemyIndex      = 1;
-            $enemiesAdded    = 0;
+            $enemyIndex = 1;
+            $enemiesAdded = 0;
             $killZoneEnemies = $killZone->getEnemies();
             foreach ($killZoneEnemies as $enemy) {
                 // MDT does not handle prideful NPCs
@@ -197,7 +197,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!in_array($enemy->npc->classification?->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
+                    if (! in_array($enemy->npc->classification?->shortname, [NpcClassification::NPC_CLASSIFICATION_BOSS, NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])) {
                         $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
                             sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
                             ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
@@ -208,7 +208,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 }
 
                 // Create an array if it didn't exist yet
-                if (!isset($pull[$mdtNpcIndex])) {
+                if (! isset($pull[$mdtNpcIndex])) {
                     $pull[$mdtNpcIndex] = [];
                 }
 
@@ -245,31 +245,31 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         $mdtObject = [
             //
-            'objects'    => $this->extractObjects($warnings),
+            'objects' => $this->extractObjects($warnings),
             // M+ level
             'difficulty' => $this->dungeonRoute->level_min,
-            'week'       => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
+            'week' => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
                 Conversion::convertAffixGroupToWeek($this->dungeonRoute->affixes->first()),
-            'value'      => [
+            'value' => [
                 'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
-                'selection'         => [],
-                'currentPull'       => 1,
-                'teeming'           => $this->dungeonRoute->teeming,
+                'selection' => [],
+                'currentPull' => 1,
+                'teeming' => $this->dungeonRoute->teeming,
                 // Legacy - we don't do anything with it
-                'riftOffsets'       => [
+                'riftOffsets' => [
 
                 ],
-                'pulls'             => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
-                'currentSublevel'   => 1,
+                'pulls' => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
+                'currentSublevel' => 1,
             ],
-            'text'       => $this->dungeonRoute->title,
-            'mdi'        => [
+            'text' => $this->dungeonRoute->title,
+            'mdi' => [
                 'freeholdJoined' => false,
-                'freehold'       => 1,
-                'beguiling'      => 1,
+                'freehold' => 1,
+                'beguiling' => 1,
             ],
             // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
-            'uid'        => $this->dungeonRoute->public_key . 'xxKG',
+            'uid' => $this->dungeonRoute->public_key.'xxKG',
         ];
 
         try {

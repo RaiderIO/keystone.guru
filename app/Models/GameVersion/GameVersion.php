@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $key
  * @property string $name
  * @property string $description
- * @property bool   $has_seasons
+ * @property bool $has_seasons
  */
 class GameVersion extends CacheModel
 {
@@ -38,8 +38,8 @@ class GameVersion extends CacheModel
     public const GAME_VERSION_CLASSIC = 'classic';
 
     public const ALL = [
-        self::GAME_VERSION_RETAIL  => 1,
-        self::GAME_VERSION_WOTLK   => 2,
+        self::GAME_VERSION_RETAIL => 1,
+        self::GAME_VERSION_WOTLK => 2,
         self::GAME_VERSION_CLASSIC => 3,
     ];
 
@@ -66,6 +66,6 @@ class GameVersion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_game_version', static fn() => GameVersion::where('key', self::DEFAULT_GAME_VERSION)->first());
+        return $cacheService->remember('default_game_version', static fn () => GameVersion::where('key', self::DEFAULT_GAME_VERSION)->first());
     }
 }

@@ -15,6 +15,6 @@ class LiveSessionPolicy
      */
     public function view(User $user, LiveSession $liveSession): bool
     {
-        return !$liveSession->isExpired();
+        return ! $liveSession->isExpired();
     }
 }

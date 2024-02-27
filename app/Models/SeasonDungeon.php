@@ -7,10 +7,10 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int     $id
- * @property int     $season_id
- * @property int     $dungeon_id
- * @property Season  $season
+ * @property int $id
+ * @property int $season_id
+ * @property int $dungeon_id
+ * @property Season $season
  * @property Dungeon $dungeon
  *
  * @mixin Eloquent

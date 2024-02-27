@@ -5,8 +5,8 @@ return [
     /*
      * The author of the log messages. You can set both to null to keep the Webhook author set in Discord
      */
-    'from'       => [
-        'name'       => env('APP_NAME', 'Discord Logger'),
+    'from' => [
+        'name' => env('APP_NAME', 'Discord Logger'),
         'avatar_url' => null,
     ],
 
@@ -17,7 +17,7 @@ return [
      * - \MarvinLabs\DiscordLogger\Converters\SimpleRecordConverter::class
      * - \MarvinLabs\DiscordLogger\Converters\RichRecordConverter::class
      */
-    'converter'  => \MarvinLabs\DiscordLogger\Converters\RichRecordConverter::class,
+    'converter' => \MarvinLabs\DiscordLogger\Converters\RichRecordConverter::class,
 
     /**
      * If enabled, stacktraces will be attached as files. If not, stacktraces will be directly printed out in the
@@ -34,28 +34,28 @@ return [
     /*
      * A set of colors to associate to the different log levels when using the `RichRecordConverter`
      */
-    'colors'     => [
-        'DEBUG'     => 0x607D8B,
-        'INFO'      => 0x4CAF50,
-        'NOTICE'    => 0x2196F3,
-        'WARNING'   => 0xFF9800,
-        'ERROR'     => 0xF44336,
-        'CRITICAL'  => 0xE91E63,
-        'ALERT'     => 0x673AB7,
+    'colors' => [
+        'DEBUG' => 0x607D8B,
+        'INFO' => 0x4CAF50,
+        'NOTICE' => 0x2196F3,
+        'WARNING' => 0xFF9800,
+        'ERROR' => 0xF44336,
+        'CRITICAL' => 0xE91E63,
+        'ALERT' => 0x673AB7,
         'EMERGENCY' => 0x9C27B0,
     ],
 
     /*
      * A set of emojis to associate to the different log levels. Set to null to disable an emoji for a given level
      */
-    'emojis'     => [
-        'DEBUG'     => null, // ':beetle:',
-        'INFO'      => null, // ':bulb:',
-        'NOTICE'    => null, // ':wink:',
-        'WARNING'   => null, // ':flushed:',
-        'ERROR'     => null, // ':poop:',
-        'CRITICAL'  => null, // ':imp:',
-        'ALERT'     => null, // ':japanese_ogre:',
+    'emojis' => [
+        'DEBUG' => null, // ':beetle:',
+        'INFO' => null, // ':bulb:',
+        'NOTICE' => null, // ':wink:',
+        'WARNING' => null, // ':flushed:',
+        'ERROR' => null, // ':poop:',
+        'CRITICAL' => null, // ':imp:',
+        'ALERT' => null, // ':japanese_ogre:',
         'EMERGENCY' => null, // ':skull:',
     ],
 ];

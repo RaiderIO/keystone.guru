@@ -25,7 +25,7 @@ class MappingVersionConditional implements ConditionalInterface
 
     public function __construct()
     {
-        $this->floorCache   = collect();
+        $this->floorCache = collect();
         $this->dungeonCache = collect();
     }
 

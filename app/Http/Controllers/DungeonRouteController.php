@@ -61,10 +61,10 @@ class DungeonRouteController extends Controller
             ->first();
 
         return redirect()->route('dungeonroute.view.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $defaultFloor?->index ?? '1',
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -74,24 +74,24 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function viewfloor(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        string                     $title,
-        string                     $floorIndex
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        string $title,
+        string $floorIndex
     ) {
         $this->authorize('view', $dungeonroute);
 
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
-        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+        if (! isset($title) || $dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
-                'dungeon'      => $dungeon,
+                'dungeon' => $dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
+                'title' => $dungeonroute->getTitleSlug(),
             ]);
         }
 
@@ -120,28 +120,28 @@ class DungeonRouteController extends Controller
                 ->first();
 
             return redirect()->route('dungeonroute.view.floor', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => $defaultFloor?->index ?? '1',
+                'title' => $dungeonroute->getTitleSlug(),
+                'floorindex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
-            if ($floor->index !== (int)$floorIndex) {
+            if ($floor->index !== (int) $floorIndex) {
                 return redirect()->route('dungeonroute.view.floor', [
-                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeon' => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
-                    'title'        => $dungeonroute->getTitleSlug(),
-                    'floorindex'   => $floor->index,
+                    'title' => $dungeonroute->getTitleSlug(),
+                    'floorindex' => $floor->index,
                 ]);
             }
 
             return view('dungeonroute.view', [
-                'dungeon'        => $dungeonroute->dungeon,
-                'dungeonroute'   => $dungeonroute,
-                'title'          => $dungeonroute->getTitleSlug(),
+                'dungeon' => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title' => $dungeonroute->getTitleSlug(),
                 'current_report' => $currentReport,
-                'floor'          => $floor,
-                'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+                'floor' => $floor,
+                'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
             ]);
         }
     }
@@ -158,10 +158,10 @@ class DungeonRouteController extends Controller
             ->first();
 
         return redirect()->route('dungeonroute.present.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $defaultFloor?->index ?? '1',
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -171,12 +171,12 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function presentFloor(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        string                     $title,
-        string                     $floorIndex)
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        string $title,
+        string $floorIndex)
     {
         $this->authorize('present', $dungeonroute);
 
@@ -189,15 +189,15 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->setRelation('challengeModeRun', $challengeModeRun);
 
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
-        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+        if (! isset($title) || $dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.present', [
-                'dungeon'      => $dungeon,
+                'dungeon' => $dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
+                'title' => $dungeonroute->getTitleSlug(),
             ]);
         }
 
@@ -215,27 +215,27 @@ class DungeonRouteController extends Controller
                 ->first();
 
             return redirect()->route('dungeonroute.present.floor', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => $defaultFloor?->index ?? '1',
+                'title' => $dungeonroute->getTitleSlug(),
+                'floorindex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
-            if ($floor->index !== (int)$floorIndex) {
+            if ($floor->index !== (int) $floorIndex) {
                 return redirect()->route('dungeonroute.present.floor', [
-                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeon' => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
-                    'title'        => $dungeonroute->getTitleSlug(),
-                    'floorindex'   => $floor->index,
+                    'title' => $dungeonroute->getTitleSlug(),
+                    'floorindex' => $floor->index,
                 ]);
             }
 
             return view('dungeonroute.present', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+                'title' => $dungeonroute->getTitleSlug(),
+                'floor' => $floor,
+                'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
             ]);
         }
     }
@@ -246,29 +246,29 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function preview(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        string                     $title,
-        string                     $floorIndex
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        string $title,
+        string $floorIndex
     ) {
         $this->authorize('preview', [$dungeonroute, $request->get('secret', '') ?? '']);
 
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
         $zoomLevel = $request->get('zoomLevel');
 
         $titleSlug = $dungeonroute->getTitleSlug();
-        if (!isset($title) || $titleSlug !== $title) {
+        if (! isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.preview', [
-                'dungeon'      => $dungeon,
+                'dungeon' => $dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $titleSlug,
-                'floorindex'   => $floorIndex,
-                'zoomLevel'    => $zoomLevel,
+                'title' => $titleSlug,
+                'floorindex' => $floorIndex,
+                'zoomLevel' => $zoomLevel,
             ]);
         }
 
@@ -281,10 +281,10 @@ class DungeonRouteController extends Controller
         $mapFacadeStyle = $floor->facade ? User::MAP_FACADE_STYLE_FACADE : User::MAP_FACADE_STYLE_SPLIT_FLOORS;
 
         return view('dungeonroute.preview', [
-            'dungeonroute'   => $dungeonroute,
-            'floorId'        => $floor->id,
-            'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor, $mapFacadeStyle),
-            'defaultZoom'    => $zoomLevel,
+            'dungeonroute' => $dungeonroute,
+            'floorId' => $floor->id,
+            'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor, $mapFacadeStyle),
+            'defaultZoom' => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
         ]);
     }
@@ -293,12 +293,12 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function migrateToSeasonalType(
-        ExpansionServiceInterface    $expansionService,
+        ExpansionServiceInterface $expansionService,
         MigrateToSeasonalTypeRequest $request,
-        Dungeon                      $dungeon,
-        DungeonRoute                 $dungeonroute,
-        string                       $title,
-        string                       $seasonalType): RedirectResponse
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        string $title,
+        string $seasonalType): RedirectResponse
     {
         $this->authorize('migrate', $dungeonroute);
 
@@ -317,7 +317,7 @@ class DungeonRouteController extends Controller
         }
 
         // May fail
-        if (!$dungeonroute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
+        if (! $dungeonroute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -332,7 +332,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = new DungeonRoute();
 
         // May fail
-        if (!$dungeonroute->saveTemporaryFromRequest($request, $seasonService, $expansionService)) {
+        if (! $dungeonroute->saveTemporaryFromRequest($request, $seasonService, $expansionService)) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -356,9 +356,9 @@ class DungeonRouteController extends Controller
             Session::flash('status', __('controller.dungeonroute.flash.route_cloned_successfully'));
 
             return redirect()->route('dungeonroute.edit', [
-                'dungeon'      => $newRoute->dungeon,
+                'dungeon' => $newRoute->dungeon,
                 'dungeonroute' => $newRoute,
-                'title'        => $newRoute->title,
+                'title' => $newRoute->title,
             ]);
         } else {
             return view('dungeonroute.limitreached');
@@ -371,9 +371,9 @@ class DungeonRouteController extends Controller
         $dungeonroute->claim(Auth::id());
 
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -388,10 +388,10 @@ class DungeonRouteController extends Controller
             ->first();
 
         return redirect()->route('dungeonroute.edit.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $defaultFloor?->index ?? '1',
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -401,26 +401,26 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function editfloor(
-        Request                    $request,
+        Request $request,
         MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        ?string                    $title,
-        ?string                    $floorIndex)
+        Dungeon $dungeon,
+        DungeonRoute $dungeonroute,
+        ?string $title,
+        ?string $floorIndex)
     {
         $this->authorize('edit', $dungeonroute);
 
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
         $titleSlug = $dungeonroute->getTitleSlug();
-        if (!isset($title) || $titleSlug !== $title) {
+        if (! isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.edit.floor', [
-                'dungeon'      => $dungeon,
+                'dungeon' => $dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $titleSlug,
-                'floorindex'   => $floorIndex,
+                'title' => $titleSlug,
+                'floorindex' => $floorIndex,
             ]);
         }
 
@@ -436,28 +436,28 @@ class DungeonRouteController extends Controller
                 ->first();
 
             return redirect()->route('dungeonroute.edit.floor', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => $defaultFloor?->index ?? '1',
+                'title' => $dungeonroute->getTitleSlug(),
+                'floorindex' => $defaultFloor?->index ?? '1',
             ]);
         } else {
-            if ($floor->index !== (int)$floorIndex) {
+            if ($floor->index !== (int) $floorIndex) {
                 return redirect()->route('dungeonroute.edit.floor', [
-                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeon' => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
-                    'title'        => $dungeonroute->getTitleSlug(),
-                    'floorindex'   => $floor->index,
+                    'title' => $dungeonroute->getTitleSlug(),
+                    'floorindex' => $floor->index,
                 ]);
             }
 
             return view('dungeonroute.edit', [
-                'dungeon'      => $dungeonroute->dungeon,
+                'dungeon' => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
-                'floorindex'   => $floorIndex,
+                'title' => $dungeonroute->getTitleSlug(),
+                'floor' => $floor,
+                'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+                'floorindex' => $floorIndex,
             ]);
         }
     }
@@ -468,12 +468,12 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function embed(
-        EmbedFormRequest           $request,
+        EmbedFormRequest $request,
         MapContextServiceInterface $mapContextService,
-        DungeonRoute               $dungeonroute,
-        string                     $floorIndex = '1')
+        DungeonRoute $dungeonroute,
+        string $floorIndex = '1')
     {
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $dungeonroute = DungeonRoute::where('public_key', $floorIndex)->first();
             if ($dungeonroute === null) {
                 return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
@@ -482,7 +482,7 @@ class DungeonRouteController extends Controller
 
         $this->authorize('embed', $dungeonroute);
 
-        if (!is_numeric($floorIndex)) {
+        if (! is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
@@ -493,39 +493,39 @@ class DungeonRouteController extends Controller
             ->indexOrFacade($floorIndex)
             ->first();
 
-        $style                 = $request->get('style', 'regular');
-        $pullsDefaultState     = $request->get('pullsDefaultState');
-        $pullsHideOnMove       = $request->get('pullsHideOnMove');
+        $style = $request->get('style', 'regular');
+        $pullsDefaultState = $request->get('pullsDefaultState');
+        $pullsHideOnMove = $request->get('pullsHideOnMove');
         $headerBackgroundColor = $request->get('headerBackgroundColor');
-        $mapBackgroundColor    = $request->get('mapBackgroundColor');
+        $mapBackgroundColor = $request->get('mapBackgroundColor');
 
-        $showEnemyInfo       = $request->get('showEnemyInfo', false);
-        $showPulls           = $request->get('showPulls', true);
-        $showEnemyForces     = $request->get('showEnemyForces', true);
-        $showAffixes         = $request->get('showAffixes', true);
-        $showTitle           = $request->get('showTitle', true);
+        $showEnemyInfo = $request->get('showEnemyInfo', false);
+        $showPulls = $request->get('showPulls', true);
+        $showEnemyForces = $request->get('showEnemyForces', true);
+        $showAffixes = $request->get('showAffixes', true);
+        $showTitle = $request->get('showTitle', true);
         $showPresenterButton = $request->get('showPresenterButton', false);
 
         return view('dungeonroute.embed', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+            'title' => $dungeonroute->getTitleSlug(),
+            'floor' => $floor,
+            'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
             'embedOptions' => [
-                'style'                 => $style,
+                'style' => $style,
                 // Null if not set - but cast to a bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
-                'pullsDefaultState'     => (int)$pullsDefaultState, // Default false - closed
-                'pullsHideOnMove'       => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
+                'pullsDefaultState' => (int) $pullsDefaultState, // Default false - closed
+                'pullsHideOnMove' => $pullsHideOnMove === null ? null : (bool) $pullsHideOnMove,
                 'headerBackgroundColor' => $headerBackgroundColor,
-                'mapBackgroundColor'    => $mapBackgroundColor,
-                'show'                  => [
-                    'enemyInfo'       => (bool)$showEnemyInfo,       // Default false - not available
-                    'pulls'           => (bool)$showPulls,           // Default true - available
-                    'enemyForces'     => (bool)$showEnemyForces,     // Default true - available
-                    'affixes'         => (bool)$showAffixes,         // Default true - available
-                    'title'           => (bool)$showTitle,           // Default true - available
-                    'presenterButton' => (bool)$showPresenterButton, // Default false, not available
+                'mapBackgroundColor' => $mapBackgroundColor,
+                'show' => [
+                    'enemyInfo' => (bool) $showEnemyInfo,       // Default false - not available
+                    'pulls' => (bool) $showPulls,           // Default true - available
+                    'enemyForces' => (bool) $showEnemyForces,     // Default true - available
+                    'affixes' => (bool) $showAffixes,         // Default true - available
+                    'title' => (bool) $showTitle,           // Default true - available
+                    'presenterButton' => (bool) $showPresenterButton, // Default false, not available
                 ],
             ],
         ]);
@@ -564,9 +564,9 @@ class DungeonRouteController extends Controller
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -582,9 +582,9 @@ class DungeonRouteController extends Controller
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -600,7 +600,7 @@ class DungeonRouteController extends Controller
         // Store it
         $dungeonroute->update([
             'mapping_version_id' => $dungeonroute->dungeon->currentMappingVersion->id,
-            'updated_at'         => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
 
         // Refresh the enemy forces
@@ -610,9 +610,9 @@ class DungeonRouteController extends Controller
 
         // Display the edit page
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 }

@@ -18,9 +18,9 @@ class ModelDeletedEvent extends ContextEvent
     public function __construct(Model $context, User $user, Model $model)
     {
         // Don't save Model here because serialization will fail due to object being deleted
-        $this->modelId    = $model->getRouteKey();
+        $this->modelId = $model->getRouteKey();
         $this->modelClass = $model::class;
-        $this->modelName  = strtolower((new ReflectionClass($model))->getShortName());
+        $this->modelName = strtolower((new ReflectionClass($model))->getShortName());
         parent::__construct($context, $user);
     }
 
@@ -28,7 +28,7 @@ class ModelDeletedEvent extends ContextEvent
     {
         return array_merge(parent::broadcastWith(), [
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
-            'model_id'    => $this->modelId,
+            'model_id' => $this->modelId,
             'model_class' => $this->modelClass,
         ]);
     }

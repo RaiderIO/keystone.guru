@@ -173,7 +173,7 @@ class Kernel extends ConsoleKernel
     {
         Log::channel('scheduler')->debug('Starting scheduler');
 
-        $debug   = config('app.debug');
+        $debug = config('app.debug');
         $appType = config('app.type');
 
         $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
@@ -204,7 +204,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('patreon:refreshmembers')->hourly();
 
         // We don't want the cache when we're debugging to ensure fresh data every time
-        if (!$debug) {
+        if (! $debug) {
             $schedule->command('discover:cache')->hourly();
             $schedule->command('keystoneguru:view', ['operation' => 'cache'])->everyTenMinutes();
         }
