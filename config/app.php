@@ -179,7 +179,6 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Yajra\DataTables\DataTablesServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
 
@@ -205,7 +204,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Agent'      => Jenssegers\Agent\Facades\Agent::class,
-        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Form'       => Collective\Html\FormFacade::class,
         'GitHub'     => GrahamCampbell\GitHub\GitHubServiceProvider::class,
         'Html'       => Collective\Html\HtmlFacade::class,
