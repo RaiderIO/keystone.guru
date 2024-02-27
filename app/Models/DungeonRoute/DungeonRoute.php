@@ -1367,7 +1367,7 @@ class DungeonRoute extends Model
     {
         DungeonRoute::dropCaches($this->id);
 
-        parent::touch();
+        parent::touch($attribute);
     }
 
     /**

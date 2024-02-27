@@ -19,5 +19,5 @@ return RectorConfig::configure()
     ])
     // uncomment to reach your current PHP version
     //    ->withPhpSets(false, true)
-    ->withSets([SetList::CODING_STYLE])
+    ->withSets([\RectorLaravel\Set\LaravelSetList::LARAVEL_90])
     ->withSkip([RemoveUselessParamTagRector::class]);
