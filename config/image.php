@@ -1,7 +1,5 @@
 <?php
 
-
-
 return [
     /*
     |--------------------------------------------------------------------------
@@ -14,7 +12,7 @@ return [
     | Supported: "gd", "imagick", "gmagick"
     |
     */
-    'driver' => 'gd',
+    'driver'                    => 'gd',
     /*
     |--------------------------------------------------------------------------
     | Memory limit
@@ -23,7 +21,7 @@ return [
     | When manipulating an image, the memory limit is increased to this value
     |
     */
-    'memory_limit' => '128M',
+    'memory_limit'              => '128M',
     /*
     |--------------------------------------------------------------------------
     | Source directories
@@ -32,7 +30,7 @@ return [
     | A list a directories to look for images
     |
     */
-    'src_dirs' => [public_path()],
+    'src_dirs'                  => [public_path()],
     /*
     |--------------------------------------------------------------------------
     | Host
@@ -42,7 +40,7 @@ return [
     | to generate the right URL.
     |
     */
-    'host' => env('URL_HOST'),
+    'host'                      => env('URL_HOST'),
     /*
     |--------------------------------------------------------------------------
     | Pattern
@@ -53,7 +51,7 @@ return [
     | pattern.
     |
     */
-    'pattern' => '^(.*){parameters}\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$',
+    'pattern'                   => '^(.*){parameters}\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$',
     /*
     |--------------------------------------------------------------------------
     | URL parameter
@@ -69,7 +67,7 @@ return [
     | Example: /uploads/photo-image(300x300-grayscale).jpg
     |
     */
-    'url_parameter' => '-image({options})',
+    'url_parameter'             => '-image({options})',
     /*
     |--------------------------------------------------------------------------
     | URL parameter separator
@@ -83,7 +81,7 @@ return [
     | Example: /uploads/photo-image(300x300-grayscale).jpg
     |
     */
-    'url_parameter_separator' => '-',
+    'url_parameter_separator'   => '-',
     /*
     |--------------------------------------------------------------------------
     | Serve image
@@ -93,7 +91,7 @@ return [
     | URL parameter above.
     |
     */
-    'serve' => true,
+    'serve'                     => true,
     /*
     |--------------------------------------------------------------------------
     | Serve route
@@ -102,7 +100,7 @@ return [
     | If you want to restrict the route to a specific domain.
     |
     */
-    'serve_domain' => null,
+    'serve_domain'              => null,
     /*
     |--------------------------------------------------------------------------
     | Serve route
@@ -111,7 +109,7 @@ return [
     | The route where image are served
     |
     */
-    'serve_route' => '{image_pattern}',
+    'serve_route'               => '{image_pattern}',
     /*
     |--------------------------------------------------------------------------
     | Serve custom Filters only
@@ -130,7 +128,7 @@ return [
     | The expires headers that are sent when sending image.
     |
     */
-    'serve_expires' => (3600*24*31),
+    'serve_expires'             => (3600 * 24 * 31),
     /*
     |--------------------------------------------------------------------------
     | Write image
@@ -140,7 +138,7 @@ return [
     | as the original image so the next request will serve this static file
     |
     */
-    'write_image' => true,
+    'write_image'               => true,
     /*
     |--------------------------------------------------------------------------
     | Write path
@@ -150,7 +148,7 @@ return [
     | as the original image, you can override this path here
     |
     */
-    'write_path' => 'storage/imagecache',
+    'write_path'                => 'storage/imagecache',
     /*
     |--------------------------------------------------------------------------
     | Proxy
@@ -159,17 +157,17 @@ return [
     | This enable or disable the proxy route
     |
     */
-    'proxy' => false,
+    'proxy'                     => false,
     /*
     |--------------------------------------------------------------------------
     | Proxy expires
     |--------------------------------------------------------------------------
     |
-    | The expires headers that are sent when proxying image. Defaults to 
+    | The expires headers that are sent when proxying image. Defaults to
     | serve_expires
     |
     */
-    'proxy_expires' => null,
+    'proxy_expires'             => null,
     /*
     |--------------------------------------------------------------------------
     | Proxy route
@@ -178,7 +176,7 @@ return [
     | The route that will be used to serve proxied image
     |
     */
-    'proxy_route' => '{image_proxy_pattern}',
+    'proxy_route'               => '{image_proxy_pattern}',
     /*
     |--------------------------------------------------------------------------
     | Proxy route pattern
@@ -188,7 +186,7 @@ return [
     | If the value is null, the default image pattern will be used.
     |
     */
-    'proxy_route_pattern' => null,
+    'proxy_route_pattern'       => null,
     /*
     |--------------------------------------------------------------------------
     | Proxy route domain
@@ -197,7 +195,7 @@ return [
     | If you wind to bind your route to a specific domain.
     |
     */
-    'proxy_route_domain' => null,
+    'proxy_route_domain'        => null,
     /*
     |--------------------------------------------------------------------------
     | Proxy filesystem
@@ -206,7 +204,7 @@ return [
     | The filesystem from which the file will be proxied
     |
     */
-    'proxy_filesystem' => 'cloud',
+    'proxy_filesystem'          => 'cloud',
     /*
     |--------------------------------------------------------------------------
     | Proxy temporary directory
@@ -215,7 +213,7 @@ return [
     | Write the manipulated image back to the file system
     |
     */
-    'proxy_write_image' => true,
+    'proxy_write_image'         => true,
     /*
     |--------------------------------------------------------------------------
     | Proxy cache
@@ -225,7 +223,7 @@ return [
     | cached using the laravel cache driver.
     |
     */
-    'proxy_cache' => true,
+    'proxy_cache'               => true,
     /*
     |--------------------------------------------------------------------------
     | Proxy cache filesystem
@@ -235,7 +233,7 @@ return [
     | cache driver.
     |
     */
-    'proxy_cache_filesystem' => null,
+    'proxy_cache_filesystem'    => null,
     /*
     |--------------------------------------------------------------------------
     | Proxy cache expiration
@@ -245,7 +243,7 @@ return [
     | is -1, the image is cached forever.
     |
     */
-    'proxy_cache_expiration' => 60*24,
+    'proxy_cache_expiration'    => 60 * 24,
     /*
     |--------------------------------------------------------------------------
     | Proxy temporary path
@@ -254,5 +252,5 @@ return [
     | The temporary path where the manipulated file are saved.
     |
     */
-    'proxy_tmp_path' => sys_get_temp_dir(),
+    'proxy_tmp_path'            => sys_get_temp_dir(),
 ];

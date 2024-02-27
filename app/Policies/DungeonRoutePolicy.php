@@ -13,7 +13,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view the dungeon route.
      *
-     * @param User|null $user
      * @return mixed
      */
     public function view(?User $user, DungeonRoute $dungeonroute)
@@ -29,7 +28,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can present the dungeon route.
      *
-     * @param User|null $user
      * @return mixed
      */
     public function present(?User $user, DungeonRoute $dungeonroute)
@@ -45,7 +43,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view the dungeon route.
      *
-     * @param User|null $user
      * @return mixed
      */
     public function preview(?User $user, DungeonRoute $dungeonroute, string $secret)
@@ -56,7 +53,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can view an embedded the dungeon route.
      *
-     * @param User|null $user
      * @return mixed
      */
     public function embed(?User $user, DungeonRoute $dungeonroute)
@@ -85,7 +81,7 @@ class DungeonRoutePolicy
         }
 
         // Only authors or if the user is an admin
-        return ($dungeonroute->isOwnedByUser($user) || $user->hasRole('admin'));
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
@@ -96,7 +92,7 @@ class DungeonRoutePolicy
     public function unpublish(User $user, DungeonRoute $dungeonroute)
     {
         // Only authors or if the user is an admin
-        return ($dungeonroute->isOwnedByUser($user) || $user->hasRole('admin'));
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
     }
 
     /**
@@ -143,7 +139,6 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can update the dungeon route.
      *
-     * @param User|null $user
      * @return mixed
      */
     public function edit(?User $user, DungeonRoute $dungeonroute)
@@ -184,7 +179,6 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null $user
      * @return mixed
      */
     public function addKillZone(?User $user, DungeonRoute $dungeonRoute)
@@ -197,7 +191,6 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null $user
      * @return mixed
      */
     public function addBrushline(?User $user, DungeonRoute $dungeonRoute)
@@ -210,7 +203,6 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null $user
      * @return mixed
      */
     public function addPath(?User $user, DungeonRoute $dungeonRoute)
@@ -223,7 +215,6 @@ class DungeonRoutePolicy
     }
 
     /**
-     * @param User|null $user
      * @return mixed
      */
     public function addMapIcon(?User $user, DungeonRoute $dungeonRoute)

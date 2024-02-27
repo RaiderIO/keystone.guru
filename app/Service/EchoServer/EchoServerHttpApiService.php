@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\EchoServer;
 
 use Exception;
@@ -11,14 +10,13 @@ use Teapot\StatusCode;
 
 class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
 {
-
     /** @var Client Guzzle client; used for communicating with the echo server API. */
     private Client $_client;
 
     public function __construct()
     {
         // Make sure we don't have a trailing slash in the app_url
-        $appUrl = trim((string) config('keystoneguru.echo.url'), '/');
+        $appUrl = trim((string)config('keystoneguru.echo.url'), '/');
 
         try {
             $this->_client = new Client([
@@ -27,18 +25,16 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
                 // You can set any number of default request options.
                 'timeout'  => 2.0,
             ]);
-        } catch (InvalidArgumentException $ex) {
-            report($ex);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            report($invalidArgumentException);
 
             Log::error('Unable to connect to echo server service!');
 
-            throw $ex;
+            throw $invalidArgumentException;
         }
     }
 
     /**
-     * @param $uri
-     * @return array
      * @throws Exception
      */
     private function _doRequest($uri): array
@@ -62,7 +58,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      **/
     public function getStatus(): array
     {
@@ -70,7 +66,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      **/
     public function getChannels(): array
     {
@@ -78,7 +74,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      **/
     public function getChannelInfo($channelName): array
     {
@@ -86,11 +82,10 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      **/
     public function getChannelUsers($channelName): array
     {
         return $this->_doRequest(sprintf('channels/%s/users', $channelName))['users'];
     }
-
 }

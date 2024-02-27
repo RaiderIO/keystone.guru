@@ -42,6 +42,7 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         // Temp store; it messes with the count
         $havings        = $query->havings;
         $query->havings = null;
+
         $query->orders  = null;
         $countResults   = $query->get();
         // Restore

@@ -9,9 +9,6 @@ use Request;
 
 class APIDungeonController extends Controller
 {
-    /**
-     * @return DungeonCollectionResource
-     */
     public function list(Request $request): DungeonCollectionResource
     {
         return new DungeonCollectionResource(

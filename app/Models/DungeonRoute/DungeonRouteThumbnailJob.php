@@ -20,10 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null     $image_height
  * @property float        $zoom_level
  * @property int          $quality
- *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
- *
  * @property Carbon       $created_at
  * @property Carbon       $updated_at
  *
@@ -31,10 +29,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonRouteThumbnailJob extends Model
 {
-    public const STATUS_QUEUED    = 'queued';
+    public const STATUS_QUEUED = 'queued';
+
     public const STATUS_COMPLETED = 'completed';
-    public const STATUS_EXPIRED   = 'expired';
-    public const STATUS_ERROR     = 'error';
+
+    public const STATUS_EXPIRED = 'expired';
+
+    public const STATUS_ERROR = 'error';
 
     protected $fillable = [
         'dungeon_route_id',
@@ -55,25 +56,16 @@ class DungeonRouteThumbnailJob extends Model
         'floor',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return bool
-     */
     public function expire(): bool
     {
         // Always try to delete the image, but always return OK if it wasn't successful (there may not be an image then).

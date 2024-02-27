@@ -14,7 +14,6 @@ use Illuminate\Support\Collection;
  * @property int                                 $dungeon_route_id
  * @property int                                 $character_race_id
  * @property int                                 $index
- *
  * @property DungeonRoute                        $dungeonRoute
  * @property CharacterRace                       $characterRace
  * @property Collection|DungeonRoutePlayerRace[] $races
@@ -23,7 +22,8 @@ use Illuminate\Support\Collection;
  */
 class DungeonRoutePlayerRace extends Model
 {
-    public    $hidden   = ['id'];
+    public $hidden = ['id'];
+
     protected $fillable = [
         'dungeon_route_id',
         'character_race_id',
@@ -31,25 +31,16 @@ class DungeonRoutePlayerRace extends Model
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function characterRace(): BelongsTo
     {
         return $this->belongsTo(CharacterRace::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function races(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');

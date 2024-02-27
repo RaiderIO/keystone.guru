@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  * @property int          $polyline_id
  * @property string       $updated_at
  * @property string       $created_at
- *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline
  * @property Floor        $floor
@@ -31,14 +30,14 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  */
 class Brushline extends Model
 {
-    public $visible  = ['id', 'floor_id', 'polyline'];
+    public $visible = ['id', 'floor_id', 'polyline'];
+
     public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
-    public $with     = ['polyline'];
+
+    public $with = ['polyline'];
 
     /**
      * Get the dungeon route that this brushline is attached to.
-     *
-     * @return BelongsTo
      */
     public function dungeonRoute(): BelongsTo
     {
@@ -47,8 +46,6 @@ class Brushline extends Model
 
     /**
      * Get the dungeon route that this brushline is attached to.
-     *
-     * @return HasOne
      */
     public function polyline(): HasOne
     {
@@ -57,20 +54,18 @@ class Brushline extends Model
 
     /**
      * Get the floor that this polyline is drawn on.
-     *
-     * @return BelongsTo
      */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete Brushline properly if it gets deleted
-        static::deleting(function (Brushline $brushline) {
+        static::deleting(static function (Brushline $brushline) {
             $brushline->polyline()->delete();
         });
     }

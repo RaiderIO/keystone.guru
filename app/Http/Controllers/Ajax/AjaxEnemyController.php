@@ -29,16 +29,15 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     use PublicKeyDungeonRoute;
 
     /**
-     * @param Enemy|null $enemy
-     *
      * @return Enemy|Model
+     *
      * @throws Throwable
      */
     public function store(
         APIEnemyFormRequest         $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        Enemy                       $enemy = null
+        ?Enemy                      $enemy = null
     ): Enemy {
         $validated = $request->validated();
 
@@ -50,9 +49,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
-
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
             foreach ($activeAuras as $activeAura) {
@@ -67,9 +65,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     }
                 }
             }
-
             $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
-
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
                 $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
@@ -81,8 +77,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     *
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
@@ -117,11 +113,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws Throwable
      */
     public function delete(Request $request, Enemy $enemy)
     {
-        return DB::transaction(function () use ($request, $enemy) {
+        return DB::transaction(function () use ($enemy) {
             try {
                 if ($enemy->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments
@@ -131,6 +128,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                         broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
                     }
                 }
+
                 $result = response()->noContent();
             } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

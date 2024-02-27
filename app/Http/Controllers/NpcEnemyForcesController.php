@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\Npc\NpcEnemyForcesFormRequest;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
@@ -23,7 +22,6 @@ class NpcEnemyForcesController extends Controller
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }
-
 
     public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
     {

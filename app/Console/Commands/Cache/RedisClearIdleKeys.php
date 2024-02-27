@@ -24,7 +24,6 @@ class RedisClearIdleKeys extends Command
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(): int
     {
@@ -37,7 +36,7 @@ class RedisClearIdleKeys extends Command
             sprintf('/keystoneguru-%s-cache:.{40}(?::.{40})*/', config('app.type')),
         ];
 
-        Log::channel('scheduler')->info(sprintf('Clearing idle keys in redis that haven\'t been accessed in %d seconds', $seconds));
+        Log::channel('scheduler')->info(sprintf("Clearing idle keys in redis that haven't been accessed in %d seconds", $seconds));
         $i                = 0;
         $nextKey          = 0;
         $deletedKeysCount = 0;
@@ -51,7 +50,7 @@ class RedisClearIdleKeys extends Command
             foreach ($result[1] as $redisKey) {
                 $output = [];
                 foreach ($keyWhitelistRegex as $regex) {
-                    if (preg_match($regex, (string) $redisKey, $output) !== false) {
+                    if (preg_match($regex, (string)$redisKey, $output) !== false) {
                         $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
                         if ($idleTime > $seconds) {
                             $toDelete[] = $redisKey;
@@ -73,7 +72,7 @@ class RedisClearIdleKeys extends Command
                 }
             }
 
-            $i++;
+            ++$i;
             if ($i % 1000 === 0) {
                 Log::channel('scheduler')->info(sprintf('Scan count %d... (deleted %d keys)', $i, $deletedKeysCount));
                 $deletedKeysCount = 0;

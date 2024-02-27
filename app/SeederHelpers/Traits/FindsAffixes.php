@@ -2,7 +2,6 @@
 
 namespace App\SeederHelpers\Traits;
 
-
 use App\Models\Affix;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;

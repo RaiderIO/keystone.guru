@@ -41,6 +41,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -90,6 +91,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function discoverSeasonPopular(
@@ -123,6 +125,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function discoverSeasonThisWeek(
@@ -162,6 +165,7 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @param Dungeon $dungeon
      * @return Factory|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function discoverSeasonNextWeek(
@@ -200,6 +204,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function discoverSeasonNew(
@@ -233,6 +238,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function discoverExpansion(
@@ -270,6 +276,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -320,6 +327,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      */
     public function discoverpopular(Expansion $expansion, DiscoverServiceInterface $discoverService)
@@ -337,6 +345,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      */
     public function discoverthisweek(Expansion $expansion, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
@@ -360,6 +369,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      */
     public function discovernextweek(Expansion $expansion, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
@@ -383,6 +393,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      */
     public function discovernew(Expansion $expansion, DiscoverServiceInterface $discoverService)
@@ -401,9 +412,9 @@ class DungeonRouteDiscoverController extends Controller
         ]);
     }
 
-
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      */
     public function discoverdungeonpopular(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService)
@@ -425,6 +436,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -466,6 +478,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -507,6 +520,7 @@ class DungeonRouteDiscoverController extends Controller
 
     /**
      * @return Factory
+     *
      * @throws AuthorizationException
      */
     public function discoverdungeonnew(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService)
@@ -532,8 +546,6 @@ class DungeonRouteDiscoverController extends Controller
      * it will find affixes for the timewalking season and not for the current season, leading to incorrect affixes.
      *
      * This function will correct this mistake and apply the correct expansion + season.
-     *
-     * @return Expansion
      */
     private function applyCorrectedExpansion(
         Expansion                $originalExpansion,

@@ -20,11 +20,6 @@ class WowheadService implements WowheadServiceInterface
 
     private const HEALTH_IDENTIFYING_TOKEN = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
 
-    /**
-     * @param GameVersion $gameVersion
-     * @param Npc         $npc
-     * @return int|null
-     */
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int
     {
         $response = $this->curlGet(
@@ -62,7 +57,7 @@ class WowheadService implements WowheadServiceInterface
                     if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
                         $grabNext = true;
                     } else if ($grabNext) {
-                        $possibleHealth = (int)str_replace(',', '', (string) $td->innerHtml);
+                        $possibleHealth = (int)str_replace(',', '', (string)$td->innerHtml);
                         if ($possibleHealth > 0) {
                             $health = $possibleHealth;
                             break;
@@ -86,6 +81,7 @@ class WowheadService implements WowheadServiceInterface
         if ($ini == 0) {
             return '';
         }
+
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
 

@@ -35,11 +35,11 @@ use Teapot\StatusCode;
 class TeamController extends Controller
 {
     /**
-     * @param Team|null $team
      * @return mixed
+     *
      * @throws Exception
      */
-    public function store(TeamFormRequest $request, Team $team = null)
+    public function store(TeamFormRequest $request, ?Team $team = null)
     {
         $new = $team === null;
 
@@ -67,6 +67,7 @@ class TeamController extends Controller
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $team->delete();
                     }
+
                     throw $ex;
                 }
             }
@@ -90,6 +91,7 @@ class TeamController extends Controller
 
     /**
      * @return Application|ResponseFactory|RedirectResponse|Response
+     *
      * @throws AuthorizationException
      */
     public function edit(Request $request, Team $team)
@@ -109,6 +111,7 @@ class TeamController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function delete(Request $request, Team $team)
@@ -126,6 +129,7 @@ class TeamController extends Controller
 
     /**
      * @return Team|Factory|Builder|Model|RedirectResponse|View|object
+     *
      * @throws Exception
      */
     public function update(TeamFormRequest $request, Team $team)
@@ -144,6 +148,7 @@ class TeamController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(TeamFormRequest $request)

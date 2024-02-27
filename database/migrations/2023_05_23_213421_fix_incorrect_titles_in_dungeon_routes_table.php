@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class FixIncorrectTitlesInDungeonRoutesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -39,4 +38,4 @@ class FixIncorrectTitlesInDungeonRoutesTable extends Migration
     public function down()
     {
     }
-}
+};

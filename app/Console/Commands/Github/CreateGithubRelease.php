@@ -41,6 +41,7 @@ class CreateGithubRelease extends GithubReleaseCommand
      * Execute the console command.
      *
      * @return void
+     *
      * @throws MissingArgumentException
      * @throws Throwable
      */

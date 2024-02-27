@@ -39,6 +39,7 @@ class ReportRelease extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService)
@@ -54,6 +55,7 @@ class ReportRelease extends Command
             if (!str_starts_with($version, 'v')) {
                 $version = sprintf('v%s', $version);
             }
+
             $release = Release::where('version', $version)->first();
         }
 

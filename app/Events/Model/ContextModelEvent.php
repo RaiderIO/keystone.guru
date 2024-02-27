@@ -11,9 +11,9 @@ abstract class ContextModelEvent extends ContextEvent
     /**
      * Create a new event instance.
      *
-     * @param $context Model
-     * @param $user User
-     * @param $model Model
+     * @param  $context  Model
+     * @param  $user  User
+     * @param  $model  Model
      * @return void
      */
     public function __construct(Model $context, User $user, protected Model $model)

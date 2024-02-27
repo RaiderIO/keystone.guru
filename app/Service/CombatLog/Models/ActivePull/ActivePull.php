@@ -13,13 +13,12 @@ class ActivePull
     /** @var Collection|ActivePullEnemy[] */
     protected Collection $enemiesKilled;
 
-    /** @var Collection */
     protected Collection $spellsCast;
 
     /**
      * @var bool To prevent chain pulls from being killed before the original pull, we defer creating the chain pull
-     * until the OG pull is killed. Meanwhile, the chain pull is marked as completed and new pulls are created until
-     * then instead of new enemies being added to the chain pull every time.
+     *           until the OG pull is killed. Meanwhile, the chain pull is marked as completed and new pulls are created until
+     *           then instead of new enemies being added to the chain pull every time.
      */
     private bool $isCompleted;
 
@@ -32,12 +31,9 @@ class ActivePull
         $this->isCompleted = false;
     }
 
-    /**
-     * @return float
-     */
     public function getAverageHPPercentAt(Carbon $timestamp): float
     {
-        $inCombatSum = $this->enemiesInCombat->sum(fn(ActivePullEnemy $activePullEnemy) => $activePullEnemy->getHPPercentAt($timestamp));
+        $inCombatSum = $this->enemiesInCombat->sum(static fn(ActivePullEnemy $activePullEnemy) => $activePullEnemy->getHPPercentAt($timestamp));
 
         $totalEnemiesInPull = ($this->enemiesInCombat->count() + $this->enemiesKilled->count());
         if ($totalEnemiesInPull === 0) {
@@ -63,9 +59,6 @@ class ActivePull
         return $this->enemiesKilled;
     }
 
-    /**
-     * @return Collection
-     */
     public function getSpellsCast(): Collection
     {
         return $this->spellsCast;
@@ -76,6 +69,7 @@ class ActivePull
      */
     public function enemyKilled(string $uniqueId): ActivePull
     {
+        /** @var ActivePullEnemy $activePullEnemy */
         $activePullEnemy = $this->enemiesInCombat->get($uniqueId);
         if ($activePullEnemy !== null) {
             $this->enemiesInCombat->forget($uniqueId);
@@ -112,34 +106,22 @@ class ActivePull
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnemyInCombat(string $uniqueUid): bool
     {
         return $this->enemiesInCombat->has($uniqueUid);
     }
 
-    /**
-     * @return bool
-     */
     public function isCompleted(): bool
     {
         return $this->isCompleted;
     }
 
-    /**
-     * @return void
-     */
     public function merge(ActivePull $activePull): void
     {
         $this->enemiesInCombat = $this->enemiesInCombat->merge($activePull->enemiesInCombat);
         $this->enemiesKilled   = $this->enemiesKilled->merge($activePull->enemiesKilled);
     }
 
-    /**
-     * @return array
-     */
     public function getAvgLatLng(): array
     {
         $result = ['lat' => 0, 'lng' => 0];
@@ -152,7 +134,7 @@ class ActivePull
 
             $result['lat'] += $killedActivePullEnemy->getResolvedEnemy()->lat;
             $result['lng'] += $killedActivePullEnemy->getResolvedEnemy()->lng;
-            $count++;
+            ++$count;
         }
 
         $result['lat'] /= $count;

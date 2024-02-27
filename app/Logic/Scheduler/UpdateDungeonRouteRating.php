@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateDungeonRouteRating
 {
-    function __invoke()
+    public function __invoke()
     {
         Log::channel('scheduler')->debug('>> Updating dungeonroute rating');
 

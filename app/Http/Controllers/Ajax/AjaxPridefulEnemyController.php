@@ -20,9 +20,10 @@ class AjaxPridefulEnemyController extends Controller
 {
     /**
      * @return PridefulEnemy
+     *
      * @throws Exception
      */
-    function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -54,9 +55,10 @@ class AjaxPridefulEnemyController extends Controller
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonRoute);
 

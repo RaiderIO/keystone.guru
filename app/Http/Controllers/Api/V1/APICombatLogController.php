@@ -13,10 +13,6 @@ class APICombatLogController extends Controller
 {
     use SavesStringToTempDisk;
 
-    /**
-     *
-     * @return DungeonRouteResource
-     */
     public function createRoute(
         CreateRouteRequest                      $request,
         CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService

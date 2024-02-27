@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 {
-
     public function __construct(DatatablesHandler $dtHandler)
     {
         parent::__construct($dtHandler, 'affixes.id');
@@ -26,9 +25,9 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 
         $affixes = $columnData['search']['value'];
         if (!empty($affixes)) {
-            $affixIds = explode(',', (string) $affixes);
+            $affixIds = explode(',', (string)$affixes);
 
-            $subBuilder->whereHas('affixes', function ($query) use (&$affixIds) {
+            $subBuilder->whereHas('affixes', static function ($query) use (&$affixIds) {
                 /** @var $query Builder */
                 $query->whereIn('affix_groups.id', $affixIds);
             });

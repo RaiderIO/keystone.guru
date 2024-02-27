@@ -35,7 +35,7 @@ $chunks     = $affixgroup->affixes->chunk($chunkCount);
             </div>
         </div>
             <?php
-            $affixIndex++;
+            ++$affixIndex;
         }
             ?>
     </div>

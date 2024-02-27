@@ -17,7 +17,6 @@ use Illuminate\Database\Query\JoinClause;
  * @property int         $kill_zone_id
  * @property int         $npc_id
  * @property int         $mdt_id
- *
  * @property LiveSession $livesession
  * @property KillZone    $killzone
  * @property Npc         $npc
@@ -38,38 +37,26 @@ class OverpulledEnemy extends Model
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function livesession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function killzone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return Enemy
-     */
     public function getEnemy(): Enemy
     {
         /** @var Enemy $result */
         $result = Enemy::select('enemies.*')
-            ->join('overpulled_enemies', function (JoinClause $clause) {
+            ->join('overpulled_enemies', static function (JoinClause $clause) {
                 $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
                     ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
             })

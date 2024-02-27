@@ -2,20 +2,16 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\ChallengeModeStart;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 final class ChallengeModeStartTest extends PublicTestCase
 {
-
-    /**
-     * @return void
-     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('ChallengeModeStart')]

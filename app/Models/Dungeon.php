@@ -22,31 +22,28 @@ use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
- * @property int                                     $id                          The ID of this Dungeon.
- * @property int                                     $expansion_id                The linked expansion to this dungeon.
- * @property int                                     $game_version_id             The linked game version to this dungeon.
- * @property int                                     $zone_id                     The ID of the location that WoW has given this dungeon.
- * @property int                                     $map_id                      The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int                                     $challenge_mode_id           The ID of the M+ for this dungeon (used internally in the game, used for ARC)
- * @property int                                     $mdt_id                      The ID that MDT has given this dungeon.
- * @property string                                  $name                        The name of the dungeon.
- * @property string                                  $slug                        The url friendly slug of the dungeon.
- * @property string                                  $key                         Shorthand key of the dungeon
- * @property boolean                                 $speedrun_enabled            True if this dungeon has a speedrun enabled, false if it does not.
- * @property boolean                                 $facade_enabled              True if this dungeon uses facades, false if it does not.
- * @property boolean                                 $active                      True if this dungeon is active, false if it is not.
- * @property boolean                                 $mdt_supported               True if MDT is supported for this dungeon, false if it is not.
- *
+ * @property int                                     $id The ID of this Dungeon.
+ * @property int                                     $expansion_id The linked expansion to this dungeon.
+ * @property int                                     $game_version_id The linked game version to this dungeon.
+ * @property int                                     $zone_id The ID of the location that WoW has given this dungeon.
+ * @property int                                     $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int                                     $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int                                     $mdt_id The ID that MDT has given this dungeon.
+ * @property string                                  $name The name of the dungeon.
+ * @property string                                  $slug The url friendly slug of the dungeon.
+ * @property string                                  $key Shorthand key of the dungeon
+ * @property bool                                    $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
+ * @property bool                                    $facade_enabled True if this dungeon uses facades, false if it does not.
+ * @property bool                                    $active True if this dungeon is active, false if it is not.
+ * @property bool                                    $mdt_supported True if MDT is supported for this dungeon, false if it is not.
  * @property Expansion                               $expansion
  * @property GameVersion                             $gameVersion
  * @property MappingVersion                          $currentMappingVersion
- *
  * @property Collection|MappingVersion[]             $mappingVersions
  * @property Collection|Floor[]                      $floors
  * @property Collection|Floor[]                      $activeFloors
  * @property Collection|DungeonRoute[]               $dungeonRoutes
  * @property Collection|Npc[]                        $npcs
- *
  * @property Collection|Enemy[]                      $enemies
  * @property Collection|EnemyPack[]                  $enemypacks
  * @property Collection|EnemyPatrol[]                $enemypatrols
@@ -70,7 +67,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
      *
      * @var array
      */
-    protected $appends  = ['floor_count', 'mdt_supported'];
+    protected $appends = ['floor_count', 'mdt_supported'];
+
     protected $fillable = [
         'expansion_id',
         'game_version_id',
@@ -86,11 +84,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'slug',
     ];
 
-    public $with       = ['expansion', 'gameVersion', 'floors'];
-    public $hidden     = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $with = ['expansion', 'gameVersion', 'floors'];
+
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+
     public $timestamps = false;
 
     public const DIFFICULTY_10_MAN = 1;
+
     public const DIFFICULTY_25_MAN = 2;
 
     public const DIFFICULTY_ALL = [
@@ -99,168 +100,297 @@ class Dungeon extends CacheModel implements MappingModelInterface
     ];
 
     // Classic
-    public const DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps';     //blackfanthomdeeps
-    public const DUNGEON_BLACKROCK_DEPTHS            = 'blackrock_depths';      //blackrockdepths
-    public const DUNGEON_DEADMINES                   = 'deadmines';             //thedeadmines
-    public const DUNGEON_DIRE_MAUL_WEST              = 'dire_maul_west';        //diremaul
-    public const DUNGEON_DIRE_MAUL_NORTH             = 'dire_maul_north';       //diremaul
-    public const DUNGEON_DIRE_MAUL_EAST              = 'dire_maul_east';        //diremaul
-    public const DUNGEON_GNOMEREGAN                  = 'gnomeregan';            //gnomeregan
-    public const DUNGEON_LOWER_BLACKROCK_SPIRE       = 'lower_blackrock_spire'; //blackrockspire
-    public const DUNGEON_MARAUDON                    = 'maraudon';
-    public const DUNGEON_RAGEFIRE_CHASM              = 'ragefire_chasm';              //ragefire
-    public const DUNGEON_RAZORFEN_DOWNS              = 'razorfen_downs';              //razorfendowns
-    public const DUNGEON_RAZORFEN_KRAUL              = 'razorfen_kraul';              //razorfenkraul
-    public const DUNGEON_SCARLET_MONASTERY_ARMORY    = 'scarlet_monastery_armory';    //scarletmonastery
+    public const DUNGEON_BLACKFATHOM_DEEPS = 'blackfathom_deeps';     //blackfanthomdeeps
+
+    public const DUNGEON_BLACKROCK_DEPTHS = 'blackrock_depths';      //blackrockdepths
+
+    public const DUNGEON_DEADMINES = 'deadmines';             //thedeadmines
+
+    public const DUNGEON_DIRE_MAUL_WEST = 'dire_maul_west';        //diremaul
+
+    public const DUNGEON_DIRE_MAUL_NORTH = 'dire_maul_north';       //diremaul
+
+    public const DUNGEON_DIRE_MAUL_EAST = 'dire_maul_east';        //diremaul
+
+    public const DUNGEON_GNOMEREGAN = 'gnomeregan';            //gnomeregan
+
+    public const DUNGEON_LOWER_BLACKROCK_SPIRE = 'lower_blackrock_spire'; //blackrockspire
+
+    public const DUNGEON_MARAUDON = 'maraudon';
+
+    public const DUNGEON_RAGEFIRE_CHASM = 'ragefire_chasm';              //ragefire
+
+    public const DUNGEON_RAZORFEN_DOWNS = 'razorfen_downs';              //razorfendowns
+
+    public const DUNGEON_RAZORFEN_KRAUL = 'razorfen_kraul';              //razorfenkraul
+
+    public const DUNGEON_SCARLET_MONASTERY_ARMORY = 'scarlet_monastery_armory';    //scarletmonastery
+
     public const DUNGEON_SCARLET_MONASTERY_CATHEDRAL = 'scarlet_monastery_cathedral'; //scarletmonastery
-    public const DUNGEON_SCARLET_MONASTERY_LIBRARY   = 'scarlet_monastery_library';   //scarletmonastery
+
+    public const DUNGEON_SCARLET_MONASTERY_LIBRARY = 'scarlet_monastery_library';   //scarletmonastery
+
     public const DUNGEON_SCARLET_MONASTERY_GRAVEYARD = 'scarlet_monastery_graveyard'; //scarletmonastery
-    public const DUNGEON_SCHOLOMANCE                 = 'scholomance';
-    public const DUNGEON_SHADOWFANG_KEEP             = 'shadowfang_keep'; //shadowfangkeep
-    public const DUNGEON_STRATHOLME                  = 'stratholme';
-    public const DUNGEON_THE_STOCKADE                = 'the_stockade';              //thestockade
-    public const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
-    public const DUNGEON_ULDAMAN                     = 'uldaman';
-    public const DUNGEON_UPPER_BLACKROCK_SPIRE       = 'upper_blackrock_spire'; //upperblackrockspire
-    public const DUNGEON_WAILING_CAVERNS             = 'wailing_caverns';       //wailingcaverns
-    public const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';            //zulfarrak
+
+    public const DUNGEON_SCHOLOMANCE = 'scholomance';
+
+    public const DUNGEON_SHADOWFANG_KEEP = 'shadowfang_keep'; //shadowfangkeep
+
+    public const DUNGEON_STRATHOLME = 'stratholme';
+
+    public const DUNGEON_THE_STOCKADE = 'the_stockade';              //thestockade
+
+    public const DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR = 'the_temple_of_atal_hakkar'; //thetempleofatalhakkar
+
+    public const DUNGEON_ULDAMAN = 'uldaman';
+
+    public const DUNGEON_UPPER_BLACKROCK_SPIRE = 'upper_blackrock_spire'; //upperblackrockspire
+
+    public const DUNGEON_WAILING_CAVERNS = 'wailing_caverns';       //wailingcaverns
+
+    public const DUNGEON_ZUL_FARRAK = 'zul_farrak';            //zulfarrak
 
     // The Burning Crusade
-    public const DUNGEON_ACHENAI_CRYPTS          = 'auchenai_crypts';
-    public const DUNGEON_HELLFIRE_RAMPARTS       = 'hellfire_ramparts';
-    public const DUNGEON_MAGISTERS_TERRACE       = 'magisters_terrace';
-    public const DUNGEON_MANA_TOMBS              = 'mana_tombs';
+    public const DUNGEON_ACHENAI_CRYPTS = 'auchenai_crypts';
+
+    public const DUNGEON_HELLFIRE_RAMPARTS = 'hellfire_ramparts';
+
+    public const DUNGEON_MAGISTERS_TERRACE = 'magisters_terrace';
+
+    public const DUNGEON_MANA_TOMBS = 'mana_tombs';
+
     public const DUNGEON_OLD_HILLSBRAD_FOOTHILLS = 'old_hillsbrad_foothills';
-    public const DUNGEON_SETHEKK_HALLS           = 'sethekk_halls';
-    public const DUNGEON_SHADOW_LABYRINTH        = 'shadow_labyrinth';
-    public const DUNGEON_THE_ARCATRAZ            = 'the_arcatraz';
-    public const DUNGEON_THE_BLACK_MORASS        = 'the_black_morass';
-    public const DUNGEON_THE_BLOOD_FURNACE       = 'the_blood_furnace';
-    public const DUNGEON_THE_BOTANICA            = 'the_botanica';
-    public const DUNGEON_THE_MECHANAR            = 'the_mechanar';
-    public const DUNGEON_THE_SHATTERED_HALLS     = 'the_shattered_halls';
-    public const DUNGEON_THE_SLAVE_PENS          = 'the_slave_pens';
-    public const DUNGEON_THE_STEAMVAULT          = 'the_steamvault';
-    public const DUNGEON_THE_UNDERBOG            = 'the_underbog';
+
+    public const DUNGEON_SETHEKK_HALLS = 'sethekk_halls';
+
+    public const DUNGEON_SHADOW_LABYRINTH = 'shadow_labyrinth';
+
+    public const DUNGEON_THE_ARCATRAZ = 'the_arcatraz';
+
+    public const DUNGEON_THE_BLACK_MORASS = 'the_black_morass';
+
+    public const DUNGEON_THE_BLOOD_FURNACE = 'the_blood_furnace';
+
+    public const DUNGEON_THE_BOTANICA = 'the_botanica';
+
+    public const DUNGEON_THE_MECHANAR = 'the_mechanar';
+
+    public const DUNGEON_THE_SHATTERED_HALLS = 'the_shattered_halls';
+
+    public const DUNGEON_THE_SLAVE_PENS = 'the_slave_pens';
+
+    public const DUNGEON_THE_STEAMVAULT = 'the_steamvault';
+
+    public const DUNGEON_THE_UNDERBOG = 'the_underbog';
 
     // Wrath of the Lich King
     public const DUNGEON_AHN_KAHET_THE_OLD_KINGDOM = 'ahnkahet';
-    public const DUNGEON_AZJOL_NERUB               = 'azjolnerub';
-    public const DUNGEON_DRAK_THARON_KEEP          = 'draktharonkeep';
-    public const DUNGEON_GUNDRAK                   = 'gundrak';
-    public const DUNGEON_HALLS_OF_LIGHTNING        = 'hallsoflightning';
-    public const DUNGEON_HALLS_OF_REFLECTION       = 'hallsofreflection';
-    public const DUNGEON_HALLS_OF_STONE            = 'hallsofstone'; // ulduar77
-    public const DUNGEON_PIT_OF_SARON              = 'pitofsaron';
+
+    public const DUNGEON_AZJOL_NERUB = 'azjolnerub';
+
+    public const DUNGEON_DRAK_THARON_KEEP = 'draktharonkeep';
+
+    public const DUNGEON_GUNDRAK = 'gundrak';
+
+    public const DUNGEON_HALLS_OF_LIGHTNING = 'hallsoflightning';
+
+    public const DUNGEON_HALLS_OF_REFLECTION = 'hallsofreflection';
+
+    public const DUNGEON_HALLS_OF_STONE = 'hallsofstone'; // ulduar77
+
+    public const DUNGEON_PIT_OF_SARON = 'pitofsaron';
+
     public const DUNGEON_THE_CULLING_OF_STRATHOLME = 'thecullingofstratholme'; // cotstratholme
-    public const DUNGEON_THE_FORGE_OF_SOULS        = 'theforgeofsouls';
-    public const DUNGEON_THE_NEXUS                 = 'thenexus';
-    public const DUNGEON_THE_OCULUS                = 'theoculus';          // nexus80
-    public const DUNGEON_THE_VIOLET_HOLD           = 'theviolethold';      // violethold
-    public const DUNGEON_TRIAL_OF_THE_CHAMPION     = 'trialofthechampion'; // theargentcoliseum
-    public const DUNGEON_UTGARDE_KEEP              = 'utgardekeep';
-    public const DUNGEON_UTGARDE_PINNACLE          = 'utgardepinnacle';
+
+    public const DUNGEON_THE_FORGE_OF_SOULS = 'theforgeofsouls';
+
+    public const DUNGEON_THE_NEXUS = 'thenexus';
+
+    public const DUNGEON_THE_OCULUS = 'theoculus';          // nexus80
+
+    public const DUNGEON_THE_VIOLET_HOLD = 'theviolethold';      // violethold
+
+    public const DUNGEON_TRIAL_OF_THE_CHAMPION = 'trialofthechampion'; // theargentcoliseum
+
+    public const DUNGEON_UTGARDE_KEEP = 'utgardekeep';
+
+    public const DUNGEON_UTGARDE_PINNACLE = 'utgardepinnacle';
 
     // Wrath of the Lich King Raid
-    public const RAID_ICECROWN_CITADEL                         = 'icecrowncitadel';
-    public const RAID_NAXXRAMAS                                = 'naxxramas';
-    public const RAID_ONYXIAS_LAIR                             = 'onyxiaslair';
+    public const RAID_ICECROWN_CITADEL = 'icecrowncitadel';
+
+    public const RAID_NAXXRAMAS = 'naxxramas';
+
+    public const RAID_ONYXIAS_LAIR = 'onyxiaslair';
+
     public const RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER = 'theargentcoliseum';
-    public const RAID_THE_EYE_OF_ETERNITY                      = 'theeyeofeternity';
-    public const RAID_THE_OBSIDIAN_SANCTUM                     = 'theobsidiansanctum';
-    public const RAID_THE_RUBY_SANCTUM                         = 'therubysanctum';
-    public const RAID_ULDUAR                                   = 'ulduar';
-    public const RAID_VAULT_OF_ARCHAVON                        = 'vaultofarchavon';
+
+    public const RAID_THE_EYE_OF_ETERNITY = 'theeyeofeternity';
+
+    public const RAID_THE_OBSIDIAN_SANCTUM = 'theobsidiansanctum';
+
+    public const RAID_THE_RUBY_SANCTUM = 'therubysanctum';
+
+    public const RAID_ULDUAR = 'ulduar';
+
+    public const RAID_VAULT_OF_ARCHAVON = 'vaultofarchavon';
 
     // Cataclysm
-    public const DUNGEON_BLACKROCK_CAVERNS        = 'blackrock_caverns';
-    public const DUNGEON_DEADMINES_CATACLYSM      = 'deadmines_cataclysm';
-    public const DUNGEON_END_TIME                 = 'end_time';
-    public const DUNGEON_GRIM_BATOL               = 'grim_batol';
-    public const DUNGEON_HALLS_OF_ORIGINATION     = 'halls_of_origination';
-    public const DUNGEON_HOUR_OF_TWILIGHT         = 'hour_of_twilight';
+    public const DUNGEON_BLACKROCK_CAVERNS = 'blackrock_caverns';
+
+    public const DUNGEON_DEADMINES_CATACLYSM = 'deadmines_cataclysm';
+
+    public const DUNGEON_END_TIME = 'end_time';
+
+    public const DUNGEON_GRIM_BATOL = 'grim_batol';
+
+    public const DUNGEON_HALLS_OF_ORIGINATION = 'halls_of_origination';
+
+    public const DUNGEON_HOUR_OF_TWILIGHT = 'hour_of_twilight';
+
     public const DUNGEON_LOST_CITY_OF_THE_TOL_VIR = 'lost_city_of_the_tol_vir';
-    public const DUNGEON_SHADOWFANG_KEEP_CATA     = 'shadowfang_keep_cataclysm';
-    public const DUNGEON_THE_STONECORE            = 'the_stonecore';
-    public const DUNGEON_THE_VORTEX_PINNACLE      = 'skywall';
-    public const DUNGEON_THRONE_OF_THE_TIDES      = 'throne_of_the_tides'; // throneoftides
-    public const DUNGEON_WELL_OF_ETERNITY         = 'well_of_eternity';
-    public const DUNGEON_ZUL_AMAN                 = 'zul_aman';
-    public const DUNGEON_ZUL_GURUB                = 'zul_gurub';
+
+    public const DUNGEON_SHADOWFANG_KEEP_CATA = 'shadowfang_keep_cataclysm';
+
+    public const DUNGEON_THE_STONECORE = 'the_stonecore';
+
+    public const DUNGEON_THE_VORTEX_PINNACLE = 'skywall';
+
+    public const DUNGEON_THRONE_OF_THE_TIDES = 'throne_of_the_tides'; // throneoftides
+
+    public const DUNGEON_WELL_OF_ETERNITY = 'well_of_eternity';
+
+    public const DUNGEON_ZUL_AMAN = 'zul_aman';
+
+    public const DUNGEON_ZUL_GURUB = 'zul_gurub';
 
     // Mists of Pandaria
-    public const DUNGEON_GATE_OF_THE_SETTING_SUN    = 'gate_of_the_setting_sun';
-    public const DUNGEON_MOGU_SHAN_PALACE           = 'mogu_shan palace';
-    public const DUNGEON_SCARLET_HALLS_MOP          = 'scarlet_halls_mop';
-    public const DUNGEON_SCARLET_MONASTERY_MOP      = 'scarlet_monastery_mop';
-    public const DUNGEON_SCHOLOMANCE_MOP            = 'scholomance_mop';
-    public const DUNGEON_SHADO_PAN_MONASTERY        = 'shado_pan_monastery';
-    public const DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     = 'siege_of_niu_zao_temple';
-    public const DUNGEON_STORMSTOUT_BREWERY         = 'stormstout_brewery';
+    public const DUNGEON_GATE_OF_THE_SETTING_SUN = 'gate_of_the_setting_sun';
+
+    public const DUNGEON_MOGU_SHAN_PALACE = 'mogu_shan palace';
+
+    public const DUNGEON_SCARLET_HALLS_MOP = 'scarlet_halls_mop';
+
+    public const DUNGEON_SCARLET_MONASTERY_MOP = 'scarlet_monastery_mop';
+
+    public const DUNGEON_SCHOLOMANCE_MOP = 'scholomance_mop';
+
+    public const DUNGEON_SHADO_PAN_MONASTERY = 'shado_pan_monastery';
+
+    public const DUNGEON_SIEGE_OF_NIUZAO_TEMPLE = 'siege_of_niu_zao_temple';
+
+    public const DUNGEON_STORMSTOUT_BREWERY = 'stormstout_brewery';
+
     public const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'templeofthejadeserpent';
 
     // Warlords of Draenor
-    public const DUNGEON_AUCHINDOUN                = 'auchindoun';
-    public const DUNGEON_BLOODMAUL_SLAG_MINES      = 'bloodmaulslagmines';
-    public const DUNGEON_IRON_DOCKS                = 'irondocks';
-    public const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
+    public const DUNGEON_AUCHINDOUN = 'auchindoun';
+
+    public const DUNGEON_BLOODMAUL_SLAG_MINES = 'bloodmaulslagmines';
+
+    public const DUNGEON_IRON_DOCKS = 'irondocks';
+
+    public const DUNGEON_GRIMRAIL_DEPOT = 'grimraildepot';
+
     public const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
-    public const DUNGEON_SKYREACH                  = 'skyreach';
-    public const DUNGEON_THE_EVERBLOOM             = 'theeverbloom'; // overgrownoutput
+
+    public const DUNGEON_SKYREACH = 'skyreach';
+
+    public const DUNGEON_THE_EVERBLOOM = 'theeverbloom'; // overgrownoutput
 
     // Legion
-    public const DUNGEON_ARCWAY                      = 'arcway';
-    public const DUNGEON_BLACK_ROOK_HOLD             = 'blackrookhold';
-    public const DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  = 'cathedralofeternalnight';
-    public const DUNGEON_COURT_OF_STARS              = 'courtofstars';
-    public const DUNGEON_DARKHEART_THICKET           = 'darkheartthicket';
-    public const DUNGEON_EYE_OF_AZSHARA              = 'eyeofazshara';
-    public const DUNGEON_HALLS_OF_VALOR              = 'hallsofvalor';
-    public const DUNGEON_LOWER_KARAZHAN              = 'lowerkarazhan';
-    public const DUNGEON_MAW_OF_SOULS                = 'mawofsouls';
-    public const DUNGEON_NELTHARIONS_LAIR            = 'neltharionslair';
-    public const DUNGEON_UPPER_KARAZHAN              = 'upperkarazhan';
+    public const DUNGEON_ARCWAY = 'arcway';
+
+    public const DUNGEON_BLACK_ROOK_HOLD = 'blackrookhold';
+
+    public const DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT = 'cathedralofeternalnight';
+
+    public const DUNGEON_COURT_OF_STARS = 'courtofstars';
+
+    public const DUNGEON_DARKHEART_THICKET = 'darkheartthicket';
+
+    public const DUNGEON_EYE_OF_AZSHARA = 'eyeofazshara';
+
+    public const DUNGEON_HALLS_OF_VALOR = 'hallsofvalor';
+
+    public const DUNGEON_LOWER_KARAZHAN = 'lowerkarazhan';
+
+    public const DUNGEON_MAW_OF_SOULS = 'mawofsouls';
+
+    public const DUNGEON_NELTHARIONS_LAIR = 'neltharionslair';
+
+    public const DUNGEON_UPPER_KARAZHAN = 'upperkarazhan';
+
     public const DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE = 'theseatofthetriumvirate';
-    public const DUNGEON_VAULT_OF_THE_WARDENS        = 'vaultofthewardens';
+
+    public const DUNGEON_VAULT_OF_THE_WARDENS = 'vaultofthewardens';
 
     // Battle for Azeroth
-    public const DUNGEON_ATAL_DAZAR           = 'ataldazar';
-    public const DUNGEON_FREEHOLD             = 'freehold';
-    public const DUNGEON_KINGS_REST           = 'kingsrest';
-    public const DUNGEON_SHRINE_OF_THE_STORM  = 'shrineofthestorm';
-    public const DUNGEON_SIEGE_OF_BORALUS     = 'siegeofboralus';
+    public const DUNGEON_ATAL_DAZAR = 'ataldazar';
+
+    public const DUNGEON_FREEHOLD = 'freehold';
+
+    public const DUNGEON_KINGS_REST = 'kingsrest';
+
+    public const DUNGEON_SHRINE_OF_THE_STORM = 'shrineofthestorm';
+
+    public const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';
+
     public const DUNGEON_TEMPLE_OF_SETHRALISS = 'templeofsethraliss';
-    public const DUNGEON_THE_MOTHERLODE       = 'themotherlode';
-    public const DUNGEON_THE_UNDERROT         = 'theunderrot';
-    public const DUNGEON_TOL_DAGOR            = 'toldagor';
-    public const DUNGEON_WAYCREST_MANOR       = 'waycrestmanor';
-    public const DUNGEON_MECHAGON_JUNKYARD    = 'mechagonjunkyard';
-    public const DUNGEON_MECHAGON_WORKSHOP    = 'mechagonworkshop';
+
+    public const DUNGEON_THE_MOTHERLODE = 'themotherlode';
+
+    public const DUNGEON_THE_UNDERROT = 'theunderrot';
+
+    public const DUNGEON_TOL_DAGOR = 'toldagor';
+
+    public const DUNGEON_WAYCREST_MANOR = 'waycrestmanor';
+
+    public const DUNGEON_MECHAGON_JUNKYARD = 'mechagonjunkyard';
+
+    public const DUNGEON_MECHAGON_WORKSHOP = 'mechagonworkshop';
 
     // Shadowlands
-    public const DUNGEON_DE_OTHER_SIDE              = 'deotherside_ardenweald';
-    public const DUNGEON_HALLS_OF_ATONEMENT         = 'hallsofatonement_a';
-    public const DUNGEON_MISTS_OF_TIRNA_SCITHE      = 'mistsoftirnescithe';
-    public const DUNGEON_PLAGUEFALL                 = 'plaguefall';
-    public const DUNGEON_SANGUINE_DEPTHS            = 'sanguinedepths_a';
-    public const DUNGEON_SPIRES_OF_ASCENSION        = 'spiresofascension_a';
-    public const DUNGEON_THE_NECROTIC_WAKE          = 'necroticwake_a';
-    public const DUNGEON_THEATER_OF_PAIN            = 'theaterofpain';
+    public const DUNGEON_DE_OTHER_SIDE = 'deotherside_ardenweald';
+
+    public const DUNGEON_HALLS_OF_ATONEMENT = 'hallsofatonement_a';
+
+    public const DUNGEON_MISTS_OF_TIRNA_SCITHE = 'mistsoftirnescithe';
+
+    public const DUNGEON_PLAGUEFALL = 'plaguefall';
+
+    public const DUNGEON_SANGUINE_DEPTHS = 'sanguinedepths_a';
+
+    public const DUNGEON_SPIRES_OF_ASCENSION = 'spiresofascension_a';
+
+    public const DUNGEON_THE_NECROTIC_WAKE = 'necroticwake_a';
+
+    public const DUNGEON_THEATER_OF_PAIN = 'theaterofpain';
+
     public const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazaveshstreetsofwonder';
-    public const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
+
+    public const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT = 'tazaveshsoleahsgambit';
 
     // Dragonflight
-    public const DUNGEON_ALGETH_AR_ACADEMY     = 'dragonacademy';
-    public const DUNGEON_BRACKENHIDE_HOLLOW    = 'brackenhide';
-    public const DUNGEON_HALLS_OF_INFUSION     = 'hallsofinfusion';
-    public const DUNGEON_NELTHARUS             = 'neltharus';
-    public const DUNGEON_RUBY_LIFE_POOLS       = 'rubylifepools';
-    public const DUNGEON_THE_AZURE_VAULT       = 'theazurevault';
-    public const DUNGEON_THE_NOKHUD_OFFENSIVE  = 'nokhudoffensive';
+    public const DUNGEON_ALGETH_AR_ACADEMY = 'dragonacademy';
+
+    public const DUNGEON_BRACKENHIDE_HOLLOW = 'brackenhide';
+
+    public const DUNGEON_HALLS_OF_INFUSION = 'hallsofinfusion';
+
+    public const DUNGEON_NELTHARUS = 'neltharus';
+
+    public const DUNGEON_RUBY_LIFE_POOLS = 'rubylifepools';
+
+    public const DUNGEON_THE_AZURE_VAULT = 'theazurevault';
+
+    public const DUNGEON_THE_NOKHUD_OFFENSIVE = 'nokhudoffensive';
+
     public const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
 
     public const DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL = 'dawn_of_the_infinite_galakronds_fall';
-    public const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  = 'dawn_of_the_infinite_murozonds_rise';
+
+    public const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE = 'dawn_of_the_infinite_murozonds_rise';
 
     public const ALL = [
         Expansion::EXPANSION_CLASSIC      => [
@@ -433,7 +563,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     * @return string
      */
     public function getRouteKeyName(): string
     {
@@ -448,9 +577,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->floors->count();
     }
 
-    /**
-     * @return bool
-     */
     public function getMdtSupportedAttribute(): bool
     {
         return Conversion::hasMDTDungeonName($this->key);
@@ -472,18 +598,18 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
 
-                    $npcs[$npc->id] = (optional($npcEnemyForces)->enemy_forces ?? -1) >= 0;
+                    $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0;
                 }
             }
-        } catch (Exception $ex) {
-            dd($ex);
+        } catch (Exception $exception) {
+            dd($exception);
         }
 
         // Calculate which ones are unmapped
         $unmappedCount = 0;
         foreach ($npcs as $id => $npc) {
             if (!$npc) {
-                $unmappedCount++;
+                ++$unmappedCount;
             }
         }
 
@@ -496,33 +622,21 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
     }
 
-    /**
-     * @return HasOne
-     */
     public function currentMappingVersion(): HasOne
     {
         return $this->hasOne(MappingVersion::class)
@@ -531,25 +645,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
-    /**
-     * @return HasMany
-     */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
     }
 
-    /**
-     * @return HasMany
-     */
     public function activeFloors(): HasMany
     {
         return $this->floors()->active();
     }
 
-    /**
-     * @return HasMany
-     */
     public function floorsForMapFacade(bool $useFacade): HasMany
     {
         // If we use facade
@@ -559,14 +664,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->hasMany(Floor::class)
             ->select('floors.*')
             ->join('dungeons', 'floors.dungeon_id', 'dungeons.id')
-            ->where(function (Builder $builder) use ($useFacade) {
-                $builder->when(!$useFacade, function (Builder $builder) use ($useFacade) {
+            ->where(static function (Builder $builder) use ($useFacade) {
+                $builder->when(!$useFacade, static function (Builder $builder) {
                     $builder->where('facade', 0);
-                })->when($useFacade, function (Builder $builder) use ($useFacade) {
-                    $builder->where(function (Builder $builder) use ($useFacade) {
+                })->when($useFacade, static function (Builder $builder) use ($useFacade) {
+                    $builder->where(static function (Builder $builder) use ($useFacade) {
                         $builder->where('facade_enabled', true)
                             ->where('facade', $useFacade);
-                    })->orWhere(function (Builder $builder) use ($useFacade) {
+                    })->orWhere(static function (Builder $builder) {
                         $builder->where('facade_enabled', false)
                             ->where('facade', 0);
                     });
@@ -575,87 +680,57 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->orderBy('index');
     }
 
-    /**
-     * @return HasMany
-     */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany(Npc::class)
-            ->when($includeGlobalNpcs, function (Builder $builder) {
+            ->when($includeGlobalNpcs, static function (Builder $builder) {
                 $builder->orWhere('dungeon_id', -1);
             });
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function enemies(): HasManyThrough
     {
         return $this->hasManyThrough(Enemy::class, Floor::class);
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function enemypacks(): HasManyThrough
     {
         return $this->hasManyThrough(EnemyPack::class, Floor::class);
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function enemypatrols(): HasManyThrough
     {
         return $this->hasManyThrough(EnemyPatrol::class, Floor::class);
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
-            ->where(fn(Builder $builder) => $builder
+            ->where(static fn(Builder $builder) => $builder
                 ->whereNull('dungeon_route_id'));
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function dungeonfloorswitchmarkers(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function mountableareas(): HasManyThrough
     {
         return $this->hasManyThrough(MountableArea::class, Floor::class);
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function dungeonSpeedrunRequiredNpcs10Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
             ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
-    /**
-     * @return HasManyThrough
-     */
     public function dungeonSpeedrunRequiredNpcs25Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
@@ -664,9 +739,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Scope a query to only the Siege of Boralus dungeon.
-     *
-     *
-     * @return Builder
      */
     public function scopeFactionSelectionRequired(Builder $query): Builder
     {
@@ -675,9 +747,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Scope a query to only include active dungeons.
-     *
-     *
-     * @return Builder
      */
     public function scopeActive(Builder $query): Builder
     {
@@ -686,18 +755,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Scope a query to only include inactive dungeons.
-     *
-     *
-     * @return Builder
      */
     public function scopeInactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
     }
 
-    /**
-     * @return MapIcon|null
-     */
     public function getDungeonStart(): ?MapIcon
     {
         $result = null;
@@ -714,19 +777,13 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    /**
-     * @return Floor|null
-     */
     public function getFacadeFloor(): ?Floor
     {
-        return $this->floors->first(fn(Floor $floor) => $floor->facade);
+        return $this->floors->first(static fn(Floor $floor) => $floor->facade);
     }
 
     /**
      * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
-     *
-     *
-     * @return Season|null
      */
     public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
     {
@@ -745,9 +802,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $seasonService->getCurrentSeason($this->expansion);
     }
 
-    /**
-     * @return array
-     */
     private function getNpcsHealthBuilderEnemyForcesDungeonExclusionList(): array
     {
         // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
@@ -765,9 +819,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         );
     }
 
-    /**
-     * @return HasMany
-     */
     private function getNpcsHealthBuilder(MappingVersion $mappingVersion): HasMany
     {
         return $this->npcs(false)
@@ -778,7 +829,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('npc_type_id', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
             ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
-                fn(Builder $builder) => $builder
+                static fn(Builder $builder) => $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
                     ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id))
             ->groupBy('enemies.npc_id');
@@ -786,9 +837,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the minimum amount of health of all NPCs in this dungeon.
-     *
-     *
-     * @return int
      */
     public function getNpcsMinHealth(MappingVersion $mappingVersion): int
     {
@@ -797,9 +845,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the maximum amount of health of all NPCs in this dungeon.
-     *
-     *
-     * @return int
      */
     public function getNpcsMaxHealth(MappingVersion $mappingVersion): int
     {
@@ -847,7 +892,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->get();
     }
 
-
     /**
      * @return Collection|int[]
      */
@@ -862,9 +906,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->push(194373);
     }
 
-    /**
-     * @return bool
-     */
     public function isFactionSelectionRequired(): bool
     {
         return in_array($this->key, [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
@@ -873,8 +914,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
      * hence this function, so we can use it to differentiate between the two.
-     *
-     * @return bool
      */
     public function isSiegeOfBoralus(): bool
     {
@@ -883,73 +922,47 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Checks if this dungeon is Tol Dagor. It's a bit of a special dungeon because of a shitty MDT bug.
-     *
-     * @return bool
      */
     public function isTolDagor(): bool
     {
         return $this->key === self::DUNGEON_TOL_DAGOR;
     }
 
-    /**
-     * @return int
-     */
     public function getTimerUpgradePlusTwoSeconds(): int
     {
         return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plustwofactor');
     }
 
-    /**
-     * @return int
-     */
     public function getTimerUpgradePlusThreeSeconds(): int
     {
         return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
     }
 
-    /**
-     * @return string
-     */
     public function getImageUrl(): string
     {
         return url(sprintf('images/dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
     }
 
-    /**
-     * @return string
-     */
     public function getImage32Url(): string
     {
         return url(sprintf('images/dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
     }
 
-    /**
-     * @return string
-     */
     public function getImageTransparentUrl(): string
     {
         return url(sprintf('images/dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
     }
 
-    /**
-     * @return string
-     */
     public function getImageWallpaperUrl(): string
     {
         return url(sprintf('images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
     }
 
-    /**
-     * @return bool
-     */
     public function hasImageWallpaper(): bool
     {
         return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
     }
 
-    /**
-     * @return string
-     */
     public static function findExpansionByKey(string $key): ?string
     {
         $result = null;
@@ -964,9 +977,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
         return $this->id;

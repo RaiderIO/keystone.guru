@@ -8,8 +8,6 @@ use Illuminate\Validation\Rule;
 
 /**
  * User wants to publish their route
- *
- * @package App\Http\Requests
  */
 class PublishFormRequest extends FormRequest
 {

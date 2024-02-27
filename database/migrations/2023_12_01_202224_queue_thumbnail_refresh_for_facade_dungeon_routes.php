@@ -5,8 +5,7 @@ use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Collection;
 
-class QueueThumbnailRefreshForFacadeDungeonRoutes extends Migration
-{
+return new class extends Migration {
     private $thumbnailService;
 
     public function __construct()
@@ -40,4 +39,4 @@ class QueueThumbnailRefreshForFacadeDungeonRoutes extends Migration
     {
         // No going back
     }
-}
+};

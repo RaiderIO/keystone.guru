@@ -12,7 +12,6 @@ use Illuminate\Support\Collection;
  * @property string           $name
  * @property string           $key
  * @property string           $color
- *
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
@@ -21,14 +20,19 @@ class NpcClassification extends CacheModel
 {
     use SeederModel;
 
-    public    $hidden   = ['created_at', 'updated_at'];
+    public $hidden = ['created_at', 'updated_at'];
+
     protected $fillable = ['id', 'name', 'key', 'color'];
 
-    public const NPC_CLASSIFICATION_NORMAL     = 'normal';
-    public const NPC_CLASSIFICATION_ELITE      = 'elite';
-    public const NPC_CLASSIFICATION_BOSS       = 'boss';
+    public const NPC_CLASSIFICATION_NORMAL = 'normal';
+
+    public const NPC_CLASSIFICATION_ELITE = 'elite';
+
+    public const NPC_CLASSIFICATION_BOSS = 'boss';
+
     public const NPC_CLASSIFICATION_FINAL_BOSS = 'finalboss';
-    public const NPC_CLASSIFICATION_RARE       = 'rare';
+
+    public const NPC_CLASSIFICATION_RARE = 'rare';
 
     public const ALL = [
         self::NPC_CLASSIFICATION_NORMAL     => 1,
@@ -40,8 +44,6 @@ class NpcClassification extends CacheModel
 
     /**
      * Gets all derived NPCs from this classification.
-     *
-     * @return HasMany
      */
     public function npcs(): HasMany
     {

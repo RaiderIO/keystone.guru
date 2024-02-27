@@ -38,7 +38,7 @@ class UserController extends Controller
     public function makeadmin(Request $request, User $user)
     {
         $currentUser = Auth::user();
-        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', [])) !== false) {
+        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
             if (!$user->hasRole('admin')) {
                 $user->attachRole('admin');
 
@@ -73,9 +73,6 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function delete(Request $request, User $user): RedirectResponse
     {
         try {
@@ -88,9 +85,6 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function grantAllBenefits(Request $request, User $user): RedirectResponse
     {
         try {

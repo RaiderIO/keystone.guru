@@ -15,8 +15,8 @@ use Eloquent;
  * @property string $updated_at
  * @property string $created_at
  *
- * @package App\Models\Metrics
  * @author Wouter
+ *
  * @since 16/02/2023
  *
  * @mixin Eloquent

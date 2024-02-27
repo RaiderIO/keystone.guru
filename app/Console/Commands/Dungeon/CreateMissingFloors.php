@@ -33,9 +33,6 @@ class CreateMissingFloors extends Command
         parent::__construct();
     }
 
-    /**
-     * @return int
-     */
     public function handle(): int
     {
         /** @var Collection|Dungeon[] $dungeons */
@@ -67,7 +64,7 @@ class CreateMissingFloors extends Command
 
                 $this->comment(sprintf('-- Added new floor %s', __($floorKey, [], 'en-US')));
 
-                $index++;
+                ++$index;
             }
         }
 

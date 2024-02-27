@@ -8,9 +8,6 @@ use App\Logic\CombatLog\CombatLogVersion;
 
 class AdvancedDataBuilder
 {
-    /**
-     * @return AdvancedDataInterface
-     */
     public static function create(int $combatLogVersion): AdvancedDataInterface
     {
         return match ($combatLogVersion) {

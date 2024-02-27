@@ -19,19 +19,22 @@ class GameVersion extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable   = [
+    protected $fillable = [
         'id',
         'key',
         'name',
         'description',
         'has_seasons',
     ];
-    public    $timestamps = false;
+
+    public $timestamps = false;
 
     public const DEFAULT_GAME_VERSION = self::GAME_VERSION_RETAIL;
 
-    public const GAME_VERSION_RETAIL  = 'retail';
-    public const GAME_VERSION_WOTLK   = 'wotlk';
+    public const GAME_VERSION_RETAIL = 'retail';
+
+    public const GAME_VERSION_WOTLK = 'wotlk';
+
     public const GAME_VERSION_CLASSIC = 'classic';
 
     public const ALL = [
@@ -42,7 +45,6 @@ class GameVersion extends CacheModel
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     * @return string
      */
     public function getRouteKeyName(): string
     {
@@ -64,6 +66,6 @@ class GameVersion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_game_version', fn() => GameVersion::where('key', self::DEFAULT_GAME_VERSION)->first());
+        return $cacheService->remember('default_game_version', static fn() => GameVersion::where('key', self::DEFAULT_GAME_VERSION)->first());
     }
 }

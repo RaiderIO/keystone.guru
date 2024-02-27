@@ -13,14 +13,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int          $dungeon_route_id
  * @property int          $character_class_specialization_id
  * @property int          $index
- *
  * @property DungeonRoute $dungeonRoute
  *
  * @mixin Eloquent
  */
 class DungeonRoutePlayerSpecialization extends Model
 {
-    public    $hidden   = ['id'];
+    public $hidden = ['id'];
+
     protected $fillable = [
         'character_class_specialization_id',
         'dungeon_route_id',
@@ -28,25 +28,16 @@ class DungeonRoutePlayerSpecialization extends Model
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function characterclassspecialization(): BelongsTo
     {
         return $this->belongsTo(CharacterClassSpecialization::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function specializations(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerSpecialization::class, 'dungeon_route_player_specializations');

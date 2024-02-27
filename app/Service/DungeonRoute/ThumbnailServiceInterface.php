@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
@@ -9,18 +8,9 @@ use Illuminate\Support\Collection;
 
 interface ThumbnailServiceInterface
 {
-    /**
-     * @return bool
-     */
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool;
 
     /**
-     * @param int|null $viewportWidth
-     * @param int|null $viewportHeight
-     * @param int|null $imageWidth
-     * @param int|null $imageHeight
-     * @param int|null $zoomLevel
-     * @param int|null $quality
      * @return Collection|DungeonRouteThumbnailJob[]
      */
     public function queueThumbnailRefreshForApi(
@@ -33,24 +23,12 @@ interface ThumbnailServiceInterface
         ?int         $quality = null
     ): Collection;
 
-    /**
-     * @return bool
-     */
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts
     ): bool;
 
-    /**
-     * @param int|null $viewportWidth
-     * @param int|null $viewportHeight
-     * @param int|null $imageWidth
-     * @param int|null $imageHeight
-     * @param int|null $zoomLevel
-     * @param int|null $quality
-     * @return bool
-     */
     public function createThumbnailCustom(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
@@ -68,8 +46,5 @@ interface ThumbnailServiceInterface
      */
     public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool;
 
-    /**
-     * @return bool
-     */
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool;
 }

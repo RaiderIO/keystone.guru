@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Season;
 
 use App\Models\Expansion;

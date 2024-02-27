@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateAffixGroupIdForDragonflightS1AffixGroups extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,21 +12,21 @@ class UpdateAffixGroupIdForDragonflightS1AffixGroups extends Migration
     {
         $mapping = [
             // Temp to prevent it from being overridden when 99 and 100 get migrated
-            101 => 990,
-            102 => 1000,
-            103 => 101,
+            101  => 990,
+            102  => 1000,
+            103  => 101,
             // These were deleted in previous migration
-//            104 => false,
-//            105 => false,
-            106 => 102,
-            107 => 103,
-            108 => 104,
-            109 => 105,
-            110 => 106,
-            99  => 107,
-            100 => 108,
+            //            104 => false,
+            //            105 => false,
+            106  => 102,
+            107  => 103,
+            108  => 104,
+            109  => 105,
+            110  => 106,
+            99   => 107,
+            100  => 108,
             // Correct wrong ones to the correct ones
-            990 => 99,
+            990  => 99,
             1000 => 100,
         ];
 
@@ -51,4 +50,4 @@ class UpdateAffixGroupIdForDragonflightS1AffixGroups extends Migration
     {
         //
     }
-}
+};

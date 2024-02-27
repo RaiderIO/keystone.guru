@@ -33,7 +33,6 @@ use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
-
     /**
      * @return Factory|View
      */
@@ -51,8 +50,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param string|null $title
-     * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
@@ -67,13 +64,13 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => optional($defaultFloor)->index ?? '1',
+            'floorindex'   => $defaultFloor?->index ?? '1',
         ]);
     }
 
     /**
-     *
      * @return Factory|RedirectResponse|View
+     *
      * @throws AuthorizationException
      */
     public function viewfloor(
@@ -126,7 +123,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => optional($defaultFloor)->index ?? '1',
+                'floorindex'   => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -150,8 +147,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param string|null $title
-     * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
@@ -166,13 +161,13 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => optional($defaultFloor)->index ?? '1',
+            'floorindex'   => $defaultFloor?->index ?? '1',
         ]);
     }
 
     /**
-     *
      * @return Factory|RedirectResponse|View
+     *
      * @throws AuthorizationException
      */
     public function presentFloor(
@@ -223,7 +218,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => optional($defaultFloor)->index ?? '1',
+                'floorindex'   => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -247,6 +242,7 @@ class DungeonRouteController extends Controller
 
     /**
      * @return Factory|RedirectResponse|View
+     *
      * @throws AuthorizationException
      */
     public function preview(
@@ -294,8 +290,8 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function migrateToSeasonalType(
@@ -314,12 +310,9 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param DungeonRoute|null $dungeonroute
-     *
-     * @return DungeonRoute
      * @throws Exception
      */
-    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute = null): DungeonRoute
+    public function store(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService, ?DungeonRoute $dungeonroute = null): DungeonRoute
     {
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
@@ -334,8 +327,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
-     * @return DungeonRoute
      * @throws Exception
      */
     public function storetemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): DungeonRoute
@@ -351,11 +342,11 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @return Application|RedirectResponse|Redirector
+     *
      * @throws AuthorizationException
      */
-    function clone(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, ThumbnailServiceInterface $thumbnailService)
+    public function clone(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, ThumbnailServiceInterface $thumbnailService)
     {
         $this->authorize('clone', $dungeonroute);
 
@@ -377,7 +368,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @return RedirectResponse
      */
     public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title)
@@ -393,9 +383,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param string|null $title
-     *
-     * @return RedirectResponse
      * @throws InvalidArgumentException
      */
     public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
@@ -409,15 +396,13 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => optional($defaultFloor)->index ?? '1',
+            'floorindex'   => $defaultFloor?->index ?? '1',
         ]);
     }
 
     /**
-     * @param string|null $title
-     * @param string|null $floorIndex
-     *
      * @return Factory|RedirectResponse|View
+     *
      * @throws AuthorizationException
      */
     public function editfloor(
@@ -459,7 +444,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => optional($defaultFloor)->index ?? '1',
+                'floorindex'   => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -484,8 +469,8 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRoute $dungeonroute
-     *
      * @return Application|Factory|View
+     *
      * @throws AuthorizationException
      */
     public function embed(
@@ -500,6 +485,7 @@ class DungeonRouteController extends Controller
                 return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         }
+
         $this->authorize('embed', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
@@ -551,12 +537,10 @@ class DungeonRouteController extends Controller
         ]);
     }
 
-
     /**
      * Override to give the type hint which is required.
      *
      *
-     * @return RedirectResponse
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
@@ -575,8 +559,8 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService)
@@ -595,8 +579,8 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService)
@@ -616,9 +600,8 @@ class DungeonRouteController extends Controller
 
     /**
      * @param DungeonRouteFormRequest $request
-     * @param string|null             $title
-     *
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      * @throws Exception

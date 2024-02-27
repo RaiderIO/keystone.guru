@@ -18,13 +18,13 @@ trait CreatesRaidEventPullEnemy
     /**
      * @return RaidEventPullEnemy|MockObject
      */
-    public function createRaidEventPullEnemy(array $methodsToMock = [], SimulationCraftRaidEventsOptions $options = null, Enemy $enemy = null, int $enemyIndexInPull = 0)
+    public function createRaidEventPullEnemy(array $methodsToMock = [], ?SimulationCraftRaidEventsOptions $options = null, ?Enemy $enemy = null, int $enemyIndexInPull = 0)
     {
         return $this->getMockBuilder(RaidEventPullEnemy::class)
             ->setConstructorArgs([
-                    $options ?? $this->createSimulationCraftRaidEventsOptions(),
-                    $enemy ?? $this->createEnemy(),
-                    $enemyIndexInPull,
+                $options ?? $this->createSimulationCraftRaidEventsOptions(),
+                $enemy ?? $this->createEnemy(),
+                $enemyIndexInPull,
             ])
             ->onlyMethods($methodsToMock)
             ->getMock();

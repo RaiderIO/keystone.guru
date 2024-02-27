@@ -7,7 +7,7 @@ use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
-class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOutputInterface
+class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollectionInterface
 {
     /** @var Collection|RaidEventPull[] */
     private Collection $raidEventPulls;
@@ -17,7 +17,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateRaidEvents(): RaidEventsCollectionInterface
     {
@@ -47,7 +47,7 @@ class RaidEventsCollection implements RaidEventsCollectionInterface, RaidEventOu
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toString(): string
     {

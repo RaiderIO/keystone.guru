@@ -23,9 +23,6 @@ class CreateMappingVersion extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     *
-     *
-     * @return int
      */
     public function handle(CombatLogMappingVersionServiceInterface $combatLogMappingVersionService): int
     {
@@ -40,10 +37,6 @@ class CreateMappingVersion extends BaseCombatLogCommand
         return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->createMappingVersionFromCombatLog($combatLogMappingVersionService, $filePath, $mappingVersion));
     }
 
-    /**
-     * @param MappingVersion|null $mappingVersion
-     * @return int
-     */
     private function createMappingVersionFromCombatLog(
         CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
         string                                  $filePath,

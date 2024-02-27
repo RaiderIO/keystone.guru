@@ -10,33 +10,21 @@ abstract class BaseEvent
     {
     }
 
-    /**
-     * @return int
-     */
     public function getCombatLogVersion(): int
     {
         return $this->combatLogVersion;
     }
 
-    /**
-     * @return Carbon
-     */
     public function getTimestamp(): Carbon
     {
         return $this->timestamp;
     }
 
-    /**
-     * @return string
-     */
     public function getEventName(): string
     {
         return $this->eventName;
     }
 
-    /**
-     * @return string
-     */
     public function getRawEvent(): string
     {
         return $this->rawEvent;

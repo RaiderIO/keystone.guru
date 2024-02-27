@@ -62,10 +62,12 @@ $factions ??= $allFactions;
                 foreach (old('specialization', '') as $oldSpecialization) {
                     $newSpecializations[] = ['id' => $oldSpecialization];
                 }
+
                 $newClasses = [];
                 foreach (old('class', '') as $oldClass) {
                     $newClasses[] = ['id' => $oldClass];
                 }
+
                 $newRaces = [];
                 foreach (old('race', '') as $oldRace) {
                     $newRaces[] = ['id' => $oldRace];
@@ -77,23 +79,27 @@ $factions ??= $allFactions;
             _oldClasses = {!! json_encode($newClasses)  !!};
             _oldRaces = {!! json_encode($newRaces)  !!};
 
-            <?php } ?>
+<?php }
+                 ?>
 
 
             <?php
             /** If collapseSelector is set, only load this when we're actually opening the collapseSelector to speed up loading. */
             if( isset($collapseSelector) ){ ?>
             $('{{$collapseSelector}}').on('shown.bs.collapse', function () {
-                <?php } ?>
+                <?php }
+             ?>
                 let composition = _inlineManager.getInlineCode('common/group/composition');
                 composition._loadDungeonRouteDefaults();
 
                 <?php if( isset($collapseSelector) ){ ?>
             });
-            <?php } ?>
+            <?php }
+             ?>
 
-            <?php
+<?php
             }
+
             // @formatter:on
             ?>
         });
@@ -119,7 +125,7 @@ $factions ??= $allFactions;
     @endisset
 </div>
 <div class="row">
-    <?php for($i = 1; $i <= config('keystoneguru.party_size'); $i++){ ?>
+    <?php for($i = 1; $i <= config('keystoneguru.party_size'); ++$i){ ?>
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
@@ -142,5 +148,6 @@ $factions ??= $allFactions;
             </select>
         </div>
     </div>
-    <?php } ?>
+    <?php }
+             ?>
 </div>

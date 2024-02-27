@@ -18,12 +18,11 @@ class DungeonController extends Controller
     use ChangesMapping;
 
     /**
-     * @param Dungeon|null $dungeon
-     *
      * @return mixed
+     *
      * @throws Exception
      */
-    public function store(DungeonFormRequest $request, Dungeon $dungeon = null)
+    public function store(DungeonFormRequest $request, ?Dungeon $dungeon = null)
     {
         $validated = $request->validated();
 
@@ -76,7 +75,6 @@ class DungeonController extends Controller
     }
 
     /**
-     *
      * @return Factory|View
      */
     public function edit(Request $request, Dungeon $dungeon)
@@ -89,6 +87,7 @@ class DungeonController extends Controller
 
     /**
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(DungeonFormRequest $request, Dungeon $dungeon)
@@ -104,8 +103,8 @@ class DungeonController extends Controller
     }
 
     /**
-     *
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(DungeonFormRequest $request)
@@ -116,7 +115,7 @@ class DungeonController extends Controller
         // Message to the user
         Session::flash('status', __('controller.dungeon.flash.dungeon_created'));
 
-        return redirect()->route('admin.dungeon.edit', ["dungeon" => $dungeon]);
+        return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
     }
 
     /**

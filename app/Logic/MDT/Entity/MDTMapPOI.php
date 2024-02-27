@@ -7,8 +7,10 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class MDTMapPOI implements Arrayable
 {
-    public const TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
+    public const TEMPLATE_MAP_LINK_PIN = 'MapLinkPinTemplate';
+
     public const TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
+
     // Ny'alotha spires
     public const TEMPLATE_VIGNETTE_PIN = 'VignettePinTemplate';
 
@@ -18,13 +20,19 @@ class MDTMapPOI implements Arrayable
         self::TEMPLATE_VIGNETTE_PIN,
     ];
 
-    public const TYPE_MAP_LINK             = 'mapLink';
-    public const TYPE_GRAVEYARD            = 'graveyard';
-    public const TYPE_GENERAL_NOTE         = 'generalNote';
-    public const TYPE_ZOOM                 = 'zoom';
+    public const TYPE_MAP_LINK = 'mapLink';
+
+    public const TYPE_GRAVEYARD = 'graveyard';
+
+    public const TYPE_GENERAL_NOTE = 'generalNote';
+
+    public const TYPE_ZOOM = 'zoom';
+
     public const TYPE_IRON_DOCKS_IRON_STAR = 'ironDocksIronStar';
-    public const TYPE_NYALOTHA_SPIRE       = 'nyalothaSpire';
-    public const TYPE_THE_UNDERROT_SKIP    = 'tuSkip';
+
+    public const TYPE_NYALOTHA_SPIRE = 'nyalothaSpire';
+
+    public const TYPE_THE_UNDERROT_SKIP = 'tuSkip';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -72,82 +80,51 @@ class MDTMapPOI implements Arrayable
         }
     }
 
-    /**
-     * @return int
-     */
     public function getSubLevel(): int
     {
         return $this->subLevel;
     }
 
-    /**
-     * @return string
-     */
     public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return int|null
-     */
     public function getTarget(): ?int
     {
         return $this->target;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDirection(): ?int
     {
         return $this->direction;
     }
 
-    /**
-     * @return int|null
-     */
     public function getConnectionIndex(): ?int
     {
         return $this->connectionIndex;
     }
 
-    /**
-     * @return float
-     */
     public function getX(): float
     {
         return $this->x;
     }
 
-    /**
-     * @return float
-     */
     public function getY(): float
     {
         return $this->y;
     }
 
-    /**
-     * @return array
-     */
     public function getRawMapPOI(): array
     {
         return $this->rawMapPOI;
     }
 
-
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [

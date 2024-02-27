@@ -22,7 +22,6 @@ class EnsureChallengeMode extends BaseCombatLogCommand
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(CombatLogServiceInterface $combatLogService): int
     {
@@ -34,9 +33,6 @@ class EnsureChallengeMode extends BaseCombatLogCommand
         return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->analyzeCombatLog($combatLogService, $filePath));
     }
 
-    /**
-     * @return int
-     */
     private function analyzeCombatLog(CombatLogServiceInterface $combatLogService, string $filePath): int
     {
         $this->comment(sprintf('- Analyzing %s', $filePath));

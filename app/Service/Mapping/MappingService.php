@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
@@ -13,9 +12,6 @@ use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface
 {
-    /**
-     * @return bool
-     */
     public function shouldSynchronizeMapping(): bool
     {
         /** @var MappingChangeLog $mostRecentMappingChangeLog */
@@ -66,33 +62,34 @@ class MappingService implements MappingServiceInterface
         return $dungeonQueryBuilder
             ->whereNotNull('dungeon_id')
             ->get()
-            ->keyBy(fn(Dungeon $dungeon) => $dungeon->id);
+            ->keyBy(static fn(Dungeon $dungeon) => $dungeon->id);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
     {
         $currentMappingVersion = $dungeon->currentMappingVersion;
+        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
 
         return MappingVersion::create([
             'dungeon_id'       => $dungeon->id,
-            'mdt_mapping_hash' => optional($currentMappingVersion)->mdt_mapping_hash ?? '',
-            'version'          => (++optional($currentMappingVersion)->version) ?? 1,
+            'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? '',
+            'version'          => $newVersion,
             'created_at'       => Carbon::now()->toDateTimeString(),
             'updated_at'       => Carbon::now()->toDateTimeString(),
         ]);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
     {
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
-        $newMappingVersionVersion = (optional($currentMappingVersion)->version ?? 0) + 1;
+        $newMappingVersionVersion = ($currentMappingVersion?->version ?? 0) + 1;
 
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
@@ -132,7 +129,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
     {

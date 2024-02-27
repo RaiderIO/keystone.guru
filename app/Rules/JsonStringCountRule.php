@@ -15,19 +15,16 @@ class JsonStringCountRule implements Rule
      *
      * @param string $attribute
      * @param mixed  $value
-     * @return bool
      */
     public function passes($attribute, $value): bool
     {
-        $decoded = json_decode((string) $value, true);
+        $decoded = json_decode((string)$value, true);
 
         return is_array($decoded) && count($decoded) >= $this->count;
     }
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

@@ -11,11 +11,6 @@ use Tests\Unit\Fixtures\ServiceFixtures;
 
 final class CombatLogDungeonRouteServiceTest extends PublicTestCase
 {
-
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('CombatLogDungeonRouteService')]
     #[DataProvider('parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider')]
@@ -24,10 +19,10 @@ final class CombatLogDungeonRouteServiceTest extends PublicTestCase
         // Arrange
         ini_set('memory_limit', '1G');
         $combatLogServiceLog = LoggingFixtures::createCombatLogServiceLogging($this);
-        $combatLogService    = ServiceFixtures::getCombatLogServiceMock($this, $combatLogServiceLog);
+        $combatLogService = ServiceFixtures::getCombatLogServiceMock($this, $combatLogServiceLog);
 
         $combatLogDungeonRouteServiceLog = LoggingFixtures::createCombatLogDungeonRouteServiceLogging($this);
-        $combatLogDungeonRouteService    = ServiceFixtures::getResultEventDungeonRouteServiceMock(
+        $combatLogDungeonRouteService = ServiceFixtures::getResultEventDungeonRouteServiceMock(
             $this,
             $combatLogService,
             $combatLogDungeonRouteServiceLog
@@ -45,18 +40,18 @@ final class CombatLogDungeonRouteServiceTest extends PublicTestCase
     public static function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
     {
         return [
-//            [
-//                __DIR__ . '/Fixtures/2_underrot/combat.log',
-//            ],
-//            [
-//                __DIR__ . '/Fixtures/4_neltharus/combat.log',
-//            ],
-//            [
-//                __DIR__ . '/Fixtures/5_freehold/combat.log',
-//            ],
-//            [
-//                __DIR__ . '/Fixtures/18_neltharus/combat.log',
-//            ],
+            //            [
+            //                __DIR__ . '/Fixtures/2_underrot/combat.log',
+            //            ],
+            //            [
+            //                __DIR__ . '/Fixtures/4_neltharus/combat.log',
+            //            ],
+            //            [
+            //                __DIR__ . '/Fixtures/5_freehold/combat.log',
+            //            ],
+            //            [
+            //                __DIR__ . '/Fixtures/18_neltharus/combat.log',
+            //            ],
         ];
     }
 }

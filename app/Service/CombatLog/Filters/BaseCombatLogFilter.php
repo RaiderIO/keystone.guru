@@ -32,12 +32,6 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
         $this->filters->push($combatLogParser);
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         $result = false;
@@ -54,7 +48,7 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
-        return $this->resultEvents->sortBy(function (BaseResultEvent $baseResultEvent) {
+        return $this->resultEvents->sortBy(static function (BaseResultEvent $baseResultEvent) {
             // Add some CONSISTENT (not necessarily accurate) numbers so that events with the same timestamp are sorted
             // consistently instead of "randomly" causing all kinds of issues
             $addition  = 0;
@@ -66,7 +60,6 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
                     $addition = min(0.99999, ($guid->getId() + hexdec($guid->getSpawnUID())) / 10000000000000);
                 }
             }
-
             return $baseResultEvent->getBaseEvent()->getTimestamp()->getTimestampMs() + $addition;
         });
     }

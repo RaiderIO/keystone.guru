@@ -29,7 +29,7 @@ $id              ??= 'route_select_affixes';
 
 $allAffixGroupsWithSeasons = $allAffixGroups
     ->merge($currentSeason->affixgroups)
-    ->merge(optional($nextSeason)->affixgroups ?? collect());
+    ->merge($nextSeason?->affixgroups ?? collect());
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [

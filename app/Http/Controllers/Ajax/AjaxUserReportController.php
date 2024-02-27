@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Ajax;
 
-
 use App\Http\Requests\UserReportFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -29,9 +28,6 @@ class AjaxUserReportController
         return $userreport;
     }
 
-    /**
-     * @return bool
-     */
     private function store(UserReportFormRequest $request, Model $model): bool
     {
         $userReport              = new UserReport();
@@ -59,7 +55,6 @@ class AjaxUserReportController
     }
 
     /**
-     *
      * @return Response
      */
     public function dungeonrouteStore(UserReportFormRequest $request, DungeonRoute $dungeonroute)
@@ -72,7 +67,6 @@ class AjaxUserReportController
     }
 
     /**
-     *
      * @return Response
      */
     public function enemyStore(UserReportFormRequest $request, Enemy $enemy)

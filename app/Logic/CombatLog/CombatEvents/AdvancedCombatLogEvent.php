@@ -14,8 +14,6 @@ class AdvancedCombatLogEvent extends CombatLogEvent
     private ?AdvancedDataInterface $advancedData = null;
 
     /**
-     * @param array $parameters
-     * @return CombatLogEvent
      * @throws Exception
      */
     public function setParameters(array $parameters): CombatLogEvent
@@ -39,10 +37,6 @@ class AdvancedCombatLogEvent extends CombatLogEvent
         return $this;
     }
 
-
-    /**
-     * @return AdvancedDataInterface
-     */
     public function getAdvancedData(): AdvancedDataInterface
     {
         return $this->advancedData;

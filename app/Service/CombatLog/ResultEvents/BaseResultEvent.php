@@ -10,9 +10,6 @@ abstract class BaseResultEvent
     {
     }
 
-    /**
-     * @return BaseEvent
-     */
     public function getBaseEvent(): BaseEvent
     {
         return $this->baseEvent;

@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int          $id
  * @property int          $dungeon_route_id
  * @property int          $affix_group_id
- *
  * @property DungeonRoute $dungeonRoute
  * @property AffixGroup   $affixGroup
  *
@@ -19,7 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonRouteAffixGroup extends Model
 {
-    public $hidden   = ['id'];
+    public $hidden = ['id'];
+
     public $fillable = [
         'dungeon_route_id',
         'affix_group_id',
@@ -27,17 +27,11 @@ class DungeonRouteAffixGroup extends Model
 
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);

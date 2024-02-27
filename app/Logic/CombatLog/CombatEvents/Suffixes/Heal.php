@@ -17,48 +17,32 @@ class Heal extends Suffix
     /** @var string ex: nil (probably something like isGlancing or isCrushing, but those are not applicable to heals */
     private string $unknown1;
 
-    /**
-     * @return int
-     */
     public function getAmount(): int
     {
         return $this->amount;
     }
 
-    /**
-     * @return int
-     */
     public function getOverHealing(): int
     {
         return $this->overHealing;
     }
 
-    /**
-     * @return int
-     */
     public function getAbsorbed(): int
     {
         return $this->absorbed;
     }
 
-    /**
-     * @return bool
-     */
     public function isCritical(): bool
     {
         return $this->critical;
     }
 
-    /**
-     * @return string
-     */
     public function getUnknown1(): string
     {
         return $this->unknown1;
     }
 
     /**
-     * @param array $parameters
      * @return HasParameters|$this
      */
     public function setParameters(array $parameters): HasParameters
@@ -74,10 +58,6 @@ class Heal extends Suffix
         return $this;
     }
 
-
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 5;

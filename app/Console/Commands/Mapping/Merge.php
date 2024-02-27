@@ -35,6 +35,7 @@ class Merge extends Command
      * Execute the console command.
      *
      * @return int
+     *
      * @throws MissingArgumentException
      */
     public function handle(MappingService $mappingService)
@@ -70,7 +71,7 @@ class Merge extends Command
         }
 
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(fn(Dungeon $dungeon) => __($dungeon->name));
+        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(static fn(Dungeon $dungeon) => __($dungeon->name));
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
         } else if ($changedDungeonNames->isEmpty()) {
@@ -101,7 +102,6 @@ class Merge extends Command
             ]);
             $this->info('Pull request updated!');
         }
-
 
         return 0;
     }

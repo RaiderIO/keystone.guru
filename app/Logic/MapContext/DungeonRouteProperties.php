@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Models\AffixGroup\AffixGroup;
@@ -11,7 +10,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Trait DungeonRouteTrait
- * @package App\Logic\MapContext
  *
  * @mixin MapContext
  */
@@ -24,9 +22,6 @@ trait DungeonRouteProperties
         return $this->floor->dungeon->floorsForMapFacade($useFacade)->active()->get();
     }
 
-    /**
-     * @return Collection
-     */
     private function getDungeonRoutesProperties(CoordinatesServiceInterface $coordinatesService, array $publicKeys): Collection
     {
         $result = collect();
@@ -48,9 +43,6 @@ trait DungeonRouteProperties
         return $result;
     }
 
-    /**
-     * @return array
-     */
     private function getDungeonRouteProperties(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute): array
     {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
@@ -78,12 +70,12 @@ trait DungeonRouteProperties
             'paths'                    => $dungeonRoute->mapContextPaths($coordinatesService, $useFacade),
             'brushlines'               => $dungeonRoute->mapContextBrushlines($coordinatesService, $useFacade),
             'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
-            'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(fn(DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) => [
+            'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(static fn(DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) => [
                 'enemy_id'         => $drEnemyRaidMarker->enemy_id,
                 'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
             ]),
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'            => $dungeonRoute->affixes->map(fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(fn(string $name) => __($name, [], 'en-US')),
+            'uniqueAffixes'            => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(static fn(string $name) => __($name, [], 'en-US')),
         ];
     }
 }

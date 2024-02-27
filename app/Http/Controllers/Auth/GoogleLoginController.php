@@ -6,11 +6,6 @@ use App\User;
 
 class GoogleLoginController extends OAuthLoginController
 {
-    /**
-     * @param $oauthUser
-     * @param $oAuthId
-     * @return User
-     */
     protected function getUser($oauthUser, $oAuthId): User
     {
         return new User([
@@ -26,9 +21,6 @@ class GoogleLoginController extends OAuthLoginController
         ]);
     }
 
-    /**
-     * @return string
-     */
     protected function getDriver(): string
     {
         return 'google';

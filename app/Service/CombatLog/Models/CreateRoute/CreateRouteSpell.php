@@ -3,7 +3,6 @@
 namespace App\Service\CombatLog\Models\CreateRoute;
 
 use Carbon\Carbon;
-use DateTime;
 
 class CreateRouteSpell
 {
@@ -13,19 +12,12 @@ class CreateRouteSpell
     {
     }
 
-
-    /**
-     * @return Carbon
-     */
     public function getCastAt(): Carbon
     {
         return $this->castAtCarbon ??
             $this->castAtCarbon = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->castAt);
     }
 
-    /**
-     * @return CreateRouteSpell
-     */
     public static function createFromArray(array $body): CreateRouteSpell
     {
         return new CreateRouteSpell(

@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDungeonRouteNamespaceInTagsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -23,4 +22,4 @@ class UpdateDungeonRouteNamespaceInTagsTable extends Migration
     {
         DB::update('UPDATE `tags` SET `model_class` = "App\Models\DungeonRoute" WHERE `model_class` = "App\Models\DungeonRoute\DungeonRoute"');
     }
-}
+};

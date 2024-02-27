@@ -23,9 +23,10 @@ class AjaxOverpulledEnemyController extends Controller
 {
     /**
      * @return array
+     *
      * @throws AuthorizationException
      */
-    function store(
+    public function store(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonRoute,
@@ -65,9 +66,10 @@ class AjaxOverpulledEnemyController extends Controller
 
     /**
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function delete(
+    public function delete(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonroute,

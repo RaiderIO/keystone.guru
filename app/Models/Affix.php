@@ -20,8 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Affix extends CacheModel
 {
-    use SeederModel;
     use HasIconFile;
+    use SeederModel;
 
     public $hidden = ['icon_file_id', 'pivot'];
 
@@ -29,37 +29,66 @@ class Affix extends CacheModel
 
     protected $fillable = ['id', 'icon_file_id', 'affix_id', 'key', 'name', 'description'];
 
+    public const AFFIX_BOLSTERING = 'Bolstering';
 
-    public const AFFIX_BOLSTERING  = 'Bolstering';
-    public const AFFIX_BURSTING    = 'Bursting';
-    public const AFFIX_EXPLOSIVE   = 'Explosive';
-    public const AFFIX_FORTIFIED   = 'Fortified';
-    public const AFFIX_GRIEVOUS    = 'Grievous';
-    public const AFFIX_INFESTED    = 'Infested';
-    public const AFFIX_NECROTIC    = 'Necrotic';
-    public const AFFIX_QUAKING     = 'Quaking';
-    public const AFFIX_RAGING      = 'Raging';
-    public const AFFIX_RELENTLESS  = 'Relentless';
-    public const AFFIX_SANGUINE    = 'Sanguine';
-    public const AFFIX_SKITTISH    = 'Skittish';
-    public const AFFIX_TEEMING     = 'Teeming';
-    public const AFFIX_TYRANNICAL  = 'Tyrannical';
-    public const AFFIX_VOLCANIC    = 'Volcanic';
-    public const AFFIX_REAPING     = 'Reaping';
-    public const AFFIX_BEGUILING   = 'Beguiling';
-    public const AFFIX_AWAKENED    = 'Awakened';
-    public const AFFIX_INSPIRING   = 'Inspiring';
-    public const AFFIX_SPITEFUL    = 'Spiteful';
-    public const AFFIX_STORMING    = 'Storming';
-    public const AFFIX_PRIDEFUL    = 'Prideful';
-    public const AFFIX_TORMENTED   = 'Tormented';
-    public const AFFIX_UNKNOWN     = 'Unknown';
-    public const AFFIX_INFERNAL    = 'Infernal';
-    public const AFFIX_ENCRYPTED   = 'Encrypted';
-    public const AFFIX_SHROUDED    = 'Shrouded';
-    public const AFFIX_THUNDERING  = 'Thundering';
-    public const AFFIX_AFFLICTED   = 'Afflicted';
-    public const AFFIX_ENTANGLING  = 'Entangling';
+    public const AFFIX_BURSTING = 'Bursting';
+
+    public const AFFIX_EXPLOSIVE = 'Explosive';
+
+    public const AFFIX_FORTIFIED = 'Fortified';
+
+    public const AFFIX_GRIEVOUS = 'Grievous';
+
+    public const AFFIX_INFESTED = 'Infested';
+
+    public const AFFIX_NECROTIC = 'Necrotic';
+
+    public const AFFIX_QUAKING = 'Quaking';
+
+    public const AFFIX_RAGING = 'Raging';
+
+    public const AFFIX_RELENTLESS = 'Relentless';
+
+    public const AFFIX_SANGUINE = 'Sanguine';
+
+    public const AFFIX_SKITTISH = 'Skittish';
+
+    public const AFFIX_TEEMING = 'Teeming';
+
+    public const AFFIX_TYRANNICAL = 'Tyrannical';
+
+    public const AFFIX_VOLCANIC = 'Volcanic';
+
+    public const AFFIX_REAPING = 'Reaping';
+
+    public const AFFIX_BEGUILING = 'Beguiling';
+
+    public const AFFIX_AWAKENED = 'Awakened';
+
+    public const AFFIX_INSPIRING = 'Inspiring';
+
+    public const AFFIX_SPITEFUL = 'Spiteful';
+
+    public const AFFIX_STORMING = 'Storming';
+
+    public const AFFIX_PRIDEFUL = 'Prideful';
+
+    public const AFFIX_TORMENTED = 'Tormented';
+
+    public const AFFIX_UNKNOWN = 'Unknown';
+
+    public const AFFIX_INFERNAL = 'Infernal';
+
+    public const AFFIX_ENCRYPTED = 'Encrypted';
+
+    public const AFFIX_SHROUDED = 'Shrouded';
+
+    public const AFFIX_THUNDERING = 'Thundering';
+
+    public const AFFIX_AFFLICTED = 'Afflicted';
+
+    public const AFFIX_ENTANGLING = 'Entangling';
+
     public const AFFIX_INCORPOREAL = 'Incorporeal';
 
     public const ALL = [
@@ -116,17 +145,11 @@ class Affix extends CacheModel
         Enemy::SEASONAL_TYPE_PRIDEFUL           => Affix::AFFIX_PRIDEFUL,
     ];
 
-    /**
-     * @return BelongsToMany
-     */
     public function affixGroups(): BelongsToMany
     {
         return $this->belongsToMany(AffixGroup::class, 'affix_group_couplings');
     }
 
-    /**
-     * @return string|null
-     */
     public static function getAffixBySeasonalType(string $seasonalType): ?string
     {
         return self::SEASONAL_TYPE_AFFIX_MAPPING[$seasonalType] ?? null;

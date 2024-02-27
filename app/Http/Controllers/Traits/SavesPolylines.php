@@ -22,8 +22,6 @@ trait SavesPolylines
 {
     /**
      * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
-     * @param Floor|null                                                                       $changedFloor
-     * @return Polyline
      */
     private function savePolyline(
         CoordinatesServiceInterface $coordinatesService,

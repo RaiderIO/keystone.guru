@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameSubcreationEaseTierPullsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -25,4 +23,4 @@ class RenameSubcreationEaseTierPullsTable extends Migration
     {
         Schema::rename('affix_group_ease_tier_pulls', 'subcreation_ease_tier_pulls');
     }
-}
+};

@@ -59,22 +59,23 @@
         "ext-zip": "*",
         "akaunting/laravel-language": "^1.0",
         "barryvdh/laravel-ide-helper": "^2.13",
-        "beyondcode/laravel-server-timing": "^1.2",
+        "beyondcode/laravel-server-timing": "^1.4",
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "fakerphp/faker": "^1.23",
-        "genealabs/laravel-model-caching": "^0.11.7",
+        "genealabs/laravel-model-caching": "^0.12",
         "graham-campbell/github": "^12.4",
+        "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^3.4",
         "jenssegers/agent": "^2.6",
-        "laravel/framework": "^8.0",
-        "laravel/horizon": "^5.0",
-        "laravel/socialite": "^5.0",
-        "laravel/telescope": "^4.4",
-        "laravel/tinker": "^2.0",
-        "laravel/ui": "^3.0",
+        "laravel/framework": "^9.52",
+        "laravel/horizon": "^5.8",
+        "laravel/socialite": "^5.3",
+        "laravel/telescope": "^4.7",
+        "laravel/tinker": "^2.7",
+        "laravel/ui": "^3.3",
         "laravelcollective/html": "6.3.*",
-        "marvinlabs/laravel-discord-logger": "^1.1",
+        "marvinlabs/laravel-discord-logger": "^1.2",
         "nnoggie/mythicdungeontools": "4.3.3.5",
         "paquettg/php-html-parser-php-8-fix": "^3.1",
         "patreon/patreon": "^1.0.0",
@@ -85,19 +86,23 @@
         "socialiteproviders/battlenet": "^4.1.0",
         "socialiteproviders/discord": "^4.2.0",
         "spatie/url": "^2.3",
+        "symfony/http-client": "^7.0",
+        "symfony/mailgun-mailer": "^7.0",
         "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
-        "yajra/laravel-datatables-oracle": "~9.0",
+        "yajra/laravel-datatables-oracle": "^9.19",
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.5",
+        "barryvdh/laravel-debugbar": "^3.6",
         "deployer/deployer": "^7.3",
-        "filp/whoops": "^2.0",
-        "mockery/mockery": "^1.0",
+        "filp/whoops": "^2.8",
+        "mockery/mockery": "^1.4.4",
         "phpunit/phpunit": "^10.0",
         "rector/rector": "^1.0",
-        "wotuu/keystone.guru.deployer": "0.1"
+        "wotuu/keystone.guru.deployer": "0.1",
+        "nunomaduro/collision": "^6.3",
+        "spatie/laravel-ignition": "^1.4"
     },
     "autoload": {
         "classmap": [
@@ -119,7 +124,8 @@
             "Illuminate\\Foundation\\ComposerScripts::postInstall"
         ],
         "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ]
     },
     "config": {

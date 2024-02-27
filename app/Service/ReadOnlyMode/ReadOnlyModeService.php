@@ -10,9 +10,8 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
     {
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setReadOnly(bool $readOnly): bool
     {
@@ -20,7 +19,7 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function isReadOnly(): bool
     {

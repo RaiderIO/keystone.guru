@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePatreonAdFreeGiveawaysTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -33,4 +32,4 @@ class CreatePatreonAdFreeGiveawaysTable extends Migration
     {
         Schema::dropIfExists('patreon_ad_free_giveaways');
     }
-}
+};

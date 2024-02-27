@@ -18,13 +18,10 @@ class SplitChallengeMode extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $description = 'Ensures that a filepath\'s combat logs contain just one challenge mode. If more are found, the combat log is split up.';
+    protected $description = "Ensures that a filepath's combat logs contain just one challenge mode. If more are found, the combat log is split up.";
 
     /**
      * Execute the console command.
-     *
-     *
-     * @return int
      */
     public function handle(CombatLogSplitServiceInterface $combatLogSplitService): int
     {
@@ -35,10 +32,6 @@ class SplitChallengeMode extends BaseCombatLogCommand
         return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->splitCombatLog($combatLogSplitService, $filePath));
     }
 
-    /**
-     *
-     * @return int
-     */
     private function splitCombatLog(CombatLogSplitServiceInterface $combatLogSplitService, string $filePath): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));

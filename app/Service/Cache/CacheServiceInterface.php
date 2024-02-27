@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Cache;
 
 interface CacheServiceInterface

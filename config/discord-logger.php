@@ -35,14 +35,14 @@ return [
      * A set of colors to associate to the different log levels when using the `RichRecordConverter`
      */
     'colors'     => [
-        'DEBUG'     => 0x607d8b,
-        'INFO'      => 0x4caf50,
-        'NOTICE'    => 0x2196f3,
-        'WARNING'   => 0xff9800,
-        'ERROR'     => 0xf44336,
-        'CRITICAL'  => 0xe91e63,
-        'ALERT'     => 0x673ab7,
-        'EMERGENCY' => 0x9c27b0,
+        'DEBUG'     => 0x607D8B,
+        'INFO'      => 0x4CAF50,
+        'NOTICE'    => 0x2196F3,
+        'WARNING'   => 0xFF9800,
+        'ERROR'     => 0xF44336,
+        'CRITICAL'  => 0xE91E63,
+        'ALERT'     => 0x673AB7,
+        'EMERGENCY' => 0x9C27B0,
     ],
 
     /*

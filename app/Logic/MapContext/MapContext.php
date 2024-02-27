@@ -27,7 +27,7 @@ abstract class MapContext
 
     protected MappingVersion $mappingVersion;
 
-    function __construct(
+    public function __construct(
         protected CacheServiceInterface       $cacheService,
         protected CoordinatesServiceInterface $coordinatesService,
         protected Model                       $context,
@@ -38,33 +38,29 @@ abstract class MapContext
         $this->mappingVersion = $mappingVersion;
     }
 
-    public abstract function getType(): string;
+    abstract public function getType(): string;
 
-    public abstract function isTeeming(): bool;
+    abstract public function isTeeming(): bool;
 
-    public abstract function getSeasonalIndex(): int;
+    abstract public function getSeasonalIndex(): int;
 
-    public abstract function getFloors(): Collection;
+    abstract public function getFloors(): Collection;
 
-    public abstract function getEnemies(): array;
+    abstract public function getEnemies(): array;
 
-    public abstract function getEchoChannelName(): string;
+    abstract public function getEchoChannelName(): string;
 
     public function getMapFacadeStyle(): string
     {
         return $this->mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle();
     }
 
-    /**
-     * @return Model
-     */
     public function getContext(): Model
     {
         return $this->context;
     }
 
     /**
-     * @return array
      * @throws InvalidArgumentException
      */
     public function getProperties(): array
@@ -104,7 +100,7 @@ abstract class MapContext
                 ]);
             }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $this->cacheService->remember('static_data', fn() => [
+        $static = $this->cacheService->remember('static_data', static fn() => [
             'spells'                            => Spell::all(),
             'mapIconTypes'                      => MapIconType::all(),
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),

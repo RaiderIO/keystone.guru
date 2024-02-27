@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddChallengeModeRunIdColumnToEnemyPositionsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -31,4 +30,4 @@ class AddChallengeModeRunIdColumnToEnemyPositionsTable extends Migration
             $table->dropColumn('challenge_mode_run_id');
         });
     }
-}
+};

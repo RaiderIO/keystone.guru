@@ -10,19 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OverpulledEnemyChangedEvent extends ContextEvent
 {
-    /** @var int */
     protected int $enemy_id;
 
-    /** @var int */
     protected int $kill_zone_id;
 
     /**
      * Create a new event instance.
-     *
-     * @param Model           $context
-     * @param User            $user
-     * @param OverpulledEnemy $overpulledEnemy
-     * @param Enemy           $enemy
      */
     public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
     {

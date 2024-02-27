@@ -36,81 +36,51 @@ class ImportStringDetails implements Arrayable
         return $this->errors;
     }
 
-    /**
-     * @return Dungeon
-     */
     public function getDungeon(): Dungeon
     {
         return $this->dungeon;
     }
 
-    /**
-     * @return bool
-     */
     public function isHasThisWeeksAffixGroup(): bool
     {
         return $this->hasThisWeeksAffixGroup;
     }
 
-    /**
-     * @return int
-     */
     public function getPulls(): int
     {
         return $this->pulls;
     }
 
-    /**
-     * @return int
-     */
     public function getPaths(): int
     {
         return $this->paths;
     }
 
-    /**
-     * @return int
-     */
     public function getLines(): int
     {
         return $this->lines;
     }
 
-    /**
-     * @return int
-     */
     public function getNotes(): int
     {
         return $this->notes;
     }
 
-    /**
-     * @return int
-     */
     public function getEnemyForces(): int
     {
         return $this->enemyForces;
     }
 
-    /**
-     * @return int
-     */
     public function getEnemyForcesMax(): int
     {
         return $this->enemyForcesMax;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFaction(): ?string
     {
         return $this->faction;
     }
 
-    /**
-     * @return ImportStringDetails
-     */
     public function setFaction(string $faction): ImportStringDetails
     {
         $this->faction = $faction;
@@ -118,10 +88,6 @@ class ImportStringDetails implements Arrayable
         return $this;
     }
 
-
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [

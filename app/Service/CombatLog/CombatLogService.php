@@ -32,9 +32,8 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string $filePath
-     *
      * @return Collection|BaseEvent[]
+     *
      * @throws Exception
      */
     public function parseCombatLogToEvents(string $filePath): Collection
@@ -57,10 +56,6 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string   $filePath
-     * @param callable $callable
-     *
-     * @return void
      * @throws Exception
      */
     public function parseCombatLogStreaming(string $filePath, callable $callable): void
@@ -79,20 +74,18 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string $filePath
-     *
      * @return Collection|ChallengeMode
+     *
      * @throws Exception
      */
     public function getChallengeModes(string $filePath): Collection
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use ($events) {
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, string $rawEvent) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent(
                 [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START], $combatLogVersion
             );
-
             if ($parsedEvent instanceof ChallengeModeStartEvent) {
                 try {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeId())->firstOrFail();
@@ -108,7 +101,6 @@ class CombatLogService implements CombatLogServiceInterface
                     $parsedEvent->getKeystoneLevel()
                 )));
             }
-
             return $parsedEvent;
         });
 
@@ -116,22 +108,19 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string $filePath
-     *
      * @return Collection|ChallengeMode
+     *
      * @throws Exception
      */
     public function getUiMapIds(string $filePath): Collection
     {
         $result = new Collection();
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use ($result) {
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, string $rawEvent) use ($result) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
-
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
             }
-
             return $parsedEvent;
         });
 
@@ -139,10 +128,6 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string            $combatLogFilePath
-     * @param DungeonRoute|null $dungeonRoute
-     *
-     * @return Collection
      * @throws Exception
      */
     public function getResultEventsForChallengeMode(
@@ -155,12 +140,11 @@ class CombatLogService implements CombatLogServiceInterface
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             $this->parseCombatLogStreaming($combatLogFilePath,
-                function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
+                static function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
                     // If parsing was successful, it generated a dungeonroute, so then construct our filter
                     if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
                         $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
                     }
-
                     $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
                 }
             );
@@ -175,9 +159,6 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string $combatLogFilePath
-     *
-     * @return Collection
      * @throws Exception
      */
     public function getResultEventsForDungeonOrRaid(
@@ -188,7 +169,7 @@ class CombatLogService implements CombatLogServiceInterface
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
             $this->parseCombatLogStreaming($combatLogFilePath,
-                function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter) {
+                static function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter) {
                     $combatLogDungeonOrRaidFilter->parse($baseEvent, $lineNr);
                 }
             );
@@ -200,8 +181,6 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string $filePath
-     *
      * @return string|null Null if the file was not a zip file and was not extracted
      */
     public function extractCombatLog(string $filePath): ?string
@@ -236,11 +215,6 @@ class CombatLogService implements CombatLogServiceInterface
         return $extractedFilePath;
     }
 
-    /**
-     * @param string $filePathToTxt
-     *
-     * @return string
-     */
     public function compressCombatLog(string $filePathToTxt): string
     {
         if (Str::endsWith($filePathToTxt, '.zip')) {
@@ -274,10 +248,6 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @param string   $filePath
-     * @param callable $callback
-     *
-     * @return void
      * @throws Exception
      */
     public function parseCombatLog(string $filePath, callable $callback): void
@@ -317,12 +287,6 @@ class CombatLogService implements CombatLogServiceInterface
         }
     }
 
-    /**
-     * @param Collection $rawEvents
-     * @param string     $filePath
-     *
-     * @return bool
-     */
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
     {
         $fileHandle = fopen($filePath, 'w');
@@ -331,7 +295,7 @@ class CombatLogService implements CombatLogServiceInterface
         }
 
         foreach ($rawEvents as $rawEvent) {
-            fwrite($fileHandle, (string) $rawEvent);
+            fwrite($fileHandle, (string)$rawEvent);
         }
 
         return true;

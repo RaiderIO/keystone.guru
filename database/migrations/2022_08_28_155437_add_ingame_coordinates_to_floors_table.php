@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIngameCoordinatesToFloorsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -37,4 +36,4 @@ class AddIngameCoordinatesToFloorsTable extends Migration
             $table->dropColumn('ingame_min_x');
         });
     }
-}
+};

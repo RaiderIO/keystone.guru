@@ -9,8 +9,9 @@ use Illuminate\Broadcasting\PresenceChannel;
 
 /**
  * Class StopEvent
- * @package App\Events\LiveSession
+ *
  * @author Wouter
+ *
  * @since 15/06/2021
  *
  * @property LiveSession $_context

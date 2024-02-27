@@ -14,23 +14,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int                $seasonal_index
  * @property int                $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
  * @property string             $text To string of the affix group
- *
  * @property Collection|Affix[] $affixes
  *
  * @mixin Eloquent
  */
 abstract class AffixGroupBase extends CacheModel
 {
-    public    $timestamps = false;
-    public    $with       = ['affixes'];
-    public    $hidden     = ['pivot'];
-    protected $appends    = ['text'];
+    public $timestamps = false;
 
-    protected abstract function getAffixGroupCouplingsTableName(): string;
+    public $with = ['affixes'];
 
-    /**
-     * @return BelongsToMany
-     */
+    public $hidden = ['pivot'];
+
+    protected $appends = ['text'];
+
+    abstract protected function getAffixGroupCouplingsTableName(): string;
+
     public function affixes(): BelongsToMany
     {
         // I don't know why this suddenly needs an order by. After adding indexes to the database somehow the order of this was done by affix_id
@@ -50,6 +49,7 @@ abstract class AffixGroupBase extends CacheModel
             /** @var $affix Affix */
             $result[] = __($affix->name);
         }
+
         $result = implode(', ', $result);
 
         if ($this->seasonal_index !== null) {
@@ -59,9 +59,6 @@ abstract class AffixGroupBase extends CacheModel
         return $result;
     }
 
-    /**
-     * @return bool
-     */
     public function hasAffix(string $key): bool
     {
         $result = false;

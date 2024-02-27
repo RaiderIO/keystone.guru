@@ -29,12 +29,15 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     /** @var Collection|string[] */
     private Collection $rawEvents;
 
-    private ?string                  $lastCombatLogVersion;
-    private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
-    private ?string                  $lastZoneChange;
-    private ?string                  $lastMapChange;
-    private ?Carbon                  $lastTimestamp               = null;
+    private ?string $lastCombatLogVersion;
 
+    private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
+
+    private ?string $lastZoneChange;
+
+    private ?string $lastMapChange;
+
+    private ?Carbon $lastTimestamp = null;
 
     public function __construct(
         private readonly CombatLogServiceInterface             $combatLogService,
@@ -43,10 +46,6 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         $this->reset();
     }
 
-    /**
-     * @param string $filePath
-     * @return Collection
-     */
     public function splitCombatLogOnChallengeModes(string $filePath): Collection
     {
         $this->log->splitCombatLogOnChallengeModesStart($filePath);
@@ -62,8 +61,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
                 return $result;
             }
 
-            $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
-            use ($filePath, $targetFilePath, &$result) {
+            $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($filePath, &$result) {
                 $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
                 $combatLogEntry = (new CombatLogEntry($rawEvent));
@@ -151,10 +149,6 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         return $result;
     }
 
-
-    /**
-     * @return void
-     */
     private function resetCurrentChallengeMode(): void
     {
         $this->log->resetCurrentChallengeMode();
@@ -164,9 +158,6 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         $this->lastChallengeModeStartEvent = null;
     }
 
-    /**
-     * @return void
-     */
     private function reset(): void
     {
         $this->log->reset();
@@ -180,8 +171,6 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     /**
      * Based on the currently known information (as for what dungeon we're doing), generate a file path
      * to save the current combat log at.
-     *
-     * @return string
      */
     private function generateTargetCombatLogFileName(string $originalFilePath): string
     {
@@ -202,9 +191,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
             $this->log->generateTargetCombatLogFileNameAttempt($saveFilePath);
             // While we have a zip file that already exists, someone may have done two
             // the same dungeons of the same key level
-            $count++;
+            ++$count;
         } while (file_exists(str_replace('.txt', '.zip', $saveFilePath)));
-
 
         return $saveFilePath;
     }

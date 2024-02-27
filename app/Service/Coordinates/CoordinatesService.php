@@ -11,7 +11,6 @@ use InvalidArgumentException;
 
 class CoordinatesService implements CoordinatesServiceInterface
 {
-
     /** @var int Y */
     public const MAP_MAX_LAT = -256;
 
@@ -25,9 +24,6 @@ class CoordinatesService implements CoordinatesServiceInterface
     public const MAP_ASPECT_RATIO = 1.5;
 
     /**
-     * @param LatLng $latLng
-     *
-     * @return IngameXY
      * @see mapcontext.js
      */
     public function calculateIngameLocationForMapLocation(LatLng $latLng): IngameXY
@@ -52,11 +48,6 @@ class CoordinatesService implements CoordinatesServiceInterface
         );
     }
 
-    /**
-     * @param IngameXY $ingameXY
-     *
-     * @return LatLng
-     */
     public function calculateMapLocationForIngameLocation(IngameXY $ingameXY): LatLng
     {
         $targetFloor = $ingameXY->getFloor();
@@ -78,13 +69,6 @@ class CoordinatesService implements CoordinatesServiceInterface
         );
     }
 
-    /**
-     *
-     * @param MappingVersion $mappingVersion
-     * @param LatLng         $latLng
-     * @param Floor|null     $forceFloor
-     * @return LatLng
-     */
     public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng
     {
         $sourceFloor = $latLng->getFloor();
@@ -111,7 +95,7 @@ class CoordinatesService implements CoordinatesServiceInterface
             $targetFloor = null;
 
             // If we're forcing the translation on a certain floor, check if this floor union matches that forced floor
-            if ($floorUnion->target_floor_id === optional($forceFloor)->id) {
+            if ($floorUnion->target_floor_id === $forceFloor?->id) {
                 $targetFloor = $forceFloor;
             } else {
                 // Otherwise, check if the floor union area contains the target point, then we use this floor union's
@@ -149,12 +133,6 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $result;
     }
 
-    /**
-     * @param MappingVersion $mappingVersion
-     * @param LatLng         $latLng
-     *
-     * @return LatLng
-     */
     public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng
     {
         $sourceFloor = $latLng->getFloor();
@@ -195,10 +173,6 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $result;
     }
 
-
-    /**
-     * @return float
-     */
     public function distanceBetweenPoints(float $x1, float $x2, float $y1, float $y2): float
     {
         // Pythagoras theorem: a^2+b^2=c^2
@@ -208,12 +182,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         );
     }
 
-
     /**
-     * @param LatLng $latLngA1
-     * @param LatLng $latLngA2
-     * @param LatLng $latLngB1
-     * @param LatLng $latLngB2
      * @return array{lng: float, lat: float}|null
      */
     public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng
@@ -257,26 +226,23 @@ class CoordinatesService implements CoordinatesServiceInterface
         }
     }
 
-    /**
-     * @param LatLng $latLng
-     * @param array  $polygon
-     * @return bool
-     */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
     {
         if ($polygon[0] != $polygon[count($polygon) - 1]) {
             $polygon[] = $polygon[0];
         }
+
         $j        = 0;
         $oddNodes = false;
         $lat      = $latLng->getLat();
         $lng      = $latLng->getLng();
         $n        = count($polygon);
-        for ($i = 0; $i < $n; $i++) {
-            $j++;
+        for ($i = 0; $i < $n; ++$i) {
+            ++$j;
             if ($j == $n) {
                 $j = 0;
             }
+
             if ((($polygon[$i]['lng'] < $lng) && ($polygon[$j]['lng'] >= $lng)) || (($polygon[$j]['lng'] < $lng) && ($polygon[$i]['lng'] >=
                         $lng))) {
                 if ($polygon[$i]['lat'] + ($lng - $polygon[$i]['lng']) / ($polygon[$j]['lng'] - $polygon[$i]['lng']) * ($polygon[$j]['lat'] -
@@ -289,11 +255,6 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $oddNodes;
     }
 
-    /**
-     * @param Floor|null $floor
-     *
-     * @return LatLng
-     */
     public static function getMapCenterLatLng(?Floor $floor = null): LatLng
     {
         return new LatLng(

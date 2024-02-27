@@ -19,7 +19,7 @@ class ProfileFormRequest extends FormRequest
         /** @var User $user */
         $user = Auth::user();
 
-        return $user->hasRole("user") || $user->hasRole("admin");
+        return $user->hasRole('user') || $user->hasRole('admin');
     }
 
     /**

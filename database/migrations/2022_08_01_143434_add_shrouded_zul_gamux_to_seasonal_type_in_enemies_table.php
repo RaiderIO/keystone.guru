@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class AddShroudedZulGamuxToSeasonalTypeInEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -25,4 +22,4 @@ class AddShroudedZulGamuxToSeasonalTypeInEnemiesTable extends Migration
     {
         DB::statement("ALTER TABLE enemies CHANGE COLUMN seasonal_type seasonal_type ENUM('awakened', 'inspiring', 'prideful', 'tormented', 'encrypted', 'mdt_placeholder', 'shrouded') NULL DEFAULT NULL");
     }
-}
+};

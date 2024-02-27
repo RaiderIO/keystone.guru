@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Auth;
  * @property string|null $color
  * @property Carbon      $updated_at
  * @property Carbon      $created_at
- *
  * @property TagCategory $tagCategory
  *
  * @method Builder unique(?int $tagCategoryId)
@@ -36,16 +35,12 @@ class Tag extends Model
 
     protected $visible = ['id', 'name', 'color'];
 
-    /**
-     * @return BelongsTo
-     */
     public function tagCategory(): BelongsTo
     {
         return $this->belongsTo(TagCategory::class);
     }
 
     /**
-     * @param int|null $categoryId
      * @return Builder
      */
     public function scopeUnique(Builder $query, ?int $categoryId = null)
@@ -57,9 +52,6 @@ class Tag extends Model
         return $query->groupBy('name');
     }
 
-    /**
-     * @return Collection
-     */
     public function getUsage(): Collection
     {
         $result = new Collection();
@@ -76,9 +68,6 @@ class Tag extends Model
         return $result;
     }
 
-    /**
-     * @return Tag
-     */
     public static function saveFromRequest(TagFormRequest $request, int $tagCategoryId): Tag
     {
         // Bit strange - but required with multiple forms existing on the profile page

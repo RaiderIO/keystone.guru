@@ -8,9 +8,6 @@ use App\Models\Mapping\MappingVersion;
 
 class AjaxMappingVersionController extends Controller
 {
-    /**
-     * @return MappingVersion
-     */
     public function store(APIMappingVersionFormRequest $request, MappingVersion $mappingVersion): MappingVersion
     {
         $updateResult = $mappingVersion->update($request->validated());

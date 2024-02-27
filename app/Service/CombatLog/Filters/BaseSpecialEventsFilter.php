@@ -66,10 +66,6 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
      * @throws FloorNotSupportedException
      * @throws DungeonNotSupportedException
      */
@@ -110,5 +106,4 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
 
         return false;
     }
-
 }

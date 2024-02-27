@@ -11,17 +11,11 @@ class MountableAreaIntersection
     {
     }
 
-    /**
-     * @return MountableArea
-     */
     public function getMountableArea(): MountableArea
     {
         return $this->mountableArea;
     }
 
-    /**
-     * @return LatLng
-     */
     public function getLatLng(): LatLng
     {
         return $this->latLng;

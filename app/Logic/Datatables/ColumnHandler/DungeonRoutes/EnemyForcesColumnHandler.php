@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class EnemyForcesColumnHandler extends DatatablesColumnHandler
 {
-
     public function __construct(DatatablesHandler $dtHandler)
     {
         parent::__construct($dtHandler, 'enemy_forces');
@@ -23,12 +22,12 @@ class EnemyForcesColumnHandler extends DatatablesColumnHandler
     protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
         $views = $columnData['search']['value'];
-        if (!empty($views)) {
-//            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
-//                /** @var $query Builder */
-//                $query->whereIn('affix_groups.id', $affixIds);
-//            });
-        }
+//        if (!empty($views)) {
+            //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
+            //                /** @var $query Builder */
+            //                $query->whereIn('affix_groups.id', $affixIds);
+            //            });
+//        }
 
         // Only order
         if ($order !== null) {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\LiveSession;
 
 use App\Models\LiveSession;
@@ -8,10 +7,8 @@ use Illuminate\Support\Collection;
 
 class DungeonRouteCorrection
 {
-    /** @var Collection */
     private Collection $obsoleteEnemies;
 
-    /** @var int */
     private int $enemyForces;
 
     /**
@@ -23,9 +20,6 @@ class DungeonRouteCorrection
         $this->enemyForces     = $liveSession->dungeonroute->enemy_forces;
     }
 
-    /**
-     * @return Collection
-     */
     public function getObsoleteEnemies(): Collection
     {
         return $this->obsoleteEnemies;
@@ -41,25 +35,17 @@ class DungeonRouteCorrection
         $this->obsoleteEnemies = $this->obsoleteEnemies->merge($enemies);
     }
 
-    /**
-     * @return int
-     */
     public function getEnemyForces(): int
     {
         return $this->enemyForces;
     }
 
-
-    /**
-     * @return DungeonRouteCorrection
-     */
     public function setEnemyForces(int $enemyForces): DungeonRouteCorrection
     {
         $this->enemyForces = $enemyForces;
 
         return $this;
     }
-
 
     public function toArray(): array
     {

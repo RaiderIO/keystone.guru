@@ -2,16 +2,15 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
-
 use Illuminate\Support\Facades\Queue;
 use InfluxDB\Point;
 
 class QueueSize extends Measurement
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function getPoints(): array
+    public function getPoints(): array
     {
         $tags = array_merge($this->getTags(), ['server' => 'maisie']);
 

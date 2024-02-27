@@ -13,7 +13,6 @@ class DungeonRouteDiscoverExpansionPolicy
     /**
      * Determine whether the user can view the dungeon.
      *
-     * @param User|null $user
      * @return mixed
      */
     public function view(?User $user, Expansion $expansion)

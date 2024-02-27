@@ -11,8 +11,6 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -71,7 +69,6 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'released_at' => Carbon::make('2022-11-29 00:00:00'),
             ]),
         ];
-
 
         foreach ($expansions as $name => $expansion) {
             /** @var Expansion $expansion */

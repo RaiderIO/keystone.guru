@@ -33,7 +33,7 @@ class PageView extends Model
 
     /**
      * @return bool True if this PageView is recent enough to be considered 'current', false if it is not and a new view
-     * can be inserted instead.
+     *              can be inserted instead.
      */
     public function isRecent(): bool
     {
@@ -45,10 +45,10 @@ class PageView extends Model
 
     /**
      * Tracks a view for this model. The view may not track if there's a recent view, and we're still in the same 'session'.
-     * @param int|null $source
+     *
      * @return bool True if the page view was tracked, false if it was not.
      */
-    public static function trackPageView(int $modelId, string $modelClass, int $source = null): bool
+    public static function trackPageView(int $modelId, string $modelClass, ?int $source = null): bool
     {
         $result = false;
 
@@ -81,8 +81,9 @@ class PageView extends Model
 
     /**
      * Checks if the view may be counted or if it shouldn't be counted because a previously existing view is too recent.
-     * @param $modelId int
-     * @param $modelClass string
+     *
+     * @param  $modelId  int
+     * @param  $modelClass  string
      * @return PageView|null The most recent page view, or null if none was found.
      */
     private static function getMostRecentPageView(int $modelId, string $modelClass): ?PageView

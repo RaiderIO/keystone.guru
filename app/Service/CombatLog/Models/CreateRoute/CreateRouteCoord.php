@@ -8,9 +8,6 @@ class CreateRouteCoord
     {
     }
 
-    /**
-     * @return CreateRouteCoord
-     */
     public static function createFromArray(array $body): CreateRouteCoord
     {
         return new CreateRouteCoord(

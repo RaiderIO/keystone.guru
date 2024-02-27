@@ -54,7 +54,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection|string[] List of GUIDs for all enemies that we have killed since the start. */
     private readonly Collection $killedEnemies;
 
-    /** @var BaseCombatFilterLoggingInterface */
     private readonly BaseCombatFilterLoggingInterface $log;
 
     public function __construct(/** @var Collection|BaseResultEvent[] */
@@ -75,12 +74,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $this->validNpcIds = $validNpcIds;
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // If a unit has died/is defeated
@@ -168,9 +161,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         return false;
     }
 
-    /**
-     * @return bool
-     */
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
     {
         // We skip all non-advanced combat log events, we need positional information of NPCs.
@@ -194,23 +184,20 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         return true;
 
-//        // We skip all non-advanced combat log events, we need positional information of NPCs.
-//        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
-//            return false;
-//        }
-//
-//        // The info GUID is the GUID for which the advanced data is valid for
-//        // So if the info GUID is for an enemy we're 100% interested in this info
-//        $infoGuid = $combatLogEvent->getAdvancedData()->getInfoGuid();
-//        // Ignore events that did not originate from
-//        return !($combatLogEvent->getGenericData()->getSourceGuid() instanceof Creature) &&
-//            $infoGuid instanceof Creature &&
-//            $infoGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
+        //        // We skip all non-advanced combat log events, we need positional information of NPCs.
+        //        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+        //            return false;
+        //        }
+        //
+        //        // The info GUID is the GUID for which the advanced data is valid for
+        //        // So if the info GUID is for an enemy we're 100% interested in this info
+        //        $infoGuid = $combatLogEvent->getAdvancedData()->getInfoGuid();
+        //        // Ignore events that did not originate from
+        //        return !($combatLogEvent->getGenericData()->getSourceGuid() instanceof Creature) &&
+        //            $infoGuid instanceof Creature &&
+        //            $infoGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET;
     }
 
-    /**
-     * @return string|null
-     */
     private function hasAdvancedDataNewGuid(AdvancedDataInterface $advancedData): ?string
     {
         $guid = $advancedData->getInfoGuid();
@@ -237,9 +224,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         return null;
     }
 
-    /**
-     * @return bool
-     */
     private function hasDeathAuraApplied(BaseEvent $combatLogEvent): bool
     {
         return false;
@@ -261,9 +245,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         //        ]);
     }
 
-    /**
-     * @return bool
-     */
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool
     {
         if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {

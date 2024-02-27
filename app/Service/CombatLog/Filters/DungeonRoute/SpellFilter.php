@@ -20,12 +20,6 @@ class SpellFilter implements CombatLogParserInterface
         $this->spellsToTrack = Spell::where('selectable', true)->get()->pluck('id');
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {

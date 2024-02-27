@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class AddBeguilingSeasonalTypeToEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -29,4 +26,4 @@ class AddBeguilingSeasonalTypeToEnemiesTable extends Migration
             ENUM('awakened', 'inspiring', 'prideful', 'tormented', 'encrypted', 'mdt_placeholder', 'shrouded', 'shrouded_zul_gamux', 'no_shrouded')
             NULL DEFAULT NULL");
     }
-}
+};

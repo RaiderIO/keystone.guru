@@ -6,5 +6,4 @@ use App\Service\CombatLog\Filters\BaseSpecialEventsFilter;
 
 class SpecialEventsFilter extends BaseSpecialEventsFilter
 {
-
 }

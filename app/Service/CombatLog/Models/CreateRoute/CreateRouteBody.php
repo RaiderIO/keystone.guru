@@ -20,9 +20,6 @@ class CreateRouteBody
     ) {
     }
 
-    /**
-     * @return CreateRouteBody
-     */
     public static function createFromArray(array $body): CreateRouteBody
     {
         $metadata      = CreateRouteMetadata::createFromArray($body['metadata'] ?? []);

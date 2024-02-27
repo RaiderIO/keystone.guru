@@ -12,15 +12,12 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
-class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
+class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 {
-    /** @var int */
     private int $pullIndex;
 
-    /** @var bool */
     private bool $bloodLust = false;
 
-    /** @var int */
     private int $delay = 0;
 
     /** @var Collection|RaidEventPullEnemy[] */
@@ -31,7 +28,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateRaidEventPullEnemies(KillZone $killZone, LatLng $previousKillLocation): RaidEventPullInterface
     {
@@ -56,7 +53,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateDelay(KillZone $killZone, LatLng $previousKillLocation): float
     {
@@ -79,14 +76,9 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return $result;
     }
 
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB): float
     {
-        if (optional($latLngA->getFloor())->id !== optional($latLngB->getFloor())->id) {
+        if ($latLngA->getFloor()?->id !== $latLngB->getFloor()?->id) {
             throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
         }
 
@@ -137,21 +129,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return $delayMounted + $delayOnFoot + $delayMountCasts;
     }
 
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     public function calculateDelayBetweenPointsOnDifferentFloors(LatLng $latLngA, LatLng $latLngB): float
     {
         return $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB) +
             $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB);
     }
 
-
-    /**
-     * @return float
-     */
     private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(LatLng $latLngA, LatLng $latLngB): float
     {
         $previousKillFloorClosestDungeonFloorSwitchMarker = $latLngA->getFloor()->findClosestFloorSwitchMarker(
@@ -173,7 +156,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self
     {
@@ -284,7 +267,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
             // We were not mounted this intersection - mount up for the next one!
             // But only if we have another intersection after this
             else if ($index !== $allMountableAreaIntersectionsCount - 1) {
-                $mountCasts++;
+                ++$mountCasts;
             }
 
             // Since we encountered a new edge of the zone, we're now either mounting or dismounting
@@ -315,39 +298,21 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return [$factorsAndSpeeds, $mountCasts];
     }
 
-    /**
-     * @param float $ingameDistance
-     * @return float
-     */
     public function calculateDelayForDistanceOnFoot(float $ingameDistance): float
     {
         return max(0, $ingameDistance) / config('keystoneguru.character.default_movement_speed_yards_second');
     }
 
-    /**
-     * @param int $mountCasts
-     * @return float
-     */
     public function calculateDelayForMountCasts(int $mountCasts): float
     {
-        return (max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds'));
+        return max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds');
     }
 
-    /**
-     * @param float $ingameDistance
-     * @param float $factor
-     * @param int   $speed
-     * @return float
-     */
     public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float
     {
         return max(0, $ingameDistance * $factor) / $speed;
     }
 
-
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         $result = sprintf(

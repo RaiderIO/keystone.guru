@@ -6,7 +6,6 @@ use Exception;
 
 interface MDTMappingImportServiceLoggingInterface
 {
-
     public function importMappingVersionFromMDTMappingChanged(?string $mdtMappingHash, string $latestMdtMappingHash): void;
 
     public function importMappingVersionFromMDTCreateMappingVersion(int $version, int $id): void;

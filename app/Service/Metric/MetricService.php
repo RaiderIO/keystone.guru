@@ -10,14 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class MetricService implements MetricServiceInterface
 {
-    /**
-     * @param int|null    $modelId
-     * @param string|null $modelClass
-     * @param int         $category
-     * @param string      $tag
-     * @param int         $value
-     * @return Metric
-     */
     public function storeMetric(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
@@ -29,13 +21,6 @@ class MetricService implements MetricServiceInterface
         ]);
     }
 
-    /**
-     * @param Model  $model
-     * @param int    $category
-     * @param string $tag
-     * @param int    $value
-     * @return Metric
-     */
     public function storeMetricByModel(Model $model, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
@@ -47,9 +32,6 @@ class MetricService implements MetricServiceInterface
         ]);
     }
 
-    /**
-     * @return bool
-     */
     public function aggregateMetrics(): bool
     {
         $result = DB::insert("

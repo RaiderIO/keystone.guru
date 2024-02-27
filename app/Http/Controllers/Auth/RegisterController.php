@@ -99,6 +99,7 @@ class RegisterController extends Controller
      * Handle a registration request for the application.
      *
      * @return Application|RedirectResponse|Response|Redirector
+     *
      * @throws ValidationException
      */
     public function register(Request $request)

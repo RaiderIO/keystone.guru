@@ -14,10 +14,6 @@ interface CombatLogServiceInterface
      */
     public function parseCombatLogToEvents(string $filePath): Collection;
 
-    /**
-     *
-     * @return void
-     */
     public function parseCombatLogStreaming(string $filePath, callable $callable): void;
 
     /**
@@ -35,31 +31,13 @@ interface CombatLogServiceInterface
      */
     public function getResultEventsForChallengeMode(string $combatLogFilePath): Collection;
 
-    /**
-     * @return Collection
-     */
     public function getResultEventsForDungeonOrRaid(string $combatLogFilePath): Collection;
 
-    /**
-     * @return string|null
-     */
     public function extractCombatLog(string $filePath): ?string;
 
-    /**
-     * @return string
-     */
     public function compressCombatLog(string $filePathToTxt): string;
 
-    /**
-     *
-     * @return void
-     */
     public function parseCombatLog(string $filePath, callable $callback): void;
 
-    /**
-     *
-     * @return bool
-     */
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool;
-
 }

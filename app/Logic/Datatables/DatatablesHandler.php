@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
-    /**  @var Builder */
     protected Builder $builder;
 
     /** @var DatatablesColumnHandler[] */
@@ -28,17 +27,11 @@ abstract class DatatablesHandler
         $this->columnHandlers = [];
     }
 
-    /**
-     * @return Request
-     */
     public function getRequest(): Request
     {
         return $this->request;
     }
 
-    /**
-     * @return Builder
-     */
     public function getBuilder(): Builder
     {
         return $this->builder;
@@ -56,7 +49,6 @@ abstract class DatatablesHandler
 
     /**
      * @param DatatablesColumnHandler|array $dtColumnHandlers
-     *
      * @return $this
      */
     public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
@@ -75,6 +67,7 @@ abstract class DatatablesHandler
 
     /**
      * @return $this
+     *
      * @throws Exception
      */
     public function applyRequestToBuilder(): DatatablesHandler
@@ -107,9 +100,6 @@ abstract class DatatablesHandler
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getResult(): array
     {
         $isDev = config('app.env') !== 'production';
@@ -142,7 +132,7 @@ abstract class DatatablesHandler
         return $result;
     }
 
-    protected abstract function calculateRecordsTotal(): int;
+    abstract protected function calculateRecordsTotal(): int;
 
-    protected abstract function calculateRecordsFiltered(): ?int;
+    abstract protected function calculateRecordsFiltered(): ?int;
 }

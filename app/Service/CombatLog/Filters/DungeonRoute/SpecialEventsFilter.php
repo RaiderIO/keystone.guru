@@ -16,10 +16,6 @@ class SpecialEventsFilter extends BaseSpecialEventsFilter
     private ?ChallengeModeStart $challengeModeStartEvent = null;
 
     /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
      * @throws DungeonNotSupportedException
      * @throws FloorNotSupportedException
      */
@@ -42,5 +38,4 @@ class SpecialEventsFilter extends BaseSpecialEventsFilter
 
         return parent::parse($combatLogEvent, $lineNr);
     }
-
 }

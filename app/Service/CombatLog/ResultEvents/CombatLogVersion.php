@@ -2,8 +2,8 @@
 
 namespace App\Service\CombatLog\ResultEvents;
 
-use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\CombatLogVersion as CombatLogVersionConstant;
+use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use Exception;
 
 class CombatLogVersion extends BaseResultEvent

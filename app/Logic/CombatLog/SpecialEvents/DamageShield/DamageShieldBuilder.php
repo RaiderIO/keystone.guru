@@ -11,7 +11,6 @@ use Carbon\Carbon;
 
 class DamageShieldBuilder implements SpecialEventBuilderInterface
 {
-
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,

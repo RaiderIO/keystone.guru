@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDungeonRouteNamespaceInPageViewsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -26,4 +25,4 @@ class UpdateDungeonRouteNamespaceInPageViewsTable extends Migration
         set_time_limit(-1);
         DB::update('UPDATE `page_views` SET `model_class` = "App\Models\DungeonRoute" WHERE `model_class` = "App\Models\DungeonRoute\DungeonRoute"');
     }
-}
+};

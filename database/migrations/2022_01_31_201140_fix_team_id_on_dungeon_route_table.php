@@ -4,8 +4,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class FixTeamIdOnDungeonRouteTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -31,4 +30,4 @@ class FixTeamIdOnDungeonRouteTable extends Migration
             $table->integer('team_id')->nullable(false)->change();
         });
     }
-}
+};

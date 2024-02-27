@@ -27,11 +27,8 @@ class DungeonRouteFilter implements CombatLogParserInterface
     }
 
     /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     * @param bool      $waitForChallengeModeStart True to wait for a ChallengeModeStart event before parsing, otherwise ZONE_CHANGE will be used
+     * @param bool $waitForChallengeModeStart True to wait for a ChallengeModeStart event before parsing, otherwise ZONE_CHANGE will be used
      *
-     * @return bool
      * @throws AdvancedLogNotEnabledException
      * @throws DungeonNotSupportedException
      */
@@ -92,9 +89,6 @@ class DungeonRouteFilter implements CombatLogParserInterface
         return false;
     }
 
-    /**
-     * @return DungeonRoute|null
-     */
     public function getDungeonRoute(): ?DungeonRoute
     {
         return $this->dungeonRoute;

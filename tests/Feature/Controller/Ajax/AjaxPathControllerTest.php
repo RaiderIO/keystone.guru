@@ -2,19 +2,15 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Floor\Floor;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use App\Models\Floor\Floor;
 use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 use Tests\Feature\Fixtures\PolylineFixtures;
 
 final class AjaxPathControllerTest extends DungeonRouteTestBase
 {
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('Controller')]
     public function store_givenNewValidPath_shouldReturnPath(): void
@@ -42,10 +38,6 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
     }
 
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('Controller')]
     public function store_givenNewEmptyPath_shouldReturnFormValidationErrors(): void
@@ -62,22 +54,17 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         $response->assertSessionHasErrors(['floor_id', 'polyline']);
     }
 
-
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('Controller')]
     public function store_givenPathWithValidButNotMatchingFloorId_shouldReturnError(): void
     {
         // Arrange
-        $validIds  = $this->dungeonRoute->dungeon->floors->pluck('id');
+        $validIds = $this->dungeonRoute->dungeon->floors->pluck('id');
         $allFloors = Floor::all()->keyBy('id');
 
-        $randomInvalidId    = $allFloors->pluck('id')->diff($validIds)->random();
+        $randomInvalidId = $allFloors->pluck('id')->diff($validIds)->random();
         $randomInvalidFloor = $allFloors->get($randomInvalidId);
-        $polyline           = PolylineFixtures::createPolyline($randomInvalidFloor);
+        $polyline = PolylineFixtures::createPolyline($randomInvalidFloor);
 
         // Act
         $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
@@ -89,10 +76,6 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         $response->assertStatus(422);
     }
 
-    /**
-     *
-     * @return void
-     */
     #[Test]
     #[Group('Controller')]
     public function store_givenPathEmptyVertexCount_shouldReturnError(): void

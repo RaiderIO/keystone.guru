@@ -42,8 +42,7 @@
 @section('content')
     <?php
     /** @var $warnings \Illuminate\Support\Collection */
-    $warnings = $warnings->groupBy(fn($item) => /** @var $item \App\Logic\MDT\Exception\ImportWarning */
-    $item->getCategory());
+    $warnings = $warnings->groupBy(static fn($item) => $item->getCategory());
 
     $headers = [
         'mismatched_health'               => __('views/admin.tools.mdt.diff.headers.mismatched_health'),

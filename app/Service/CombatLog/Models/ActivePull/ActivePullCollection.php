@@ -6,9 +6,6 @@ use Illuminate\Support\Collection;
 
 class ActivePullCollection extends Collection
 {
-    /**
-     * @return ActivePull
-     */
     public function addNewPull(): ActivePull
     {
         $activePull = new ActivePull();
@@ -17,9 +14,6 @@ class ActivePullCollection extends Collection
         return $activePull;
     }
 
-    /**
-     * @return Collection
-     */
     public function getInCombatGroups(): Collection
     {
         $result = collect();

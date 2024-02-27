@@ -77,17 +77,17 @@ class Conversion
         ],
 
         Expansion::EXPANSION_CATACLYSM => [
-//            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
+            //            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
         ],
 
         Expansion::EXPANSION_MOP => [
-//            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
         ],
 
         Expansion::EXPANSION_WOD => [
-//            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
-//            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
-//            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+            //            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
+            //            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
+            //            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
         ],
 
         Expansion::EXPANSION_LEGION => [
@@ -167,19 +167,12 @@ class Conversion
 
     /**
      * Rounds a number to the nearest two decimals.
-     *
-     * @param $nr
-     *
-     * @return float
      */
     private static function round($nr): float
     {
         return ((int)($nr * 100)) / 100;
     }
 
-    /**
-     * @return string|null
-     */
     public static function getExpansionName(string $dungeonKey): ?string
     {
         $result = null;
@@ -193,17 +186,13 @@ class Conversion
         return $result;
     }
 
-    /**
-     * @return string|null
-     */
     public static function getMDTExpansionName(string $dungeonKey): ?string
     {
         return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)] ?? null;
     }
 
     /**
-     * @param $dungeonKey string
-     *
+     * @param  $dungeonKey  string
      * @return bool True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -212,8 +201,7 @@ class Conversion
     }
 
     /**
-     * @param $dungeonKey string
-     *
+     * @param  $dungeonKey  string
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -231,9 +219,8 @@ class Conversion
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
      *
-     * @param $mdtDungeonId int
+     * @param  $mdtDungeonId  int
      *
-     * @return Dungeon
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
     public static function convertMDTDungeonIDToDungeon(int $mdtDungeonId): Dungeon
@@ -250,8 +237,6 @@ class Conversion
      * Converts an array with x/y keys set to an array with lat/lng set, converted to our own coordinate system.
      *
      * @param array{x: float, y: float} $xy
-     * @param Floor|null                $floor
-     * @return LatLng
      */
     public static function convertMDTCoordinateToLatLng(array $xy, ?Floor $floor = null): LatLng
     {
@@ -262,9 +247,6 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
-     *
-     *
-     * @return array
      */
     public static function convertLatLngToMDTCoordinateString(LatLng $latLng): array
     {
@@ -277,9 +259,6 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
-     *
-     *
-     * @return array
      */
     public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {
@@ -290,7 +269,6 @@ class Conversion
      * Convert a MDT week to a matching affix group
      *
      *
-     * @return AffixGroup|null
      * @throws Exception
      */
     public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
@@ -315,9 +293,6 @@ class Conversion
         return $affixGroup;
     }
 
-    /**
-     * @return int
-     */
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
         // We need to figure out which week it is in the rotation

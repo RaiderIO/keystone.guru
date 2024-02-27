@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Mapping;
-
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\SeederHelpers\RelationImport\Parsers\Relation\DungeonRouteAffixGroupRelationParser;
@@ -21,7 +19,7 @@ use App\SeederHelpers\RelationImport\Parsers\Relation\NestedModelRelationParser;
 class DungeonRouteRelationMapping extends RelationMapping
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct()
     {
@@ -51,5 +49,4 @@ class DungeonRouteRelationMapping extends RelationMapping
             new DungeonRouteMapIconsRelationParser(),
         ]));
     }
-
 }

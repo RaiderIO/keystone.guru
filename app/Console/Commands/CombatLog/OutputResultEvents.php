@@ -26,7 +26,6 @@ class OutputResultEvents extends BaseCombatLogCommand
      * Execute the console command.
      *
      *
-     * @return int
      * @throws Exception
      */
     public function handle(CombatLogServiceInterface $combatLogService): int
@@ -48,9 +47,6 @@ class OutputResultEvents extends BaseCombatLogCommand
         });
     }
 
-    /**
-     * @return int
-     */
     private function outputResultEvents(
         CombatLogServiceInterface $combatLogService,
         string                    $filePath,

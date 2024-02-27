@@ -35,8 +35,6 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param string $combatLogFilePath
-     *
      * @return Collection|DungeonRoute[]
      *
      * @throws InvalidArgumentException If combat log does not exist
@@ -61,37 +59,37 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             }
 
             // <editor-fold desc="Debug" defaultstate="collapsed">
-//            dd($resultEvents->map(function (BaseResultEvent $resultEvent) {
-//                if ($resultEvent instanceof MapChangeResultEvent) {
-//                    return sprintf('%s: %s -> %s',
-//                        $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
-//                        get_class($resultEvent),
-//                        __(optional($resultEvent->getFloor())->name ??
-//                        sprintf('unknown floor (%s, %d)', $resultEvent->getMapChangeEvent()->getUiMapName(), $resultEvent->getMapChangeEvent()->getUiMapID()))
-//                    );
-//                } else if ($resultEvent instanceof EnemyEngaged) {
-//                    return sprintf('%s: %s -> %s',
-//                        $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
-//                        get_class($resultEvent),
-//                        $resultEvent->getGuid()->getGuid()
-//                    );
-//                } else if ($resultEvent instanceof EnemyKilled) {
-//                    $baseEvent = $resultEvent->getBaseEvent();
-//                    if ($baseEvent instanceof GenericSpecialEvent || $baseEvent instanceof CombatLogEvent) {
-//                        $genericData = $baseEvent->getGenericData();
-//                    } else {
-//                        return 'EVENT HAS NO GENERIC DATA';
-//                    }
-//
-//                    return sprintf('%s: %s -> %s',
-//                        $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
-//                        get_class($resultEvent),
-//                        $genericData->getDestGuid()->getGuid()
-//                    );
-//                } else {
-//                    return get_class($resultEvent);
-//                }
-//            }));
+            //            dd($resultEvents->map(function (BaseResultEvent $resultEvent) {
+            //                if ($resultEvent instanceof MapChangeResultEvent) {
+            //                    return sprintf('%s: %s -> %s',
+            //                        $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
+            //                        get_class($resultEvent),
+            //                        __($resultEvent->getFloor()?->name ??
+            //                        sprintf('unknown floor (%s, %d)', $resultEvent->getMapChangeEvent()->getUiMapName(), $resultEvent->getMapChangeEvent()->getUiMapID()))
+            //                    );
+            //                } else if ($resultEvent instanceof EnemyEngaged) {
+            //                    return sprintf('%s: %s -> %s',
+            //                        $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
+            //                        get_class($resultEvent),
+            //                        $resultEvent->getGuid()->getGuid()
+            //                    );
+            //                } else if ($resultEvent instanceof EnemyKilled) {
+            //                    $baseEvent = $resultEvent->getBaseEvent();
+            //                    if ($baseEvent instanceof GenericSpecialEvent || $baseEvent instanceof CombatLogEvent) {
+            //                        $genericData = $baseEvent->getGenericData();
+            //                    } else {
+            //                        return 'EVENT HAS NO GENERIC DATA';
+            //                    }
+            //
+            //                    return sprintf('%s: %s -> %s',
+            //                        $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString(),
+            //                        get_class($resultEvent),
+            //                        $genericData->getDestGuid()->getGuid()
+            //                    );
+            //                } else {
+            //                    return get_class($resultEvent);
+            //                }
+            //            }));
             // </editor-fold>
 
             // Store found enemy positions in the database for analyzing
@@ -117,7 +115,6 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
     /**
      * @param Collection|BaseResultEvent[] $resultEvents
-     * @return void
      */
     private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
@@ -128,23 +125,27 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             $currentFloor            = null;
 
             $now = Carbon::now()->toDateTimeString();
-
-            $challengeModeStart = $challengeModeEnd = null;
+            $challengeModeStart = null;
+            $challengeModeEnd = null;
 
             foreach ($resultEvents as $resultEvent) {
                 // Track the starts and ends. Don't do anything just yet with this
                 if ($resultEvent instanceof ChallengeModeStartResultEvent) {
                     $challengeModeStart = $resultEvent;
+
                     continue;
                 }
+
                 if ($resultEvent instanceof ChallengeModeEndResultEvent) {
                     $challengeModeEnd = $resultEvent;
+
                     continue;
                 }
 
                 // Keep track of the current floor
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     $currentFloor = $resultEvent->getFloor();
+
                     continue;
                 }
 
@@ -200,8 +201,6 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
 
     /**
      * @param Collection|BaseResultEvent[] $resultEvents
-     * @param DungeonRoute|null            $dungeonRoute
-     * @return void
      */
     private function generateMapIconsFromEvents(
         MappingVersion $mappingVersion,
@@ -213,6 +212,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
         foreach ($resultEvents as $resultEvent) {
             if ($resultEvent instanceof MapChangeResultEvent) {
                 $currentFloor = $resultEvent->getFloor();
+
                 continue;
             } else if ($currentFloor === null) {
                 continue;
@@ -262,7 +262,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             $mapIconAttributes->push(array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
+                'dungeon_route_id'   => $dungeonRoute?->id ?? null,
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
                 'comment'            => $comment,

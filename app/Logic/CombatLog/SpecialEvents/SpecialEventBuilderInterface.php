@@ -6,9 +6,6 @@ use Carbon\Carbon;
 
 interface SpecialEventBuilderInterface
 {
-    /**
-     * @return SpecialEvent
-     */
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,

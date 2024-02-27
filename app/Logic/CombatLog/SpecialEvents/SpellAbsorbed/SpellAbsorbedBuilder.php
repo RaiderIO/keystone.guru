@@ -12,11 +12,6 @@ use Carbon\Carbon;
 class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
 {
     /**
-     * @param int    $combatLogVersion
-     * @param Carbon $timestamp
-     * @param string $eventName
-     * @param array  $parameters
-     * @param string $rawEvent
      * @return SpecialEvent|SpellAbsorbedInterface
      */
     public static function create(

@@ -17,11 +17,13 @@ if ($section) { ?>
                     /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
                 if ($modal){ ?>
                 $('{{$modal}}').on('shown.bs.modal', function () {
-                    <?php } ?>
+                    <?php }
+                 ?>
                     _inlineManager.activate('{{ $path }}');
                         <?php if ($modal){ ?>
                 });
-                <?php } ?>
+                <?php }
+                 ?>
             }
         });
     </script>
@@ -38,11 +40,13 @@ if ($section) { ?>
                 /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
             if ($modal){ ?>
             $('{{$modal}}').on('shown.bs.modal', function () {
-                <?php } ?>
+                <?php }
+             ?>
                 _inlineManager.activate('{{ $path }}');
                     <?php if ($modal){ ?>
             });
-            <?php } ?>
+            <?php }
+             ?>
         }
     });
 </script>

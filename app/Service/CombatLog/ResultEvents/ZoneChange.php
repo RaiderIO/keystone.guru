@@ -15,7 +15,6 @@ class ZoneChange extends BaseResultEvent
     {
         parent::__construct($baseEvent);
 
-
         try {
             $this->dungeon = Dungeon::where('map_id', $baseEvent->getZoneId())->firstOrFail();
         } catch (Exception) {
@@ -25,17 +24,11 @@ class ZoneChange extends BaseResultEvent
         }
     }
 
-    /**
-     * @return Dungeon|null
-     */
     public function getDungeon(): ?Dungeon
     {
         return $this->dungeon;
     }
 
-    /**
-     * @return ZoneChangeEvent
-     */
     public function getZoneChangeEvent(): ZoneChangeEvent
     {
         /** @var ZoneChangeEvent $zoneChangeEvent */

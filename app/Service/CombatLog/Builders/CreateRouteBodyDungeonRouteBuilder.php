@@ -23,8 +23,8 @@ use Carbon\Carbon;
 use Exception;
 
 /**
- * @package App\Service\CombatLog\Builders
  * @author Wouter
+ *
  * @since 24/06/2023
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
@@ -33,22 +33,18 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
     public function __construct(
         private readonly SeasonServiceInterface $seasonService,
-        CoordinatesServiceInterface    $coordinatesService,
+        CoordinatesServiceInterface             $coordinatesService,
         private readonly CreateRouteBody        $createRouteBody
     ) {
         $dungeonRoute = $this->initDungeonRoute();
 
         parent::__construct($coordinatesService, $dungeonRoute);
 
-
         /** @var CreateRouteBodyDungeonRouteBuilderLoggingInterface $log */
         $log       = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
         $this->log = $log;
     }
 
-    /**
-     * @return DungeonRoute
-     */
     public function build(): DungeonRoute
     {
         $this->buildKillZones();
@@ -59,7 +55,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
-     * @return DungeonRoute
      * @throws DungeonNotSupportedException
      */
     private function initDungeonRoute(): DungeonRoute
@@ -75,6 +70,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
             );
         }
+
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
         $dungeonRoute = DungeonRoute::create([
@@ -115,20 +111,17 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         return $dungeonRoute;
     }
 
-    /**
-     * @return void
-     */
     private function buildKillZones(): void
     {
         $filteredNpcs = $this->createRouteBody->npcs->filter(fn(CreateRouteNpc $npc) => $this->validNpcIds->search($npc->npcId) !== false);
 
-        $npcEngagedEvents = $filteredNpcs->map(fn(CreateRouteNpc $npc) => [
+        $npcEngagedEvents = $filteredNpcs->map(static fn(CreateRouteNpc $npc) => [
             'type'      => 'engaged',
             'timestamp' => $npc->getEngagedAt(),
             'npc'       => $npc,
         ]);
 
-        $npcDiedEvents = $filteredNpcs->map(fn(CreateRouteNpc $npc) => [
+        $npcDiedEvents = $filteredNpcs->map(static fn(CreateRouteNpc $npc) => [
             'type'      => 'died',
             // A bit of a hack - but prevent one-shot enemies from having their diedAt event
             // potentially come _before_ engagedAt event due to sorting
@@ -138,24 +131,23 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
         $npcEngagedAndDiedEvents = $npcEngagedEvents
             ->merge($npcDiedEvents)
-            ->sortBy(function (array $event) {
+            ->sortBy(static function (array $event) {
                 /** @var Carbon $timestamp */
                 $timestamp = $event['timestamp'];
-
                 return $timestamp->unix();
             });
 
-//        dd($npcEngagedAndDiedEvents->map(function (array $event) {
-//            /** @var Carbon $timestamp */
-//            $timestamp     = $event['timestamp'];
-//            $event['date'] = $timestamp->toDateTimeString();
-//            $event['guid'] = $event['npc']->spawnUid;
-//
-//            unset($event['npc']);
-//            unset($event['timestamp']);
-//
-//            return $event;
-//        }));
+        //        dd($npcEngagedAndDiedEvents->map(function (array $event) {
+        //            /** @var Carbon $timestamp */
+        //            $timestamp     = $event['timestamp'];
+        //            $event['date'] = $timestamp->toDateTimeString();
+        //            $event['guid'] = $event['npc']->spawnUid;
+        //
+        //            unset($event['npc']);
+        //            unset($event['timestamp']);
+        //
+        //            return $event;
+        //        }));
 
         $firstEngagedAt = null;
         foreach ($npcEngagedAndDiedEvents as $event) {
@@ -218,7 +210,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 // Handle spells and the actual creation of pulls
                 /** @var $firstActivePull ActivePull|null */
                 $firstActivePull          = $this->activePullCollection->first();
-                $firstActivePullCompleted = optional($firstActivePull)->isCompleted() ?? false;
+                $firstActivePullCompleted = $firstActivePull?->isCompleted() ?? false;
                 foreach ($this->activePullCollection as $pullIndex => $activePull) {
                     /** @var $activePull ActivePull */
                     if ($activePull->isCompleted()) {
@@ -248,7 +240,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     }
 
     /**
-     * @param Carbon|null $lastDiedAt
      * @return void
      */
     private function determineSpellsCastBetween(ActivePull $activePull, ?Carbon $lastDiedAt = null)
@@ -272,9 +263,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         }
     }
 
-    /**
-     * @return ActivePullEnemy
-     */
     private function createActivePullEnemy(CreateRouteNpc $npc): ActivePullEnemy
     {
         return new ActivePullEnemy(

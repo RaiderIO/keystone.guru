@@ -8,15 +8,11 @@ use Illuminate\Validation\Rule;
 
 /**
  * User wants to change the default role of the team
- *
- * @package App\Http\Requests
  */
 class TeamDefaultRoleFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -25,8 +21,6 @@ class TeamDefaultRoleFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Logic\MapContext;
 
 use App\Models\Floor\Floor;
@@ -8,13 +7,12 @@ use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
 /**
  * Class MapContextLiveSession
- * @package App\Logic\MapContext
+ *
  * @author  Wouter
+ *
  * @since   13/05/2021
  *
  * @property LiveSession $context
@@ -73,5 +71,4 @@ class MapContextLiveSession extends MapContext
             'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
         ]);
     }
-
 }

@@ -6,8 +6,8 @@ namespace App\Logic\CombatLog\SpecialEvents;
  * ENCHANT_REMOVED,0000000000000000,nil,0x80000000,0x80000000,Player-3684-0DE448BF,"Bunten-Mal'Ganis",0x511,0x0,"Howling Rune",204319,"Bloodfire Extraction Conduit"
  * ENCHANT_APPLIED,Player-3684-0DE448BF,"Bunten-Mal'Ganis",0x511,0x8,Player-3684-0DE448BF,"Bunten-Mal'Ganis",0x511,0x8,"Howling Rune",195505,"Caustic Coldsteel Slicer"
  *
- * @package App\Logic\CombatLog\SpecialEvents
  * @author Wouter
+ *
  * @since 26/05/2023
  */
 abstract class EnchantBase extends SpecialEvent
@@ -18,34 +18,21 @@ abstract class EnchantBase extends SpecialEvent
 
     private string $itemName;
 
-    /**
-     * @return string
-     */
     public function getSpellName(): string
     {
         return $this->spellName;
     }
 
-    /**
-     * @return int
-     */
     public function getItemId(): int
     {
         return $this->itemId;
     }
 
-    /**
-     * @return string
-     */
     public function getItemName(): string
     {
         return $this->itemName;
     }
 
-    /**
-     * @param array $parameters
-     * @return self
-     */
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);
@@ -57,9 +44,6 @@ abstract class EnchantBase extends SpecialEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 11;

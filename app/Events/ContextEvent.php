@@ -16,13 +16,14 @@ use Illuminate\Queue\SerializesModels;
 
 abstract class ContextEvent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
     /**
      * Create a new event instance.
      *
-     * @param $context Model
-     * @param $user User
+     * @param  $context  Model
+     * @param  $user  User
      * @return void
      */
     public function __construct(protected Model $_context, protected User $_user)
@@ -63,5 +64,5 @@ abstract class ContextEvent implements ShouldBroadcast
         ];
     }
 
-    public abstract function broadcastAs(): string;
+    abstract public function broadcastAs(): string;
 }

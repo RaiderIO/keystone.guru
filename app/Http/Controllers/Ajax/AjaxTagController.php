@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpVoidFunctionResultUsedInspection */
+<?php
+
+/** @noinspection PhpVoidFunctionResultUsedInspection */
 
 namespace App\Http\Controllers\Ajax;
 
@@ -41,8 +43,8 @@ class AjaxTagController extends Controller
     }
 
     /**
-     *
      * @return Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function store(APITagFormRequest $request)
@@ -85,7 +87,7 @@ class AjaxTagController extends Controller
             $tag->model_class     = $tagCategory->model_class;
             $tag->name            = $tagName;
             // Will be null if no similar tag is found which is fine
-            $tag->color = optional($similarTag)->color;
+            $tag->color = $similarTag?->color;
 
             if ($tag->save()) {
                 $result = $tag;
@@ -101,6 +103,7 @@ class AjaxTagController extends Controller
 
     /**
      * @return Response
+     *
      * @throws AuthorizationException
      */
     public function updateAll(APITagUpdateFormRequest $request, Tag $tag)
@@ -118,6 +121,7 @@ class AjaxTagController extends Controller
 
     /**
      * @return Response
+     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -136,6 +140,7 @@ class AjaxTagController extends Controller
 
     /**
      * @return array|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function delete(Request $request, Tag $tag)

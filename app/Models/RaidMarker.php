@@ -15,14 +15,21 @@ class RaidMarker extends CacheModel
 {
     use SeederModel;
 
-    public const RAID_MARKER_STAR     = 'star';
-    public const RAID_MARKER_CIRCLE   = 'circle';
-    public const RAID_MARKER_DIAMOND  = 'diamond';
+    public const RAID_MARKER_STAR = 'star';
+
+    public const RAID_MARKER_CIRCLE = 'circle';
+
+    public const RAID_MARKER_DIAMOND = 'diamond';
+
     public const RAID_MARKER_TRIANGLE = 'triangle';
-    public const RAID_MARKER_MOON     = 'moon';
-    public const RAID_MARKER_SQUARE   = 'square';
-    public const RAID_MARKER_CROSS    = 'cross';
-    public const RAID_MARKER_SKULL    = 'skull';
+
+    public const RAID_MARKER_MOON = 'moon';
+
+    public const RAID_MARKER_SQUARE = 'square';
+
+    public const RAID_MARKER_CROSS = 'cross';
+
+    public const RAID_MARKER_SKULL = 'skull';
 
     public const ALL = [
         self::RAID_MARKER_STAR     => 1,

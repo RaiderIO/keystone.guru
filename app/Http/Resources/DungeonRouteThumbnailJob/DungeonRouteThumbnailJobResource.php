@@ -13,9 +13,10 @@ use JsonSerializable;
 /**
  * Class DungeonRouteThumbnailJobResource
  *
- * @package App\Http\Resources
  * @author Wouter
+ *
  * @since 20/01/2024
+ *
  * @mixin DungeonRouteThumbnailJob
  */
 class DungeonRouteThumbnailJobResource extends JsonResource
@@ -24,7 +25,6 @@ class DungeonRouteThumbnailJobResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Ajax;
 
-
 use App\Http\Requests\User\UserFormRequest;
 use App\Logic\Datatables\UsersDatatablesHandler;
 use App\User;
@@ -15,6 +14,7 @@ class AjaxUserController
 {
     /**
      * @return array|mixed
+     *
      * @throws Exception
      */
     public function list(Request $request)
@@ -22,7 +22,6 @@ class AjaxUserController
         $users = User::with(['patreonUserLink', 'roles', 'dungeonroutes'])->selectRaw('users.*');
 
         $datatablesResult = (new UsersDatatablesHandler($request))->setBuilder($users)->applyRequestToBuilder()->getResult();
-
 
         foreach ($datatablesResult['data'] as $user) {
             /** @var $user User */
@@ -35,9 +34,6 @@ class AjaxUserController
         return $datatablesResult;
     }
 
-    /**
-     * @return User
-     */
     public function store(UserFormRequest $request, string $publicKey): User
     {
         /** @var User|null $user */

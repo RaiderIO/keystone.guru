@@ -4,9 +4,6 @@ namespace App\Http\Requests\MappingVersion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @package App\Http\Requests
- */
 class APIMappingVersionFormRequest extends FormRequest
 {
     /**
@@ -21,8 +18,6 @@ class APIMappingVersionFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

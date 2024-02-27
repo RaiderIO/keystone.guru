@@ -9,10 +9,9 @@ use Mockery\Exception;
 trait PublicKeyDungeonRoute
 {
     /**
-     * @return DungeonRoute
      * @throws Exception
      */
-    function _getDungeonRouteFromPublicKey(string $publicKey, bool $auth = true): DungeonRoute
+    public function _getDungeonRouteFromPublicKey(string $publicKey, bool $auth = true): DungeonRoute
     {
         /** @var DungeonRoute $dungeonRoute */
         $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->firstOrFail();

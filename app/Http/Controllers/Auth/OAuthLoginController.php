@@ -17,17 +17,15 @@ abstract class OAuthLoginController extends LoginController
     /**
      * @return string The driver for this OAuth login request
      */
-    protected abstract function getDriver(): string;
+    abstract protected function getDriver(): string;
 
     /**
-     * @param $oauthUser
-     * @param $oAuthId
      * @return mixed
      */
-    protected abstract function getUser($oauthUser, $oAuthId);
+    abstract protected function getUser($oauthUser, $oAuthId);
 
     /**
-     * @param $id string The ID that the auth provider supplied
+     * @param  $id  string The ID that the auth provider supplied
      * @return mixed A globally uniquely identifyable ID to couple to the user account.
      */
     protected function getOAuthId(string $id)
@@ -37,7 +35,8 @@ abstract class OAuthLoginController extends LoginController
 
     /**
      * Checks if a user exists by its username.
-     * @param $username string The username to check.
+     *
+     * @param  $username  string The username to check.
      * @return bool True if the user exists, false if it does not.
      */
     protected function userExistsByUsername(string $username): bool
@@ -47,7 +46,8 @@ abstract class OAuthLoginController extends LoginController
 
     /**
      * Checks if a user exists by its e-mail address.
-     * @param $email string The e-mail address to check.
+     *
+     * @param  $email  string The e-mail address to check.
      * @return bool True if the user exists, false if it does not.
      */
     protected function userExistsByEmail(string $email): bool
@@ -57,8 +57,6 @@ abstract class OAuthLoginController extends LoginController
 
     /**
      * Redirect the user to the OAuth authentication page.
-     *
-     * @return RedirectResponse
      */
     public function redirectToProvider(Request $request): RedirectResponse
     {
@@ -70,7 +68,6 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Obtain the user information from the OAuth provider.
      *
-     * @return \Laravel\Socialite\Contracts\User
      * @throws InvalidStateException
      * @throws ClientException
      */
@@ -81,8 +78,6 @@ abstract class OAuthLoginController extends LoginController
 
     /**
      * Obtain the user information from Google.
-     *
-     * @return RedirectResponse
      */
     public function handleProviderCallback(Request $request): RedirectResponse
     {

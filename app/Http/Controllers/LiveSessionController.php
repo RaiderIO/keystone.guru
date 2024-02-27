@@ -25,9 +25,8 @@ use Teapot\StatusCode;
 class LiveSessionController extends Controller
 {
     /**
-     * @param string|null $title
-     *
      * @return RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
@@ -81,9 +80,8 @@ class LiveSessionController extends Controller
     }
 
     /**
-     * @param string|null $title
-     *
      * @return Application|Factory|View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function view(
@@ -103,14 +101,13 @@ class LiveSessionController extends Controller
             $dungeonroute,
             $title,
             $livesession,
-            optional($defaultFloor)->index ?? '1'
+            $defaultFloor?->index ?? '1'
         );
     }
 
     /**
-     * @param string|null $title
-     *
      * @return Application|Factory|View|RedirectResponse
+     *
      * @throws AuthorizationException
      */
     public function viewfloor(

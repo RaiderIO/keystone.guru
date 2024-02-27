@@ -23,11 +23,11 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param Floor|null $floor
      * @return Floor
+     *
      * @throws Exception
      */
-    public function store(FloorFormRequest $request, Dungeon $dungeon, Floor $floor = null)
+    public function store(FloorFormRequest $request, Dungeon $dungeon, ?Floor $floor = null)
     {
         $beforeFloor = $floor === null ? null : clone $floor;
 
@@ -74,7 +74,6 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Factory|View
      */
     public function new(Request $request, Dungeon $dungeon)
@@ -85,7 +84,6 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Application|Factory|RedirectResponse|View
      */
     public function edit(Request $request, Dungeon $dungeon, Floor $floor)
@@ -106,7 +104,6 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Application|Factory|View|RedirectResponse
      */
     public function mapping(
@@ -134,8 +131,8 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
@@ -152,6 +149,7 @@ class FloorController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(FloorFormRequest $request, Dungeon $dungeon)

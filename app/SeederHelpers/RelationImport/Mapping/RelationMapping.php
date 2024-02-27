@@ -10,8 +10,9 @@ use Illuminate\Support\Collection;
 
 /**
  * Class RelationMapping
- * @package App\SeederHelpers\RelationImport\Mapping
+ *
  * @author Wouter
+ *
  * @since 25/04/2021
  */
 abstract class RelationMapping
@@ -65,9 +66,6 @@ abstract class RelationMapping
         return $this->attributeParsers;
     }
 
-    /**
-     * @return RelationMapping
-     */
     public function setAttributeParsers(Collection $attributeParsers): RelationMapping
     {
         $this->attributeParsers = $attributeParsers;
@@ -113,9 +111,6 @@ abstract class RelationMapping
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFileName(): string
     {
         return $this->fileName;
@@ -129,9 +124,6 @@ abstract class RelationMapping
         return $this->class;
     }
 
-    /**
-     * @return bool
-     */
     public function isPersistent(): bool
     {
         return $this->persistent;

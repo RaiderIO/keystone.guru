@@ -169,7 +169,6 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param Schedule $schedule
      *
      * @return void
      */
@@ -191,6 +190,7 @@ class Kernel extends ConsoleKernel
             // Ensure display IDs are set
             $schedule->command('wowtools:refreshdisplayids')->hourly();
         }
+
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
         // https://laravel.com/docs/8.x/horizon

@@ -38,23 +38,20 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property string                    $locale
  * @property string                    $theme
  * @property string                    $echo_color
- * @property boolean                   $echo_anonymous
- * @property boolean                   $changed_username
+ * @property bool                      $echo_anonymous
+ * @property bool                      $changed_username
  * @property string                    $timezone
  * @property string                    $map_facade_style
  * @property string                    $password
  * @property string                    $raw_patreon_response_data
- * @property boolean                   $legal_agreed
+ * @property bool                      $legal_agreed
  * @property int                       $legal_agreed_ms
- * @property boolean                   $analytics_cookie_opt_out
- *
+ * @property bool                      $analytics_cookie_opt_out
  * @property PatreonUserLink           $patreonUserLink
  * @property GameServerRegion          $gameServerRegion
  * @property GameVersion               $gameVersion
  * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
- *
- * @property boolean                   $is_admin
- *
+ * @property bool                      $is_admin
  * @property DungeonRoute[]|Collection $dungeonRoutes
  * @property UserReport[]|Collection   $reports
  * @property Team[]|Collection         $teams
@@ -65,13 +62,14 @@ use Laratrust\Traits\LaratrustUserTrait;
  */
 class User extends Authenticatable
 {
+    use GeneratesPublicKey;
     use HasIconFile;
     use LaratrustUserTrait;
     use Notifiable;
-    use GeneratesPublicKey;
 
     public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
-    public const MAP_FACADE_STYLE_FACADE       = 'facade';
+
+    public const MAP_FACADE_STYLE_FACADE = 'facade';
 
     public const MAP_FACADE_STYLE_ALL = [
         self::MAP_FACADE_STYLE_SPLIT_FLOORS,
@@ -121,81 +119,52 @@ class User extends Authenticatable
 
     protected $with = ['iconfile', 'patreonUserLink', 'gameVersion'];
 
-    /**
-     * @return string
-     */
     public function getInitialsAttribute(): string
     {
         return initials($this->name);
     }
 
-    /**
-     * @return bool
-     */
     public function getIsAdminAttribute(): bool
     {
         return $this->hasRole('admin');
     }
 
-    /**
-     * @return HasMany
-     */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function reports(): HasMany
     {
         return $this->hasMany(UserReport::class);
     }
 
-    /**
-     * @return HasOne
-     */
     public function patreonUserLink(): HasOne
     {
         return $this->hasOne(PatreonUserLink::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function gameServerRegion(): BelongsTo
     {
         return $this->belongsTo(GameServerRegion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'team_users');
     }
 
-    /**
-     * @return HasOne
-     */
     public function patreonAdFreeGiveaway(): HasOne
     {
         return $this->hasOne(PatreonAdFreeGiveaway::class, 'receiver_user_id');
     }
 
     /**
-     * @param int|null $categoryId
-     *
      * @return HasMany|Tag
      */
     public function tags(?int $categoryId = null): HasMany
@@ -211,8 +180,6 @@ class User extends Authenticatable
 
     /**
      * Checks if this user has registered using OAuth or not.
-     *
-     * @return bool
      */
     public function isOAuth(): bool
     {
@@ -221,9 +188,6 @@ class User extends Authenticatable
 
     /**
      * Checks if this user has paid for a certain tier one way or the other.
-     *
-     *
-     * @return bool
      */
     public function hasPatreonBenefit(string $key): bool
     {
@@ -240,8 +204,6 @@ class User extends Authenticatable
 
     /**
      * Get a list of tiers that this User has access to.
-     *
-     * @return Collection
      */
     public function getPatreonBenefits(): Collection
     {
@@ -257,17 +219,11 @@ class User extends Authenticatable
         return $result;
     }
 
-    /**
-     * @return bool
-     */
     public function hasAdFreeGiveaway(): bool
     {
         return PatreonAdFreeGiveaway::where('receiver_user_id', $this->id)->exists();
     }
 
-    /**
-     * @return User|null
-     */
     public function getAdFreeGiveawayUser(): ?User
     {
         /** @var User|null $user */
@@ -289,7 +245,6 @@ class User extends Authenticatable
      * Get the amount of routes a user may still create.
      *
      * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     * @return int
      */
     public function getRemainingRouteCount(): int
     {
@@ -302,7 +257,6 @@ class User extends Authenticatable
      * Sends the password reset notification.
      *
      * @param string $token
-     *
      * @return void
      */
     public function sendPasswordResetNotification($token)
@@ -322,6 +276,7 @@ class User extends Authenticatable
             } catch (Exception) {
                 $newOwner = null;
             }
+
             /** @var $team Team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
@@ -342,25 +297,20 @@ class User extends Authenticatable
         ]);
     }
 
-    /**
-     * @return string
-     */
     public static function getCurrentUserMapFacadeStyle(): string
     {
         return optional(Auth::user())->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete user properly if it gets deleted
-        static::deleting(function (User $user) {
+        static::deleting(static function (User $user) {
             $user->dungeonRoutes()->delete();
             $user->reports()->delete();
-
             $user->patreonUserLink()->delete();
-
             foreach ($user->teams as $team) {
                 // Remove ourselves from the team
                 $team->removeMember($user);
@@ -384,7 +334,6 @@ class User extends Authenticatable
                     logger()->error($exception->getMessage());
                 }
             }
-
             return true;
         });
     }

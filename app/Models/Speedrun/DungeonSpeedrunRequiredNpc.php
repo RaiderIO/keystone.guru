@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int      $npc5_id
  * @property int      $difficulty
  * @property int      $count
- *
  * @property Dungeon  $dungeon
  * @property Floor    $floor
  * @property Npc      $npc
@@ -47,7 +46,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'count',
     ];
 
-    protected $fillable   = [
+    protected $fillable = [
         'floor_id',
         'npc_id',
         'npc2_id',
@@ -57,67 +56,44 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'difficulty',
         'count',
     ];
-    public    $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
+    public $timestamps = false;
+
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeon(): BelongsTo
     {
         return $this->floor->dungeon();
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc2(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc3(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc4(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc5(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return string
-     */
     public function getDisplayText(): string
     {
         $parts = [];

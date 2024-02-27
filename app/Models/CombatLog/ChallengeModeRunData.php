@@ -12,11 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string           $run_id
  * @property string           $correlation_id
  * @property string           $post_body
- *
  * @property ChallengeModeRun $challengeModeRun
  *
- * @package App\Models\CombatLog
  * @author Wouter
+ *
  * @since 06/07/2023
  *
  * @mixin Eloquent
@@ -34,9 +33,6 @@ class ChallengeModeRunData extends Model
         'post_body',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function challengeModeRun(): BelongsTo
     {
         return $this->belongsTo(ChallengeModeRun::class);

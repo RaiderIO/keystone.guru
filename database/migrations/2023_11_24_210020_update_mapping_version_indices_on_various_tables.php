@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateMappingVersionIndicesOnVariousTables extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -101,4 +100,4 @@ class UpdateMappingVersionIndicesOnVariousTables extends Migration
             $table->dropIndex(['mapping_version_id', 'floor_id']);
         });
     }
-}
+};

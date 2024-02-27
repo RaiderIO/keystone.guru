@@ -10,11 +10,6 @@ class WowToolsService implements WowToolsServiceInterface
     {
     }
 
-
-    /**
-     * @param int $npcId
-     * @return int|null
-     */
     public function getDisplayId(int $npcId): ?int
     {
         $this->log->getDisplayIdRequestStart($npcId);

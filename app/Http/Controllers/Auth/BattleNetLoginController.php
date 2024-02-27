@@ -31,10 +31,6 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function redirectToProvider(Request $request): RedirectResponse
     {
         $this->redirectTo = $request->get('redirect', '/');

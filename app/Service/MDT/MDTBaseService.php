@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php
+
+/** @noinspection PhpUndefinedClassInspection */
 
 namespace App\Service\MDT;
 
@@ -9,7 +11,6 @@ class MDTBaseService
 {
     /**
      * Gets a Lua instance and load all the required files in it.
-     * @return Lua
      */
     protected function getLua(): Lua
     {
@@ -25,9 +26,6 @@ class MDTBaseService
         return $lua;
     }
 
-    /**
-     * @return string
-     */
     protected function encode(array $contents): string
     {
         Artisan::call('mdt:encode', ['string' => json_encode($contents)]);

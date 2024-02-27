@@ -2,9 +2,6 @@
 
 namespace Tests\Unit\App\Logic\CombatLog\Advanced\SwingDamage;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
@@ -12,13 +9,14 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 final class SwingDamageTest extends PublicTestCase
 {
-
     /**
-     * @return void
      * @throws \Exception
      */
     #[Test]
@@ -44,7 +42,6 @@ final class SwingDamageTest extends PublicTestCase
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     #[Test]
@@ -53,16 +50,16 @@ final class SwingDamageTest extends PublicTestCase
     #[DataProvider('parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent,
-        int    $expectedAmount,
-        int    $expectedRawAmount,
-        int    $expectedOverKill,
-        int    $expectedSchool,
-        int    $expectedResisted,
-        int    $expectedBlocked,
-        int    $expectedAbsorbed,
-        bool   $expectedIsCritical,
-        bool   $expectedIsGlancing,
-        bool   $expectedIsCrushing
+        int $expectedAmount,
+        int $expectedRawAmount,
+        int $expectedOverKill,
+        int $expectedSchool,
+        int $expectedResisted,
+        int $expectedBlocked,
+        int $expectedAbsorbed,
+        bool $expectedIsCritical,
+        bool $expectedIsGlancing,
+        bool $expectedIsCrushing
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);

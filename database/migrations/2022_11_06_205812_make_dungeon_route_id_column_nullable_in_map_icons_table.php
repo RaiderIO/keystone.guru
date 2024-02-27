@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MakeDungeonRouteIdColumnNullableInMapIconsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -31,4 +30,4 @@ class MakeDungeonRouteIdColumnNullableInMapIconsTable extends Migration
             $table->integer('dungeon_route_id')->nullable(false)->default(-1)->change();
         });
     }
-}
+};

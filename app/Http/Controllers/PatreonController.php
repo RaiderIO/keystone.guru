@@ -13,7 +13,6 @@ use Session;
 
 class PatreonController extends Controller
 {
-
     /**
      * Unlinks the user from Patreon.
      *
@@ -31,6 +30,7 @@ class PatreonController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
+     *
      * @return RedirectResponse
      */
     public function link(Request $request, PatreonApiServiceInterface $patreonApiService, PatreonServiceInterface $patreonService)
@@ -49,7 +49,7 @@ class PatreonController extends Controller
 
                 // Save new tokens to database
                 // Delete existing patreon data, if any
-                optional($user->patreonUserLink)->delete();
+                $user->patreonUserLink?->delete();
 
                 $patreonUserLinkAttributes = [
                     'user_id'       => $user->id,
@@ -76,7 +76,7 @@ class PatreonController extends Controller
                     } else if (!isset($identityResponse['included'])) {
                         Session::flash('warning', __('controller.patreon.flash.internal_error_occurred'));
                     } else {
-                        $member = collect($identityResponse['included'])->filter(fn(array $included) => $included['type'] === 'member')->first();
+                        $member = collect($identityResponse['included'])->filter(static fn(array $included) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
@@ -102,9 +102,6 @@ class PatreonController extends Controller
         return redirect()->route('profile.edit', ['#patreon']);
     }
 
-    /**
-     * @return PatreonUserLink
-     */
     private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
     {
         $existingPatreonUserLink = PatreonUserLink::where('email', $attributes['email'])->first();
@@ -129,10 +126,8 @@ class PatreonController extends Controller
     /**
      * This route is called after a) the user has clicked the link button, b) given the app permission to read their Patron data
      * c) this route is called to give me their info
-     *
-     * @param $request
      */
-    function oauth_redirect($request)
+    public function oauth_redirect($request)
     {
 
     }

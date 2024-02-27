@@ -28,18 +28,18 @@ class AjaxBrushlineController extends Controller
     use ValidatesFloorId;
 
     /**
-     * @param Brushline|null $brushline
      * @return Brushline|Response
+     *
      * @throws AuthorizationException
      * @throws Throwable
      */
-    function store(
+    public function store(
         APIBrushlineFormRequest     $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
         ?Brushline                  $brushline = null
     ) {
-        $dungeonRoute = optional($brushline)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
         $this->authorize('addBrushline', $dungeonRoute);
@@ -82,7 +82,7 @@ class AjaxBrushlineController extends Controller
                     // Couple the path to the polyline
                     $brushline->update([
                         'polyline_id' => $polyline->id,
-                        'floor_id'    => optional($changedFloor)->id ?? $brushline->floor_id,
+                        'floor_id'    => $changedFloor?->id ?? $brushline->floor_id,
                     ]);
 
                     // Load the polyline, so it can be echoed back to the user
@@ -110,9 +110,10 @@ class AjaxBrushlineController extends Controller
 
     /**
      * @return Response|ResponseFactory
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
         $dungeonRoute = $brushline->dungeonRoute;
 

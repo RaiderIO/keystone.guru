@@ -12,19 +12,13 @@ class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
 {
     /**
      * Create a new job instance.
-     *
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRouteThumbnailJob  $dungeonRouteThumbnailJob
-     * @param DungeonRoute              $dungeonRoute
-     * @param int                       $floorIndex
-     * @param int                       $attempts
      */
     public function __construct(
-        ThumbnailServiceInterface        $thumbnailService,
+        ThumbnailServiceInterface                 $thumbnailService,
         private readonly DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
-        DungeonRoute                     $dungeonRoute,
-        int                              $floorIndex,
-        int                              $attempts = 0
+        DungeonRoute                              $dungeonRoute,
+        int                                       $floorIndex,
+        int                                       $attempts = 0
     ) {
         parent::__construct($thumbnailService, $dungeonRoute, $floorIndex, $attempts);
 

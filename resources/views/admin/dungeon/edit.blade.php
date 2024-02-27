@@ -6,7 +6,7 @@
  */
 
 $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
-    ->mapWithKeys(fn(\App\Models\GameVersion\GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
+    ->mapWithKeys(static fn(\App\Models\GameVersion\GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [

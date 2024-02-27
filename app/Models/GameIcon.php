@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $category
  * @property string $name
  * @property string $alias
- *
  * @property File   $file
  *
  * @mixin Eloquent
@@ -21,9 +20,6 @@ class GameIcon extends Model
 {
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);

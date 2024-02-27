@@ -23,11 +23,9 @@ use Illuminate\Support\Collection;
  * @property string                $name
  * @property string                $shortname
  * @property string                $color
- *
  * @property Carbon                $released_at
  * @property Carbon                $created_at
  * @property Carbon                $updated_at
- *
  * @property Collection|Dungeon[]  $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
  *
@@ -35,13 +33,15 @@ use Illuminate\Support\Collection;
  */
 class Expansion extends CacheModel
 {
-    use SeederModel;
     use HasIconFile;
+    use SeederModel;
     use UserCurrentTime;
 
     public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
-    public $hidden   = ['id', 'icon_file_id', 'created_at', 'updated_at'];
-    public $with     = ['timewalkingevent'];
+
+    public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
+
+    public $with = ['timewalkingevent'];
 
     protected $dates = [
         // 'released_at',
@@ -49,15 +49,24 @@ class Expansion extends CacheModel
         'updated_at',
     ];
 
-    public const EXPANSION_CLASSIC      = 'classic';
-    public const EXPANSION_TBC          = 'tbc';
-    public const EXPANSION_WOTLK        = 'wotlk';
-    public const EXPANSION_CATACLYSM    = 'cata';
-    public const EXPANSION_MOP          = 'mop';
-    public const EXPANSION_WOD          = 'wod';
-    public const EXPANSION_LEGION       = 'legion';
-    public const EXPANSION_BFA          = 'bfa';
-    public const EXPANSION_SHADOWLANDS  = 'shadowlands';
+    public const EXPANSION_CLASSIC = 'classic';
+
+    public const EXPANSION_TBC = 'tbc';
+
+    public const EXPANSION_WOTLK = 'wotlk';
+
+    public const EXPANSION_CATACLYSM = 'cata';
+
+    public const EXPANSION_MOP = 'mop';
+
+    public const EXPANSION_WOD = 'wod';
+
+    public const EXPANSION_LEGION = 'legion';
+
+    public const EXPANSION_BFA = 'bfa';
+
+    public const EXPANSION_SHADOWLANDS = 'shadowlands';
+
     public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
     public const ALL = [
@@ -74,45 +83,32 @@ class Expansion extends CacheModel
     ];
 
     private ?Collection $currentSeasonCache = null;
-    private ?Collection $nextSeasonCache    = null;
 
+    private ?Collection $nextSeasonCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     * @return string
      */
     public function getRouteKeyName(): string
     {
         return 'shortname';
     }
 
-    /**
-     * @return HasMany
-     */
     public function dungeons(): HasMany
     {
         return $this->hasMany(Dungeon::class)->orderBy('name');
     }
 
-    /**
-     * @return HasMany
-     */
     public function seasons(): HasMany
     {
         return $this->hasMany(Season::class);
     }
 
-    /**
-     * @return HasOne
-     */
     public function timewalkingevent(): HasOne
     {
         return $this->hasOne(TimewalkingEvent::class);
     }
 
-    /**
-     * @return Season|null
-     */
     public function currentSeason(GameServerRegion $gameServerRegion): ?Season
     {
         if ($this->currentSeasonCache === null) {
@@ -137,9 +133,6 @@ class Expansion extends CacheModel
         return $season;
     }
 
-    /**
-     * @return Season|null
-     */
     public function nextSeason(GameServerRegion $gameServerRegion): ?Season
     {
         if ($this->nextSeasonCache === null) {
@@ -167,9 +160,6 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include active dungeons.
-     *
-     *
-     * @return Builder
      */
     public function scopeActive(Builder $query): Builder
     {
@@ -178,26 +168,17 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include inactive dungeons.
-     *
-     *
-     * @return Builder
      */
     public function scopeInactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
     }
 
-    /**
-     * @return bool
-     */
     public function hasTimewalkingEvent(): bool
     {
         return $this->timewalkingevent instanceof TimewalkingEvent;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
     {
         $result = false;
@@ -214,7 +195,6 @@ class Expansion extends CacheModel
 
     /**
      * Returns if we should display individual dungeon images
-     * @return bool
      */
     public function showDiscoverRoutesCardDungeonImage(): bool
     {
@@ -226,7 +206,6 @@ class Expansion extends CacheModel
      * Saves an expansion with the data from a Request.
      *
      *
-     * @return bool
      * @throws Exception
      */
     public function saveFromRequest(Request $request, string $fileUploadDirectory = 'uploads'): bool
@@ -256,6 +235,7 @@ class Expansion extends CacheModel
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $this->delete();
                     }
+
                     throw $ex;
                 }
             }

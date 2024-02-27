@@ -1,12 +1,11 @@
 <?php
 
-
 namespace App\Logic\Utils;
 
 class Stopwatch
 {
     /**
-     * @var $timers array The start times of the StopWatches
+     * @var array The start times of the StopWatches
      */
     private static array $timers = [];
 
@@ -21,8 +20,7 @@ class Stopwatch
     /**
      * Start a timer.
      *
-     * @param $timerName string The name of the timer
-     * @return void
+     * @param  $timerName  string The name of the timer
      */
     public static function start(string $timerName = 'default'): void
     {
@@ -33,7 +31,7 @@ class Stopwatch
         if (isset(self::$timers[$timerName]['end'])) {
             // Add the difference to the start to simulate the pause!
             self::$timers[$timerName]['start'] += (self::_getTime() - self::$timers[$timerName]['end']);
-            self::$timers[$timerName]['count']++;
+            ++self::$timers[$timerName]['count'];
 
             // Remove the pause, it's now applied to the start so it's processed.
             unset(self::$timers[$timerName]['end']);
@@ -45,7 +43,8 @@ class Stopwatch
 
     /**
      * Pause a timer.
-     * @param $timerName string The name of the timer.
+     *
+     * @param  $timerName  string The name of the timer.
      */
     public static function pause(string $timerName = 'default'): void
     {
@@ -61,7 +60,7 @@ class Stopwatch
     /**
      * Get the elapsed time in seconds
      *
-     * @param $timerName string The name of the timer to start
+     * @param  $timerName  string The name of the timer to start
      * @return float The elapsed time since start() was called
      */
     public static function elapsed(string $timerName = 'default'): float
@@ -81,13 +80,9 @@ class Stopwatch
         return round(($now - $timerStart) * 1000, 4);
     }
 
-    /**
-     * @param $timerName
-     * @return string
-     */
     private static function getElapsedString(string $timerName): string
     {
-        return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : " ($timerName)", StopWatch::elapsed($timerName));
+        return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : sprintf(' (%s)', $timerName), StopWatch::elapsed($timerName));
     }
 
     /**
@@ -100,9 +95,6 @@ class Stopwatch
         dump(sprintf('%s (%sx)', self::getElapsedString($timerName), self::$timers[$timerName]['count']));
     }
 
-    /**
-     * @return float
-     */
     public static function stop(string $timerName = 'default'): float
     {
         $elapsed = self::elapsed($timerName);
@@ -112,9 +104,6 @@ class Stopwatch
         return $elapsed;
     }
 
-    /**
-     *
-     */
     public static function dumpAll(): void
     {
         foreach (self::$timers as $key => $value) {
@@ -122,9 +111,6 @@ class Stopwatch
         }
     }
 
-    /**
-     * @return array
-     */
     public static function getAll(): array
     {
         $result = [];

@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\App\Service\Coordinates;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Service\Coordinates\CoordinatesService;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\ServiceFixtures;
 
@@ -16,8 +16,6 @@ final class CoordinatesServiceTest extends PublicTestCase
 {
     /**
      * Scenario: Tests that the ingame location
-     *
-     * @return void
      */
     #[Test]
     #[DataProvider('checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider')]
@@ -35,9 +33,6 @@ final class CoordinatesServiceTest extends PublicTestCase
         $this->assertEquals($expected->getY(), $result->getY());
     }
 
-    /**
-     * @return array
-     */
     public static function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider(): array
     {
         return [

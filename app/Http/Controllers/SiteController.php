@@ -44,6 +44,7 @@ class SiteController extends Controller
             if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
                 $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
             }
+
             $season ??= $seasonService->getCurrentSeason();
 
             return view('profile.overview', [
@@ -141,6 +142,7 @@ class SiteController extends Controller
 
     /**
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function affixes(

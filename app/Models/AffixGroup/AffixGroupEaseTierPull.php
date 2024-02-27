@@ -13,11 +13,9 @@ use Illuminate\Support\Collection;
  * @property int                             $id
  * @property int                             $affix_group_id
  * @property string                          $tiers_hash
- *
  * @property Carbon                          $last_updated_at
  * @property Carbon                          $created_at
  * @property Carbon                          $updated_at
- *
  * @property AffixGroup                      $affixGroup
  * @property Collection|AffixGroupEaseTier[] $affixGroupEaseTiers
  *
@@ -33,17 +31,11 @@ class AffixGroupEaseTierPull extends CacheModel
         'last_updated_at',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function affixGroupEaseTiers(): HasMany
     {
         return $this->hasMany(AffixGroupEaseTier::class);
@@ -52,12 +44,12 @@ class AffixGroupEaseTierPull extends CacheModel
     /**
      * @return void
      */
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         // Delete AffixGroupEaseTiers properly if it gets deleted
-        static::deleting(function (AffixGroupEaseTierPull $affixGroupEaseTierPull) {
+        static::deleting(static function (AffixGroupEaseTierPull $affixGroupEaseTierPull) {
             $affixGroupEaseTierPull->affixGroupEaseTiers()->delete();
         });
     }

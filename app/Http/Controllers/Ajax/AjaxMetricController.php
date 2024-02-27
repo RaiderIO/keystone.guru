@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpVoidFunctionResultUsedInspection */
+<?php
+
+/** @noinspection PhpVoidFunctionResultUsedInspection */
 
 namespace App\Http\Controllers\Ajax;
 
@@ -14,6 +16,7 @@ class AjaxMetricController extends Controller
 {
     /**
      * @return Response
+     *
      * @throws AuthorizationException
      */
     public function store(APIMetricFormRequest $request, MetricServiceInterface $metricService)

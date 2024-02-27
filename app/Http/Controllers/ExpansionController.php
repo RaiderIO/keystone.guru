@@ -14,11 +14,11 @@ use Session;
 class ExpansionController extends Controller
 {
     /**
-     * @param Expansion|null $expansion
      * @return mixed
+     *
      * @throws Exception
      */
-    public function store(ExpansionFormRequest $request, Expansion $expansion = null)
+    public function store(ExpansionFormRequest $request, ?Expansion $expansion = null)
     {
         if ($new = ($expansion === null)) {
             $expansion = new Expansion();
@@ -52,6 +52,7 @@ class ExpansionController extends Controller
 
     /**
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(ExpansionFormRequest $request, Expansion $expansion)
@@ -68,6 +69,7 @@ class ExpansionController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(ExpansionFormRequest $request)
@@ -78,7 +80,7 @@ class ExpansionController extends Controller
         // Message to the user
         Session::flash('status', __('controller.expansion.flash.expansion_created'));
 
-        return redirect()->route('admin.expansion.edit', ["expansion" => $expansion]);
+        return redirect()->route('admin.expansion.edit', ['expansion' => $expansion]);
     }
 
     /**

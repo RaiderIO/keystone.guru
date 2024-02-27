@@ -25,7 +25,6 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
      * Execute the console command.
      *
      *
-     * @return int
      * @throws Exception
      */
     public function handle(CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService): int
@@ -46,7 +45,6 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
     }
 
     /**
-     * @return int
      * @throws Exception
      */
     private function outputCreateRouteJson(CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService, string $filePath): int

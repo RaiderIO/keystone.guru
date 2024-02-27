@@ -11,10 +11,8 @@ use Illuminate\Support\Facades\App;
 
 class CombatFilter extends BaseCombatFilter
 {
-    /** @var bool */
     private bool $zoneFound = false;
 
-    /** @var MappingVersionCombatFilterLoggingInterface */
     private readonly MappingVersionCombatFilterLoggingInterface $log;
 
     public function __construct(Collection $resultEvents)
@@ -26,12 +24,6 @@ class CombatFilter extends BaseCombatFilter
         $this->log = $log;
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // First, we wait for the challenge mode to start

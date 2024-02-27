@@ -12,7 +12,7 @@ $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $curr
 $selectable       ??= true;
 $route            ??= null;
 $routeParams      ??= [];
-$linkMapFn        = fn(\App\Models\Dungeon $dungeon) => [
+$linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
     'dungeon' => $dungeon->key,
     'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon]))
 ];

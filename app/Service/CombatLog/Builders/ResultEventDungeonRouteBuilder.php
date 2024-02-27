@@ -18,8 +18,8 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @package App\Service\CombatLog\Builders
  * @author Wouter
+ *
  * @since 24/06/2023
  */
 class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
@@ -30,7 +30,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
         /** @var Collection|BaseResultEvent[] */
-        private readonly Collection          $resultEvents
+        private readonly Collection $resultEvents
     ) {
         parent::__construct($coordinatesService, $dungeonRoute);
 
@@ -39,9 +39,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         $this->log = $log;
     }
 
-    /**
-     * @return DungeonRoute
-     */
     public function build(): DungeonRoute
     {
         foreach ($this->resultEvents as $resultEvent) {
@@ -57,6 +54,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     $this->currentFloor = $resultEvent->getFloor();
                 } else if ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();
+
                     continue;
                 }
 
@@ -116,7 +114,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     // UnitDied only has DestGuid
                     $guid = $resultEvent->getGuid()->getGuid();
 
-
                     // Find the pull that this enemy is part of
                     foreach ($this->activePullCollection as $activePull) {
                         /** @var $activePull ActivePull */
@@ -145,6 +142,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         /** @var ActivePull $activePull */
                         $activePull = $this->activePullCollection->last();
                     }
+
                     $activePull->addSpell($resultEvent->getSpellId());
 
                     $this->log->buildSpellCast(
@@ -156,7 +154,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 $this->log->buildEnd();
             }
         }
-
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {
@@ -172,9 +169,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         return $this->dungeonRoute;
     }
 
-    /**
-     * @return ActivePullEnemy
-     */
     private function createActivePullEnemy(EnemyEngaged $enemyEngaged): ActivePullEnemy
     {
         return new ActivePullEnemy(

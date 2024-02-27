@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class ConvertEnemyIdIntoNpcIdAndMdtIdInOverpulledEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -40,4 +37,4 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInOverpulledEnemiesTable extends Migration
                 SET `overpulled_enemies`.`npc_id` = null, `overpulled_enemies`.`mdt_id` = null;
         ');
     }
-}
+};

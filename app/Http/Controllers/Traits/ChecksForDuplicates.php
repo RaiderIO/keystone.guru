@@ -20,7 +20,7 @@ trait ChecksForDuplicates
      * @param bool  $abort True to abort, false to return true|false upon completion.
      * @return bool False if no duplicate was found, true if there was a duplicate.
      */
-    function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
+    public function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
     {
         // Find out of there is a duplicate
         /** @var Builder $query */
@@ -54,17 +54,15 @@ trait ChecksForDuplicates
     /**
      * Abort because a duplicate has been found.
      */
-    function abortDuplicate()
+    public function abortDuplicate()
     {
         abort(Http::BAD_REQUEST, 'This object already exists. Please refresh the page.');
     }
 
     /**
      * Checks a list of vertices for duplicates.
-     * @param $className
-     * @param $verticesArray
      */
-    function checkForDuplicateVertices($className, $verticesArray)
+    public function checkForDuplicateVertices($className, $verticesArray)
     {
         // Store them
         $failures = 0;

@@ -18,6 +18,7 @@ class SpellController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
+     *
      * @return bool
      */
     private function isSaveAsNew(Request $request)
@@ -26,19 +27,20 @@ class SpellController extends Controller
     }
 
     /**
-     * @param Spell|null $spell
      * @return array|mixed
+     *
      * @throws Exception
      */
-    public function store(SpellFormRequest $request, Spell $spell = null)
+    public function store(SpellFormRequest $request, ?Spell $spell = null)
     {
         // If we're saving as new, make a new Spell and save that instead
         if ($spell === null || $this->isSaveAsNew($request)) {
             $spell = new Spell();
         }
-//        else {
-//            $oldId = $spell->id;
-//        }
+
+        //        else {
+        //            $oldId = $spell->id;
+        //        }
 
         $spellBefore = clone $spell;
 
@@ -51,13 +53,14 @@ class SpellController extends Controller
         foreach ($schools as $school) {
             $mask |= (int)$school;
         }
+
         $spell->schools_mask = $mask;
         $spell->aura         = $request->get('aura', false);
 
         if ($spell->save()) {
-//            if ($oldId > 0) {
-//                Enemy::where('spell_id', $oldId)->update(['spell_id' => $spell->id]);
-//            }
+            //            if ($oldId > 0) {
+            //                Enemy::where('spell_id', $oldId)->update(['spell_id' => $spell->id]);
+            //            }
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($spellBefore, $spell);
@@ -98,6 +101,7 @@ class SpellController extends Controller
      * Override to give the type hint which is required.
      *
      * @return Factory|RedirectResponse|View
+     *
      * @throws Exception
      */
     public function update(SpellFormRequest $request, Spell $spell)
@@ -118,6 +122,7 @@ class SpellController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function savenew(SpellFormRequest $request)

@@ -10,10 +10,6 @@ use Tests\TestCase;
  */
 trait CreatesSimulationCraftRaidEventsOptions
 {
-    /**
-     * @param array|null $attributes
-     * @return SimulationCraftRaidEventsOptions
-     */
     public function createSimulationCraftRaidEventsOptions(?array $attributes = null): SimulationCraftRaidEventsOptions
     {
         return new SimulationCraftRaidEventsOptions($attributes ?? $this->getSimulationCraftRaidEventsOptionsDefaultAttributes());

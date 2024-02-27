@@ -9,20 +9,11 @@ abstract class GenericSpecialEvent extends SpecialEvent
 {
     private GenericDataInterface $genericData;
 
-
-    /**
-     * @return GenericDataInterface
-     */
     public function getGenericData(): GenericDataInterface
     {
         return $this->genericData;
     }
 
-
-    /**
-     * @param array $parameters
-     * @return self
-     */
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

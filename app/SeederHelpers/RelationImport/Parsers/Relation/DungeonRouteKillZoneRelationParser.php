@@ -10,43 +10,21 @@ use App\Models\KillZone\KillZoneSpell;
 
 class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 {
-    /**
-     * @return bool
-     */
     public function canParseRootModel(string $modelClassName): bool
     {
         return false;
     }
 
-    /**
-     * @param string $modelClassName
-     *
-     * @return bool
-     */
     public function canParseModel(string $modelClassName): bool
     {
         return $modelClassName === DungeonRoute::class;
     }
 
-    /**
-     * @param string $name
-     * @param array  $value
-     *
-     * @return bool
-     */
     public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'killzones' || $name === 'kill_zones';
     }
 
-    /**
-     * @param string $modelClassName
-     * @param array  $modelData
-     * @param string $name
-     * @param array  $value
-     *
-     * @return array
-     */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $killZoneData) {
@@ -115,5 +93,4 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
         // Didn't really change anything so just return the value.
         return $modelData;
     }
-
 }

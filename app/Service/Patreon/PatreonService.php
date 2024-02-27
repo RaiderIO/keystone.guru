@@ -10,16 +10,13 @@ use App\User;
 
 class PatreonService implements PatreonServiceInterface
 {
-    /** @var User|null */
     private ?User $cachedAdminUser = null;
 
     public function __construct(private readonly PatreonServiceLoggingInterface $log)
     {
     }
 
-
     /**
-     * @param PatreonApiService $patreonApiService
      * @return array{array{id: int, type: string, attributes: array{title: string}}}|null
      */
     public function loadCampaignBenefits(PatreonApiService $patreonApiService): ?array
@@ -41,14 +38,13 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(fn($included) => $included['type'] === 'benefit')->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'benefit')->toArray();
         } finally {
             $this->log->loadCampaignBenefitsEnd();
         }
     }
 
     /**
-     * @param PatreonApiService $patreonApiService
      * @return array{array{id: int, type: string, relationships: array}}|null
      */
     public function loadCampaignTiers(PatreonApiService $patreonApiService): ?array
@@ -58,7 +54,6 @@ class PatreonService implements PatreonServiceInterface
 
             return null;
         }
-
 
         try {
             $this->log->loadCampaignTiersStart();
@@ -71,16 +66,12 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(fn($included) => $included['type'] === 'tier')->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'tier')->toArray();
         } finally {
             $this->log->loadCampaignTiersEnd();
         }
     }
 
-    /**
-     * @param PatreonApiService $patreonApiService
-     * @return array|null
-     */
     public function loadCampaignMembers(PatreonApiService $patreonApiService): ?array
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
@@ -88,7 +79,6 @@ class PatreonService implements PatreonServiceInterface
 
             return null;
         }
-
 
         try {
             $this->log->loadCampaignMembersStart();
@@ -101,23 +91,15 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($membersResponse['data'])->filter(fn($included) => $included['type'] === 'member')->toArray();
+            return collect($membersResponse['data'])->filter(static fn($included) => $included['type'] === 'member')->toArray();
         } finally {
             $this->log->loadCampaignMembersEnd();
         }
     }
 
-
-    /**
-     * @param array $campaignBenefits
-     * @param array $campaignTiers
-     * @param array $member
-     * @return bool
-     */
     public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool
     {
         /** @var array{id: string, type: string, relationships: array, attributes: array{email: string}} $member */
-
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
@@ -196,10 +178,6 @@ class PatreonService implements PatreonServiceInterface
         return true;
     }
 
-
-    /**
-     * @return User|null
-     */
     private function loadAdminUser(PatreonApiService $patreonApiService): ?User
     {
         if (isset($this->cachedAdminUser)) {
@@ -266,10 +244,6 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
-
-    /**
-     * @return array|null
-     */
     private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): ?array
     {
         $result = [];
@@ -288,6 +262,7 @@ class PatreonService implements PatreonServiceInterface
                         }
                     }
                 }
+
                 break;
             }
         }

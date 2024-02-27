@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
@@ -13,12 +12,8 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
-    /** @var bool */
     private bool $cacheEnabled = true;
 
-    /**
-     * @return DateInterval|null
-     */
     private function getTtl(string $key): ?DateInterval
     {
         $cacheConfig = config('keystoneguru.cache');
@@ -26,10 +21,6 @@ class CacheService implements CacheServiceInterface
         return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
     }
 
-    /**
-     * @param bool $cacheEnabled
-     * @return CacheService
-     */
     public function setCacheEnabled(bool $cacheEnabled): CacheService
     {
         $this->cacheEnabled = $cacheEnabled;
@@ -39,11 +30,11 @@ class CacheService implements CacheServiceInterface
 
     /**
      * Remembers a value with a specific key if a condition is met
-     * @param bool                     $condition
-     * @param string                   $key
+     *
      * @param Closure|mixed            $value
      * @param string|null|DateInterval $ttl
      * @return Closure|mixed|null
+     *
      * @throws InvalidArgumentException
      */
     public function rememberWhen(bool $condition, string $key, $value, $ttl = null): mixed
@@ -58,10 +49,8 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string                   $key
      * @param Closure|mixed            $value
      * @param string|null|DateInterval $ttl
-     * @return mixed
      */
     public function remember(string $key, $value, $ttl = null): mixed
     {
@@ -80,6 +69,7 @@ class CacheService implements CacheServiceInterface
                 if (is_string($ttl)) {
                     $ttl = DateInterval::createFromDateString($ttl);
                 }
+
                 // If not overridden, get the TTL from config, if it's set anyway
                 try {
                     if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
@@ -100,20 +90,14 @@ class CacheService implements CacheServiceInterface
         return $result;
     }
 
-    /**
-     * @param string $key
-     * @return mixed
-     */
     public function get(string $key): mixed
     {
         return Cache::get($key);
     }
 
     /**
-     * @param string                   $key
-     * @param                          $object
      * @param string|null|DateInterval $ttl
-     * @return bool
+     *
      * @throws InvalidArgumentException
      */
     public function set(string $key, $object, $ttl = null): bool
@@ -122,7 +106,6 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @return bool
      * @throws InvalidArgumentException
      */
     public function unset(string $key): bool
@@ -130,17 +113,12 @@ class CacheService implements CacheServiceInterface
         return Cache::delete($key);
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
     public function has(string $key): bool
     {
         return Cache::has($key);
     }
 
     /**
-     *
      * @throws InvalidArgumentException
      */
     public function dropCaches(): void

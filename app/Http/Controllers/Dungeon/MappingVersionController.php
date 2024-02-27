@@ -13,9 +13,6 @@ use Session;
 
 class MappingVersionController extends Controller
 {
-    /**
-     * @return RedirectResponse
-     */
     public function savenew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
     {
         $mappingService->createNewMappingVersionFromPreviousMapping($dungeon);
@@ -28,7 +25,6 @@ class MappingVersionController extends Controller
     }
 
     /**
-     * @return RedirectResponse
      * @throws Exception
      */
     public function delete(Request $request, Dungeon $dungeon, MappingVersion $mappingVersion): RedirectResponse

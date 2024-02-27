@@ -27,7 +27,6 @@ use Teapot\StatusCode\Http;
 class AjaxKillZoneController extends Controller
 {
     /**
-     * @return KillZone
      * @throws \Exception
      */
     private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true): KillZone
@@ -119,16 +118,13 @@ class AjaxKillZoneController extends Controller
         return $killZone;
     }
 
-
     /**
-     * @param KillZone|null $killZone
-     * @return KillZone
      * @throws AuthorizationException
      * @throws \Exception
      */
-    function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, KillZone $killZone = null): KillZone
+    public function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, ?KillZone $killZone = null): KillZone
     {
-        $dungeonRoute = optional($killZone)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
 
         try {
             $data = $request->validated();
@@ -137,10 +133,12 @@ class AjaxKillZoneController extends Controller
             if (!isset($data['enemies'])) {
                 $data['enemies'] = [];
             }
+
             if (!isset($data['spells'])) {
                 $data['spells'] = [];
             }
-            $data['id'] = optional($killZone)->id ?? null;
+
+            $data['id'] = $killZone?->id ?? null;
 
             $result = $this->saveKillZone($dungeonRoute, $data);
         } catch (Exception) {
@@ -152,6 +150,7 @@ class AjaxKillZoneController extends Controller
 
     /**
      * @return array|ResponseFactory|Response|null
+     *
      * @throws AuthorizationException
      */
     public function storeAll(APIKillZoneMassFormRequest $request, DungeonRoute $dungeonRoute)
@@ -184,7 +183,7 @@ class AjaxKillZoneController extends Controller
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], fn($item) => in_array($item, $validEnemyIds));
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
@@ -203,7 +202,7 @@ class AjaxKillZoneController extends Controller
         }
 
         // May be empty if the user did not send any enemies
-        if (count($killZoneEnemies) > 0) {
+        if ($killZoneEnemies !== []) {
             // Delete existing enemies
             KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
             // Save all new enemies at once
@@ -220,9 +219,10 @@ class AjaxKillZoneController extends Controller
 
     /**
      * @return array|ResponseFactory|Response
+     *
      * @throws \Exception
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, KillZone $killZone)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, KillZone $killZone)
     {
         $dungeonRoute = $killZone->dungeonRoute;
 
@@ -257,9 +257,10 @@ class AjaxKillZoneController extends Controller
 
     /**
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonRoute)
+    public function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('edit', $dungeonRoute);
 

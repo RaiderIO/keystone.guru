@@ -14,7 +14,6 @@ use Illuminate\Database\Query\JoinClause;
  * @property int      $kill_zone_id
  * @property int      $npc_id
  * @property int      $mdt_id
- *
  * @property KillZone $killzone
  * @property Enemy    $enemy
  * @property Npc      $npc
@@ -33,30 +32,21 @@ class KillZoneEnemy extends Model
         'mdt_id',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function killzone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return Enemy
-     */
     public function getEnemy(): Enemy
     {
         /** @var Enemy $result */
         $result = Enemy::select('enemies.*')
-            ->join('kill_zone_enemies', function (JoinClause $clause) {
+            ->join('kill_zone_enemies', static function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
                     ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
             })

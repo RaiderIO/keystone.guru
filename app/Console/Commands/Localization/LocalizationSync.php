@@ -6,8 +6,9 @@ use Illuminate\Console\Command;
 
 /**
  * Class LocalizationSync
- * @package App\Console\Commands\Localization
+ *
  * @author imbrish
+ *
  * @since 29/09/2016
  * @see https://gist.github.com/imbrish/204e3b85cadfd8d6db0369d6469eb814
  */
@@ -47,7 +48,6 @@ class LocalizationSync extends Command
         $baseLang   = $this->argument('base');
         $targetLang = $this->argument('target');
 
-
         $langDir   = resource_path() . DIRECTORY_SEPARATOR . 'lang';
         $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
         $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
@@ -70,6 +70,7 @@ class LocalizationSync extends Command
             // Ensure dirs are created if we found one
             if (is_dir($basePath)) {
                 $this->scanDir($baseLang, $targetLang, $basePath, $targetPath);
+
                 // Don't parse the dir as a file so stop here
                 continue;
             }
@@ -79,7 +80,8 @@ class LocalizationSync extends Command
                 $lemmas = $this->parse($targetLang, $target);
 
                 if ($lemmas === false) {
-                    $this->error("Parsing failed while reading '$targetLang/$name'");
+                    $this->error(sprintf('Parsing failed while reading \'%s/%s\'', $targetLang, $name));
+
                     continue;
                 }
             } else {
@@ -91,7 +93,8 @@ class LocalizationSync extends Command
             $result = $this->parse($targetLang, $base, $lemmas);
 
             if ($result === false) {
-                $this->error("Parsing failed while syncing '$baseLang/$name'");
+                $this->error(sprintf('Parsing failed while syncing \'%s/%s\'', $baseLang, $name));
+
                 continue;
             }
 
@@ -99,9 +102,9 @@ class LocalizationSync extends Command
             if ($target === false || $target != $result) {
                 file_put_contents($targetPath, $result);
 
-                $this->info("File '$shortTargetPath' synchronized");
+                $this->info(sprintf('File \'%s\' synchronized', $shortTargetPath));
             } else {
-                $this->line("File '$shortTargetPath' already in sync");
+                $this->line(sprintf('File \'%s\' already in sync', $shortTargetPath));
             }
         }
     }
@@ -173,7 +176,7 @@ class LocalizationSync extends Command
                     if ($lemmas === false) {
                         $result[$key] = $match[2];
                     } // replace value with matching, non-empty lemma
-                    else if (array_key_exists($key, $lemmas) && strlen((string) $lemmas[$key]) > 0) {
+                    else if (array_key_exists($key, $lemmas) && strlen((string)$lemmas[$key]) > 0) {
                         $segment = $match[1] . $lemmas[$key] . $match[1];
                     } // mark value as not specified
                     else {

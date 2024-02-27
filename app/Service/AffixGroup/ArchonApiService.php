@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\AffixGroup;
 
 use App\Service\AffixGroup\Exceptions\InvalidResponseException;
@@ -11,7 +10,7 @@ class ArchonApiService implements ArchonApiServiceInterface
     use Curl;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getDungeonEaseTierListOverall(): array
     {
@@ -24,7 +23,7 @@ class ArchonApiService implements ArchonApiServiceInterface
         }
 
         // Temp fix for strange characters being put in front of the affix list
-        $response['encounterTierList']['label'] = trim((string) $response['encounterTierList']['label'], '‍');
+        $response['encounterTierList']['label'] = trim((string)$response['encounterTierList']['label'], '‍');
 
         return $response;
     }

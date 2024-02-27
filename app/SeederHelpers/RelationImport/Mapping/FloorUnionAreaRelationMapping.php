@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Mapping;
-
 
 use App\Models\Floor\FloorUnionArea;
 use App\SeederHelpers\RelationImport\Conditionals\MappingVersionConditional;
@@ -10,7 +8,7 @@ use App\SeederHelpers\RelationImport\Conditionals\MappingVersionConditional;
 class FloorUnionAreaRelationMapping extends RelationMapping
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __construct()
     {

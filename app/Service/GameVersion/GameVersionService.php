@@ -9,13 +9,12 @@ class GameVersionService implements GameVersionServiceInterface
 {
     private const GAME_VERSION_COOKIE = 'game_version';
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void
     {
-        optional($user)->update(['game_version_id' => $gameVersion->id]);
+        $user?->update(['game_version_id' => $gameVersion->id]);
 
         // Unit tests and artisan commands don't like this
         if (!app()->runningInConsole()) {
@@ -25,9 +24,8 @@ class GameVersionService implements GameVersionServiceInterface
         }
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getGameVersion(?User $user): GameVersion
     {

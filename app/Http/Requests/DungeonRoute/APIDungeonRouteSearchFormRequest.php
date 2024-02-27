@@ -22,7 +22,7 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function failedValidation(Validator $validator)
     {
@@ -31,7 +31,6 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
             response()->json(['data' => $errors], 422)
         );
     }
-
 
     /**
      * Get the validation rules that apply to the request.

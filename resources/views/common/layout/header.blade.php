@@ -34,6 +34,7 @@ if($currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VE
             'text' => $nextSeason->name
         ];
     }
+
     $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
         'text' => $currentSeason->name
     ];

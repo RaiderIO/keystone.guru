@@ -1,13 +1,11 @@
 <?php
 
-
 namespace App\Models\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Trait GeneratesPublicKey
- * @package App\Models\Traits
  *
  * @mixin Model
  */
@@ -22,7 +20,7 @@ trait GeneratesPublicKey
         $charactersLength = strlen($characters);
         do {
             $newKey = '';
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < $length; ++$i) {
                 $newKey .= $characters[random_int(0, $charactersLength - 1)];
             }
         } while ($checkUsages && static::where($column, $newKey)->count() > 0);

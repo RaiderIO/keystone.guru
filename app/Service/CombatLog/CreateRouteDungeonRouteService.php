@@ -44,11 +44,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     {
     }
 
-    /**
-     * @param CreateRouteBody $createRouteBody
-     *
-     * @return DungeonRoute
-     */
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
         $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $this->coordinatesService, $createRouteBody))->build();
@@ -67,9 +62,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     * @param string $combatLogFilePath
-     *
-     * @return CreateRouteBody
      * @throws Exception
      */
     public function getCreateRouteBody(string $combatLogFilePath): CreateRouteBody
@@ -89,10 +81,10 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
+            $challengeModeStartEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
 
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
+            $challengeModeEndEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
             $challengeMode = new CreateRouteChallengeMode(
                 $challengeModeStartEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
@@ -113,6 +105,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyEngagedInvalidNpcId($guid->getId());
+
                         continue;
                     }
 
@@ -121,6 +114,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCreateRouteBodyEnemyKilledInvalidNpcId($guid->getId());
+
                         continue;
                     }
 
@@ -162,7 +156,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             }
 
             if ($npcEngagedEvents->isNotEmpty()) {
-                throw new Exception('Found enemies that weren\'t killed!');
+                throw new Exception("Found enemies that weren't killed!");
             }
 
             return new CreateRouteBody(
@@ -179,7 +173,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     }
 
     /**
-     *
      * @return void
      */
     private function saveChallengeModeRun(CreateRouteBody $createRouteBody, DungeonRoute $dungeonRoute)
@@ -212,6 +205,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
                     $invalidUiMapIds[] = $npc->coord->uiMapId;
                 }
+
                 continue;
             }
 
@@ -243,11 +237,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         ]);
     }
 
-    /**
-     * @param DungeonRoute|null $dungeonRoute
-     *
-     * @return void
-     */
     private function generateMapIcons(
         MappingVersion  $mappingVersion,
         CreateRouteBody $createRouteBody,
@@ -266,10 +255,11 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 continue;
             }
 
-            $currentFloor = optional($npc->getResolvedEnemy())->floor ?? $previousFloor;
+            $currentFloor = $npc->getResolvedEnemy()?->floor ?? $previousFloor;
 
             if ($currentFloor === null) {
                 $this->log->generateMapIconsUnableToFindFloor($npc->getUniqueId());
+
                 continue;
             }
 
@@ -288,7 +278,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $mapIconAttributes[] = array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => optional($dungeonRoute)->id ?? null,
+                'dungeon_route_id'   => $dungeonRoute?->id ?? null,
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
                 'comment'            => $comment,
@@ -297,7 +287,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
             if ($hasResolvedEnemy) {
                 $brushlineAttributes[] = [
-                    'dungeon_route_id' => optional($dungeonRoute)->id ?? null,
+                    'dungeon_route_id' => $dungeonRoute?->id ?? null,
                     'floor_id'         => $currentFloor->id,
                     'polyline_id'      => -1,
                     'created_at'       => $now,
@@ -328,13 +318,13 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         foreach ($dungeonRoute->brushlines as $brushline) {
             $polylineAttributes[$index]['model_id'] = $brushline->id;
 
-            $index++;
+            ++$index;
         }
 
         Polyline::insert($polylineAttributes);
 
         // Assign the polylines back to the brushlines/paths
-        $polyLines = Polyline::where(function (Builder $builder) use ($dungeonRoute) {
+        $polyLines = Polyline::where(static function (Builder $builder) use ($dungeonRoute) {
             $builder->whereIn('model_id', $dungeonRoute->brushlines->pluck('id'))
                 ->where('model_class', Brushline::class);
         })->orderBy('id')
@@ -344,7 +334,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         foreach ($dungeonRoute->brushlines as $brushline) {
             $brushline->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
 
-            $polyLineIndex++;
+            ++$polyLineIndex;
         }
     }
 }

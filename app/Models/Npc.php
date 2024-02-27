@@ -32,13 +32,11 @@ use InvalidArgumentException;
  * @property bool                                $sanguine
  * @property bool                                $runs_away_in_fear
  * @property bool                                $hyper_respawn
- *
  * @property Dungeon                             $dungeon
  * @property NpcClassification                   $classification
  * @property NpcType                             $type
  * @property NpcClass                            $class
  * @property NpcEnemyForces|null                 $enemyForces
- *
  * @property NpcEnemyForces[]|Collection         $npcEnemyForces
  * @property Enemy[]|Collection                  $enemies
  * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
@@ -50,9 +48,11 @@ class Npc extends CacheModel implements MappingModelInterface
     use SeederModel;
 
     public $incrementing = false;
-    public $timestamps   = false;
 
-    protected $with     = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+    public $timestamps = false;
+
+    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+
     protected $fillable = [
         'id',
         'dungeon_id',
@@ -73,10 +73,14 @@ class Npc extends CacheModel implements MappingModelInterface
     ];
 
     public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
+
     public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
-    public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
-    public const AGGRESSIVENESS_FRIENDLY   = 'friendly';
-    public const AGGRESSIVENESS_AWAKENED   = 'awakened';
+
+    public const AGGRESSIVENESS_NEUTRAL = 'neutral';
+
+    public const AGGRESSIVENESS_FRIENDLY = 'friendly';
+
+    public const AGGRESSIVENESS_AWAKENED = 'awakened';
 
     public const ALL_AGGRESSIVENESS = [
         self::AGGRESSIVENESS_AGGRESSIVE,
@@ -88,92 +92,59 @@ class Npc extends CacheModel implements MappingModelInterface
 
     /**
      * Gets all derived enemies from this Npc.
-     *
-     * @return hasMany
      */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
     }
 
-    /**
-     * @return hasMany
-     */
     public function npcbolsteringwhitelists(): HasMany
     {
         return $this->hasMany(NpcBolsteringWhitelist::class);
     }
 
-    /**
-     * @return belongsTo
-     */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
 
-    /**
-     * @return belongsTo
-     */
     public function classification(): BelongsTo
     {
         return $this->belongsTo(NpcClassification::class);
     }
 
-    /**
-     * @return belongsTo
-     */
     public function type(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcType::class, 'npc_type_id');
     }
 
-    /**
-     * @return belongsTo
-     */
     public function class(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcClass::class, 'npc_class_id');
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function spells(): BelongsToMany
     {
         return $this->belongsToMany(Spell::class, 'npc_spells');
     }
 
-    /**
-     * @return HasMany
-     */
     public function npcspells(): HasMany
     {
         return $this->hasMany(NpcSpell::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function npcEnemyForces(): HasMany
     {
         return $this->hasMany(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
     }
 
-    /**
-     * @return HasOne
-     */
     public function enemyForces(): HasOne
     {
         return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
     }
 
-    /**
-     * @param MappingVersion|null $mappingVersion
-     * @return NpcEnemyForces
-     */
     public function setEnemyForces(int $enemyForces, ?MappingVersion $mappingVersion = null): NpcEnemyForces
     {
         if ($this->dungeon_id === -1 && $mappingVersion === null) {
@@ -197,10 +168,6 @@ class Npc extends CacheModel implements MappingModelInterface
         return $npcEnemyForces;
     }
 
-    /**
-     * @param int|null $mappingVersionId
-     * @return HasOne
-     */
     public function enemyForcesByMappingVersion(?int $mappingVersionId = null): HasOne
     {
         $belongsTo = $this->hasOne(NpcEnemyForces::class);
@@ -215,78 +182,51 @@ class Npc extends CacheModel implements MappingModelInterface
         return $belongsTo;
     }
 
-    /**
-     * @return bool
-     */
     public function isEmissary(): bool
     {
         return in_array($this->id, [155432, 155433, 155434]);
     }
 
-    /**
-     * @return bool
-     */
     public function isAwakened(): bool
     {
         return in_array($this->id, [161244, 161243, 161124, 161241]);
     }
 
-    /**
-     * @return bool
-     */
     public function isEncrypted(): bool
     {
         return in_array($this->id, [185680, 185683, 185685]);
     }
 
-    /**
-     * @return bool
-     */
     public function isPrideful(): bool
     {
         return $this->id === config('keystoneguru.prideful.npc_id');
     }
 
-    /**
-     * @return bool
-     */
     public function isShrouded(): bool
     {
         return $this->id === config('keystoneguru.shrouded.npc_id');
     }
 
-    /**
-     * @return bool
-     */
     public function isShroudedZulGamux(): bool
     {
         return $this->id === config('keystoneguru.shrouded.npc_id_zul_gamux');
     }
 
-    /**
-     * @return bool
-     */
     public function isAffectedByFortified(): bool
     {
         return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE]]);
     }
 
-    /**
-     * @return bool
-     */
     public function isAffectedByTyrannical(): bool
     {
         return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]);
     }
 
-    /**
-     * @return float
-     */
     public function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
     {
         $keyLevelFactor = 1;
         // 2 because we start counting up at key level 3 (+2 = 0)
-        for ($i = 2; $i < $keyLevel; $i++) {
+        for ($i = 2; $i < $keyLevel; ++$i) {
             $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
         }
 
@@ -315,8 +255,6 @@ class Npc extends CacheModel implements MappingModelInterface
 
     /**
      * Upon creation of a new NPC, we must create npc enemy forces for each mapping version
-     * @param int|null $existingEnemyForces
-     * @return  bool
      */
     public function createNpcEnemyForcesForExistingMappingVersions(?int $existingEnemyForces = null): bool
     {
@@ -326,7 +264,7 @@ class Npc extends CacheModel implements MappingModelInterface
             $this->load('dungeon');
             // Create new enemy forces for this enemy for each relevant mapping version
             // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
-            $mappingVersions = optional($this->dungeon)->mappingVersions ?? MappingVersion::all();
+            $mappingVersions = $this->dungeon?->mappingVersions ?? MappingVersion::all();
             foreach ($mappingVersions as $mappingVersion) {
                 $result = $result && NpcEnemyForces::create([
                         'npc_id'               => $this->id,
@@ -340,22 +278,18 @@ class Npc extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-
-    public static function booted()
+    protected static function booted()
     {
         parent::booted();
 
         // Delete Npc properly if it gets deleted
-        static::deleting(function (Npc $npc) {
+        static::deleting(static function (Npc $npc) {
             $npc->npcbolsteringwhitelists()->delete();
             $npc->npcspells()->delete();
             $npc->npcEnemyForces()->delete();
         });
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
         return $this->dungeon_id ?? null;

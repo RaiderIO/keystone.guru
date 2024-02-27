@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddHealthPercentageColumnToNpcsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -29,4 +28,4 @@ class AddHealthPercentageColumnToNpcsTable extends Migration
             $table->dropColumn('health_percentage');
         });
     }
-}
+};

@@ -8,18 +8,11 @@ class ExtraAttacks extends Suffix
 {
     private int $amount;
 
-    /**
-     * @return int
-     */
     public function getAmount(): int
     {
         return $this->amount;
     }
 
-    /**
-     * @param array $parameters
-     * @return HasParameters
-     */
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -29,9 +22,6 @@ class ExtraAttacks extends Suffix
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 1;

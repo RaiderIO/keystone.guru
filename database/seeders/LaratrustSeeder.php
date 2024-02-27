@@ -14,8 +14,6 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return  void
      */
     public function run(): void
     {
@@ -90,7 +88,7 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
     /**
      * Truncates all the laratrust tables and the users table
      *
-     * @return    void
+     * @return void
      */
     public function truncateLaratrustTables()
     {

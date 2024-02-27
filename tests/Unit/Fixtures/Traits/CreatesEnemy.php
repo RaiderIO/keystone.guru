@@ -10,10 +10,6 @@ use Tests\TestCase;
  */
 trait CreatesEnemy
 {
-    /**
-     * @param array|null $attributes
-     * @return Enemy
-     */
     public function createEnemy(?array $attributes = null): Enemy
     {
         return new Enemy($attributes ?? $this->getEnemyDefaultAttributes());

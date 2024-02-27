@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Traits;
 
 use Illuminate\Support\Carbon;
@@ -8,9 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 trait UserCurrentTime
 {
-    /**
-     * @return string
-     */
     public function getUserTimezone(): string
     {
         return optional(Auth::user())->timezone ?? config('app.timezone');

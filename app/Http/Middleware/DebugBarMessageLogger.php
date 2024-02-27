@@ -1,4 +1,6 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;

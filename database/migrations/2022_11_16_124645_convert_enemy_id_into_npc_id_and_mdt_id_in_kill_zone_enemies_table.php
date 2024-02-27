@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class ConvertEnemyIdIntoNpcIdAndMdtIdInKillZoneEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -41,4 +38,4 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInKillZoneEnemiesTable extends Migration
                 SET `kill_zone_enemies`.`npc_id` = null, `kill_zone_enemies`.`mdt_id` = null;
         ');
     }
-}
+};

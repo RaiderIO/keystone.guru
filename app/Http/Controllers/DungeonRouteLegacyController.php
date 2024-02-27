@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 /**
  * Class DungeonRouteLegacyController - contains all deprecated endpoints for dungeonroutes to keep the OG file clean
- * @package App\Http\Controllers
+ *
  * @author Wouter
+ *
  * @since 06/06/2022
  */
 class DungeonRouteLegacyController extends Controller
