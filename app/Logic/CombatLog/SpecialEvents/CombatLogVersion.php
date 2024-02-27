@@ -3,12 +3,13 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\CombatLogVersion as CombatLogVersionConstant;
+use Exception;
 
 /**
  * COMBAT_LOG_VERSION,20,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,10.1.0,PROJECT_ID,1
  *
- * @package App\Logic\CombatLog\SpecialEvents
  * @author Wouter
+ *
  * @since 26/05/2023
  */
 class CombatLogVersion extends SpecialEvent
@@ -21,43 +22,28 @@ class CombatLogVersion extends SpecialEvent
 
     private int $projectID;
 
-    /**
-     * @return int
-     */
     public function getVersion(): int
     {
         return $this->version;
     }
 
-    /**
-     * @return bool
-     */
     public function isAdvancedLogEnabled(): bool
     {
         return $this->advancedLogEnabled;
     }
 
-    /**
-     * @return string
-     */
     public function getBuildVersion(): string
     {
         return $this->buildVersion;
     }
 
-    /**
-     * @return int
-     */
     public function getProjectID(): int
     {
         return $this->projectID;
     }
 
-
     /**
-     * @param array $parameters
-     * @return self
-     * @throws \Exception
+     * @throws Exception
      */
     public function setParameters(array $parameters): self
     {
@@ -69,15 +55,12 @@ class CombatLogVersion extends SpecialEvent
         $this->projectID          = $parameters[6];
 
         if (!isset(CombatLogVersionConstant::ALL[$this->version])) {
-            throw new \Exception(sprintf('Unable to find combat log version %d!', $this->version));
+            throw new Exception(sprintf('Unable to find combat log version %d!', $this->version));
         }
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 7;

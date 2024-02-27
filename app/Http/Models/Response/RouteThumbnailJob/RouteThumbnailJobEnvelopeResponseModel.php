@@ -9,8 +9,6 @@ class RouteThumbnailJobEnvelopeResponseModel
 {
     /**
      * @OA\Property(ref="#/components/schemas/RouteThumbnailJob")
-     *
-     * @var RouteThumbnailJobResponseModel
      */
     public RouteThumbnailJobResponseModel $data;
 }

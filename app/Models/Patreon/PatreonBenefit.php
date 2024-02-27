@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $key
  *
  * @mixin Eloquent
+ *
  * @todo Using CacheModel causes cache problems? People did not get their patreon rewards applied properly because of it?
  */
 class PatreonBenefit extends Model
@@ -27,12 +28,18 @@ class PatreonBenefit extends Model
     ];
 
     protected $hidden = ['pivot'];
-    public const AD_FREE                 = 'ad-free';
+
+    public const AD_FREE = 'ad-free';
+
     public const UNLIMITED_DUNGEONROUTES = 'unlimited-dungeonroutes';
-    public const UNLISTED_ROUTES         = 'unlisted-routes';
-    public const ANIMATED_POLYLINES      = 'animated-polylines';
-    public const ADVANCED_SIMULATION     = 'advanced-simulation';
-    public const AD_FREE_TEAM_MEMBERS    = 'ad-free-team-members';
+
+    public const UNLISTED_ROUTES = 'unlisted-routes';
+
+    public const ANIMATED_POLYLINES = 'animated-polylines';
+
+    public const ADVANCED_SIMULATION = 'advanced-simulation';
+
+    public const AD_FREE_TEAM_MEMBERS = 'ad-free-team-members';
 
     public const ALL = [
         self::AD_FREE              => 1,

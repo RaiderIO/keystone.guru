@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDungeonRouteIdColumnToChallengeModeRunsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('challenge_mode_runs', function (Blueprint $table) {
             $table->integer('dungeon_route_id')->after('dungeon_id');
@@ -22,13 +19,11 @@ class AddDungeonRouteIdColumnToChallengeModeRunsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('challenge_mode_runs', function (Blueprint $table) {
             $table->dropColumn('dungeon_route_id');
         });
     }
-}
+};

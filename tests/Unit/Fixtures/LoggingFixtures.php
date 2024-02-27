@@ -11,7 +11,6 @@ use Tests\TestCases\PublicTestCase;
 class LoggingFixtures
 {
     /**
-     * @param PublicTestCase $testCase
      * @return MockObject|AffixGroupEaseTierServiceLoggingInterface
      */
     public static function createAffixGroupEaseTierServiceLogging(
@@ -21,7 +20,6 @@ class LoggingFixtures
     }
 
     /**
-     * @param PublicTestCase $testCase
      * @return MockObject|CombatLogServiceLoggingInterface
      */
     public static function createCombatLogServiceLogging(
@@ -31,7 +29,6 @@ class LoggingFixtures
     }
 
     /**
-     * @param PublicTestCase $testCase
      * @return MockObject|CombatLogDungeonRouteServiceLoggingInterface
      */
     public static function createCombatLogDungeonRouteServiceLogging(

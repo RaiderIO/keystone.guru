@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Season;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DungeonRouteDiscoverSeasonPolicy
@@ -12,12 +12,8 @@ class DungeonRouteDiscoverSeasonPolicy
 
     /**
      * Determine whether the user can view the dungeon.
-     *
-     * @param User|null $user
-     * @param Season $season
-     * @return mixed
      */
-    public function view(?User $user, Season $season)
+    public function view(?User $user, Season $season): bool
     {
         return $season->expansion->active;
     }

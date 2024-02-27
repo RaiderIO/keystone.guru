@@ -16,18 +16,17 @@ use Teapot\StatusCode\Http;
 trait ChecksForDuplicates
 {
     /**
-     * @param Model $candidate
      * @param array $fields Additional fields to check on for duplicates.
-     * @param bool $abort True to abort, false to return true|false upon completion.
+     * @param bool  $abort True to abort, false to return true|false upon completion.
      * @return bool False if no duplicate was found, true if there was a duplicate.
      */
-    function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
+    public function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
     {
         // Find out of there is a duplicate
         /** @var Builder $query */
         // Round it like MySql does, otherwise we get strange rounding errors and it won't detect it as a duplicate
         /** @var Eloquent $modelClass */
-        $modelClass = get_class($candidate);
+        $modelClass = $candidate::class;
         $query      = $modelClass::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
             ->where('lng', round($candidate->lng, 2, PHP_ROUND_HALF_EVEN));
 
@@ -48,23 +47,22 @@ trait ChecksForDuplicates
         } else {
             $result = false;
         }
+
         return $result;
     }
 
     /**
      * Abort because a duplicate has been found.
      */
-    function abortDuplicate()
+    public function abortDuplicate()
     {
         abort(Http::BAD_REQUEST, 'This object already exists. Please refresh the page.');
     }
 
     /**
      * Checks a list of vertices for duplicates.
-     * @param $className
-     * @param $verticesArray
      */
-    function checkForDuplicateVertices($className, $verticesArray)
+    public function checkForDuplicateVertices($className, $verticesArray)
     {
         // Store them
         $failures = 0;

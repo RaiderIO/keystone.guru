@@ -14,38 +14,19 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class DatatablesColumnHandler
 {
+    private readonly ?string $columnData;
 
-    /** @var DatatablesHandler */
-    private DatatablesHandler $dtHandler;
-
-    /**  @var string */
-    private string $columnName;
-
-    /** @var string|null */
-    private ?string $columnData;
-
-    public function __construct(DatatablesHandler $dtHandler, string $columnName, string $columnData = null)
+    public function __construct(private readonly DatatablesHandler $dtHandler, private readonly string $columnName, ?string $columnData = null)
     {
-        $this->dtHandler = $dtHandler;
-
-        $this->columnName = $columnName;
         // If not set, just copy the column name
-        $this->columnData = $columnData ?? $columnName;
+        $this->columnData = $columnData ?? $this->columnName;
     }
 
     /**
-     * @param Builder $subBuilder
-     * @param $columnData
-     * @param $order
-     * @param $generalSearch
-     *
      * @return mixed
      */
-    protected abstract function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
+    abstract protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
 
-    /**
-     * @return DatatablesHandler
-     */
     public function getDtHandler(): DatatablesHandler
     {
         return $this->dtHandler;
@@ -68,9 +49,8 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @param Builder $subBuilder
-     *
      * @return $this
+     *
      * @throws Exception
      */
     public function applyToBuilder(Builder $subBuilder): self
@@ -106,7 +86,6 @@ abstract class DatatablesColumnHandler
             $this->applyFilter($subBuilder, $column, $order, $generalSearch);
             // throw new \Exception(sprintf("Unable to find column '%s' in Request->params->columns array", $this->_columnName));
         }
-
 
         return $this;
     }

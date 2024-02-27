@@ -35,12 +35,11 @@ use Teapot\StatusCode;
 class TeamController extends Controller
 {
     /**
-     * @param TeamFormRequest $request
-     * @param Team|null $team
      * @return mixed
+     *
      * @throws Exception
      */
-    public function store(TeamFormRequest $request, Team $team = null)
+    public function store(TeamFormRequest $request, ?Team $team = null)
     {
         $new = $team === null;
 
@@ -68,6 +67,7 @@ class TeamController extends Controller
                         // Roll back the saving of the expansion since something went wrong with the file.
                         $team->delete();
                     }
+
                     throw $ex;
                 }
             }
@@ -84,18 +84,17 @@ class TeamController extends Controller
     /**
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('team.new');
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
      * @return Application|ResponseFactory|RedirectResponse|Response
+     *
      * @throws AuthorizationException
      */
-    public function edit(Request $request, Team $team)
+    public function edit(Request $request, Team $team): View
     {
         $this->authorize('edit', $team);
 
@@ -111,18 +110,15 @@ class TeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
-    public function delete(Request $request, Team $team)
+    public function delete(Request $request, Team $team): RedirectResponse
     {
         $this->authorize('delete', $team);
 
         try {
             $team->delete();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             abort(500);
         }
 
@@ -130,9 +126,8 @@ class TeamController extends Controller
     }
 
     /**
-     * @param TeamFormRequest $request
-     * @param Team $team
      * @return Team|Factory|Builder|Model|RedirectResponse|View|object
+     *
      * @throws Exception
      */
     public function update(TeamFormRequest $request, Team $team)
@@ -150,11 +145,9 @@ class TeamController extends Controller
     }
 
     /**
-     * @param TeamFormRequest $request
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(TeamFormRequest $request)
+    public function savenew(TeamFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $team = $this->store($request);
@@ -170,15 +163,14 @@ class TeamController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         $user = Auth::user();
+
         return view('team.list', ['models' => $user->teams]);
     }
 
     /**
-     * @param Request $request
-     * @param string $invitecode
      * @return Factory|View
      */
     public function invite(Request $request, string $invitecode)
@@ -201,8 +193,6 @@ class TeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param string $invitecode
      * @return Factory|View
      */
     public function inviteaccept(Request $request, string $invitecode)
@@ -224,11 +214,8 @@ class TeamController extends Controller
 
     /**
      * Creates a tag from the tag manager
-     *
-     * @param TagFormRequest $request
-     * @return RedirectResponse
      */
-    public function createtag(TagFormRequest $request)
+    public function createtag(TagFormRequest $request): RedirectResponse
     {
         $error = [];
 

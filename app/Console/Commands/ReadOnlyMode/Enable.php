@@ -7,8 +7,9 @@ use Illuminate\Console\Command;
 
 /**
  * Class Aggregate
- * @package App\Console\Commands\Localization
+ *
  * @author Wouter
+ *
  * @since 16/02/2023
  */
 class Enable extends Command
@@ -39,10 +40,8 @@ class Enable extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService)
+    public function handle(ReadOnlyModeServiceInterface $readOnlyModeService): int
     {
         if ($readOnlyModeService->setReadOnly(true)) {
             $this->info('Site is now read-only');

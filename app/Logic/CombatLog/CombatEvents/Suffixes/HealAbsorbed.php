@@ -7,7 +7,7 @@ use App\Logic\CombatLog\Guid\Guid;
 
 class HealAbsorbed extends Suffix
 {
-    private ?Guid $extraGUID;
+    private ?Guid $extraGUID = null;
 
     private string $extraName;
 
@@ -25,80 +25,52 @@ class HealAbsorbed extends Suffix
 
     private int $totalAmount;
 
-    /**
-     * @return Guid|null
-     */
     public function getExtraGUID(): ?Guid
     {
         return $this->extraGUID;
     }
 
-    /**
-     * @return string
-     */
     public function getExtraName(): string
     {
         return $this->extraName;
     }
 
-    /**
-     * @return string
-     */
     public function getExtraFlags(): string
     {
         return $this->extraFlags;
     }
 
-    /**
-     * @return string
-     */
     public function getExtraRaidFlags(): string
     {
         return $this->extraRaidFlags;
     }
 
-    /**
-     * @return int
-     */
     public function getExtraSpellId(): int
     {
         return $this->extraSpellId;
     }
 
-    /**
-     * @return string
-     */
     public function getExtraSpellName(): string
     {
         return $this->extraSpellName;
     }
 
-    /**
-     * @return string
-     */
     public function getExtraSchool(): string
     {
         return $this->extraSchool;
     }
 
-    /**
-     * @return int
-     */
     public function getAbsorbedAmount(): int
     {
         return $this->absorbedAmount;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalAmount(): int
     {
         return $this->totalAmount;
     }
 
     /**
-     * @param array $parameters
      * @return HasParameters|$this
      */
     public function setParameters(array $parameters): HasParameters
@@ -121,17 +93,11 @@ class HealAbsorbed extends Suffix
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOptionalParameterCount(): int
     {
         return 1;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 9;

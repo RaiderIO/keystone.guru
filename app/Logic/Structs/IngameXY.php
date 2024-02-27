@@ -7,39 +7,17 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class IngameXY implements Arrayable
 {
-    private float $x;
-
-    private float $y;
-
-    private ?Floor $floor;
-
     private ?LatLng $latLng = null;
 
-    /**
-     * @param float      $x
-     * @param float      $y
-     * @param Floor|null $floor
-     */
-    public function __construct(float $x = 0, float $y = 0, ?Floor $floor = null)
+    public function __construct(private float $x = 0, private float $y = 0, private ?Floor $floor = null)
     {
-        $this->x     = $x;
-        $this->y     = $y;
-        $this->floor = $floor;
     }
 
-    /**
-     * @return float
-     */
     public function getX(): float
     {
         return $this->x;
     }
 
-    /**
-     * @param float $x
-     *
-     * @return IngameXY
-     */
     public function setX(float $x): IngameXY
     {
         $this->x = $x;
@@ -47,19 +25,11 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getY(): float
     {
         return $this->y;
     }
 
-    /**
-     * @param float $y
-     *
-     * @return IngameXY
-     */
     public function setY(float $y): IngameXY
     {
         $this->y = $y;
@@ -67,19 +37,11 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    /**
-     * @return Floor|null
-     */
     public function getFloor(): ?Floor
     {
         return $this->floor;
     }
 
-    /**
-     * @param Floor|null $floor
-     *
-     * @return IngameXY
-     */
     public function setFloor(?Floor $floor): IngameXY
     {
         $this->floor = $floor;
@@ -87,9 +49,6 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -107,12 +66,6 @@ class IngameXY implements Arrayable
         );
     }
 
-    /**
-     * @param array      $ingameXY
-     * @param Floor|null $floor
-     *
-     * @return IngameXY
-     */
     public static function fromArray(array $ingameXY, ?Floor $floor): IngameXY
     {
         return new IngameXY($ingameXY['x'], $ingameXY['y'], $floor);

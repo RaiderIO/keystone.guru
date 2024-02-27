@@ -19,16 +19,14 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
-use App\User;
+use App\Models\User;
 
-$dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonRoute) {
+$dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dungeonRoute) {
     // Shouldn't happen - but it may if the route was deleted and someone left their browser window open
     if ($dungeonRoute === null) {
         return false;
     }
-
     $result = false;
-
     if (Auth::check()) {
         if ($user->echo_anonymous &&
             // If we didn't create this route, don't show our name
@@ -54,7 +52,7 @@ $dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonRout
                 'name'       => $user->name,
                 'initials'   => $user->initials,
                 'color'      => $user->echo_color,
-                'avatar_url' => optional($user->iconfile)->getURL(),
+                'avatar_url' => $user->iconfile?->getURL(),
                 'anonymous'  => false,
                 'url'        => route('profile.view', $user),
             ];
@@ -65,17 +63,11 @@ $dungeonRouteChannelCallback = function (?User $user, ?DungeonRoute $dungeonRout
 };
 
 Broadcast::channel(sprintf('%s-route-edit.{dungeonRoute}', config('app.type')), $dungeonRouteChannelCallback);
-Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), function (?User $user, LiveSession $liveSession) use ($dungeonRouteChannelCallback) {
-    // Validate live sessions the same way as a dungeon route
-    return $dungeonRouteChannelCallback($user, $liveSession->dungeonroute);
-});
+Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), static fn(?User $user, LiveSession $liveSession) => $dungeonRouteChannelCallback($user, $liveSession->dungeonroute));
 Broadcast::channel(sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', config('app.type')),
-    function (?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) use ($dungeonRouteChannelCallback) {
-    // Validate to see if both routes may be viewed by the user
-    return $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB);
-});
+    static fn(?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) => $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB));
 
-Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type')), function (User $user, Dungeon $dungeon) {
+Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type')), static function (User $user, Dungeon $dungeon) {
     $result = false;
     if ($user->hasRole('admin')) {
         $result = [
@@ -83,9 +75,10 @@ Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type
             'name'       => $user->name,
             'initials'   => $user->initials,
             'color'      => $user->echo_color,
-            'avatar_url' => optional($user->iconfile)->getURL(),
+            'avatar_url' => $user->iconfile?->getURL(),
             'anonymous'  => false,
         ];
     }
+
     return $result;
 });

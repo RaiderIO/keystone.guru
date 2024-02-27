@@ -18,19 +18,17 @@ class DungeonController extends Controller
     use ChangesMapping;
 
     /**
-     * @param DungeonFormRequest $request
-     * @param Dungeon|null       $dungeon
-     *
      * @return mixed
+     *
      * @throws Exception
      */
-    public function store(DungeonFormRequest $request, Dungeon $dungeon = null)
+    public function store(DungeonFormRequest $request, ?Dungeon $dungeon = null)
     {
         $validated = $request->validated();
 
         $validated['expansion_id']     = Expansion::where('shortname', Dungeon::findExpansionByKey($validated['key']))->firstOrFail()->id;
-        $validated['active']           = $validated['active'] ?? 0;
-        $validated['speedrun_enabled'] = $validated['speedrun_enabled'] ?? 0;
+        $validated['active']           ??= 0;
+        $validated['speedrun_enabled'] ??= 0;
 
         if ($dungeon === null) {
             $beforeDungeon = new Dungeon();
@@ -53,7 +51,7 @@ class DungeonController extends Controller
     /**
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         $dungeons            = Dungeon::all()->keyBy('key');
         $availableKeysSelect = collect();
@@ -77,12 +75,9 @@ class DungeonController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     *
      * @return Factory|View
      */
-    public function edit(Request $request, Dungeon $dungeon)
+    public function edit(Request $request, Dungeon $dungeon): View
     {
         return view('admin.dungeon.edit', [
             'expansions' => Expansion::all()->pluck('name', 'id'),
@@ -91,10 +86,8 @@ class DungeonController extends Controller
     }
 
     /**
-     * @param DungeonFormRequest $request
-     * @param Dungeon            $dungeon
-     *
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(DungeonFormRequest $request, Dungeon $dungeon)
@@ -110,12 +103,9 @@ class DungeonController extends Controller
     }
 
     /**
-     * @param DungeonFormRequest $request
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(DungeonFormRequest $request)
+    public function savenew(DungeonFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $dungeon = $this->store($request);
@@ -123,7 +113,7 @@ class DungeonController extends Controller
         // Message to the user
         Session::flash('status', __('controller.dungeon.flash.dungeon_created'));
 
-        return redirect()->route('admin.dungeon.edit', ["dungeon" => $dungeon]);
+        return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
     }
 
     /**
@@ -131,7 +121,7 @@ class DungeonController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.dungeon.list', [
             'models' => Dungeon::with(['mappingVersions'])

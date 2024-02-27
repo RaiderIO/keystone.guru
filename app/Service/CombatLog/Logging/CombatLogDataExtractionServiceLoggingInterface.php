@@ -4,7 +4,6 @@ namespace App\Service\CombatLog\Logging;
 
 interface CombatLogDataExtractionServiceLoggingInterface
 {
-
     public function extractDataTimestampNotSet(): void;
 
     public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, string $affixGroup): void;

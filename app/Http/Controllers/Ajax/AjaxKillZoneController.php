@@ -27,10 +27,6 @@ use Teapot\StatusCode\Http;
 class AjaxKillZoneController extends Controller
 {
     /**
-     * @param DungeonRoute $dungeonroute
-     * @param array        $data
-     * @param bool         $recalculateEnemyForces
-     * @return KillZone
      * @throws \Exception
      */
     private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true): KillZone
@@ -122,18 +118,13 @@ class AjaxKillZoneController extends Controller
         return $killZone;
     }
 
-
     /**
-     * @param APIKillZoneFormRequest $request
-     * @param DungeonRoute           $dungeonRoute
-     * @param KillZone|null          $killZone
-     * @return KillZone
      * @throws AuthorizationException
      * @throws \Exception
      */
-    function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, KillZone $killZone = null): KillZone
+    public function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, ?KillZone $killZone = null): KillZone
     {
-        $dungeonRoute = optional($killZone)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
 
         try {
             $data = $request->validated();
@@ -142,13 +133,15 @@ class AjaxKillZoneController extends Controller
             if (!isset($data['enemies'])) {
                 $data['enemies'] = [];
             }
+
             if (!isset($data['spells'])) {
                 $data['spells'] = [];
             }
-            $data['id'] = optional($killZone)->id ?? null;
+
+            $data['id'] = $killZone?->id ?? null;
 
             $result = $this->saveKillZone($dungeonRoute, $data);
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -156,9 +149,8 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * @param APIKillZoneMassFormRequest $request
-     * @param DungeonRoute               $dungeonRoute
      * @return array|ResponseFactory|Response|null
+     *
      * @throws AuthorizationException
      */
     public function storeAll(APIKillZoneMassFormRequest $request, DungeonRoute $dungeonRoute)
@@ -176,7 +168,7 @@ class AjaxKillZoneController extends Controller
                 unset($kzDataWithoutEnemies['enemies']);
                 // Do not save the enemy forces - we save it one time down below
                 $killZones->push($this->saveKillZone($dungeonRoute, $kzDataWithoutEnemies, false));
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }
         }
@@ -191,9 +183,7 @@ class AjaxKillZoneController extends Controller
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], function ($item) use ($validEnemyIds) {
-                        return in_array($item, $validEnemyIds);
-                    });
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
@@ -206,13 +196,13 @@ class AjaxKillZoneController extends Controller
                         ];
                     }
                 }
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }
         }
 
         // May be empty if the user did not send any enemies
-        if (count($killZoneEnemies) > 0) {
+        if ($killZoneEnemies !== []) {
             // Delete existing enemies
             KillZoneEnemy::whereIn('kill_zone_id', $killZones->pluck('id')->toArray())->delete();
             // Save all new enemies at once
@@ -228,13 +218,11 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
-     * @param KillZone     $killZone
      * @return array|ResponseFactory|Response
+     *
      * @throws \Exception
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, KillZone $killZone)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, KillZone $killZone)
     {
         $dungeonRoute = $killZone->dungeonRoute;
 
@@ -260,7 +248,7 @@ class AjaxKillZoneController extends Controller
                 $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
             }
 
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -268,12 +256,11 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * @param APIDeleteAllFormRequest $request
-     * @param DungeonRoute            $dungeonRoute
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonRoute)
+    public function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonRoute)
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -300,10 +287,10 @@ class AjaxKillZoneController extends Controller
                 $dungeonRoute->load('killZones');
                 $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
                 // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
+                $dungeonRoute->touch(null);
 
                 $result = ['enemy_forces' => $dungeonRoute->enemy_forces];
-            } catch (\Exception $ex) {
+            } catch (\Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         } else {

@@ -6,33 +6,24 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
-use App\User;
+use App\Models\User;
 
 class PatreonService implements PatreonServiceInterface
 {
-    /** @var User|null */
     private ?User $cachedAdminUser = null;
 
-    /** @var PatreonServiceLoggingInterface */
-    private PatreonServiceLoggingInterface $log;
-
-    /**
-     * @param PatreonServiceLoggingInterface $log
-     */
-    public function __construct(PatreonServiceLoggingInterface $log)
+    public function __construct(private readonly PatreonServiceLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
-
     /**
-     * @param PatreonApiService $patreonApiService
      * @return array{array{id: int, type: string, attributes: array{title: string}}}|null
      */
     public function loadCampaignBenefits(PatreonApiService $patreonApiService): ?array
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
             $this->log->loadCampaignBenefitsAdminUserNull();
+
             return null;
         }
 
@@ -43,28 +34,26 @@ class PatreonService implements PatreonServiceInterface
             $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignBenefitsRetrieveTiersErrors($tiersAndBenefitsResponse);
+
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(function ($included) {
-                return $included['type'] === 'benefit';
-            })->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'benefit')->toArray();
         } finally {
             $this->log->loadCampaignBenefitsEnd();
         }
     }
 
     /**
-     * @param PatreonApiService $patreonApiService
      * @return array{array{id: int, type: string, relationships: array}}|null
      */
     public function loadCampaignTiers(PatreonApiService $patreonApiService): ?array
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
             $this->log->loadCampaignTiersAdminUserNull();
+
             return null;
         }
-
 
         try {
             $this->log->loadCampaignTiersStart();
@@ -73,28 +62,23 @@ class PatreonService implements PatreonServiceInterface
             $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveTiersAndBenefitsErrors($tiersAndBenefitsResponse);
+
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(function ($included) {
-                return $included['type'] === 'tier';
-            })->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'tier')->toArray();
         } finally {
             $this->log->loadCampaignTiersEnd();
         }
     }
 
-    /**
-     * @param PatreonApiService $patreonApiService
-     * @return array|null
-     */
     public function loadCampaignMembers(PatreonApiService $patreonApiService): ?array
     {
         if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
             $this->log->loadCampaignMembersAdminUserNull();
+
             return null;
         }
-
 
         try {
             $this->log->loadCampaignMembersStart();
@@ -103,28 +87,19 @@ class PatreonService implements PatreonServiceInterface
             $membersResponse = $patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
             if (isset($membersResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveMembersErrors($membersResponse);
+
                 return null;
             }
 
-            return collect($membersResponse['data'])->filter(function ($included) {
-                return $included['type'] === 'member';
-            })->toArray();
+            return collect($membersResponse['data'])->filter(static fn($included) => $included['type'] === 'member')->toArray();
         } finally {
             $this->log->loadCampaignMembersEnd();
         }
     }
 
-
-    /**
-     * @param array $campaignBenefits
-     * @param array $campaignTiers
-     * @param array $member
-     * @return bool
-     */
     public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool
     {
         /** @var array{id: string, type: string, relationships: array, attributes: array{email: string}} $member */
-
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
@@ -132,6 +107,7 @@ class PatreonService implements PatreonServiceInterface
 
             if (empty($memberEmail)) {
                 $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
+
                 return false;
             }
 
@@ -140,18 +116,21 @@ class PatreonService implements PatreonServiceInterface
 
             if ($patreonUserLink === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
+
                 return false;
             }
 
             $user = $patreonUserLink->user;
             if ($user === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
+
                 return false;
             }
 
             // Exception for users that were granted their membership status
             if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
                 $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
+
                 return true;
             }
 
@@ -199,15 +178,11 @@ class PatreonService implements PatreonServiceInterface
         return true;
     }
 
-
-    /**
-     * @param PatreonApiService $patreonApiService
-     * @return User|null
-     */
     private function loadAdminUser(PatreonApiService $patreonApiService): ?User
     {
         if (isset($this->cachedAdminUser)) {
             $this->log->loadAdminUserIsCached($this->cachedAdminUser->id);
+
             return $this->cachedAdminUser;
         }
 
@@ -219,6 +194,7 @@ class PatreonService implements PatreonServiceInterface
 
             if ($adminUser === null) {
                 $this->log->loadAdminUserAdminUserNotFound();
+
                 return null;
             }
 
@@ -226,6 +202,7 @@ class PatreonService implements PatreonServiceInterface
             $adminUser->load(['patreonUserLink']);
             if ($adminUser->patreonUserLink === null) {
                 $this->log->loadAdminUserPatreonUserLinkNotSet();
+
                 return null;
             }
 
@@ -236,15 +213,19 @@ class PatreonService implements PatreonServiceInterface
 
                 if (isset($tokens['errors'])) {
                     $this->log->loadAdminUserTokenRefreshError($tokens);
+
                     return null;
                 } else if (!isset($tokens['access_token'])) {
                     $this->log->loadAdminUserAccessTokenNotSet($tokens);
+
                     return null;
                 } else if (!isset($tokens['refresh_token'])) {
                     $this->log->loadAdminUserRefreshTokenNotSet($tokens);
+
                     return null;
                 } else if (!isset($tokens['expires_in'])) {
                     $this->log->loadAdminUserExpiresInNotSet($tokens);
+
                     return null;
                 } else {
                     $adminUser->patreonUserLink->update([
@@ -263,13 +244,6 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
-
-    /**
-     * @param array $campaignTiers
-     * @param array $campaignBenefits
-     * @param int $tierId
-     * @return array|null
-     */
     private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): ?array
     {
         $result = [];
@@ -288,6 +262,7 @@ class PatreonService implements PatreonServiceInterface
                         }
                     }
                 }
+
                 break;
             }
         }

@@ -7,12 +7,11 @@ use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\User;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -28,21 +27,16 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use PublicKeyDungeonRoute;
 
-
     protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
     {
         /** @var MapIcon $beforeModel */
         /** @var MapIcon $afterModel */
-        return optional($beforeModel)->dungeon_route_id === null || optional($afterModel)->dungeon_route_id === null;
+        return $beforeModel?->dungeon_route_id === null || $afterModel?->dungeon_route_id === null;
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MapIconFormRequest          $request
-     * @param MappingVersion|null         $mappingVersion
-     * @param ?DungeonRoute               $dungeonRoute
-     * @param MapIcon|null                $mapIcon
      * @return MapIcon|Model
+     *
      * @throws AuthorizationException
      * @throws Throwable
      */
@@ -51,11 +45,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         MapIconFormRequest          $request,
         ?MappingVersion             $mappingVersion,
         ?DungeonRoute               $dungeonRoute,
-        MapIcon                     $mapIcon = null): MapIcon
+        ?MapIcon                    $mapIcon = null): MapIcon
     {
-        $dungeonRoute                  = optional($mapIcon)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute;
         $validated                     = $request->validated();
-        $validated['dungeon_route_id'] = optional($dungeonRoute)->id;
+        $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
         $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
         // Must be an admin to use this endpoint like this!
@@ -69,11 +63,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $this->authorize('addMapIcon', $dungeonRoute);
         }
 
-        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
+        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, static function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $updateAttributes = [];
-
-            $teamId = $validated['team_id'];
+            $teamId           = $validated['team_id'];
             if ($teamId !== null) {
                 $team = Team::find($teamId);
                 if ($team !== null && $team->isUserCollaborator(Auth::user())) {
@@ -83,13 +76,12 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                     ];
                 }
             }
-
             // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
             if (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
                 $mapIcon->load('mappingVersion');
 
                 $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                    optional($dungeonRoute)->mappingVersion ?? $mapIcon->mappingVersion,
+                    $dungeonRoute?->mappingVersion ?? $mapIcon->mappingVersion,
                     $mapIcon->getLatLng()
                 );
 
@@ -101,36 +93,28 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
                 $mapIcon->setRelation('floor', $latLng->getFloor());
             }
-
             // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
             // of a dungeon
             $mapIcon->update(array_merge($updateAttributes, [
                 'mapping_version_id' => $dungeonRoute === null ? $validated['mapping_version_id'] : null,
             ]));
-
             // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
             if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
                 throw new Exception('Unable to save map icon!');
             }
-
             // Set or unset the linked awakened obelisks now that we have an ID
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
-
             // Only when icons that are not sticky to the map are saved
-            if ($dungeonRoute !== null) {
-                $dungeonRoute->touch();
-            }
+            $dungeonRoute?->touch();
         });
     }
 
     /**
-     * @param Request           $request
-     * @param DungeonRoute|null $dungeonRoute
-     * @param MapIcon           $mapIcon
      * @return array|ResponseFactory|Response
+     *
      * @throws Exception
      */
-    function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon)
+    public function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon)
     {
         $dungeonRoute = $mapIcon->dungeonRoute;
 
@@ -162,7 +146,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             } else {
                 $result = ['result' => 'error'];
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -170,11 +154,6 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MapIconFormRequest $request
-     * @param MappingVersion $mappingVersion
-     * @param MapIcon|null $mapIcon
-     * @return MapIcon
      * @throws AuthorizationException
      * @throws Throwable
      */
@@ -182,19 +161,17 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         MapIconFormRequest          $request,
         MappingVersion              $mappingVersion,
-        MapIcon                     $mapIcon = null): MapIcon
+        ?MapIcon                    $mapIcon = null): MapIcon
     {
         return $this->store($coordinatesService, $request, $mappingVersion, null, $mapIcon);
     }
 
-
     /**
-     * @param Request $request
-     * @param MapIcon $mapIcon
      * @return array|ResponseFactory|Response
+     *
      * @throws Exception
      */
-    function adminDelete(Request $request, MapIcon $mapIcon)
+    public function adminDelete(Request $request, MapIcon $mapIcon)
     {
         return $this->delete($request, null, $mapIcon);
     }

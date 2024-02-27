@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\SeederHelpers\RelationImport\Conditionals;
 
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;

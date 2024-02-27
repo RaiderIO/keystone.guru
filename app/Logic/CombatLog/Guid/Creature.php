@@ -4,24 +4,27 @@ namespace App\Logic\CombatLog\Guid;
 
 class Creature extends Guid
 {
-    const CREATURE_UNIT_TYPE_CREATURE    = 'Creature';
-    const CREATURE_UNIT_TYPE_PET         = 'Pet';
-    const CREATURE_UNIT_TYPE_GAME_OBJECT = 'GameObject';
-    const CREATURE_UNIT_TYPE_VEHICLE     = 'Vehicle';
+    public const CREATURE_UNIT_TYPE_CREATURE = 'Creature';
 
-    private string $unitType;
-    
-    private int $unknown1;
+    public const CREATURE_UNIT_TYPE_PET = 'Pet';
 
-    private int $serverId;
+    public const CREATURE_UNIT_TYPE_GAME_OBJECT = 'GameObject';
 
-    private int $instanceId;
+    public const CREATURE_UNIT_TYPE_VEHICLE = 'Vehicle';
 
-    private int $zoneUID;
+    private readonly string $unitType;
 
-    private int $id;
+    private readonly int $unknown1;
 
-    private string $spawnUID;
+    private readonly int $serverId;
+
+    private readonly int $instanceId;
+
+    private readonly int $zoneUID;
+
+    private readonly int $id;
+
+    private readonly string $spawnUID;
 
     protected function __construct(string $guid, array $parameters)
     {
@@ -38,56 +41,36 @@ class Creature extends Guid
         // Creature-0-3778-2526-12117-196045-0003CA41E4
     }
 
-    /**
-     * @return string
-     */
     public function getUnitType(): string
     {
         return $this->unitType;
     }
-    /**
-     * @return int
-     */
+
     public function getUnknown1(): int
     {
         return $this->unknown1;
     }
 
-    /**
-     * @return int
-     */
     public function getServerId(): int
     {
         return $this->serverId;
     }
 
-    /**
-     * @return int
-     */
     public function getInstanceId(): int
     {
         return $this->instanceId;
     }
 
-    /**
-     * @return int
-     */
     public function getZoneUID(): int
     {
         return $this->zoneUID;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getSpawnUID(): string
     {
         return $this->spawnUID;

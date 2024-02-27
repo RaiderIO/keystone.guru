@@ -8,7 +8,7 @@ use MarvinLabs\DiscordLogger\ServiceProvider;
 
 class ControllerServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         // API
         $this->app->bind(APIDungeonRouteControllerServiceInterface::class, APIDungeonRouteControllerService::class);

@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\WowTools;
 
-use App\Console\Commands\Traits\ConvertsMDTStrings;
-use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Npc;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Console\Command;
@@ -37,10 +35,8 @@ class RefreshDisplayIds extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle(WowToolsServiceInterface $wowToolsService)
+    public function handle(WowToolsServiceInterface $wowToolsService): void
     {
         /** @var Collection|Npc[] $npcsToRefresh */
         $npcsToRefresh = Npc::whereNull('display_id')->get();

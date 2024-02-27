@@ -3,6 +3,7 @@
 namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
+use Exception;
 
 class OutputCreateRouteJson extends BaseCombatLogCommand
 {
@@ -23,10 +24,8 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
     /**
      * Execute the console command.
      *
-     * @param CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
      *
-     * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService): int
     {
@@ -46,11 +45,7 @@ class OutputCreateRouteJson extends BaseCombatLogCommand
     }
 
     /**
-     * @param CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
-     * @param string                                  $filePath
-     *
-     * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     private function outputCreateRouteJson(CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService, string $filePath): int
     {

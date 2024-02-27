@@ -2,26 +2,23 @@
 
 namespace App\Http\Requests\Floor;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FloorFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return \Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'active'                             => ['nullable', 'bool'],

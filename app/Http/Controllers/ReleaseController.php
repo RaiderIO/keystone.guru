@@ -18,11 +18,9 @@ use Session;
 class ReleaseController extends Controller
 {
     /**
-     * @param ReleaseFormRequest $request
-     * @param Release|null       $release
      * @return mixed
      */
-    public function store(ReleaseFormRequest $request, Release $release = null)
+    public function store(ReleaseFormRequest $request, ?Release $release = null)
     {
         if ($new = ($release === null)) {
             $release   = new Release();
@@ -34,7 +32,6 @@ class ReleaseController extends Controller
         // Update the changelog
         $changelog->description = $request->get('changelog_description');
         $changelog->save();
-
 
         // Update changes
         $tickets    = $request->get('tickets', []);
@@ -49,19 +46,19 @@ class ReleaseController extends Controller
         $releaseChangelogChangesAttributes = [];
         for ($i = 0; $i < count($tickets); $i++) {
             // Only filled in rows, but tickets may be null
-            if ((int)$categories[$i] !== -1 && strlen($categories[$i]) > 0 && strlen($changes[$i]) > 0) {
+            if ((int)$categories[$i] !== -1 && strlen((string)$categories[$i]) > 0 && strlen((string)$changes[$i]) > 0) {
                 $releaseChangelogChangesAttributes[] = [
                     'release_changelog_id'          => $changelog->id,
                     'release_changelog_category_id' => $categories[$i],
-                    'ticket_id'                     => is_null($tickets[$i]) ? null : intval(str_replace('#', '', $tickets[$i])),
+                    'ticket_id'                     => is_null($tickets[$i]) ? null : intval(str_replace('#', '', (string)$tickets[$i])),
                     'change'                        => $changes[$i],
                 ];
             }
         }
+
         ReleaseChangelogChange::insert($releaseChangelogChangesAttributes);
 
         $changelog->load('changes');
-
 
         $release->version   = $request->get('version');
         $release->title     = $request->get('title', '') ?? '';
@@ -97,7 +94,7 @@ class ReleaseController extends Controller
      *
      * @return Factory|View
      */
-    public function new()
+    public function new(): View
     {
         return view('admin.release.edit', [
             'categories' => ReleaseChangelogCategory::all(),
@@ -105,11 +102,9 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Release $release
      * @return Factory|View
      */
-    public function edit(Request $request, Release $release)
+    public function edit(Request $request, Release $release): View
     {
         return view('admin.release.edit', [
             'release'    => $release,
@@ -118,9 +113,8 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param ReleaseFormRequest $request
-     * @param Release            $release
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(ReleaseFormRequest $request, Release $release)
@@ -136,11 +130,9 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @param ReleaseFormRequest $request
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(ReleaseFormRequest $request)
+    public function savenew(ReleaseFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $release = $this->store($request);
@@ -153,19 +145,16 @@ class ReleaseController extends Controller
 
     /**
      * Handles the viewing of a collection of items in a table.
-     *
-     * @return Factory
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.release.list', ['models' => Release::orderBy('id', 'desc')->get()]);
     }
 
     /**
-     * @param Release $release
      * @return Factory|View
      */
-    public function view(Release $release)
+    public function view(Release $release): View
     {
         return view('release.view', ['release' => $release]);
     }

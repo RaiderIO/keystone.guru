@@ -13,10 +13,10 @@
  */
 // By default, show it if we're not mobile, but allow overrides
 $pullsSidebarState      = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState           = $defaultState ?? ($isMobile ? 0 : $pullsSidebarState);
+$defaultState           ??= $isMobile ? 0 : $pullsSidebarState;
 $shouldShowPullsSidebar = $defaultState === 1;
-$hideOnMove             = $hideOnMove ?? $isMobile;
-$showAds                = $showAds ?? true;
+$hideOnMove             ??= $isMobile;
+$showAds                ??= true;
 ?>
 @include('common.general.inline', ['path' => 'common/maps/killzonessidebar', 'options' => [
     'stateCookie' => 'pulls_sidebar_state',

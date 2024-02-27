@@ -13,26 +13,13 @@ use Illuminate\Support\Collection;
 
 class SpellFilter implements CombatLogParserInterface
 {
-    private Collection $resultEvents;
+    private readonly Collection $spellsToTrack;
 
-    private Collection $spellsToTrack;
-
-    /**
-     * @param Collection $resultEvents
-     */
-    public function __construct(Collection $resultEvents)
+    public function __construct(private readonly Collection $resultEvents)
     {
-        $this->resultEvents = $resultEvents;
-
         $this->spellsToTrack = Spell::where('selectable', true)->get()->pluck('id');
     }
 
-    /**
-     * @param BaseEvent $combatLogEvent
-     * @param int       $lineNr
-     *
-     * @return bool
-     */
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {

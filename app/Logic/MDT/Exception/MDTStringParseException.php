@@ -8,13 +8,13 @@
 
 namespace App\Logic\MDT\Exception;
 
+use Exception;
 
 /**
- * @package App\Logic\MDT\Exception
  * @author Wouter
+ *
  * @since 11/11/2023
  */
-class MDTStringParseException extends \Exception
+class MDTStringParseException extends Exception
 {
-
 }

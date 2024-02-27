@@ -7,7 +7,7 @@ use App\Logging\StructuredLogging;
 class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements CreateRouteDungeonRouteServiceLoggingInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCreateRouteBodyStart(string $combatLogFilePath): void
     {
@@ -15,7 +15,7 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCreateRouteBodyEnemyEngagedInvalidNpcId(int $npcId): void
     {
@@ -23,7 +23,7 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCreateRouteBodyEnemyKilledInvalidNpcId(int $npcId): void
     {
@@ -31,7 +31,7 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCreateRouteBodyEnd(): void
     {
@@ -39,7 +39,7 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function saveChallengeModeRunUnableToFindFloor(int $uiMapId): void
     {
@@ -47,7 +47,7 @@ class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function generateMapIconsUnableToFindFloor(string $uniqueId): void
     {

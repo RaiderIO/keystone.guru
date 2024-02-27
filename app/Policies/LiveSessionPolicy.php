@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\LiveSession;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class LiveSessionPolicy
@@ -12,12 +12,8 @@ class LiveSessionPolicy
 
     /**
      * Determine whether the user can create a tag.
-     *
-     * @param User $user
-     * @param LiveSession $liveSession
-     * @return bool
      */
-    public function view(User $user, LiveSession $liveSession)
+    public function view(User $user, LiveSession $liveSession): bool
     {
         return !$liveSession->isExpired();
     }

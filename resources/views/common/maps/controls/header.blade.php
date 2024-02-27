@@ -10,8 +10,8 @@
  * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
  * @var $edit bool
  */
-$echo        = $echo ?? false;
-$mayUserEdit = optional($dungeonroute)->mayUserEdit(Auth::user()) ?? false;
+$echo        ??= false;
+$mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 ?>
 <nav id="map_header"

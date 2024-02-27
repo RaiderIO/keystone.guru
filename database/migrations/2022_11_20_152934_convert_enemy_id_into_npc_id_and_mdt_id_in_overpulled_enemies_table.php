@@ -1,17 +1,12 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class ConvertEnemyIdIntoNpcIdAndMdtIdInOverpulledEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         DB::delete('
             DELETE `overpulled_enemies`.*
@@ -30,14 +25,12 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInOverpulledEnemiesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         DB::update('
             UPDATE `overpulled_enemies`
                 SET `overpulled_enemies`.`npc_id` = null, `overpulled_enemies`.`mdt_id` = null;
         ');
     }
-}
+};

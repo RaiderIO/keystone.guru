@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int $id
- * @property string $type
- *
+ * @property int              $id
+ * @property string           $type
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
@@ -19,19 +18,29 @@ class NpcType extends CacheModel
 {
     use SeederModel;
 
-    const ABERRATION    = 1;
-    const BEAST         = 2;
-    const CRITTER       = 3;
-    const DEMON         = 4;
-    const DRAGONKIN     = 5;
-    const ELEMENTAL     = 6;
-    const GIANT         = 7;
-    const HUMANOID      = 8;
-    const MECHANICAL    = 9;
-    const UNDEAD        = 10;
-    const UNCATEGORIZED = 11;
+    public const ABERRATION = 1;
 
-    const ALL = [
+    public const BEAST = 2;
+
+    public const CRITTER = 3;
+
+    public const DEMON = 4;
+
+    public const DRAGONKIN = 5;
+
+    public const ELEMENTAL = 6;
+
+    public const GIANT = 7;
+
+    public const HUMANOID = 8;
+
+    public const MECHANICAL = 9;
+
+    public const UNDEAD = 10;
+
+    public const UNCATEGORIZED = 11;
+
+    public const ALL = [
         'Aberration'    => self::ABERRATION,
         'Beast'         => self::BEAST,
         'Critter'       => self::CRITTER,
@@ -46,11 +55,9 @@ class NpcType extends CacheModel
     ];
 
     protected $fillable = ['id', 'type'];
+
     public $timestamps = false;
 
-    /**
-     * @return string
-     */
     public function getTypeKeyAttribute(): string
     {
         return strtolower($this->type);
@@ -58,8 +65,6 @@ class NpcType extends CacheModel
 
     /**
      * Gets all derived NPCs from this type.
-     *
-     * @return HasMany
      */
     public function npcs(): HasMany
     {

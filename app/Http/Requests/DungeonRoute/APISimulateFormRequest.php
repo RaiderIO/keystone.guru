@@ -9,10 +9,8 @@ class APISimulateFormRequest extends DungeonRouteFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'key_level'                      => 'required|int|max:40',

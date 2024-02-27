@@ -18,19 +18,15 @@ trait ListsBrushlines
 {
     /**
      * Lists all brushlines on a specific floor of a dungeon route.
-     *
-     * @param $floorId
-     * @param DungeonRoute|null $dungeonRoute
-     * @return Collection
      */
-    function listBrushlines($floorId, ?DungeonRoute $dungeonRoute = null): Collection
+    public function listBrushlines($floorId, ?DungeonRoute $dungeonRoute = null): Collection
     {
         try {
             $result = Brushline::with('polyline')
                 ->where('dungeon_route_id', $dungeonRoute->id)
                 ->where('floor_id', $floorId)
                 ->get();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

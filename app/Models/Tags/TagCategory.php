@@ -19,10 +19,11 @@ class TagCategory extends Model
 
     public $timestamps = false;
 
-    const DUNGEON_ROUTE_PERSONAL = 'dungeon_route_personal';
-    const DUNGEON_ROUTE_TEAM     = 'dungeon_route_team';
+    public const DUNGEON_ROUTE_PERSONAL = 'dungeon_route_personal';
 
-    const ALL = [
+    public const DUNGEON_ROUTE_TEAM = 'dungeon_route_team';
+
+    public const ALL = [
         self::DUNGEON_ROUTE_PERSONAL => 1,
         self::DUNGEON_ROUTE_TEAM     => 2,
     ];
@@ -31,9 +32,8 @@ class TagCategory extends Model
 
     /**
      * https://stackoverflow.com/a/34485411/771270
-     * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'category';
     }

@@ -26,23 +26,19 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
     }
 
     /**
-     * @param DungeonFloorSwitchMarkerFormRequest $request
-     * @param MappingVersion                      $mappingVersion
-     * @param DungeonFloorSwitchMarker|null       $dungeonFloorSwitchMarker
      * @return DungeonFloorSwitchMarker|Model
+     *
      * @throws Throwable
      */
     public function store(
         DungeonFloorSwitchMarkerFormRequest $request,
         MappingVersion                      $mappingVersion,
-        DungeonFloorSwitchMarker            $dungeonFloorSwitchMarker = null
+        ?DungeonFloorSwitchMarker           $dungeonFloorSwitchMarker = null
     ): DungeonFloorSwitchMarker {
         return $this->storeModel($mappingVersion, $request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }
 
     /**
-     * @param Request                  $request
-     * @param DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
      * @return ResponseFactory|Response
      */
     public function delete(Request $request, DungeonFloorSwitchMarker $dungeonFloorSwitchMarker)
@@ -57,8 +53,9 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($dungeonFloorSwitchMarker, null);
             }
+
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

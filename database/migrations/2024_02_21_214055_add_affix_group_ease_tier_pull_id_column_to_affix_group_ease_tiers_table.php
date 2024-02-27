@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAffixGroupEaseTierPullIdColumnToAffixGroupEaseTiersTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('affix_group_ease_tiers', function (Blueprint $table) {
             // These indices are not necessary
@@ -23,10 +20,8 @@ class AddAffixGroupEaseTierPullIdColumnToAffixGroupEaseTiersTable extends Migrat
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('affix_group_ease_tiers', function (Blueprint $table) {
             $table->renameColumn('affix_group_ease_tier_pull_id', 'subcreation_ease_tier_pull_id');
@@ -34,4 +29,4 @@ class AddAffixGroupEaseTierPullIdColumnToAffixGroupEaseTiersTable extends Migrat
             $table->index(['affix_group_id']);
         });
     }
-}
+};

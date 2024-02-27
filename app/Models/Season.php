@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Log;
  * @property int                     $affix_group_count
  * @property int                     $start_affix_group_index The index of the affix that was the first affix to be available upon season start
  * @property string                  $name Dynamic attribute
- *
  * @property Expansion               $expansion
  * @property Collection|AffixGroup[] $affixgroups
  * @property Collection|Dungeon[]    $dungeons
@@ -35,62 +34,45 @@ use Illuminate\Support\Facades\Log;
  */
 class Season extends CacheModel
 {
-    use SeederModel;
     use HasStart;
+    use SeederModel;
 
-    protected $fillable   = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count', 'start_affix_group_index'];
-    public    $with       = ['expansion', 'affixgroups', 'dungeons'];
-    public    $timestamps = false;
+    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count', 'start_affix_group_index'];
+
+    public $with = ['expansion', 'affixgroups', 'dungeons'];
+
+    public $timestamps = false;
 
     protected $appends = ['name'];
 
-    /** @var boolean|null Cache for if we're a timewalking season or not */
+    /** @var bool|null Cache for if we're a timewalking season or not */
     private ?bool $isTimewalkingSeason = null;
 
-    /**
-     * @return string
-     */
     public function getNameAttribute(): string
     {
         return __('seasons.name', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function affixgroups(): HasMany
     {
         return $this->hasMany(AffixGroup::class);
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');
     }
 
-    /**
-     * @return HasMany
-     */
     public function seasondungeons(): HasMany
     {
         return $this->hasMany(SeasonDungeon::class);
     }
 
-    /**
-     * @param Dungeon $dungeon
-     * @return bool
-     */
     public function hasDungeon(Dungeon $dungeon): bool
     {
         return $this->seasondungeons()->where('dungeon_id', $dungeon->id)->exists();
@@ -98,8 +80,6 @@ class Season extends CacheModel
 
     /**
      * Get a list of unique affixes found in this season.
-     *
-     * @return Collection
      */
     public function getFeaturedAffixes(): Collection
     {
@@ -114,8 +94,6 @@ class Season extends CacheModel
 
     /**
      * Get the amount of weeks that have passed since the start of the M+ season, on a specific date.
-     * @param Carbon $date
-     * @return int
      */
     public function getWeeksSinceStartAt(Carbon $date): int
     {
@@ -131,7 +109,6 @@ class Season extends CacheModel
     /**
      * Get the amount of full iterations of the entire list of affix groups that this season has done, since the start
      * of the season.
-     * @return int
      */
     public function getAffixGroupIterations(): int
     {
@@ -140,9 +117,6 @@ class Season extends CacheModel
 
     /**
      * Get the amount of full iterations of the entire list of affix groups
-     *
-     * @param Carbon $date
-     * @return int
      */
     public function getAffixGroupIterationsAt(Carbon $date): int
     {
@@ -155,20 +129,18 @@ class Season extends CacheModel
     /**
      * Get the affix group that is currently active in the region's timezone.
      *
-     * @param GameServerRegion $region
-     * @return AffixGroup|null
      * @throws Exception
      */
     public function getCurrentAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now(), $region);
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
                 'region'    => $region->short,
             ]);
-            throw $ex;
+            throw $exception;
         }
 
         return $result;
@@ -177,20 +149,18 @@ class Season extends CacheModel
     /**
      * Get the affix group that will be active next week in the region's timezone.
      *
-     * @param GameServerRegion $region
-     * @return AffixGroup|null
      * @throws Exception
      */
     public function getNextAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addWeek(), $region);
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
                 'region'    => $region->short,
             ]);
-            throw $ex;
+            throw $exception;
         }
 
         return $result;
@@ -199,16 +169,15 @@ class Season extends CacheModel
     /**
      * Get the affix group that is currently active in the user's timezone (if user timezone was set).
      *
-     * @return AffixGroup|null
      * @throws Exception
      */
     public function getCurrentAffixGroup(): ?AffixGroup
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now(), GameServerRegion::getUserOrDefaultRegion());
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
             ]);
             throw new Exception('Error getting current affix group');
         }
@@ -219,16 +188,15 @@ class Season extends CacheModel
     /**
      * Get the affix group that will be active in the user's timezone next week (if user timezone was set).
      *
-     * @return AffixGroup|null
      * @throws Exception
      */
     public function getNextAffixGroup(): ?AffixGroup
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), GameServerRegion::getUserOrDefaultRegion());
-        } catch (Exception $ex) {
+        } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
-                'exception' => $ex,
+                'exception' => $exception,
             ]);
             throw new Exception('Error getting current affix group');
         }
@@ -236,13 +204,12 @@ class Season extends CacheModel
         return $result;
     }
 
-
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param Carbon           $date The date at which you want to know the affix group.
-     * @param GameServerRegion $region
+     * @param Carbon $date The date at which you want to know the affix group.
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
+     *
      * @throws Exception
      */
     public function getAffixGroupAt(Carbon $date, GameServerRegion $region): ?AffixGroup
@@ -268,8 +235,6 @@ class Season extends CacheModel
     }
 
     /**
-     * @param AffixGroup $affixGroup
-     * @return int
      * @throws Exception
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
@@ -278,16 +243,14 @@ class Season extends CacheModel
         $startIndex      = $this->affixgroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );
-        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(function (AffixGroup $affixGroupCandidate) use ($affixGroup) {
-            return $affixGroupCandidate->id === $affixGroup->id;
-        })->first());
+        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixgroups->count()) % $this->presets + 1 : 0;
     }
 
     /**
      * Get the current preset (if any) at a specific date.
-     * @param Carbon $date
+     *
      * @return int The preset at the passed date.
      */
     public function getPresetAtDate(Carbon $date): int
@@ -296,9 +259,6 @@ class Season extends CacheModel
         return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets : 0;
     }
 
-    /**
-     * @return bool
-     */
     private function hasTimewalkingEvent(): bool
     {
         if ($this->isTimewalkingSeason !== null) {

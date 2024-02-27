@@ -7,8 +7,9 @@ use Illuminate\Console\Command;
 
 /**
  * Class Aggregate
- * @package App\Console\Commands\Localization
+ *
  * @author Wouter
+ *
  * @since 16/02/2023
  */
 class Aggregate extends Command
@@ -39,10 +40,8 @@ class Aggregate extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle(MetricServiceInterface $metricService)
+    public function handle(MetricServiceInterface $metricService): int
     {
         if ($metricService->aggregateMetrics()) {
             $this->info('Successfully aggregated metrics');

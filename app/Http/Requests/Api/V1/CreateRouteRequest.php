@@ -8,17 +8,12 @@ use App\Models\Floor\Floor;
 use App\Models\Spell;
 use App\Rules\CreateRouteNpcChronologicalRule;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
 class CreateRouteRequest extends APIFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -27,8 +22,6 @@ class CreateRouteRequest extends APIFormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

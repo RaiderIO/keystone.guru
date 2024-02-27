@@ -10,46 +10,34 @@ namespace App\Logic\Datatables;
 
 use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
-    /**  @var Request */
-    protected Request $request;
-
-    /**  @var Builder */
     protected Builder $builder;
 
     /** @var DatatablesColumnHandler[] */
     protected array $columnHandlers;
 
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request        = $request;
         $this->columnHandlers = [];
     }
 
-    /**
-     * @return Request
-     */
     public function getRequest(): Request
     {
         return $this->request;
     }
 
-    /**
-     * @return Builder
-     */
     public function getBuilder(): Builder
     {
         return $this->builder;
     }
 
     /**
-     * @param Builder $builder
-     *
      * @return $this
      */
     public function setBuilder(Builder $builder): DatatablesHandler
@@ -61,7 +49,6 @@ abstract class DatatablesHandler
 
     /**
      * @param DatatablesColumnHandler|array $dtColumnHandlers
-     *
      * @return $this
      */
     public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
@@ -80,7 +67,8 @@ abstract class DatatablesHandler
 
     /**
      * @return $this
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function applyRequestToBuilder(): DatatablesHandler
     {
@@ -89,8 +77,7 @@ abstract class DatatablesHandler
         $this->builder->limit((int)$this->request->get('length'));
 
         // For any custom column handlers, handle their wishes inside a single where
-        $this->builder->where(function (Builder $subBuilder)
-        {
+        $this->builder->where(function (Builder $subBuilder) {
             foreach ($this->columnHandlers as $columnHandler) {
                 $columnHandler->applyToBuilder($subBuilder);
             }
@@ -113,9 +100,6 @@ abstract class DatatablesHandler
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getResult(): array
     {
         $isDev = config('app.env') !== 'production';
@@ -148,7 +132,7 @@ abstract class DatatablesHandler
         return $result;
     }
 
-    protected abstract function calculateRecordsTotal(): int;
+    abstract protected function calculateRecordsTotal(): int;
 
-    protected abstract function calculateRecordsFiltered(): ?int;
+    abstract protected function calculateRecordsFiltered(): ?int;
 }

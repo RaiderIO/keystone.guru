@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\Traits;
 
 use App\Models\Mapping\MappingChangeLog;
@@ -13,7 +12,7 @@ trait ChangesMapping
     /**
      * @param Model|MappingModelInterface|null $beforeModel
      * @param Model|MappingModelInterface|null $afterModel
-     * @return void
+     *
      * @throws Exception
      */
     public function mappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): void
@@ -23,9 +22,9 @@ trait ChangesMapping
         }
 
         (new MappingChangeLog([
-            'dungeon_id'   => optional($beforeModel)->getDungeonId() ?? $afterModel->getDungeonId(),
-            'model_id'     => optional($beforeModel)->id ?? $afterModel->id,
-            'model_class'  => get_class($beforeModel ?? $afterModel),
+            'dungeon_id'   => $beforeModel?->getDungeonId() ?? $afterModel->getDungeonId(),
+            'model_id'     => $beforeModel?->id ?? $afterModel->id,
+            'model_class'  => ($beforeModel ?? $afterModel)::class,
             'before_model' => $beforeModel !== null ? json_encode($beforeModel->toArray()) : null,
             'after_model'  => $afterModel !== null ? json_encode($afterModel->toArray()) : null,
         ]))->save();

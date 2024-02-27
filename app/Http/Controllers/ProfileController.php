@@ -9,7 +9,7 @@ use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
-use App\User;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -25,59 +25,46 @@ use Session;
 class ProfileController extends Controller
 {
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
-    public function edit(Request $request)
+    public function edit(Request $request): \Illuminate\View\View
     {
         return view('profile.edit');
     }
 
     /**
-     * @param Request $request
-     * @param User $user
      * @return Application|Factory|View
      */
-    public function view(Request $request, User $user)
+    public function view(Request $request, User $user): \Illuminate\View\View
     {
         return view('profile.view', ['user' => $user]);
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function routes(Request $request)
+    public function routes(Request $request): RedirectResponse
     {
         return redirect()->route('home');
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
-    public function favorites(Request $request)
+    public function favorites(Request $request): \Illuminate\View\View
     {
         return view('profile.favorites');
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
-    public function tags(Request $request)
+    public function tags(Request $request): \Illuminate\View\View
     {
         return view('profile.tags');
     }
 
     /**
-     * @param Request $request
-     * @param User $user
-     * @param EchoServerHttpApiServiceInterface $echoServerHttpApiService
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService)
+    public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
     {
         // Allow username change once!
         if ($user->isOAuth()) {
@@ -93,6 +80,7 @@ class ProfileController extends Controller
         else {
             $user->email = $request->get('email');
         }
+
         $user->theme                 = $request->get('theme');
         $user->echo_color            = $request->get('echo_color', randomHexColor());
         $user->echo_anonymous        = $request->get('echo_anonymous', false);
@@ -134,11 +122,11 @@ class ProfileController extends Controller
                         $context = null;
 
                         // If it's a route edit page
-                        if (strpos($name, 'route-edit') !== false) {
+                        if (str_contains($name, 'route-edit')) {
                             $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
                             /** @var DungeonRoute $context */
                             $context = DungeonRoute::where('public_key', $routeKey)->first();
-                        } else if (strpos($name, 'live-session') !== false) {
+                        } else if (str_contains($name, 'live-session')) {
                             $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
                             /** @var LiveSession $context */
                             $context = LiveSession::where('public_key', $routeKey)->first();
@@ -171,12 +159,7 @@ class ProfileController extends Controller
         return redirect()->route('profile.edit');
     }
 
-    /**
-     * @param Request $request
-     * @param User $user
-     * @return RedirectResponse
-     */
-    public function updatePrivacy(Request $request, User $user)
+    public function updatePrivacy(Request $request, User $user): RedirectResponse
     {
         $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
 
@@ -190,10 +173,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
-    public function changepassword(Request $request)
+    public function changepassword(Request $request): \Illuminate\View\View
     {
         $currentPw          = $request->get('current_password');
         $newPassword        = $request->get('new_password');
@@ -229,10 +211,9 @@ class ProfileController extends Controller
     /**
      * Creates a tag from the tag manager
      *
-     * @param TagFormRequest $request
      * @return Application|Factory|View
      */
-    public function createtag(TagFormRequest $request)
+    public function createtag(TagFormRequest $request): \Illuminate\View\View
     {
         $error = [];
 
@@ -254,20 +235,17 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Application|Factory|View
      */
-    public function list(Request $request)
+    public function list(Request $request): \Illuminate\View\View
     {
         return view('profile.list');
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(Request $request)
+    public function delete(Request $request): RedirectResponse
     {
         if (Auth::getUser()->hasRole('admin')) {
             throw new Exception(__('controller.profile.flash.admins_cannot_delete_themselves'));
@@ -277,7 +255,7 @@ class ProfileController extends Controller
             User::findOrFail(Auth::id())->delete();
             Auth::logout();
             Session::flash('status', __('controller.profile.flash.account_deleted_successfully'));
-        } catch (Exception $e) {
+        } catch (Exception) {
             Session::flash('warning', __('controller.profile.flash.error_deleting_account'));
         }
 

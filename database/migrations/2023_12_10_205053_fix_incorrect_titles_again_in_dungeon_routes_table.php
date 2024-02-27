@@ -7,14 +7,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class FixIncorrectTitlesAgainInDungeonRoutesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         $output = new ConsoleOutput();
         DungeonRoute::chunk(100, function (Collection $dungeonRoutes) use ($output) {
@@ -32,13 +29,11 @@ class FixIncorrectTitlesAgainInDungeonRoutesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             //
         });
     }
-}
+};

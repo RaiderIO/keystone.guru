@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\Npc\NpcEnemyForcesFormRequest;
 use App\Models\Npc;
 use App\Models\Npc\NpcEnemyForces;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Request;
 
 class NpcEnemyForcesController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Npc $npc
-     * @param NpcEnemyForces $npcEnemyForces
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
-    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
+    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
     {
         return view('admin.npcenemyforces.edit', [
             'npc'            => $npc,
@@ -24,8 +23,7 @@ class NpcEnemyForcesController extends Controller
         ]);
     }
 
-
-    public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
+    public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
     {
         $npcEnemyForces->update($request->validated());
 

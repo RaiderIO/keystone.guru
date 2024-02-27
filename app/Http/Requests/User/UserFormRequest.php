@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\User;
 
-use App\Models\Dungeon;
-use App\Models\GameVersion\GameVersion;
-use App\User;
+use App\Models\User;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -13,8 +11,6 @@ class UserFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -23,8 +19,6 @@ class UserFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

@@ -3,34 +3,23 @@
 namespace App\Events\Model;
 
 use App\Events\ContextEvent;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 
 class ModelDeletedEvent extends ContextEvent
 {
-    /** @var int $modelId */
     protected int $modelId;
 
-    /** @var string $modelClass */
     protected string $modelClass;
 
-    /** @var string $modelName */
-    private string $modelName;
+    private readonly string $modelName;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param $context Model
-     * @param $user User
-     * @param $model Model
-     * @return void
-     */
     public function __construct(Model $context, User $user, Model $model)
     {
         // Don't save Model here because serialization will fail due to object being deleted
         $this->modelId    = $model->getRouteKey();
-        $this->modelClass = get_class($model);
+        $this->modelClass = $model::class;
         $this->modelName  = strtolower((new ReflectionClass($model))->getShortName());
         parent::__construct($context, $user);
     }

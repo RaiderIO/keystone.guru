@@ -5,38 +5,30 @@ namespace App\Jobs;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class ProcessRouteFloorThumbnailCustom extends ProcessRouteFloorThumbnail
 {
-    private DungeonRouteThumbnailJob $dungeonRouteThumbnailJob;
-
     /**
      * Create a new job instance.
-     *
-     * @param ThumbnailServiceInterface $thumbnailService
-     * @param DungeonRouteThumbnailJob  $dungeonRouteThumbnailJob
-     * @param DungeonRoute              $dungeonRoute
-     * @param int                       $floorIndex
-     * @param int                       $attempts
      */
     public function __construct(
-        ThumbnailServiceInterface $thumbnailService,
-        DungeonRouteThumbnailJob  $dungeonRouteThumbnailJob,
-        DungeonRoute              $dungeonRoute,
-        int                       $floorIndex,
-        int                       $attempts = 0
+        ThumbnailServiceInterface                 $thumbnailService,
+        private readonly DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
+        DungeonRoute                              $dungeonRoute,
+        int                                       $floorIndex,
+        int                                       $attempts = 0
     ) {
         parent::__construct($thumbnailService, $dungeonRoute, $floorIndex, $attempts);
 
-        $this->queue                    = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
-        $this->dungeonRouteThumbnailJob = $dungeonRouteThumbnailJob;
+        $this->queue = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         Log::channel('scheduler')->info(
             sprintf(

@@ -26,17 +26,16 @@ use Illuminate\Support\Collection;
  * @property string|null        $color_animated
  * @property string             $label
  * @property string             $vertices_json
- *
  * @property Floor              $floor
  * @property Collection|Enemy[] $enemies
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface, ConvertsVerticesInterface
+class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
-    use SeederModel;
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
+    use SeederModel;
 
     public $timestamps = false;
 
@@ -62,33 +61,22 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
         'floor_id'           => 'integer',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
     }
 
     /**
-     * @param string $seasonalType
-     *
      * @return Collection|Enemy[]
      */
     public function getEnemiesWithSeasonalType(string $seasonalType): Collection
@@ -96,11 +84,8 @@ class EnemyPack extends CacheModel implements MappingModelInterface, MappingMode
         return $this->enemies()->where('seasonal_type', $seasonalType)->get();
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
-        return optional($this->floor)->dungeon_id ?? null;
+        return $this->floor?->dungeon_id ?? null;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Logging;
 use App\Logic\Utils\Stopwatch;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
+use Monolog\Level;
 use Monolog\Logger;
 
 class StructuredLogging implements StructuredLoggingInterface
@@ -12,7 +13,7 @@ class StructuredLogging implements StructuredLoggingInterface
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
 
-    /** @var array Upon calling begin() or end(), this array is a flattened version of $groupedContext to make it quicker to write logs to disk */
+    /** @var array Upon calling begin() or end(), this array is a flattened version of to make it quicker to write logs to disk */
     private array $cachedContext = [];
 
     private ?string $channel = null;
@@ -27,41 +28,24 @@ class StructuredLogging implements StructuredLoggingInterface
         }
     }
 
-
-    /**
-     * @param string $key
-     * @param array  $context
-     * @return void
-     */
-    public function addContext(string $key, ...$context): void
+    public function addContext(string $key, array ...$context): void
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
-        $this->groupedContexts[$key] = call_user_func_array('array_merge', $context);
-        $this->cachedContext         = call_user_func_array('array_merge', $this->groupedContexts);
+        $this->groupedContexts[$key] = array_merge(...$context);
+        $this->cachedContext         = array_merge(...$this->groupedContexts);
     }
 
-    /**
-     * @param string $key
-     * @return void
-     */
     public function removeContext(string $key): void
     {
         unset($this->groupedContexts[$key]);
-        $this->cachedContext = call_user_func_array('array_merge', $this->groupedContexts);
+        $this->cachedContext = array_merge(...$this->groupedContexts);
     }
 
-    /**
-     * @return string|null
-     */
     protected function getChannel(): ?string
     {
         return $this->channel;
     }
 
-    /**
-     * @param string|null $channel
-     * @return StructuredLogging
-     */
     protected function setChannel(?string $channel): StructuredLogging
     {
         $this->channel = $channel;
@@ -69,42 +53,33 @@ class StructuredLogging implements StructuredLoggingInterface
         return $this;
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function start(string $functionName, array $context = []): void
     {
         $targetKey = str_replace('start', '', strtolower($functionName));
         if (isset($this->groupedContexts[$targetKey])) {
             $this->log(
-                Logger::ERROR,
+                Level::Error->toRFC5424Level(),
                 sprintf('%s: Unable to start a structured log that was already started!', __METHOD__),
                 array_merge(['targetKey' => $targetKey], $context)
             );
         }
+
         $this->addContext($targetKey, $context);
         Stopwatch::start($targetKey);
 
-        $this->log(Logger::INFO, $functionName, $context);
+        $this->log(Level::Info->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function end(string $functionName, array $context = []): void
     {
         $targetKey = str_replace('end', '', strtolower($functionName));
 
-        $this->log(Logger::INFO, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
+        $this->log(Level::Info->toRFC5424Level(), $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
 
         if (!isset($this->groupedContexts[$targetKey])) {
             $this->log(
-                Logger::ERROR,
-                sprintf('%s: Unable to end a structured log that wasn\'t started!', __METHOD__),
+                Level::Error->toRFC5424Level(),
+                sprintf("%s: Unable to end a structured log that wasn't started!", __METHOD__),
                 array_merge(['targetKey' => $targetKey], $context)
             );
         }
@@ -112,85 +87,44 @@ class StructuredLogging implements StructuredLoggingInterface
         $this->removeContext($targetKey);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function debug(string $functionName, array $context = []): void
     {
-        $this->log(Logger::DEBUG, $functionName, $context);
+        $this->log(Level::Debug->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function notice(string $functionName, array $context = []): void
     {
-        $this->log(Logger::NOTICE, $functionName, $context);
+        $this->log(Level::Notice->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function info(string $functionName, array $context = []): void
     {
-        $this->log(Logger::INFO, $functionName, $context);
+        $this->log(Level::Info->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function warning(string $functionName, array $context = []): void
     {
-        $this->log(Logger::WARNING, $functionName, $context);
+        $this->log(Level::Warning->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function error(string $functionName, array $context = []): void
     {
-        $this->log(Logger::ERROR, $functionName, $context);
+        $this->log(Level::Error->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function critical(string $functionName, array $context = []): void
     {
-        $this->log(Logger::CRITICAL, $functionName, $context);
+        $this->log(Level::Critical->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     protected function emergency(string $functionName, array $context = []): void
     {
-        $this->log(Logger::EMERGENCY, $functionName, $context);
+        $this->log(Level::Emergency->toRFC5424Level(), $functionName, $context);
     }
 
-    /**
-     * @param int    $level
-     * @param string $functionName
-     * @param array  $context
-     * @return void
-     */
     private function log(int $level, string $functionName, array $context = []): void
     {
-        $levelName = Logger::getLevelName($level);
+        $levelName = Level::from($level)->getName();
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
         $fixedLength  = 7;
         $startPadding = str_repeat(' ', $fixedLength - strlen($levelName));

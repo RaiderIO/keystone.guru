@@ -1,11 +1,10 @@
 <?php
 
-
 namespace App\Service\Reddit;
 
 class RedditApiService implements RedditApiServiceInterface
 {
-    function createPost(string $subreddit, string $subject, string $body): bool
+    public function createPost(string $subreddit, string $subject, string $body): bool
     {
         $ch = curl_init();
 
@@ -37,7 +36,6 @@ class RedditApiService implements RedditApiServiceInterface
          * "scope": "submit"
          * }
          */
-
         $response = json_decode(curl_exec($ch), true);
 
         curl_close($ch);
@@ -75,8 +73,7 @@ class RedditApiService implements RedditApiServiceInterface
         return false;
     }
 
-
-    function sendMessage(string $webhookUrl, string $message, string $username = null): string
+    public function sendMessage(string $webhookUrl, string $message, ?string $username = null): string
     {
         // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord
         $ch = curl_init();
@@ -95,5 +92,4 @@ class RedditApiService implements RedditApiServiceInterface
 
         return $response;
     }
-
 }

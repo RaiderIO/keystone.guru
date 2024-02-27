@@ -10,7 +10,7 @@ use Log;
 
 class DebugInfoContextLogger
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
         $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
 
@@ -29,8 +29,8 @@ class DebugInfoContextLogger
 
         // @TODO use structured logging?
         logger()->debug('DebugInfoContextLogger::handle', [
-            'url'           => $request->url(),
-            'method'        => $request->method(),
+            'url'    => $request->url(),
+            'method' => $request->method(),
         ]);
 
         /** @var Response $response */

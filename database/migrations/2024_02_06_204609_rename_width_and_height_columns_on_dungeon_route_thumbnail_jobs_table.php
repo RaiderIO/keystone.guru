@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameWidthAndHeightColumnsOnDungeonRouteThumbnailJobsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_route_thumbnail_jobs', function (Blueprint $table) {
             $table->renameColumn('width', 'image_width');
@@ -21,14 +18,12 @@ class RenameWidthAndHeightColumnsOnDungeonRouteThumbnailJobsTable extends Migrat
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeon_route_thumbnail_jobs', function (Blueprint $table) {
             $table->renameColumn('image_width', 'width');
             $table->renameColumn('image_height', 'height');
         });
     }
-}
+};

@@ -6,41 +6,26 @@ use PHLAK\SemVer\Exceptions\InvalidVersionException;
 
 class Version extends \PHLAK\SemVer\Version
 {
-    /**
-     * @return int
-     */
     public function getMajor(): int
     {
         return $this->major;
     }
 
-    /**
-     * @return int
-     */
     public function getMinor(): int
     {
         return $this->minor;
     }
 
-    /**
-     * @return int
-     */
     public function getPatch(): int
     {
         return $this->patch;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPreRelease(): ?string
     {
         return $this->preRelease;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBuild(): ?string
     {
         return $this->build;
@@ -52,10 +37,9 @@ class Version extends \PHLAK\SemVer\Version
      * Examples: 'v1', 'v1.2', 'v1-beta.4', 'v1.3+007'
      *
      * @param string $version Version string
-     *
      * @return self This Version object
-     * @throws InvalidVersionException
      *
+     * @throws InvalidVersionException
      */
     public static function parse(string $version): self
     {
@@ -77,5 +61,4 @@ class Version extends \PHLAK\SemVer\Version
 
         return new self($version);
     }
-
 }

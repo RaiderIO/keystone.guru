@@ -17,7 +17,7 @@ interface MapContextServiceInterface
     public function createMapContextDungeonRoute(
         DungeonRoute $dungeonRoute,
         Floor        $floor,
-        string       $mapFacadeStyle = null
+        ?string      $mapFacadeStyle = null
     ): MapContextDungeonRoute;
 
     public function createMapContextLiveSession(

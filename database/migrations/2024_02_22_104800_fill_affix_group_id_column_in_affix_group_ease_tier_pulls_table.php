@@ -5,15 +5,14 @@ use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Migrations\Migration;
 
-class FillAffixGroupIdColumnInAffixGroupEaseTierPullsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
-     * @return void
+     *
      * @throws BindingResolutionException
      */
-    public function up()
+    public function up(): void
     {
         $rows = DB::select('
             SELECT * FROM affix_group_ease_tier_pulls;
@@ -42,14 +41,12 @@ class FillAffixGroupIdColumnInAffixGroupEaseTierPullsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         /** @noinspection SqlWithoutWhere */
         DB::update('
                 UPDATE affix_group_ease_tier_pulls SET affix_group_id = 0;
             ');
     }
-}
+};

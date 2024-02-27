@@ -40,11 +40,11 @@ class CreateGithubRelease extends GithubReleaseCommand
     /**
      * Execute the console command.
      *
-     * @return void
+     *
      * @throws MissingArgumentException
      * @throws Throwable
      */
-    public function handle()
+    public function handle(): void
     {
         $version = $this->argument('version');
         $release = $this->findReleaseByVersion($version);
@@ -61,6 +61,7 @@ class CreateGithubRelease extends GithubReleaseCommand
             foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
                 if ($githubRelease['name'] === $release->version) {
                     $this->error(sprintf('OK Unable to create release for %s; already exists!', $release->version));
+
                     return;
                 }
             }

@@ -8,29 +8,12 @@ use App\Models\NpcClassification;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Str;
 
-class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutputInterface
+class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemyInterface
 {
-    /** @var SimulationCraftRaidEventsOptions */
-    private SimulationCraftRaidEventsOptions $options;
-
-    /** @var Enemy */
-    private Enemy $enemy;
-
-    /** @var int */
-    private int $enemyIndexInPull;
-
-    public function __construct(SimulationCraftRaidEventsOptions $options, Enemy $enemy, int $enemyIndexInPull)
+    public function __construct(private readonly SimulationCraftRaidEventsOptions $options, private readonly Enemy $enemy, private readonly int $enemyIndexInPull)
     {
-        $this->options          = $options;
-        $this->enemy            = $enemy;
-        $this->enemyIndexInPull = $enemyIndexInPull;
     }
 
-    /**
-     * @param SimulationCraftRaidEventsOptions $options
-     * @param Npc $npc
-     * @return int
-     */
     public function calculateHealth(SimulationCraftRaidEventsOptions $options, Npc $npc): int
     {
         return $npc->calculateHealthForKey(
@@ -42,7 +25,7 @@ class RaidEventPullEnemy implements RaidEventPullEnemyInterface, RaidEventOutput
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toString(): string
     {

@@ -1,27 +1,29 @@
 <?php
-$options = $options ?? [];
-$section = $section ?? true;
-$modal = $modal ?? false;
+$options ??= [];
+$section ??= true;
+$modal   ??= false;
 
 // Wrap in section tags of the inline code, otherwise just spit it out right now
-if( $section ) { ?>
+if ($section) { ?>
 @section('scripts')
     @parent
 
     <script>
-        document.addEventListener('DOMContentLoaded', function (event) {
+        document.addEventListener('DOMContentLoaded', function () {
             let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
             if (!code.isActivated()) {
-                <?php
-                /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
-                if( $modal ){ ?>
+                    <?php
+                    /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
+                if ($modal){ ?>
                 $('{{$modal}}').on('shown.bs.modal', function () {
-                    <?php } ?>
+                    <?php }
+                 ?>
                     _inlineManager.activate('{{ $path }}');
-                    <?php if( $modal ){ ?>
+                        <?php if ($modal){ ?>
                 });
-                <?php } ?>
+                <?php }
+                 ?>
             }
         });
     </script>
@@ -30,19 +32,21 @@ if( $section ) { ?>
 <?php } else { ?>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function (event) {
+    document.addEventListener('DOMContentLoaded', function () {
         let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
         if (!code.isActivated()) {
-            <?php
-            /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
-            if( $modal ){ ?>
+                <?php
+                /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
+            if ($modal){ ?>
             $('{{$modal}}').on('shown.bs.modal', function () {
-                <?php } ?>
+                <?php }
+             ?>
                 _inlineManager.activate('{{ $path }}');
-                <?php if( $modal ){ ?>
+                    <?php if ($modal){ ?>
             });
-            <?php } ?>
+            <?php }
+             ?>
         }
     });
 </script>

@@ -8,20 +8,12 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 
 class RaidEventsService implements RaidEventsServiceInterface
 {
-    private CoordinatesServiceInterface $coordinatesService;
-
-    /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     */
-    public function __construct(
-        CoordinatesServiceInterface $coordinatesService
-    )
+    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService)
     {
-        $this->coordinatesService = $coordinatesService;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getRaidEvents(SimulationCraftRaidEventsOptions $options): RaidEventsCollection
     {

@@ -13,25 +13,22 @@ use Illuminate\Support\Facades\Log;
 
 class RefreshEnemyForces implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /** @var int $dungeonRouteId */
-    private int $dungeonRouteId;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
-     *
-     * @param int $dungeonRouteId
      */
-    public function __construct(int $dungeonRouteId)
+    public function __construct(private int $dungeonRouteId)
     {
-        $this->dungeonRouteId = $dungeonRouteId;
     }
 
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $dungeonRoute = DungeonRoute::find($this->dungeonRouteId);
         if ($dungeonRoute) {

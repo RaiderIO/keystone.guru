@@ -7,13 +7,13 @@
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  */
 
-$dungeon          = $dungeon ?? null;
-$cols             = $cols ?? 4;
-$showMore         = $showMore ?? false;
-$loadMore         = $loadMore ?? false;
-$showDungeonImage = $showDungeonImage ?? false;
-$affixgroup       = $affixgroup ?? null;
-$cache            = $cache ?? true;
+$dungeon          ??= null;
+$cols             ??= 4;
+$showMore         ??= false;
+$loadMore         ??= false;
+$showDungeonImage ??= false;
+$affixgroup       ??= null;
+$cache            ??= true;
 ?>
 <div class="discover_panel">
     <div class="row mt-4">

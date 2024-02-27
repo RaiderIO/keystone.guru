@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddHasSeasonsToGameVersionsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('game_versions', function (Blueprint $table) {
             $table->boolean('has_seasons')->default(0)->after('description');
@@ -20,13 +17,11 @@ class AddHasSeasonsToGameVersionsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('game_versions', function (Blueprint $table) {
             $table->dropColumn('has_seasons');
         });
     }
-}
+};

@@ -18,11 +18,9 @@ class EnvironmentalDamageBuilder implements SpecialEventBuilderInterface
         array  $parameters,
         string $rawEvent
     ): SpecialEvent {
-        switch ($combatLogVersion) {
-            case CombatLogVersion::CLASSIC:
-                return new EnvironmentalDamageV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-            default:
-                return new EnvironmentalDamageV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-        }
+        return match ($combatLogVersion) {
+            CombatLogVersion::CLASSIC => new EnvironmentalDamageV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            default => new EnvironmentalDamageV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+        };
     }
 }

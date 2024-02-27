@@ -9,13 +9,7 @@ use Illuminate\Http\Request;
 
 class LiveSessionLegacyController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
-     * @return RedirectResponse
-     */
-    public function view(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession)
+    public function view(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession): RedirectResponse
     {
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -25,14 +19,7 @@ class LiveSessionLegacyController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
-     * @param string $floorIndex
-     * @return RedirectResponse
-     */
-    public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex)
+    public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex): RedirectResponse
     {
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,

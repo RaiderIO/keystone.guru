@@ -10,41 +10,25 @@ use App\Models\MountableArea;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
-class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
+class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 {
-    /** @var CoordinatesServiceInterface */
-    private CoordinatesServiceInterface $coordinatesService;
-
-    /** @var SimulationCraftRaidEventsOptions */
-    private SimulationCraftRaidEventsOptions $options;
-
-    /** @var int */
     private int $pullIndex;
 
-    /** @var bool */
     private bool $bloodLust = false;
 
-    /** @var int */
     private int $delay = 0;
 
     /** @var Collection|RaidEventPullEnemy[] */
     private Collection $raidEventPullEnemies;
 
-    /**
-     * @param CoordinatesServiceInterface      $coordinatesService
-     * @param SimulationCraftRaidEventsOptions $options
-     */
-    public function __construct(
-        CoordinatesServiceInterface      $coordinatesService,
-        SimulationCraftRaidEventsOptions $options
-    ) {
-        $this->coordinatesService = $coordinatesService;
-        $this->options            = $options;
+    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService, private readonly SimulationCraftRaidEventsOptions $options)
+    {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateRaidEventPullEnemies(KillZone $killZone, LatLng $previousKillLocation): RaidEventPullInterface
     {
@@ -69,7 +53,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculateDelay(KillZone $killZone, LatLng $previousKillLocation): float
     {
@@ -92,15 +76,10 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return $result;
     }
 
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB): float
     {
-        if (optional($latLngA->getFloor())->id !== optional($latLngB->getFloor())->id) {
-            throw new \InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
+        if ($latLngA->getFloor()?->id !== $latLngB->getFloor()?->id) {
+            throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
         }
 
         [$mountFactorsAndSpeeds, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
@@ -150,23 +129,12 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return $delayMounted + $delayOnFoot + $delayMountCasts;
     }
 
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     public function calculateDelayBetweenPointsOnDifferentFloors(LatLng $latLngA, LatLng $latLngB): float
     {
         return $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB) +
             $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB);
     }
 
-
-    /**
-     * @param LatLng $latLngA
-     * @param LatLng $latLngB
-     * @return float
-     */
     private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(LatLng $latLngA, LatLng $latLngB): float
     {
         $previousKillFloorClosestDungeonFloorSwitchMarker = $latLngA->getFloor()->findClosestFloorSwitchMarker(
@@ -188,7 +156,7 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self
     {
@@ -263,12 +231,10 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         // then determine if an intersection causes a mount up, or a dismount
         /** @var MountableAreaIntersection[]|Collection $allMountableAreaIntersections */
         $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
-            function (MountableAreaIntersection $foundIntersection) use ($latLngA) {
-                return $this->coordinatesService->distanceBetweenPoints(
-                    $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
-                    $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
-                );
-            })->values();
+            fn(MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
+                $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
+                $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
+            ))->values();
 
         $totalDistance = $this->coordinatesService->distanceBetweenPoints(
             $latLngA->getLng(), $latLngB->getLng(),
@@ -332,39 +298,21 @@ class RaidEventPull implements RaidEventPullInterface, RaidEventOutputInterface
         return [$factorsAndSpeeds, $mountCasts];
     }
 
-    /**
-     * @param float $ingameDistance
-     * @return float
-     */
     public function calculateDelayForDistanceOnFoot(float $ingameDistance): float
     {
         return max(0, $ingameDistance) / config('keystoneguru.character.default_movement_speed_yards_second');
     }
 
-    /**
-     * @param int $mountCasts
-     * @return float
-     */
     public function calculateDelayForMountCasts(int $mountCasts): float
     {
-        return (max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds'));
+        return max(0, $mountCasts) * config('keystoneguru.character.mount_cast_time_seconds');
     }
 
-    /**
-     * @param float $ingameDistance
-     * @param float $factor
-     * @param int   $speed
-     * @return float
-     */
     public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float
     {
         return max(0, $ingameDistance * $factor) / $speed;
     }
 
-
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         $result = sprintf(

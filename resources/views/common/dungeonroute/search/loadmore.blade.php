@@ -1,7 +1,7 @@
 <?php
-$dungeon             = $dungeon ?? null;
+$dungeon             ??= null;
 $hasLoader           = isset($routeLoaderSelector);
-$routeLoaderSelector = $routeLoaderSelector ?? '#category_route_load_more_loader';
+$routeLoaderSelector ??= '#category_route_load_more_loader';
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/searchloadmore', 'options' => [
         'category' => $category,

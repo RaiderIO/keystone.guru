@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDungeonSpeedrunRequiredNpcsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('dungeon_speedrun_required_npcs', function (Blueprint $table) {
             $table->id();
@@ -25,11 +22,9 @@ class CreateDungeonSpeedrunRequiredNpcsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('dungeon_speedrun_required_npcs');
     }
-}
+};

@@ -7,17 +7,11 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 
 class SpellCast extends BaseResultEvent
 {
-    /**
-     * @param AdvancedCombatLogEvent $baseEvent
-     */
     public function __construct(AdvancedCombatLogEvent $baseEvent)
     {
         parent::__construct($baseEvent);
     }
 
-    /**
-     * @return AdvancedCombatLogEvent
-     */
     public function getAdvancedCombatLogEvent(): AdvancedCombatLogEvent
     {
         /** @var AdvancedCombatLogEvent $baseEvent */
@@ -26,9 +20,6 @@ class SpellCast extends BaseResultEvent
         return $baseEvent;
     }
 
-    /**
-     * @return int
-     */
     public function getSpellId(): int
     {
         /** @var Spell $prefix */

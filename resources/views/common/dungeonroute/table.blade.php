@@ -12,8 +12,8 @@ if (!isset($affixgroups)) {
 }
 
 /** @var App\Models\Team|null $team */
-$team      = $team ?? null;
-$favorites = $favorites ?? false;
+$team ??= null;
+$favorites ??= false;
 
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
@@ -58,6 +58,7 @@ if (Auth::check()) {
 @section('scripts')
     @parent
 
+    <!--suppress HtmlDeprecatedAttribute -->
     <script type="text/javascript">
         $(function () {
             let code = _inlineManager.getInlineCode('dungeonroute/table');

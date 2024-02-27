@@ -22,18 +22,15 @@ class AssignMDTIDs extends Command
      *
      * @var string
      */
-    protected $description = 'Assigns MDT IDs to a mapping that doesn\'t have them yet.';
+    protected $description = "Assigns MDT IDs to a mapping that doesn't have them yet.";
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         /** @var Collection|MappingVersion[] $mappingVersions */
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();
-
 
         foreach ($mappingVersions as $mappingVersion) {
             if ($mappingVersion->dungeon->expansion->shortname === Expansion::EXPANSION_WOTLK) {
@@ -45,12 +42,11 @@ class AssignMDTIDs extends Command
                     continue;
                 }
 
-                if ($enemies->filter(function (Enemy $enemy) {
-                    return $enemy->mdt_id > 0;
-                })->isNotEmpty()) {
+                if ($enemies->filter(static fn(Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
                     $this->comment(
                         sprintf('- Skipping dungeon %s - already assigned has assigned MDT IDs', __($mappingVersion->dungeon->name, [], 'en-US'))
                     );
+
                     continue;
                 }
 

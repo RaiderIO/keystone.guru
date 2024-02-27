@@ -18,8 +18,6 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -30,16 +28,13 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
     {
         $this->merge([
             'source_floor_id'                       => (int)$this->source_floor_id === -1 ? null : $this->source_floor_id,
-            'linked_dungeon_floor_switch_marker_id' =>
-                (int)$this->linked_dungeon_floor_switch_marker_id === -1 ? null : $this->linked_dungeon_floor_switch_marker_id,
+            'linked_dungeon_floor_switch_marker_id' => (int)$this->linked_dungeon_floor_switch_marker_id === -1 ? null : $this->linked_dungeon_floor_switch_marker_id,
             'direction'                             => (int)$this->direction === -1 ? null : $this->direction,
         ]);
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

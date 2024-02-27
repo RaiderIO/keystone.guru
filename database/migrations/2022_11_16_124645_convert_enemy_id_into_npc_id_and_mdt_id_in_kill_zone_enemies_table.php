@@ -1,17 +1,12 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class ConvertEnemyIdIntoNpcIdAndMdtIdInKillZoneEnemiesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         // Get rid of all enemies assigned to pulls that have since been deleted
         DB::delete('
@@ -31,14 +26,12 @@ class ConvertEnemyIdIntoNpcIdAndMdtIdInKillZoneEnemiesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         DB::update('
             UPDATE `kill_zone_enemies`
                 SET `kill_zone_enemies`.`npc_id` = null, `kill_zone_enemies`.`mdt_id` = null;
         ');
     }
-}
+};

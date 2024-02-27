@@ -91,8 +91,10 @@ $now    = \Carbon\Carbon::now();
                                 <?php
                             }
                         }
-                        $affixGroupIndex++;
+
+                        ++$affixGroupIndex;
                     }
+
                     // @formatter:on
 
                     ?>

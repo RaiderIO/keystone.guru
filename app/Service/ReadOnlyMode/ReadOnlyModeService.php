@@ -6,19 +6,12 @@ use App\Service\Cache\CacheServiceInterface;
 
 class ReadOnlyModeService implements ReadOnlyModeServiceInterface
 {
-    private CacheServiceInterface $cacheService;
-
-    /**
-     * @param CacheServiceInterface $cacheService
-     */
-    public function __construct(CacheServiceInterface $cacheService)
+    public function __construct(private readonly CacheServiceInterface $cacheService)
     {
-        $this->cacheService = $cacheService;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setReadOnly(bool $readOnly): bool
     {
@@ -26,7 +19,7 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function isReadOnly(): bool
     {

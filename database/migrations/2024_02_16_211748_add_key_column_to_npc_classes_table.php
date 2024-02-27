@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddKeyColumnToNpcClassesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('npc_classes', function (Blueprint $table) {
             $table->string('key')->after('name');
@@ -22,13 +19,11 @@ class AddKeyColumnToNpcClassesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('npc_classes', function (Blueprint $table) {
             $table->dropColumn('key');
         });
     }
-}
+};

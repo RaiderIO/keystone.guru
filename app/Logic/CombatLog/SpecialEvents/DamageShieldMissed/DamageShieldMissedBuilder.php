@@ -11,7 +11,6 @@ use Carbon\Carbon;
 
 class DamageShieldMissedBuilder implements SpecialEventBuilderInterface
 {
-
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,
@@ -19,11 +18,9 @@ class DamageShieldMissedBuilder implements SpecialEventBuilderInterface
         array  $parameters,
         string $rawEvent
     ): SpecialEvent {
-        switch ($combatLogVersion) {
-            case CombatLogVersion::CLASSIC:
-                return new DamageShieldMissedV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-            default:
-                return new DamageShieldMissedV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-        }
+        return match ($combatLogVersion) {
+            CombatLogVersion::CLASSIC => new DamageShieldMissedV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            default => new DamageShieldMissedV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+        };
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\View;
 
 use App\Models\Affix;
@@ -18,11 +17,11 @@ use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
 use App\Models\Spell;
+use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
-use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -46,7 +45,7 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getGlobalViewVariables(bool $useCache = true): array
     {
@@ -87,9 +86,7 @@ class ViewService implements ViewServiceInterface
             $selectableSpellsByCategory = Spell::where('selectable', true)
                 ->get()
                 ->groupBy('category')
-                ->mapWithKeys(function (Collection $spells, string $key) {
-                    return [__($key) => $spells];
-                });
+                ->mapWithKeys(static fn(Collection $spells, string $key) => [__($key) => $spells]);
 
             $appRevision = trim(file_get_contents(base_path('version')));
 
@@ -98,9 +95,7 @@ class ViewService implements ViewServiceInterface
                 'demoRoutes'                      => $demoRoutes,
                 'demoRouteDungeons'               => $demoRouteDungeons,
                 'demoRouteMapping'                => $demoRouteDungeons
-                    ->mapWithKeys(function (Dungeon $dungeon) use ($demoRoutes) {
-                        return [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key];
-                    }),
+                    ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
                 'latestRelease'                   => $latestRelease,
                 'latestReleaseSpotlight'          => $latestReleaseSpotlight,
                 'appVersion'                      => $latestRelease->version,
@@ -148,19 +143,12 @@ class ViewService implements ViewServiceInterface
 
                 // Create route
                 'dungeonExpansions'               => $allDungeonsByExpansionId
-                    ->pluck('expansion_id', 'id')->mapWithKeys(function (int $expansionId, int $dungeonId) use ($allExpansions) {
-                        return [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname];
-                    }),
+                    ->pluck('expansion_id', 'id')->mapWithKeys(static fn(int $expansionId, int $dungeonId) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
                 'allSpeedrunDungeons'             => Dungeon::where('speedrun_enabled', true)->get(),
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl'));
     }
 
-    /**
-     * @param GameServerRegion $gameServerRegion
-     * @param bool             $useCache
-     * @return array
-     */
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
         return $this->cacheService->setCacheEnabled($useCache)->remember(
