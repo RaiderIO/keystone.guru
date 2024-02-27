@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
 use Closure;
 use Debugbar;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DebugBarMessageLogger
 {

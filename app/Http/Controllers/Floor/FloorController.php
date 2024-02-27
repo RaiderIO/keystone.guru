@@ -23,7 +23,6 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     *
      * @throws Exception
      */
     public function store(FloorFormRequest $request, Dungeon $dungeon, ?Floor $floor = null): Floor
@@ -147,7 +146,6 @@ class FloorController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(FloorFormRequest $request, Dungeon $dungeon): RedirectResponse

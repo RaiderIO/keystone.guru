@@ -103,7 +103,6 @@ class DungeonController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(DungeonFormRequest $request): RedirectResponse

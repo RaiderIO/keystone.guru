@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Models\UserReport;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 
 class UserReportController extends Controller
 {

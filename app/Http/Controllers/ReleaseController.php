@@ -130,7 +130,6 @@ class ReleaseController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(ReleaseFormRequest $request): RedirectResponse

@@ -290,7 +290,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function migrateToSeasonalType(
@@ -554,7 +553,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(DungeonRouteFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService, ThumbnailServiceInterface $thumbnailService): RedirectResponse
@@ -573,7 +571,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenewtemporary(DungeonRouteTemporaryFormRequest $request, SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): RedirectResponse
@@ -592,7 +589,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      * @throws InvalidArgumentException
      * @throws Exception

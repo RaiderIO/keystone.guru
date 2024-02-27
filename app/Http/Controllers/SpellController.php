@@ -119,7 +119,6 @@ class SpellController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(SpellFormRequest $request): RedirectResponse

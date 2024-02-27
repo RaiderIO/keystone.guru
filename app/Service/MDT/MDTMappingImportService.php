@@ -360,7 +360,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     *
      * @throws Exception
      */
     private function importEnemyPatrols(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, Collection $savedEnemies): void
@@ -460,7 +459,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     *
      * @throws Exception
      */
     private function importDungeonFloorSwitchMarkers(MappingVersion $currentMappingVersion, MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon): void

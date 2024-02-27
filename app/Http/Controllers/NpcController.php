@@ -248,7 +248,6 @@ class NpcController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(NpcFormRequest $request): RedirectResponse

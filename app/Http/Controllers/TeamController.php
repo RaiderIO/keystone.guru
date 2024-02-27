@@ -110,7 +110,6 @@ class TeamController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function delete(Request $request, Team $team): RedirectResponse
@@ -146,7 +145,6 @@ class TeamController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(TeamFormRequest $request): RedirectResponse

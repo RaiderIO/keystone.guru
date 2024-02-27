@@ -62,7 +62,6 @@ class ProfileController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
@@ -244,7 +243,6 @@ class ProfileController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function delete(Request $request): RedirectResponse

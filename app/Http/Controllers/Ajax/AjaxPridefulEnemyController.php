@@ -19,7 +19,6 @@ use Teapot\StatusCode\Http;
 class AjaxPridefulEnemyController extends Controller
 {
     /**
-     *
      * @throws Exception
      */
     public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): PridefulEnemy

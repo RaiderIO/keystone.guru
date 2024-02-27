@@ -102,7 +102,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
@@ -119,7 +118,6 @@ class AjaxTagController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      * @throws Exception
      */

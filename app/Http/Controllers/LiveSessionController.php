@@ -25,7 +25,6 @@ use Teapot\StatusCode;
 class LiveSessionController extends Controller
 {
     /**
-     *
      * @throws AuthorizationException
      */
     public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse

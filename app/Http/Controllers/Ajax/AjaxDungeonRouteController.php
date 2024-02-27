@@ -440,7 +440,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function store(
@@ -465,7 +464,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute): Response
@@ -484,7 +482,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute): Response
@@ -499,7 +496,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute): Response
@@ -523,7 +519,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team): Response
@@ -608,7 +603,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
@@ -625,7 +619,6 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response

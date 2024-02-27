@@ -68,7 +68,6 @@ class ExpansionController extends Controller
     }
 
     /**
-     *
      * @throws Exception
      */
     public function savenew(ExpansionFormRequest $request): RedirectResponse

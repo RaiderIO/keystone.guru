@@ -27,7 +27,6 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team): Response

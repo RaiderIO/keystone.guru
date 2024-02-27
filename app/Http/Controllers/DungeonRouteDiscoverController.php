@@ -272,7 +272,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -322,7 +321,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function discoverpopular(Expansion $expansion, DiscoverServiceInterface $discoverService): View
@@ -339,7 +337,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function discoverthisweek(Expansion $expansion, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): View
@@ -362,7 +359,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function discovernextweek(Expansion $expansion, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): View
@@ -385,7 +381,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function discovernew(Expansion $expansion, DiscoverServiceInterface $discoverService): View
@@ -405,7 +400,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function discoverdungeonpopular(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService): View
@@ -426,7 +420,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -467,7 +460,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      * @throws Exception
      */
@@ -508,7 +500,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     *
      * @throws AuthorizationException
      */
     public function discoverdungeonnew(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService): View

@@ -15,7 +15,6 @@ use Illuminate\Http\Response;
 class AjaxMetricController extends Controller
 {
     /**
-     *
      * @throws AuthorizationException
      */
     public function store(APIMetricFormRequest $request, MetricServiceInterface $metricService): Response

@@ -18,7 +18,6 @@ class CombatLogEvent extends BaseEvent
     protected Suffix $suffix;
 
     /**
-     *
      * @throws Exception
      */
     public function setParameters(array $parameters): CombatLogEvent
