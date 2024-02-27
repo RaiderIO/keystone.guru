@@ -114,8 +114,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name'    => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'support@keystone.guru'),
+        'name'    => env('MAIL_FROM_NAME', 'Keystone.guru Support'),
     ],
 
     'encryption' => env('MAIL_ENCRYPTION', 'tls'),
