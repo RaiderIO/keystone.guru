@@ -1,4 +1,5 @@
-window._ = require('lodash');
+import _ from 'lodash';
+window._ = _;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -9,7 +10,7 @@ window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 window.Popper = require('popper.js').default;
 
-require('bootstrap');
+import 'bootstrap';
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -28,7 +29,8 @@ import Echo from 'laravel-echo'
  */
 import messages from './messages';
 
-window.io = require('socket.io-client');
+import io from 'socket.io-client';
+window.io = io;
 
 window.startEcho = function () {
     window.Echo = new Echo({
@@ -43,46 +45,76 @@ window.startEcho = function () {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+import axios from 'axios';
+window.axios = axios;
 
-window.datatables = require('datatables');
-window.leaflet = require('leaflet');
-window.leafletdraw = require('leaflet-draw');
+import datatables from 'datatables';
+window.datatables = datatables;
+import leaflet from 'leaflet';
+window.leaflet = leaflet;
+import leafletdraw from 'leaflet-draw';
+window.leafletdraw = leafletdraw;
 // window.leafleteditable = require('leaflet-editable');
-window.leafletcontextmenu = require('leaflet-contextmenu');
-window.GestureHandling = require('leaflet-gesture-handling');
+import leafletcontextmenu from 'leaflet-contextmenu';
+window.leafletcontextmenu = leafletcontextmenu;
+import GestureHandling from 'leaflet-gesture-handling';
+window.GestureHandling = GestureHandling;
 // window.interpolate = require('color-interpolate');
-window.gju = require('geojson-utils');
-window.bootstrapselect = require('bootstrap-select');
-window.Handlebars = require('handlebars');
-window.barrating = require('jquery-bar-rating');
-window.polylinedecorator = require('leaflet-polylinedecorator');
-window.lightCarousel = require('lightslider');
-window.introjs = require('intro.js');
-window.pwstrengthmeter = require('password-strength-meter');
-window.jqueryMousewheel = require('jquery-mousewheel');
-window.Cookies = require('js-cookie');
+import gju from 'geojson-utils';
+window.gju = gju;
+import bootstrapselect from 'bootstrap-select';
+window.bootstrapselect = bootstrapselect;
+import Handlebars from 'handlebars';
+window.Handlebars = Handlebars;
+import barrating from 'jquery-bar-rating';
+window.barrating = barrating;
+import polylinedecorator from 'leaflet-polylinedecorator';
+window.polylinedecorator = polylinedecorator;
+import lightCarousel from 'lightslider';
+window.lightCarousel = lightCarousel;
+import introjs from 'intro.js';
+window.introjs = introjs;
+import pwstrengthmeter from 'password-strength-meter';
+window.pwstrengthmeter = pwstrengthmeter;
+import jqueryMousewheel from 'jquery-mousewheel';
+window.jqueryMousewheel = jqueryMousewheel;
+import Cookies from 'js-cookie';
+window.Cookies = Cookies;
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 window.Offset = require('polygon-offset'); // Offsetting polygons to get a smooth padding around them
 window.Lang = require('lang.js'); // Javascript translations
 window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
-window.Pather = require('leaflet-pather');
+import Pather from 'leaflet-pather';
+window.Pather = Pather;
 // window.circleMenu = require('zikes-circlemenu');
-window.Noty = require('noty');
-window.Pickr = require('@simonwep/pickr');
-window.AntPath = require('leaflet-ant-path');
-window.Grapick = require('grapick');
-window.jqueryVisible = require('jquery-visible');
-window.simplebar = require('simplebar');
-window.Draggable = require('@shopify/draggable');
-window.autocomplete = require('bootstrap-4-autocomplete');
-window.toggle = require('bootstrap4-toggle');
-window.jarallax = require('jarallax/dist/jarallax.min');
-window.swipe = require('jquery-touchswipe');
-window.lazysizes = require('lazysizes');
-window.ionRangeSlider = require('ion-rangeslider');
+import Noty from 'noty';
+window.Noty = Noty;
+import Pickr from '@simonwep/pickr';
+window.Pickr = Pickr;
+import AntPath from 'leaflet-ant-path';
+window.AntPath = AntPath;
+import Grapick from 'grapick';
+window.Grapick = Grapick;
+import jqueryVisible from 'jquery-visible';
+window.jqueryVisible = jqueryVisible;
+import simplebar from 'simplebar';
+window.simplebar = simplebar;
+import Draggable from '@shopify/draggable';
+window.Draggable = Draggable;
+import autocomplete from 'bootstrap-4-autocomplete';
+window.autocomplete = autocomplete;
+import toggle from 'bootstrap4-toggle';
+window.toggle = toggle;
+import jarallax from 'jarallax/dist/jarallax.min';
+window.jarallax = jarallax;
+import swipe from 'jquery-touchswipe';
+window.swipe = swipe;
+import lazysizes from 'lazysizes';
+window.lazysizes = lazysizes;
+import ionRangeSlider from 'ion-rangeslider';
+window.ionRangeSlider = ionRangeSlider;
 
-require('@fortawesome/fontawesome-free');
+import '@fortawesome/fontawesome-free';
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
