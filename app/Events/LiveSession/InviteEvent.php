@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
  *
  * @since 14/05/2021
  *
- * @property LiveSession $_context
+ * @property LiveSession $context
  */
 class InviteEvent extends ContextEvent
 {
@@ -43,7 +43,7 @@ class InviteEvent extends ContextEvent
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->_context->dungeonroute->getRouteKey())),
+            new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->dungeonroute->getRouteKey())),
         ];
     }
 
@@ -53,10 +53,10 @@ class InviteEvent extends ContextEvent
             // Cannot use ContextModelEvent as model is already deleted and serialization will fail
             'invitees' => $this->invitees,
             'url'      => route('dungeonroute.livesession.view', [
-                'dungeon'      => $this->_context->dungeonroute->dungeon,
-                'title'        => Str::slug($this->_context->dungeonroute->title),
-                'dungeonroute' => $this->_context->dungeonroute,
-                'livesession'  => $this->_context,
+                'dungeon'      => $this->context->dungeonroute->dungeon,
+                'title'        => Str::slug($this->context->dungeonroute->title),
+                'dungeonroute' => $this->context->dungeonroute,
+                'livesession'  => $this->context,
             ]),
         ]);
     }

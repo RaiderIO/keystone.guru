@@ -23,7 +23,7 @@ class RatingColumnHandler extends DatatablesColumnHandler
     protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
     {
 
-        $rating = $columnData['search']['value'];
+        //        $rating = $columnData['search']['value'];
         //        if (!empty($rating)) {
         //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
         //                /** @var $query Builder */

@@ -38,7 +38,7 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         // Bit of a hack, but for now the only way to reliably get the pre-limit count.
         $query = $this->builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
-            ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate'));
+            ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate')->getValue($this->builder->getGrammar()));
         // Temp store; it messes with the count
         $havings        = $query->havings;
         $query->havings = null;

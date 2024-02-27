@@ -256,7 +256,7 @@ class User extends Authenticatable
     /**
      * Sends the password reset notification.
      */
-    public function sendPasswordResetNotification(string $token): void
+    public function sendPasswordResetNotification($token): void
     {
         $this->notify(new CustomPasswordResetEmail($token));
     }

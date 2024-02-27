@@ -94,7 +94,7 @@ class AjaxOverpulledEnemyController extends Controller
                     ->first();
 
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy, $enemy));
                 }
 
                 // Optionally don't calculate the return value

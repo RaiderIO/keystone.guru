@@ -14,9 +14,6 @@ class OverpulledEnemyChangedEvent extends ContextEvent
 
     protected int $kill_zone_id;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
     {
         $this->enemy_id     = $enemy->id;

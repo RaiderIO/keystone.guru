@@ -16,7 +16,7 @@ class NpcsDatatablesHandler extends DatatablesHandler
     {
         $query = $this->builder->getQuery()
             ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
-            ->selectRaw(DB::raw('SQL_CALC_FOUND_ROWS *'));
+            ->selectRaw(DB::raw('SQL_CALC_FOUND_ROWS *')->getValue($this->builder->getGrammar()));
 
         $havings        = $query->havings;
         $query->havings = null;
@@ -26,7 +26,7 @@ class NpcsDatatablesHandler extends DatatablesHandler
         // Restore
         $query->havings = $havings;
 
-        $foundRows = DB::select(DB::raw('SELECT FOUND_ROWS() as count'));
+        $foundRows = DB::raw('SELECT FOUND_ROWS() as count')->getValue($this->builder->getGrammar());
 
         return $foundRows[0]->count;
     }
