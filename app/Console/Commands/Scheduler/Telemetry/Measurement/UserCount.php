@@ -18,11 +18,11 @@ class UserCount extends Measurement
                 null,
                 $this->getTags(),
                 [
-                    'all'          => User::count(),
+                    'all' => User::count(),
                     'keystoneguru' => User::whereNull('oauth_id')->count(),
-                    'discord'      => User::where('oauth_id', 'LIKE', '%@discord')->count(),
-                    'google'       => User::where('oauth_id', 'LIKE', '%@google')->count(),
-                    'battlenet'    => User::where('oauth_id', 'LIKE', '%@battlenet')->count(),
+                    'discord' => User::where('oauth_id', 'LIKE', '%@discord')->count(),
+                    'google' => User::where('oauth_id', 'LIKE', '%@google')->count(),
+                    'battlenet' => User::where('oauth_id', 'LIKE', '%@battlenet')->count(),
                 ],
                 time()
             ),

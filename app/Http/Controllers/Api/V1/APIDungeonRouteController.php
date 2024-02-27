@@ -65,9 +65,9 @@ class APIDungeonRouteController extends Controller
      * )
      */
     public function createThumbnails(
-        DungeonRouteThumbnailRequest              $request,
+        DungeonRouteThumbnailRequest $request,
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
-        DungeonRoute                              $dungeonRoute
+        DungeonRoute $dungeonRoute
     ): DungeonRouteThumbnailJobCollectionResource {
         $validated = $request->validated();
 

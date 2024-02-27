@@ -18,12 +18,12 @@ class ArchonApiService implements ArchonApiServiceInterface
 
         $response = json_decode($responseStr, true);
 
-        if (!is_array($response)) {
+        if (! is_array($response)) {
             throw new InvalidResponseException($responseStr);
         }
 
         // Temp fix for strange characters being put in front of the affix list
-        $response['encounterTierList']['label'] = trim((string)$response['encounterTierList']['label'], '‍');
+        $response['encounterTierList']['label'] = trim((string) $response['encounterTierList']['label'], '‍');
 
         return $response;
     }

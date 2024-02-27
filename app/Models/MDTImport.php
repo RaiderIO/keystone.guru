@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int    $id
- * @property int    $dungeon_route_id
+ * @property int $id
+ * @property int $dungeon_route_id
  * @property string $import_string
  *
  * @mixin Eloquent

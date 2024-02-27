@@ -53,7 +53,7 @@ class AjaxTeamController extends Controller
         $user = Auth::user();
         /** @var User $targetUser */
         $targetUser = User::where('name', $request->get('username'))->firstOrFail();
-        $role       = $request->get('role');
+        $role = $request->get('role');
 
         // Only if the current user may do such a thing
         if ($team->canChangeRole($user, $targetUser, $role)) {
@@ -126,7 +126,7 @@ class AjaxTeamController extends Controller
             // Disband if no team members are left
             if ($team->members->isEmpty()) {
                 $team->delete();
-            } else if ($team->isUserAdmin($user)) {
+            } elseif ($team->isUserAdmin($user)) {
                 // Promote someone else to be the new admin
                 $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                 if ($newAdmin !== null) {
@@ -185,7 +185,7 @@ class AjaxTeamController extends Controller
         }
 
         return PatreonAdFreeGiveaway::create([
-            'giver_user_id'    => $currentUser->id,
+            'giver_user_id' => $currentUser->id,
             'receiver_user_id' => $user->id,
         ]);
     }

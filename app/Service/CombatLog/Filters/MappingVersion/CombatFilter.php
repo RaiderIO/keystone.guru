@@ -20,7 +20,7 @@ class CombatFilter extends BaseCombatFilter
         parent::__construct($resultEvents);
 
         /** @var MappingVersionCombatFilterLoggingInterface $log */
-        $log       = App::make(MappingVersionCombatFilterLoggingInterface::class);
+        $log = App::make(MappingVersionCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -35,7 +35,7 @@ class CombatFilter extends BaseCombatFilter
         }
 
         // If it hasn't started yet, we don't process anything
-        if (!$this->zoneFound) {
+        if (! $this->zoneFound) {
             return false;
         }
 

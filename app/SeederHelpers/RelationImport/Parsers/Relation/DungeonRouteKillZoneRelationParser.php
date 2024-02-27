@@ -58,8 +58,8 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
                     // Make sure the enemy's relation with the kill zone is restored.
                     $killZoneEnemyAttributes[] = [
                         'kill_zone_id' => $killZone->id,
-                        'npc_id'       => $enemy->npc_id,
-                        'mdt_id'       => $enemy->mdt_id,
+                        'npc_id' => $enemy->npc_id,
+                        'mdt_id' => $enemy->mdt_id,
                     ];
 
                     $savedEnemyIds->push($enemyId);
@@ -82,7 +82,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
                     // Make sure the spell's relation with the kill zone is restored.
                     $killZoneSpellAttributes[] = [
                         'kill_zone_id' => $killZone->id,
-                        'spell_id'     => $spellId,
+                        'spell_id' => $spellId,
                     ];
                 }
 

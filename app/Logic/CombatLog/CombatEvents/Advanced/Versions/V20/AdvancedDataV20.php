@@ -155,18 +155,18 @@ class AdvancedDataV20 implements AdvancedDataInterface
      */
     public function setParameters(array $parameters): HasParameters
     {
-        $this->infoGuid     = Guid::createFromGuidString($parameters[0]);
-        $this->ownerGuid    = Guid::createFromGuidString($parameters[1]);
-        $this->currentHP    = $parameters[2];
-        $this->maxHP        = $parameters[3];
-        $this->attackPower  = $parameters[4];
-        $this->spellPower   = $parameters[5];
-        $this->armor        = $parameters[6];
-        $this->absorb       = $parameters[7];
-        $this->powerType    = explode('|', (string)$parameters[8]);
-        $this->currentPower = explode('|', (string)$parameters[9]);
-        $this->maxPower     = explode('|', (string)$parameters[10]);
-        $this->powerCost    = explode('|', (string)$parameters[11]);
+        $this->infoGuid = Guid::createFromGuidString($parameters[0]);
+        $this->ownerGuid = Guid::createFromGuidString($parameters[1]);
+        $this->currentHP = $parameters[2];
+        $this->maxHP = $parameters[3];
+        $this->attackPower = $parameters[4];
+        $this->spellPower = $parameters[5];
+        $this->armor = $parameters[6];
+        $this->absorb = $parameters[7];
+        $this->powerType = explode('|', (string) $parameters[8]);
+        $this->currentPower = explode('|', (string) $parameters[9]);
+        $this->maxPower = explode('|', (string) $parameters[10]);
+        $this->powerCost = explode('|', (string) $parameters[11]);
         // https://forums.combatlogforums.com/t/unit-positions-from-combat-log-solved/822
         // Be aware also that the coordinates are rotated 90 degrees for some crazy reason. This means that for the two numbers listed, pos1 and pos2, the following rules apply:
         //
@@ -175,9 +175,9 @@ class AdvancedDataV20 implements AdvancedDataInterface
         // This fixes the above issue. X and Y are fine after this
         $this->positionX = $parameters[13] * -1;
         $this->positionY = $parameters[12];
-        $this->uiMapId   = $parameters[14];
-        $this->facing    = $parameters[15];
-        $this->level     = $parameters[16];
+        $this->uiMapId = $parameters[14];
+        $this->facing = $parameters[15];
+        $this->level = $parameters[16];
 
         return $this;
     }

@@ -1,34 +1,34 @@
 <?php
 
 return [
-    'classic'            => [
+    'classic' => [
         'name' => 'Classic',
     ],
-    'tbc'                => [
+    'tbc' => [
         'name' => 'The Burning Crusade',
     ],
-    'wotlk'              => [
+    'wotlk' => [
         'name' => 'Wrath of the Lich King',
     ],
-    'cata'               => [
+    'cata' => [
         'name' => 'Cataclysm',
     ],
-    'mop'                => [
+    'mop' => [
         'name' => 'Mists of Pandaria',
     ],
-    'wod'                => [
+    'wod' => [
         'name' => 'Warlords of Draenor',
     ],
-    'legion'             => [
+    'legion' => [
         'name' => 'Legion',
     ],
     'battle_for_azeroth' => [
         'name' => 'Battle for Azeroth',
     ],
-    'shadowlands'        => [
+    'shadowlands' => [
         'name' => 'Shadowlands',
     ],
-    'dragonflight'       => [
+    'dragonflight' => [
         'name' => 'Dragonflight',
     ],
 ];

@@ -10,7 +10,7 @@ return [
     | This option enable language route.
     |
     */
-    'route'      => true,
+    'route' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ return [
     | to url('/')
     |
     */
-    'home'       => true,
+    'home' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
     | This option will add the language code to the redirected url
     |
     */
-    'url'        => false,
+    'url' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     | It can be 'session' (default) or 'referer'
     |
     */
-    'back'       => 'session',
+    'back' => 'session',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     | This option the language of carbon library.
     |
     */
-    'carbon'     => true,
+    'carbon' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -62,7 +62,7 @@ return [
     | This option the language of jenssegers/date library.
     |
     */
-    'date'       => false,
+    'date' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -73,7 +73,7 @@ return [
     | browser language.
     |
     */
-    'auto'       => true,
+    'auto' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     | This option indicates the prefix for language routes.
     |
     */
-    'prefix'     => 'languages',
+    'prefix' => 'languages',
 
     /*
     |--------------------------------------------------------------------------
@@ -128,7 +128,7 @@ return [
     |
     */
 
-    'mode'    => ['code' => 'long', 'name' => 'native'],
+    'mode' => ['code' => 'long', 'name' => 'native'],
 
     /*
     |--------------------------------------------------------------------------

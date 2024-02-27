@@ -24,7 +24,7 @@ class WowheadService implements WowheadServiceInterface
     {
         $response = $this->curlGet(
             sprintf('https://wowhead.com/%snpc=%s/%s',
-                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
+                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key.'/',
                 $npc->id,
                 Str::slug($npc->name)
             )
@@ -32,11 +32,11 @@ class WowheadService implements WowheadServiceInterface
 
         // Hacky shit to scrape it
         $health = 0;
-        $lines  = explode(PHP_EOL, $response);
+        $lines = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (!str_contains($line, self::HEALTH_IDENTIFYING_TOKEN)) {
+            if (! str_contains($line, self::HEALTH_IDENTIFYING_TOKEN)) {
                 continue;
             }
 
@@ -56,8 +56,8 @@ class WowheadService implements WowheadServiceInterface
                 foreach ($tds as $td) {
                     if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
                         $grabNext = true;
-                    } else if ($grabNext) {
-                        $possibleHealth = (int)str_replace(',', '', (string)$td->innerHtml);
+                    } elseif ($grabNext) {
+                        $possibleHealth = (int) str_replace(',', '', (string) $td->innerHtml);
                         if ($possibleHealth > 0) {
                             $health = $possibleHealth;
                             break;
@@ -76,8 +76,8 @@ class WowheadService implements WowheadServiceInterface
      */
     private function getStringBetween(string $string, string $start, string $end)
     {
-        $string = ' ' . $string;
-        $ini    = strpos($string, $start);
+        $string = ' '.$string;
+        $ini = strpos($string, $start);
         if ($ini == 0) {
             return '';
         }

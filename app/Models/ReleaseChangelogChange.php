@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int                      $id
- * @property int                      $release_changelog_id
- * @property int                      $release_changelog_category_id
- * @property int                      $ticket_id
- * @property string                   $change
+ * @property int $id
+ * @property int $release_changelog_id
+ * @property int $release_changelog_category_id
+ * @property int $ticket_id
+ * @property string $change
  * @property ReleaseChangelogCategory $category
- * @property ReleaseChangelog         $changelog
+ * @property ReleaseChangelog $changelog
  *
  * @mixin Eloquent
  */

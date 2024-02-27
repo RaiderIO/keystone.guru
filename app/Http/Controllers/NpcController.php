@@ -44,35 +44,35 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, ?Npc $npc = null)
     {
-        $oldId        = null;
+        $oldId = null;
         $oldDungeonId = null;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
         } else {
-            $oldId        = $npc->id;
+            $oldId = $npc->id;
             $oldDungeonId = $npc->dungeon_id;
         }
 
         $npcBefore = clone $npc;
 
-        $validated  = $request->validated();
+        $validated = $request->validated();
         $attributes = [
-            'id'                => $validated['id'],
-            'dungeon_id'        => $validated['dungeon_id'],
+            'id' => $validated['id'],
+            'dungeon_id' => $validated['dungeon_id'],
             'classification_id' => $validated['classification_id'],
-            'npc_type_id'       => $validated['npc_type_id'],
-            'npc_class_id'      => $validated['npc_class_id'],
-            'name'              => $validated['name'],
+            'npc_type_id' => $validated['npc_type_id'],
+            'npc_class_id' => $validated['npc_class_id'],
+            'name' => $validated['name'],
             // Remove commas or dots in the name; we want the integer value
-            'base_health'       => str_replace([',', '.'], '', (string)$validated['base_health']),
+            'base_health' => str_replace([',', '.'], '', (string) $validated['base_health']),
             'health_percentage' => $validated['health_percentage'],
-            'aggressiveness'    => $validated['aggressiveness'],
-            'dangerous'         => $validated['dangerous'] ?? 0,
-            'truesight'         => $validated['truesight'] ?? 0,
-            'bursting'          => $validated['bursting'] ?? 0,
-            'bolstering'        => $validated['bolstering'] ?? 0,
-            'sanguine'          => $validated['sanguine'] ?? 0,
+            'aggressiveness' => $validated['aggressiveness'],
+            'dangerous' => $validated['dangerous'] ?? 0,
+            'truesight' => $validated['truesight'] ?? 0,
+            'bursting' => $validated['bursting'] ?? 0,
+            'bolstering' => $validated['bolstering'] ?? 0,
+            'sanguine' => $validated['sanguine'] ?? 0,
             'runs_away_in_fear' => $validated['runs_away_in_fear'] ?? 0,
         ];
 
@@ -91,7 +91,7 @@ class NpcController extends Controller
             $npc->npcbolsteringwhitelists()->delete();
             foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
                 NpcBolsteringWhitelist::insert([
-                    'npc_id'           => $npc->id,
+                    'npc_id' => $npc->id,
                     'whitelist_npc_id' => $whitelistNpcId,
                 ]);
             }
@@ -102,7 +102,7 @@ class NpcController extends Controller
             $npc->npcspells()->delete();
             foreach ($spells as $spellId) {
                 NpcSpell::insert([
-                    'npc_id'   => $npc->id,
+                    'npc_id' => $npc->id,
                     'spell_id' => $spellId,
                 ]);
             }
@@ -139,7 +139,7 @@ class NpcController extends Controller
 
             // Broadcast notifications so that any open mapping sessions get these changes immediately
             // If no dungeon is set, user selected 'All Dungeons'
-            $npcAllDungeon       = ($npc->dungeon === null);
+            $npcAllDungeon = ($npc->dungeon === null);
             $npcBeforeAllDungeon = ($npcBefore->dungeon === null);
 
             // Prevent sending multiple messages for the same dungeon
@@ -161,14 +161,14 @@ class NpcController extends Controller
 
             // If we're now for all dungeons we don't have a current dungeon so we can't do these checks
             // We already sent messages above in this case so we're already good
-            if (!$npcAllDungeon) {
+            if (! $npcAllDungeon) {
                 // Let previous dungeon know that this NPC is no longer available
                 if ($messagesSentToDungeons->search($npc->dungeon->id) === false) {
                     broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
 
-                if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
+                if (! $npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
                     broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
@@ -195,17 +195,18 @@ class NpcController extends Controller
     public function new()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
-            'spells'          => Spell::all(),
-            'bolsteringNpcs'  => Npc::orderByRaw('dungeon_id, name')
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn (string $name, int $id) => [$id => __($name)]),
+            'spells' => Spell::all(),
+            'bolsteringNpcs' => Npc::orderByRaw('dungeon_id, name')
                 ->get()
                 ->groupBy('dungeon_id')
                 ->mapWithKeys(static function ($value, $key) {
                     // Halls of Valor => [npcs]
                     $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+
                     return [
                         $dungeonName => $value->pluck('name', 'id')
-                            ->map(static fn($value, $key) => sprintf('%s (%s)', $value, $key)),
+                            ->map(static fn ($value, $key) => sprintf('%s (%s)', $value, $key)),
                     ];
                 })
                 ->toArray(),
@@ -218,10 +219,10 @@ class NpcController extends Controller
     public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
     {
         return view('admin.npc.edit', [
-            'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
-            'spells'          => Spell::all(),
-            'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
+            'npc' => $npc,
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn (string $name, int $id) => [$id => __($name)]),
+            'spells' => Spell::all(),
+            'bolsteringNpcs' => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);
     }
 

@@ -40,8 +40,8 @@ class ImportWarning extends Exception implements Arrayable
     {
         return [
             'category' => $this->category,
-            'message'  => $this->getMessage(),
-            'data'     => $this->data,
+            'message' => $this->getMessage(),
+            'data' => $this->data,
         ];
     }
 }

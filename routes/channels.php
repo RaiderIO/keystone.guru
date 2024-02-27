@@ -58,13 +58,14 @@ $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dung
             ];
         }
     }
+
     return $result;
 };
 
 Broadcast::channel(sprintf('%s-route-edit.{dungeonRoute}', config('app.type')), $dungeonRouteChannelCallback);
-Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), static fn(?User $user, LiveSession $liveSession) => $dungeonRouteChannelCallback($user, $liveSession->dungeonroute));
+Broadcast::channel(sprintf('%s-live-session.{liveSession}', config('app.type')), static fn (?User $user, LiveSession $liveSession) => $dungeonRouteChannelCallback($user, $liveSession->dungeonroute));
 Broadcast::channel(sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', config('app.type')),
-    static fn(?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) => $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB));
+    static fn (?User $user, DungeonRoute $dungeonRouteA, DungeonRoute $dungeonRouteB) => $dungeonRouteChannelCallback($user, $dungeonRouteA) && $dungeonRouteChannelCallback($user, $dungeonRouteB));
 
 Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type')), static function (User $user, Dungeon $dungeon) {
     $result = false;
@@ -78,5 +79,6 @@ Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type
             'anonymous' => false,
         ];
     }
+
     return $result;
 });

@@ -12,15 +12,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @property int         $id
- * @property int         $live_session_id
- * @property int         $kill_zone_id
- * @property int         $npc_id
- * @property int         $mdt_id
+ * @property int $id
+ * @property int $live_session_id
+ * @property int $kill_zone_id
+ * @property int $npc_id
+ * @property int $mdt_id
  * @property LiveSession $livesession
- * @property KillZone    $killzone
- * @property Npc         $npc
- * @property Enemy       $enemy
+ * @property KillZone $killzone
+ * @property Npc $npc
+ * @property Enemy $enemy
  *
  * @mixin Eloquent
  */

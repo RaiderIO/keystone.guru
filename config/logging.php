@@ -32,7 +32,7 @@ return [
 
     'deprecations' => [
         'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
-        'trace'   => false,
+        'trace' => false,
     ],
 
     /*
@@ -52,80 +52,80 @@ return [
 
     'channels' => [
         'stack' => [
-            'driver'            => 'stack',
-            'channels'          => ['daily', 'discord'],
+            'driver' => 'stack',
+            'channels' => ['daily', 'discord'],
             'ignore_exceptions' => false,
         ],
 
         'scheduler' => [
-            'driver'   => 'stack',
+            'driver' => 'stack',
             'channels' => ['scheduler_file', 'discord'],
         ],
 
         'single' => [
             'driver' => 'single',
-            'path'   => storage_path('logs/laravel.log'),
-            'level'  => env('LOG_LEVEL', 'debug'),
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'scheduler_file' => [
             'driver' => 'daily',
-            'path'   => storage_path('logs/scheduler.log'),
-            'level'  => 'debug',
-            'days'   => 14,
+            'path' => storage_path('logs/scheduler.log'),
+            'level' => 'debug',
+            'days' => 14,
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path'   => storage_path('logs/laravel.log'),
-            'level'  => env('LOG_LEVEL', 'debug'),
-            'days'   => 14,
+            'path' => storage_path('logs/laravel.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
         ],
 
         'slack' => [
-            'driver'   => 'slack',
-            'url'      => env('LOG_SLACK_WEBHOOK_URL'),
+            'driver' => 'slack',
+            'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
-            'emoji'    => ':boom:',
-            'level'    => env('LOG_LEVEL', 'critical'),
+            'emoji' => ':boom:',
+            'level' => env('LOG_LEVEL', 'critical'),
         ],
 
         'papertrail' => [
-            'driver'       => 'monolog',
-            'level'        => env('LOG_LEVEL', 'debug'),
-            'handler'      => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
             'handler_with' => [
-                'host'             => env('PAPERTRAIL_URL'),
-                'port'             => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
+                'host' => env('PAPERTRAIL_URL'),
+                'port' => env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
         ],
 
         'stderr' => [
-            'driver'    => 'monolog',
-            'level'     => env('LOG_LEVEL', 'debug'),
-            'handler'   => StreamHandler::class,
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'handler' => StreamHandler::class,
             'formatter' => env('LOG_STDERR_FORMATTER'),
-            'with'      => [
+            'with' => [
                 'stream' => 'php://stderr',
             ],
         ],
 
         'syslog' => [
             'driver' => 'syslog',
-            'level'  => env('LOG_LEVEL', 'debug'),
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
-            'level'  => env('LOG_LEVEL', 'debug'),
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'discord' => empty(env('APP_LOG_DISCORD_WEBHOOK')) ? [] : [
             'driver' => 'custom',
-            'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
-            'via'    => MarvinLabs\DiscordLogger\Logger::class,
-            'level'  => 'error',
+            'url' => env('APP_LOG_DISCORD_WEBHOOK'),
+            'via' => MarvinLabs\DiscordLogger\Logger::class,
+            'level' => 'error',
             //            'formatter' => Monolog\Formatter\LineFormatter::class,
             //            'formatter_with' => [
             //                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
@@ -133,7 +133,7 @@ return [
         ],
 
         'null' => [
-            'driver'  => 'monolog',
+            'driver' => 'monolog',
             'handler' => NullHandler::class,
         ],
 

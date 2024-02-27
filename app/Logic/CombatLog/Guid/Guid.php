@@ -35,19 +35,19 @@ abstract class Guid implements Stringable
     private const GUID_TYPE_EVADE = 'EVADE';
 
     private const GUID_TYPE_CLASS_MAPPING = [
-        self::GUID_TYPE_BATTLE_PET    => BattlePet::class,
+        self::GUID_TYPE_BATTLE_PET => BattlePet::class,
         self::GUID_TYPE_B_NET_ACCOUNT => BNetAccount::class,
-        self::GUID_TYPE_CAST          => Cast::class,
-        self::GUID_TYPE_CLIENT_ACTOR  => ClientActor::class,
-        self::GUID_TYPE_CREATURE      => Creature::class,
-        self::GUID_TYPE_FOLLOWER      => Follower::class,
-        self::GUID_TYPE_GAME_OBJECT   => Creature::class,
-        self::GUID_TYPE_ITEM          => Item::class,
-        self::GUID_TYPE_PET           => Creature::class,
-        self::GUID_TYPE_PLAYER        => Player::class,
-        self::GUID_TYPE_VIGNETTE      => Vignette::class,
-        self::GUID_TYPE_VEHICLE       => Creature::class,
-        self::GUID_TYPE_EVADE         => Evade::class,
+        self::GUID_TYPE_CAST => Cast::class,
+        self::GUID_TYPE_CLIENT_ACTOR => ClientActor::class,
+        self::GUID_TYPE_CREATURE => Creature::class,
+        self::GUID_TYPE_FOLLOWER => Follower::class,
+        self::GUID_TYPE_GAME_OBJECT => Creature::class,
+        self::GUID_TYPE_ITEM => Item::class,
+        self::GUID_TYPE_PET => Creature::class,
+        self::GUID_TYPE_PLAYER => Player::class,
+        self::GUID_TYPE_VIGNETTE => Vignette::class,
+        self::GUID_TYPE_VEHICLE => Creature::class,
+        self::GUID_TYPE_EVADE => Evade::class,
     ];
 
     protected function __construct(private readonly string $guid)
@@ -68,7 +68,7 @@ abstract class Guid implements Stringable
         $result = null;
 
         $parameters = explode('-', $guid);
-        $guidType   = $parameters[0];
+        $guidType = $parameters[0];
 
         foreach (self::GUID_TYPE_CLASS_MAPPING as $guidTypeCandidate => $className) {
             if ($guidType === $guidTypeCandidate) {

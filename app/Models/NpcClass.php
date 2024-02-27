@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int              $id
- * @property string           $name
+ * @property int $id
+ * @property string $name
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent

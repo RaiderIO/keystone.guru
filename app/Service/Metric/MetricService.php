@@ -13,22 +13,22 @@ class MetricService implements MetricServiceInterface
     public function storeMetric(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
-            'model_id'    => $modelId,
+            'model_id' => $modelId,
             'model_class' => $modelClass,
-            'category'    => $category,
-            'tag'         => $tag,
-            'value'       => $value,
+            'category' => $category,
+            'tag' => $tag,
+            'value' => $value,
         ]);
     }
 
     public function storeMetricByModel(Model $model, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
-            'model_id'    => $model->id,
+            'model_id' => $model->id,
             'model_class' => $model::class,
-            'category'    => $category,
-            'tag'         => $tag,
-            'value'       => $value,
+            'category' => $category,
+            'tag' => $tag,
+            'value' => $value,
         ]);
     }
 

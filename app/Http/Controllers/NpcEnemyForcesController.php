@@ -18,7 +18,7 @@ class NpcEnemyForcesController extends Controller
     public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces)
     {
         return view('admin.npcenemyforces.edit', [
-            'npc'            => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }
@@ -28,7 +28,7 @@ class NpcEnemyForcesController extends Controller
         $npcEnemyForces->update($request->validated());
 
         return view('admin.npcenemyforces.edit', [
-            'npc'            => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }

@@ -59,12 +59,12 @@ class ChallengeModeEnd extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->instanceId    = $parameters[0];
-        $this->success       = $parameters[1];
+        $this->instanceId = $parameters[0];
+        $this->success = $parameters[1];
         $this->keystoneLevel = $parameters[2];
-        $this->totalTimeMS   = $parameters[3];
-        $this->unknown1      = $parameters[4];
-        $this->unknown2      = $parameters[5];
+        $this->totalTimeMS = $parameters[3];
+        $this->unknown1 = $parameters[4];
+        $this->unknown2 = $parameters[5];
 
         return $this;
     }

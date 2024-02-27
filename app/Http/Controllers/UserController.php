@@ -39,7 +39,7 @@ class UserController extends Controller
     {
         $currentUser = Auth::user();
         if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
-            if (!$user->hasRole('admin')) {
+            if (! $user->hasRole('admin')) {
                 $user->attachRole('admin');
 
                 // Message to the user
@@ -94,13 +94,13 @@ class UserController extends Controller
             } else {
                 // Create a dummy patreon link
                 $patreonUserLink = PatreonUserLink::create([
-                    'user_id'       => $user->id,
-                    'email'         => $user->email,
-                    'scope'         => 'identity identity[email] identity.memberships campaigns',
-                    'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'scope' => 'identity identity[email] identity.memberships campaigns',
+                    'access_token' => PatreonUserLink::PERMANENT_TOKEN,
                     'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
-                    'version'       => '0.0.1',
-                    'expires_at'    => Carbon::now()->addYears(100),
+                    'version' => '0.0.1',
+                    'expires_at' => Carbon::now()->addYears(100),
                 ]);
                 $user->setRelation('patreonUserLink', $patreonUserLink);
 
@@ -111,7 +111,7 @@ class UserController extends Controller
             foreach (PatreonBenefit::ALL as $patreonBenefit => $patreonBenefitId) {
                 PatreonUserBenefit::create([
                     'patreon_user_link_id' => $user->patreon_user_link_id,
-                    'patreon_benefit_id'   => $patreonBenefitId,
+                    'patreon_benefit_id' => $patreonBenefitId,
                 ]);
             }
 
@@ -137,7 +137,7 @@ class UserController extends Controller
             foreach ($newPatreonBenefitIds as $newPatreonBenefitId) {
                 PatreonUserBenefit::create([
                     'patreon_user_link_id' => $user->patreon_user_link_id,
-                    'patreon_benefit_id'   => $newPatreonBenefitId,
+                    'patreon_benefit_id' => $newPatreonBenefitId,
                 ]);
             }
 

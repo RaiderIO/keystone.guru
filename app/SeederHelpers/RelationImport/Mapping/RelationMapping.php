@@ -34,9 +34,9 @@ abstract class RelationMapping
      */
     public function __construct(private readonly string $fileName, private readonly string $class, private readonly bool $persistent = false)
     {
-        $this->conditionals            = collect();
-        $this->attributeParsers        = collect();
-        $this->preSaveRelationParsers  = collect();
+        $this->conditionals = collect();
+        $this->attributeParsers = collect();
+        $this->preSaveRelationParsers = collect();
         $this->postSaveRelationParsers = collect();
     }
 
@@ -82,7 +82,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @param RelationParserInterface[]|Collection $preSaveRelationParsers
+     * @param  RelationParserInterface[]|Collection  $preSaveRelationParsers
      * @return $this
      */
     protected function setPreSaveRelationParsers($preSaveRelationParsers): self
@@ -101,7 +101,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @param RelationParserInterface[]|Collection $postSaveRelationParsers
+     * @param  RelationParserInterface[]|Collection  $postSaveRelationParsers
      * @return $this
      */
     protected function setPostSaveRelationParsers($postSaveRelationParsers): self

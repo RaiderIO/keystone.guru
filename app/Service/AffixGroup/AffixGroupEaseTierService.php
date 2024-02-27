@@ -16,19 +16,19 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 {
     public const DUNGEON_NAME_MAPPING = [
         "Dawn of the Infinite: Galakrond's Fall" => "Galakrond's Fall",
-        "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
-        'The Everbloom'                           => 'Everbloom',
+        "Dawn of the Infinite: Murozond's Rise" => "Murozond's Rise",
+        'The Everbloom' => 'Everbloom',
     ];
 
     public function __construct(
-        private readonly SeasonServiceInterface                    $seasonService,
+        private readonly SeasonServiceInterface $seasonService,
         private readonly AffixGroupEaseTierServiceLoggingInterface $log
     ) {
     }
 
     public function getTiersHash(array $tierList, array $dungeonNameMapping): string
     {
-        $affixes        = $tierList['encounterTierList']['label'];
+        $affixes = $tierList['encounterTierList']['label'];
         $tiersByDungeon = [];
         foreach ($tierList['encounterTierList']['tierLists'][0]['tiers'] as $tier) {
 
@@ -61,7 +61,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $lastEaseTierPull = AffixGroupEaseTierPull::latest()->first();
 
         $affixGroupString = $tierListsResponse['encounterTierList']['label'];
-        $affixGroup       = $this->getAffixGroupByString($affixGroupString);
+        $affixGroup = $this->getAffixGroupByString($affixGroupString);
 
         if ($affixGroup === null) {
             $this->log->parseTierListUnknownAffixGroup($affixGroupString);
@@ -69,23 +69,24 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             return null;
         }
 
-        $result    = null;
+        $result = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
 
         if ($lastEaseTierPull === null ||
             $lastEaseTierPull->affix_group_id !== $affixGroup->id ||
             $lastEaseTierPull->tiers_hash !== $tiersHash) {
 
-            $affixGroupString       = $affixGroup->text;
+            $affixGroupString = $affixGroup->text;
             $affixGroupEaseTierPull = AffixGroupEaseTierPull::create([
-                'affix_group_id'  => $affixGroup->id,
-                'tiers_hash'      => $tiersHash,
+                'affix_group_id' => $affixGroup->id,
+                'tiers_hash' => $tiersHash,
                 'last_updated_at' => Carbon::now()->toDateTimeString(),
             ]);
 
             $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
                 // Translate the name of the dungeon to English (from a key), and then match it
                 $ksgDungeonName = __($dungeon->name, [], 'en-US');
+
                 return self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName;
             });
 
@@ -100,7 +101,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                         /** @var array{id: int, name: string, url: string} $dungeon */
                         // If found
                         $dungeonName = $dungeon['name'];
-                        $dungeon     = $dungeonList->get($dungeonName);
+                        $dungeon = $dungeonList->get($dungeonName);
 
                         if ($dungeon === null) {
                             $this->log->parseTierListUnknownDungeon($dungeonName);
@@ -110,9 +111,9 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
                         $affixGroupEaseTiersAttributes[] = [
                             'affix_group_ease_tier_pull_id' => $affixGroupEaseTierPull->id,
-                            'affix_group_id'                => $affixGroup->id,
-                            'dungeon_id'                    => $dungeon->id,
-                            'tier'                          => $tier,
+                            'affix_group_id' => $affixGroup->id,
+                            'dungeon_id' => $dungeon->id,
+                            'tier' => $tier,
                         ];
 
                         $this->log->parseTierListSavedDungeonTier($dungeonName, $tier);
@@ -196,16 +197,16 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     {
         $result = null;
 
-        $affixList                = Affix::all();
-        $currentSeason            = $this->seasonService->getCurrentSeason();
+        $affixList = Affix::all();
+        $currentSeason = $this->seasonService->getCurrentSeason();
         $currentSeasonAffixGroups = $currentSeason->affixgroups;
 
         $affixes = collect(explode(', ', $affixString));
 
         // Filter out properties that don't have the correct amount of affixes
-        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
+        if ($affixes->count() === 3 + (int) ($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix) => __($affix->name, [], 'en-US') === $affixName)->isEmpty());
+            $invalidAffixes = $affixes->filter(static fn (string $affixName) => $affixList->filter(static fn (Affix $affix) => __($affix->name, [], 'en-US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {
@@ -213,7 +214,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
 
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(Affix $affix) => $affixes->search($affix->key) === false);
+                    $notFoundAffixes = $affixGroup->affixes->filter(static fn (Affix $affix) => $affixes->search($affix->key) === false);
 
                     // If we have found the match, we're done
                     if ($notFoundAffixes->isEmpty()) {

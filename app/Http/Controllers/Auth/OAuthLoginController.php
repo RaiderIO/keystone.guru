@@ -84,7 +84,7 @@ abstract class OAuthLoginController extends LoginController
         try {
             /** @var \SocialiteProviders\Manager\OAuth2\User $oauthUser */
             $oauthUser = $this->fetchUser();
-            $success   = false;
+            $success = false;
 
             $oAuthId = $this->getOAuthId($oauthUser->id);
             /** @var User $existingUser */
@@ -94,9 +94,9 @@ abstract class OAuthLoginController extends LoginController
                 // Get a new template user
                 $existingUser = $this->getUser($oauthUser, $oAuthId);
                 // Only if he/she does not already exists, we cannot just log in that existing user to prevent account takeovers.
-                if (!$this->userExistsByEmail($existingUser->email)) {
+                if (! $this->userExistsByEmail($existingUser->email)) {
                     // Check if the username doesn't exist yet
-                    if (!$this->userExistsByUsername($existingUser->name)) {
+                    if (! $this->userExistsByUsername($existingUser->name)) {
                         $success = true;
                         // Save it
                         $existingUser->save();

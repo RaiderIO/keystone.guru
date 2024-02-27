@@ -64,12 +64,12 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             /** @var Affix $affix */
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
 
-            $iconName          = strtolower(str_replace(' ', '', $affix->key));
-            $icon              = new File();
-            $icon->model_id    = $affix->id;
+            $iconName = strtolower(str_replace(' ', '', $affix->key));
+            $icon = new File();
+            $icon->model_id = $affix->id;
             $icon->model_class = get_class($affix);
-            $icon->disk        = 'public';
-            $icon->path        = sprintf('images/affixes/%s.jpg', $iconName);
+            $icon->disk = 'public';
+            $icon->path = sprintf('images/affixes/%s.jpg', $iconName);
             $icon->save();
 
             $affix->icon_file_id = $icon->id;
@@ -81,9 +81,9 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             return [$expansion->shortname => $expansion->id];
         });
 
-        $legion       = $expansions->get(Expansion::EXPANSION_LEGION);
-        $bfa          = $expansions->get(Expansion::EXPANSION_BFA);
-        $shadowlands  = $expansions->get(Expansion::EXPANSION_SHADOWLANDS);
+        $legion = $expansions->get(Expansion::EXPANSION_LEGION);
+        $bfa = $expansions->get(Expansion::EXPANSION_BFA);
+        $shadowlands = $expansions->get(Expansion::EXPANSION_SHADOWLANDS);
         $dragonflight = $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT);
 
         $groups = [
@@ -229,22 +229,22 @@ class AffixSeeder extends Seeder implements TableSeederInterface
 
         ];
 
-        $affixGroupAttributes          = [];
+        $affixGroupAttributes = [];
         $affixGroupCouplingsAttributes = [];
-        $affixGroupId                  = 1;
+        $affixGroupId = 1;
         foreach ($groups as $groupArr) {
             $affixGroupAttributes[] = [
-                'season_id'      => $groupArr['season_id'],
-                'expansion_id'   => $groupArr['expansion_id'],
+                'season_id' => $groupArr['season_id'],
+                'expansion_id' => $groupArr['expansion_id'],
                 'seasonal_index' => $groupArr['seasonal_index'] ?? null,
-                'confirmed'      => $groupArr['confirmed'] ?? true,
+                'confirmed' => $groupArr['confirmed'] ?? true,
             ];
 
             foreach ($groupArr['affixes'] as $affixName) {
                 $affix = $this->findAffix($affixes, $affixName);
 
                 $affixGroupCouplingsAttributes[] = [
-                    'affix_id'       => $affix->id,
+                    'affix_id' => $affix->id,
                     'affix_group_id' => $affixGroupId,
                 ];
             }

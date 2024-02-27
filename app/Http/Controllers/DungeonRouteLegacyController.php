@@ -21,9 +21,9 @@ class DungeonRouteLegacyController extends Controller
     public function viewold(Request $request, DungeonRoute $dungeonroute)
     {
         return redirect()->route('dungeonroute.view', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -33,9 +33,9 @@ class DungeonRouteLegacyController extends Controller
     public function edit(Request $request, DungeonRoute $dungeonroute)
     {
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -45,10 +45,10 @@ class DungeonRouteLegacyController extends Controller
     public function editfloor(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
         return redirect()->route('dungeonroute.edit.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $floorIndex,
         ]);
     }
 
@@ -58,10 +58,10 @@ class DungeonRouteLegacyController extends Controller
     public function embedold(Request $request, DungeonRoute $dungeonroute, string $floorIndex = '1')
     {
         return redirect()->route('dungeonroute.embed', array_merge([
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $floorIndex,
         ], $request->all()));
     }
 
@@ -71,10 +71,10 @@ class DungeonRouteLegacyController extends Controller
     public function viewfloorold(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
         return redirect()->route('dungeonroute.view.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $floorIndex,
         ]);
     }
 
@@ -84,10 +84,10 @@ class DungeonRouteLegacyController extends Controller
     public function previewold(Request $request, DungeonRoute $dungeonroute, string $floorIndex)
     {
         return redirect()->route('dungeonroute.preview', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'title' => $dungeonroute->getTitleSlug(),
+            'floorindex' => $floorIndex,
         ]);
     }
 
@@ -97,9 +97,9 @@ class DungeonRouteLegacyController extends Controller
     public function cloneold(Request $request, DungeonRoute $dungeonroute)
     {
         return redirect()->route('dungeonroute.clone', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 
@@ -109,9 +109,9 @@ class DungeonRouteLegacyController extends Controller
     public function claimold(Request $request, DungeonRoute $dungeonroute)
     {
         return redirect()->route('dungeonroute.claim', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon' => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'title' => $dungeonroute->getTitleSlug(),
         ]);
     }
 }

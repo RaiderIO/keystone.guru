@@ -68,7 +68,7 @@ class SyncAdsTxt extends Command
         $playwireParam1 = config('keystoneguru.playwire.param_1');
         $playwireParam2 = config('keystoneguru.playwire.param_2');
 
-        if (!is_numeric($playwireParam1) || !is_numeric($playwireParam2)) {
+        if (! is_numeric($playwireParam1) || ! is_numeric($playwireParam2)) {
             $this->warn('Playwire params not set, not syncing ads.txt');
 
             return 0;

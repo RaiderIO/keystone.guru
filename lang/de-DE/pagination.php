@@ -14,6 +14,6 @@ return [
     */
 
     'previous' => '@todo de: .previous',
-    'next'     => '@todo de: .next',
+    'next' => '@todo de: .next',
 
 ];

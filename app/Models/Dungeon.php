@@ -22,34 +22,34 @@ use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
- * @property int                                     $id The ID of this Dungeon.
- * @property int                                     $expansion_id The linked expansion to this dungeon.
- * @property int                                     $game_version_id The linked game version to this dungeon.
- * @property int                                     $zone_id The ID of the location that WoW has given this dungeon.
- * @property int                                     $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int                                     $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
- * @property int                                     $mdt_id The ID that MDT has given this dungeon.
- * @property string                                  $name The name of the dungeon.
- * @property string                                  $slug The url friendly slug of the dungeon.
- * @property string                                  $key Shorthand key of the dungeon
- * @property bool                                    $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
- * @property bool                                    $facade_enabled True if this dungeon uses facades, false if it does not.
- * @property bool                                    $active True if this dungeon is active, false if it is not.
- * @property bool                                    $mdt_supported True if MDT is supported for this dungeon, false if it is not.
- * @property Expansion                               $expansion
- * @property GameVersion                             $gameVersion
- * @property MappingVersion                          $currentMappingVersion
- * @property Collection|MappingVersion[]             $mappingVersions
- * @property Collection|Floor[]                      $floors
- * @property Collection|Floor[]                      $activeFloors
- * @property Collection|DungeonRoute[]               $dungeonRoutes
- * @property Collection|Npc[]                        $npcs
- * @property Collection|Enemy[]                      $enemies
- * @property Collection|EnemyPack[]                  $enemypacks
- * @property Collection|EnemyPatrol[]                $enemypatrols
- * @property Collection|MapIcon[]                    $mapicons
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
- * @property Collection|MountableArea[]              $mountableareas
+ * @property int $id The ID of this Dungeon.
+ * @property int $expansion_id The linked expansion to this dungeon.
+ * @property int $game_version_id The linked game version to this dungeon.
+ * @property int $zone_id The ID of the location that WoW has given this dungeon.
+ * @property int $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int $mdt_id The ID that MDT has given this dungeon.
+ * @property string $name The name of the dungeon.
+ * @property string $slug The url friendly slug of the dungeon.
+ * @property string $key Shorthand key of the dungeon
+ * @property bool $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
+ * @property bool $facade_enabled True if this dungeon uses facades, false if it does not.
+ * @property bool $active True if this dungeon is active, false if it is not.
+ * @property bool $mdt_supported True if MDT is supported for this dungeon, false if it is not.
+ * @property Expansion $expansion
+ * @property GameVersion $gameVersion
+ * @property MappingVersion $currentMappingVersion
+ * @property Collection|MappingVersion[] $mappingVersions
+ * @property Collection|Floor[] $floors
+ * @property Collection|Floor[] $activeFloors
+ * @property Collection|DungeonRoute[] $dungeonRoutes
+ * @property Collection|Npc[] $npcs
+ * @property Collection|Enemy[] $enemies
+ * @property Collection|EnemyPack[] $enemypacks
+ * @property Collection|EnemyPatrol[] $enemypatrols
+ * @property Collection|MapIcon[] $mapicons
+ * @property Collection|DungeonFloorSwitchMarker[] $dungeonfloorswitchmarkers
+ * @property Collection|MountableArea[] $mountableareas
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs10Man
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs25Man
  *
@@ -393,7 +393,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE = 'dawn_of_the_infinite_murozonds_rise';
 
     public const ALL = [
-        Expansion::EXPANSION_CLASSIC      => [
+        Expansion::EXPANSION_CLASSIC => [
             self::DUNGEON_BLACKFATHOM_DEEPS,
             self::DUNGEON_BLACKROCK_DEPTHS,
             self::DUNGEON_DEADMINES,
@@ -420,7 +420,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_WAILING_CAVERNS,
             self::DUNGEON_ZUL_FARRAK,
         ],
-        Expansion::EXPANSION_TBC          => [
+        Expansion::EXPANSION_TBC => [
             self::DUNGEON_ACHENAI_CRYPTS,
             self::DUNGEON_HELLFIRE_RAMPARTS,
             self::DUNGEON_MAGISTERS_TERRACE,
@@ -438,7 +438,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_THE_STEAMVAULT,
             self::DUNGEON_THE_UNDERBOG,
         ],
-        Expansion::EXPANSION_WOTLK        => [
+        Expansion::EXPANSION_WOTLK => [
             self::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM,
             self::DUNGEON_AZJOL_NERUB,
             self::DUNGEON_DRAK_THARON_KEEP,
@@ -456,7 +456,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_UTGARDE_KEEP,
             self::DUNGEON_UTGARDE_PINNACLE,
         ],
-        Expansion::EXPANSION_CATACLYSM    => [
+        Expansion::EXPANSION_CATACLYSM => [
             self::DUNGEON_BLACKROCK_CAVERNS,
             self::DUNGEON_DEADMINES_CATACLYSM,
             self::DUNGEON_END_TIME,
@@ -472,7 +472,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_ZUL_AMAN,
             self::DUNGEON_ZUL_GURUB,
         ],
-        Expansion::EXPANSION_MOP          => [
+        Expansion::EXPANSION_MOP => [
             self::DUNGEON_GATE_OF_THE_SETTING_SUN,
             self::DUNGEON_MOGU_SHAN_PALACE,
             self::DUNGEON_SCARLET_HALLS_MOP,
@@ -483,7 +483,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_STORMSTOUT_BREWERY,
             self::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ],
-        Expansion::EXPANSION_WOD          => [
+        Expansion::EXPANSION_WOD => [
             self::DUNGEON_AUCHINDOUN,
             self::DUNGEON_BLOODMAUL_SLAG_MINES,
             self::DUNGEON_IRON_DOCKS,
@@ -492,7 +492,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_SKYREACH,
             self::DUNGEON_THE_EVERBLOOM,
         ],
-        Expansion::EXPANSION_LEGION       => [
+        Expansion::EXPANSION_LEGION => [
             self::DUNGEON_ARCWAY,
             self::DUNGEON_BLACK_ROOK_HOLD,
             self::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT,
@@ -507,7 +507,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
             self::DUNGEON_VAULT_OF_THE_WARDENS,
         ],
-        Expansion::EXPANSION_BFA          => [
+        Expansion::EXPANSION_BFA => [
             self::DUNGEON_ATAL_DAZAR,
             self::DUNGEON_FREEHOLD,
             self::DUNGEON_KINGS_REST,
@@ -521,7 +521,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_MECHAGON_JUNKYARD,
             self::DUNGEON_MECHAGON_WORKSHOP,
         ],
-        Expansion::EXPANSION_SHADOWLANDS  => [
+        Expansion::EXPANSION_SHADOWLANDS => [
             self::DUNGEON_DE_OTHER_SIDE,
             self::DUNGEON_HALLS_OF_ATONEMENT,
             self::DUNGEON_MISTS_OF_TIRNA_SCITHE,
@@ -588,7 +588,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getEnemyForcesMappedStatusAttribute(): array
     {
         $result = [];
-        $npcs   = [];
+        $npcs = [];
 
         try {
             // Loop through all floors
@@ -608,16 +608,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
         // Calculate which ones are unmapped
         $unmappedCount = 0;
         foreach ($npcs as $id => $npc) {
-            if (!$npc) {
-                ++$unmappedCount;
+            if (! $npc) {
+                $unmappedCount++;
             }
         }
 
-        $total              = count($npcs);
-        $result['npcs']     = $npcs;
+        $total = count($npcs);
+        $result['npcs'] = $npcs;
         $result['unmapped'] = $unmappedCount;
-        $result['total']    = $total;
-        $result['percent']  = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
+        $result['total'] = $total;
+        $result['percent'] = $total <= 0 ? 0 : 100 - (($unmappedCount / $total) * 100);
 
         return $result;
     }
@@ -665,7 +665,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->select('floors.*')
             ->join('dungeons', 'floors.dungeon_id', 'dungeons.id')
             ->where(static function (Builder $builder) use ($useFacade) {
-                $builder->when(!$useFacade, static function (Builder $builder) {
+                $builder->when(! $useFacade, static function (Builder $builder) {
                     $builder->where('facade', 0);
                 })->when($useFacade, static function (Builder $builder) use ($useFacade) {
                     $builder->where(static function (Builder $builder) use ($useFacade) {
@@ -711,7 +711,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function mapicons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
-            ->where(static fn(Builder $builder) => $builder
+            ->where(static fn (Builder $builder) => $builder
                 ->whereNull('dungeon_route_id'));
     }
 
@@ -779,7 +779,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     public function getFacadeFloor(): ?Floor
     {
-        return $this->floors->first(static fn(Floor $floor) => $floor->facade);
+        return $this->floors->first(static fn (Floor $floor) => $floor->facade);
     }
 
     /**
@@ -828,8 +828,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('npc_type_id', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
-            ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
-                static fn(Builder $builder) => $builder
+            ->when(! in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
+                static fn (Builder $builder) => $builder
                     ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
                     ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id))
             ->groupBy('enemies.npc_id');
@@ -858,7 +858,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     {
         return Npc::select('npcs.*')
             ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
-            ->where(fn(Builder $builder) => $builder->where('npcs.dungeon_id', $this->id)
+            ->where(fn (Builder $builder) => $builder->where('npcs.dungeon_id', $this->id)
                 ->orWhere('npcs.dungeon_id', -1))
             ->where(function (Builder $builder) {
                 $builder->where(function (Builder $builder) {

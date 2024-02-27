@@ -63,19 +63,19 @@ class MDTMapPOI implements Arrayable
      */
     public function __construct(private readonly int $subLevel, private array $rawMapPOI)
     {
-        $this->template        = $this->rawMapPOI['template'];
-        $this->type            = $this->rawMapPOI['type'];
-        $this->target          = $this->rawMapPOI['target'] ?? 0;
-        $this->direction       = $this->rawMapPOI['direction'] ?? 0;
+        $this->template = $this->rawMapPOI['template'];
+        $this->type = $this->rawMapPOI['type'];
+        $this->target = $this->rawMapPOI['target'] ?? 0;
+        $this->direction = $this->rawMapPOI['direction'] ?? 0;
         $this->connectionIndex = $this->rawMapPOI['connectionIndex'] ?? 0;
-        $this->x               = $this->rawMapPOI['x'];
-        $this->y               = $this->rawMapPOI['y'];
+        $this->x = $this->rawMapPOI['x'];
+        $this->y = $this->rawMapPOI['y'];
 
-        if (!in_array($this->template, self::ALL_TEMPLATES)) {
+        if (! in_array($this->template, self::ALL_TEMPLATES)) {
             throw new Exception(sprintf('Found new template %s - we need to add it!', $this->template));
         }
 
-        if (!in_array($this->type, self::ALL_TYPES)) {
+        if (! in_array($this->type, self::ALL_TYPES)) {
             throw new Exception(sprintf('Found new type %s - we need to add it!', $this->type));
         }
     }
@@ -128,14 +128,14 @@ class MDTMapPOI implements Arrayable
     public function toArray(): array
     {
         return [
-            'subLevel'        => $this->subLevel,
-            'template'        => $this->template,
-            'type'            => $this->type,
-            'target'          => $this->target,
-            'direction'       => $this->direction,
+            'subLevel' => $this->subLevel,
+            'template' => $this->template,
+            'type' => $this->type,
+            'target' => $this->target,
+            'direction' => $this->direction,
             'connectionIndex' => $this->connectionIndex,
-            'x'               => $this->x,
-            'y'               => $this->y,
+            'x' => $this->x,
+            'y' => $this->y,
         ];
     }
 }

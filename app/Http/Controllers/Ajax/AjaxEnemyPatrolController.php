@@ -29,9 +29,9 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
      */
     public function store(
         CoordinatesServiceInterface $coordinatesService,
-        EnemyPatrolFormRequest      $request,
-        MappingVersion              $mappingVersion,
-        ?EnemyPatrol                $enemyPatrol = null
+        EnemyPatrolFormRequest $request,
+        MappingVersion $mappingVersion,
+        ?EnemyPatrol $enemyPatrol = null
     ): EnemyPatrol {
         $validated = $request->validated();
 
@@ -56,7 +56,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 // Couple the patrol to the polyline
                 $saveResult = $enemyPatrol->update([
                     'polyline_id' => $polyline->id,
-                    'floor_id'    => $changedFloor?->id ?? $enemyPatrol->floor_id,
+                    'floor_id' => $changedFloor?->id ?? $enemyPatrol->floor_id,
                 ]);
 
                 // Load the polyline, so it can be echoed back to the user

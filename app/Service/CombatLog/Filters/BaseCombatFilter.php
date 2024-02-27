@@ -59,13 +59,13 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     public function __construct(/** @var Collection|BaseResultEvent[] */
         private readonly Collection $resultEvents)
     {
-        $this->validNpcIds            = collect();
+        $this->validNpcIds = collect();
         $this->accurateEnemySightings = collect();
-        $this->summonedEnemies        = collect();
-        $this->killedEnemies          = collect();
+        $this->summonedEnemies = collect();
+        $this->killedEnemies = collect();
 
         /** @var BaseCombatFilterLoggingInterface $log */
-        $log       = App::make(BaseCombatFilterLoggingInterface::class);
+        $log = App::make(BaseCombatFilterLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -82,7 +82,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
 
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
-            if (!$this->accurateEnemySightings->has($destGuid->getGuid())) {
+            if (! $this->accurateEnemySightings->has($destGuid->getGuid())) {
                 $this->log->parseUnitDiedEnemyWasNotPartOfCurrentPull($lineNr, $destGuid->getGuid());
 
                 return false;
@@ -164,7 +164,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
     {
         // We skip all non-advanced combat log events, we need positional information of NPCs.
-        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+        if (! ($combatLogEvent instanceof AdvancedCombatLogEvent)) {
             return false;
         }
 
@@ -203,7 +203,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $guid = $advancedData->getInfoGuid();
 
         // We're not interested in events if they don't contain a creature
-        if (!$guid instanceof Creature) {
+        if (! $guid instanceof Creature) {
             return null;
         }
 
@@ -247,16 +247,16 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool
     {
-        if (!($combatLogEvent instanceof AdvancedCombatLogEvent)) {
+        if (! ($combatLogEvent instanceof AdvancedCombatLogEvent)) {
             return false;
         }
 
         $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
-        if (!($destGuid instanceof Creature)) {
+        if (! ($destGuid instanceof Creature)) {
             return false;
         }
 
-        if (!isset(self::DEFEATED_PERCENTAGE[$destGuid->getId()])) {
+        if (! isset(self::DEFEATED_PERCENTAGE[$destGuid->getId()])) {
             return false;
         }
 

@@ -28,47 +28,47 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                     $id
- * @property int                                     $dungeon_id
- * @property int                                     $index
- * @property int|null                                $mdt_sub_level
- * @property int|null                                $ui_map_id
- * @property string                                  $name
- * @property bool                                    $default
- * @property bool                                    $facade
- * @property int                                     $min_enemy_size
- * @property int                                     $max_enemy_size
- * @property int                                     $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
- * @property int                                     $enemy_engagement_max_range_patrols The max range after which we're considering patrols
- * @property float                                   $ingame_min_x
- * @property float                                   $ingame_min_y
- * @property float                                   $ingame_max_x
- * @property float                                   $ingame_max_y
- * @property int|null                                $percentage_display_zoom
- * @property bool                                    $active
- * @property Dungeon                                 $dungeon
- * @property FloorUnion|null                         $floorUnion
- * @property Collection|Enemy[]                      $enemies
- * @property Collection|EnemyPack[]                  $enemypacks
- * @property Collection|EnemyPatrol[]                $enemypatrols
- * @property Collection|MapIcon[]                    $mapIcons
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkers
- * @property Collection|MountableArea[]              $mountableareas
- * @property Collection|FloorUnion[]                 $floorUnions
- * @property Collection|FloorUnionArea[]             $floorUnionAreas
- * @property Collection|Enemy[]                      $enemiesForExport
- * @property Collection|EnemyPack[]                  $enemyPacksForExport
- * @property Collection|EnemyPatrol[]                $enemyPatrolsForExport
- * @property Collection|MapIcon[]                    $mapIconsForExport
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
- * @property Collection|MountableArea[]              $mountableAreasForExport
- * @property Collection|FloorUnion[]                 $floorUnionsForExport
- * @property Collection|FloorUnionArea[]             $floorUnionAreasForExport
- * @property Collection|FloorCoupling[]              $floorcouplings
+ * @property int $id
+ * @property int $dungeon_id
+ * @property int $index
+ * @property int|null $mdt_sub_level
+ * @property int|null $ui_map_id
+ * @property string $name
+ * @property bool $default
+ * @property bool $facade
+ * @property int $min_enemy_size
+ * @property int $max_enemy_size
+ * @property int $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int $enemy_engagement_max_range_patrols The max range after which we're considering patrols
+ * @property float $ingame_min_x
+ * @property float $ingame_min_y
+ * @property float $ingame_max_x
+ * @property float $ingame_max_y
+ * @property int|null $percentage_display_zoom
+ * @property bool $active
+ * @property Dungeon $dungeon
+ * @property FloorUnion|null $floorUnion
+ * @property Collection|Enemy[] $enemies
+ * @property Collection|EnemyPack[] $enemypacks
+ * @property Collection|EnemyPatrol[] $enemypatrols
+ * @property Collection|MapIcon[] $mapIcons
+ * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
+ * @property Collection|MountableArea[] $mountableareas
+ * @property Collection|FloorUnion[] $floorUnions
+ * @property Collection|FloorUnionArea[] $floorUnionAreas
+ * @property Collection|Enemy[] $enemiesForExport
+ * @property Collection|EnemyPack[] $enemyPacksForExport
+ * @property Collection|EnemyPatrol[] $enemyPatrolsForExport
+ * @property Collection|MapIcon[] $mapIconsForExport
+ * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkersForExport
+ * @property Collection|MountableArea[] $mountableAreasForExport
+ * @property Collection|FloorUnion[] $floorUnionsForExport
+ * @property Collection|FloorUnionArea[] $floorUnionAreasForExport
+ * @property Collection|FloorCoupling[] $floorcouplings
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
- * @property Collection|Floor[]                      $connectedFloors
- * @property Collection|Floor[]                      $directConnectedFloors
- * @property Collection|Floor[]                      $reverseConnectedFloors
+ * @property Collection|Floor[] $connectedFloors
+ * @property Collection|Floor[] $directConnectedFloors
+ * @property Collection|Floor[] $reverseConnectedFloors
  *
  * @method static Builder active()
  * @method static Builder indexOrFacade(int $floorIndex)
@@ -86,12 +86,12 @@ class Floor extends CacheModel implements MappingModelInterface
     // bosses) and put them on the main floor without introducing a 2nd floor.
     public const UI_MAP_ID_MAPPING = [
         // Court of Stars
-        762  => 761,
-        763  => 761,
+        762 => 761,
+        763 => 761,
         // Brackenhide Hollow
         2106 => 2096,
         // Temple of the Jade Serpent
-        430  => 429,
+        430 => 429,
         // Algeth'ar Academy
         2099 => 2097,
         // Ruby Life Pools (Dragon Isles zone)
@@ -272,8 +272,8 @@ class Floor extends CacheModel implements MappingModelInterface
         }
 
         // Either grab the facade floor, or grab the requested floor _as long as it's not the facade floor_, otherwise return the default floor
-        return $builder->where(static fn(Builder $builder) => $builder->when($useFacade, static fn(Builder $builder) => $builder->where('facade', 1)
-            ->orWhere('default', 1))->when(!$useFacade, static fn(Builder $builder) => $builder->where('facade', 0)
+        return $builder->where(static fn (Builder $builder) => $builder->when($useFacade, static fn (Builder $builder) => $builder->where('facade', 1)
+            ->orWhere('default', 1))->when(! $useFacade, static fn (Builder $builder) => $builder->where('facade', 0)
             ->where(static function (Builder $builder) use ($floorIndex) {
                 // Either try to resolve the actual floor, or revert to the default if not found
                 $builder->where('index', $floorIndex)
@@ -295,8 +295,8 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public function findClosestFloorSwitchMarker(
         CoordinatesServiceInterface $coordinatesService,
-        LatLng                      $latLng,
-        int                         $targetFloorId): ?DungeonFloorSwitchMarker
+        LatLng $latLng,
+        int $targetFloorId): ?DungeonFloorSwitchMarker
     {
         $result = null;
 
@@ -315,7 +315,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
                 if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
                     $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
-                    $result                             = $dungeonFloorSwitchMarker;
+                    $result = $dungeonFloorSwitchMarker;
                 }
             }
         } else {
@@ -331,12 +331,12 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
+     * @param  int|null  $dungeonId  Can be passed in case the uiMapIds are not unique
      */
     public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): Floor
     {
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
-            ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->when($dungeonId !== null, static fn (Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->firstOrFail();
     }
 
@@ -350,13 +350,13 @@ class Floor extends CacheModel implements MappingModelInterface
             }
         }
 
-        if (!$hasCoupling) {
+        if (! $hasCoupling) {
             FloorCoupling::create([
                 'floor1_id' => $this->id,
                 'floor2_id' => $targetFloor->id,
             ]);
         }
 
-        return !$hasCoupling;
+        return ! $hasCoupling;
     }
 }
