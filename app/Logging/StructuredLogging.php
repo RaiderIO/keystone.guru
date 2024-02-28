@@ -58,7 +58,7 @@ class StructuredLogging implements StructuredLoggingInterface
         $targetKey = str_replace('start', '', strtolower($functionName));
         if (isset($this->groupedContexts[$targetKey])) {
             $this->log(
-                Level::Error->toRFC5424Level(),
+                Level::Error,
                 sprintf('%s: Unable to start a structured log that was already started!', __METHOD__),
                 array_merge(['targetKey' => $targetKey], $context)
             );
@@ -67,18 +67,18 @@ class StructuredLogging implements StructuredLoggingInterface
         $this->addContext($targetKey, $context);
         Stopwatch::start($targetKey);
 
-        $this->log(Level::Info->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Info, $functionName, $context);
     }
 
     protected function end(string $functionName, array $context = []): void
     {
         $targetKey = str_replace('end', '', strtolower($functionName));
 
-        $this->log(Level::Info->toRFC5424Level(), $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
+        $this->log(Level::Info, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
 
         if (!isset($this->groupedContexts[$targetKey])) {
             $this->log(
-                Level::Error->toRFC5424Level(),
+                Level::Error,
                 sprintf("%s: Unable to end a structured log that wasn't started!", __METHOD__),
                 array_merge(['targetKey' => $targetKey], $context)
             );
@@ -89,42 +89,42 @@ class StructuredLogging implements StructuredLoggingInterface
 
     protected function debug(string $functionName, array $context = []): void
     {
-        $this->log(Level::Debug->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Debug, $functionName, $context);
     }
 
     protected function notice(string $functionName, array $context = []): void
     {
-        $this->log(Level::Notice->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Notice, $functionName, $context);
     }
 
     protected function info(string $functionName, array $context = []): void
     {
-        $this->log(Level::Info->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Info, $functionName, $context);
     }
 
     protected function warning(string $functionName, array $context = []): void
     {
-        $this->log(Level::Warning->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Warning, $functionName, $context);
     }
 
     protected function error(string $functionName, array $context = []): void
     {
-        $this->log(Level::Error->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Error, $functionName, $context);
     }
 
     protected function critical(string $functionName, array $context = []): void
     {
-        $this->log(Level::Critical->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Critical, $functionName, $context);
     }
 
     protected function emergency(string $functionName, array $context = []): void
     {
-        $this->log(Level::Emergency->toRFC5424Level(), $functionName, $context);
+        $this->log(Level::Emergency, $functionName, $context);
     }
 
-    private function log(int $level, string $functionName, array $context = []): void
+    private function log(Level $level, string $functionName, array $context = []): void
     {
-        $levelName = Level::from($level)->getName();
+        $levelName = $level->getName();
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
         $fixedLength  = 7;
         $startPadding = str_repeat(' ', $fixedLength - strlen($levelName));
