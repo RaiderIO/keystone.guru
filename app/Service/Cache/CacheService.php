@@ -35,7 +35,7 @@ class CacheService implements CacheServiceInterface
      * @return Closure|mixed|null
      *
      */
-    public function rememberWhen(bool $condition, string $key, $value, ?string $ttl = null): mixed
+    public function rememberWhen(bool $condition, string $key, mixed $value, mixed $ttl = null): mixed
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
@@ -50,7 +50,7 @@ class CacheService implements CacheServiceInterface
      * @param Closure|mixed $value
      * @return mixed
      */
-    public function remember(string $key, $value, ?string $ttl = null): mixed
+    public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
         $result = null;
 
@@ -99,7 +99,7 @@ class CacheService implements CacheServiceInterface
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function set(string $key, $object, ?string $ttl = null): bool
+    public function set(string $key, mixed $object, mixed $ttl = null): bool
     {
         return Cache::set($key, $object, $ttl);
     }

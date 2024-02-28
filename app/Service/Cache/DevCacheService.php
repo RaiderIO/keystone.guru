@@ -21,7 +21,7 @@ class DevCacheService extends CacheService
      *
      * @throws InvalidArgumentException
      */
-    public function rememberWhen(bool $condition, string $key, $value, ?string $ttl = null): mixed
+    public function rememberWhen(bool $condition, string $key, mixed $value, mixed $ttl = null): mixed
     {
         $measureKey = sprintf('cacheservice-rememberwhen[%s]:%s', $key, $condition ? 'hit' : 'miss');
         Counter::increase($measureKey);
@@ -35,7 +35,7 @@ class DevCacheService extends CacheService
     /**
      * @param Closure|mixed $value
      */
-    public function remember(string $key, $value, ?string $ttl = null): mixed
+    public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
         $measureKey = sprintf('cacheservice-remember[%s]', $key);
         Counter::increase($measureKey);
