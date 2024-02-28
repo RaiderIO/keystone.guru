@@ -32,13 +32,13 @@ class StructuredLogging implements StructuredLoggingInterface
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
         $this->groupedContexts[$key] = array_merge(...$context);
-        $this->cachedContext         = array_merge(...$this->groupedContexts);
+        $this->cachedContext         = array_merge(array_values(...$this->groupedContexts));
     }
 
     public function removeContext(string $key): void
     {
         unset($this->groupedContexts[$key]);
-        $this->cachedContext = array_merge(...$this->groupedContexts);
+        $this->cachedContext = array_merge(array_values(...$this->groupedContexts));
     }
 
     protected function getChannel(): ?string
