@@ -16,45 +16,25 @@
                 "release_changelog_id": 199,
                 "release_changelog_category_id": 3,
                 "ticket_id": 1890,
-                "change": "Certain floors that have no enemies on them are now disabled and cannot be viewed. This happens when there's just one enemy on a certain floor and it's opted to put the enemy on the previous floor instead to streamline the routing process. Algeth'ar Academy and Brackenhide Hollow are examples of this.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Certain floors that have no enemies on them are now disabled and cannot be viewed. This happens when there's just one enemy on a certain floor and it's opted to put the enemy on the previous floor instead to streamline the routing process. Algeth'ar Academy and Brackenhide Hollow are examples of this."
             },
             {
                 "release_changelog_id": 199,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1892,
-                "change": "Fixed some vertical spacing issues with the sidebars after a rework.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed some vertical spacing issues with the sidebars after a rework."
             },
             {
                 "release_changelog_id": 199,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1899,
-                "change": "Routes created through the API now properly add casted spells to the correct pulls.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Routes created through the API now properly add casted spells to the correct pulls."
             },
             {
                 "release_changelog_id": 199,
                 "release_changelog_category_id": 11,
                 "ticket_id": 1882,
-                "change": "Dragonflight Season 1 dungeon improvements.",
-                "category": {
-                    "id": 11,
-                    "key": "auto_route_changes",
-                    "name": "releasechangelogcategories.auto_route_changes"
-                }
+                "change": "Dragonflight Season 1 dungeon improvements."
             }
         ]
     }

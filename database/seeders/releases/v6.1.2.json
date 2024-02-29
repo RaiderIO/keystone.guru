@@ -16,23 +16,13 @@
                 "release_changelog_id": 160,
                 "release_changelog_category_id": 3,
                 "ticket_id": 1508,
-                "change": "Attempting to navigate away from the page with unsaved changes will now prompt you to make sure you're okay with this.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Attempting to navigate away from the page with unsaved changes will now prompt you to make sure you're okay with this."
             },
             {
                 "release_changelog_id": 160,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1507,
-                "change": "Deleting a pull or map icon no longer crashes the map, rendering it useless.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Deleting a pull or map icon no longer crashes the map, rendering it useless."
             }
         ]
     }

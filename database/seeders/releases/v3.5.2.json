@@ -16,34 +16,19 @@
                 "release_changelog_id": 66,
                 "release_changelog_category_id": 3,
                 "ticket_id": 455,
-                "change": "Added new neon colored button Map Icons.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Added new neon colored button Map Icons."
             },
             {
                 "release_changelog_id": 66,
                 "release_changelog_category_id": 4,
                 "ticket_id": 452,
-                "change": "Admin: Dungeon settings location has been moved from seeder to file instead (so changes can be done through UI and they will persist during updates).",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Admin: Dungeon settings location has been moved from seeder to file instead (so changes can be done through UI and they will persist during updates)."
             },
             {
                 "release_changelog_id": 66,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed floor selection being empty when in map view.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed floor selection being empty when in map view."
             }
         ]
     }

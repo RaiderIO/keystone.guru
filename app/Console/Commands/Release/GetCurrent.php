@@ -5,21 +5,21 @@ namespace App\Console\Commands\Release;
 use App\Models\Release;
 use Illuminate\Console\Command;
 
-class GetCurrentRelease extends Command
+class GetCurrent extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:release';
+    protected $signature = 'release:current';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Retrieves information about releases in Keystone.guru';
+    protected $description = 'Retrieves information about the latest release in Keystone.guru';
 
     /**
      * Create a new command instance.

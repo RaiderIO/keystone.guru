@@ -16,23 +16,13 @@
                 "release_changelog_id": 129,
                 "release_changelog_category_id": 1,
                 "ticket_id": 967,
-                "change": "Encrypted affix activated.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Encrypted affix activated."
             },
             {
                 "release_changelog_id": 129,
                 "release_changelog_category_id": 5,
                 "ticket_id": 975,
-                "change": "Pull connections are now redrawn properly when you switch floors.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Pull connections are now redrawn properly when you switch floors."
             }
         ]
     }

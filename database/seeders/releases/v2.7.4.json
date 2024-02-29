@@ -16,12 +16,7 @@
                 "release_changelog_id": 40,
                 "release_changelog_category_id": 1,
                 "ticket_id": 239,
-                "change": "Awakened affix added.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Awakened affix added."
             }
         ]
     }

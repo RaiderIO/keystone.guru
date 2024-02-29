@@ -16,23 +16,13 @@
                 "release_changelog_id": 172,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Added missing trash before last boss of Neltharus.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added missing trash before last boss of Neltharus."
             },
             {
                 "release_changelog_id": 172,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Added missing trash in alternative route in Halls of Infusion.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added missing trash in alternative route in Halls of Infusion."
             }
         ]
     }

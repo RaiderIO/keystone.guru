@@ -16,23 +16,13 @@
                 "release_changelog_id": 209,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2006,
-                "change": "Added Blackrock Depths mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Blackrock Depths mapping."
             },
             {
                 "release_changelog_id": 209,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed an issue where ICC and newer added classic dungeons' pulls did not persist properly.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an issue where ICC and newer added classic dungeons' pulls did not persist properly."
             }
         ]
     }

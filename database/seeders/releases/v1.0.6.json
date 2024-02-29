@@ -16,12 +16,7 @@
                 "release_changelog_id": 11,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Corrected Teeming enemy forces needed for The Underrot, King's Rest.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Corrected Teeming enemy forces needed for The Underrot, King's Rest."
             }
         ]
     }

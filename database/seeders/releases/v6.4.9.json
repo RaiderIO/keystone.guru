@@ -16,12 +16,7 @@
                 "release_changelog_id": 178,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1699,
-                "change": "Fixed crash when adding overpulled enemies in a live session.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed crash when adding overpulled enemies in a live session."
             }
         ]
     }

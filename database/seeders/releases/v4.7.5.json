@@ -16,45 +16,25 @@
                 "release_changelog_id": 142,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1288,
-                "change": "Subcreation tiers now show up properly for Mechagon and Karazhan dungeons.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Subcreation tiers now show up properly for Mechagon and Karazhan dungeons."
             },
             {
                 "release_changelog_id": 142,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1273,
-                "change": "Corrected many changes to enemy forces in all new dungeons.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Corrected many changes to enemy forces in all new dungeons."
             },
             {
                 "release_changelog_id": 142,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1273,
-                "change": "Removed some enemies in the first carriage that were there on PTR but not on live.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Removed some enemies in the first carriage that were there on PTR but not on live."
             },
             {
                 "release_changelog_id": 142,
                 "release_changelog_category_id": 6,
                 "ticket_id": 1272,
-                "change": "Grimrail Depot can now be imported\/exported with MDT. Other dungeons will soon follow.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Grimrail Depot can now be imported\/exported with MDT. Other dungeons will soon follow."
             }
         ]
     }

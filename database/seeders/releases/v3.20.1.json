@@ -16,12 +16,7 @@
                 "release_changelog_id": 92,
                 "release_changelog_category_id": 1,
                 "ticket_id": 487,
-                "change": "Fixed the affixes for the next 3 weeks.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Fixed the affixes for the next 3 weeks."
             }
         ]
     }

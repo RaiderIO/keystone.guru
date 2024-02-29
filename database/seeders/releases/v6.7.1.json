@@ -16,45 +16,25 @@
                 "release_changelog_id": 189,
                 "release_changelog_category_id": 2,
                 "ticket_id": 617,
-                "change": "Revamped editing pulls in the sidebar to allow for more features. Added option to add descriptions on each pull. MDT importer will try to find comments close to your pull and assign them, exporting to MDT will create comments near your pull instead.",
-                "category": {
-                    "id": 2,
-                    "key": "route_changes",
-                    "name": "releasechangelogcategories.route_changes"
-                }
+                "change": "Revamped editing pulls in the sidebar to allow for more features. Added option to add descriptions on each pull. MDT importer will try to find comments close to your pull and assign them, exporting to MDT will create comments near your pull instead."
             },
             {
                 "release_changelog_id": 189,
                 "release_changelog_category_id": 3,
                 "ticket_id": 1807,
-                "change": "Pull connections line (that connects your pulls together) sometimes would choose the wrong floor switcher. This was noted particularly in Halls of Infusion. This has been corrected.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Pull connections line (that connects your pulls together) sometimes would choose the wrong floor switcher. This was noted particularly in Halls of Infusion. This has been corrected."
             },
             {
                 "release_changelog_id": 189,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1804,
-                "change": "[Hotfixed] Routes that had the exact amount of required enemy forces were considered as _not_ having enough enemy forces at various places.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "[Hotfixed] Routes that had the exact amount of required enemy forces were considered as _not_ having enough enemy forces at various places."
             },
             {
                 "release_changelog_id": 189,
                 "release_changelog_category_id": 6,
                 "ticket_id": 1805,
-                "change": "MDT importer has been restructured\/partially rewritten, enabling much better performance and reduced server load.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "MDT importer has been restructured\/partially rewritten, enabling much better performance and reduced server load."
             }
         ]
     }

@@ -16,23 +16,13 @@
                 "release_changelog_id": 99,
                 "release_changelog_category_id": 1,
                 "ticket_id": 727,
-                "change": "There is now an open beta for the redesign of the site. You can upgrade your experience from the top right of the header.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "There is now an open beta for the redesign of the site. You can upgrade your experience from the top right of the header."
             },
             {
                 "release_changelog_id": 99,
                 "release_changelog_category_id": 3,
                 "ticket_id": 707,
-                "change": "Selecting pulls in the sidebar should be easier\/not broken for some users now.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Selecting pulls in the sidebar should be easier\/not broken for some users now."
             }
         ]
     }

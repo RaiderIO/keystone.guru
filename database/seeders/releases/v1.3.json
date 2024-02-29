@@ -16,34 +16,19 @@
                 "release_changelog_id": 15,
                 "release_changelog_category_id": 1,
                 "ticket_id": 75,
-                "change": "Profile page is now tabbed; it looks a lot better now!",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Profile page is now tabbed; it looks a lot better now!"
             },
             {
                 "release_changelog_id": 15,
                 "release_changelog_category_id": 1,
                 "ticket_id": 29,
-                "change": "Added privacy controls in your Profile for opting out of Google Analytics cookies and disabling Personalized Ads for Google Adsense. With both options enabled, you should have no third-party cookies on your browser from Keystone.guru.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added privacy controls in your Profile for opting out of Google Analytics cookies and disabling Personalized Ads for Google Adsense. With both options enabled, you should have no third-party cookies on your browser from Keystone.guru."
             },
             {
                 "release_changelog_id": 15,
                 "release_changelog_category_id": 1,
                 "ticket_id": 74,
-                "change": "Now users now have to explicitly agree to the privacy policy, terms of service and the cookie policy. Existing users have to give their consent to continue using the site.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Now users now have to explicitly agree to the privacy policy, terms of service and the cookie policy. Existing users have to give their consent to continue using the site."
             }
         ]
     }

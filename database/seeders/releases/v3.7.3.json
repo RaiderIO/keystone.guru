@@ -16,12 +16,7 @@
                 "release_changelog_id": 78,
                 "release_changelog_category_id": 1,
                 "ticket_id": 487,
-                "change": "Fixed this week's affixes.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Fixed this week's affixes."
             }
         ]
     }

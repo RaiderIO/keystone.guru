@@ -16,122 +16,67 @@
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2000,
-                "change": "Added Maraudon mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Maraudon mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2004,
-                "change": "Added Zul'Farrak mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Zul'Farrak mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2007,
-                "change": "Added Dire Maul East mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Dire Maul East mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2008,
-                "change": "Added Dire Maul North mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Dire Maul North mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2009,
-                "change": "Added Dire Maul West mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Dire Maul West mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2012,
-                "change": "Added Razorfen Downs mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Razorfen Downs mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2013,
-                "change": "Added Razorfen Kraul mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Razorfen Kraul mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2014,
-                "change": "Added Scholomance mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Scholomance mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2015,
-                "change": "Added Stratholme mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Stratholme mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2016,
-                "change": "Added The Temple of Atal'Hakkar mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added The Temple of Atal'Hakkar mapping."
             },
             {
                 "release_changelog_id": 207,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2029,
-                "change": "Added Icecrown Citadel mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Icecrown Citadel mapping."
             }
         ]
     }

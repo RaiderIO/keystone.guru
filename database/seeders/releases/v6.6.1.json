@@ -16,12 +16,7 @@
                 "release_changelog_id": 187,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "All profession benefits added to all dungeons.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "All profession benefits added to all dungeons."
             }
         ]
     }

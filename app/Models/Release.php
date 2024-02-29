@@ -38,6 +38,8 @@ class Release extends CacheModel
 
     protected $appends = ['github_body', 'discord_body', 'reddit_body'];
 
+    protected $hidden = ['reddit_body', 'discord_body', 'github_body'];
+
     /**
      * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
      */
@@ -73,7 +75,7 @@ class Release extends CacheModel
     {
         $body       = trim(view('app.release.discord', [
             'model'   => $this,
-            'mention' => $this->isMajorUpgrade(),
+            'mention' => !$this->silent && $this->isMajorUpgrade(),
         ])->render());
         $bodyLength = strlen($body);
 

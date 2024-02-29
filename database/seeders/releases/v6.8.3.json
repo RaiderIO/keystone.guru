@@ -16,34 +16,19 @@
                 "release_changelog_id": 194,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1832,
-                "change": "Embedding a route can now hide\/show the pulls sidebar based on the width of the total iframe.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Embedding a route can now hide\/show the pulls sidebar based on the width of the total iframe."
             },
             {
                 "release_changelog_id": 194,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1831,
-                "change": "Added a new style for embeds: compact. Also trimmed down the regular embed style to be neater.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added a new style for embeds: compact. Also trimmed down the regular embed style to be neater."
             },
             {
                 "release_changelog_id": 194,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1839,
-                "change": "Dire Maul is now 3 dungeons instead of one.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Dire Maul is now 3 dungeons instead of one."
             }
         ]
     }

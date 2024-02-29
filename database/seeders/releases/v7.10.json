@@ -16,23 +16,13 @@
                 "release_changelog_id": 228,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2194,
-                "change": "[Hotfixed] Fixed thumbnails not showing up in various overview pages.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "[Hotfixed] Fixed thumbnails not showing up in various overview pages."
             },
             {
                 "release_changelog_id": 228,
                 "release_changelog_category_id": 12,
                 "ticket_id": 2195,
-                "change": "Thumbnails are now generated correctly once again. To properly fix this the route thumbnail API can now pass viewport width\/height separate from image width\/height.",
-                "category": {
-                    "id": 12,
-                    "key": "api_changes",
-                    "name": "releasechangelogcategories.api_changes"
-                }
+                "change": "Thumbnails are now generated correctly once again. To properly fix this the route thumbnail API can now pass viewport width\/height separate from image width\/height."
             }
         ]
     }

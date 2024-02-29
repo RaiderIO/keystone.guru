@@ -16,34 +16,19 @@
                 "release_changelog_id": 84,
                 "release_changelog_category_id": 4,
                 "ticket_id": 550,
-                "change": "Inspiring enemies have been added. Note: three areas are missing still. Sanguine Depths before second boss, the anti-clockwise route to the boss may have missing Inspired enemies. Spires of Ascension going left after the first boss. Mists of Tirna Scithe maze south route and past the maze boss on the right may not be accurate. These are either random or very unpopular routes so they shouldn't affect most people. I'll await more footage showing up so I can add these areas too.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Inspiring enemies have been added. Note: three areas are missing still. Sanguine Depths before second boss, the anti-clockwise route to the boss may have missing Inspired enemies. Spires of Ascension going left after the first boss. Mists of Tirna Scithe maze south route and past the maze boss on the right may not be accurate. These are either random or very unpopular routes so they shouldn't affect most people. I'll await more footage showing up so I can add these areas too."
             },
             {
                 "release_changelog_id": 84,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Halls of Atonement: Added missing floor switch marker on the last floor back to the second floor.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Halls of Atonement: Added missing floor switch marker on the last floor back to the second floor."
             },
             {
                 "release_changelog_id": 84,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Various minor adjustments across most dungeons.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Various minor adjustments across most dungeons."
             }
         ]
     }

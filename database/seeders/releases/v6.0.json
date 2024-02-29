@@ -16,23 +16,13 @@
                 "release_changelog_id": 154,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1448,
-                "change": "The way pulls are saved and handled changed drastically - you should notice nothing of this but this was a major overhaul required to align mapping with MythicDungeonTools.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "The way pulls are saved and handled changed drastically - you should notice nothing of this but this was a major overhaul required to align mapping with MythicDungeonTools."
             },
             {
                 "release_changelog_id": 154,
                 "release_changelog_category_id": 4,
                 "ticket_id": 678,
-                "change": "Enemies are now able to be linked with their patrols (will be active when Keystone.guru switches to use MythicDungeonTools mapping).",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Enemies are now able to be linked with their patrols (will be active when Keystone.guru switches to use MythicDungeonTools mapping)."
             }
         ]
     }

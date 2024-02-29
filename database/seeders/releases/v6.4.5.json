@@ -16,12 +16,7 @@
                 "release_changelog_id": 174,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Halls of Infusion mapping adjusted near gauntlet - added\/removed enemies according to latest PTR build.(thanks Xtyr!)",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Halls of Infusion mapping adjusted near gauntlet - added\/removed enemies according to latest PTR build.(thanks Xtyr!)"
             }
         ]
     }

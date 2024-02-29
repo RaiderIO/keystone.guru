@@ -16,34 +16,19 @@
                 "release_changelog_id": 102,
                 "release_changelog_category_id": 1,
                 "ticket_id": 758,
-                "change": "Releases may now have titles, this will help seeing at a glance what the release is for. Useful on Reddit for example.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Releases may now have titles, this will help seeing at a glance what the release is for. Useful on Reddit for example."
             },
             {
                 "release_changelog_id": 102,
                 "release_changelog_category_id": 1,
                 "ticket_id": 760,
-                "change": "Updated backend telemetry system to show me some more info about the site's performance\/statistics.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Updated backend telemetry system to show me some more info about the site's performance\/statistics."
             },
             {
                 "release_changelog_id": 102,
                 "release_changelog_category_id": 4,
                 "ticket_id": 762,
-                "change": "Updated icons in Necrotic Wake for various items - thanks Jastola for providing them!",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Updated icons in Necrotic Wake for various items - thanks Jastola for providing them!"
             }
         ]
     }

@@ -16,34 +16,19 @@
                 "release_changelog_id": 220,
                 "release_changelog_category_id": 1,
                 "ticket_id": 2119,
-                "change": "Updated S3 affixes (hotfixed).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Updated S3 affixes (hotfixed)."
             },
             {
                 "release_changelog_id": 220,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2116,
-                "change": "Fixed too long descriptions for routes messing up the layout of the route discovery pages.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed too long descriptions for routes messing up the layout of the route discovery pages."
             },
             {
                 "release_changelog_id": 220,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2093,
-                "change": "Many tweaks and updates to route thumbnail generation (v2).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Many tweaks and updates to route thumbnail generation (v2)."
             }
         ]
     }

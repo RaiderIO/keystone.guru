@@ -16,12 +16,7 @@
                 "release_changelog_id": 32,
                 "release_changelog_category_id": 1,
                 "ticket_id": 179,
-                "change": "Added an admin dashboard.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added an admin dashboard."
             }
         ]
     }

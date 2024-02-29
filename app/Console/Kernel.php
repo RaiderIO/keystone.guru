@@ -39,9 +39,10 @@ use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
 use App\Console\Commands\ReadOnlyMode\Enable as EnableReadOnlyMode;
-use App\Console\Commands\Release\GetCurrentRelease;
-use App\Console\Commands\Release\GetReleaseBody;
-use App\Console\Commands\Release\ReportRelease;
+use App\Console\Commands\Release\Export as ReleaseExport;
+use App\Console\Commands\Release\GetBody as ReleaseGetBody;
+use App\Console\Commands\Release\GetCurrent as ReleaseGetCurrent;
+use App\Console\Commands\Release\Report as ReleaseReport;
 use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
@@ -135,10 +136,11 @@ class Kernel extends ConsoleKernel
         DisableReadOnlyMode::class,
 
         // Release
-        GetCurrentRelease::class,
-        GetReleaseBody::class,
-        ReportRelease::class,
+        ReleaseGetCurrent::class,
+        ReleaseGetBody::class,
+        ReleaseReport::class,
         ReleaseSave::class,
+        ReleaseExport::class,
 
         // Scheduler
         DeleteExpiredDungeonRoutes::class,

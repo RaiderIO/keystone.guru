@@ -16,12 +16,7 @@
                 "release_changelog_id": 210,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2049,
-                "change": "Added ICC 25-man mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added ICC 25-man mapping."
             }
         ]
     }

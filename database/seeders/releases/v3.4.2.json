@@ -16,12 +16,7 @@
                 "release_changelog_id": 62,
                 "release_changelog_category_id": 1,
                 "ticket_id": 430,
-                "change": "Changes to improve mapping of dungeons.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Changes to improve mapping of dungeons."
             }
         ]
     }

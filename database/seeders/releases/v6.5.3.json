@@ -16,23 +16,13 @@
                 "release_changelog_id": 183,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Updated Freehold mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/458",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Updated Freehold mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/458"
             },
             {
                 "release_changelog_id": 183,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Updated Vortex Pinnacle mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/461",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Updated Vortex Pinnacle mapping, see https:\/\/github.com\/Nnoggie\/MythicDungeonTools\/issues\/461"
             }
         ]
     }

@@ -24,7 +24,7 @@ class ReleaseChangelogChange extends CacheModel
 
     protected $fillable = ['id', 'release_changelog_id', 'release_changelog_category_id', 'ticket_id', 'change'];
 
-    protected $visible = ['ticket_id', 'change', 'category', 'release_changelog_category_id', 'release_changelog_id'];
+    protected $visible = ['ticket_id', 'change', 'release_changelog_category_id', 'release_changelog_id'];
 
     protected $with = ['category'];
 
@@ -37,6 +37,6 @@ class ReleaseChangelogChange extends CacheModel
 
     public function changelog(): HasOne
     {
-        return $this->hasOne(ReleaseChangelog::class);
+        return $this->hasOne(ReleaseChangelog::class, 'release_changelog_id');
     }
 }

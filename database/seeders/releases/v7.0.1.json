@@ -16,23 +16,13 @@
                 "release_changelog_id": 204,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1986,
-                "change": "Added demo routes for Classic dungeons.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added demo routes for Classic dungeons."
             },
             {
                 "release_changelog_id": 204,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1985,
-                "change": "Fixed an issue where Classic dungeons' enemies would not persist when saving your pulls.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an issue where Classic dungeons' enemies would not persist when saving your pulls."
             }
         ]
     }

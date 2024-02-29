@@ -16,45 +16,25 @@
                 "release_changelog_id": 83,
                 "release_changelog_category_id": 1,
                 "ticket_id": 544,
-                "change": "Routes created in Keystone.guru may now be embedded on another web page. Copy the code from the sidebar on the left to get started!",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Routes created in Keystone.guru may now be embedded on another web page. Copy the code from the sidebar on the left to get started!"
             },
             {
                 "release_changelog_id": 83,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "De Other Side: Removed a Headless Client in Mechagon. It was removed before but it snuck its way back in.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "De Other Side: Removed a Headless Client in Mechagon. It was removed before but it snuck its way back in."
             },
             {
                 "release_changelog_id": 83,
                 "release_changelog_category_id": 5,
                 "ticket_id": 547,
-                "change": "Unlisted routes now properly show up in your profile and are no longer unlisted from yourself too.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Unlisted routes now properly show up in your profile and are no longer unlisted from yourself too."
             },
             {
                 "release_changelog_id": 83,
                 "release_changelog_category_id": 6,
                 "ticket_id": null,
-                "change": "De Other Side: Fixed Mueh'Zala not being imported properly.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "De Other Side: Fixed Mueh'Zala not being imported properly."
             }
         ]
     }

@@ -16,23 +16,13 @@
                 "release_changelog_id": 61,
                 "release_changelog_category_id": 1,
                 "ticket_id": 424,
-                "change": "Reworked the front page to make it more clear that MDT import is a feature. Also updated some information and added a dungeon selector so you can more easily jump to a demo route.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Reworked the front page to make it more clear that MDT import is a feature. Also updated some information and added a dungeon selector so you can more easily jump to a demo route."
             },
             {
                 "release_changelog_id": 61,
                 "release_changelog_category_id": 4,
                 "ticket_id": 252,
-                "change": "Operation: Mechagon Workshop: added missing enemies. Also fixed various issues in the admin section.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Operation: Mechagon Workshop: added missing enemies. Also fixed various issues in the admin section."
             }
         ]
     }

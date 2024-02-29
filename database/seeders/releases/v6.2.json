@@ -16,23 +16,13 @@
                 "release_changelog_id": 165,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1581,
-                "change": "Linking a Patreon account to a second Keystone.guru account will now unlink it from the first account, removing benefits from the first account and placing them on the second account.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Linking a Patreon account to a second Keystone.guru account will now unlink it from the first account, removing benefits from the first account and placing them on the second account."
             },
             {
                 "release_changelog_id": 165,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1553,
-                "change": "Added Ulduar mapping and required enemies for 25-man speedrun. Note: 10-man speedrun currently is not supported but will be added later.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Ulduar mapping and required enemies for 25-man speedrun. Note: 10-man speedrun currently is not supported but will be added later."
             }
         ]
     }

@@ -9,14 +9,14 @@ use App\Service\Reddit\RedditApiService;
 use Exception;
 use Illuminate\Console\Command;
 
-class ReportRelease extends Command
+class Report extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'report:release {platform} {version=latest}';
+    protected $signature = 'release:report {platform} {version=latest}';
 
     /**
      * The console command description.
