@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Permission;
-use App\Role;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
@@ -79,7 +79,7 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                     'legal_agreed'    => 1,
                     'legal_agreed_ms' => -1,
                 ]);
-                $user->attachRole($role);
+                $user->addRole($role);
             }
 
         }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models\Laratrust;
 
 use Eloquent;
-use Laratrust\Models\LaratrustPermission;
+use Laratrust\Models\Permission as LaratrustPermission;
 
 /**
  * @mixin Eloquent

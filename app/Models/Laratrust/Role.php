@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models\Laratrust;
 
 use Eloquent;
-use Laratrust\Models\LaratrustRole;
+use Laratrust\Models\Role as LaratrustRole;
 
 /**
  * @mixin Eloquent

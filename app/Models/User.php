@@ -4,16 +4,14 @@ namespace App\Models;
 
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\Tags\Tag;
-use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
-use App\Models\UserReport;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +22,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Laratrust\Traits\LaratrustUserTrait;
+use Laratrust\Contracts\LaratrustUser;
+use Laratrust\Traits\HasRolesAndPermissions;
 
 /**
  * @property int                       $id
@@ -60,11 +59,11 @@ use Laratrust\Traits\LaratrustUserTrait;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements LaratrustUser
 {
     use GeneratesPublicKey;
     use HasIconFile;
-    use LaratrustUserTrait;
+    use HasRolesAndPermissions;
     use Notifiable;
 
     public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';

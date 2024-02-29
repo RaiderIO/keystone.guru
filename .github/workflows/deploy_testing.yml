@@ -10,9 +10,9 @@ jobs:
   deploy:
     name: Deploy to Testing
     runs-on: ubuntu-latest
+    if: github.actor == 'Wotuu'
     steps:
       - uses: actions/checkout@v4
-        if: github.actor == 'Wotuu'
       - name: Composer install
         uses: php-actions/composer@v6
         with:

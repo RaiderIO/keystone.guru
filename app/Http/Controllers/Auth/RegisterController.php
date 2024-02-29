@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\GameServerRegion;
-use App\Role;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
@@ -86,7 +86,7 @@ class RegisterController extends Controller
             'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);
 
-        $user->attachRole($userRole);
+        $user->addRole($userRole);
 
         return $user;
     }
