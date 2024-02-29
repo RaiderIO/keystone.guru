@@ -98,7 +98,7 @@ class AjaxDungeonRouteController extends Controller
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(static function (Builder $query) {
+            ->where(function (Builder $query) {
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
             })
@@ -145,7 +145,7 @@ class AjaxDungeonRouteController extends Controller
 
             // Handle favorites
             if (in_array('favorite', $requirements, true) || $request->get('favorites', false)) {
-                $routes = $routes->whereHas('favorites', static function ($query) use (&$user) {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
