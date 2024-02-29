@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Role;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
@@ -102,7 +102,7 @@ abstract class OAuthLoginController extends LoginController
                         $existingUser->save();
 
                         // Add it as a user
-                        $existingUser->attachRole(Role::where('name', 'user')->first());
+                        $existingUser->addRole(Role::where('name', 'user')->first());
 
                         Session::flash('status', __('controller.oauthlogin.flash.registered_successfully'));
                     } else {

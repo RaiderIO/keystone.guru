@@ -32,15 +32,16 @@ class UserController extends Controller
 
     public function makeadmin(Request $request, User $user): RedirectResponse
     {
+        /** @var User $currentUser */
         $currentUser = Auth::user();
-        if ($currentUser !== null && array_search($currentUser->name, config('keystoneguru.super_admins', []), true) !== false) {
+        if ($currentUser !== null && in_array($currentUser->name, config('keystoneguru.super_admins', []), true)) {
             if (!$user->hasRole('admin')) {
-                $user->attachRole('admin');
+                $user->addRole('admin');
 
                 // Message to the user
                 Session::flash('status', sprintf(__('controller.user.flash.user_is_now_an_admin'), $user->name));
             } else {
-                $user->detachRole('admin');
+                $user->removeRole('admin');
 
                 // Message to the user
                 Session::flash('status', sprintf(__('controller.user.flash.user_is_no_longer_an_admin'), $user->name));
@@ -52,11 +53,12 @@ class UserController extends Controller
 
     public function makeuser(Request $request, User $user): RedirectResponse
     {
+        /** @var User $currentUser */
         $currentUser = Auth::user();
         if ($currentUser !== null && $currentUser->name === 'Admin') {
-            $user->detachRoles($user->roles);
+            $user->removeRoles($user->roles);
 
-            $user->attachRole('user');
+            $user->addRole('user');
 
             // Message to the user
             Session::flash('status', sprintf(__('controller.user.flash.user_is_now_a_user'), $user->name));

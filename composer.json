@@ -81,7 +81,7 @@
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.1",
         "predis/predis": "^2.0",
-        "santigarcor/laratrust": "^7.2",
+        "santigarcor/laratrust": "^8.2",
         "shrikeh/teapot": "^2.3",
         "socialiteproviders/battlenet": "^4.1.0",
         "socialiteproviders/discord": "^4.2.0",
