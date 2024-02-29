@@ -5,8 +5,8 @@ namespace App\Logging;
 use App\Logic\Utils\Stopwatch;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
+use Illuminate\Log\LogManager;
 use Monolog\Level;
-use Monolog\Logger;
 
 class StructuredLogging implements StructuredLoggingInterface
 {
@@ -32,13 +32,13 @@ class StructuredLogging implements StructuredLoggingInterface
     {
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
         $this->groupedContexts[$key] = empty($context) ? [] : array_merge(...$context);
-        $this->cachedContext         = empty($this->groupedContexts) ? [] : array_merge(array_values(...$this->groupedContexts));
+        $this->cacheGroupedContexts();
     }
 
     public function removeContext(string $key): void
     {
         unset($this->groupedContexts[$key]);
-        $this->cachedContext = empty($this->groupedContexts) ? [] : array_merge(array_values(...$this->groupedContexts));
+        $this->cacheGroupedContexts();
     }
 
     protected function getChannel(): ?string
@@ -122,6 +122,11 @@ class StructuredLogging implements StructuredLoggingInterface
         $this->log(Level::Emergency, $functionName, $context);
     }
 
+    protected function logger(): LogManager
+    {
+        return logger();
+    }
+
     private function log(Level $level, string $functionName, array $context = []): void
     {
         $levelName = $level->getName();
@@ -131,10 +136,19 @@ class StructuredLogging implements StructuredLoggingInterface
 
         $messageWithContextCounts = trim(sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0]));
         // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
-        logger()->channel($this->channel)->log(
+        $this->logger()->channel($this->channel)->log(
             $levelName,
             sprintf('%s%s', $startPadding, $messageWithContextCounts),
             array_merge($this->cachedContext, $context)
         );
+    }
+
+    private function cacheGroupedContexts(): void
+    {
+        $this->cachedContext = [];
+
+        foreach($this->groupedContexts as $key => $context) {
+            $this->cachedContext = array_merge($this->cachedContext, $context);
+        }
     }
 }
