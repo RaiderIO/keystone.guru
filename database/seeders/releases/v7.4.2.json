@@ -16,12 +16,7 @@
                 "release_changelog_id": 214,
                 "release_changelog_category_id": 11,
                 "ticket_id": 2094,
-                "change": "Most dungeons for S3 are now working with the Auto Route Creator.",
-                "category": {
-                    "id": 11,
-                    "key": "auto_route_changes",
-                    "name": "releasechangelogcategories.auto_route_changes"
-                }
+                "change": "Most dungeons for S3 are now working with the Auto Route Creator."
             }
         ]
     }

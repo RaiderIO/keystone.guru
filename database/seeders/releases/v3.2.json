@@ -16,45 +16,25 @@
                 "release_changelog_id": 58,
                 "release_changelog_category_id": 1,
                 "ticket_id": 382,
-                "change": "Updating the privacy settings no longer results in a 404.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Updating the privacy settings no longer results in a 404."
             },
             {
                 "release_changelog_id": 58,
                 "release_changelog_category_id": 3,
                 "ticket_id": 381,
-                "change": "Improved the performance while zooming in\/out of the map.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Improved the performance while zooming in\/out of the map."
             },
             {
                 "release_changelog_id": 58,
                 "release_changelog_category_id": 3,
                 "ticket_id": 372,
-                "change": "Awakened enemies can now be killed with the final boss.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Awakened enemies can now be killed with the final boss."
             },
             {
                 "release_changelog_id": 58,
                 "release_changelog_category_id": 3,
                 "ticket_id": 384,
-                "change": "You can now change the Teeming state of your map after it's been created.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "You can now change the Teeming state of your map after it's been created."
             }
         ]
     }

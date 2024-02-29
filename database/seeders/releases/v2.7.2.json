@@ -16,34 +16,19 @@
                 "release_changelog_id": 38,
                 "release_changelog_category_id": 1,
                 "ticket_id": 230,
-                "change": "On the \/affixes page, the preset for the affix is now displayed. This should aid you in selecting the proper beguiling preset for your route. By default, the beguiling preset is now also set to the current preset which is active for your region (based on profile settings).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "On the \/affixes page, the preset for the affix is now displayed. This should aid you in selecting the proper beguiling preset for your route. By default, the beguiling preset is now also set to the current preset which is active for your region (based on profile settings)."
             },
             {
                 "release_changelog_id": 38,
                 "release_changelog_category_id": 1,
                 "ticket_id": 232,
-                "change": "Required fields are now highlighted in orange (the asterisk).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Required fields are now highlighted in orange (the asterisk)."
             },
             {
                 "release_changelog_id": 38,
                 "release_changelog_category_id": 5,
                 "ticket_id": 231,
-                "change": "Fixed an issue where cloning a public route would fail unless it was owned by you.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an issue where cloning a public route would fail unless it was owned by you."
             }
         ]
     }

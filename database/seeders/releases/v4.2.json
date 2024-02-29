@@ -16,133 +16,73 @@
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 1,
                 "ticket_id": 883,
-                "change": "Made various changes to accomodate the addition of Legion routes alongside current Shadowlands routes.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Made various changes to accomodate the addition of Legion routes alongside current Shadowlands routes."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 1,
                 "ticket_id": 107,
-                "change": "The site is now fully translatable and available in Russian. Thanks so much to Rodriguez#8726 for your help with providing translations!",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "The site is now fully translatable and available in Russian. Thanks so much to Rodriguez#8726 for your help with providing translations!"
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 1,
                 "ticket_id": 882,
-                "change": "Added a background service which performs some caching to increase the load speed of all \/routes pages.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added a background service which performs some caching to increase the load speed of all \/routes pages."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
                 "ticket_id": 877,
-                "change": "Added Neltharion's Lair mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Neltharion's Lair mapping."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
                 "ticket_id": 878,
-                "change": "Added Vault of the Wardens mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Vault of the Wardens mapping."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
                 "ticket_id": 873,
-                "change": "Added Black Rook Hold mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Black Rook Hold mapping."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
                 "ticket_id": 874,
-                "change": "Added Court of Stars mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Court of Stars mapping."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
                 "ticket_id": 875,
-                "change": "Added Darkheart Thicket mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Darkheart Thicket mapping."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 4,
                 "ticket_id": 876,
-                "change": "Added Eye of Azshara mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Eye of Azshara mapping."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 5,
                 "ticket_id": 866,
-                "change": "Mouse synchronization now properly works when you have set yourself to be anonymous in your profile (which is the default).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Mouse synchronization now properly works when you have set yourself to be anonymous in your profile (which is the default)."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 5,
                 "ticket_id": 867,
-                "change": "Following a user's map movements when using a live session will now sync your viewport to their exact position, instead of the previously known position.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Following a user's map movements when using a live session will now sync your viewport to their exact position, instead of the previously known position."
             },
             {
                 "release_changelog_id": 118,
                 "release_changelog_category_id": 5,
                 "ticket_id": 872,
-                "change": "Concluding a live session will no longer prompt the route author to rate their own route (if the current user made that route); you cannot rate your own routes.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Concluding a live session will no longer prompt the route author to rate their own route (if the current user made that route); you cannot rate your own routes."
             }
         ]
     }

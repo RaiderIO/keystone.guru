@@ -16,12 +16,7 @@
                 "release_changelog_id": 226,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2172,
-                "change": "Admin pages change to help fix thumbnails not being generated properly for routes with combined floors",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Admin pages change to help fix thumbnails not being generated properly for routes with combined floors"
             }
         ]
     }

@@ -16,12 +16,7 @@
                 "release_changelog_id": 34,
                 "release_changelog_category_id": 1,
                 "ticket_id": 186,
-                "change": "Updated the affixes page to reflect the current and upcoming season.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Updated the affixes page to reflect the current and upcoming season."
             }
         ]
     }

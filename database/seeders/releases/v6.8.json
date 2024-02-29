@@ -16,12 +16,7 @@
                 "release_changelog_id": 190,
                 "release_changelog_category_id": 2,
                 "ticket_id": 1789,
-                "change": "You can now couple spells to pulls, allowing you to better plan your cooldowns. For now just Bloodlust-type spells, more to come soon!",
-                "category": {
-                    "id": 2,
-                    "key": "route_changes",
-                    "name": "releasechangelogcategories.route_changes"
-                }
+                "change": "You can now couple spells to pulls, allowing you to better plan your cooldowns. For now just Bloodlust-type spells, more to come soon!"
             }
         ]
     }

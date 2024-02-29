@@ -16,12 +16,7 @@
                 "release_changelog_id": 157,
                 "release_changelog_category_id": 5,
                 "ticket_id": 864,
-                "change": "Fixed an issue where killing the same enemy twice would calculate that enemy twice for enemy forces.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an issue where killing the same enemy twice would calculate that enemy twice for enemy forces."
             }
         ]
     }

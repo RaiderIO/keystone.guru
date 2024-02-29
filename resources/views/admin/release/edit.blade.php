@@ -73,7 +73,6 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
     @isset($release)
         <div class="form-group">
             <?php
-                $release->makeHidden(['reddit_body', 'discord_body', 'github_body']);
                 $releaseArr = $release->toArray();
             ?>
             {!! Form::label('release_json', __('views/admin.release.edit.release_json')) !!}

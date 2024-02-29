@@ -16,12 +16,7 @@
                 "release_changelog_id": 208,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2039,
-                "change": "Many new dungeons had their enemy packs assigned incorrectly - this has been corrected.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Many new dungeons had their enemy packs assigned incorrectly - this has been corrected."
             }
         ]
     }

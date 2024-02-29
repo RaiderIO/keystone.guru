@@ -16,34 +16,19 @@
                 "release_changelog_id": 184,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1740,
-                "change": "Sped up the loading time of route lists if you have a lot of views for your routes.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Sped up the loading time of route lists if you have a lot of views for your routes."
             },
             {
                 "release_changelog_id": 184,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1722,
-                "change": "Added support for enemies not being full health (Watcher Irideus, for example).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added support for enemies not being full health (Watcher Irideus, for example)."
             },
             {
                 "release_changelog_id": 184,
                 "release_changelog_category_id": 10,
                 "ticket_id": 1741,
-                "change": "Fixed \"the affix field is required\" when attempting to generate SimulationCraft strings for non-Thundering routes.",
-                "category": {
-                    "id": 10,
-                    "key": "simulation_craft_changes",
-                    "name": "releasechangelogcategories.simulation_craft_changes"
-                }
+                "change": "Fixed \"the affix field is required\" when attempting to generate SimulationCraft strings for non-Thundering routes."
             }
         ]
     }

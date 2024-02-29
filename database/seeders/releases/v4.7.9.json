@@ -16,12 +16,7 @@
                 "release_changelog_id": 147,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1297,
-                "change": "Hotfixes for Lower Karazhan.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Hotfixes for Lower Karazhan."
             }
         ]
     }

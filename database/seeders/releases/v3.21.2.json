@@ -16,12 +16,7 @@
                 "release_changelog_id": 95,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Fixed backdrop z-index being too high, preventing people from being able to log in.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed backdrop z-index being too high, preventing people from being able to log in."
             }
         ]
     }

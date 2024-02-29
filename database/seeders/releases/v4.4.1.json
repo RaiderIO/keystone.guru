@@ -16,12 +16,7 @@
                 "release_changelog_id": 126,
                 "release_changelog_category_id": 6,
                 "ticket_id": 940,
-                "change": "Fixed various issues with the MDT string importer.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Fixed various issues with the MDT string importer."
             }
         ]
     }

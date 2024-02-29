@@ -16,34 +16,19 @@
                 "release_changelog_id": 107,
                 "release_changelog_category_id": 1,
                 "ticket_id": 792,
-                "change": "Further increased performance of \/routes and \/affixes pages. I'll get them to be quick eventually.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Further increased performance of \/routes and \/affixes pages. I'll get them to be quick eventually."
             },
             {
                 "release_changelog_id": 107,
                 "release_changelog_category_id": 1,
                 "ticket_id": 806,
-                "change": "Added new admin page to allow me to debug issues with routes easier.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added new admin page to allow me to debug issues with routes easier."
             },
             {
                 "release_changelog_id": 107,
                 "release_changelog_category_id": 5,
                 "ticket_id": 785,
-                "change": "Copy to Clipboard functionality in Share window now works again.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Copy to Clipboard functionality in Share window now works again."
             }
         ]
     }

@@ -16,23 +16,13 @@
                 "release_changelog_id": 53,
                 "release_changelog_category_id": 1,
                 "ticket_id": 241,
-                "change": "The website is now running on a dedicated server.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "The website is now running on a dedicated server."
             },
             {
                 "release_changelog_id": 53,
                 "release_changelog_category_id": 6,
                 "ticket_id": 344,
-                "change": "Various improvements for importing MDT strings.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Various improvements for importing MDT strings."
             }
         ]
     }

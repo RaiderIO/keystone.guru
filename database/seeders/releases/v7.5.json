@@ -16,12 +16,7 @@
                 "release_changelog_id": 221,
                 "release_changelog_category_id": 1,
                 "ticket_id": 2124,
-                "change": "What the site thinks is the current season\/expansion is now always decided upon based on the game region you selected in your profile. It will no longer sometimes show incorrect seasons based on your region.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "What the site thinks is the current season\/expansion is now always decided upon based on the game region you selected in your profile. It will no longer sometimes show incorrect seasons based on your region."
             }
         ]
     }

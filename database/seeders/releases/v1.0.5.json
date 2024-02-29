@@ -16,78 +16,43 @@
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Ratings now show as a '-' if no votes have been cast rather than 1 (0 votes).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Ratings now show as a '-' if no votes have been cast rather than 1 (0 votes)."
             },
             {
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Increased polish all around, mostly minor things.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Increased polish all around, mostly minor things."
             },
             {
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone again.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Deleting a killzone with enemies attached will now allow you to re-attach those enemies to another killzone again."
             },
             {
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Switching floors will no longer generate duplicate killzones (also potentially leading to inflated enemy forces counts, these are corrected).",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Switching floors will no longer generate duplicate killzones (also potentially leading to inflated enemy forces counts, these are corrected)."
             },
             {
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Fixed multiple other issues related to switching floors.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Fixed multiple other issues related to switching floors."
             },
             {
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Improved error handling when things go wrong when planning your route.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Improved error handling when things go wrong when planning your route."
             },
             {
                 "release_changelog_id": 10,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "You are now given feedback when deleting objects has succeeded.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "You are now given feedback when deleting objects has succeeded."
             }
         ]
     }

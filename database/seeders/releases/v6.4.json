@@ -16,34 +16,19 @@
                 "release_changelog_id": 169,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1618,
-                "change": "Added Dragonflight Season 2 support.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Dragonflight Season 2 support."
             },
             {
                 "release_changelog_id": 169,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1634,
-                "change": "Reworked some endpoints to increase security (hotfixed).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Reworked some endpoints to increase security (hotfixed)."
             },
             {
                 "release_changelog_id": 169,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1636,
-                "change": "Deleting a user no longer sometimes deletes a team you were a member of (hotfixed).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Deleting a user no longer sometimes deletes a team you were a member of (hotfixed)."
             }
         ]
     }

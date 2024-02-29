@@ -16,23 +16,13 @@
                 "release_changelog_id": 218,
                 "release_changelog_category_id": 1,
                 "ticket_id": 2113,
-                "change": "Switched ad provider from NitroPay to Playwire.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Switched ad provider from NitroPay to Playwire."
             },
             {
                 "release_changelog_id": 218,
                 "release_changelog_category_id": 8,
                 "ticket_id": 2112,
-                "change": "Exporting a route to MDT on dungeons that have a combined floor (Throne of the Tides, Black Rook Hold, Dawn of the Infinite) now properly exports the route for display in MDT.",
-                "category": {
-                    "id": 8,
-                    "key": "mdt_exporter_changes",
-                    "name": "releasechangelogcategories.mdt_exporter_changes"
-                }
+                "change": "Exporting a route to MDT on dungeons that have a combined floor (Throne of the Tides, Black Rook Hold, Dawn of the Infinite) now properly exports the route for display in MDT."
             }
         ]
     }

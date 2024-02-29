@@ -16,12 +16,7 @@
                 "release_changelog_id": 149,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1376,
-                "change": "Fixed various issues with the SimulationCraft implementation which brings it much closer to actual log results (thanks Finalslave for reporting).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed various issues with the SimulationCraft implementation which brings it much closer to actual log results (thanks Finalslave for reporting)."
             }
         ]
     }

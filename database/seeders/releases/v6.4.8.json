@@ -16,12 +16,7 @@
                 "release_changelog_id": 177,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1685,
-                "change": "Calculation for when the current\/next season is for certain dungeons was incorrect and did not take into account timezones etc.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Calculation for when the current\/next season is for certain dungeons was incorrect and did not take into account timezones etc."
             }
         ]
     }

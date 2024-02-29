@@ -16,12 +16,7 @@
                 "release_changelog_id": 70,
                 "release_changelog_category_id": 3,
                 "ticket_id": 469,
-                "change": "Admin: coupling enemies to a pack now works properly again.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Admin: coupling enemies to a pack now works properly again."
             }
         ]
     }

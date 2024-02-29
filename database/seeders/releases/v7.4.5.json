@@ -16,23 +16,13 @@
                 "release_changelog_id": 217,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Updated MDT version to include the latest mapping of various dungeons.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Updated MDT version to include the latest mapping of various dungeons."
             },
             {
                 "release_changelog_id": 217,
                 "release_changelog_category_id": 6,
                 "ticket_id": 2092,
-                "change": "Importing a string from a dungeon with combined floors in MDT now puts drawn lines and map comments on the correct floors. The exporter still has issues on this front - will fix them later.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Importing a string from a dungeon with combined floors in MDT now puts drawn lines and map comments on the correct floors. The exporter still has issues on this front - will fix them later."
             }
         ]
     }

@@ -16,122 +16,67 @@
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 3,
                 "ticket_id": 563,
-                "change": "Switching floors will no longer sometimes cause your Edit and Delete buttons to become grayed out until you refresh the page. Thanks Akiranai for reporting!",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Switching floors will no longer sometimes cause your Edit and Delete buttons to become grayed out until you refresh the page. Thanks Akiranai for reporting!"
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 3,
                 "ticket_id": 568,
-                "change": "Clicking on an empty pull in the sidebar no longer causes the map to go blank. Thanks Ogando | Steffen for reporting!",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Clicking on an empty pull in the sidebar no longer causes the map to go blank. Thanks Ogando | Steffen for reporting!"
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Sanguine Depths: Removed Famished Tick link with the first boss - kept the note about it being bugged sometimes though. Fixed various MDT coupling errors on the General Kaal gauntlet, leading to import warnings. Removed a Wicket Oppressor in that same gauntlet that isn't actually there.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Sanguine Depths: Removed Famished Tick link with the first boss - kept the note about it being bugged sometimes though. Fixed various MDT coupling errors on the General Kaal gauntlet, leading to import warnings. Removed a Wicket Oppressor in that same gauntlet that isn't actually there."
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Plaguefall: Added a missing Unstable Canister after the second boss. Thanks greatman for reporting! Plaguebound Devoted with NPC id 171188\/173840 now properly give 4 enemy forces instead of 0. Thanks Sonskyn for reporting!",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Plaguefall: Added a missing Unstable Canister after the second boss. Thanks greatman for reporting! Plaguebound Devoted with NPC id 171188\/173840 now properly give 4 enemy forces instead of 0. Thanks Sonskyn for reporting!"
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "De Other Side: Added button that engineers can press in Mechagon to stop the flow of slimes. Thanks \/r\/CompetitiveWoW.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "De Other Side: Added button that engineers can press in Mechagon to stop the flow of slimes. Thanks \/r\/CompetitiveWoW."
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Halls of Atonement: Changed a Depraved Obliterator into a Depraved Darkblade in the pack right in front of the first boss.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Halls of Atonement: Changed a Depraved Obliterator into a Depraved Darkblade in the pack right in front of the first boss."
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "The Necrotic Wake: Added missing floor switch marker from Zolramus to Stitchwerks.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "The Necrotic Wake: Added missing floor switch marker from Zolramus to Stitchwerks."
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Spires of Ascension: Spires of Ascension: Three enemies were inside the contours of a pack, but were not actually assigned to the pack. This has been corrected, attempt 2.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Spires of Ascension: Spires of Ascension: Three enemies were inside the contours of a pack, but were not actually assigned to the pack. This has been corrected, attempt 2."
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 6,
                 "ticket_id": 567,
-                "change": "Importing objects from MDT strings now respect the visible flag, if they aren't visible in MDT they will be ignored when importing. Thanks Ogando | Steffen for reporting!",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Importing objects from MDT strings now respect the visible flag, if they aren't visible in MDT they will be ignored when importing. Thanks Ogando | Steffen for reporting!"
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 6,
                 "ticket_id": null,
-                "change": "De Other Side: Fixed Risen Bonesoldier in the first pack not being imported properly. Thanks Ogando | Steffen for reporting (seeing a pattern yet?)",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "De Other Side: Fixed Risen Bonesoldier in the first pack not being imported properly. Thanks Ogando | Steffen for reporting (seeing a pattern yet?)"
             },
             {
                 "release_changelog_id": 86,
                 "release_changelog_category_id": 6,
                 "ticket_id": null,
-                "change": "Halls of Atonement: Fixed MDT coupling with Loyal Stoneborns - they will no longer give import warnings.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Halls of Atonement: Fixed MDT coupling with Loyal Stoneborns - they will no longer give import warnings."
             }
         ]
     }

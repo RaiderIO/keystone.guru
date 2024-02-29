@@ -6,21 +6,21 @@ use App\Models\Release;
 use Exception;
 use Illuminate\Console\Command;
 
-class GetReleaseBody extends Command
+class GetBody extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'keystoneguru:release {version} {platform=github}';
+    protected $signature = 'release:body {version} {platform=github}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Retrieves the latest/current release of Keystone.guru';
+    protected $description = 'Retrieves the body of a platform from a release';
 
     /**
      * Create a new command instance.

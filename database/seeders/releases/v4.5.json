@@ -16,144 +16,79 @@
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 1,
                 "ticket_id": 956,
-                "change": "Added a new route coverage overview, showing you what dungeons and affixes you still need to create or find routes for.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added a new route coverage overview, showing you what dungeons and affixes you still need to create or find routes for."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 1,
                 "ticket_id": 961,
-                "change": "Added Encrypted affix to map view (though we probably want to get some better support for it later).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added Encrypted affix to map view (though we probably want to get some better support for it later)."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 1,
                 "ticket_id": 967,
-                "change": "Added new M+ season with Encrypted as its affix",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added new M+ season with Encrypted as its affix"
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 3,
                 "ticket_id": 952,
-                "change": "Adding a new pull with shift + click will now insert this pull behind your currently selected pull (if any).",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Adding a new pull with shift + click will now insert this pull behind your currently selected pull (if any)."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 3,
                 "ticket_id": 953,
-                "change": "Added Guardian Druid Incarnation map icon.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Added Guardian Druid Incarnation map icon."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 3,
                 "ticket_id": 970,
-                "change": "By default, all pulls are now connected with a line similar to the dungeon preview image so you can more easily follow the flow of a route. You can disable this in the left sidebar under Elements -> Pull connections.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "By default, all pulls are now connected with a line similar to the dungeon preview image so you can more easily follow the flow of a route. You can disable this in the left sidebar under Elements -> Pull connections."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 4,
                 "ticket_id": 960,
-                "change": "Added Tazavesh: Streets of Wonder and Tazavesh: So'leah's Gambit. Note: MDT importer\/exporter not supported yet.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Tazavesh: Streets of Wonder and Tazavesh: So'leah's Gambit. Note: MDT importer\/exporter not supported yet."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 4,
                 "ticket_id": 965,
-                "change": "Adjusted health values and enemy forces of all Shadowlands dungeons (including Tazavesh) with expert help from Forced and Marlamin from the WoW.tools and WoW Trace Discord.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Adjusted health values and enemy forces of all Shadowlands dungeons (including Tazavesh) with expert help from Forced and Marlamin from the WoW.tools and WoW Trace Discord."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 5,
                 "ticket_id": 949,
-                "change": "Removing a kill area from a pull now properly syncs this action to all others viewing the route.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Removing a kill area from a pull now properly syncs this action to all others viewing the route."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 5,
                 "ticket_id": 950,
-                "change": "Removing a kill area now syncs this action to all others viewing the route.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Removing a kill area now syncs this action to all others viewing the route."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 5,
                 "ticket_id": 954,
-                "change": "Switching floors while having the left sidebar expanded no longer causes descriptions to disappear.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Switching floors while having the left sidebar expanded no longer causes descriptions to disappear."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 5,
                 "ticket_id": 955,
-                "change": "Switching floors and using the browser back button now navigates you back to the previous floor(s).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Switching floors and using the browser back button now navigates you back to the previous floor(s)."
             },
             {
                 "release_changelog_id": 128,
                 "release_changelog_category_id": 5,
                 "ticket_id": 957,
-                "change": "Fixed ghost tooltips of enemy %-ages in map view when using route synchronization with others.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed ghost tooltips of enemy %-ages in map view when using route synchronization with others."
             }
         ]
     }

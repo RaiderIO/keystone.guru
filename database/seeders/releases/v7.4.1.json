@@ -16,12 +16,7 @@
                 "release_changelog_id": 213,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2079,
-                "change": "Fixed various crashes and issues that were introduced in release v7.4.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed various crashes and issues that were introduced in release v7.4."
             }
         ]
     }

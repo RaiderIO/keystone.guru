@@ -16,12 +16,7 @@
                 "release_changelog_id": 134,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1062,
-                "change": "Updated Tazavesh mapping further and corrected enemy forces.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Updated Tazavesh mapping further and corrected enemy forces."
             }
         ]
     }

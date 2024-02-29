@@ -16,12 +16,7 @@
                 "release_changelog_id": 152,
                 "release_changelog_category_id": 4,
                 "ticket_id": 1405,
-                "change": "Added Naxxramas (many thanks to Cosmophile for adding it!)",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Naxxramas (many thanks to Cosmophile for adding it!)"
             }
         ]
     }
