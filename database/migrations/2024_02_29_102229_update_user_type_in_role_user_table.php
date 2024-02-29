@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlResolve */
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::update("
-            UPDATE `role_user` SET `user_type` = 'App\\Models\\User' WHERE `user_type` = 'App\\User'
-        ");
+        DB::update('
+            UPDATE `role_user` SET `user_type` = "App\\Models\\User" WHERE `user_type` = "App\\User"
+        ');
     }
 
     /**
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::update("
-            UPDATE `role_user` SET `user_type` = 'App\\User' WHERE `user_type` = 'App\\Models\\User'
-        ");
+        DB::update('
+            UPDATE `role_user` SET `user_type` = "App\\User" WHERE `user_type` = "App\\Models\\User"
+        ');
     }
 };
