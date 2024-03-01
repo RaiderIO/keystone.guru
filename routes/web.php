@@ -70,7 +70,7 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', (new WebhookController())->github(...))->name('webhook.github');
 
-Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger')->group(static function () {
+Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger'])->group(static function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));
     Route::get('credits', (new SiteController())->credits(...))->name('misc.credits');
@@ -152,7 +152,7 @@ Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_
             Route::get('edit/{floorindex}', (new DungeonRouteController())->editfloor(...))->name('dungeonroute.edit.floor');
             // Submit a patch for your own dungeon route
             Route::patch('edit', (new DungeonRouteController())->update(...))->name('dungeonroute.update');
-            Route::middleware('auth', 'role:user|admin')->group(static function () {
+            Route::middleware(['auth', 'role:user|admin'])->group(static function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
                 Route::get('live', (new LiveSessionController())->create(...))->name('dungeonroute.livesession.create');
                 Route::get('live/{livesession}', (new LiveSessionController())->view(...))->name('dungeonroute.livesession.view');
@@ -169,7 +169,7 @@ Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
         Route::get('edit/{floorindex}', (new DungeonRouteLegacyController())->editfloor(...));
-        Route::middleware('auth', 'role:user|admin')->group(static function () {
+        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
             Route::get('live/{livesession}', (new LiveSessionLegacyController())->view(...));
             Route::get('live/{livesession}/{floorIndex}', (new LiveSessionLegacyController())->viewfloor(...));
@@ -179,7 +179,7 @@ Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_
             Route::get('claim', (new DungeonRouteLegacyController())->claimold(...));
         });
     });
-    Route::middleware('auth', 'role:user|admin')->group(static function () {
+    Route::middleware(['auth', 'role:user|admin'])->group(static function () {
         Route::get('patreon-unlink', (new PatreonController())->unlink(...))->name('patreon.unlink');
         // Profile routes
         Route::prefix('profile')->group(static function () {
@@ -204,7 +204,7 @@ Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_
             Route::get('invite/{invitecode}/accept', (new TeamController())->inviteaccept(...))->name('team.invite.accept');
         });
     });
-    Route::middleware('auth', 'role:admin')->group(static function () {
+    Route::middleware(['auth', 'role:admin'])->group(static function () {
         // Only admins may view a list of profiles
         Route::get('profiles', (new ProfileController())->list(...))->name('profile.list');
         Route::get('phpinfo', (new SiteController())->phpinfo(...))->name('misc.phpinfo');
@@ -357,7 +357,7 @@ Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_
             Route::post('/route/{dungeonRoute}', (new AjaxMetricController())->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });
         // Must be an admin to perform these actions
-        Route::middleware('auth', 'role:admin')->group(static function () {
+        Route::middleware(['auth', 'role:admin'])->group(static function () {
             Route::prefix('admin')->group(static function () {
                 Route::get('/user', (new AjaxUserController())->list(...));
                 Route::get('/npc', (new AjaxNpcController())->list(...));
@@ -421,7 +421,7 @@ Route::middleware('viewcachebuster', 'language', 'debugbarmessagelogger', 'read_
             Route::post('/simulate', (new AjaxDungeonRouteController())->simulate(...))->name('api.dungeonroute.simulate');
         });
         // Must be logged in to perform these actions
-        Route::middleware('auth', 'role:user|admin')->group(static function () {
+        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::prefix('{dungeonRoute}')->group(static function () {
                 Route::patch('/', (new AjaxDungeonRouteController())->store(...))->name('api.dungeonroute.update');
                 Route::patch('/pullgradient', (new AjaxDungeonRouteController())->storePullGradient(...))->name('api.dungeonroute.pullgradient.update');

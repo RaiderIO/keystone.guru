@@ -1,5 +1,5 @@
 <?php
-/** @var \App\User $user */
+/** @var \App\Models\User $user */
 /** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
 ?>
 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">

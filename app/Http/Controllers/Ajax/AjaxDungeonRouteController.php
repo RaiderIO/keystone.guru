@@ -39,6 +39,7 @@ use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -97,14 +98,14 @@ class AjaxDungeonRouteController extends Controller
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
-            ->where(static function ($query) {
-                /** @var $query \Illuminate\Database\Query\Builder */
+            ->where(function (Builder $query) {
                 $query->where('expires_at', 0);
                 $query->orWhereNull('expires_at');
             })
             // required for the enemy forces calculation
             ->groupBy(['dungeon_routes.id', 'mapping_versions.dungeon_id']);
 
+        /** @var User $user */
         $user = Auth::user();
         $mine = false;
 
@@ -114,7 +115,7 @@ class AjaxDungeonRouteController extends Controller
         $requirements = $request->get('requirements', []);
 
         // Enough enemy forces
-        if (array_search('enough_enemy_forces', $requirements, true) !== false) {
+        if (in_array('enough_enemy_forces', $requirements, true)) {
             // Clear group by
             $routes = $routes
                 ->whereRaw('IF(dungeon_routes.teeming, dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required_teeming,
@@ -143,8 +144,8 @@ class AjaxDungeonRouteController extends Controller
             }
 
             // Handle favorites
-            if (array_search('favorite', $requirements, true) !== false || $request->get('favorites', false)) {
-                $routes = $routes->whereHas('favorites', static function ($query) use (&$user) {
+            if (in_array('favorite', $requirements, true) || $request->get('favorites', false)) {
+                $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
@@ -525,6 +526,7 @@ class AjaxDungeonRouteController extends Controller
     {
         $this->authorize('clone', $dungeonRoute);
 
+        /** @var User $user */
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {

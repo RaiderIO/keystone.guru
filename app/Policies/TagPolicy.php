@@ -15,16 +15,12 @@ class TagPolicy
 
     /**
      * Determine whether the user can edit the tag.
-     *
-     * @return mixed
      */
-    public function createTag(User $user, TagCategory $tagCategory, Model $model)
+    public function createTag(User $user, TagCategory $tagCategory, Model $model): bool
     {
-        $result = false;
-
         $result = match ($tagCategory->name) {
             TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model->mayUserEdit($user),
-            default => $result,
+            default => false,
         };
 
         return $result;
@@ -32,10 +28,8 @@ class TagPolicy
 
     /**
      * Determine whether the user can edit the tag.
-     *
-     * @return mixed
      */
-    public function edit(User $user, Tag $tag)
+    public function edit(User $user, Tag $tag): bool
     {
         $result = false;
 
@@ -58,7 +52,7 @@ class TagPolicy
     }
 
     /**
-     * @return bool|mixed
+     * @return bool
      */
     public function delete(User $user, Tag $tag): bool
     {

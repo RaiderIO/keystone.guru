@@ -7,12 +7,12 @@ use Tests\TestCase;
 
 abstract class PublicTestCase extends TestCase
 {
-    protected function createMock(string $originalClassName): MockObject
+    public function createMock(string $originalClassName): MockObject
     {
         return parent::createMock($originalClassName);
     }
 
-    protected function createPartialMock(string $originalClassName, array $methods): MockObject
+    public function createPartialMock(string $originalClassName, array $methods): MockObject
     {
         return parent::createPartialMock($originalClassName, $methods);
     }
