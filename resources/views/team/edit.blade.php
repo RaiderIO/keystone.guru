@@ -6,7 +6,7 @@
 /** @var int $userAdFreeTeamMembersMax */
 
 $title = sprintf(__('views/team.edit.title'), $team->name);
-/** @var \App\User $user */
+/** @var \App\Models\User $user */
 $user      = Auth::user();
 $menuItems = [
     ['icon' => 'far fa-list-alt', 'text' => __('views/team.edit.overview'), 'target' => '#overview'],
@@ -50,6 +50,7 @@ foreach ($team->teamusers as $teamuser) {
 ])
 @section('header-title', $title)
 @section('header-addition')
+    <!--suppress HtmlDeprecatedAttribute -->
     <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
         <i class="fas fa-backward"></i> {{ __('views/team.edit.to_team_list') }}
     </a>

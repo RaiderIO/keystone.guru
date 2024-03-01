@@ -12,6 +12,10 @@ return [
             'explore' => 'Explore',
         ],
 
+        'dungeonroute' => [
+            'new' => 'New route',
+        ],
+
         'dungeonroutes' => [
             'search'            => 'Search',
             'popular'           => 'Popular',

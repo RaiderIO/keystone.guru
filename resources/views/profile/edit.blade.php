@@ -1,5 +1,5 @@
 <?php
-/** @var \App\User $user */
+/** @var \App\Models\User $user */
 /** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
 /** @var \App\Models\GameServerRegion[]|\Illuminate\Support\Collection $allRegions */
 

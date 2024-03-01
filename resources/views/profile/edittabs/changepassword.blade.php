@@ -1,5 +1,5 @@
 <?php
-/** @var $user \App\User */
+/** @var $user \App\Models\User */
 ?>
 <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
     <h4>

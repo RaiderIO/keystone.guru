@@ -1,5 +1,5 @@
 <?php
-/** @var $user \App\User */
+/** @var $user \App\Models\User */
 $title  = sprintf(__('views/profile.view.title'), $user->name);
 $header = sprintf(__('views/profile.view.header'), $user->name);
 ?>

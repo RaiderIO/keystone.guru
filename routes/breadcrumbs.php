@@ -26,6 +26,11 @@ Breadcrumbs::for('home', static function (Generator $trail) {
 /**
  * Site pages
  */
+
+Breadcrumbs::for('dungeonroute.new', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.dungeonroute.new'), route('dungeonroute.new'));
+});
 Breadcrumbs::for('misc.affixes', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.affixes'), route('misc.affixes'));
