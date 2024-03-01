@@ -13,16 +13,12 @@ class TagCategoryPolicy
 
     /**
      * Determine whether the user can create a tag.
-     *
-     * @return mixed
      */
-    public function createTag(User $user, TagCategory $tagCategory, Model $model)
+    public function createTag(User $user, TagCategory $tagCategory, Model $model): bool
     {
-        $result = false;
-
         $result = match ($tagCategory->name) {
             TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model->mayUserEdit($user),
-            default => $result,
+            default => false,
         };
 
         return $result;
