@@ -58,6 +58,15 @@ return [
                 'tinkers_court'     => 'Tinkers\' Court',
             ],
         ],
+        'gnomeregan_sod'                  => [
+            'name'   => 'Gnomeregan (SOD)',
+            'floors' => [
+                'the_hall_of_gears' => 'The Hall of Gears',
+                'the_dormitory'     => 'The Dormitory',
+                'launch_bay'        => 'Launch Bay',
+                'tinkers_court'     => 'Tinkers\' Court',
+            ],
+        ],
         'lower_blackrock_spire'       => [
             'name'   => 'Lower Blackrock Spire',
             'floors' => [
