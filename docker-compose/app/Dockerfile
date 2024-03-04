@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     default-mysql-client  \
-    wget
+    wget \
+    gettext
 
 # Install global packages
 RUN npm i -g handlebars puppeteer@19.9.0
@@ -114,6 +115,12 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
 COPY etc/crontab /etc/crontab
 
 COPY var/ /var/
+
+COPY root/ /root/
+
+# Import .env file and apply it to the current environment
+RUN export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst) && \
+    envsubst < /root/.config/composer/auth.json
 
 # Set working directory
 WORKDIR /var/www
