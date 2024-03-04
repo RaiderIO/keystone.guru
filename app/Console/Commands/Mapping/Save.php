@@ -75,7 +75,7 @@ class Save extends Command
         return 0;
     }
 
-    private function saveMappingVersions(string $dungeonDataDir)
+    private function saveMappingVersions(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving mapping versions');
@@ -91,7 +91,7 @@ class Save extends Command
         );
     }
 
-    private function saveMappingCommitLogs(string $dungeonDataDir)
+    private function saveMappingCommitLogs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving mapping commit logs');
@@ -107,7 +107,7 @@ class Save extends Command
         );
     }
 
-    private function saveDungeons(string $dungeonDataDir)
+    private function saveDungeons(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving dungeons');
@@ -127,7 +127,9 @@ class Save extends Command
                 'name',
                 'slug',
                 'speedrun_enabled',
-            ])->toArray(),
+            ])
+                ->makeHidden(['floor_count'])
+                ->toArray(),
             $dungeonDataDir,
             'dungeons.json'
         );
@@ -136,7 +138,7 @@ class Save extends Command
     /**
      * @param  $dungeonDataDir  string
      */
-    private function saveNpcs(string $dungeonDataDir)
+    private function saveNpcs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving global NPCs');
@@ -154,7 +156,7 @@ class Save extends Command
     /**
      * @param  $dungeonDataDir  string
      */
-    private function saveSpells(string $dungeonDataDir)
+    private function saveSpells(string $dungeonDataDir): void
     {
         // Save all spells
         $this->info('Saving Spells');
@@ -170,9 +172,9 @@ class Save extends Command
     /**
      * @param  $dungeonDataDir  string
      */
-    private function saveDungeonData(string $dungeonDataDir)
+    private function saveDungeonData(string $dungeonDataDir): void
     {
-        foreach (Dungeon::with(['dungeonRoutes'])->get() as $dungeon) {
+        foreach (Dungeon::with(['dungeonRoutesForExport'])->get() as $dungeon) {
             /** @var $dungeon Dungeon */
             $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
 
@@ -201,8 +203,7 @@ class Save extends Command
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
-        $demoRoutes = $dungeon->dungeonRoutes->where('demo', true)->values();
-        foreach ($demoRoutes as $demoRoute) {
+        foreach ($dungeon->dungeonRoutesForExport as $demoRoute) {
             /** @var $demoRoute DungeonRoute */
             unset($demoRoute->relations);
             // Do not reload them
@@ -288,17 +289,22 @@ class Save extends Command
             }
         }
 
-        if ($demoRoutes->count() > 0) {
-            $this->info(sprintf('-- Saving %s dungeonroutes', $demoRoutes->count()));
+        if ($dungeon->dungeonRoutesForExport->isNotEmpty()) {
+            $this->info(sprintf('-- Saving %s dungeonroutes', $dungeon->dungeonRoutesForExport->count()));
         }
 
-        $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
+        $this->saveDataToJsonFile($dungeon->dungeonRoutesForExport->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
 
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
-        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', $dungeon->id)->get()->values();
-        $npcs->makeHidden(['type', 'class']);
+        $npcs = Npc::without(['spells', 'enemyForces'])
+            ->with(['npcspells', 'npcEnemyForces'])
+            ->where('dungeon_id', $dungeon->id)
+            ->get()
+            ->makeHidden(['type', 'class'])
+            ->values();
+
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
         }

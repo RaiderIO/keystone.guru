@@ -43,6 +43,7 @@ use Mockery\Exception;
  * @property Collection|Floor[]                      $floors
  * @property Collection|Floor[]                      $activeFloors
  * @property Collection|DungeonRoute[]               $dungeonRoutes
+ * @property Collection|DungeonRoute[]               $dungeonRoutesForExport
  * @property Collection|Npc[]                        $npcs
  * @property Collection|Enemy[]                      $enemies
  * @property Collection|EnemyPack[]                  $enemyPacks
@@ -688,6 +689,11 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
+    }
+
+    public function dungeonRoutesForExport(): HasMany
+    {
+        return $this->dungeonRoutes()->where('demo', true);
     }
 
     public function npcs(bool $includeGlobalNpcs = true): HasMany

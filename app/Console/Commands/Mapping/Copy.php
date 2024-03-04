@@ -3,6 +3,9 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use App\Service\Mapping\MappingService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +18,7 @@ class Copy extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:copy {sourceDungeonId} {targetDungeonId}';
+    protected $signature = 'mapping:copy {sourceDungeon} {targetDungeon}';
 
     /**
      * The console command description.
@@ -29,13 +32,13 @@ class Copy extends Command
      */
     public function handle(MappingService $mappingService): int
     {
-        $sourceDungeonId = $this->argument('sourceDungeonId');
-        $targetDungeonId = $this->argument('targetDungeonId');
+        $sourceDungeonKey = $this->argument('sourceDungeon');
+        $targetDungeonKey = $this->argument('targetDungeon');
 
-        $sourceDungeon = Dungeon::findOrFail($sourceDungeonId);
-        $targetDungeon = Dungeon::findOrFail($targetDungeonId);
+        $sourceDungeon = Dungeon::firstWhere('key', $sourceDungeonKey);
+        $targetDungeon = Dungeon::firstWhere('key', $targetDungeonKey);
 
-        if ($sourceDungeonId !== $targetDungeonId) {
+        if ($sourceDungeonKey !== $targetDungeonKey) {
             if ($sourceDungeon->floors()->count() !== $targetDungeon->floors()->count()) {
                 $this->error('Unable to migrate mapping version to different dungeon - floor count does not match');
 
@@ -48,10 +51,22 @@ class Copy extends Command
 
         $newMappingVersion->update([
             'dungeon_id' => $targetDungeon->id,
-            'version'    => ($sourceDungeon->currentMappingVersion?->version ?? 0) + 1,
+            'version'    => ($targetDungeon->currentMappingVersion?->version ?? 0) + 1,
         ]);
 
-        if ($sourceDungeonId !== $targetDungeonId) {
+        if ($sourceDungeonKey !== $targetDungeonKey) {
+            // Construct a floor mapping
+            $sourceDungeonFloors = $sourceDungeon->floors()->orderBy('index')->get()->keyBy('index');
+            $targetDungeonFloors = $targetDungeon->floors()->orderBy('index')->get()->keyBy('index');
+
+            /** @var Collection|Floor[] $floorIdMapping */
+            $floorIdMapping = $sourceDungeonFloors->mapWithKeys(function (Floor $floor) use ($targetDungeonFloors) {
+                /** @var Floor $targetFloor */
+                $targetFloor = $targetDungeonFloors->get($floor->index);
+
+                return [$floor->id => $targetFloor->id];
+            });
+
             // Try to migrate all floors as good as we can
             $relations = [
                 'dungeonFloorSwitchMarkers',
@@ -65,13 +80,27 @@ class Copy extends Command
                 'npcEnemyForces',
             ];
 
+            $newMappingVersion->load($relations);
+
             foreach ($relations as $relation) {
+                $this->info(sprintf('Copying %s...', $relation));
                 /** @var Collection|Model[] $entities */
-                $entities = $newMappingVersion->getRelation($relation)->get();
+                $entities = $newMappingVersion->getRelation($relation);
+
                 foreach ($entities as $entity) {
-                    $entity->update([
-                        'floor_id' => '',
-                    ]);
+                    /** @noinspection PhpPossiblePolymorphicInvocationInspection Trust me bro */
+                    $attributes = [
+                        'floor_id' => $floorIdMapping->get($entity->floor_id),
+                    ];
+
+                    if ($entity instanceof DungeonFloorSwitchMarker) {
+                        $attributes['source_floor_id'] = $floorIdMapping->get($entity->source_floor_id);
+                        $attributes['target_floor_id'] = $floorIdMapping->get($entity->target_floor_id);
+                    } else if ($entity instanceof FloorUnion) {
+                        $attributes['target_floor_id'] = $floorIdMapping->get($entity->target_floor_id);
+                    }
+
+                    $entity->update($attributes);
                 }
             }
         }

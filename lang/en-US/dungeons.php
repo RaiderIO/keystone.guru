@@ -59,7 +59,7 @@ return [
             ],
         ],
         'gnomeregan_sod'                  => [
-            'name'   => 'Gnomeregan (SOD)',
+            'name'   => 'Gnomeregan (SoD)',
             'floors' => [
                 'the_hall_of_gears' => 'The Hall of Gears',
                 'the_dormitory'     => 'The Dormitory',
