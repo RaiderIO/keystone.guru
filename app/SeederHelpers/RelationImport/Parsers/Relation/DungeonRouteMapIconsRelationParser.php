@@ -32,8 +32,7 @@ class DungeonRouteMapIconsRelationParser implements RelationParserInterface
             $awakenedObeliskLinkData = $mapIconData['linkedawakenedobelisks'];
             unset($mapIconData['linkedawakenedobelisks']);
 
-            $mapIcon = new MapIcon($mapIconData);
-            $mapIcon->save();
+            $mapIcon = MapIcon::create($mapIconData);
 
             // Restore awakened obelisk data
             foreach ($awakenedObeliskLinkData as $data) {
