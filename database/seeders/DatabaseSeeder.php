@@ -102,6 +102,8 @@ class DatabaseSeeder extends Seeder
 
                     break;
                 }
+            } catch (Exception $e) {
+                $this->command->error($e->getMessage());
             } finally {
                 $cleanupFailed = false;
                 foreach ($affectedModelClasses as $affectedModelClass) {

@@ -12,7 +12,6 @@
         "slug": "arcway",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -52,7 +51,6 @@
         "slug": "black-rook-hold",
         "speedrun_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 7,
         "mdt_supported": true,
         "floors": [
             {
@@ -290,7 +288,6 @@
         "slug": "cathedral-of-eternal-night",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
         "mdt_supported": true,
         "floors": [
             {
@@ -418,7 +415,6 @@
         "slug": "court-of-stars",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -458,7 +454,6 @@
         "slug": "darkheart-thicket",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -498,7 +493,6 @@
         "slug": "eye-of-azshara",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -538,7 +532,6 @@
         "slug": "halls-of-valor",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -649,7 +642,6 @@
         "slug": "lower-karazhan",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 6,
         "mdt_supported": true,
         "floors": [
             {
@@ -913,7 +905,6 @@
         "slug": "maw-of-souls",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -1024,7 +1015,6 @@
         "slug": "neltharions-lair",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -1064,7 +1054,6 @@
         "slug": "upper-karazhan",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 8,
         "mdt_supported": true,
         "floors": [
             {
@@ -1350,7 +1339,6 @@
         "slug": "the-seat-of-the-triumvirate",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -1390,7 +1378,6 @@
         "slug": "vault-of-the-wardens",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -1501,7 +1488,6 @@
         "slug": "ataldazar",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -1577,7 +1563,6 @@
         "slug": "freehold",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -1617,7 +1602,6 @@
         "slug": "kings-rest",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -1657,7 +1641,6 @@
         "slug": "shrine-of-the-storm",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -1733,7 +1716,6 @@
         "slug": "siege-of-boralus",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -1773,7 +1755,6 @@
         "slug": "temple-of-sethraliss",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -1849,7 +1830,6 @@
         "slug": "the-motherlode",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -1889,7 +1869,6 @@
         "slug": "the-underrot",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -1965,7 +1944,6 @@
         "slug": "tol-dagor",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 7,
         "mdt_supported": true,
         "floors": [
             {
@@ -2216,7 +2194,6 @@
         "slug": "waycrest-manor",
         "speedrun_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 6,
         "mdt_supported": true,
         "floors": [
             {
@@ -2419,7 +2396,6 @@
         "slug": "mechagon-junkyard",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -2495,7 +2471,6 @@
         "slug": "mechagon-workshop",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -2606,7 +2581,6 @@
         "slug": "orgrimmar-horrific-vision",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": false,
         "floors": [
             {
@@ -2682,7 +2656,6 @@
         "slug": "stormwind-city-horrific-vision",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -2722,7 +2695,6 @@
         "slug": "de-other-side",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -2868,7 +2840,6 @@
         "slug": "halls-of-atonement",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -2979,7 +2950,6 @@
         "slug": "mists-of-tirna-scithe",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3019,7 +2989,6 @@
         "slug": "plaguefall",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -3095,7 +3064,6 @@
         "slug": "sanguine-depths",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -3171,7 +3139,6 @@
         "slug": "spires-of-ascension",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -3317,7 +3284,6 @@
         "slug": "the-necrotic-wake",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -3428,7 +3394,6 @@
         "slug": "theater-of-pain",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
         "mdt_supported": true,
         "floors": [
             {
@@ -3615,7 +3580,6 @@
         "slug": "tazavesh-streets-of-wonder",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -3761,7 +3725,6 @@
         "slug": "tazavesh-so-leahs-gambit",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -3907,7 +3870,6 @@
         "slug": "auchindoun",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -3947,7 +3909,6 @@
         "slug": "bloodmaul-slag-mines",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -3987,7 +3948,6 @@
         "slug": "iron-docks",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4027,7 +3987,6 @@
         "slug": "grimrail-depot",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -4173,7 +4132,6 @@
         "slug": "ahn-kahet-the-old-kingdom",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4213,7 +4171,6 @@
         "slug": "azjol-nerub",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -4324,7 +4281,6 @@
         "slug": "drak-tharon-keep",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -4400,7 +4356,6 @@
         "slug": "gundrak",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4440,7 +4395,6 @@
         "slug": "halls-of-lightning",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -4516,7 +4470,6 @@
         "slug": "halls-of-reflection",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -4556,7 +4509,6 @@
         "slug": "halls-of-stone",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4596,7 +4548,6 @@
         "slug": "pit-of-saron",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -4636,7 +4587,6 @@
         "slug": "the-culling-of-stratholme",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -4712,7 +4662,6 @@
         "slug": "the-forge-of-souls",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -4752,7 +4701,6 @@
         "slug": "the-nexus",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4792,7 +4740,6 @@
         "slug": "the-oculus",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
         "mdt_supported": true,
         "floors": [
             {
@@ -4973,7 +4920,6 @@
         "slug": "the-violet-hold",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -5013,7 +4959,6 @@
         "slug": "trial-of-the-champion",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -5053,7 +4998,6 @@
         "slug": "utgarde-keep",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -5164,7 +5108,6 @@
         "slug": "utgarde-pinnacle",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -5240,7 +5183,6 @@
         "slug": "icecrown-citadel",
         "speedrun_enabled": 1,
         "facade_enabled": 0,
-        "floor_count": 8,
         "mdt_supported": false,
         "floors": [
             {
@@ -5556,7 +5498,6 @@
         "slug": "onyxias-lair",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -5596,7 +5537,6 @@
         "slug": "naxxramas",
         "speedrun_enabled": 1,
         "facade_enabled": 0,
-        "floor_count": 6,
         "mdt_supported": true,
         "floors": [
             {
@@ -6205,7 +6145,6 @@
         "slug": "crusaders-coliseum-trial-of-the-crusader",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": false,
         "floors": [
             {
@@ -6267,7 +6206,6 @@
         "slug": "the-eye-of-eternity",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -6307,7 +6245,6 @@
         "slug": "the-obsidian-sanctum",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -6347,7 +6284,6 @@
         "slug": "the-ruby-sanctum",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -6387,7 +6323,6 @@
         "slug": "ulduar",
         "speedrun_enabled": 1,
         "facade_enabled": 0,
-        "floor_count": 6,
         "mdt_supported": true,
         "floors": [
             {
@@ -7171,7 +7106,6 @@
         "slug": "vault-of-archavon",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -7211,7 +7145,6 @@
         "slug": "algeth-ar-academy",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -7322,7 +7255,6 @@
         "slug": "brackenhide-hollow",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -7398,7 +7330,6 @@
         "slug": "halls-of-infusion",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -7474,7 +7405,6 @@
         "slug": "neltharus",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -7550,7 +7480,6 @@
         "slug": "the-nokhud-offensive",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -7590,7 +7519,6 @@
         "slug": "ruby-life-pools",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -7666,7 +7594,6 @@
         "slug": "the-azure-vault",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
         "mdt_supported": true,
         "floors": [
             {
@@ -7847,7 +7774,6 @@
         "slug": "uldaman-legacy-of-tyr",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -7923,7 +7849,6 @@
         "slug": "shadowmoon-burial-grounds",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -8034,7 +7959,6 @@
         "slug": "temple-of-the-jade-serpent",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -8074,7 +7998,6 @@
         "slug": "the-vortex-pinnacle",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -8114,7 +8037,6 @@
         "slug": "blackfathom-deeps",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -8225,7 +8147,6 @@
         "slug": "blackrock-depths",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -8301,7 +8222,6 @@
         "slug": "the-deadmines",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -8377,7 +8297,6 @@
         "slug": "dire-maul-west",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -8488,7 +8407,6 @@
         "slug": "gnomeregan",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -8634,7 +8552,6 @@
         "slug": "lower-blackrock-spire",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 6,
         "mdt_supported": true,
         "floors": [
             {
@@ -8880,7 +8797,6 @@
         "slug": "maraudon",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -8956,7 +8872,6 @@
         "slug": "ragefire-chasm",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -8996,7 +8911,6 @@
         "slug": "razorfen-downs",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9036,7 +8950,6 @@
         "slug": "razorfen-kraul",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9076,7 +8989,6 @@
         "slug": "scarlet-monastery-armory",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9116,7 +9028,6 @@
         "slug": "scarlet-monastery-cathedral",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9156,7 +9067,6 @@
         "slug": "scarlet-monastery-graveyard",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9196,7 +9106,6 @@
         "slug": "scarlet-monastery-library",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9236,7 +9145,6 @@
         "slug": "scholomance",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
         "mdt_supported": true,
         "floors": [
             {
@@ -9394,7 +9302,6 @@
         "slug": "shadowfang-keep",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 7,
         "mdt_supported": true,
         "floors": [
             {
@@ -9651,7 +9558,6 @@
         "slug": "stratholme",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -9727,7 +9633,6 @@
         "slug": "the-stockade",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9767,7 +9672,6 @@
         "slug": "the-temple-of-atalhakkar",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
         "mdt_supported": true,
         "floors": [
             {
@@ -9960,7 +9864,6 @@
         "slug": "uldaman",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -10036,7 +9939,6 @@
         "slug": "wailing-caverns",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10076,7 +9978,6 @@
         "slug": "zulfarrak",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10116,7 +10017,6 @@
         "slug": "dire-maul-north",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10156,7 +10056,6 @@
         "slug": "dire-maul-east",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -10232,7 +10131,6 @@
         "slug": "the-everbloom",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
         "mdt_supported": true,
         "floors": [
             {
@@ -10308,7 +10206,6 @@
         "slug": "throne-of-the-tides",
         "speedrun_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -10406,7 +10303,6 @@
         "slug": "upper-blackrock-spire",
         "speedrun_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
         "mdt_supported": true,
         "floors": [
             {
@@ -10517,7 +10413,6 @@
         "slug": "dawn-of-the-infinite-galakronds-fall",
         "speedrun_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 6,
         "mdt_supported": true,
         "floors": [
             {
@@ -10763,7 +10658,6 @@
         "slug": "dawn-of-the-infinite-murozonds-rise",
         "speedrun_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 8,
         "mdt_supported": true,
         "floors": [
             {
@@ -11094,6 +10988,151 @@
                         "id": 840,
                         "floor1_id": 266,
                         "floor2_id": 264,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 107,
+        "expansion_id": 4,
+        "game_version_id": 3,
+        "zone_id": 721,
+        "map_id": 90,
+        "challenge_mode_id": null,
+        "mdt_id": 123,
+        "key": "gnomeregan_sod",
+        "name": "dungeons.classic.gnomeregan_sod.name",
+        "slug": "gnomeregan-sod",
+        "speedrun_enabled": 0,
+        "facade_enabled": 0,
+        "mdt_supported": false,
+        "floors": [
+            {
+                "id": 270,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 226,
+                "name": "dungeons.classic.gnomeregan_sod.floors.the_hall_of_gears",
+                "default": 1,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -694,
+                "ingame_min_y": -277.77,
+                "ingame_max_x": -180.88,
+                "ingame_max_y": 491.89,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 904,
+                        "floor1_id": 270,
+                        "floor2_id": 271,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 271,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 227,
+                "name": "dungeons.classic.gnomeregan_sod.floors.the_dormitory",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -714,
+                "ingame_min_y": -77.77,
+                "ingame_max_x": -200.88,
+                "ingame_max_y": 691.89,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 905,
+                        "floor1_id": 271,
+                        "floor2_id": 270,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 906,
+                        "floor1_id": 271,
+                        "floor2_id": 272,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 272,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": 228,
+                "name": "dungeons.classic.gnomeregan_sod.floors.launch_bay",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -967.33,
+                "ingame_min_y": -127.77,
+                "ingame_max_x": -387.55,
+                "ingame_max_y": 741.89,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 907,
+                        "floor1_id": 272,
+                        "floor2_id": 271,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 908,
+                        "floor1_id": 272,
+                        "floor2_id": 273,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 273,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": 229,
+                "name": "dungeons.classic.gnomeregan_sod.floors.tinkers_court",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -937.33,
+                "ingame_min_y": 72.99,
+                "ingame_max_x": -357.55,
+                "ingame_max_y": 942.66,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 909,
+                        "floor1_id": 273,
+                        "floor2_id": 272,
                         "direction": "up"
                     }
                 ],

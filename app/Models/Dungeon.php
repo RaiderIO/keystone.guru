@@ -43,13 +43,14 @@ use Mockery\Exception;
  * @property Collection|Floor[]                      $floors
  * @property Collection|Floor[]                      $activeFloors
  * @property Collection|DungeonRoute[]               $dungeonRoutes
+ * @property Collection|DungeonRoute[]               $dungeonRoutesForExport
  * @property Collection|Npc[]                        $npcs
  * @property Collection|Enemy[]                      $enemies
- * @property Collection|EnemyPack[]                  $enemypacks
- * @property Collection|EnemyPatrol[]                $enemypatrols
- * @property Collection|MapIcon[]                    $mapicons
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonfloorswitchmarkers
- * @property Collection|MountableArea[]              $mountableareas
+ * @property Collection|EnemyPack[]                  $enemyPacks
+ * @property Collection|EnemyPatrol[]                $enemyPatrols
+ * @property Collection|MapIcon[]                    $mapIcons
+ * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkers
+ * @property Collection|MountableArea[]              $mountableAreas
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs10Man
  * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs25Man
  *
@@ -149,6 +150,11 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public const DUNGEON_WAILING_CAVERNS = 'wailing_caverns';       //wailingcaverns
 
     public const DUNGEON_ZUL_FARRAK = 'zul_farrak';            //zulfarrak
+
+    // Classic: Season of Discovery
+
+    public const DUNGEON_GNOMEREGAN_SOD = 'gnomeregan_sod';            //gnomeregan
+
 
     // The Burning Crusade
     public const DUNGEON_ACHENAI_CRYPTS = 'auchenai_crypts';
@@ -685,6 +691,11 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->hasMany(DungeonRoute::class);
     }
 
+    public function dungeonRoutesForExport(): HasMany
+    {
+        return $this->dungeonRoutes()->where('demo', true);
+    }
+
     public function npcs(bool $includeGlobalNpcs = true): HasMany
     {
         return $this->hasMany(Npc::class)
@@ -698,29 +709,29 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->hasManyThrough(Enemy::class, Floor::class);
     }
 
-    public function enemypacks(): HasManyThrough
+    public function enemyPacks(): HasManyThrough
     {
         return $this->hasManyThrough(EnemyPack::class, Floor::class);
     }
 
-    public function enemypatrols(): HasManyThrough
+    public function enemyPatrols(): HasManyThrough
     {
         return $this->hasManyThrough(EnemyPatrol::class, Floor::class);
     }
 
-    public function mapicons(): HasManyThrough
+    public function mapIcons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
             ->where(static fn(Builder $builder) => $builder
                 ->whereNull('dungeon_route_id'));
     }
 
-    public function dungeonfloorswitchmarkers(): HasManyThrough
+    public function dungeonFloorSwitchMarkers(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
     }
 
-    public function mountableareas(): HasManyThrough
+    public function mountableAreas(): HasManyThrough
     {
         return $this->hasManyThrough(MountableArea::class, Floor::class);
     }

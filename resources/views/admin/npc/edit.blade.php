@@ -80,7 +80,8 @@
     <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('views/admin.npc.edit.class'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id'), null, ['class' => 'form-control selectpicker']) !!}
+        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]), null,
+                        ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
 
@@ -200,6 +201,7 @@
     <div class="form-group">
         {!! Form::label('spells[]', __('views/admin.npc.edit.spells'), [], false) !!}
         @php($selectedSpells = isset($npc) ? $npc->spells->pluck(['id'])->toArray() : [])
+        <!--suppress HtmlFormInputWithoutLabel -->
         <select class="form-control selectpicker" name="spells[]" multiple="multiple"
                 data-live-search="true" data-selected-text-format="count > 1"
                 data-count-selected-text="{{ __('views/admin.npc.edit.spells_count') }}">

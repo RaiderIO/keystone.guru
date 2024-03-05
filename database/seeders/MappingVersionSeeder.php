@@ -49,7 +49,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             ]);
             $this->command->comment(sprintf('- Created new mapping version for %s', __($dungeon->name)));
 
-            $updatedDungeonFloorSwitchMarkers = $dungeon->dungeonfloorswitchmarkers()->update([
+            $updatedDungeonFloorSwitchMarkers = $dungeon->dungeonFloorSwitchMarkers()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d dungeon floor switch markers', $updatedDungeonFloorSwitchMarkers));
@@ -59,23 +59,23 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             ]);
             $this->command->comment(sprintf('-- Updated %d enemies', $updatedEnemies));
 
-            $updatedEnemyPacks = $dungeon->enemypacks()->update([
+            $updatedEnemyPacks = $dungeon->enemyPacks()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemy packs', $updatedEnemyPacks));
 
-            $updatedEnemyPatrols = $dungeon->enemypatrols()->update([
+            $updatedEnemyPatrols = $dungeon->enemyPatrols()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemy patrols', $updatedEnemyPatrols));
 
             // Only the map icons that are related to a mapping
-            $updatedMapIcons = $dungeon->mapicons()->update([
+            $updatedMapIcons = $dungeon->mapIcons()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d map icons', $updatedMapIcons));
 
-            $updatedMountableAreas = $dungeon->mountableareas()->update([
+            $updatedMountableAreas = $dungeon->mountableAreas()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d mountable areas', $updatedMountableAreas));

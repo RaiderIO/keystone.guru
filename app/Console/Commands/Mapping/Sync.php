@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class Sync extends Command
 {
-    use ExecutesShellCommands;
-
     /**
      * The name and signature of the console command.
      *

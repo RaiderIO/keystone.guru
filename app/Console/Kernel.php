@@ -25,6 +25,7 @@ use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\LocalizationSync;
 use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
+use App\Console\Commands\Mapping\Copy as MappingCopy;
 use App\Console\Commands\Mapping\Merge as MappingMerge;
 use App\Console\Commands\Mapping\Restore as MappingRestore;
 use App\Console\Commands\Mapping\RotateIngameCoords;
@@ -113,6 +114,7 @@ class Kernel extends ConsoleKernel
         // Mapping
         AssignMDTIDs::class,
         MappingCommit::class,
+        MappingCopy::class,
         MappingMerge::class,
         MappingSave::class,
         MappingRestore::class,
