@@ -10,10 +10,10 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
-use App\Models\Traits\SeederModel;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -61,8 +61,6 @@ use Mockery\Exception;
  */
 class Dungeon extends CacheModel implements MappingModelInterface
 {
-    use SeederModel;
-
     /**
      * The accessors to append to the model's array form.
      *
@@ -407,6 +405,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_DIRE_MAUL_NORTH,
             self::DUNGEON_DIRE_MAUL_EAST,
             self::DUNGEON_GNOMEREGAN,
+            self::DUNGEON_GNOMEREGAN_SOD,
             self::DUNGEON_LOWER_BLACKROCK_SPIRE,
             self::DUNGEON_MARAUDON,
             self::DUNGEON_RAGEFIRE_CHASM,
@@ -904,7 +903,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection|int[]
+     * @return Collection<int>
      */
     public function getInUseNpcIds(): Collection
     {
@@ -991,5 +990,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->id;
+    }
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(static fn(Model $model) => false);
     }
 }

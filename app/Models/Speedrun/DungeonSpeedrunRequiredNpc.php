@@ -57,6 +57,14 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
         'count',
     ];
 
+    protected $with = [
+        'npc',
+        'npc2',
+        'npc3',
+        'npc4',
+        'npc5',
+    ];
+
     public $timestamps = false;
 
     public function floor(): BelongsTo

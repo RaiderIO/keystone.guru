@@ -30,7 +30,7 @@ class DungeonFormRequest extends FormRequest
             'game_version_id'   => Rule::exists(GameVersion::class, 'id'),
             'zone_id'           => 'int',
             'map_id'            => 'int',
-            'challenge_mode_id' => 'int',
+            'challenge_mode_id' => 'nullable|int',
             'mdt_id'            => 'int',
             'name'              => ['required', Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name')],
             'key'               => [
