@@ -11007,7 +11007,7 @@
         "key": "gnomeregan_sod",
         "name": "dungeons.classic.gnomeregan_sod.name",
         "slug": "gnomeregan-sod",
-        "speedrun_enabled": 0,
+        "speedrun_enabled": 1,
         "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
@@ -11072,7 +11072,30 @@
                         "direction": "down"
                     }
                 ],
-                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 87,
+                        "floor_id": 271,
+                        "npc_id": 6218,
+                        "npc2_id": 6219,
+                        "npc3_id": 6220,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    },
+                    {
+                        "id": 88,
+                        "floor_id": 271,
+                        "npc_id": 6223,
+                        "npc2_id": 6233,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 14
+                    }
+                ],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -11107,7 +11130,52 @@
                         "direction": "down"
                     }
                 ],
-                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 89,
+                        "floor_id": 272,
+                        "npc_id": 6230,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 1
+                    },
+                    {
+                        "id": 90,
+                        "floor_id": 272,
+                        "npc_id": 7603,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 28
+                    },
+                    {
+                        "id": 91,
+                        "floor_id": 272,
+                        "npc_id": 6222,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    },
+                    {
+                        "id": 92,
+                        "floor_id": 272,
+                        "npc_id": 6224,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 11
+                    }
+                ],
                 "dungeon_speedrun_required_npcs25_man": []
             },
             {
@@ -11136,7 +11204,30 @@
                         "direction": "up"
                     }
                 ],
-                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 93,
+                        "floor_id": 273,
+                        "npc_id": 6226,
+                        "npc2_id": 6227,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    },
+                    {
+                        "id": 94,
+                        "floor_id": 273,
+                        "npc_id": 6212,
+                        "npc2_id": 6232,
+                        "npc3_id": 6234,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 20
+                    }
+                ],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]

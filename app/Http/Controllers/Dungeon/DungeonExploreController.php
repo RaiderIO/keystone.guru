@@ -6,15 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Service\MapContext\MapContextServiceInterface;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class DungeonExploreController extends Controller
 {
-    public function list(Request $request): \Illuminate\View\View
+    public function list(Request $request): View
     {
         return view('dungeon.explore.list');
     }
@@ -32,14 +30,11 @@ class DungeonExploreController extends Controller
         ]);
     }
 
-    /**
-     * @return Application|Factory|View|RedirectResponse
-     */
     public function viewDungeonFloor(
         Request                    $request,
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
-        string                     $floorIndex = '1')
+        string                     $floorIndex = '1'): View|RedirectResponse
     {
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';

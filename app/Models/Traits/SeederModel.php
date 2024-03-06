@@ -12,21 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait SeederModel
 {
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
-
-        // While we're seeding, fix the database table
-        //        $fixDbTableFn = function (Model $model) {
-        //            if (DatabaseSeeder::$running && !Str::endsWith($model->getTable(), DatabaseSeeder::TEMP_TABLE_SUFFIX)) {
-        //                dump($model->id, DatabaseSeeder::getTempTableName(get_class($model)));
-        //                $model->setTable(DatabaseSeeder::getTempTableName(get_class($model)));
-        //            }
-        //        };
-        //        static::retrieved($fixDbTableFn);
-        //        static::creating($fixDbTableFn);
-        //        static::updating($fixDbTableFn);
-        //        static::saving($fixDbTableFn);
 
         // This model may NOT be deleted, it's read only!
         static::deleting(static fn(Model $model) => $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy);
