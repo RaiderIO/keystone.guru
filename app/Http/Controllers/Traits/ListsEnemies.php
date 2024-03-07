@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
@@ -54,10 +55,11 @@ trait ListsEnemies
 
         // Only if we should show MDT enemies
         $mdtEnemies = collect();
-        if ($showMdtEnemies) {
+        if ($showMdtEnemies && Conversion::hasMDTDungeonName($mappingVersion->dungeon)) {
             try {
-                $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
-                $mdtEnemies = (new MDTDungeon($cacheService, $coordinatesService, $dungeon))->getClonesAsEnemies($this->mappingVersion, $dungeon->floors()->with(['dungeon'])->get());
+                $mdtEnemies = (new MDTDungeon($cacheService, $coordinatesService, $mappingVersion->dungeon))
+                    ->getClonesAsEnemies($this->mappingVersion, $mappingVersion->dungeon->floors()->with(['dungeon'])
+                        ->get());
 
                 $mdtEnemies = $mdtEnemies->filter(static fn(Enemy $mdtEnemy) => !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]));
 
