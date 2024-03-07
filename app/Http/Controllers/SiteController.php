@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\Release;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -47,8 +48,10 @@ class SiteController extends Controller
 
             $season ??= $seasonService->getCurrentSeason();
 
+            /** @var User $user */
+            $user = Auth::user();
             return view('profile.overview', [
-                'dungeonRoutes' => $coverageService->getForUser(Auth::user(), $season),
+                'dungeonRoutes' => $coverageService->getForUser($user, $season),
             ]);
         } else {
             return view('home');
@@ -186,7 +189,7 @@ class SiteController extends Controller
         return redirect(route('dungeonroutes'), 301);
     }
 
-    public function phpinfo(Request $request)
+    public function phpinfo(Request $request): void
     {
         phpinfo();
     }

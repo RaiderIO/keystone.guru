@@ -116,7 +116,7 @@ class AdminToolsController extends Controller
     /**
      * @return void
      */
-    public function npcimportsubmit(Request $request)
+    public function npcimportsubmit(Request $request): void
     {
         $importString = $request->get('import_string');
 
@@ -272,7 +272,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function enemyforcesimportsubmit(Request $request)
+    public function enemyforcesimportsubmit(Request $request): void
     {
         $json = json_decode((string)$request->get('import_string'), true);
 
@@ -315,7 +315,7 @@ class AdminToolsController extends Controller
     /**
      * @return void
      */
-    public function enemyforcesrecalculatesubmit(Request $request)
+    public function enemyforcesrecalculatesubmit(Request $request): void
     {
         $dungeonId = (int)$request->get('dungeon_id');
 
@@ -500,7 +500,7 @@ class AdminToolsController extends Controller
      *
      * @throws Throwable
      */
-    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingImportServiceInterface $mdtMappingService)
+    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingImportServiceInterface $mdtMappingService): void
     {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
@@ -533,7 +533,7 @@ class AdminToolsController extends Controller
      *
      * @throws Throwable
      */
-    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService)
+    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService): void
     {
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
 
@@ -554,7 +554,7 @@ class AdminToolsController extends Controller
      *
      * @throws Exception
      */
-    public function importingamecoordinatessubmit(Request $request)
+    public function importingamecoordinatessubmit(Request $request): void
     {
         // Parse all Map TABLE data and convert them to a workable format
         $mapTable                   = $request->get('map_table_xhr_response');
@@ -838,7 +838,7 @@ class AdminToolsController extends Controller
     /**
      * @return void
      */
-    public function mappingForceSync(Request $request)
+    public function mappingForceSync(Request $request): void
     {
         Artisan::call('mapping:sync', ['--force' => true]);
     }
@@ -918,7 +918,7 @@ class AdminToolsController extends Controller
      * @throws TokenMismatchException
      * @throws Exception
      */
-    public function exceptionselectsubmit(Request $request)
+    public function exceptionselectsubmit(Request $request): void
     {
         switch ($request->get('exception')) {
             case 'TokenMismatchException':

@@ -24,7 +24,7 @@ trait HasIconFile
     /**
      * @throws Exception
      */
-    public function saveUploadedFile(UploadedFile $file)
+    public function saveUploadedFile(UploadedFile $file): void
     {
         // Delete the icon should it exist already
         if ($this->iconfile !== null) {

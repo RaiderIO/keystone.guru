@@ -76,7 +76,7 @@ trait HasLinkedAwakenedObelisk
         return $result || $mapIcon === null;
     }
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 

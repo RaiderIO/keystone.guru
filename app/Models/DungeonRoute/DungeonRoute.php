@@ -1003,7 +1003,7 @@ class DungeonRoute extends Model
      * @param DungeonRoute $dungeonroute The RECEIVER of the target $relations
      * @param array        $relations The relations that you want to clone.
      */
-    public function cloneRelationsInto(DungeonRoute $dungeonroute, array $relations)
+    public function cloneRelationsInto(DungeonRoute $dungeonroute, array $relations): void
     {
         // Link all relations to their new dungeon route
         foreach ($relations as $relation) {
@@ -1364,7 +1364,7 @@ class DungeonRoute extends Model
     /**
      * {@inheritDoc}
      */
-    public function touch($attribute = null)
+    public function touch($attribute = null): void
     {
         DungeonRoute::dropCaches($this->id);
 
@@ -1409,7 +1409,7 @@ class DungeonRoute extends Model
     /**
      * Drops any caches associated with this dungeon route
      */
-    public static function dropCaches(int $dungeonRouteId)
+    public static function dropCaches(int $dungeonRouteId): void
     {
         try {
             Cache::delete(sprintf('view:dungeonroute_card_0_0_%d', $dungeonRouteId));

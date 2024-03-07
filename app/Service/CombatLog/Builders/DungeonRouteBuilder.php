@@ -369,7 +369,7 @@ abstract class DungeonRouteBuilder
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
         ?LatLng         $previousPullLatLng,
-        ClosestEnemy    $closestEnemy)
+        ClosestEnemy    $closestEnemy): void
     {
         $this->findClosestEnemyAndDistanceFromList(
             $filteredEnemies,
