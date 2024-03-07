@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
+use App\Models\User;
 use App\Rules\DungeonRouteLevelRule;
 use App\Rules\FactionSelectionRequiredRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,6 +25,9 @@ class DungeonRouteFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        /** @var User|null $user */
+        $user = Auth::check() ? Auth::user() : null;
+
         $rules = [
             'dungeon_route_title'       => 'nullable|string|max:80',
             'dungeon_route_description' => 'nullable|string|max:1000',
@@ -41,7 +45,7 @@ class DungeonRouteFormRequest extends FormRequest
             )],
             // May be -1 (unset) or must be part of the user's teams
             'team_id'                   => [Rule::in(
-                array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [null, -1])
+                array_merge($user?->teams->pluck('id')->toArray() ?? [], [null, -1])
             )],
             'teeming'                   => 'nullable|int',
             'template'                  => 'nullable|int',
@@ -68,7 +72,7 @@ class DungeonRouteFormRequest extends FormRequest
         ];
 
         // Validate demo state, optional or numeric
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
+        if ($user?->hasRole('admin')) {
             $rules['demo'] = 'numeric';
         }
 

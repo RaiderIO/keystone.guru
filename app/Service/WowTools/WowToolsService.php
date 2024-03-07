@@ -19,7 +19,7 @@ class WowToolsService implements WowToolsServiceInterface
             $ch = curl_init();
 
             curl_setopt_array($ch, [
-                CURLOPT_URL            => sprintf('https://wow.tools/db/creature_api.php?id=%d', $npcId),
+                CURLOPT_URL            => sprintf('https://old.wow.tools/db/creature_api.php?id=%d', $npcId),
                 CURLOPT_RETURNTRANSFER => 1,
             ]);
 
