@@ -25,7 +25,9 @@ class WowToolsService implements WowToolsServiceInterface
 
             $requestResult = (array)json_decode(curl_exec($ch), true);
 
-            if (isset($requestResult['error'])) {
+            if (empty($requestResult)) {
+                $this->log->getDisplayIdInvalidResponse();
+            } else if (isset($requestResult['error'])) {
                 $this->log->getDisplayIdRequestError($requestResult['error']);
             } else {
                 if (!isset($requestResult['CreatureDisplayInfoID[0]'])) {

@@ -6,6 +6,8 @@ interface WowToolsServiceLoggingInterface
 {
     public function getDisplayIdRequestStart(int $npcId): void;
 
+    public function getDisplayIdInvalidResponse(): void;
+
     public function getDisplayIdRequestError(string $error): void;
 
     public function getDisplayIdRequestResult(int $displayInfoId): void;
