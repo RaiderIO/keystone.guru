@@ -26,4 +26,4 @@ jobs:
           ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
           ssh-known-hosts: ${{ secrets.DEPLOYER_SSH_KNOWN_HOSTS }}
       - name: Deploy
-        run: dep deploy mapping.keystone.guru --branch=mapping -vvv
+        run: dep deploy mapping.keystone.guru -vvv
