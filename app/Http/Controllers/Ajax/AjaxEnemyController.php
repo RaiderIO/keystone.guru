@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
@@ -12,6 +11,7 @@ use App\Models\EnemyActiveAura;
 use App\Models\Mapping\MappingVersion;
 use App\Models\RaidMarker;
 use App\Models\Spell;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
@@ -26,8 +26,6 @@ use Throwable;
 
 class AjaxEnemyController extends AjaxMappingModelBaseController
 {
-    use PublicKeyDungeonRoute;
-
     /**
      * @return Enemy|Model
      *
@@ -112,12 +110,14 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @return Response|ResponseFactory
+     * @return Response
      *
      * @throws Throwable
      */
-    public function delete(Request $request, Enemy $enemy)
-    {
+    public function delete(
+        Request $request,
+        Enemy   $enemy
+    ): Response {
         return DB::transaction(function () use ($enemy) {
             try {
                 if ($enemy->delete()) {
@@ -125,7 +125,9 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     $this->mappingChanged($enemy, null);
 
                     if (Auth::check()) {
-                        broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+                        /** @var User $user */
+                        $user = Auth::getUser();
+                        broadcast(new ModelDeletedEvent($enemy->floor->dungeon, $user, $enemy));
                     }
                 }
 

@@ -87,7 +87,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $clonedEnemyPatrol;
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

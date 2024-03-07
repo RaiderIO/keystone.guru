@@ -6,6 +6,7 @@ use App\Events\LiveSession\StopEvent;
 use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -28,7 +29,9 @@ class AjaxLiveSessionController extends Controller
                 $liveSession->save();
 
                 if (Auth::check()) {
-                    broadcast(new StopEvent($liveSession, Auth::user()));
+                    /** @var User $user */
+                    $user = Auth::user();
+                    broadcast(new StopEvent($liveSession, $user));
                 }
 
                 // Convert to seconds

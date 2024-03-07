@@ -16,6 +16,8 @@ trait ListsKillzones
 {
     /**
      * Lists all killzones of a dungeon route.
+     *
+     * @return Collection<KillZone>
      */
     public function listKillzones(?DungeonRoute $dungeonRoute = null): Collection
     {

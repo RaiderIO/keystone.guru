@@ -25,8 +25,6 @@ use Throwable;
 
 class AjaxMapIconController extends AjaxMappingModelBaseController
 {
-    use PublicKeyDungeonRoute;
-
     protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
     {
         /** @var MapIcon $beforeModel */
@@ -51,7 +49,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         $validated                     = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
-        $isUserAdmin = Auth::check() && Auth::user()->hasRole('admin');
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        $isUserAdmin = $user?->hasRole('admin');
         // Must be an admin to use this endpoint like this!
         if ($dungeonRoute === null) {
             if (!$isUserAdmin) {
@@ -63,13 +64,13 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $this->authorize('addMapIcon', $dungeonRoute);
         }
 
-        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, static function (MapIcon $mapIcon) use ($validated, $dungeonRoute, $coordinatesService) {
+        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, static function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $updateAttributes = [];
             $teamId           = $validated['team_id'];
             if ($teamId !== null) {
                 $team = Team::find($teamId);
-                if ($team !== null && $team->isUserCollaborator(Auth::user())) {
+                if ($team !== null && $user !== null && $team->isUserCollaborator($user)) {
                     $updateAttributes = [
                         'team_id'          => $teamId,
                         'dungeon_route_id' => null,
@@ -131,7 +132,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         try {
             if ($mapIcon->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
+                    /** @var User $user */
+                    $user = Auth::user();
+                    broadcast(new ModelDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, $user, $mapIcon));
                 }
 
                 // Only when icons that are sticky to the map are saved

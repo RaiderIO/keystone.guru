@@ -30,7 +30,7 @@ abstract class ContextEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return array
      */
     public function broadcastOn(): array
     {

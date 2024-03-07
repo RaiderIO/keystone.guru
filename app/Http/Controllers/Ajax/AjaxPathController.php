@@ -12,6 +12,7 @@ use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -92,7 +93,9 @@ class AjaxPathController extends Controller
 
                     // Something's updated; broadcast it
                     if (Auth::check()) {
-                        broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
+                        /** @var User $user */
+                        $user = Auth::getUser();
+                        broadcast(new ModelChangedEvent($dungeonRoute, $user, $path));
                     }
 
                     // Touch the route so that the thumbnail gets updated
@@ -125,7 +128,9 @@ class AjaxPathController extends Controller
         try {
             if ($path->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $path));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($dungeonRoute, $user, $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated

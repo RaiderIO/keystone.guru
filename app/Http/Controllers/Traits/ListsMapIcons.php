@@ -18,9 +18,9 @@ trait ListsMapIcons
     /**
      * Lists all map icons of a floor.
      *
-     * @return MapIcon[]|Collection
+     * @return Collection<MapIcon>
      */
-    public function listMapIcons($floorId, ?DungeonRoute $dungeonRoute)
+    public function listMapIcons(int $floorId, ?DungeonRoute $dungeonRoute): Collection
     {
         try {
             $dungeonRouteId = $dungeonRoute->id;
@@ -34,6 +34,7 @@ trait ListsMapIcons
         return MapIcon::where('floor_id', $floorId)
             ->where(static fn($query) => $query->where('dungeon_route_id', $dungeonRouteId)->orWhereNull('dungeon_route_id')->orWhere('team_id', $teamId))
             // Order by dungeon route so that route-agnostic icons are loaded first in the front end, and the linked map icons can always find them
-            ->orderBy('dungeon_route_id')->get();
+            ->orderBy('dungeon_route_id')
+            ->get();
     }
 }

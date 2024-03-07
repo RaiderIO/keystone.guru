@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ajax;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -12,11 +13,12 @@ class AjaxProfileController
     {
         $time = $request->get('time', -1);
 
-        $user                  = Auth::user();
-        $user->legal_agreed    = 1;
-        $user->legal_agreed_ms = $time;
-
-        $user->save();
+        /** @var User $user */
+        $user = Auth::user();
+        $user->update([
+            'legal_agreed'    => 1,
+            'legal_agreed_ms' => $time,
+        ]);
 
         return response()->noContent();
     }

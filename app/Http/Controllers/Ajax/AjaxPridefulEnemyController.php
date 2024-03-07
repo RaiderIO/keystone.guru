@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -43,7 +44,9 @@ class AjaxPridefulEnemyController extends Controller
         }
 
         if (Auth::check()) {
-            broadcast(new ModelChangedEvent($dungeonRoute, Auth::getUser(), $pridefulEnemy));
+            /** @var User $user */
+            $user = Auth::getUser();
+            broadcast(new ModelChangedEvent($dungeonRoute, $user, $pridefulEnemy));
         }
 
         $dungeonRoute->touch();
@@ -64,7 +67,9 @@ class AjaxPridefulEnemyController extends Controller
             /** @var PridefulEnemy $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
             if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
-                broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $pridefulEnemy));
+                /** @var User $user */
+                $user = Auth::getUser();
+                broadcast(new ModelDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
             }
 
             $dungeonRoute->touch();

@@ -12,7 +12,6 @@ use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteDataFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
@@ -70,7 +69,6 @@ class AjaxDungeonRouteController extends Controller
     use ListsEnemyPatrols;
     use ListsMapIcons;
     use ListsPaths;
-    use PublicKeyDungeonRoute;
 
     /**
      * @return mixed

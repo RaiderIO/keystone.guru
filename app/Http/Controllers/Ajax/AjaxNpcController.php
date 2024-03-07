@@ -10,6 +10,7 @@ use App\Logic\Datatables\ColumnHandler\Npc\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,9 @@ class AjaxNpcController extends Controller
             $npc = Npc::findOrFail($request->get('id'));
 
             if ($npc->delete()) {
-                broadcast(new ModelDeletedEvent($npc->dungeon, Auth::user(), $npc));
+                /** @var User $user */
+                $user = Auth::user();
+                broadcast(new ModelDeletedEvent($npc->dungeon, $user, $npc));
             }
 
             // Trigger mapping changed event so the mapping gets saved across all environments
@@ -41,11 +44,9 @@ class AjaxNpcController extends Controller
     }
 
     /**
-     * @return array
-     *
      * @throws Exception
      */
-    public function list(Request $request)
+    public function list(Request $request): array
     {
         $npcs = Npc::with(['dungeon', 'type', 'classification', 'enemyForces'])
             ->selectRaw('npcs.*, COUNT(enemies.id) as enemy_count')
@@ -59,10 +60,13 @@ class AjaxNpcController extends Controller
 
         $datatablesHandler = (new NpcsDatatablesHandler($request));
 
-        return $datatablesHandler->setBuilder($npcs)->addColumnHandler([
-            new IdColumnHandler($datatablesHandler),
-            new NameColumnHandler($datatablesHandler),
-            new DungeonColumnHandler($datatablesHandler),
-        ])->applyRequestToBuilder()->getResult();
+        return $datatablesHandler->setBuilder($npcs)
+            ->addColumnHandler([
+                new IdColumnHandler($datatablesHandler),
+                new NameColumnHandler($datatablesHandler),
+                new DungeonColumnHandler($datatablesHandler),
+            ])
+            ->applyRequestToBuilder()
+            ->getResult();
     }
 }

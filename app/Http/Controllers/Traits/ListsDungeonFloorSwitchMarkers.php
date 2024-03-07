@@ -16,7 +16,7 @@ trait ListsDungeonFloorSwitchMarkers
     /**
      * Lists all dungeon floor switch markers on a floor.
      */
-    public function listDungeonFloorSwitchMarkers($floorId): Collection
+    public function listDungeonFloorSwitchMarkers(int $floorId): Collection
     {
         return DungeonFloorSwitchMarker::where('floor_id', $floorId)->get();
     }

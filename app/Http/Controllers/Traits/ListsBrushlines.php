@@ -19,7 +19,7 @@ trait ListsBrushlines
     /**
      * Lists all brushlines on a specific floor of a dungeon route.
      */
-    public function listBrushlines($floorId, ?DungeonRoute $dungeonRoute = null): Collection
+    public function listBrushlines(int $floorId, ?DungeonRoute $dungeonRoute = null): Collection
     {
         try {
             $result = Brushline::with('polyline')
