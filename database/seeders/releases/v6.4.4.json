@@ -16,23 +16,13 @@
                 "release_changelog_id": 173,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Neltharus: enemies placed in previous release are now assignable to routes.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Neltharus: enemies placed in previous release are now assignable to routes."
             },
             {
                 "release_changelog_id": 173,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Halls of Infusion: Enemies placed in previous release are now assignable to routes. Also edited trash after PTR changes after 2nd boss (thanks Tealc!)",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Halls of Infusion: Enemies placed in previous release are now assignable to routes. Also edited trash after PTR changes after 2nd boss (thanks Tealc!)"
             }
         ]
     }

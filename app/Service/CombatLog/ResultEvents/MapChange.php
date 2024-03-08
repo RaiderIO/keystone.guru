@@ -9,34 +9,26 @@ use Exception;
 
 class MapChange extends BaseResultEvent
 {
-
     private ?Floor $floor = null;
 
     public function __construct(MapChangeEvent $baseEvent)
     {
         parent::__construct($baseEvent);
 
-
         try {
             $this->floor = Floor::findByUiMapId($baseEvent->getUiMapID());
-        } catch (Exception $exception) {
+        } catch (Exception) {
             throw new FloorNotSupportedException(
                 sprintf('Floor with ui MAP ID %d not found', $baseEvent->getUiMapID())
             );
         }
     }
 
-    /**
-     * @return Floor|null
-     */
     public function getFloor(): ?Floor
     {
         return $this->floor;
     }
 
-    /**
-     * @return MapChangeEvent
-     */
     public function getMapChangeEvent(): MapChangeEvent
     {
         /** @var MapChangeEvent $mapChangeEvent */

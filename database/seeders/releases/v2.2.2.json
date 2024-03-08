@@ -16,12 +16,7 @@
                 "release_changelog_id": 27,
                 "release_changelog_category_id": 1,
                 "ticket_id": 149,
-                "change": "The MDT importer will now show warnings when something isn't right, rather than outright failing. Also updated the UI to be more user friendly.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "The MDT importer will now show warnings when something isn't right, rather than outright failing. Also updated the UI to be more user friendly."
             }
         ]
     }

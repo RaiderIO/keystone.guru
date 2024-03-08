@@ -1,5 +1,5 @@
 <?php
-/** @var \App\User $user */
+/** @var \App\Models\User $user */
 /** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
 ?>
 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -74,9 +74,11 @@
                  data-color="{{ $class->color }}"
                  style="background-color: {{ $class->color }};">
             </div>
-            <?php } ?>
+            <?php }
+ ?>
         </div>
-        <?php } ?>
+<?php }
+ ?>
     </div>
 
     {!! Form::submit(__('views/profile.edit.save'), ['class' => 'btn btn-info']) !!}

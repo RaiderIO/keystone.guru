@@ -1,5 +1,5 @@
 <?php
-$type = isset($type) ? $type : 'responsive';
+$type ??= 'responsive';
 ?>
 
 @if( $type === 'responsive' )

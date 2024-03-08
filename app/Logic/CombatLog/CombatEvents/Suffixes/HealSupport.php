@@ -9,18 +9,11 @@ class HealSupport extends Heal
 {
     private Guid $supportGuid;
 
-    /**
-     * @return Guid|null
-     */
     public function getSupportGuid(): ?Guid
     {
         return $this->supportGuid;
     }
 
-    /**
-     * @param array $parameters
-     * @return HasParameters
-     */
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -30,10 +23,6 @@ class HealSupport extends Heal
         return $this;
     }
 
-
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 6;

@@ -26,13 +26,11 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param FloorUnionFormRequest $request
-     * @param MappingVersion        $mappingVersion
-     * @param FloorUnion|null       $floorUnion
      * @return FloorUnion|Model
+     *
      * @throws Throwable
      */
-    public function store(FloorUnionFormRequest $request, MappingVersion $mappingVersion, FloorUnion $floorUnion = null): FloorUnion
+    public function store(FloorUnionFormRequest $request, MappingVersion $mappingVersion, ?FloorUnion $floorUnion = null): FloorUnion
     {
         $validated = $request->validated();
 
@@ -40,22 +38,22 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request    $request
-     * @param FloorUnion $floorUnion
      * @return Response|ResponseFactory
+     *
      * @throws Throwable
      */
     public function delete(Request $request, FloorUnion $floorUnion)
     {
-        return DB::transaction(function () use ($request, $floorUnion) {
+        return DB::transaction(static function () use ($floorUnion) {
             try {
                 if ($floorUnion->delete()) {
                     if (Auth::check()) {
                         broadcast(new ModelDeletedEvent($floorUnion->floor->dungeon, Auth::getUser(), $floorUnion));
                     }
                 }
+
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

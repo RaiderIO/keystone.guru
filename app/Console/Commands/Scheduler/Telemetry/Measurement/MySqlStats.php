@@ -2,16 +2,15 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
-
 use DB;
 use InfluxDB\Point;
 
 class MySqlStats extends Measurement
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function getPoints(): array
+    public function getPoints(): array
     {
         $threadsConnected = DB::select('SHOW STATUS WHERE `variable_name` = "Threads_connected"')[0]->Value;
         $maxThreads       = DB::select('SHOW VARIABLES LIKE "max_connections"')[0]->Value;

@@ -4,14 +4,11 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class FixTeamIdOnDungeonRouteTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->integer('team_id')->nullable(true)->change();
@@ -21,14 +18,12 @@ class FixTeamIdOnDungeonRouteTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         DungeonRoute::query()->whereNull('team_id')->update(['team_id' => -1]);
         Schema::table('dungeon_routes', function (Blueprint $table) {
             $table->integer('team_id')->nullable(false)->change();
         });
     }
-}
+};

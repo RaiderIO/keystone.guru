@@ -8,6 +8,7 @@ use App\Http\Requests\EnemyPatrol\EnemyPatrolFormRequest;
 use App\Models\EnemyPatrol;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -23,18 +24,15 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     use SavesPolylines;
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param EnemyPatrolFormRequest      $request
-     * @param MappingVersion              $mappingVersion
-     * @param EnemyPatrol|null            $enemyPatrol
      * @return EnemyPatrol|Model
+     *
      * @throws Throwable
      */
     public function store(
         CoordinatesServiceInterface $coordinatesService,
         EnemyPatrolFormRequest      $request,
         MappingVersion              $mappingVersion,
-        EnemyPatrol                 $enemyPatrol = null
+        ?EnemyPatrol                $enemyPatrol = null
     ): EnemyPatrol {
         $validated = $request->validated();
 
@@ -59,7 +57,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 // Couple the patrol to the polyline
                 $saveResult = $enemyPatrol->update([
                     'polyline_id' => $polyline->id,
-                    'floor_id'    => optional($changedFloor)->id ?? $enemyPatrol->floor_id,
+                    'floor_id'    => $changedFloor?->id ?? $enemyPatrol->floor_id,
                 ]);
 
                 // Load the polyline, so it can be echoed back to the user
@@ -71,23 +69,24 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request     $request
-     * @param EnemyPatrol $enemyPatrol
-     * @return array|ResponseFactory|Response
+     * @return Response
      */
-    function delete(Request $request, EnemyPatrol $enemyPatrol)
+    public function delete(Request $request, MappingVersion $mappingVersion, EnemyPatrol $enemyPatrol): Response
     {
         try {
             if ($enemyPatrol->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($enemyPatrol, null);
             }
+
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

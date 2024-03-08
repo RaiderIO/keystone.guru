@@ -6,9 +6,8 @@ use App\Logging\StructuredLogging;
 
 class DungeonRouteCombatFilterLogging extends StructuredLogging implements DungeonRouteCombatFilterLoggingInterface
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function parseChallengeModeStartFound(int $lineNr): void
     {

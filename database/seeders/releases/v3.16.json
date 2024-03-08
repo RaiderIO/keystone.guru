@@ -16,78 +16,43 @@
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Various performance improvements across the board.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Various performance improvements across the board."
             },
             {
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 2,
                 "ticket_id": 351,
-                "change": "Route sharing has been reworked. You no longer 'publish' and 'unpublish' routes, but you have a few more options instead. There are now 4 options. Unpublished remains as it was - only you may view the current route. A new option will be 'Team', where all members of teams you are part of may view the route (and noone else). 'World' will allow your route to be viewed by everyone and it will be featured on the Routes page of the website. Finally, 'World with Link' is available for Patrons, which will allow you to make your routes viewable by everyone if they have the link. This replaces the 'Unlisted route' option.",
-                "category": {
-                    "id": 2,
-                    "key": "route_changes",
-                    "name": "releasechangelogcategories.route_changes"
-                }
+                "change": "Route sharing has been reworked. You no longer 'publish' and 'unpublish' routes, but you have a few more options instead. There are now 4 options. Unpublished remains as it was - only you may view the current route. A new option will be 'Team', where all members of teams you are part of may view the route (and noone else). 'World' will allow your route to be viewed by everyone and it will be featured on the Routes page of the website. Finally, 'World with Link' is available for Patrons, which will allow you to make your routes viewable by everyone if they have the link. This replaces the 'Unlisted route' option."
             },
             {
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "The Necrotic Wake: Removed permanent tooltip indicating the dungeon timer - these can be found in the left sidebar when viewing a route (hover over the dungeon timer).",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "The Necrotic Wake: Removed permanent tooltip indicating the dungeon timer - these can be found in the left sidebar when viewing a route (hover over the dungeon timer)."
             },
             {
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Plaguefall: Added missing Slime Tentacles in the platform just before Doctor Ickus.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Plaguefall: Added missing Slime Tentacles in the platform just before Doctor Ickus."
             },
             {
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Spires of Ascension: Inspiring enemies that you encounter when going left from the first boss have been mapped.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Spires of Ascension: Inspiring enemies that you encounter when going left from the first boss have been mapped."
             },
             {
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 5,
                 "ticket_id": 574,
-                "change": "Fixed an error with users who registered with the site from OAuth providers and viewed the map.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an error with users who registered with the site from OAuth providers and viewed the map."
             },
             {
                 "release_changelog_id": 87,
                 "release_changelog_category_id": 6,
                 "ticket_id": null,
-                "change": "Plaguefall: Fixed a missing MDT link with a recently placed Unstable Canister.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Plaguefall: Fixed a missing MDT link with a recently placed Unstable Canister."
             }
         ]
     }

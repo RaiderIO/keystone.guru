@@ -8,16 +8,12 @@ use Illuminate\Http\Request;
 
 class AjaxSiteController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function refreshCsrf(Request $request)
+    public function refreshCsrf(Request $request): JsonResponse
     {
         session()->regenerate();
 
         return response()->json([
-            'token' => csrf_token()
+            'token' => csrf_token(),
         ]);
     }
 }

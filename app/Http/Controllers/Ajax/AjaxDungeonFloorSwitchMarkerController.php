@@ -7,11 +7,12 @@ use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Requests\DungeonFloorSwitchMarker\DungeonFloorSwitchMarkerFormRequest;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
@@ -20,45 +21,42 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
 {
     use ListsDungeonFloorSwitchMarkers;
 
-    public function list(Request $request)
+    public function list(Request $request): Collection
     {
         return $this->listDungeonFloorSwitchMarkers($request->get('floor_id'));
     }
 
     /**
-     * @param DungeonFloorSwitchMarkerFormRequest $request
-     * @param MappingVersion                      $mappingVersion
-     * @param DungeonFloorSwitchMarker|null       $dungeonFloorSwitchMarker
-     * @return DungeonFloorSwitchMarker|Model
      * @throws Throwable
      */
     public function store(
         DungeonFloorSwitchMarkerFormRequest $request,
         MappingVersion                      $mappingVersion,
-        DungeonFloorSwitchMarker            $dungeonFloorSwitchMarker = null
-    ): DungeonFloorSwitchMarker {
+        ?DungeonFloorSwitchMarker           $dungeonFloorSwitchMarker = null
+    ): DungeonFloorSwitchMarker|Model {
         return $this->storeModel($mappingVersion, $request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }
 
-    /**
-     * @param Request                  $request
-     * @param DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
-     * @return ResponseFactory|Response
-     */
-    public function delete(Request $request, DungeonFloorSwitchMarker $dungeonFloorSwitchMarker)
-    {
+    public function delete(
+        Request                  $request,
+        MappingVersion           $mappingVersion,
+        DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
+    ): Response {
         try {
             $dungeon = $dungeonFloorSwitchMarker->floor->dungeon;
             if ($dungeonFloorSwitchMarker->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeon, Auth::getUser(), $dungeonFloorSwitchMarker));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($dungeon, $user, $dungeonFloorSwitchMarker));
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($dungeonFloorSwitchMarker, null);
             }
+
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

@@ -1,5 +1,5 @@
 <?php
-$selected = $selected ?? '';
+$selected ??= '';
 
 // https://gist.github.com/Xeoncross/1204255
 $regions = [
@@ -12,7 +12,7 @@ $regions = [
     __('views/common.forms.timezoneselect.indian')     => DateTimeZone::INDIAN,
     __('views/common.forms.timezoneselect.pacific')    => DateTimeZone::PACIFIC
 ];
-$timezones = array();
+$timezones = [];
 foreach ($regions as $name => $mask) {
     $zones = DateTimeZone::listIdentifiers($mask);
     foreach ($zones as $timezone) {
@@ -24,6 +24,7 @@ foreach ($regions as $name => $mask) {
         $timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i') . $ampm;
     }
 }
+
 // View
 ?>
 <label for="timezone">

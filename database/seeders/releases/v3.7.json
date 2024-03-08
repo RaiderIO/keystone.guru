@@ -16,45 +16,25 @@
                 "release_changelog_id": 75,
                 "release_changelog_category_id": 1,
                 "ticket_id": 417,
-                "change": "Various minor changes and bugfixes for the Shadowlands release.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Various minor changes and bugfixes for the Shadowlands release."
             },
             {
                 "release_changelog_id": 75,
                 "release_changelog_category_id": 1,
                 "ticket_id": 487,
-                "change": "New affix rotation added (beware: this may be incorrect, will update when correct data becomes available).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "New affix rotation added (beware: this may be incorrect, will update when correct data becomes available)."
             },
             {
                 "release_changelog_id": 75,
                 "release_changelog_category_id": 1,
                 "ticket_id": 222,
-                "change": "Reduced technical debt in the code.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Reduced technical debt in the code."
             },
             {
                 "release_changelog_id": 75,
                 "release_changelog_category_id": 7,
                 "ticket_id": 480,
-                "change": "Fixed various issues related to leaving a team.",
-                "category": {
-                    "id": 7,
-                    "key": "team_changes",
-                    "name": "releasechangelogcategories.team_changes"
-                }
+                "change": "Fixed various issues related to leaving a team."
             }
         ]
     }

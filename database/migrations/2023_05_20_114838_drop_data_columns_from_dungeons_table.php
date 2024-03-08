@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropDataColumnsFromDungeonsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->dropColumn('enemy_forces_required');
@@ -24,10 +21,8 @@ class DropDataColumnsFromDungeonsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->integer('enemy_forces_required');
@@ -37,4 +32,4 @@ class DropDataColumnsFromDungeonsTable extends Migration
             $table->integer('timer_max_seconds');
         });
     }
-}
+};

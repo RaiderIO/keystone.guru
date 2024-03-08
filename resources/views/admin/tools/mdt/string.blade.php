@@ -1,5 +1,5 @@
 <?php
-$asDungeonroute = $asDungeonroute ?? false;
+$asDungeonroute ??= false;
 ?>
 
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.tools.mdt.string.title')])

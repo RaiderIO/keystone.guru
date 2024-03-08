@@ -12,6 +12,7 @@ use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -28,20 +29,17 @@ class AjaxPathController extends Controller
     use ValidatesFloorId;
 
     /**
-     * @param APIPathFormRequest          $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param DungeonRoute                $dungeonRoute
-     * @param Path|null                   $path
      * @return Brushline|Response
+     *
      * @throws AuthorizationException
      */
-    function store(
+    public function store(
         APIPathFormRequest          $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
         ?Path                       $path = null)
     {
-        $dungeonRoute = optional($path)->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
         $this->authorize('addPath', $dungeonRoute);
@@ -84,7 +82,7 @@ class AjaxPathController extends Controller
                     // Couple the path to the polyline
                     $path->update([
                         'polyline_id' => $polyline->id,
-                        'floor_id'    => optional($changedFloor)->id ?? $path->floor_id,
+                        'floor_id'    => $changedFloor?->id ?? $path->floor_id,
                     ]);
 
                     // Load the polyline so it can be echoed back to the user
@@ -95,7 +93,9 @@ class AjaxPathController extends Controller
 
                     // Something's updated; broadcast it
                     if (Auth::check()) {
-                        broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $path));
+                        /** @var User $user */
+                        $user = Auth::getUser();
+                        broadcast(new ModelChangedEvent($dungeonRoute, $user, $path));
                     }
 
                     // Touch the route so that the thumbnail gets updated
@@ -105,7 +105,7 @@ class AjaxPathController extends Controller
                 }
 
                 $result = $path;
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         });
@@ -114,13 +114,11 @@ class AjaxPathController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Path         $path
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
     {
         $dungeonRoute = $path->dungeonRoute;
 
@@ -130,7 +128,9 @@ class AjaxPathController extends Controller
         try {
             if ($path->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $path));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($dungeonRoute, $user, $path));
                 }
 
                 // Touch the route so that the thumbnail gets updated
@@ -140,7 +140,7 @@ class AjaxPathController extends Controller
             } else {
                 $result = response(__('controller.path.error.unable_to_delete_path'), Http::INTERNAL_SERVER_ERROR);
             }
-        } catch (\Exception $ex) {
+        } catch (\Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

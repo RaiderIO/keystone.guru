@@ -1,7 +1,7 @@
 <?php
 /** @var $categories \App\Models\ReleaseChangelogCategory[]|\Illuminate\Support\Collection $categories */
 /** @var $release \App\Models\Release */
-$showHeader = $showHeader ?? true;
+$showHeader ??= true;
 ?>
 <div class="form-group">
     @if($showHeader)

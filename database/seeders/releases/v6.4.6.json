@@ -16,34 +16,19 @@
                 "release_changelog_id": 175,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "All dungeons for season 2 have been revisited and adjusted to latest PTR mapping (thanks Nnoggie).",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "All dungeons for season 2 have been revisited and adjusted to latest PTR mapping (thanks Nnoggie)."
             },
             {
                 "release_changelog_id": 175,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1685,
-                "change": "Fixed crash related to new season starting (hotfixed).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed crash related to new season starting (hotfixed)."
             },
             {
                 "release_changelog_id": 175,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1678,
-                "change": "Routes that have no ascii characters in their title are now able to be edited again.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Routes that have no ascii characters in their title are now able to be edited again."
             }
         ]
     }

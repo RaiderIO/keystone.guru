@@ -16,12 +16,7 @@
                 "release_changelog_id": 196,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1858,
-                "change": "Created presenter mode.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Created presenter mode."
             }
         ]
     }

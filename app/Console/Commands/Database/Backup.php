@@ -23,10 +23,8 @@ class Backup extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Backup MySql database if the environment asks for it!
         $backupDir = config('keystoneguru.db_backup_dir');
@@ -34,7 +32,7 @@ class Backup extends Command
             $this->info('Backing up MySQL database...');
 
             $this->shell([
-                sprintf('mysqldump --no-tablespaces -u %s -p\'%s\' %s | gzip -9 -c > %s/%s.%s.sql.gz',
+                sprintf("mysqldump --no-tablespaces -u %s -p'%s' %s | gzip -9 -c > %s/%s.%s.sql.gz",
                     config('database.connections.migrate.username'),
                     config('database.connections.migrate.password'),
                     config('database.connections.migrate.database'),

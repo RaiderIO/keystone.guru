@@ -1,5 +1,5 @@
 <?php
-/** @var $user \App\User */
+/** @var $user \App\Models\User */
 ?>
 <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
     <h4>

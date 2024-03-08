@@ -2,20 +2,34 @@
 
 namespace App\Logic\CombatLog\Guid;
 
-abstract class Guid
+use Stringable;
+
+abstract class Guid implements Stringable
 {
-    private const GUID_TYPE_BATTLE_PET    = 'BattlePet';
+    private const GUID_TYPE_BATTLE_PET = 'BattlePet';
+
     private const GUID_TYPE_B_NET_ACCOUNT = 'BNetAccount';
-    private const GUID_TYPE_CAST          = 'Cast';
-    private const GUID_TYPE_CLIENT_ACTOR  = 'ClientActor';
-    private const GUID_TYPE_CREATURE      = 'Creature';
-    private const GUID_TYPE_FOLLOWER      = 'Follower';
-    private const GUID_TYPE_GAME_OBJECT   = 'GameObject';
-    private const GUID_TYPE_ITEM          = 'Item';
-    private const GUID_TYPE_PET           = 'Pet';
-    private const GUID_TYPE_PLAYER        = 'Player';
-    private const GUID_TYPE_VIGNETTE      = 'Vignette';
-    private const GUID_TYPE_VEHICLE       = 'Vehicle';
+
+    private const GUID_TYPE_CAST = 'Cast';
+
+    private const GUID_TYPE_CLIENT_ACTOR = 'ClientActor';
+
+    private const GUID_TYPE_CREATURE = 'Creature';
+
+    private const GUID_TYPE_FOLLOWER = 'Follower';
+
+    private const GUID_TYPE_GAME_OBJECT = 'GameObject';
+
+    private const GUID_TYPE_ITEM = 'Item';
+
+    private const GUID_TYPE_PET = 'Pet';
+
+    private const GUID_TYPE_PLAYER = 'Player';
+
+    private const GUID_TYPE_VIGNETTE = 'Vignette';
+
+    private const GUID_TYPE_VEHICLE = 'Vehicle';
+
     // This GUID is a bit of a hack because evading enemies have their InfoGUID set to EVADE. This ensures we can still
     // use strongly typed GUIDs while still supporting this
     private const GUID_TYPE_EVADE = 'EVADE';
@@ -36,25 +50,15 @@ abstract class Guid
         self::GUID_TYPE_EVADE         => Evade::class,
     ];
 
-    private string $guid;
-
-    protected function __construct(string $guid)
+    protected function __construct(private readonly string $guid)
     {
-        $this->guid = $guid;
     }
 
-    /**
-     * @return string
-     */
     public function getGuid(): string
     {
         return $this->guid;
     }
 
-    /**
-     * @param string $guid
-     * @return Guid|null
-     */
     public static function createFromGuidString(string $guid): ?Guid
     {
         if ($guid === '0000000000000000') {
@@ -76,10 +80,7 @@ abstract class Guid
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->guid;
     }

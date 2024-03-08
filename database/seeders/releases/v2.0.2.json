@@ -16,23 +16,13 @@
                 "release_changelog_id": 23,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Fixed Virtual Tour not working properly.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Fixed Virtual Tour not working properly."
             },
             {
                 "release_changelog_id": 23,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Assigned raid markers are now displayed properly again.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Assigned raid markers are now displayed properly again."
             }
         ]
     }

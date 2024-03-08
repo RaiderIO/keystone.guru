@@ -14,7 +14,7 @@ use App\Models\RaidMarker;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -25,61 +25,42 @@ abstract class MapContext
 {
     use ListsEnemies;
 
-    protected CacheServiceInterface $cacheService;
-
-    protected CoordinatesServiceInterface $coordinatesService;
-
-    protected Model $context;
-
-    protected Floor $floor;
-
     protected MappingVersion $mappingVersion;
 
-    protected ?string $mapFacadeStyle = null;
-
-    function __construct(
-        CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService,
-        Model                       $context,
-        Floor                       $floor,
-        MappingVersion              $mappingVersion,
-        ?string                      $mapFacadeStyle = null
+    public function __construct(
+        protected CacheServiceInterface       $cacheService,
+        protected CoordinatesServiceInterface $coordinatesService,
+        protected Model                       $context,
+        protected Floor                       $floor,
+        MappingVersion                        $mappingVersion,
+        protected ?string                     $mapFacadeStyle = null
     ) {
-        $this->cacheService       = $cacheService;
-        $this->coordinatesService = $coordinatesService;
-        $this->context            = $context;
-        $this->floor              = $floor;
-        $this->mappingVersion     = $mappingVersion;
-        $this->mapFacadeStyle     = $mapFacadeStyle;
+        $this->mappingVersion = $mappingVersion;
     }
 
-    public abstract function getType(): string;
+    abstract public function getType(): string;
 
-    public abstract function isTeeming(): bool;
+    abstract public function isTeeming(): bool;
 
-    public abstract function getSeasonalIndex(): int;
+    abstract public function getSeasonalIndex(): int;
 
-    public abstract function getFloors(): Collection;
+    abstract public function getFloors(): Collection;
 
-    public abstract function getEnemies(): array;
+    abstract public function getEnemies(): array;
 
-    public abstract function getEchoChannelName(): string;
+    abstract public function getEchoChannelName(): string;
 
     public function getMapFacadeStyle(): string
     {
         return $this->mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle();
     }
 
-    /**
-     * @return Model
-     */
     public function getContext(): Model
     {
         return $this->context;
     }
 
     /**
-     * @return array
      * @throws InvalidArgumentException
      */
     public function getProperties(): array
@@ -95,7 +76,7 @@ abstract class MapContext
                 /** @var Dungeon $dungeon */
                 $dungeon = $this->floor->dungeon()
                     ->with(['dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
-                    ->without(['floors', 'mapicons', 'enemypacks'])
+                    ->without(['floors', 'mapIcons', 'enemyPacks'])
                     ->first();
                 // Filter out floors that we do not need
                 $dungeon->setRelation('floors', $this->getFloors());
@@ -105,9 +86,7 @@ abstract class MapContext
                     'npcs'                      => $this->floor->dungeon->npcs()->with([
                         'spells',
                         // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                        'enemyForces' => function (HasOne $query) {
-                            return $query->where('mapping_version_id', $this->mappingVersion->id);
-                        },
+                        'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
                     ])->get(),
                     'auras'                     => Spell::where('aura', true)->get(),
                     'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
@@ -121,18 +100,16 @@ abstract class MapContext
                 ]);
             }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $this->cacheService->remember('static_data', function () {
-            return [
-                'spells'                            => Spell::all(),
-                'mapIconTypes'                      => MapIconType::all(),
-                'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
-                'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
-                'classColors'                       => CharacterClass::all()->pluck('color'),
-                'raidMarkers'                       => RaidMarker::all(),
-                'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
-                'publishStates'                     => PublishedState::all(),
-            ];
-        }, config('keystoneguru.cache.static_data.ttl'));
+        $static = $this->cacheService->remember('static_data', static fn() => [
+            'spells'                            => Spell::all(),
+            'mapIconTypes'                      => MapIconType::all(),
+            'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
+            'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
+            'classColors'                       => CharacterClass::all()->pluck('color'),
+            'raidMarkers'                       => RaidMarker::all(),
+            'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+            'publishStates'                     => PublishedState::all(),
+        ], config('keystoneguru.cache.static_data.ttl'));
 
         $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth($this->mappingVersion);
         $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth($this->mappingVersion);

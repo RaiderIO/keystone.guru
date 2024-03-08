@@ -16,10 +16,9 @@ trait ListsEnemyPatrols
     /**
      * Lists all patrols of a floor.
      *
-     * @param int $floorId
-     * @return Collection
+     * @return Collection<EnemyPatrol>
      */
-    function listEnemyPatrols(int $floorId): Collection
+    public function listEnemyPatrols(int $floorId): Collection
     {
         return EnemyPatrol::with('polyline')->where('floor_id', $floorId)->get();
     }

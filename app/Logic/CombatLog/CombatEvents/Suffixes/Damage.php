@@ -6,7 +6,6 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 
 class Damage extends Suffix
 {
-
     private int $amount;
 
     private int $rawAmount;
@@ -27,90 +26,56 @@ class Damage extends Suffix
 
     private bool $crushing;
 
-    /**
-     * @return int
-     */
     public function getAmount(): int
     {
         return $this->amount;
     }
 
-    /**
-     * @return int
-     */
     public function getRawAmount(): int
     {
         return $this->rawAmount;
     }
 
-    /**
-     * @return int
-     */
     public function getOverKill(): int
     {
         return $this->overKill;
     }
 
-    /**
-     * @return int
-     */
     public function getSchool(): int
     {
         return $this->school;
     }
 
-    /**
-     * @return int
-     */
     public function getResisted(): int
     {
         return $this->resisted;
     }
 
-    /**
-     * @return int
-     */
     public function getBlocked(): int
     {
         return $this->blocked;
     }
 
-    /**
-     * @return int
-     */
     public function getAbsorbed(): int
     {
         return $this->absorbed;
     }
 
-    /**
-     * @return bool
-     */
     public function isCritical(): bool
     {
         return $this->critical;
     }
 
-    /**
-     * @return bool
-     */
     public function isGlancing(): bool
     {
         return $this->glancing;
     }
 
-    /**
-     * @return bool
-     */
     public function isCrushing(): bool
     {
         return $this->crushing;
     }
 
-    /**
-     * @param array $parameters
-     * @return HasParameters
-     */
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -129,9 +94,6 @@ class Damage extends Suffix
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 10;

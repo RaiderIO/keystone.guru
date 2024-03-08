@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
@@ -13,9 +12,6 @@ use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface
 {
-    /**
-     * @return bool
-     */
     public function shouldSynchronizeMapping(): bool
     {
         /** @var MappingChangeLog $mostRecentMappingChangeLog */
@@ -45,9 +41,6 @@ class MappingService implements MappingServiceInterface
         return $result;
     }
 
-    /**
-     * @return Collection|Dungeon[]
-     */
     public function getDungeonsWithUnmergedMappingChanges(): Collection
     {
         $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
@@ -66,75 +59,86 @@ class MappingService implements MappingServiceInterface
         return $dungeonQueryBuilder
             ->whereNotNull('dungeon_id')
             ->get()
-            ->keyBy(function (Dungeon $dungeon) {
-                return $dungeon->id;
-            });
+            ->keyBy(static fn(Dungeon $dungeon) => $dungeon->id);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
     {
         $currentMappingVersion = $dungeon->currentMappingVersion;
+        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
+
+        $now = Carbon::now()->toDateTimeString();
 
         return MappingVersion::create([
             'dungeon_id'       => $dungeon->id,
-            'mdt_mapping_hash' => optional($currentMappingVersion)->mdt_mapping_hash ?? '',
-            'version'          => (++optional($currentMappingVersion)->version) ?? 1,
-            'created_at'       => Carbon::now()->toDateTimeString(),
-            'updated_at'       => Carbon::now()->toDateTimeString(),
+            'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? null,
+            'version'          => $newVersion,
+            'created_at'       => $now,
+            'updated_at'       => $now,
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
     {
-        $currentMappingVersion = $dungeon->currentMappingVersion;
-
-        $newMappingVersionVersion = (optional($currentMappingVersion)->version ?? 0) + 1;
-
+        $now = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $hash,
-            'version'          => $newMappingVersionVersion,
-            'created_at'       => Carbon::now()->toDateTimeString(),
-            'updated_at'       => Carbon::now()->toDateTimeString(),
+            'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
+            'created_at'       => $now,
+            'updated_at'       => $now,
         ]);
 
         $newMappingVersion = MappingVersion::find($id);
 
-        // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
-        // MDT mapping
-        if ($currentMappingVersion !== null) {
-            foreach ($currentMappingVersion->mapIcons as $mapIcon) {
-                $mapIcon->cloneForNewMappingVersion($newMappingVersion);
-            }
-
-            foreach ($currentMappingVersion->mountableAreas as $mountableArea) {
-                $mountableArea->cloneForNewMappingVersion($newMappingVersion);
-            }
-
-            foreach ($currentMappingVersion->floorUnions as $floorUnion) {
-                /** @var FloorUnion $newFloorUnion */
-                $newFloorUnion = $floorUnion->cloneForNewMappingVersion($newMappingVersion);
-                foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
-                    $floorUnionArea->cloneForNewMappingVersion($newMappingVersion, $newFloorUnion);
-                }
-            }
-
-            // Load the newly generated relationships
-            $newMappingVersion->load(['mapIcons', 'mountableAreas', 'floorUnions', 'floorUnionAreas']);
-        }
-
-        return $newMappingVersion;
+        return $this->copyMappingVersionContentsToDungeon($dungeon->currentMappingVersion, $newMappingVersion);
     }
 
+    public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
+    {
+        $now = Carbon::now()->toDateTimeString();
+        // This needs to happen quietly as to not trigger MappingVersion events defined in its class
+        $id = MappingVersion::insertGetId([
+            'dungeon_id'       => $dungeon->id,
+            'mdt_mapping_hash' => $sourceMappingVersion->mdt_mapping_hash,
+            'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
+            'created_at'       => $now,
+            'updated_at'       => $now,
+        ]);
+
+        return MappingVersion::find($id);
+    }
+
+    public function copyMappingVersionContentsToDungeon(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): MappingVersion
+    {
+        // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
+        // MDT mapping
+        foreach ($sourceMappingVersion->mapIcons as $mapIcon) {
+            $mapIcon->cloneForNewMappingVersion($targetMappingVersion);
+        }
+
+        foreach ($sourceMappingVersion->mountableAreas as $mountableArea) {
+            $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
+        }
+
+        foreach ($sourceMappingVersion->floorUnions as $floorUnion) {
+            /** @var FloorUnion $newFloorUnion */
+            $newFloorUnion = $floorUnion->cloneForNewMappingVersion($targetMappingVersion);
+            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                $floorUnionArea->cloneForNewMappingVersion($targetMappingVersion, $newFloorUnion);
+            }
+        }
+
+        // Load the newly generated relationships
+        $targetMappingVersion->load(['mapIcons', 'mountableAreas', 'floorUnions', 'floorUnionAreas']);
+
+        return $targetMappingVersion;
+    }
+
+
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
     {

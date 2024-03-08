@@ -16,34 +16,19 @@
                 "release_changelog_id": 125,
                 "release_changelog_category_id": 1,
                 "ticket_id": 931,
-                "change": "Legion timewalking affixes are now displayed on the affixes page. All Legion routes are now assigned affixes that are only available for Legion dungeons. Creating a Legion route now only allows you to select Legion affixes. Searching for routes now also supports multiple expansions. Many, many optimizations have been performed as part of this as well.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Legion timewalking affixes are now displayed on the affixes page. All Legion routes are now assigned affixes that are only available for Legion dungeons. Creating a Legion route now only allows you to select Legion affixes. Searching for routes now also supports multiple expansions. Many, many optimizations have been performed as part of this as well."
             },
             {
                 "release_changelog_id": 125,
                 "release_changelog_category_id": 1,
                 "ticket_id": 935,
-                "change": "Additional background images are now displayed on the route discover pages.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Additional background images are now displayed on the route discover pages."
             },
             {
                 "release_changelog_id": 125,
                 "release_changelog_category_id": 5,
                 "ticket_id": 930,
-                "change": "Embedding a route now looks better if you view it on mobile.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Embedding a route now looks better if you view it on mobile."
             }
         ]
     }

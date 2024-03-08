@@ -2,7 +2,6 @@
 
 namespace App\SeederHelpers\Traits;
 
-
 use App\Models\Affix;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -16,7 +15,6 @@ trait FindsAffixes
      * Finds an affix by name in a list of affixes.
      *
      * @param Collection|Affix[] $affixes
-     * @param string $affixName
      * @return bool|Affix
      */
     private function findAffix(Collection $affixes, string $affixName)

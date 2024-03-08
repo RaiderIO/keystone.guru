@@ -16,34 +16,19 @@
                 "release_changelog_id": 120,
                 "release_changelog_category_id": 3,
                 "ticket_id": 892,
-                "change": "You can now select a default color for your paths and free-drawn lines in the map settings menu.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "You can now select a default color for your paths and free-drawn lines in the map settings menu."
             },
             {
                 "release_changelog_id": 120,
                 "release_changelog_category_id": 5,
                 "ticket_id": 891,
-                "change": "Creating an anonymous route no longer requires you to be logged in. The intention of this feature is to allow you to try the site without being logged in, this was accidentally broken in a previous patch.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Creating an anonymous route no longer requires you to be logged in. The intention of this feature is to allow you to try the site without being logged in, this was accidentally broken in a previous patch."
             },
             {
                 "release_changelog_id": 120,
                 "release_changelog_category_id": 5,
                 "ticket_id": 869,
-                "change": "Editing a map icon awith a permanent tooltip will no longer reset that state when you edit said map icon. The tooltip will remain permanently on if you set it to be so.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Editing a map icon awith a permanent tooltip will no longer reset that state when you edit said map icon. The tooltip will remain permanently on if you set it to be so."
             }
         ]
     }

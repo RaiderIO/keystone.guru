@@ -16,56 +16,31 @@
                 "release_changelog_id": 179,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1703,
-                "change": "Updated affixes for DF S2.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Updated affixes for DF S2."
             },
             {
                 "release_changelog_id": 179,
                 "release_changelog_category_id": 1,
                 "ticket_id": 1711,
-                "change": "Route coverage affixes are now displayed prettier to account for the lack of a seasonal affix this season.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Route coverage affixes are now displayed prettier to account for the lack of a seasonal affix this season."
             },
             {
                 "release_changelog_id": 179,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Updated The Underrot with its new count requirement, positional corrections and enemy removal\/additions.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Updated The Underrot with its new count requirement, positional corrections and enemy removal\/additions."
             },
             {
                 "release_changelog_id": 179,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1707,
-                "change": "Affixes page now properly highlights the current affixes of the week.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Affixes page now properly highlights the current affixes of the week."
             },
             {
                 "release_changelog_id": 179,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1709,
-                "change": "Upon creating a route, the current season's affixes are no longer shown twice.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Upon creating a route, the current season's affixes are no longer shown twice."
             }
         ]
     }

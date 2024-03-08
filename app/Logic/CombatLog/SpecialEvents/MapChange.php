@@ -16,58 +16,36 @@ class MapChange extends SpecialEvent
 
     private float $yMin;
 
-    /**
-     * @return int
-     */
     public function getUiMapID(): int
     {
         return $this->uiMapID;
     }
 
-    /**
-     * @return string
-     */
     public function getUiMapName(): string
     {
         return $this->uiMapName;
     }
 
-    /**
-     * @return float
-     */
     public function getXMax(): float
     {
         return $this->xMax;
     }
 
-    /**
-     * @return float
-     */
     public function getXMin(): float
     {
         return $this->xMin;
     }
 
-    /**
-     * @return float
-     */
     public function getYMax(): float
     {
         return $this->yMax;
     }
 
-    /**
-     * @return float
-     */
     public function getYMin(): float
     {
         return $this->yMin;
     }
 
-    /**
-     * @param array $parameters
-     * @return self
-     */
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);
@@ -82,13 +60,8 @@ class MapChange extends SpecialEvent
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 6;
     }
-
-
 }

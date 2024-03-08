@@ -13,9 +13,10 @@ use JsonSerializable;
 /**
  * Class DungeonRouteThumbnailJobResource
  *
- * @package App\Http\Resources
  * @author Wouter
+ *
  * @since 20/01/2024
+ *
  * @mixin DungeonRouteThumbnailJob
  */
 class DungeonRouteThumbnailJobResource extends JsonResource
@@ -23,11 +24,9 @@ class DungeonRouteThumbnailJobResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $queueSize = Queue::size(sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env')));
 
@@ -54,7 +53,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
                         sprintf(
                             '%s/%s',
                             ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH,
-                            ThumbnailService::getFilename($this->dungeonRoute, $this->floor->index, 'jpg')
+                            ThumbnailService::getFilename($this->dungeonRoute, $this->floor->index)
                         )
                     )
                     : null,

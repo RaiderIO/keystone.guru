@@ -2,7 +2,6 @@
 
 namespace App\Models\AffixGroup;
 
-use App;
 use App\Models\Affix;
 use App\Models\CacheModel;
 use Eloquent;
@@ -10,12 +9,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property int $id The ID of this Affix.
- * @property int $season_id
- * @property int $seasonal_index
- * @property int $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
- * @property string $text To string of the affix group
- *
+ * @property int                $id The ID of this Affix.
+ * @property int                $season_id
+ * @property int                $seasonal_index
+ * @property int                $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
+ * @property string             $text To string of the affix group
  * @property Collection|Affix[] $affixes
  *
  * @mixin Eloquent
@@ -23,15 +21,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 abstract class AffixGroupBase extends CacheModel
 {
     public $timestamps = false;
+
     public $with = ['affixes'];
+
     public $hidden = ['pivot'];
+
     protected $appends = ['text'];
 
-    protected abstract function getAffixGroupCouplingsTableName(): string;
+    abstract protected function getAffixGroupCouplingsTableName(): string;
 
-    /**
-     * @return BelongsToMany
-     */
     public function affixes(): BelongsToMany
     {
         // I don't know why this suddenly needs an order by. After adding indexes to the database somehow the order of this was done by affix_id
@@ -51,6 +49,7 @@ abstract class AffixGroupBase extends CacheModel
             /** @var $affix Affix */
             $result[] = __($affix->name);
         }
+
         $result = implode(', ', $result);
 
         if ($this->seasonal_index !== null) {
@@ -60,10 +59,6 @@ abstract class AffixGroupBase extends CacheModel
         return $result;
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
     public function hasAffix(string $key): bool
     {
         $result = false;

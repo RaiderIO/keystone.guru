@@ -1,15 +1,16 @@
 <?php
-/** @var $isProduction string */
-/** @var $isMobile boolean */
-
+/**
+ * @var $isProduction string
+ * @var $isMobile boolean
+ */
 $user = \Illuminate\Support\Facades\Auth::user();
 // Show ads if not set
-$showAds = $showAds ?? true;
+$showAds ??= true;
 // Any class to add to the root div
-$rootClass = $rootClass ?? '';
+$rootClass ??= '';
 // Page title
-$title         = $title ?? null;
-$cookieConsent = $cookieConsent ?? true;
+$title         ??= null;
+$cookieConsent ??= true;
 ?>
 @extends('layouts.app', ['showSpotlight' => false, 'showAds' => $showAds, 'title' => $title, 'cookieConsent' => $cookieConsent])
 

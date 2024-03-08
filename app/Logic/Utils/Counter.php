@@ -1,19 +1,14 @@
 <?php
 
-
 namespace App\Logic\Utils;
 
 class Counter
 {
     /**
-     * @var $counters array The start times of the StopWatches
+     * @var array The start times of the StopWatches
      */
     private static array $counters = [];
 
-    /**
-     * @param $counterName
-     * @return string
-     */
     private static function getCountString($counterName): string
     {
         return sprintf('%s %dx', $counterName, self::$counters[$counterName]);
@@ -21,10 +16,8 @@ class Counter
 
     /**
      * Increase a new or existing counter.
-     *
-     * @param string $counterName
      */
-    public static function increase(string $counterName)
+    public static function increase(string $counterName): void
     {
         // Resuming a paused timer
         if (isset(self::$counters[$counterName])) {
@@ -45,9 +38,6 @@ class Counter
         dump(self::getCountString($counterName));
     }
 
-    /**
-     *
-     */
     public static function dumpAll(): void
     {
         foreach (self::$counters as $key => $value) {
@@ -55,15 +45,13 @@ class Counter
         }
     }
 
-    /**
-     * @return array
-     */
     public static function getAll(): array
     {
         $result = [];
         foreach (self::$counters as $name => $count) {
             $result[$name] = self::getCountString($name);
         }
+
         return $result;
     }
 }

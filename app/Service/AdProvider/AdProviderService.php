@@ -9,7 +9,7 @@ class AdProviderService implements AdProviderServiceInterface
     use Curl;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getNitroPayAdsTxt(int $userId): string
     {
@@ -17,7 +17,7 @@ class AdProviderService implements AdProviderServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getPlaywireAdsTxt(int $param1, int $param2): string
     {

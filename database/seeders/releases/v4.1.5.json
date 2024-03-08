@@ -16,12 +16,7 @@
                 "release_changelog_id": 115,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Added new affix combination Tyrannical, Spiteful, Necrotic and Tormented.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added new affix combination Tyrannical, Spiteful, Necrotic and Tormented."
             }
         ]
     }

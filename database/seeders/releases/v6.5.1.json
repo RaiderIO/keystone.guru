@@ -16,12 +16,7 @@
                 "release_changelog_id": 181,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1723,
-                "change": "Fixed Subcreation tiers not refreshing.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed Subcreation tiers not refreshing."
             }
         ]
     }

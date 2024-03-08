@@ -19,8 +19,8 @@ use Illuminate\Support\Collection;
 
 class Save extends Command
 {
-    use SavesArrayToJsonFile;
     use ExecutesShellCommands;
+    use SavesArrayToJsonFile;
 
     /**
      * The name and signature of the console command.
@@ -38,10 +38,8 @@ class Save extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Drop all caches for all models - otherwise it may produce some strange results
         $this->call('modelCache:clear');
@@ -61,7 +59,6 @@ class Save extends Command
         if (!empty($mappingBackupDir)) {
             $targetDir = sprintf('%s/%s', $mappingBackupDir, Carbon::now()->format('Y-m-d H:i:s'));
 
-
             $tmpZippedFilePath = '/tmp';
             $zippedFileName    = 'mapping.gz';
             $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
@@ -78,10 +75,7 @@ class Save extends Command
         return 0;
     }
 
-    /**
-     * @param string $dungeonDataDir
-     */
-    private function saveMappingVersions(string $dungeonDataDir)
+    private function saveMappingVersions(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving mapping versions');
@@ -97,10 +91,7 @@ class Save extends Command
         );
     }
 
-    /**
-     * @param string $dungeonDataDir
-     */
-    private function saveMappingCommitLogs(string $dungeonDataDir)
+    private function saveMappingCommitLogs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving mapping commit logs');
@@ -116,10 +107,7 @@ class Save extends Command
         );
     }
 
-    /**
-     * @param string $dungeonDataDir
-     */
-    private function saveDungeons(string $dungeonDataDir)
+    private function saveDungeons(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving dungeons');
@@ -139,16 +127,18 @@ class Save extends Command
                 'name',
                 'slug',
                 'speedrun_enabled',
-            ])->toArray(),
+            ])
+                ->makeHidden(['floor_count'])
+                ->toArray(),
             $dungeonDataDir,
             'dungeons.json'
         );
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param  $dungeonDataDir  string
      */
-    private function saveNpcs(string $dungeonDataDir)
+    private function saveNpcs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
         $this->info('Saving global NPCs');
@@ -164,9 +154,9 @@ class Save extends Command
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param  $dungeonDataDir  string
      */
-    private function saveSpells(string $dungeonDataDir)
+    private function saveSpells(string $dungeonDataDir): void
     {
         // Save all spells
         $this->info('Saving Spells');
@@ -175,15 +165,16 @@ class Save extends Command
         foreach ($spells as $spell) {
             $spell->makeHidden(['icon_url']);
         }
+
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
     }
 
     /**
-     * @param $dungeonDataDir string
+     * @param  $dungeonDataDir  string
      */
-    private function saveDungeonData(string $dungeonDataDir)
+    private function saveDungeonData(string $dungeonDataDir): void
     {
-        foreach (Dungeon::with(['dungeonRoutes'])->get() as $dungeon) {
+        foreach (Dungeon::with(['dungeonRoutesForExport'])->get() as $dungeon) {
             /** @var $dungeon Dungeon */
             $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
 
@@ -209,17 +200,10 @@ class Save extends Command
         }
     }
 
-    /**
-     * @param Dungeon $dungeon
-     * @param string  $rootDirPath
-     *
-     * @return void
-     */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
-        $demoRoutes = $dungeon->dungeonRoutes->where('demo', true)->values();
-        foreach ($demoRoutes as $demoRoute) {
+        foreach ($dungeon->dungeonRoutesForExport as $demoRoute) {
             /** @var $demoRoute DungeonRoute */
             unset($demoRoute->relations);
             // Do not reload them
@@ -242,38 +226,48 @@ class Save extends Command
             foreach ($demoRoute->playerspecializations as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->playerraces as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->playerclasses as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->routeattributesraw as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->affixgroups as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->brushlines as $item) {
                 $item->setVisible(['floor_id', 'polyline']);
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->paths as $item) {
                 $item->load(['linkedawakenedobelisks']);
                 $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->killZones as $item) {
                 // Hidden by default to save data
                 $item->makeVisible(['floor_id']);
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->enemyRaidMarkers as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->pridefulEnemies as $item) {
                 $toHide->add($item);
             }
+
             foreach ($demoRoute->mapicons as $item) {
                 $item->load(['linkedawakenedobelisks']);
                 $item->setVisible([
@@ -288,28 +282,29 @@ class Save extends Command
                 ]);
                 $toHide->add($item);
             }
+
             foreach ($toHide as $item) {
                 /** @var $item Model */
                 $item->makeHidden(['id', 'dungeon_route_id']);
             }
         }
 
-        if ($demoRoutes->count() > 0) {
-            $this->info(sprintf('-- Saving %s dungeonroutes', $demoRoutes->count()));
+        if ($dungeon->dungeonRoutesForExport->isNotEmpty()) {
+            $this->info(sprintf('-- Saving %s dungeonroutes', $dungeon->dungeonRoutesForExport->count()));
         }
-        $this->saveDataToJsonFile($demoRoutes->toArray(), $rootDirPath, 'dungeonroutes.json');
+
+        $this->saveDataToJsonFile($dungeon->dungeonRoutesForExport->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
 
-    /**
-     * @param Dungeon $dungeon
-     * @param string  $rootDirPath
-     *
-     * @return void
-     */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
-        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', $dungeon->id)->get()->values();
-        $npcs->makeHidden(['type', 'class']);
+        $npcs = Npc::without(['spells', 'enemyForces'])
+            ->with(['npcspells', 'npcEnemyForces'])
+            ->where('dungeon_id', $dungeon->id)
+            ->get()
+            ->makeHidden(['type', 'class'])
+            ->values();
+
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
         }
@@ -318,15 +313,10 @@ class Save extends Command
         if ($npcs->count() > 0) {
             $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
         }
+
         $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
-    /**
-     * @param Floor  $floor
-     * @param string $rootDirPath
-     *
-     * @return void
-     */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
         $this->info(sprintf('-- Saving floor %s', __($floor->name)));
@@ -339,7 +329,7 @@ class Save extends Command
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
         $dungeonFloorSwitchMarkers
             ->makeHidden(['floorCouplingDirection'])
-            ->map(function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
+            ->map(static function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
                 $dungeonFloorSwitchMarker->direction = $dungeonFloorSwitchMarker->direction === '' ?
                     null : $dungeonFloorSwitchMarker->direction;
 
@@ -370,6 +360,7 @@ class Save extends Command
             if ($categoryData->count() > 0) {
                 $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
             }
+
             $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }
     }

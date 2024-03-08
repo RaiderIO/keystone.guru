@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AjaxEchoController extends Controller
 {
-    public function members(Request $request, DungeonRoute $dungeonRoute)
+    public function members(Request $request, DungeonRoute $dungeonRoute): void
     {
         dd($dungeonRoute);
     }

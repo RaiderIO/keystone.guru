@@ -13,9 +13,10 @@ use JsonSerializable;
 /**
  * Class DungeonRouteResource
  *
- * @package App\Http\Resources
  * @author Wouter
+ *
  * @since 12/06/2023
+ *
  * @mixin DungeonRoute
  */
 class DungeonRouteResource extends JsonResource
@@ -23,11 +24,9 @@ class DungeonRouteResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         $thumbnailUrls = [];
         foreach ($this->dungeon->floors()->where('facade', 0)->get() as $floor) {

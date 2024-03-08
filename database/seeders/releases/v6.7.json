@@ -16,23 +16,13 @@
                 "release_changelog_id": 188,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "All dungeons mappings have been brought up-to-date.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "All dungeons mappings have been brought up-to-date."
             },
             {
                 "release_changelog_id": 188,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1781,
-                "change": "Having a number as your route title will no longer confuse the map and cause all kinds of issues.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Having a number as your route title will no longer confuse the map and cause all kinds of issues."
             }
         ]
     }

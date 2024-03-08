@@ -16,23 +16,13 @@
                 "release_changelog_id": 211,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2010,
-                "change": "Added Lower Blackrock Spire mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Lower Blackrock Spire mapping."
             },
             {
                 "release_changelog_id": 211,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2011,
-                "change": "Added Upper Blackrock Spire mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Upper Blackrock Spire mapping."
             }
         ]
     }

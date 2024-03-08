@@ -2,25 +2,20 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDungeonRouteNamespaceInUserReportsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         DB::update('UPDATE `user_reports` SET `model_class` = "App\Models\DungeonRoute\DungeonRoute" WHERE `model_class` = "App\Models\DungeonRoute"');
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         DB::update('UPDATE `user_reports` SET `model_class` = "App\Models\DungeonRoute" WHERE `model_class` = "App\Models\DungeonRoute\DungeonRoute"');
     }
-}
+};

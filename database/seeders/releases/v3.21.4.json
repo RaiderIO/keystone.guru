@@ -16,12 +16,7 @@
                 "release_changelog_id": 97,
                 "release_changelog_category_id": 3,
                 "ticket_id": 707,
-                "change": "Fixed an issue where selecting pulls in the pulls sidebar on the right would not always work properly.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Fixed an issue where selecting pulls in the pulls sidebar on the right would not always work properly."
             }
         ]
     }

@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,35 +15,21 @@ class TagPolicy
 
     /**
      * Determine whether the user can edit the tag.
-     *
-     * @param User $user
-     * @param TagCategory $tagCategory
-     * @param Model $model
-     * @return mixed
      */
-    public function createTag(User $user, TagCategory $tagCategory, Model $model)
+    public function createTag(User $user, TagCategory $tagCategory, Model $model): bool
     {
-        $result = false;
-
-        switch ($tagCategory->name) {
-            case TagCategory::DUNGEON_ROUTE_PERSONAL:
-            case TagCategory::DUNGEON_ROUTE_TEAM:
-                /** @var DungeonRoute $model */
-                $result = $model->mayUserEdit($user);
-                break;
-        }
+        $result = match ($tagCategory->name) {
+            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model->mayUserEdit($user),
+            default => false,
+        };
 
         return $result;
     }
 
     /**
      * Determine whether the user can edit the tag.
-     *
-     * @param User $user
-     * @param Tag $tag
-     * @return mixed
      */
-    public function edit(User $user, Tag $tag)
+    public function edit(User $user, Tag $tag): bool
     {
         $result = false;
 
@@ -66,11 +52,9 @@ class TagPolicy
     }
 
     /**
-     * @param User $user
-     * @param Tag $tag
-     * @return bool|mixed
+     * @return bool
      */
-    public function delete(User $user, Tag $tag)
+    public function delete(User $user, Tag $tag): bool
     {
         return $this->edit($user, $tag);
     }

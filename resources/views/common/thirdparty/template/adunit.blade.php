@@ -5,8 +5,8 @@
 /** @var bool $map */
 
 $id   = 'myprovider-' . $id;
-$type = $type ?? 'responsive';
-$map  = $map ?? false;
+$type ??= 'responsive';
+$map  ??= false;
 $demo = config('app.env') !== 'production' ? 'true' : 'false';
 ?>
 

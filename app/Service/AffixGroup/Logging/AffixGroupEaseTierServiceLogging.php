@@ -6,7 +6,6 @@ use App\Logging\StructuredLogging;
 
 class AffixGroupEaseTierServiceLogging extends StructuredLogging implements AffixGroupEaseTierServiceLoggingInterface
 {
-
     public function parseTierListUnknownAffixGroup(string $affixGroupString): void
     {
         $this->error(__METHOD__, get_defined_vars());

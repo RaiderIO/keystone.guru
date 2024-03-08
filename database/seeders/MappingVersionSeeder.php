@@ -13,16 +13,14 @@ use Illuminate\Support\Collection;
 /**
  * The Mapping Versions are loaded from mapping_versions.json using the DungeonDataSeeder after this initial seed.
  *
- * @package Database\Seeders
  * @author Wouter
+ *
  * @since 30/10/2022
  */
 class MappingVersionSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -31,6 +29,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
 
         if (MappingVersion::count() !== 0) {
             $this->command->comment('NOT adding Mapping Versions - initial seed has already happened');
+
             return;
         }
 
@@ -50,7 +49,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             ]);
             $this->command->comment(sprintf('- Created new mapping version for %s', __($dungeon->name)));
 
-            $updatedDungeonFloorSwitchMarkers = $dungeon->dungeonfloorswitchmarkers()->update([
+            $updatedDungeonFloorSwitchMarkers = $dungeon->dungeonFloorSwitchMarkers()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d dungeon floor switch markers', $updatedDungeonFloorSwitchMarkers));
@@ -60,32 +59,32 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             ]);
             $this->command->comment(sprintf('-- Updated %d enemies', $updatedEnemies));
 
-            $updatedEnemyPacks = $dungeon->enemypacks()->update([
+            $updatedEnemyPacks = $dungeon->enemyPacks()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemy packs', $updatedEnemyPacks));
 
-            $updatedEnemyPatrols = $dungeon->enemypatrols()->update([
+            $updatedEnemyPatrols = $dungeon->enemyPatrols()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d enemy patrols', $updatedEnemyPatrols));
 
             // Only the map icons that are related to a mapping
-            $updatedMapIcons = $dungeon->mapicons()->update([
+            $updatedMapIcons = $dungeon->mapIcons()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d map icons', $updatedMapIcons));
 
-            $updatedMountableAreas = $dungeon->mountableareas()->update([
+            $updatedMountableAreas = $dungeon->mountableAreas()->update([
                 'mapping_version_id' => $mappingVersionId,
             ]);
             $this->command->comment(sprintf('-- Updated %d mountable areas', $updatedMountableAreas));
         }
 
         /**
-        // This works initially as well?
-        UPDATE `dungeon_routes`
-        SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
+         * // This works initially as well?
+         * UPDATE `dungeon_routes`
+         * SET `dungeon_routes`.`mapping_version_id` = `dungeon_routes`.`dungeon_id`
          */
         $this->command->info('Coupling dungeon routes to latest mapping version.. ');
         $count = 0;

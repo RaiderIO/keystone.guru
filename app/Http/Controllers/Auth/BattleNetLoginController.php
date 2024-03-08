@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\GameServerRegion;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use SocialiteProviders\Battlenet\Provider;
 
 class BattleNetLoginController extends OAuthLoginController
@@ -32,10 +31,6 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
     public function redirectToProvider(Request $request): RedirectResponse
     {
         $this->redirectTo = $request->get('redirect', '/');
@@ -46,6 +41,7 @@ class BattleNetLoginController extends OAuthLoginController
         }
 
         Provider::setRegion($region);
+
         return parent::redirectToProvider($request);
     }
 }

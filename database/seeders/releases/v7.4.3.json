@@ -1,61 +1,41 @@
 {
-  "id": 208,
-  "release_changelog_id": 215,
-  "version": "v7.4.3",
-  "title": "Bugfixes and optimizations going into season 3",
-  "silent": 0,
-  "spotlight": 0,
-  "created_at": "2023-11-09T21:32:12+00:00",
-  "updated_at": "2023-11-09T21:32:12+00:00",
-  "changelog": {
-    "id": 215,
-    "release_id": 208,
-    "description": null,
-    "changes": [
-      {
-        "release_changelog_id": 215,
-        "release_changelog_category_id": 4,
-        "ticket_id": 2089,
-        "change": "Re-imported various dungeons from MDT.",
-        "category": {
-          "id": 4,
-          "key": "mapping_changes",
-          "name": "releasechangelogcategories.mapping_changes"
-        }
-      },
-      {
-        "release_changelog_id": 215,
-        "release_changelog_category_id": 4,
-        "ticket_id": null,
-        "change": "Dawn of the Infinite: Murozond's Rise now has floor switches.",
-        "category": {
-          "id": 4,
-          "key": "mapping_changes",
-          "name": "releasechangelogcategories.mapping_changes"
-        }
-      },
-      {
-        "release_changelog_id": 215,
-        "release_changelog_category_id": 5,
-        "ticket_id": 2099,
-        "change": "Fixed a crash.. that I never quite figured out where it came from. But I reworked stuff so it should no longer happen.",
-        "category": {
-          "id": 5,
-          "key": "bugfixes",
-          "name": "releasechangelogcategories.bugfixes"
-        }
-      },
-      {
-        "release_changelog_id": 215,
-        "release_changelog_category_id": 11,
-        "ticket_id": 2097,
-        "change": "Auto route creator can now differentiate between two M+ dungeons in the same physical dungeon (Dawn of the Infinite, looking at you).",
-        "category": {
-          "id": 11,
-          "key": "auto_route_changes",
-          "name": "releasechangelogcategories.auto_route_changes"
-        }
-      }
-    ]
-  }
+    "id": 208,
+    "release_changelog_id": 215,
+    "version": "v7.4.3",
+    "title": "Bugfixes and optimizations going into season 3",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2023-11-09T21:32:12+00:00",
+    "updated_at": "2023-11-09T21:32:12+00:00",
+    "changelog": {
+        "id": 215,
+        "release_id": 208,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 215,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2089,
+                "change": "Re-imported various dungeons from MDT."
+            },
+            {
+                "release_changelog_id": 215,
+                "release_changelog_category_id": 4,
+                "ticket_id": null,
+                "change": "Dawn of the Infinite: Murozond's Rise now has floor switches."
+            },
+            {
+                "release_changelog_id": 215,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2099,
+                "change": "Fixed a crash.. that I never quite figured out where it came from. But I reworked stuff so it should no longer happen."
+            },
+            {
+                "release_changelog_id": 215,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2097,
+                "change": "Auto route creator can now differentiate between two M+ dungeons in the same physical dungeon (Dawn of the Infinite, looking at you)."
+            }
+        ]
+    }
 }

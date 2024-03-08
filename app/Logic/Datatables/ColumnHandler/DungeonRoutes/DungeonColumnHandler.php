@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 
 class DungeonColumnHandler extends DatatablesColumnHandler
 {
-
     public function __construct(DatatablesHandler $dtHandler)
     {
         parent::__construct($dtHandler, 'dungeon_id');
@@ -29,12 +28,13 @@ class DungeonColumnHandler extends DatatablesColumnHandler
             $searchValue = $columnData['search']['value'];
             // -1 = all dungeons = no filter
             if ((int)$searchValue !== -1 && !empty($searchValue)) {
-                $explode = explode('-', $searchValue);
+                $explode = explode('-', (string)$searchValue);
                 if (count($explode) === 2) {
                     if ($explode[0] === 'season') {
                         $seasonId = $explode[1];
                         // Joins need to be added to the main builder
-                        $this->getDtHandler()->getBuilder()->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
+                        $this->getDtHandler()->getBuilder()
+                            ->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
                         $subBuilder->whereColumn('dungeon_routes.dungeon_id', '=', 'season_dungeons.dungeon_id');
                     } else if ($explode[0] === 'expansion') {
                         $subBuilder->where('dungeons.expansion_id', $explode[1]);

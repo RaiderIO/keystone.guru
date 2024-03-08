@@ -9,94 +9,85 @@ use App\Logic\CombatLog\Guid\Guid;
 /**
  * SPELL_CAST_SUCCESS,Player-1084-0A6D63A6,"Sadarøn-TarrenMill",0x512,0x0,Creature-0-4242-1841-14566-131436-0000E285EA,"Chosen Blood Matron",0x10a48,0x0,22568,"Ferocious Bite",0x1,Player-1084-0A6D63A6,0000000000000000,295296,370660,8542,2087,3228,0,3|4,47|5,100|5,25|5,685.25,1257.08,1041,5.7142,407
  *
- * @package App\Logic\CombatLog\CombatEvents\Advanced
  * @author Wouter
+ *
  * @since 27/05/2023
  */
 class AdvancedDataV20 implements AdvancedDataInterface
 {
-    private ?Guid $infoGuid;
-    private ?Guid $ownerGuid;
-    private int   $currentHP;
-    private int   $maxHP;
-    private int   $attackPower;
-    private int   $spellPower;
-    private int   $armor;
-    private int   $absorb;
+    private ?Guid $infoGuid = null;
+
+    private ?Guid $ownerGuid = null;
+
+    private int $currentHP;
+
+    private int $maxHP;
+
+    private int $attackPower;
+
+    private int $spellPower;
+
+    private int $armor;
+
+    private int $absorb;
+
     /** @var int[] */
     private array $powerType;
+
     /** @var int[] */
     private array $currentPower;
+
     /** @var int[] */
     private array $maxPower;
+
     /** @var int[] */
     private array $powerCost;
+
     private float $positionX;
+
     private float $positionY;
-    private int   $uiMapId;
+
+    private int $uiMapId;
+
     private float $facing;
-    private int   $level;
 
+    private int $level;
 
-    /**
-     * @return Guid|null
-     */
     public function getInfoGuid(): ?Guid
     {
         return $this->infoGuid;
     }
 
-    /**
-     * @return Guid|null
-     */
     public function getOwnerGuid(): ?Guid
     {
         return $this->ownerGuid;
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentHP(): int
     {
         return $this->currentHP;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxHP(): int
     {
         return $this->maxHP;
     }
 
-    /**
-     * @return int
-     */
     public function getAttackPower(): int
     {
         return $this->attackPower;
     }
 
-    /**
-     * @return int
-     */
     public function getSpellPower(): int
     {
         return $this->spellPower;
     }
 
-    /**
-     * @return int
-     */
     public function getArmor(): int
     {
         return $this->armor;
     }
 
-    /**
-     * @return int
-     */
     public function getAbsorb(): int
     {
         return $this->absorb;
@@ -134,50 +125,31 @@ class AdvancedDataV20 implements AdvancedDataInterface
         return $this->powerCost;
     }
 
-    /**
-     * @return float
-     */
     public function getPositionX(): float
     {
         return $this->positionX;
     }
 
-    /**
-     * @return float
-     */
     public function getPositionY(): float
     {
         return $this->positionY;
     }
 
-    /**
-     * @return int
-     */
     public function getUiMapId(): int
     {
         return $this->uiMapId;
     }
 
-    /**
-     * @return float
-     */
     public function getFacing(): float
     {
         return $this->facing;
     }
 
-    /**
-     * @return int
-     */
     public function getLevel(): int
     {
         return $this->level;
     }
 
-    /**
-     * @param array $parameters
-     * @return self
-     */
     public function setParameters(array $parameters): HasParameters
     {
         $this->infoGuid     = Guid::createFromGuidString($parameters[0]);
@@ -188,10 +160,10 @@ class AdvancedDataV20 implements AdvancedDataInterface
         $this->spellPower   = $parameters[5];
         $this->armor        = $parameters[6];
         $this->absorb       = $parameters[7];
-        $this->powerType    = explode('|', $parameters[8]);
-        $this->currentPower = explode('|', $parameters[9]);
-        $this->maxPower     = explode('|', $parameters[10]);
-        $this->powerCost    = explode('|', $parameters[11]);
+        $this->powerType    = explode('|', (string)$parameters[8]);
+        $this->currentPower = explode('|', (string)$parameters[9]);
+        $this->maxPower     = explode('|', (string)$parameters[10]);
+        $this->powerCost    = explode('|', (string)$parameters[11]);
         // https://forums.combatlogforums.com/t/unit-positions-from-combat-log-solved/822
         // Be aware also that the coordinates are rotated 90 degrees for some crazy reason. This means that for the two numbers listed, pos1 and pos2, the following rules apply:
         //
@@ -207,9 +179,6 @@ class AdvancedDataV20 implements AdvancedDataInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 17;

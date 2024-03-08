@@ -1,8 +1,10 @@
 <?php
-/** @var $dungeon \App\Models\Dungeon */
-/* @var $floor \App\Models\Floor\Floor */
-/* @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection */
-$floor = $floor ?? null;
+/**
+ * @var $dungeon \App\Models\Dungeon
+ * @var $floor \App\Models\Floor\Floor
+ * @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection
+ */
+$floor ??= null;
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$dungeon, $floor ?? null],
@@ -30,7 +32,7 @@ $floor = $floor ?? null;
     <div class="row form-group">
         <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
             {!! Form::label('active', __('views/admin.floor.edit.active'), ['class' => 'font-weight-bold']) !!}
-            {!! Form::checkbox('active', 1, optional($floor)->active, ['class' => 'form-control left_checkbox']) !!}
+            {!! Form::checkbox('active', 1, $floor?->active, ['class' => 'form-control left_checkbox']) !!}
             @include('common.forms.form-error', ['key' => 'active'])
         </div>
 
@@ -39,7 +41,7 @@ $floor = $floor ?? null;
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('views/admin.floor.edit.default_title')
                  }}"></i>
-            {!! Form::checkbox('default', 1, optional($floor)->default ?? (int)($dungeon->floors()->count() === 0), ['class' => 'form-control left_checkbox']) !!}
+            {!! Form::checkbox('default', 1, $floor?->default ?? (int)($dungeon->floors()->count() === 0), ['class' => 'form-control left_checkbox']) !!}
             @include('common.forms.form-error', ['key' => 'default'])
         </div>
 
@@ -48,7 +50,7 @@ $floor = $floor ?? null;
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 __('views/admin.floor.edit.facade_title')
                  }}"></i>
-            {!! Form::checkbox('facade', 1, optional($floor)->facade, ['class' => 'form-control left_checkbox']) !!}
+            {!! Form::checkbox('facade', 1, $floor?->facade, ['class' => 'form-control left_checkbox']) !!}
             @include('common.forms.form-error', ['key' => 'facade'])
         </div>
     </div>
@@ -56,21 +58,21 @@ $floor = $floor ?? null;
     <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
         {!! Form::label('index', __('views/admin.floor.edit.index'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
-        {!! Form::text('index', optional($floor)->index ?? $dungeon->floors()->count() + 1, ['class' => 'form-control']) !!}
+        {!! Form::text('index', $floor?->index ?? $dungeon->floors()->count() + 1, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'index'])
     </div>
 
     <div class="form-group{{ $errors->has('mdt_sub_level') ? ' has-error' : '' }}">
         {!! Form::label('mdt_sub_level', __('views/admin.floor.edit.mdt_sub_level'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
-        {!! Form::text('mdt_sub_level', optional($floor)->mdt_sub_level, ['class' => 'form-control']) !!}
+        {!! Form::text('mdt_sub_level', $floor?->mdt_sub_level, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'mdt_sub_level'])
     </div>
 
     <div class="form-group{{ $errors->has('ui_map_id') ? ' has-error' : '' }}">
         {!! Form::label('ui_map_id', __('views/admin.floor.edit.ui_map_id'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
-        {!! Form::text('ui_map_id', optional($floor)->ui_map_id, ['class' => 'form-control']) !!}
+        {!! Form::text('ui_map_id', $floor?->ui_map_id, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'ui_map_id'])
     </div>
 

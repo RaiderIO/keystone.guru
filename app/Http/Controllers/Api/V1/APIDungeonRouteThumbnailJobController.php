@@ -14,13 +14,13 @@ class APIDungeonRouteThumbnailJobController extends Controller
      *      path="/api/v1/route/thumbnailJob/{thumbnailJobId}",
      *      summary="Return the status of a thumbnail job",
      *      tags={"Route"},
+     *
      *      @OA\Response(response=200, description="Successful operation",
+     *
      *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailJobEnvelope"))
      *     )
      *  )
      *
-     * @param DungeonRouteThumbnailJob $dungeonRouteThumbnailJob
-     * @return DungeonRouteThumbnailJobResource
      * @throws AuthorizationException
      */
     public function get(

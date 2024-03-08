@@ -16,12 +16,7 @@
                 "release_changelog_id": 26,
                 "release_changelog_category_id": 1,
                 "ticket_id": 146,
-                "change": "Fixed an error that occurred MDT Importer when your imported routes had any drawn lines.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Fixed an error that occurred MDT Importer when your imported routes had any drawn lines."
             }
         ]
     }

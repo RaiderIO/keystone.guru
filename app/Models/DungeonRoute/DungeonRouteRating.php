@@ -2,7 +2,7 @@
 
 namespace App\Models\DungeonRoute;
 
-use App\User;
+use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int          $dungeon_route_id
  * @property int          $user_id
  * @property int          $rating
- *
  * @property DungeonRoute $dungeonRoute
  * @property User         $user
  *
@@ -20,20 +19,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonRouteRating extends Model
 {
-    public $fillable   = ['dungeon_route_id', 'user_id'];
+    public $fillable = ['dungeon_route_id', 'user_id'];
+
     public $timestamps = false;
 
-    /**
-     * @return BelongsTo
-     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

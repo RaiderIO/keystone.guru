@@ -16,45 +16,25 @@
                 "release_changelog_id": 37,
                 "release_changelog_category_id": 1,
                 "ticket_id": 221,
-                "change": "Thumbnail generation for routes is now working properly again.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Thumbnail generation for routes is now working properly again."
             },
             {
                 "release_changelog_id": 37,
                 "release_changelog_category_id": 1,
                 "ticket_id": 216,
-                "change": "Affixes page now has the option to go back and forward in time.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Affixes page now has the option to go back and forward in time."
             },
             {
                 "release_changelog_id": 37,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Fixed an issue where the website would sometimes show 500 errors.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Fixed an issue where the website would sometimes show 500 errors."
             },
             {
                 "release_changelog_id": 37,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Updated this week's affixes.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Updated this week's affixes."
             }
         ]
     }

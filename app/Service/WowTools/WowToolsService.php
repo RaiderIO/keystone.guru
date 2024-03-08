@@ -6,22 +6,10 @@ use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 
 class WowToolsService implements WowToolsServiceInterface
 {
-    /** @var WowToolsServiceLoggingInterface */
-    private WowToolsServiceLoggingInterface $log;
-
-    /**
-     * @param WowToolsServiceLoggingInterface $log
-     */
-    public function __construct(WowToolsServiceLoggingInterface $log)
+    public function __construct(private readonly WowToolsServiceLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
-
-    /**
-     * @param int $npcId
-     * @return int|null
-     */
     public function getDisplayId(int $npcId): ?int
     {
         $this->log->getDisplayIdRequestStart($npcId);
@@ -31,13 +19,15 @@ class WowToolsService implements WowToolsServiceInterface
             $ch = curl_init();
 
             curl_setopt_array($ch, [
-                CURLOPT_URL            => sprintf('https://wow.tools/db/creature_api.php?id=%d', $npcId),
+                CURLOPT_URL            => sprintf('https://old.wow.tools/db/creature_api.php?id=%d', $npcId),
                 CURLOPT_RETURNTRANSFER => 1,
             ]);
 
             $requestResult = (array)json_decode(curl_exec($ch), true);
 
-            if (isset($requestResult['error'])) {
+            if (empty($requestResult)) {
+                $this->log->getDisplayIdInvalidResponse();
+            } else if (isset($requestResult['error'])) {
                 $this->log->getDisplayIdRequestError($requestResult['error']);
             } else {
                 if (!isset($requestResult['CreatureDisplayInfoID[0]'])) {

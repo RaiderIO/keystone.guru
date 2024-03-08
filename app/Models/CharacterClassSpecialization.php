@@ -20,16 +20,15 @@ use Illuminate\Support\Collection;
  */
 class CharacterClassSpecialization extends CacheModel
 {
-    use SeederModel;
     use HasIconFile;
+    use SeederModel;
 
     public $timestamps = false;
-    public $hidden     = ['icon_file_id', 'pivot'];
-    public $fillable   = ['key', 'name', 'character_class_id', 'icon_file_id'];
 
-    /**
-     * @return BelongsTo
-     */
+    public $hidden = ['icon_file_id', 'pivot'];
+
+    public $fillable = ['key', 'name', 'character_class_id', 'icon_file_id'];
+
     public function class(): BelongsTo
     {
         return $this->belongsTo(CharacterClass::class);

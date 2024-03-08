@@ -26,17 +26,13 @@ use Tests\TestCases\PublicTestCase;
 class ServiceFixtures
 {
     /**
-     * @param PublicTestCase                                 $testCase
-     * @param SeasonServiceInterface|null                    $seasonService
-     * @param AffixGroupEaseTierServiceLoggingInterface|null $log
-     * @param array                                          $methodsToMock
      * @return MockObject|AffixGroupEaseTierServiceInterface
      */
     public static function getAffixGroupEaseTierServiceMock(
-        PublicTestCase                            $testCase,
-        SeasonServiceInterface                    $seasonService = null,
-        AffixGroupEaseTierServiceLoggingInterface $log = null,
-        array                                     $methodsToMock = []
+        PublicTestCase $testCase,
+        ?SeasonServiceInterface $seasonService = null,
+        ?AffixGroupEaseTierServiceLoggingInterface $log = null,
+        array $methodsToMock = []
 
     ): MockObject {
         return $testCase
@@ -50,15 +46,12 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase                   $testCase
-     * @param CombatLogServiceLoggingInterface $log
-     * @param array                            $methodsToMock
      * @return MockObject|CombatLogServiceInterface
      */
     public static function getCombatLogServiceMock(
-        PublicTestCase                   $testCase,
+        PublicTestCase $testCase,
         CombatLogServiceLoggingInterface $log,
-        array                            $methodsToMock = []
+        array $methodsToMock = []
     ): MockObject {
         return $testCase
             ->getMockBuilder(CombatLogService::class)
@@ -70,18 +63,13 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase                               $testCase
-     * @param CombatLogService                             $combatLogService
-     * @param CombatLogDungeonRouteServiceLoggingInterface $log
-     * @param array                                        $methodsToMock
-     *
      * @return MockObject|ResultEventDungeonRouteServiceInterface
      */
     public static function getResultEventDungeonRouteServiceMock(
-        PublicTestCase                               $testCase,
-        CombatLogService                             $combatLogService,
+        PublicTestCase $testCase,
+        CombatLogService $combatLogService,
         CombatLogDungeonRouteServiceLoggingInterface $log,
-        array                                        $methodsToMock = []
+        array $methodsToMock = []
     ): MockObject {
         return $testCase
             ->getMockBuilder(ResultEventDungeonRouteService::class)
@@ -94,13 +82,11 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase $testCase
-     * @param array          $methodsToMock
      * @return MockObject|ExpansionServiceInterface
      */
     public static function getExpansionServiceMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array $methodsToMock = []
     ): MockObject {
         return $testCase->getMockBuilder(ExpansionService::class)
             ->onlyMethods($methodsToMock)
@@ -108,17 +94,14 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase  $testCase
-     * @param array           $methodsToMock
-     * @param Collection|null $seasons
      * @return MockObject|SeasonServiceInterface
      */
     public static function getSeasonServiceMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = [],
-        Collection     $seasons = null): SeasonServiceInterface
+        array $methodsToMock = [],
+        ?Collection $seasons = null): SeasonServiceInterface
     {
-        $methodsToMock[]          = 'getSeasons';
+        $methodsToMock[] = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
             ->getMockBuilder(SeasonService::class)
             ->setConstructorArgs([
@@ -130,7 +113,7 @@ class ServiceFixtures
         $seasonServiceMock->method('getSeasons')
             ->willReturn($seasons ?? collect([
                 new Season([
-                    'start'             => Carbon::now()->subYear(),
+                    'start' => Carbon::now()->subYear(),
                     'affix_group_count' => 12,
                 ]),
             ]));
@@ -139,13 +122,11 @@ class ServiceFixtures
     }
 
     /**
-     * @param PublicTestCase $testCase
-     * @param array          $methodsNotToMock
      * @return MockObject|CoordinatesServiceInterface
      */
     public static function getCoordinatesServiceMock(
         PublicTestCase $testCase,
-        array          $methodsNotToMock = []
+        array $methodsNotToMock = []
     ): MockObject {
         return $testCase
             ->getMockBuilder(CoordinatesService::class)

@@ -56,11 +56,10 @@ class DatabaseSeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * @param CacheServiceInterface $cacheService
-     * @return void
+     *
      * @throws Throwable
      */
-    public function run(CacheServiceInterface $cacheService)
+    public function run(CacheServiceInterface $cacheService): void
     {
         self::$running = true;
 
@@ -74,57 +73,52 @@ class DatabaseSeeder extends Seeder
         // 3. Cleanup: Remove existing table, rename temporary table
 
         foreach (self::SEEDERS as $seederClass) {
-            // Wrap all seeder logic inside a transaction - that way the seeding is performed seamlessly, all or nothing
-            DB::transaction(function () use ($seederClass) {
-                try {
-                    $prepareFailed = false;
+            try {
+                $prepareFailed = false;
 
-                    /** @var TableSeederInterface $seederClass */
-                    $affectedModelClasses = $seederClass::getAffectedModelClasses();
-                    foreach ($affectedModelClasses as $affectedModel) {
-                        $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
-                    }
-
-                    if ($prepareFailed) {
-                        $this->command->error(sprintf('Preparing temp table for %s failed!', $seederClass));
-
-                        return;
-                    }
-
-                    $this->call($seederClass);
-
-                    $applyFailed = false;
-                    foreach ($affectedModelClasses as $affectedModelClass) {
-                        $applyFailed = !$applyFailed && !$this->applyTempTableForModel($affectedModelClass);
-                    }
-
-                    if ($applyFailed) {
-                        $this->command->error(sprintf('Applying temp table for %s failed!', $seederClass));
-
-                        return;
-                    }
-                } finally {
-                    $cleanupFailed = false;
-                    foreach ($affectedModelClasses as $affectedModelClass) {
-                        $cleanupFailed = !$cleanupFailed && !$this->cleanupTempTableForModel($affectedModelClass);
-                    }
-
-                    if ($cleanupFailed) {
-                        $this->command->error(sprintf('Cleaning up temp table for %s failed!', $seederClass));
-
-                        return;
-                    }
+                /** @var TableSeederInterface $seederClass */
+                $affectedModelClasses = $seederClass::getAffectedModelClasses();
+                foreach ($affectedModelClasses as $affectedModel) {
+                    $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
                 }
-            });
+
+                if ($prepareFailed) {
+                    $this->command->error(sprintf('Preparing temp table for %s failed!', $seederClass));
+
+                    break;
+                }
+
+                DB::transaction(function () use ($seederClass) {
+                    $this->call($seederClass);
+                });
+
+                $applyFailed = false;
+                foreach ($affectedModelClasses as $affectedModelClass) {
+                    $applyFailed = !$applyFailed && !$this->applyTempTableForModel($affectedModelClass);
+                }
+
+                if ($applyFailed) {
+                    $this->command->error(sprintf('Applying temp table for %s failed!', $seederClass));
+
+                    break;
+                }
+            } catch (Exception $e) {
+                $this->command->error($e->getMessage());
+            } finally {
+                $cleanupFailed = false;
+                foreach ($affectedModelClasses as $affectedModelClass) {
+                    $cleanupFailed = !$cleanupFailed && !$this->cleanupTempTableForModel($affectedModelClass);
+                }
+
+                if ($cleanupFailed) {
+                    $this->command->error(sprintf('Cleaning up temp table for %s failed!', $seederClass));
+                }
+            }
         }
 
         self::$running = false;
     }
 
-    /**
-     * @param string $className
-     * @return bool
-     */
     private function prepareTempTableForModel(string $className): bool
     {
         /** @var Model $instance */
@@ -139,8 +133,6 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * @param string $className
-     * @return bool
      * @throws Throwable
      */
     private function applyTempTableForModel(string $className): bool
@@ -152,17 +144,13 @@ class DatabaseSeeder extends Seeder
         $tableNameNew = sprintf('%s%s', $tableNameOld, self::TEMP_TABLE_SUFFIX);
 
         // Remove contents from old table, replace it with contents from new table
-//        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
+        //        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
         DB::table($tableNameOld)->truncate();
 
         return DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s;', $tableNameOld, $tableNameNew));
-//        });
+        //        });
     }
 
-    /**
-     * @param string $className
-     * @return bool
-     */
     private function cleanupTempTableForModel(string $className): bool
     {
         /** @var Model $instance */
@@ -173,10 +161,6 @@ class DatabaseSeeder extends Seeder
         return DB::statement(sprintf('DROP TABLE %s;', $tableNameNew));
     }
 
-    /**
-     * @param string $className
-     * @return string
-     */
     public static function getTempTableName(string $className): string
     {
         $result = Str::snake(Str::pluralStudly(class_basename($className)));

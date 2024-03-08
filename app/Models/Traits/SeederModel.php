@@ -5,6 +5,8 @@ namespace App\Models\Traits;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,26 +14,15 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait SeederModel
 {
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
-        // While we're seeding, fix the database table
-//        $fixDbTableFn = function (Model $model) {
-//            if (DatabaseSeeder::$running && !Str::endsWith($model->getTable(), DatabaseSeeder::TEMP_TABLE_SUFFIX)) {
-//                dump($model->id, DatabaseSeeder::getTempTableName(get_class($model)));
-//                $model->setTable(DatabaseSeeder::getTempTableName(get_class($model)));
-//            }
-//        };
-//        static::retrieved($fixDbTableFn);
-//        static::creating($fixDbTableFn);
-//        static::updating($fixDbTableFn);
-//        static::saving($fixDbTableFn);
-
-        // This model may NOT be deleted, it's read only!
-        static::deleting(function (Model $model) {
-            // Only these may be deleted!
-            return $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy;
+        // This model may NOT be deleted, it's read only! But if you're an admin, sure you can delete everything.
+        static::deleting(function(Model $model){
+            /** @var User|null $user */
+            $user = Auth::getUser();
+            return $user?->hasRole('admin') || $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy;
         });
     }
 }

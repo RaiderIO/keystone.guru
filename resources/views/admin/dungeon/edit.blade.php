@@ -6,9 +6,7 @@
  */
 
 $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
-    ->mapWithKeys(function (\App\Models\GameVersion\GameVersion $gameVersion) {
-        return [$gameVersion->id => __($gameVersion->name)];
-    });
+    ->mapWithKeys(static fn(\App\Models\GameVersion\GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [
@@ -32,19 +30,31 @@ $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
         <div class="row form-group">
             <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
                 {!! Form::label('active', __('views/admin.dungeon.edit.active')) !!}
-                {!! Form::checkbox('active', 1, isset($dungeon) ? $dungeon->active : 1, ['class' => 'form-control left_checkbox']) !!}
+                {!! Form::checkbox('active', 1, $dungeon?->active ?? 1, ['class' => 'form-control left_checkbox']) !!}
                 @include('common.forms.form-error', ['key' => 'active'])
             </div>
 
             <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
                 {!! Form::label('speedrun_enabled', __('views/admin.dungeon.edit.speedrun_enabled')) !!}
-                {!! Form::checkbox('speedrun_enabled', 1, isset($dungeon) ? $dungeon->speedrun_enabled : 0, ['class' => 'form-control left_checkbox']) !!}
+                {!! Form::checkbox('speedrun_enabled', 1, $dungeon?->speedrun_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
                 @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
+            </div>
+
+            <div class="col {{ $errors->has('speedrun_difficulty_10_man_enabled') ? ' has-error' : '' }}">
+                {!! Form::label('speedrun_difficulty_10_man_enabled', __('views/admin.dungeon.edit.speedrun_difficulty_10_man_enabled')) !!}
+                {!! Form::checkbox('speedrun_difficulty_10_man_enabled', 1, $dungeon?->speedrun_difficulty_10_man_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'speedrun_difficulty_10_man_enabled'])
+            </div>
+
+            <div class="col {{ $errors->has('speedrun_difficulty_25_man_enabled') ? ' has-error' : '' }}">
+                {!! Form::label('speedrun_difficulty_25_man_enabled', __('views/admin.dungeon.edit.speedrun_difficulty_25_man_enabled')) !!}
+                {!! Form::checkbox('speedrun_difficulty_25_man_enabled', 1, $dungeon?->speedrun_difficulty_25_man_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'speedrun_difficulty_25_man_enabled'])
             </div>
 
             <div class="col {{ $errors->has('facade_enabled') ? ' has-error' : '' }}">
                 {!! Form::label('facade_enabled', __('views/admin.dungeon.edit.facade_enabled')) !!}
-                {!! Form::checkbox('facade_enabled', 1, isset($dungeon) ? $dungeon->facade_enabled : 0, ['class' => 'form-control left_checkbox']) !!}
+                {!! Form::checkbox('facade_enabled', 1, $dungeon?->facade_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
                 @include('common.forms.form-error', ['key' => 'facade_enabled'])
             </div>
         </div>

@@ -7,8 +7,8 @@ $teeming                = old('teeming') ?? false;
 $defaultSelectedAffixes = old('affixes') ?? [];
 
 // Make sure $model exists
-$dungeonroute         = $dungeonroute ?? null;
-$dungeonSelectId      = 'dungeon_id_select';
+$dungeonroute    ??= null;
+$dungeonSelectId = 'dungeon_id_select';
 ?>
 
 @include('common.general.inline', ['path' => 'common/forms/createroute', 'options' => [
@@ -30,9 +30,9 @@ $dungeonSelectId      = 'dungeon_id_select';
         <input id="{{ $dungeonSelectId }}" type="hidden" value="{{ $dungeonroute->dungeon_id }}">
     @endif
 
-    @include('common.team.select', ['required' => false, 'selectedId' => optional($dungeonroute)->team_id])
+    @include('common.team.select', ['required' => false, 'selectedId' => $dungeonroute?->team_id])
 
-    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsdifficulty', ['dungeon_select_id' => $dungeonSelectId, 'dungeonroute' => $dungeonroute])
+    @include('common.dungeonroute.create.dungeondifficultyselect', ['dungeon_select_id' => $dungeonSelectId, 'dungeonroute' => $dungeonroute])
 
 
     <div class="form-group">
@@ -42,7 +42,7 @@ $dungeonSelectId      = 'dungeon_id_select';
             __('views/common.forms.createroute.title_title')
              }}"></i>
         </label>
-        {!! Form::text('dungeon_route_title', optional($dungeonroute)->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+        {!! Form::text('dungeon_route_title', $dungeonroute?->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
     </div>
     <?php // The user does not really know a description for his/her route when creating it, so hide it. It will be available from the route settings ?>
     @isset($dungeonroute)

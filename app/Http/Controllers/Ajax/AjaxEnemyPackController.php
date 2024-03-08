@@ -6,6 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\EnemyPack\EnemyPackFormRequest;
 use App\Models\EnemyPack;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -17,13 +18,11 @@ use Throwable;
 class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
-     * @param EnemyPackFormRequest $request
-     * @param MappingVersion       $mappingVersion
-     * @param EnemyPack|null       $enemyPack
      * @return EnemyPack|Model
+     *
      * @throws Throwable
      */
-    public function store(EnemyPackFormRequest $request, MappingVersion $mappingVersion, EnemyPack $enemyPack = null): EnemyPack
+    public function store(EnemyPackFormRequest $request, MappingVersion $mappingVersion, ?EnemyPack $enemyPack = null): EnemyPack
     {
         $validated = $request->validated();
 
@@ -31,21 +30,20 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request   $request
-     * @param EnemyPack $enemyPack
-     * @return Response
      * @throws Exception
      * @throws Throwable
      */
-    public function delete(Request $request, EnemyPack $enemyPack): Response
+    public function delete(Request $request, MappingVersion $mappingVersion, EnemyPack $enemyPack): Response
     {
-        return DB::transaction(function () use ($request, $enemyPack) {
+        return DB::transaction(function () use ($enemyPack) {
             if ($enemyPack->delete()) {
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($enemyPack, null);
 
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, $user, $enemyPack));
                 }
 
                 $result = response()->noContent();

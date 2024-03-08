@@ -2,14 +2,10 @@
 
 namespace App\Console\Commands\Wowhead;
 
-use App\Console\Commands\Traits\ConvertsMDTStrings;
-use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
-use App\Models\Npc;
 use App\Service\Wowhead\WowheadServiceInterface;
-use App\Service\WowTools\WowToolsServiceInterface;
+use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class FetchHealth extends Command
 {
@@ -40,15 +36,15 @@ class FetchHealth extends Command
     /**
      * Execute the console command.
      *
-     * @return void
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function handle(WowheadServiceInterface $wowheadService)
+    public function handle(WowheadServiceInterface $wowheadService): void
     {
         $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
 
         if ($dungeon === null) {
-            throw new \Exception('Unable to find dungeon!');
+            throw new Exception('Unable to find dungeon!');
         }
 
         foreach ($dungeon->npcs as $npc) {
@@ -56,6 +52,7 @@ class FetchHealth extends Command
                 continue;
             } else if ($npc->base_health !== 12345) {
                 $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
+
                 continue;
             }
 

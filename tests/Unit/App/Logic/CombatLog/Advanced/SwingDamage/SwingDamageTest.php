@@ -9,23 +9,23 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 use App\Logic\CombatLog\CombatLogEntry;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
-class SwingDamageTest extends PublicTestCase
+final class SwingDamageTest extends PublicTestCase
 {
-
     /**
-     * @test
-     * @param string $advancedSwingDamageEvent
-     * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group SwingDamage
-     * @dataProvider parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('SwingDamage')]
+    #[DataProvider('parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent
-    ) {
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);
 
@@ -42,37 +42,25 @@ class SwingDamageTest extends PublicTestCase
     }
 
     /**
-     * @test
-     * @param string $advancedSwingDamageEvent
-     * @param int    $expectedAmount
-     * @param int    $expectedRawAmount
-     * @param int    $expectedOverKill
-     * @param int    $expectedSchool
-     * @param int    $expectedResisted
-     * @param int    $expectedBlocked
-     * @param int    $expectedAbsorbed
-     * @param bool   $expectedIsCritical
-     * @param bool   $expectedIsGlancing
-     * @param bool   $expectedIsCrushing
-     * @return void
      * @throws \Exception
-     * @group CombatLog
-     * @group SwingDamage
-     * @dataProvider parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider
      */
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('SwingDamage')]
+    #[DataProvider('parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent(
         string $advancedSwingDamageEvent,
-        int    $expectedAmount,
-        int    $expectedRawAmount,
-        int    $expectedOverKill,
-        int    $expectedSchool,
-        int    $expectedResisted,
-        int    $expectedBlocked,
-        int    $expectedAbsorbed,
-        bool   $expectedIsCritical,
-        bool   $expectedIsGlancing,
-        bool   $expectedIsCrushing
-    ) {
+        int $expectedAmount,
+        int $expectedRawAmount,
+        int $expectedOverKill,
+        int $expectedSchool,
+        int $expectedResisted,
+        int $expectedBlocked,
+        int $expectedAbsorbed,
+        bool $expectedIsCritical,
+        bool $expectedIsGlancing,
+        bool $expectedIsCrushing
+    ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedSwingDamageEvent);
 
@@ -95,7 +83,7 @@ class SwingDamageTest extends PublicTestCase
         Assert::assertEquals($expectedIsCrushing, $damageEvent->isCrushing());
     }
 
-    public function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnAdvancedSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
     {
         return [
             [
@@ -106,7 +94,7 @@ class SwingDamageTest extends PublicTestCase
         ];
     }
 
-    public function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
+    public static function parseEvent_ShouldReturnValidSwingDamageEvent_GivenAdvancedSwingDamageEvent_DataProvider(): array
     {
         return [
             [

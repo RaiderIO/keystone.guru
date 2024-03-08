@@ -8,7 +8,6 @@ use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
-use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -17,8 +16,6 @@ class APIEnemyFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -27,8 +24,6 @@ class APIEnemyFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

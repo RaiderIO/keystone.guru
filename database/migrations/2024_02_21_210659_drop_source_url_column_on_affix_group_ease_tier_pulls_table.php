@@ -3,14 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class DropSourceUrlColumnOnAffixGroupEaseTierPullsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('affix_group_ease_tier_pulls', function (Blueprint $table) {
             $table->dropColumn('source_url');
@@ -19,13 +16,11 @@ class DropSourceUrlColumnOnAffixGroupEaseTierPullsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('affix_group_ease_tier_pulls', function (Blueprint $table) {
             $table->string('source_url')->after('id');
         });
     }
-}
+};

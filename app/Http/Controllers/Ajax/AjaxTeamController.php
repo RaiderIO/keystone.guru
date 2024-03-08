@@ -9,7 +9,7 @@ use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
 use App\Models\TeamUser;
-use App\User;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,18 +21,15 @@ use Teapot\StatusCode\Http;
 
 class AjaxTeamController extends Controller
 {
-    function list(Request $request)
+    public function list(Request $request)
     {
         return Auth::user()->teams()->get();
     }
 
     /**
-     * @param TeamDefaultRoleFormRequest $request
-     * @param Team $team
-     * @return Response
      * @throws AuthorizationException
      */
-    public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team)
+    public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team): Response
     {
         $this->authorize('change-default-role', $team);
 
@@ -42,9 +39,8 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function changeRole(Request $request, Team $team)
@@ -69,10 +65,8 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param DungeonRoute $dungeonroute
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
@@ -93,10 +87,8 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param DungeonRoute $dungeonroute
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
@@ -117,10 +109,8 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param User $user
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws Exception
      */
     public function removeMember(Request $request, Team $team, User $user)
@@ -153,9 +143,9 @@ class AjaxTeamController extends Controller
 
     /**
      * Invalidate the current invite link and generate a new one.
-     * @param Request $request
-     * @param Team $team
+     *
      * @return array
+     *
      * @throws Exception
      */
     public function refreshInviteLink(Request $request, Team $team)
@@ -169,10 +159,8 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param User $user
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function addAdFreeGiveaway(Request $request, Team $team, User $user): PatreonAdFreeGiveaway
@@ -190,7 +178,6 @@ class AjaxTeamController extends Controller
             abort(422, 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.');
         }
 
-
         if ($user->hasAdFreeGiveaway()) {
             abort(422, 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.');
         }
@@ -202,13 +189,11 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Team $team
-     * @param User $user
      * @return array|Application|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    public function removeAdFreeGiveaway(Request $request, Team $team, User $user)
+    public function removeAdFreeGiveaway(Request $request, Team $team, User $user): Response
     {
         $this->authorize('can-ad-free-giveaway', $team);
 

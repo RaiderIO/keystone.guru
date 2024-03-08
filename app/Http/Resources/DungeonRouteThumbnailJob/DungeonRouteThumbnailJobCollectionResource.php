@@ -11,8 +11,8 @@ use JsonSerializable;
 /**
  * Class DungeonRouteThumbnailJobCollectionResource
  *
- * @package App\Http\Resources
  * @author Wouter
+ *
  * @since 20/01/2024
  */
 class DungeonRouteThumbnailJobCollectionResource extends ResourceCollection
@@ -20,14 +20,10 @@ class DungeonRouteThumbnailJobCollectionResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
-        return ['data' => $this->collection->map(function (DungeonRouteThumbnailJob $dungeonRoute) {
-            return new DungeonRouteThumbnailJobResource($dungeonRoute);
-        })];
+        return ['data' => $this->collection->map(static fn(DungeonRouteThumbnailJob $dungeonRoute) => new DungeonRouteThumbnailJobResource($dungeonRoute))];
     }
 }

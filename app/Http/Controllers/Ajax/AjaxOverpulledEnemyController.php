@@ -10,6 +10,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession;
+use App\Models\User;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -22,14 +23,11 @@ use Teapot\StatusCode\Http;
 class AjaxOverpulledEnemyController extends Controller
 {
     /**
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonRoute
-     * @param LiveSession $liveSession
      * @return array
+     *
      * @throws AuthorizationException
      */
-    function store(
+    public function store(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonRoute,
@@ -60,7 +58,9 @@ class AjaxOverpulledEnemyController extends Controller
             }
 
             if (Auth::check()) {
-                broadcast(new OverpulledEnemyChangedEvent($liveSession, Auth::getUser(), $overpulledEnemy, $enemy));
+                /** @var User $user */
+                $user = Auth::getUser();
+                broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
             }
         }
 
@@ -68,14 +68,11 @@ class AjaxOverpulledEnemyController extends Controller
     }
 
     /**
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     * @param OverpulledEnemyFormRequest $request
-     * @param DungeonRoute $dungeonroute
-     * @param LiveSession $livesession
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
-    function delete(
+    public function delete(
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonroute,
@@ -100,13 +97,15 @@ class AjaxOverpulledEnemyController extends Controller
                     ->first();
 
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $overpulledEnemy, $enemy));
                 }
 
                 // Optionally don't calculate the return value
                 $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

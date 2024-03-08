@@ -16,12 +16,7 @@
                 "release_changelog_id": 219,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2093,
-                "change": "Route thumbnail generation now works again.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Route thumbnail generation now works again."
             }
         ]
     }

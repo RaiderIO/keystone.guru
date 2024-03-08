@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class Sync extends Command
 {
-    use ExecutesShellCommands;
-
     /**
      * The name and signature of the console command.
      *
@@ -27,10 +25,8 @@ class Sync extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(MappingService $mappingService)
+    public function handle(MappingService $mappingService): int
     {
         Log::channel('scheduler')->debug('>> Synchronizing mapping');
         $force = (bool)$this->option('force');

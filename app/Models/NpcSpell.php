@@ -21,17 +21,11 @@ class NpcSpell extends CacheModel
 
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
-    /**
-     * @return BelongsTo
-     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function spell(): BelongsTo
     {
         return $this->belongsTo(Spell::class);

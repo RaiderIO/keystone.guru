@@ -17,11 +17,9 @@ trait ListsPaths
     /**
      * Lists all paths on a specific floor of a dungeon route.
      *
-     * @param $floorId
-     * @param DungeonRoute|null $dungeonRoute
-     * @return Collection
+     * @return Collection<Path>
      */
-    function listPaths($floorId, ?DungeonRoute $dungeonRoute): Collection
+    public function listPaths(int $floorId, ?DungeonRoute $dungeonRoute): Collection
     {
         return Path::with('polyline')
             ->where('dungeon_route_id', $dungeonRoute->id)

@@ -6,6 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\MountableArea\MountableAreaFormRequest;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -19,16 +20,15 @@ use Throwable;
 class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @param MountableAreaFormRequest $request
-     * @param MountableArea|null       $mountableArea
      * @return MountableArea|Model
+     *
      * @throws Exception
      * @throws Throwable
      */
     public function store(
         MountableAreaFormRequest $request,
         MappingVersion           $mappingVersion,
-        MountableArea            $mountableArea = null): MountableArea
+        ?MountableArea           $mountableArea = null): MountableArea
     {
         $validated = $request->validated();
 
@@ -39,25 +39,27 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request       $request
-     * @param MountableArea $mountableArea
      * @return Response|ResponseFactory
+     *
      * @throws Throwable
      */
     public function delete(Request $request, MountableArea $mountableArea)
     {
-        return DB::transaction(function () use ($request, $mountableArea) {
+        return DB::transaction(function () use ($mountableArea) {
             try {
                 if ($mountableArea->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments
                     $this->mappingChanged($mountableArea, null);
 
                     if (Auth::check()) {
-                        broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, Auth::getUser(), $mountableArea));
+                        /** @var User $user */
+                        $user = Auth::user();
+                        broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
                     }
                 }
+
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

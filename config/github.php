@@ -41,8 +41,8 @@ return [
     'connections' => [
 
         'main' => [
-            'method'     => 'token',
-            'token'      => env('GITHUB_ACCESS_TOKEN', null),
+            'method' => 'token',
+            'token'  => env('GITHUB_ACCESS_TOKEN', null),
             // 'backoff'    => false,
             // 'cache'      => false,
             // 'version'    => 'v3',
@@ -60,8 +60,8 @@ return [
         ],
 
         'jwt' => [
-            'method'       => 'jwt',
-            'token'        => 'your-jwt-token',
+            'method' => 'jwt',
+            'token'  => 'your-jwt-token',
             // 'backoff'      => false,
             // 'cache'        => false,
             // 'version'      => 'v3',
@@ -69,9 +69,9 @@ return [
         ],
 
         'private' => [
-            'method'     => 'private',
-            'appId'      => 'your-github-app-id',
-            'keyPath'    => 'your-private-key-path',
+            'method'  => 'private',
+            'appId'   => 'your-github-app-id',
+            'keyPath' => 'your-private-key-path',
             // 'key'        => 'your-private-key-content',
             // 'backoff'    => false,
             // 'cache'      => false,
@@ -80,9 +80,9 @@ return [
         ],
 
         'password' => [
-            'method'     => 'password',
-            'username'   => 'your-username',
-            'password'   => 'your-password',
+            'method'   => 'password',
+            'username' => 'your-username',
+            'password' => 'your-password',
             // 'backoff'    => false,
             // 'cache'      => false,
             // 'version'    => 'v3',
@@ -90,7 +90,7 @@ return [
         ],
 
         'none' => [
-            'method'     => 'none',
+            'method' => 'none',
             // 'backoff'    => false,
             // 'cache'      => false,
             // 'version'    => 'v3',

@@ -1,5 +1,5 @@
 <?php
-/** @var $user \App\User */
+/** @var $user \App\Models\User */
 $deleteConsequences = $user->getDeleteConsequences();
 ?>
 <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
@@ -44,7 +44,8 @@ $deleteConsequences = $user->getDeleteConsequences();
                         ?>
                     {{ sprintf('%s: %s', $teamName, $consequenceText) }}
                 </li>
-                <?php } ?>
+                <?php }
+ ?>
             </ul>
         </div>
     @endif

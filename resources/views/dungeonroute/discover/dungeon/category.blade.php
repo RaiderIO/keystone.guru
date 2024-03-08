@@ -4,8 +4,8 @@
  * @var $dungeon \App\Models\Dungeon
  * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
  */
-$title      = $title ?? sprintf('%s routes', __($dungeon->name));
-$affixgroup = $affixgroup ?? null;
+$title      ??= sprintf('%s routes', __($dungeon->name));
+$affixgroup ??= null;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',

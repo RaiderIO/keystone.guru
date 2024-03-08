@@ -8,41 +8,21 @@ use App\Models\Polyline;
 
 class DungeonRouteBrushlinesRelationParser implements RelationParserInterface
 {
-    /**
-     * @param string $modelClassName
-     * @return bool
-     */
     public function canParseRootModel(string $modelClassName): bool
     {
         return false;
     }
 
-    /**
-     * @param string $modelClassName
-     * @return bool
-     */
     public function canParseModel(string $modelClassName): bool
     {
         return $modelClassName === DungeonRoute::class;
     }
 
-    /**
-     * @param string $name
-     * @param array  $value
-     * @return bool
-     */
     public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'brushlines';
     }
 
-    /**
-     * @param string $modelClassName
-     * @param array  $modelData
-     * @param string $name
-     * @param array  $value
-     * @return array
-     */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $brushlineData) {
@@ -60,7 +40,7 @@ class DungeonRouteBrushlinesRelationParser implements RelationParserInterface
             $brushline = new Brushline($brushlineData);
             $brushline->save();
 
-            $polyline['model_class'] = get_class($brushline);
+            $polyline['model_class'] = $brushline::class;
             $polyline['model_id']    = $brushline->id;
 
             // Insert polyline, while capturing the result and coupling to the brushline
@@ -71,5 +51,4 @@ class DungeonRouteBrushlinesRelationParser implements RelationParserInterface
         // Didn't really change anything so just return the value.
         return $modelData;
     }
-
 }

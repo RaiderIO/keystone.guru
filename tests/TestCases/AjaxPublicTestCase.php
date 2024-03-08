@@ -2,11 +2,11 @@
 
 namespace Tests\TestCases;
 
-use App\User;
+use App\Models\User;
 
-class AjaxPublicTestCase extends PublicTestCase
+abstract class AjaxPublicTestCase extends PublicTestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

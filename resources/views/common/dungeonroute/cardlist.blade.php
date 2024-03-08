@@ -6,17 +6,16 @@
  * @var $__env array
  * @var $orientation string
  */
-$cols             = $cols ?? 1;
-$showDungeonImage = $showDungeonImage ?? false;
-$affixgroup       = $affixgroup ?? null;
-$cache            = $cache ?? true;
-$orientation      = $orientation ?? 'vertical';
+$cols             ??= 1;
+$showDungeonImage ??= false;
+$affixgroup       ??= null;
+$cache            ??= true;
+$orientation      ??= 'vertical';
 
 $i = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collection, string $header = null)
-    use($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env) {
+$renderDungeonRouteCollection = static function (\Illuminate\Support\Collection $collection, string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env) {
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
     <div class="row no-gutters mt-2">
@@ -26,9 +25,10 @@ $renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collect
     </div>
    <?php
     }
-    for ($i = 0; $i < (int)ceil($count / $cols); $i++) { ?>
+
+    for ($i = 0; $i < (int)ceil($count / $cols); ++$i) { ?>
     <div class="row no-gutters">
-        <?php for ($j = 0; $j < $cols; $j++) {
+        <?php for ($j = 0; $j < $cols; ++$j) {
         $dungeonroute = $collection->get(($i * $cols) + $j);
         ?>
         <div class="col-xl-{{ 12 / $cols }}">
@@ -42,10 +42,11 @@ $renderDungeonRouteCollection = function(\Illuminate\Support\Collection $collect
                 ])
             @endif
         </div>
-        <?php } ?>
+        <?php }
+     ?>
     </div>
-    <?php } ?>
-<?php }; ?>
+<?php }
+}; ?>
 
 @if($dungeonroutes->isEmpty())
     <div class="row no-gutters">

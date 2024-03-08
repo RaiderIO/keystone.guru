@@ -35,11 +35,11 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Throwable $e
      * @return void
+     *
      * @throws Throwable
      */
-    public function report(Throwable $e)
+    public function report(Throwable $e): void
     {
         parent::report($e);
     }
@@ -47,9 +47,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request   $request
-     * @param Throwable $e
+     * @param Request $request
      * @return mixed
+     *
      * @throws Throwable
      */
     public function render($request, Throwable $e)
@@ -72,13 +72,10 @@ class Handler extends ExceptionHandler
         return parent::render($request, $e);
     }
 
-
-
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param Request                 $request
-     * @param AuthenticationException $exception
+     * @param Request $request
      * @return mixed
      */
     protected function unauthenticated($request, AuthenticationException $exception)
@@ -90,12 +87,8 @@ class Handler extends ExceptionHandler
         return redirect()->guest('login');
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
     private function isApiRequest(Request $request): bool
     {
-        return strpos($request->decodedPath(), 'api/') === 0;
+        return str_starts_with($request->decodedPath(), 'api/');
     }
 }

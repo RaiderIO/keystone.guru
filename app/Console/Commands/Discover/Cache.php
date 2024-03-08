@@ -38,10 +38,6 @@ class Cache extends Command
 
     /**
      * Execute the console command.
-     *
-     * @param DiscoverServiceInterface  $discoverService
-     * @param ExpansionServiceInterface $expansionService
-     * @return int
      */
     public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int
     {
@@ -84,8 +80,8 @@ class Cache extends Command
                 $discoverService->newByDungeon($dungeon);
                 $discoverService->popularUsersByDungeon($dungeon);
 
-                foreach (optional($currentSeason)->affixgroups ?? [] as $affixGroup) {
-//                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
+                foreach ($currentSeason?->affixgroups ?? [] as $affixGroup) {
+                    //                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
                     $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup);
                     $discoverService->newByDungeonAndAffixGroup($dungeon, $affixGroup);
                     $discoverService->popularUsersByDungeonAndAffixGroup($dungeon, $affixGroup);

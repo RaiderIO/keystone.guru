@@ -16,111 +16,61 @@
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Fixed Virtual Tour not working for dungeons with just one floor.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Fixed Virtual Tour not working for dungeons with just one floor."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": 115,
-                "change": "Changed the internal structure of all line-based objects. This results in a good performance increase now and especially going into the future as the amount user-generated Routes keep growing.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Changed the internal structure of all line-based objects. This results in a good performance increase now and especially going into the future as the amount user-generated Routes keep growing."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": 85,
-                "change": "Reduced the amount of requests upon startup, increasing the speed at which the page loads, especially for those not situated in Europe.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Reduced the amount of requests upon startup, increasing the speed at which the page loads, especially for those not situated in Europe."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": 110,
-                "change": "Pre-compiled most Handlebars templates. Increases performance and reduces load on the local machine.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Pre-compiled most Handlebars templates. Increases performance and reduces load on the local machine."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": 132,
-                "change": "Any new Route that you create would not save its affixes; this has been resolved (some time ago already, but it's in this release now).",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Any new Route that you create would not save its affixes; this has been resolved (some time ago already, but it's in this release now)."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": 124,
-                "change": "Revamped the menu while on mobile. It looks a lot better now.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Revamped the menu while on mobile. It looks a lot better now."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 1,
                 "ticket_id": 133,
-                "change": "When you delete a Route it's now cleaned up more thoroughly.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "When you delete a Route it's now cleaned up more thoroughly."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 3,
                 "ticket_id": 88,
-                "change": "Routes are now called Paths. The term 'Route' was ambiguous with your entire run, which is also called a Route. Now the entire plannable dungeon is called a Route, the path which you take is comprised of Paths.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Routes are now called Paths. The term 'Route' was ambiguous with your entire run, which is also called a Route. Now the entire plannable dungeon is called a Route, the path which you take is comprised of Paths."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Various packs that enemies can be part of have been corrected. Some enemies were not part of a pack when they should've been, or were part of the wrong pack.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Various packs that enemies can be part of have been corrected. Some enemies were not part of a pack when they should've been, or were part of the wrong pack."
             },
             {
                 "release_changelog_id": 24,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Fixed an issue in Waycrest Manor in The Catacombs that caused Javascript errors, leading to potentially unresponsive pages.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Fixed an issue in Waycrest Manor in The Catacombs that caused Javascript errors, leading to potentially unresponsive pages."
             }
         ]
     }

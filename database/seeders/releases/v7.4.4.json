@@ -16,23 +16,13 @@
                 "release_changelog_id": 216,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2087,
-                "change": "Deleting a pull now allows you to delete more pulls without being confronted with an infinite loading indicator.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Deleting a pull now allows you to delete more pulls without being confronted with an infinite loading indicator."
             },
             {
                 "release_changelog_id": 216,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2062,
-                "change": "Pulls sidebar now always shows the default floor of a dungeon at the top instead of the first floor (these may be different).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Pulls sidebar now always shows the default floor of a dungeon at the top instead of the first floor (these may be different)."
             }
         ]
     }

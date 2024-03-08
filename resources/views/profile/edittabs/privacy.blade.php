@@ -1,6 +1,7 @@
 <?php
-/** @var $user \App\User */
+/** @var $user \App\Models\User */
 ?>
+<!--suppress HtmlDeprecatedAttribute -->
 <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
     <h4>
         {{ __('views/profile.edit.privacy') }}

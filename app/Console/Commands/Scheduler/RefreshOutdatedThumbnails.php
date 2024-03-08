@@ -39,27 +39,27 @@ class RefreshOutdatedThumbnails extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     *
      * @throws Exception
      */
-    public function handle(ThumbnailServiceInterface $thumbnailService)
+    public function handle(ThumbnailServiceInterface $thumbnailService): int
     {
         Log::channel('scheduler')->debug('>> Finding thumbnails');
 
         /** @var DungeonRoute[]|Collection $routes */
         $routes = DungeonRoute::where('author_id', '>', '0')
             // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
-            ->where(function (Builder $builder) {
+            ->where(static function (Builder $builder) {
                 $builder->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
-                    ->orWhere(function (Builder $builder) {
+                    ->orWhere(static function (Builder $builder) {
                         // If it is in the queue to be refreshed
                         $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
                             ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
                     });
             })
-            ->where(function (Builder $builder) {
+            ->where(static function (Builder $builder) {
                 // Only if it's not already queued!
-                $builder->where(function (Builder $builder) {
+                $builder->where(static function (Builder $builder) {
                     $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
                         ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
                 })->orWhereDate('thumbnail_updated_at', '<', now()->subDays(config('keystoneguru.thumbnail.refresh_anyways_days')));

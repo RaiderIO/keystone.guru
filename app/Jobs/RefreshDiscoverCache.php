@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Log;
 
 class RefreshDiscoverCache implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public int $timeout = 1800;
 
@@ -22,11 +25,10 @@ class RefreshDiscoverCache implements ShouldQueue
         $this->queue = sprintf('%s-%s-long-running', config('app.type'), config('app.env'));
     }
 
-
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         Log::channel('scheduler')->info('Started caching discover routes pages');
 

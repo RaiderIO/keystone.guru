@@ -1,14 +1,11 @@
 <?php
 
 /**
- * @param $h
- * @param $s
- * @param $v
  * @return float[]|int[]
  */
 function hsv2rgb($h, $s, $v): array
 {
-    $f = function ($n, $k = null) use ($h, $s, $v) {
+    $f = static function ($n, $k = null) use ($h, $s, $v) {
         if ($k === null) {
             $k = ($n + $h / 60) % 6;
         }
@@ -19,12 +16,6 @@ function hsv2rgb($h, $s, $v): array
     return [$f(5), $f(3), $f(1)];
 }
 
-/**
- * @param $r
- * @param $g
- * @param $b
- * @return array
- */
 function rgb2hsv($r, $g, $b): array
 {
     $v = max($r, $g, $b);
@@ -35,34 +26,29 @@ function rgb2hsv($r, $g, $b): array
 }
 
 $GLOBALS['clrLkp'] = [
-    ["light blue red", 345], ["blue red", 330], ["magenta", 315], ["blue magenta", 300], ["violet", 285],
-    ["indigo", 270], ["blue", 255], ["light green blue", 240], ["green blue", 225], ["green cyan", 210],
-    ["blaucyan", 195], ["cyan", 180], ["green cyan", 165], ["blue green", 150], ["light blue-green", 135],
-    ["green", 120], ["limett", 105], ["green yellow", 90], ["light green yellow", 75], ["yellow", 60],
-    ["safran", 45], ["orange", 30], ["brown", 20], ["vermilion", 15], ["red", 0]
+    ['light blue red', 345], ['blue red', 330], ['magenta', 315], ['blue magenta', 300], ['violet', 285],
+    ['indigo', 270], ['blue', 255], ['light green blue', 240], ['green blue', 225], ['green cyan', 210],
+    ['blaucyan', 195], ['cyan', 180], ['green cyan', 165], ['blue green', 150], ['light blue-green', 135],
+    ['green', 120], ['limett', 105], ['green yellow', 90], ['light green yellow', 75], ['yellow', 60],
+    ['safran', 45], ['orange', 30], ['brown', 20], ['vermilion', 15], ['red', 0],
 ];
 
 /**
- * @param $hex
  * @return array|float[]|int[]
+ *
  * @throws Exception
  */
 function hex2rgb($hex): array
 {
-    $parts = str_split(substr($hex, 1), 2);
+    $parts = str_split(substr((string)$hex, 1), 2);
     if (!$parts || count($parts) < 3) {
         throw new Exception('Invalid hex value');
     }
 
-    return array_map(function ($p) {
-        return hexdec($p);
-    }, $parts);
+    return array_map(static fn($p) => hexdec($p), $parts);
 }
 
 /**
- * @param $h
- * @param $s
- * @param $v
  * @return mixed|null
  */
 function hsv2name($h, $s, $v)
@@ -79,8 +65,8 @@ function hsv2name($h, $s, $v)
 }
 
 /**
- * @param $hex
  * @return mixed
+ *
  * @throws Exception
  */
 function hex2name($hex)
@@ -100,9 +86,7 @@ function hex2name($hex)
     return $result;
 }
 
-
 /**
- * @param $v
  * @return false|string
  */
 function pad($v)
@@ -111,17 +95,12 @@ function pad($v)
 }
 
 /**
- * @param $r
- * @param $g
- * @param $b
  * @return string
  */
 function rgb2hex($r, $g, $b)
 {
     return '#' . implode('', array_map('dechex', array_map('round', [$r, $g, $b])));
 }
-
-
 
 /**
  * @return string A random hex color.
@@ -130,8 +109,6 @@ function randomHexColor(): string
 {
     return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
 }
-
-
 
 /**
  * @return string A random hex color.
@@ -146,4 +123,3 @@ function randomHexColorNoMapColors(): string
 
     return $result;
 }
-

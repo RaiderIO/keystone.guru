@@ -61,7 +61,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
+            ThrottleRequests::class . ':60,1',
             'bindings',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,
@@ -70,13 +70,13 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * The application's route middleware.
+     * The application's middleware aliases.
      *
-     * These middleware may be assigned to groups or used individually.
+     * Aliases may be used to conveniently assign middleware to routes and groups.
      *
      * @var array
      */
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'auth'                      => Authenticate::class,
         'auth.basic'                => AuthenticateWithBasicAuth::class,
         'bindings'                  => SubstituteBindings::class,

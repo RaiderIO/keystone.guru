@@ -6,6 +6,7 @@ use App\Events\LiveSession\StopEvent;
 use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -16,12 +17,9 @@ use Teapot\StatusCode\Http;
 class AjaxLiveSessionController extends Controller
 {
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param LiveSession $liveSession
      * @return Response|ResponseFactory
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
     {
         try {
             if ($liveSession->expires_at === null) {
@@ -31,7 +29,9 @@ class AjaxLiveSessionController extends Controller
                 $liveSession->save();
 
                 if (Auth::check()) {
-                    broadcast(new StopEvent($liveSession, Auth::user()));
+                    /** @var User $user */
+                    $user = Auth::user();
+                    broadcast(new StopEvent($liveSession, $user));
                 }
 
                 // Convert to seconds
@@ -40,7 +40,7 @@ class AjaxLiveSessionController extends Controller
                 $result = ['expires_in' => $liveSession->getExpiresInSeconds()];
             }
 
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

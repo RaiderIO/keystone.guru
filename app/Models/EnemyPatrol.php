@@ -8,7 +8,6 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\hasOne;
 
@@ -19,19 +18,19 @@ use Illuminate\Database\Eloquent\Relations\hasOne;
  * @property int            $polyline_id
  * @property string         $teeming
  * @property string         $faction
- *
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
  * @property Polyline       $polyline
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingModelCloneableInterface
+class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
     use SeederModel;
 
-    public    $visible    = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
-    protected $fillable   = [
+    public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
+
+    protected $fillable = [
         'id',
         'mapping_version_id',
         'floor_id',
@@ -39,8 +38,10 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
         'teeming',
         'faction',
     ];
-    public    $with       = ['polyline'];
-    public    $timestamps = false;
+
+    public $with = ['polyline'];
+
+    public $timestamps = false;
 
     protected $casts = [
         'mapping_version_id' => 'integer',
@@ -48,17 +49,11 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
         'polyline_id'        => 'integer',
     ];
 
-    /**
-     * @return BelongsTo
-     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
@@ -66,28 +61,17 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
 
     /**
      * Get the dungeon route that this brushline is attached to.
-     *
-     * @return HasOne
      */
     public function polyline(): HasOne
     {
-        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', get_class($this));
+        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', static::class);
     }
 
-    /**
-     * @return int|null
-     */
     public function getDungeonId(): ?int
     {
-        return optional($this->floor)->dungeon_id ?? null;
+        return $this->floor?->dungeon_id ?? null;
     }
 
-    /**
-     * @param MappingVersion             $mappingVersion
-     * @param MappingModelInterface|null $newParent
-     *
-     * @return Model
-     */
     public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol
     {
         /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
@@ -103,13 +87,12 @@ class EnemyPatrol extends CacheModel implements MappingModelInterface, MappingMo
         return $clonedEnemyPatrol;
     }
 
-
-    public static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
         // Delete patrol properly if it gets deleted
-        static::deleting(function (EnemyPatrol $enemyPatrol) {
+        static::deleting(static function (EnemyPatrol $enemyPatrol) {
             if ($enemyPatrol->polyline !== null) {
                 $enemyPatrol->polyline->delete();
             }

@@ -16,45 +16,25 @@
                 "release_changelog_id": 202,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1932,
-                "change": "Fixed an issue where switching floors in the presenter view would cause the enemy forces tracker to disappear in the pulls sidebar.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an issue where switching floors in the presenter view would cause the enemy forces tracker to disappear in the pulls sidebar."
             },
             {
                 "release_changelog_id": 202,
                 "release_changelog_category_id": 11,
                 "ticket_id": 1923,
-                "change": "Improved\/restructured auto-route generator.",
-                "category": {
-                    "id": 11,
-                    "key": "auto_route_changes",
-                    "name": "releasechangelogcategories.auto_route_changes"
-                }
+                "change": "Improved\/restructured auto-route generator."
             },
             {
                 "release_changelog_id": 202,
                 "release_changelog_category_id": 11,
                 "ticket_id": 1924,
-                "change": "Improved\/restructured auto-route generator.",
-                "category": {
-                    "id": 11,
-                    "key": "auto_route_changes",
-                    "name": "releasechangelogcategories.auto_route_changes"
-                }
+                "change": "Improved\/restructured auto-route generator."
             },
             {
                 "release_changelog_id": 202,
                 "release_changelog_category_id": 11,
                 "ticket_id": 1930,
-                "change": "Improvements to Ruby Life Pools route generator.",
-                "category": {
-                    "id": 11,
-                    "key": "auto_route_changes",
-                    "name": "releasechangelogcategories.auto_route_changes"
-                }
+                "change": "Improvements to Ruby Life Pools route generator."
             }
         ]
     }

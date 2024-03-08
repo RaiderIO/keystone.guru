@@ -16,12 +16,7 @@
                 "release_changelog_id": 96,
                 "release_changelog_category_id": 1,
                 "ticket_id": 702,
-                "change": "Generated thumbnail images are now actually saved where they should be. Doh.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Generated thumbnail images are now actually saved where they should be. Doh."
             }
         ]
     }

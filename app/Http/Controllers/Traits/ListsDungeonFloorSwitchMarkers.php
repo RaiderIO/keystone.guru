@@ -13,14 +13,10 @@ use Illuminate\Support\Collection;
 
 trait ListsDungeonFloorSwitchMarkers
 {
-
     /**
      * Lists all dungeon floor switch markers on a floor.
-     *
-     * @param $floorId
-     * @return Collection
      */
-    function listDungeonFloorSwitchMarkers($floorId): Collection
+    public function listDungeonFloorSwitchMarkers(int $floorId): Collection
     {
         return DungeonFloorSwitchMarker::where('floor_id', $floorId)->get();
     }

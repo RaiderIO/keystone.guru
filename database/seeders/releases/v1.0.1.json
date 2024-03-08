@@ -16,67 +16,37 @@
                 "release_changelog_id": 2,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "You can now delete any route you created from your Profile page.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "You can now delete any route you created from your Profile page."
             },
             {
                 "release_changelog_id": 2,
                 "release_changelog_category_id": 1,
                 "ticket_id": null,
-                "change": "Route rating is now rounded to the nearest two decimal spaces.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Route rating is now rounded to the nearest two decimal spaces."
             },
             {
                 "release_changelog_id": 2,
                 "release_changelog_category_id": 3,
                 "ticket_id": null,
-                "change": "Removed the 'hold ctrl + scroll to zoom' message and functionality. Your mouse wheel is free!",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Removed the 'hold ctrl + scroll to zoom' message and functionality. Your mouse wheel is free!"
             },
             {
                 "release_changelog_id": 2,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Raid markers can now again be assigned to enemies for your route.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Raid markers can now again be assigned to enemies for your route."
             },
             {
                 "release_changelog_id": 2,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "Guest viewers of your route can now see the killzones and route you made through the dungeon (view was restricted to author of route).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Guest viewers of your route can now see the killzones and route you made through the dungeon (view was restricted to author of route)."
             },
             {
                 "release_changelog_id": 2,
                 "release_changelog_category_id": 5,
                 "ticket_id": null,
-                "change": "You can no longer select multiple kill zones at once.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "You can no longer select multiple kill zones at once."
             }
         ]
     }

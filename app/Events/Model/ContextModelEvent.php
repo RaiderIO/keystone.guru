@@ -3,25 +3,21 @@
 namespace App\Events\Model;
 
 use App\Events\ContextEvent;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class ContextModelEvent extends ContextEvent
 {
-    /** @var Model $model */
-    protected Model $model;
-
     /**
      * Create a new event instance.
      *
-     * @param $context Model
-     * @param $user User
-     * @param $model Model
+     * @param Model $context
+     * @param User  $user
+     * @param Model $model
      * @return void
      */
-    public function __construct(Model $context, User $user, Model $model)
+    public function __construct(Model $context, User $user, protected Model $model)
     {
-        $this->model = $model;
         parent::__construct($context, $user);
     }
 
@@ -29,7 +25,7 @@ abstract class ContextModelEvent extends ContextEvent
     {
         return array_merge(parent::broadcastWith(), [
             'model'       => $this->model,
-            'model_class' => get_class($this->model),
+            'model_class' => $this->model::class,
         ]);
     }
 }

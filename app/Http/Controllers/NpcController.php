@@ -28,24 +28,18 @@ class NpcController extends Controller
 
     /**
      * Checks if the incoming request is a save as new request or not.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function isSaveAsNew(Request $request)
+    private function isSaveAsNew(Request $request): bool
     {
         return $request->get('submit', 'submit') !== 'Submit';
     }
 
     /**
-     * @param NpcFormRequest $request
-     * @param Npc|null       $npc
-     *
      * @return array|mixed
+     *
      * @throws Exception
      */
-    public function store(NpcFormRequest $request, Npc $npc = null)
+    public function store(NpcFormRequest $request, ?Npc $npc = null)
     {
         $oldId        = null;
         $oldDungeonId = null;
@@ -68,7 +62,7 @@ class NpcController extends Controller
             'npc_class_id'      => $validated['npc_class_id'],
             'name'              => $validated['name'],
             // Remove commas or dots in the name; we want the integer value
-            'base_health'       => str_replace([',', '.'], '', $validated['base_health']),
+            'base_health'       => str_replace([',', '.'], '', (string)$validated['base_health']),
             'health_percentage' => $validated['health_percentage'],
             'aggressiveness'    => $validated['aggressiveness'],
             'dangerous'         => $validated['dangerous'] ?? 0,
@@ -109,7 +103,6 @@ class NpcController extends Controller
                     'spell_id' => $spellId,
                 ]);
             }
-
 
             $existingEnemyForces = 0;
 
@@ -155,6 +148,7 @@ class NpcController extends Controller
                         broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
                         $messagesSentToDungeons->push($dungeon->id);
                     }
+
                     if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
                         broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npcBefore));
                         $messagesSentToDungeons->push($dungeon->id);
@@ -170,6 +164,7 @@ class NpcController extends Controller
                     broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
+
                 if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
                     broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
@@ -197,44 +192,32 @@ class NpcController extends Controller
     public function new()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
-                return [$id => __($name)];
-            }),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  =>
-                Npc::orderByRaw('dungeon_id, name')
-                    ->get()
-                    ->groupBy('dungeon_id')
-                    ->mapWithKeys(function ($value, $key) {
-                        // Halls of Valor => [npcs]
-                        $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+            'bolsteringNpcs'  => Npc::orderByRaw('dungeon_id, name')
+                ->get()
+                ->groupBy('dungeon_id')
+                ->mapWithKeys(static function ($value, $key) {
+                    // Halls of Valor => [npcs]
+                    $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
 
-                        return [
-                            $dungeonName => $value->pluck('name', 'id')
-                                ->map(function ($value, $key) {
-                                    // Make sure the value is formatted as 'Hymdal (123456)'
-                                    return sprintf('%s (%s)', $value, $key);
-                                }),
-                        ];
-                    })
-                    ->toArray(),
+                    return [
+                        $dungeonName => $value->pluck('name', 'id')
+                            ->map(static fn($value, $key) => sprintf('%s (%s)', $value, $key)),
+                    ];
+                })
+                ->toArray(),
         ]);
     }
 
     /**
-     * @param Request             $request
-     * @param NpcServiceInterface $npcService
-     * @param Npc                 $npc
-     *
      * @return Factory|View
      */
-    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc)
+    public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc): View
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(function (string $name, int $id) {
-                return [$id => __($name)];
-            }),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
         ]);
@@ -243,11 +226,9 @@ class NpcController extends Controller
     /**
      * Override to give the type hint which is required.
      *
-     * @param NpcFormRequest      $request
-     * @param NpcServiceInterface $npcService
-     * @param Npc                 $npc
      *
      * @return Factory|RedirectResponse|View
+     *
      * @throws Exception
      */
     public function update(NpcFormRequest $request, NpcServiceInterface $npcService, Npc $npc)
@@ -267,12 +248,9 @@ class NpcController extends Controller
     }
 
     /**
-     * @param NpcFormRequest $request
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(NpcFormRequest $request)
+    public function savenew(NpcFormRequest $request): RedirectResponse
     {
         // Store it and show the edit page
         $npc = $this->store($request);
@@ -288,7 +266,7 @@ class NpcController extends Controller
      *
      * @return Factory|
      */
-    public function list()
+    public function list(): View
     {
         return view('admin.npc.list', ['models' => Npc::all()]);
     }

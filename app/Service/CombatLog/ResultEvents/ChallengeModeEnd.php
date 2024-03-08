@@ -18,16 +18,13 @@ class ChallengeModeEnd extends BaseResultEvent
 
         try {
             $this->dungeon = Dungeon::where('challenge_mode_id', $challengeModeStart->getChallengeModeID())->firstOrFail();
-        } catch (Exception $exception) {
+        } catch (Exception) {
             throw new DungeonNotSupportedException(
                 sprintf('Dungeon with challenge mode ID %d not found', $challengeModeStart->getChallengeModeID())
             );
         }
     }
 
-    /**
-     * @return ChallengeModeEndEvent
-     */
     public function getChallengeModeEndEvent(): ChallengeModeEndEvent
     {
         /** @var ChallengeModeEndEvent $baseEvent */
@@ -36,9 +33,6 @@ class ChallengeModeEnd extends BaseResultEvent
         return $baseEvent;
     }
 
-    /**
-     * @return Dungeon
-     */
     public function getDungeon(): Dungeon
     {
         return $this->dungeon;

@@ -16,67 +16,37 @@
                 "release_changelog_id": 54,
                 "release_changelog_category_id": 1,
                 "ticket_id": 350,
-                "change": "When editing a 'try' route, you're redirected to the route edit page (keystone.guru\/xxxx\/edit). You can as such refresh the page as you like. You (or anyone with the link) can claim the route and save it to their profile.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "When editing a 'try' route, you're redirected to the route edit page (keystone.guru\/xxxx\/edit). You can as such refresh the page as you like. You (or anyone with the link) can claim the route and save it to their profile."
             },
             {
                 "release_changelog_id": 54,
                 "release_changelog_category_id": 1,
                 "ticket_id": 328,
-                "change": "'Published' is no longer a separate column in route tables. It has been replaced by an icon in the title.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "'Published' is no longer a separate column in route tables. It has been replaced by an icon in the title."
             },
             {
                 "release_changelog_id": 54,
                 "release_changelog_category_id": 3,
                 "ticket_id": 352,
-                "change": "Clicking on an Awakened Obelisk will allow you to easily place a gateway (and line between them).",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Clicking on an Awakened Obelisk will allow you to easily place a gateway (and line between them)."
             },
             {
                 "release_changelog_id": 54,
                 "release_changelog_category_id": 3,
                 "ticket_id": 305,
-                "change": "Lots of internal changes to the structure behind the mapping, allowing me to more rapidly develop new features.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Lots of internal changes to the structure behind the mapping, allowing me to more rapidly develop new features."
             },
             {
                 "release_changelog_id": 54,
                 "release_changelog_category_id": 4,
                 "ticket_id": 325,
-                "change": "Corrected Tol Dagor\/Shrine of the Storm Awakened enemies enemy forces on Teeming weeks. Fixed various other enemy forces calculations.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Corrected Tol Dagor\/Shrine of the Storm Awakened enemies enemy forces on Teeming weeks. Fixed various other enemy forces calculations."
             },
             {
                 "release_changelog_id": 54,
                 "release_changelog_category_id": 7,
                 "ticket_id": 327,
-                "change": "Admins may now leave their teams.",
-                "category": {
-                    "id": 7,
-                    "key": "team_changes",
-                    "name": "releasechangelogcategories.team_changes"
-                }
+                "change": "Admins may now leave their teams."
             }
         ]
     }

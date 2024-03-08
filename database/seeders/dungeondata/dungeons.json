@@ -11,8 +11,10 @@
         "name": "dungeons.legion.arcway.name",
         "slug": "arcway",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 1,
@@ -50,8 +52,10 @@
         "name": "dungeons.legion.black_rook_hold.name",
         "slug": "black-rook-hold",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 7,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 2,
@@ -287,8 +291,10 @@
         "name": "dungeons.legion.cathedral_of_eternal_night.name",
         "slug": "cathedral-of-eternal-night",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 8,
@@ -414,8 +420,10 @@
         "name": "dungeons.legion.court_of_stars.name",
         "slug": "court-of-stars",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 13,
@@ -453,8 +461,10 @@
         "name": "dungeons.legion.darkheart_thicket.name",
         "slug": "darkheart-thicket",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 14,
@@ -492,8 +502,10 @@
         "name": "dungeons.legion.eye_of_azshara.name",
         "slug": "eye-of-azshara",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 15,
@@ -531,8 +543,10 @@
         "name": "dungeons.legion.halls_of_valor.name",
         "slug": "halls-of-valor",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 17,
@@ -641,8 +655,10 @@
         "name": "dungeons.legion.lower_karazhan.name",
         "slug": "lower-karazhan",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 19,
@@ -904,8 +920,10 @@
         "name": "dungeons.legion.maw_of_souls.name",
         "slug": "maw-of-souls",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 25,
@@ -1014,8 +1032,10 @@
         "name": "dungeons.legion.neltharions_lair.name",
         "slug": "neltharions-lair",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 28,
@@ -1053,8 +1073,10 @@
         "name": "dungeons.legion.upper_karazhan.name",
         "slug": "upper-karazhan",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 8,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 29,
@@ -1338,8 +1360,10 @@
         "name": "dungeons.legion.the_seat_of_the_triumvirate.name",
         "slug": "the-seat-of-the-triumvirate",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 37,
@@ -1377,8 +1401,10 @@
         "name": "dungeons.legion.vault_of_the_wardens.name",
         "slug": "vault-of-the-wardens",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 38,
@@ -1487,8 +1513,10 @@
         "name": "dungeons.bfa.atal_dazar.name",
         "slug": "ataldazar",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 41,
@@ -1562,8 +1590,10 @@
         "name": "dungeons.bfa.freehold.name",
         "slug": "freehold",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 43,
@@ -1601,8 +1631,10 @@
         "name": "dungeons.bfa.kings_rest.name",
         "slug": "kings-rest",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 44,
@@ -1640,8 +1672,10 @@
         "name": "dungeons.bfa.shrine_of_the_storm.name",
         "slug": "shrine-of-the-storm",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 45,
@@ -1715,8 +1749,10 @@
         "name": "dungeons.bfa.siege_of_boralus.name",
         "slug": "siege-of-boralus",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 47,
@@ -1754,8 +1790,10 @@
         "name": "dungeons.bfa.temple_of_sethraliss.name",
         "slug": "temple-of-sethraliss",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 48,
@@ -1829,8 +1867,10 @@
         "name": "dungeons.bfa.the_motherlode.name",
         "slug": "the-motherlode",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 50,
@@ -1868,8 +1908,10 @@
         "name": "dungeons.bfa.the_underrot.name",
         "slug": "the-underrot",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 51,
@@ -1943,8 +1985,10 @@
         "name": "dungeons.bfa.tol_dagor.name",
         "slug": "tol-dagor",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 7,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 53,
@@ -2193,8 +2237,10 @@
         "name": "dungeons.bfa.waycrest_manor.name",
         "slug": "waycrest-manor",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 60,
@@ -2395,8 +2441,10 @@
         "name": "dungeons.bfa.mechagon_junkyard.name",
         "slug": "mechagon-junkyard",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 65,
@@ -2470,8 +2518,10 @@
         "name": "dungeons.bfa.mechagon_workshop.name",
         "slug": "mechagon-workshop",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 67,
@@ -2580,8 +2630,10 @@
         "name": "dungeons.bfa.orgrimmar_horrific_vision.name",
         "slug": "orgrimmar-horrific-vision",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 70,
@@ -2655,8 +2707,10 @@
         "name": "dungeons.bfa.stormwind_horrific_vision.name",
         "slug": "stormwind-city-horrific-vision",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 72,
@@ -2694,8 +2748,10 @@
         "name": "dungeons.shadowlands.de_other_side.name",
         "slug": "de-other-side",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 73,
@@ -2839,8 +2895,10 @@
         "name": "dungeons.shadowlands.halls_of_atonement.name",
         "slug": "halls-of-atonement",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 77,
@@ -2949,8 +3007,10 @@
         "name": "dungeons.shadowlands.mists_of_tirna_scithe.name",
         "slug": "mists-of-tirna-scithe",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 80,
@@ -2988,8 +3048,10 @@
         "name": "dungeons.shadowlands.plaguefall.name",
         "slug": "plaguefall",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 81,
@@ -3063,8 +3125,10 @@
         "name": "dungeons.shadowlands.sanguine_depths.name",
         "slug": "sanguine-depths",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 83,
@@ -3138,8 +3202,10 @@
         "name": "dungeons.shadowlands.spires_of_ascension.name",
         "slug": "spires-of-ascension",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 85,
@@ -3283,8 +3349,10 @@
         "name": "dungeons.shadowlands.the_necrotic_wake.name",
         "slug": "the-necrotic-wake",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 89,
@@ -3393,8 +3461,10 @@
         "name": "dungeons.shadowlands.theater_of_pain.name",
         "slug": "theater-of-pain",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 92,
@@ -3579,8 +3649,10 @@
         "name": "dungeons.shadowlands.tazavesh_streets_of_wonder.name",
         "slug": "tazavesh-streets-of-wonder",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 101,
@@ -3724,8 +3796,10 @@
         "name": "dungeons.shadowlands.tazavesh_so_leahs_gambit.name",
         "slug": "tazavesh-so-leahs-gambit",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 97,
@@ -3869,8 +3943,10 @@
         "name": "dungeons.wod.auchindoun.name",
         "slug": "auchindoun",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 174,
@@ -3908,8 +3984,10 @@
         "name": "dungeons.wod.bloodmaul_slag_mines.name",
         "slug": "bloodmaul-slag-mines",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 175,
@@ -3947,8 +4025,10 @@
         "name": "dungeons.wod.iron_docks.name",
         "slug": "iron-docks",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 105,
@@ -3986,8 +4066,10 @@
         "name": "dungeons.wod.grimrail_depot.name",
         "slug": "grimrail-depot",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 106,
@@ -4131,8 +4213,10 @@
         "name": "dungeons.wotlk.ahn_kahet_the_old_kingdom.name",
         "slug": "ahn-kahet-the-old-kingdom",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 110,
@@ -4170,8 +4254,10 @@
         "name": "dungeons.wotlk.azjol_nerub.name",
         "slug": "azjol-nerub",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 111,
@@ -4280,8 +4366,10 @@
         "name": "dungeons.wotlk.drak_tharon_keep.name",
         "slug": "drak-tharon-keep",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 114,
@@ -4355,8 +4443,10 @@
         "name": "dungeons.wotlk.gundrak.name",
         "slug": "gundrak",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 116,
@@ -4394,8 +4484,10 @@
         "name": "dungeons.wotlk.halls_of_lightning.name",
         "slug": "halls-of-lightning",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 117,
@@ -4469,8 +4561,10 @@
         "name": "dungeons.wotlk.halls_of_reflection.name",
         "slug": "halls-of-reflection",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 119,
@@ -4508,8 +4602,10 @@
         "name": "dungeons.wotlk.halls_of_stone.name",
         "slug": "halls-of-stone",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 120,
@@ -4547,8 +4643,10 @@
         "name": "dungeons.wotlk.pit_of_saron.name",
         "slug": "pit-of-saron",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 121,
@@ -4586,8 +4684,10 @@
         "name": "dungeons.wotlk.the_culling_of_stratholme.name",
         "slug": "the-culling-of-stratholme",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 122,
@@ -4661,8 +4761,10 @@
         "name": "dungeons.wotlk.the_forge_of_souls.name",
         "slug": "the-forge-of-souls",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 124,
@@ -4700,8 +4802,10 @@
         "name": "dungeons.wotlk.the_nexus.name",
         "slug": "the-nexus",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 125,
@@ -4739,8 +4843,10 @@
         "name": "dungeons.wotlk.the_oculus.name",
         "slug": "the-oculus",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 126,
@@ -4919,8 +5025,10 @@
         "name": "dungeons.wotlk.the_violet_hold.name",
         "slug": "the-violet-hold",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 131,
@@ -4958,8 +5066,10 @@
         "name": "dungeons.wotlk.trial_of_the_champion.name",
         "slug": "trial-of-the-champion",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 132,
@@ -4997,8 +5107,10 @@
         "name": "dungeons.wotlk.utgarde_keep.name",
         "slug": "utgarde-keep",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 133,
@@ -5107,8 +5219,10 @@
         "name": "dungeons.wotlk.utgarde_pinnacle.name",
         "slug": "utgarde-pinnacle",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 136,
@@ -5182,8 +5296,10 @@
         "name": "dungeons.wotlk.icecrown_citadel.name",
         "slug": "icecrown-citadel",
         "speedrun_enabled": 1,
+        "speedrun_difficulty_10_man_enabled": 1,
+        "speedrun_difficulty_25_man_enabled": 1,
         "facade_enabled": 0,
-        "floor_count": 8,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 176,
@@ -5497,8 +5613,10 @@
         "name": "dungeons.wotlk.onyxias_lair.name",
         "slug": "onyxias-lair",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 184,
@@ -5536,8 +5654,10 @@
         "name": "dungeons.wotlk.naxxramas.name",
         "slug": "naxxramas",
         "speedrun_enabled": 1,
+        "speedrun_difficulty_10_man_enabled": 1,
+        "speedrun_difficulty_25_man_enabled": 1,
         "facade_enabled": 0,
-        "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 138,
@@ -6144,8 +6264,10 @@
         "name": "dungeons.wotlk.crusaders_coliseum_trial_of_the_crusader.name",
         "slug": "crusaders-coliseum-trial-of-the-crusader",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 185,
@@ -6205,8 +6327,10 @@
         "name": "dungeons.wotlk.the_eye_of_eternity.name",
         "slug": "the-eye-of-eternity",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 187,
@@ -6244,8 +6368,10 @@
         "name": "dungeons.wotlk.the_obsidian_sanctum.name",
         "slug": "the-obsidian-sanctum",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 188,
@@ -6283,8 +6409,10 @@
         "name": "dungeons.wotlk.the_ruby_sanctum.name",
         "slug": "the-ruby-sanctum",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 189,
@@ -6322,8 +6450,10 @@
         "name": "dungeons.wotlk.ulduar.name",
         "slug": "ulduar",
         "speedrun_enabled": 1,
+        "speedrun_difficulty_10_man_enabled": 1,
+        "speedrun_difficulty_25_man_enabled": 1,
         "facade_enabled": 0,
-        "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 167,
@@ -7105,8 +7235,10 @@
         "name": "dungeons.wotlk.vault_of_archavon.name",
         "slug": "vault-of-archavon",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 190,
@@ -7144,8 +7276,10 @@
         "name": "dungeons.dragonflight.algeth_ar_academy.name",
         "slug": "algeth-ar-academy",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 144,
@@ -7254,8 +7388,10 @@
         "name": "dungeons.dragonflight.brackenhide_hollow.name",
         "slug": "brackenhide-hollow",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 147,
@@ -7329,8 +7465,10 @@
         "name": "dungeons.dragonflight.halls_of_infusion.name",
         "slug": "halls-of-infusion",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 149,
@@ -7404,8 +7542,10 @@
         "name": "dungeons.dragonflight.neltharus.name",
         "slug": "neltharus",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 151,
@@ -7479,8 +7619,10 @@
         "name": "dungeons.dragonflight.the_nokhud_offensive.name",
         "slug": "the-nokhud-offensive",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 153,
@@ -7518,8 +7660,10 @@
         "name": "dungeons.dragonflight.ruby_life_pools.name",
         "slug": "ruby-life-pools",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 154,
@@ -7593,8 +7737,10 @@
         "name": "dungeons.dragonflight.the_azure_vault.name",
         "slug": "the-azure-vault",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 156,
@@ -7773,8 +7919,10 @@
         "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.name",
         "slug": "uldaman-legacy-of-tyr",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 161,
@@ -7848,8 +7996,10 @@
         "name": "dungeons.wod.shadowmoon_burial_grounds.name",
         "slug": "shadowmoon-burial-grounds",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 163,
@@ -7958,8 +8108,10 @@
         "name": "dungeons.mop.temple_of_the_jade_serpent.name",
         "slug": "temple-of-the-jade-serpent",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 166,
@@ -7997,8 +8149,10 @@
         "name": "dungeons.cata.the_vortex_pinnacle.name",
         "slug": "the-vortex-pinnacle",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 173,
@@ -8036,8 +8190,10 @@
         "name": "dungeons.classic.blackfathom_deeps.name",
         "slug": "blackfathom-deeps",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 191,
@@ -8146,8 +8302,10 @@
         "name": "dungeons.classic.blackrock_depths.name",
         "slug": "blackrock-depths",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 194,
@@ -8221,8 +8379,10 @@
         "name": "dungeons.classic.deadmines.name",
         "slug": "the-deadmines",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 196,
@@ -8296,8 +8456,10 @@
         "name": "dungeons.classic.dire_maul_west.name",
         "slug": "dire-maul-west",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 199,
@@ -8406,8 +8568,10 @@
         "name": "dungeons.classic.gnomeregan.name",
         "slug": "gnomeregan",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 204,
@@ -8551,8 +8715,10 @@
         "name": "dungeons.classic.lower_blackrock_spire.name",
         "slug": "lower-blackrock-spire",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 208,
@@ -8796,8 +8962,10 @@
         "name": "dungeons.classic.maraudon.name",
         "slug": "maraudon",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 214,
@@ -8871,8 +9039,10 @@
         "name": "dungeons.classic.ragefire_chasm.name",
         "slug": "ragefire-chasm",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 216,
@@ -8910,8 +9080,10 @@
         "name": "dungeons.classic.razorfen_downs.name",
         "slug": "razorfen-downs",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 217,
@@ -8949,8 +9121,10 @@
         "name": "dungeons.classic.razorfen_kraul.name",
         "slug": "razorfen-kraul",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 218,
@@ -8988,8 +9162,10 @@
         "name": "dungeons.classic.scarlet_monastery_armory.name",
         "slug": "scarlet-monastery-armory",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 219,
@@ -9027,8 +9203,10 @@
         "name": "dungeons.classic.scarlet_monastery_cathedral.name",
         "slug": "scarlet-monastery-cathedral",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 220,
@@ -9066,8 +9244,10 @@
         "name": "dungeons.classic.scarlet_monastery_graveyard.name",
         "slug": "scarlet-monastery-graveyard",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 221,
@@ -9105,8 +9285,10 @@
         "name": "dungeons.classic.scarlet_monastery_library.name",
         "slug": "scarlet-monastery-library",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 222,
@@ -9144,8 +9326,10 @@
         "name": "dungeons.classic.scholomance.name",
         "slug": "scholomance",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 4,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 223,
@@ -9301,8 +9485,10 @@
         "name": "dungeons.classic.shadowfang_keep.name",
         "slug": "shadowfang-keep",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 7,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 227,
@@ -9557,8 +9743,10 @@
         "name": "dungeons.classic.stratholme.name",
         "slug": "stratholme",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 234,
@@ -9632,8 +9820,10 @@
         "name": "dungeons.classic.the_stockade.name",
         "slug": "the-stockade",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 236,
@@ -9671,8 +9861,10 @@
         "name": "dungeons.classic.the_temple_of_atal_hakkar.name",
         "slug": "the-temple-of-atalhakkar",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 5,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 242,
@@ -9863,8 +10055,10 @@
         "name": "dungeons.classic.uldaman.name",
         "slug": "uldaman",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 238,
@@ -9938,8 +10132,10 @@
         "name": "dungeons.classic.wailing_caverns.name",
         "slug": "wailing-caverns",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 240,
@@ -9977,8 +10173,10 @@
         "name": "dungeons.classic.zul_farrak.name",
         "slug": "zulfarrak",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 241,
@@ -10016,8 +10214,10 @@
         "name": "dungeons.classic.dire_maul_north.name",
         "slug": "dire-maul-north",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 1,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 198,
@@ -10055,8 +10255,10 @@
         "name": "dungeons.classic.dire_maul_east.name",
         "slug": "dire-maul-east",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 202,
@@ -10130,8 +10332,10 @@
         "name": "dungeons.wod.the_everbloom.name",
         "slug": "the-everbloom",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 2,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 246,
@@ -10205,8 +10409,10 @@
         "name": "dungeons.cata.throne_of_the_tides.name",
         "slug": "throne-of-the-tides",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 248,
@@ -10302,8 +10508,10 @@
         "name": "dungeons.classic.upper_blackrock_spire.name",
         "slug": "upper-blackrock-spire",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 0,
-        "floor_count": 3,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 250,
@@ -10412,8 +10620,10 @@
         "name": "dungeons.dragonflight.dawn_of_the_infinite_galakronds_fall.name",
         "slug": "dawn-of-the-infinite-galakronds-fall",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 6,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 253,
@@ -10657,8 +10867,10 @@
         "name": "dungeons.dragonflight.dawn_of_the_infinite_murozonds_rise.name",
         "slug": "dawn-of-the-infinite-murozonds-rise",
         "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
         "facade_enabled": 1,
-        "floor_count": 8,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 258,
@@ -10992,6 +11204,244 @@
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 107,
+        "expansion_id": 4,
+        "game_version_id": 3,
+        "zone_id": 721,
+        "map_id": 90,
+        "challenge_mode_id": null,
+        "mdt_id": 123,
+        "key": "gnomeregan_sod",
+        "name": "dungeons.classic.gnomeregan_sod.name",
+        "slug": "gnomeregan-sod",
+        "speedrun_enabled": 1,
+        "speedrun_difficulty_10_man_enabled": 1,
+        "speedrun_difficulty_25_man_enabled": 0,
+        "facade_enabled": 0,
+        "mdt_supported": false,
+        "floors": [
+            {
+                "id": 270,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 226,
+                "name": "dungeons.classic.gnomeregan_sod.floors.the_hall_of_gears",
+                "default": 1,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -694,
+                "ingame_min_y": -277.77,
+                "ingame_max_x": -180.88,
+                "ingame_max_y": 491.89,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 904,
+                        "floor1_id": 270,
+                        "floor2_id": 271,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 271,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 227,
+                "name": "dungeons.classic.gnomeregan_sod.floors.the_dormitory",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -714,
+                "ingame_min_y": -77.77,
+                "ingame_max_x": -200.88,
+                "ingame_max_y": 691.89,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 905,
+                        "floor1_id": 271,
+                        "floor2_id": 270,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 906,
+                        "floor1_id": 271,
+                        "floor2_id": 272,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 87,
+                        "floor_id": 271,
+                        "npc_id": 6218,
+                        "npc2_id": 6219,
+                        "npc3_id": 6220,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    },
+                    {
+                        "id": 88,
+                        "floor_id": 271,
+                        "npc_id": 6223,
+                        "npc2_id": 6233,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 14
+                    }
+                ],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 272,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": 228,
+                "name": "dungeons.classic.gnomeregan_sod.floors.launch_bay",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -967.33,
+                "ingame_min_y": -127.77,
+                "ingame_max_x": -387.55,
+                "ingame_max_y": 741.89,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 907,
+                        "floor1_id": 272,
+                        "floor2_id": 271,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 908,
+                        "floor1_id": 272,
+                        "floor2_id": 273,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 89,
+                        "floor_id": 272,
+                        "npc_id": 6230,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 1
+                    },
+                    {
+                        "id": 90,
+                        "floor_id": 272,
+                        "npc_id": 7603,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 28
+                    },
+                    {
+                        "id": 91,
+                        "floor_id": 272,
+                        "npc_id": 6222,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    },
+                    {
+                        "id": 92,
+                        "floor_id": 272,
+                        "npc_id": 6224,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 11
+                    }
+                ],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 273,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": 229,
+                "name": "dungeons.classic.gnomeregan_sod.floors.tinkers_court",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": -937.33,
+                "ingame_min_y": 72.99,
+                "ingame_max_x": -357.55,
+                "ingame_max_y": 942.66,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 909,
+                        "floor1_id": 273,
+                        "floor2_id": 272,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [
+                    {
+                        "id": 93,
+                        "floor_id": 273,
+                        "npc_id": 6226,
+                        "npc2_id": 6227,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 6
+                    },
+                    {
+                        "id": 94,
+                        "floor_id": 273,
+                        "npc_id": 6212,
+                        "npc2_id": 6232,
+                        "npc3_id": 6234,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 1,
+                        "count": 20
+                    }
+                ],
                 "dungeon_speedrun_required_npcs25_man": []
             }
         ]

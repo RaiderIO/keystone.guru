@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDuplicateColumnToChallengeModeRunsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('challenge_mode_runs', function (Blueprint $table) {
             $table->boolean('duplicate')->after('total_time_ms')->default(0);
@@ -22,13 +19,11 @@ class AddDuplicateColumnToChallengeModeRunsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('challenge_mode_runs', function (Blueprint $table) {
             $table->dropColumn('duplicate');
         });
     }
-}
+};

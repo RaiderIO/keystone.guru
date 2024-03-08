@@ -16,12 +16,7 @@
                 "release_changelog_id": 206,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1997,
-                "change": "Fixed an issue causing a 502 gateway timeout to be thrown when you logged in.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed an issue causing a 502 gateway timeout to be thrown when you logged in."
             }
         ]
     }

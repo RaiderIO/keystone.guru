@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\LiveSession;
 
 use App\Models\KillZone\KillZone;
@@ -11,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function getRouteCorrection(LiveSession $liveSession): DungeonRouteCorrection
+    public function getRouteCorrection(LiveSession $liveSession): DungeonRouteCorrection
     {
         $dungeonRouteCorrection = new DungeonRouteCorrection($liveSession);
 
@@ -52,9 +51,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 
                     foreach ($groupedBy as $enemyPackId => $enemies) {
                         /** @var Collection $enemies */
-                        $enemies = $enemies->sortByDesc(function ($row) {
-                            return $row->enemy_forces;
-                        });
+                        $enemies = $enemies->sortByDesc(static fn($row) => $row->enemy_forces);
 
                         if ($enemyPackId === -1) {
                             foreach ($enemies as $enemy) {
@@ -72,9 +69,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                         }
 
                         // We need to check if we can skip all the enemies in the upcoming pack
-                        $totalEnemyForcesInPack = $enemies->sum(function ($row) {
-                            return $row->enemy_forces;
-                        });
+                        $totalEnemyForcesInPack = $enemies->sum(static fn($row) => $row->enemy_forces);
 
                         // If we can safely skip this entire pack
                         if ($enemyForcesLeftToCorrect >= $totalEnemyForcesInPack) {
@@ -95,7 +90,6 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
     }
 
     /**
-     * @param LiveSession $liveSession
      * @return Collection|array{array{kill_zone: KillZone, enemy_forces: int}}
      */
     private function getOverpulledEnemyForces(LiveSession $liveSession): Collection

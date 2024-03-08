@@ -4,7 +4,7 @@
  * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
  * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
  */
-$affixgroup = $affixgroup ?? null;
+$affixgroup ??= null;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',

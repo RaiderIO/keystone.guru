@@ -2,16 +2,15 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
-
-use App\User;
+use App\Models\User;
 use InfluxDB\Point;
 
 class UserCount extends Measurement
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function getPoints(): array
+    public function getPoints(): array
     {
         return [
             new Point(

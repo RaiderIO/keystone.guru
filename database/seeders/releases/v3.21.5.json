@@ -16,45 +16,25 @@
                 "release_changelog_id": 98,
                 "release_changelog_category_id": 3,
                 "ticket_id": 714,
-                "change": "Updated admin tools related to mapping.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Updated admin tools related to mapping."
             },
             {
                 "release_changelog_id": 98,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Plaguefall: re-added the Plagueroc on the hill in the beginning after its reintroduction in 9.0.5.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Plaguefall: re-added the Plagueroc on the hill in the beginning after its reintroduction in 9.0.5."
             },
             {
                 "release_changelog_id": 98,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Sanguine Depths: Rockbound Sprite and Dark Acolytes are no longer marked for bursting, bolstering, and sanguine. Moved one of the power up canisters to its correct location.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Sanguine Depths: Rockbound Sprite and Dark Acolytes are no longer marked for bursting, bolstering, and sanguine. Moved one of the power up canisters to its correct location."
             },
             {
                 "release_changelog_id": 98,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Spires of Ascension: Various enemy locations slightly corrected.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Spires of Ascension: Various enemy locations slightly corrected."
             }
         ]
     }

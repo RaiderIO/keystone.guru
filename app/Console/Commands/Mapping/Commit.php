@@ -26,10 +26,8 @@ class Commit extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->shell([
             sprintf('cd %s; ' .

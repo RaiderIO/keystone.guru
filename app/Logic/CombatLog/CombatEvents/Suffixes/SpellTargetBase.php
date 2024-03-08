@@ -8,16 +8,12 @@ abstract class SpellTargetBase extends SpellBase
 {
     private string $auraType;
 
-    /**
-     * @return string
-     */
     public function getAuraType(): string
     {
         return $this->auraType;
     }
 
     /**
-     * @param array $parameters
      * @return HasParameters|$this
      */
     public function setParameters(array $parameters): HasParameters
@@ -29,9 +25,6 @@ abstract class SpellTargetBase extends SpellBase
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 4;

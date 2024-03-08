@@ -116,37 +116,37 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
         // In order of the way $classes is structured
         // @formatter:off
         $raceClassMatrix = [
-            'races.human'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
-            'races.dwarf'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
-            'races.night_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', ' '],
-            'races.gnome'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            'races.draenei'             => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' ', ' '],
-            'races.worgen'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' ', ' '],
-            'races.void_elf'            => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.human' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.dwarf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.night_elf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', ' '],
+            'races.gnome' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.draenei' => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' ', ' '],
+            'races.worgen' => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' ', ' '],
+            'races.void_elf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
             'races.lightforged_draenei' => ['x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' ', ' '],
-            'races.dark_iron_dwarf'     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.dark_iron_dwarf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
 
-            'races.pandarenalliance'    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
-            'races.pandarenhorde'       => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            'races.pandarenalliance' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            'races.pandarenhorde' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
 
-            'races.dracthyralliance'    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'],
-            'races.dracthyrhorde'       => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'],
+            'races.dracthyralliance' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'],
+            'races.dracthyrhorde' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'],
 
-            'races.orc'                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'races.undead'              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            'races.tauren'              => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' ', ' '],
-            'races.troll'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
-            'races.blood_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
-            'races.goblin'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'races.nightborne'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.orc' => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.undead' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.tauren' => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' ', ' '],
+            'races.troll' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
+            'races.blood_elf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
+            'races.goblin' => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.nightborne' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
             'races.highmountain_tauren' => ['x', 'x', 'x', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' ', ' '],
-            'races.maghar_orc'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            'races.maghar_orc' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
 
-            'races.kul_tiran_human'     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' ', ' '],
-            'races.zandalari_troll'     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' '],
+            'races.kul_tiran_human' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' ', ' '],
+            'races.zandalari_troll' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' '],
 
-            'races.mechagnome'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            'races.vulpera'             => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.mechagnome' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.vulpera' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
         ];
         // @formatter:on
 
@@ -185,7 +185,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
                 new CharacterClassSpecialization(['key' => 'havoc', 'name' => 'specializations.demon_hunter.havoc']),
                 new CharacterClassSpecialization(['key' => 'vengeance', 'name' => 'specializations.demon_hunter.vengeance']),
             ],
-            'classes.druid'        => [
+            'classes.druid' => [
                 new CharacterClassSpecialization(['key' => 'balance', 'name' => 'specializations.druid.balance']),
                 new CharacterClassSpecialization(['key' => 'feral', 'name' => 'specializations.druid.feral']),
                 new CharacterClassSpecialization(['key' => 'guardian', 'name' => 'specializations.druid.guardian']),
@@ -195,47 +195,47 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
                 new CharacterClassSpecialization(['key' => 'devastation', 'name' => 'specializations.evoker.devastation']),
                 new CharacterClassSpecialization(['key' => 'preservation', 'name' => 'specializations.evoker.preservation']),
             ],
-            'classes.hunter'       => [
+            'classes.hunter' => [
                 new CharacterClassSpecialization(['key' => 'beast_mastery', 'name' => 'specializations.hunter.beast_mastery']),
                 new CharacterClassSpecialization(['key' => 'marksman', 'name' => 'specializations.hunter.marksman']),
                 new CharacterClassSpecialization(['key' => 'survival', 'name' => 'specializations.hunter.survival']),
             ],
-            'classes.mage'         => [
+            'classes.mage' => [
                 new CharacterClassSpecialization(['key' => 'arcane', 'name' => 'specializations.mage.arcane']),
                 new CharacterClassSpecialization(['key' => 'fire', 'name' => 'specializations.mage.fire']),
                 new CharacterClassSpecialization(['key' => 'frost', 'name' => 'specializations.mage.frost']),
             ],
-            'classes.monk'         => [
+            'classes.monk' => [
                 new CharacterClassSpecialization(['key' => 'brewmaster', 'name' => 'specializations.monk.brewmaster']),
                 new CharacterClassSpecialization(['key' => 'mistweaver', 'name' => 'specializations.monk.mistweaver']),
                 new CharacterClassSpecialization(['key' => 'windwalker', 'name' => 'specializations.monk.windwalker']),
             ],
-            'classes.paladin'      => [
+            'classes.paladin' => [
                 new CharacterClassSpecialization(['key' => 'holy', 'name' => 'specializations.paladin.holy']),
                 new CharacterClassSpecialization(['key' => 'protection', 'name' => 'specializations.paladin.protection']),
                 new CharacterClassSpecialization(['key' => 'retribution', 'name' => 'specializations.paladin.retribution']),
             ],
-            'classes.priest'       => [
+            'classes.priest' => [
                 new CharacterClassSpecialization(['key' => 'discipline', 'name' => 'specializations.priest.discipline']),
                 new CharacterClassSpecialization(['key' => 'holy', 'name' => 'specializations.priest.holy']),
                 new CharacterClassSpecialization(['key' => 'shadow', 'name' => 'specializations.priest.shadow']),
             ],
-            'classes.rogue'        => [
+            'classes.rogue' => [
                 new CharacterClassSpecialization(['key' => 'assassination', 'name' => 'specializations.rogue.assassination']),
                 new CharacterClassSpecialization(['key' => 'outlaw', 'name' => 'specializations.rogue.outlaw']),
                 new CharacterClassSpecialization(['key' => 'subtlety', 'name' => 'specializations.rogue.subtlety']),
             ],
-            'classes.shaman'       => [
+            'classes.shaman' => [
                 new CharacterClassSpecialization(['key' => 'elemental', 'name' => 'specializations.shaman.elemental']),
                 new CharacterClassSpecialization(['key' => 'enhancement', 'name' => 'specializations.shaman.enhancement']),
                 new CharacterClassSpecialization(['key' => 'restoration', 'name' => 'specializations.shaman.restoration']),
             ],
-            'classes.warlock'      => [
+            'classes.warlock' => [
                 new CharacterClassSpecialization(['key' => 'affliction', 'name' => 'specializations.warlock.affliction']),
                 new CharacterClassSpecialization(['key' => 'demonology', 'name' => 'specializations.warlock.demonology']),
                 new CharacterClassSpecialization(['key' => 'destruction', 'name' => 'specializations.warlock.destruction']),
             ],
-            'classes.warrior'      => [
+            'classes.warrior' => [
                 new CharacterClassSpecialization(['key' => 'arms', 'name' => 'specializations.warrior.arms']),
                 new CharacterClassSpecialization(['key' => 'fury', 'name' => 'specializations.warrior.fury']),
                 new CharacterClassSpecialization(['key' => 'protection', 'name' => 'specializations.warrior.protection']),

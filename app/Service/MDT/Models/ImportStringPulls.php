@@ -10,44 +10,19 @@ use Illuminate\Support\Collection;
 
 class ImportStringPulls
 {
-    private Collection     $warnings;
-    private Collection     $errors;
-    private Dungeon        $dungeon;
-    private MappingVersion $mappingVersion;
-    private bool           $isRouteTeeming;
-    private ?int           $seasonalIndex;
-    private array          $mdtPulls;
-
     private int $enemyForces = 0;
 
-    private Collection $killZoneAttributes;
+    private readonly Collection $killZoneAttributes;
 
-    /**
-     * @param Collection     $warnings
-     * @param Collection     $errors
-     * @param Dungeon        $dungeon
-     * @param MappingVersion $mappingVersion
-     * @param bool           $isRouteTeeming
-     * @param int|null       $seasonalIndex
-     * @param array          $mdtPulls
-     */
     public function __construct(
-        Collection     $warnings,
-        Collection     $errors,
-        Dungeon        $dungeon,
-        MappingVersion $mappingVersion,
-        bool           $isRouteTeeming,
-        ?int           $seasonalIndex,
-        array          $mdtPulls)
+        private readonly Collection     $warnings,
+        private readonly Collection     $errors,
+        private readonly Dungeon        $dungeon,
+        private readonly MappingVersion $mappingVersion,
+        private readonly bool           $isRouteTeeming,
+        private readonly ?int           $seasonalIndex,
+        private readonly array          $mdtPulls)
     {
-        $this->warnings       = $warnings;
-        $this->errors         = $errors;
-        $this->dungeon        = $dungeon;
-        $this->mappingVersion = $mappingVersion;
-        $this->isRouteTeeming = $isRouteTeeming;
-        $this->seasonalIndex  = $seasonalIndex;
-        $this->mdtPulls       = $mdtPulls;
-
         $this->killZoneAttributes = collect();
     }
 
@@ -67,50 +42,31 @@ class ImportStringPulls
         return $this->errors;
     }
 
-    /**
-     * @return Dungeon
-     */
     public function getDungeon(): Dungeon
     {
         return $this->dungeon;
     }
 
-    /**
-     * @return MappingVersion
-     */
     public function getMappingVersion(): MappingVersion
     {
         return $this->mappingVersion;
     }
 
-    /**
-     * @return bool
-     */
     public function isRouteTeeming(): bool
     {
         return $this->isRouteTeeming;
     }
 
-    /**
-     * @return int|null
-     */
     public function getSeasonalIndex(): ?int
     {
         return $this->seasonalIndex;
     }
 
-    /**
-     * @return array
-     */
     public function getMdtPulls(): array
     {
         return $this->mdtPulls;
     }
 
-    /**
-     * @param int $amount
-     * @return $this
-     */
     public function addEnemyForces(int $amount): self
     {
         $this->enemyForces += $amount;
@@ -118,10 +74,6 @@ class ImportStringPulls
         return $this;
     }
 
-    /**
-     * @param array $attributes
-     * @return self
-     */
     public function addKillZoneAttributes(array $attributes): self
     {
         $this->killZoneAttributes->push($attributes);
@@ -129,17 +81,11 @@ class ImportStringPulls
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getEnemyForces(): int
     {
         return $this->enemyForces;
     }
 
-    /**
-     * @return Collection
-     */
     public function getKillZoneAttributes(): Collection
     {
         return $this->killZoneAttributes;

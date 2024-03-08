@@ -8,106 +8,52 @@ use Carbon\Carbon;
 
 class ActivePullEnemy
 {
-    private string $uniqueId;
+    private ?Enemy $resolvedEnemy = null;
 
-    private int $npcId;
-
-    private float $x;
-
-    private float $y;
-
-    private Carbon $engagedAt;
-
-    private ?Carbon $diedAt;
-
-    private ?Enemy $resolvedEnemy;
-
-    /**
-     * @param string      $uniqueId
-     * @param int         $npcId
-     * @param float       $x
-     * @param float       $y
-     * @param Carbon      $engagedAt
-     * @param Carbon|null $diedAt
-     */
-    public function __construct(string $uniqueId, int $npcId, float $x, float $y, Carbon $engagedAt, ?Carbon $diedAt)
+    public function __construct(private readonly string $uniqueId, private readonly int $npcId, private readonly float $x, private readonly float $y, private readonly Carbon $engagedAt, private readonly ?Carbon $diedAt)
     {
-        $this->uniqueId      = $uniqueId;
-        $this->npcId         = $npcId;
-        $this->x             = $x;
-        $this->y             = $y;
-        $this->engagedAt     = $engagedAt;
-        $this->diedAt        = $diedAt;
     }
 
-    /**
-     * @return string
-     */
     public function getUniqueId(): string
     {
         return $this->uniqueId;
     }
 
-    /**
-     * @return int
-     */
     public function getNpcId(): int
     {
         return $this->npcId;
     }
 
-    /**
-     * @return float
-     */
     public function getX(): float
     {
         return $this->x;
     }
 
-    /**
-     * @return float
-     */
     public function getY(): float
     {
         return $this->y;
     }
 
-    /**
-     * @return IngameXY
-     */
     public function getIngameXY(): IngameXY
     {
         return new IngameXY($this->x, $this->y);
     }
 
-    /**
-     * @return Carbon
-     */
     public function getEngagedAt(): Carbon
     {
         return $this->engagedAt;
     }
 
-    /**
-     * @return Carbon|null
-     */
     public function getDiedAt(): ?Carbon
     {
         return $this->diedAt;
     }
 
-    /**
-     * @return Enemy|null
-     */
     public function getResolvedEnemy(): ?Enemy
     {
         return $this->resolvedEnemy;
     }
 
-    /**
-     * @param Enemy|null $resolvedEnemy
-     * @return ActivePullEnemy
-     */
     public function setResolvedEnemy(?Enemy $resolvedEnemy): self
     {
         $this->resolvedEnemy = $resolvedEnemy;
@@ -115,10 +61,6 @@ class ActivePullEnemy
         return $this;
     }
 
-    /**
-     * @param Carbon $carbon
-     * @return float
-     */
     public function getHPPercentAt(Carbon $carbon): float
     {
         // If it didn't die yet, we can't know the health based on engaged -> died

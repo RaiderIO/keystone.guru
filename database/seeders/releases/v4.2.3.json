@@ -16,12 +16,7 @@
                 "release_changelog_id": 121,
                 "release_changelog_category_id": 5,
                 "ticket_id": 896,
-                "change": "Fixed OAuth registered users not having a public key - this caused them some issues across the site.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Fixed OAuth registered users not having a public key - this caused them some issues across the site."
             }
         ]
     }

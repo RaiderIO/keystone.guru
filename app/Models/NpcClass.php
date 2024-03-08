@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 /**
  * @property int              $id
  * @property string           $name
- *
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
@@ -19,19 +18,29 @@ class NpcClass extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable   = ['id', 'name'];
-    public    $timestamps = false;
+    protected $fillable = ['id', 'name'];
 
-    public const NPC_CLASS_MELEE         = 'melee';
-    public const NPC_CLASS_RANGED        = 'ranged';
-    public const NPC_CLASS_CASTER        = 'caster';
-    public const NPC_CLASS_HEALER        = 'healer';
-    public const NPC_CLASS_CASTER_MELEE  = 'caster_melee';
+    public $timestamps = false;
+
+    public const NPC_CLASS_MELEE = 'melee';
+
+    public const NPC_CLASS_RANGED = 'ranged';
+
+    public const NPC_CLASS_CASTER = 'caster';
+
+    public const NPC_CLASS_HEALER = 'healer';
+
+    public const NPC_CLASS_CASTER_MELEE = 'caster_melee';
+
     public const NPC_CLASS_HEALER_CASTER = 'healer_caster';
-    public const NPC_CLASS_HEALER_MELEE  = 'healer_melee';
+
+    public const NPC_CLASS_HEALER_MELEE = 'healer_melee';
+
     public const NPC_CLASS_RANGED_CASTER = 'ranged_caster';
+
     public const NPC_CLASS_RANGED_HEALER = 'ranged_healer';
-    public const NPC_CLASS_RANGED_MELEE  = 'ranged_melee';
+
+    public const NPC_CLASS_RANGED_MELEE = 'ranged_melee';
 
     public const ALL = [
         self::NPC_CLASS_MELEE,
@@ -46,9 +55,6 @@ class NpcClass extends CacheModel
         self::NPC_CLASS_RANGED_MELEE,
     ];
 
-    /**
-     * @return string
-     */
     public function getNameKeyAttribute(): string
     {
         return strtolower($this->name);
@@ -56,8 +62,6 @@ class NpcClass extends CacheModel
 
     /**
      * Gets all derived NPCs from this class.
-     *
-     * @return HasMany
      */
     public function npcs(): HasMany
     {

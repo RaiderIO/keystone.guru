@@ -16,12 +16,7 @@
                 "release_changelog_id": 161,
                 "release_changelog_category_id": 6,
                 "ticket_id": 1512,
-                "change": "Import of MDT strings is now functional again.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Import of MDT strings is now functional again."
             }
         ]
     }

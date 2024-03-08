@@ -16,23 +16,13 @@
                 "release_changelog_id": 43,
                 "release_changelog_category_id": 3,
                 "ticket_id": 263,
-                "change": "Map comment fixed width is removed; the comment now always scales to the width of the text.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Map comment fixed width is removed; the comment now always scales to the width of the text."
             },
             {
                 "release_changelog_id": 43,
                 "release_changelog_category_id": 6,
                 "ticket_id": 266,
-                "change": "MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "MDT importer works again; fixed various errors and updated to the latest version of Mythic Dungeon Tools."
             }
         ]
     }

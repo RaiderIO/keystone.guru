@@ -18,17 +18,13 @@ trait ConvertsMDTStrings
 
     private static string $SUDO = '/usr/bin/sudo';
 
-    /** @var string */
     private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/cli_weakauras_parser encode %s';
 
-    /** @var string */
     private static string $CLI_PARSER_DECODE_CMD = '/usr/bin/cli_weakauras_parser decode %s';
 
     /**
      * Checks if we should log a string to the error logger should it fail parsing
      *
-     * @param string $string
-     * @return bool
      * @see https://stackoverflow.com/a/34982057/771270
      */
     private function shouldErrorLog(string $string): bool
@@ -40,7 +36,6 @@ trait ConvertsMDTStrings
     /**
      * @param bool   $encode True to encode, false to decode it.
      * @param string $string The string you want to encode/decode.
-     * @return string|null
      */
     private function transform(bool $encode, string $string): ?string
     {
@@ -57,9 +52,9 @@ trait ConvertsMDTStrings
                 if (config('app.type') !== 'local') {
                     $cmd = sprintf('%s %s', self::$SUDO, $cmd);
                 }
+
                 $process = new Process(explode(' ', $cmd));
                 $process->run();
-
 
                 // executes after the command finishes
                 if (!$process->isSuccessful()) {
@@ -90,19 +85,11 @@ trait ConvertsMDTStrings
         return $result;
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
     private function encode(string $string): ?string
     {
         return $this->transform(true, $string);
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
     private function decode(string $string): string
     {
         return $this->transform(false, $string);

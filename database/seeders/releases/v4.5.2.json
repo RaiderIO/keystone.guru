@@ -16,34 +16,19 @@
                 "release_changelog_id": 130,
                 "release_changelog_category_id": 1,
                 "ticket_id": 983,
-                "change": "Disabled route card caching to prevent translations from being cached when they shouldn't be,",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Disabled route card caching to prevent translations from being cached when they shouldn't be,"
             },
             {
                 "release_changelog_id": 130,
                 "release_changelog_category_id": 3,
                 "ticket_id": 981,
-                "change": "Pull connections are now always rendered at the back instead of over all other",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Pull connections are now always rendered at the back instead of over all other"
             },
             {
                 "release_changelog_id": 130,
                 "release_changelog_category_id": 6,
                 "ticket_id": null,
-                "change": "Fixed certain Mistveil Stingers not importing correctly in Mists of Tirna Scithe (thanks Dratnos!)",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Fixed certain Mistveil Stingers not importing correctly in Mists of Tirna Scithe (thanks Dratnos!)"
             }
         ]
     }

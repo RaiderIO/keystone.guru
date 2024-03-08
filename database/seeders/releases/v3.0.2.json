@@ -16,56 +16,31 @@
                 "release_changelog_id": 47,
                 "release_changelog_category_id": 1,
                 "ticket_id": 301,
-                "change": "Added a 'Publish' and 'Unpublish' options from the route overview page's Actions.",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "Added a 'Publish' and 'Unpublish' options from the route overview page's Actions."
             },
             {
                 "release_changelog_id": 47,
                 "release_changelog_category_id": 5,
                 "ticket_id": 296,
-                "change": "Killzone was not synced properly in a pull when using collaborative route editing.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Killzone was not synced properly in a pull when using collaborative route editing."
             },
             {
                 "release_changelog_id": 47,
                 "release_changelog_category_id": 5,
                 "ticket_id": 298,
-                "change": "New accounts did not have their color for collaborative route editing set (was empty). This has been rectified.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "New accounts did not have their color for collaborative route editing set (was empty). This has been rectified."
             },
             {
                 "release_changelog_id": 47,
                 "release_changelog_category_id": 6,
                 "ticket_id": 295,
-                "change": "MDT importer now imports Awakened Obelisks and where you pulled them.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "MDT importer now imports Awakened Obelisks and where you pulled them."
             },
             {
                 "release_changelog_id": 47,
                 "release_changelog_category_id": 7,
                 "ticket_id": 301,
-                "change": "Added a 'Clone to team' and 'Clone to my profile' button.",
-                "category": {
-                    "id": 7,
-                    "key": "team_changes",
-                    "name": "releasechangelogcategories.team_changes"
-                }
+                "change": "Added a 'Clone to team' and 'Clone to my profile' button."
             }
         ]
     }

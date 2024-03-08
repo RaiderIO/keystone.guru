@@ -6,7 +6,6 @@ use App\Logging\StructuredLogging;
 
 class CombatLogSplitServiceLogging extends StructuredLogging implements CombatLogSplitServiceLoggingInterface
 {
-
     public function splitCombatLogOnChallengeModesStart(string $filePath): void
     {
         $this->start(__METHOD__, get_defined_vars());
@@ -71,6 +70,4 @@ class CombatLogSplitServiceLogging extends StructuredLogging implements CombatLo
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-
-
 }

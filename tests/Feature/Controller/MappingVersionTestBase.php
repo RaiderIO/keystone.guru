@@ -2,15 +2,14 @@
 
 namespace Feature\Controller;
 
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use Tests\TestCases\AjaxPublicTestCase;
 
-class MappingVersionTestBase extends AjaxPublicTestCase
+final class MappingVersionTestBase extends AjaxPublicTestCase
 {
     protected MappingVersion $mappingVersion;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,12 +20,10 @@ class MappingVersionTestBase extends AjaxPublicTestCase
         $this->mappingVersion->save();
     }
 
-
     protected function tearDown(): void
     {
         $this->mappingVersion->delete();
 
         parent::tearDown();
     }
-
 }

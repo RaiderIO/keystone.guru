@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Floor;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\Floor\FloorFormRequest;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
@@ -17,7 +16,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 
 class FloorController extends Controller
@@ -25,14 +23,9 @@ class FloorController extends Controller
     use ChangesMapping;
 
     /**
-     * @param FloorFormRequest $request
-     * @param Dungeon          $dungeon
-     * @param Floor|null       $floor
-     *
-     * @return Floor
      * @throws Exception
      */
-    public function store(FloorFormRequest $request, Dungeon $dungeon, Floor $floor = null)
+    public function store(FloorFormRequest $request, Dungeon $dungeon, ?Floor $floor = null): Floor
     {
         $beforeFloor = $floor === null ? null : clone $floor;
 
@@ -79,12 +72,9 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     *
      * @return Factory|View
      */
-    public function new(Request $request, Dungeon $dungeon)
+    public function new(Request $request, Dungeon $dungeon): View
     {
         return view('admin.floor.edit', [
             'dungeon' => $dungeon,
@@ -92,10 +82,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Dungeon $dungeon
-     * @param Floor   $floor
-     *
      * @return Application|Factory|RedirectResponse|View
      */
     public function edit(Request $request, Dungeon $dungeon, Floor $floor)
@@ -116,11 +102,6 @@ class FloorController extends Controller
     }
 
     /**
-     * @param Request                    $request
-     * @param MapContextServiceInterface $mapContextService
-     * @param Dungeon                    $dungeon
-     * @param Floor                      $floor
-     *
      * @return Application|Factory|View|RedirectResponse
      */
     public function mapping(
@@ -148,11 +129,8 @@ class FloorController extends Controller
     }
 
     /**
-     * @param FloorFormRequest $request
-     * @param Dungeon          $dungeon
-     * @param Floor            $floor
-     *
      * @return Factory|View
+     *
      * @throws Exception
      */
     public function update(FloorFormRequest $request, Dungeon $dungeon, Floor $floor)
@@ -168,13 +146,9 @@ class FloorController extends Controller
     }
 
     /**
-     * @param FloorFormRequest $request
-     * @param Dungeon          $dungeon
-     *
-     * @return RedirectResponse
      * @throws Exception
      */
-    public function savenew(FloorFormRequest $request, Dungeon $dungeon)
+    public function savenew(FloorFormRequest $request, Dungeon $dungeon): RedirectResponse
     {
         // Store it and show the edit page
         $floor = $this->store($request, $dungeon);

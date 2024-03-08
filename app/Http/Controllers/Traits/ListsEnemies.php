@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
@@ -16,24 +17,26 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcType;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Error;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 
 trait ListsEnemies
 {
-
     /**
      * Lists all enemies for a specific floor.
      *
-     * @param MappingVersion $mappingVersion
-     * @param bool $showMdtEnemies
-     * @return array|null
      * @throws InvalidArgumentException
      * @throws InvalidMDTDungeonException
      */
-    function listEnemies(MappingVersion $mappingVersion, bool $showMdtEnemies = false): ?array
-    {
+    public function listEnemies(
+        CacheServiceInterface       $cacheService,
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        bool                        $showMdtEnemies = false
+    ): ?array {
         /** @var Collection|Enemy[] $enemies */
         $enemies = Enemy::selectRaw('enemies.*')
             ->join('floors', 'enemies.floor_id', '=', 'floors.id')
@@ -52,29 +55,26 @@ trait ListsEnemies
 
         // Only if we should show MDT enemies
         $mdtEnemies = collect();
-        if ($showMdtEnemies) {
+        if ($showMdtEnemies && Conversion::hasMDTDungeonName($mappingVersion->dungeon)) {
             try {
-                $dungeon    = Dungeon::findOrFail($mappingVersion->dungeon_id);
-                $mdtEnemies = (new MDTDungeon($dungeon))->getClonesAsEnemies($this->mappingVersion, $dungeon->floors()->with(['dungeon'])->get());
+                $mdtEnemies = (new MDTDungeon($cacheService, $coordinatesService, $mappingVersion->dungeon))
+                    ->getClonesAsEnemies($this->mappingVersion, $mappingVersion->dungeon->floors()->with(['dungeon'])
+                        ->get());
 
-                $mdtEnemies = $mdtEnemies->filter(function (Enemy $mdtEnemy) {
-                    return !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]);
-                });
+                $mdtEnemies = $mdtEnemies->filter(static fn(Enemy $mdtEnemy) => !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]));
 
             } // Thrown when Lua hasn't been configured
-            catch (Error $ex) {
+            catch (Error) {
                 return null;
             }
         }
 
         // Post process enemies
         foreach ($enemies as $enemy) {
-            $enemy->npc = $npcs->first(function ($item) use ($enemy) {
-                return $enemy->npc_id === $item->id;
-            });
+            $enemy->npc = $npcs->first(static fn($item) => $enemy->npc_id === $item->id);
 
             if ($enemy->npc !== null) {
-                $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1);// $npcTypes->get(rand(0, 9));//
+                $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1); // $npcTypes->get(rand(0, 9));//
                 $enemy->npc->class = $npcClasses->get($enemy->npc->npc_class_id - 1);
             }
 

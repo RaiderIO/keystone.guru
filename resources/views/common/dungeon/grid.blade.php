@@ -1,22 +1,24 @@
 <?php
-/** @var $expansionService \App\Service\Expansion\ExpansionService */
-/** @var $expansion \App\Models\Expansion */
-/** @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection */
-/** @var $route string|null */
-$dungeons = $dungeons ?? $expansion->dungeons()->active()->get();
+/**
+ * @var $expansionService \App\Service\Expansion\ExpansionService
+ * @var $expansion \App\Models\Expansion
+ * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
+ * @var $route string|null
+ */
+$dungeons ??= $expansion->dungeons()->active()->get();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
-$names = $names ?? true;
-$links = $links ?? collect();
-$route = $route ?? null;
-$selectable = $selectable ?? false;
+$names      ??= true;
+$links      ??= collect();
+$route      ??= null;
+$selectable ??= false;
 
 // @formatter:off
-for( $i = 0; $i < $rowCount; $i++ ) { ?>
+for( $i = 0; $i < $rowCount; ++$i ) { ?>
 <div class="row no-gutters">
     <?php
-    for( $j = 0; $j < $colCount; $j++ ) {
+    for( $j = 0; $j < $colCount; ++$j ) {
         $index = $i * $colCount + $j;
         if( $dungeons->has($index) ){
             $dungeon = $dungeons->get($index);
@@ -48,7 +50,8 @@ for( $i = 0; $i < $rowCount; $i++ ) { ?>
         <?php
         }
     }
+
     // @formatter:on
-    ?>
+        ?>
 </div>
 <?php }

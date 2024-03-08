@@ -16,12 +16,7 @@
                 "release_changelog_id": 117,
                 "release_changelog_category_id": 4,
                 "ticket_id": null,
-                "change": "Moved the Tormented boss in Necrotic Wake to match the new location in-game.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Moved the Tormented boss in Necrotic Wake to match the new location in-game."
             }
         ]
     }

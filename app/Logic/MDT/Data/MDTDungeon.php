@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpUndefinedClassInspection */
+
 /**
  * Created by PhpStorm.
  * User: Wouter
@@ -7,7 +10,6 @@
  */
 
 namespace App\Logic\MDT\Data;
-
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
@@ -26,31 +28,19 @@ use Exception;
 use Illuminate\Support\Collection;
 use Lua;
 use LuaException;
-use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * @package App\Logic\MDT\Data
  * @author Wouter
+ *
  * @since 05/01/2019
  */
 class MDTDungeon
 {
-    private Dungeon $dungeon;
-
-    private CacheServiceInterface $cacheService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
-    function __construct(
-        CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService,
-        Dungeon                     $dungeon
+    public function __construct(
+        private readonly CacheServiceInterface       $cacheService,
+        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly Dungeon                     $dungeon
     ) {
-        $this->cacheService       = $cacheService;
-        $this->coordinatesService = $coordinatesService;
-        $this->dungeon            = $dungeon;
-
-
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
         }
@@ -58,6 +48,7 @@ class MDTDungeon
 
     /**
      * @return array{normal: int, teeming: int, teemingEnabled: bool}
+     *
      * @throws Exception
      */
     public function getDungeonTotalCount(): array
@@ -73,7 +64,6 @@ class MDTDungeon
     }
 
     /**
-     * @return int
      * @throws Exception
      */
     public function getMDTDungeonID(): int
@@ -85,7 +75,9 @@ class MDTDungeon
 
     /**
      * Get a list of NPCs
+     *
      * @return Collection|MDTNpc[]
+     *
      * @throws Exception
      */
     public function getMDTNPCs(): Collection
@@ -106,6 +98,7 @@ class MDTDungeon
 
     /**
      * @return Collection|MDTMapPOI[]
+     *
      * @throws Exception
      */
     public function getMDTMapPOIs(): Collection
@@ -126,7 +119,7 @@ class MDTDungeon
 
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
-     * @param MappingVersion   $mappingVersion
+     *
      * @param Floor|Collection $floors The floors that you want to get the clones for.
      * @return Collection|Enemy[]
      */
@@ -151,9 +144,7 @@ class MDTDungeon
             // A bit of a hack, but it works. If we have a floor with a facade in it, we only parse THAT floor
             // since that's the only floor that MDT will have. We will then put the enemies in the correct floors.
             // Pinky promise.
-            $facadeFloors = $floors->filter(function (Floor $floor) {
-                return $floor->facade;
-            });
+            $facadeFloors = $floors->filter(static fn(Floor $floor) => $floor->facade);
 
             if ($facadeFloors->isNotEmpty()) {
                 $floors = $facadeFloors;
@@ -173,7 +164,7 @@ class MDTDungeon
                             // Set some additional props that come in handy when converting to an enemy
                             $clone['mdtNpcIndex'] = $mdtNpc->getIndex();
                             // Group ID
-                            $clone['g'] = $clone['g'] ?? -1;
+                            $clone['g'] ??= -1;
 
                             $npcId = $mdtNpc->getId();
                             // Make sure array is set
@@ -269,7 +260,6 @@ class MDTDungeon
     }
 
     /**
-     * @return Lua
      * @throws Exception
      */
     private function getLua(): Lua

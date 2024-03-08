@@ -16,23 +16,13 @@
                 "release_changelog_id": 56,
                 "release_changelog_category_id": 6,
                 "ticket_id": 374,
-                "change": "Fixed an issue where importing strings with week = 1 (current affix week) would cause a 400 bad request.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Fixed an issue where importing strings with week = 1 (current affix week) would cause a 400 bad request."
             },
             {
                 "release_changelog_id": 56,
                 "release_changelog_category_id": 6,
                 "ticket_id": 371,
-                "change": "Importing strings will now correctly set the pull index.",
-                "category": {
-                    "id": 6,
-                    "key": "mdt_importer_changes",
-                    "name": "releasechangelogcategories.mdt_importer_changes"
-                }
+                "change": "Importing strings will now correctly set the pull index."
             }
         ]
     }

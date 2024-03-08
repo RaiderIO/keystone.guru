@@ -4,14 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFacadeEnabledColumnToDungeonsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->boolean('facade_enabled')->after('speedrun_enabled')->default(false);
@@ -22,13 +19,11 @@ class AddFacadeEnabledColumnToDungeonsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('dungeons', function (Blueprint $table) {
             $table->dropColumn('facade_enabled');
         });
     }
-}
+};

@@ -16,67 +16,37 @@
                 "release_changelog_id": 212,
                 "release_changelog_category_id": 3,
                 "ticket_id": 2047,
-                "change": "Added support for combined mappings (so there's only one floor instead of multiple). This feature is optional and can be disabled in the Map Settings.",
-                "category": {
-                    "id": 3,
-                    "key": "map_changes",
-                    "name": "releasechangelogcategories.map_changes"
-                }
+                "change": "Added support for combined mappings (so there's only one floor instead of multiple). This feature is optional and can be disabled in the Map Settings."
             },
             {
                 "release_changelog_id": 212,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2032,
-                "change": "Added Dawn of the Infinite: Galakrond's Fall dungeon mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Dawn of the Infinite: Galakrond's Fall dungeon mapping."
             },
             {
                 "release_changelog_id": 212,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2033,
-                "change": "Added Dawn of the Infinite: Murozond's Rise dungeon mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Dawn of the Infinite: Murozond's Rise dungeon mapping."
             },
             {
                 "release_changelog_id": 212,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2034,
-                "change": "Added The Everbloom dungeon mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added The Everbloom dungeon mapping."
             },
             {
                 "release_changelog_id": 212,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2035,
-                "change": "Added Throne of the Tides dungeon mapping.",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Added Throne of the Tides dungeon mapping."
             },
             {
                 "release_changelog_id": 212,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2065,
-                "change": "Floor switches may now optionally override their generic direction of the floor switch (the arrow on the door).",
-                "category": {
-                    "id": 4,
-                    "key": "mapping_changes",
-                    "name": "releasechangelogcategories.mapping_changes"
-                }
+                "change": "Floor switches may now optionally override their generic direction of the floor switch (the arrow on the door)."
             }
         ]
     }

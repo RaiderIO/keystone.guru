@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Permission;
-use App\Role;
-use App\User;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +14,6 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
-     *
-     * @return  void
      */
     public function run(): void
     {
@@ -81,7 +79,7 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                     'legal_agreed'    => 1,
                     'legal_agreed_ms' => -1,
                 ]);
-                $user->attachRole($role);
+                $user->addRole($role);
             }
 
         }
@@ -89,10 +87,8 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
 
     /**
      * Truncates all the laratrust tables and the users table
-     *
-     * @return    void
      */
-    public function truncateLaratrustTables()
+    public function truncateLaratrustTables(): void
     {
         Schema::disableForeignKeyConstraints();
         DB::table('permission_role')->truncate();

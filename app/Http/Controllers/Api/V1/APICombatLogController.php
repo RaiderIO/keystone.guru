@@ -13,14 +13,8 @@ class APICombatLogController extends Controller
 {
     use SavesStringToTempDisk;
 
-    /**
-     * @param CreateRouteRequest                      $request
-     * @param CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
-     *
-     * @return DungeonRouteResource
-     */
     public function createRoute(
-        CreateRouteRequest $request,
+        CreateRouteRequest                      $request,
         CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
     ): DungeonRouteResource {
         $validated = $request->validated();

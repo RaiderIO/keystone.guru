@@ -1,13 +1,13 @@
 <?php
 /** @var $allRegions \Illuminate\Support\Collection|\App\Models\GameServerRegion[] */
 
-$modal      = $modal ?? false;
+$modal      ??= false;
 $modalClass = $modal ? 'modal-' : '';
 $width      = $modal ? '12' : '6';
-$redirect   = $redirect ?? Request::get('redirect', Request::getPathInfo());
+$redirect   ??= Request::get('redirect', Request::getPathInfo());
 // May be set if the user failed his initial registration and needs another passthrough of redirect
 $redirect = old('redirect', $redirect);
-$errors   = $errors ?? collect();
+$errors   ??= collect();
 ?>
 
 @section('scripts')

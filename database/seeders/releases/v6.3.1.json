@@ -16,45 +16,25 @@
                 "release_changelog_id": 168,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1532,
-                "change": "Deleting a pull will now once again properly re-arrange the indices of your remaining pulls and not leave you with gaps or unordered pulls.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Deleting a pull will now once again properly re-arrange the indices of your remaining pulls and not leave you with gaps or unordered pulls."
             },
             {
                 "release_changelog_id": 168,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1628,
-                "change": "Color selection in your profile no longer has a messed up layout since the addition of the Evoker class (class colors are liinked there).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Color selection in your profile no longer has a messed up layout since the addition of the Evoker class (class colors are liinked there)."
             },
             {
                 "release_changelog_id": 168,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1629,
-                "change": "Newly registered users no longer have an unknown locale selected.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Newly registered users no longer have an unknown locale selected."
             },
             {
                 "release_changelog_id": 168,
                 "release_changelog_category_id": 5,
                 "ticket_id": 1631,
-                "change": "Adding new map icons to any route no longer has them showing up in other routes.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Adding new map icons to any route no longer has them showing up in other routes."
             }
         ]
     }

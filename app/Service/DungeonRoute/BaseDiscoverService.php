@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\DungeonRoute;
 
 use App\Models\Expansion;
@@ -13,22 +12,16 @@ use Illuminate\Support\Facades\App;
 
 abstract class BaseDiscoverService implements DiscoverServiceInterface
 {
-    /** @var CacheServiceInterface */
     protected CacheServiceInterface $cacheService;
 
-    /** @var ExpansionService */
     protected ExpansionService $expansionService;
 
-    /** @var int */
     protected int $limit = 10;
 
-    /** @var Closure|null */
     protected ?Closure $closure = null;
 
-    /** @var Season|null */
     protected ?Season $season = null;
 
-    /** @var Expansion|null */
     protected ?Expansion $expansion = null;
 
     /**
@@ -42,9 +35,8 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
 
     /**
      * Makes sure that we have an expansion set at the end of this function if it wasn't set before
-     * @return DiscoverServiceInterface
      */
-    function ensureExpansion(): DiscoverServiceInterface
+    public function ensureExpansion(): DiscoverServiceInterface
     {
         if ($this->expansion === null) {
             $this->expansion = $this->expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
@@ -54,9 +46,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function withLimit(int $limit): DiscoverServiceInterface
+    public function withLimit(int $limit): DiscoverServiceInterface
     {
         $this->limit = $limit;
 
@@ -64,9 +56,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function withBuilder(Closure $closure): DiscoverServiceInterface
+    public function withBuilder(Closure $closure): DiscoverServiceInterface
     {
         $this->closure = $closure;
 
@@ -74,9 +66,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function withSeason(?Season $season): DiscoverServiceInterface
+    public function withSeason(?Season $season): DiscoverServiceInterface
     {
         $this->season = $season;
 
@@ -84,9 +76,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function withExpansion(Expansion $expansion): DiscoverServiceInterface
+    public function withExpansion(Expansion $expansion): DiscoverServiceInterface
     {
         $this->expansion = $expansion;
 
@@ -94,9 +86,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    function withCache(bool $enabled): DiscoverServiceInterface
+    public function withCache(bool $enabled): DiscoverServiceInterface
     {
         $this->cacheService->setCacheEnabled($enabled);
 

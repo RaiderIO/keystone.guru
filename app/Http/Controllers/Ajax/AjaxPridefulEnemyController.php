@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -19,13 +20,9 @@ use Teapot\StatusCode\Http;
 class AjaxPridefulEnemyController extends Controller
 {
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Enemy $enemy
-     * @return PridefulEnemy
      * @throws Exception
      */
-    function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): PridefulEnemy
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -47,7 +44,9 @@ class AjaxPridefulEnemyController extends Controller
         }
 
         if (Auth::check()) {
-            broadcast(new ModelChangedEvent($dungeonRoute, Auth::getUser(), $pridefulEnemy));
+            /** @var User $user */
+            $user = Auth::getUser();
+            broadcast(new ModelChangedEvent($dungeonRoute, $user, $pridefulEnemy));
         }
 
         $dungeonRoute->touch();
@@ -56,13 +55,11 @@ class AjaxPridefulEnemyController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Enemy $enemy
      * @return Response|ResponseFactory
+     *
      * @throws AuthorizationException
      */
-    function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
         $this->authorize('edit', $dungeonRoute);
 
@@ -70,13 +67,15 @@ class AjaxPridefulEnemyController extends Controller
             /** @var PridefulEnemy $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
             if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
-                broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $pridefulEnemy));
+                /** @var User $user */
+                $user = Auth::getUser();
+                broadcast(new ModelDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
             }
 
             $dungeonRoute->touch();
 
             $result = response()->noContent();
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 

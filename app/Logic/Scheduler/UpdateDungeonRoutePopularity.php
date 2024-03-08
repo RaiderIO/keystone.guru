@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateDungeonRoutePopularity
 {
-    function __invoke()
+    public function __invoke(): void
     {
         Log::channel('scheduler')->debug('>> Updating dungeonroute popularity');
 

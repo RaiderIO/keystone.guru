@@ -3,18 +3,16 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Floor\Floor;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 use Tests\Feature\Fixtures\PolylineFixtures;
 
-class AjaxBrushlineControllerTest extends DungeonRouteTestBase
+final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
 {
-    /**
-     * @test
-     * @group Controller
-     *
-     * @return void
-     */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenNewValidBrushline_shouldReturnBrushline(): void
     {
         // Arrange
@@ -40,12 +38,8 @@ class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
     }
 
-    /**
-     * @test
-     * @group Controller
-     *
-     * @return void
-     */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenNewEmptyBrushline_shouldReturnFormValidationErrors(): void
     {
         // Arrange
@@ -60,22 +54,17 @@ class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         $response->assertSessionHasErrors(['floor_id', 'polyline']);
     }
 
-
-    /**
-     * @test
-     * @group Controller
-     *
-     * @return void
-     */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenBrushlineWithValidButNotMatchingFloorId_shouldReturnError(): void
     {
         // Arrange
-        $validIds  = $this->dungeonRoute->dungeon->floors->pluck('id');
+        $validIds = $this->dungeonRoute->dungeon->floors->pluck('id');
         $allFloors = Floor::all()->keyBy('id');
 
-        $randomInvalidId    = $allFloors->pluck('id')->diff($validIds)->random();
+        $randomInvalidId = $allFloors->pluck('id')->diff($validIds)->random();
         $randomInvalidFloor = $allFloors->get($randomInvalidId);
-        $polyline           = PolylineFixtures::createPolyline($randomInvalidFloor);
+        $polyline = PolylineFixtures::createPolyline($randomInvalidFloor);
 
         // Act
         $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
@@ -87,12 +76,8 @@ class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         $response->assertStatus(422);
     }
 
-    /**
-     * @test
-     * @group Controller
-     *
-     * @return void
-     */
+    #[Test]
+    #[Group('Controller')]
     public function store_givenBrushlineEmptyVertexCount_shouldReturnError(): void
     {
         // Arrange

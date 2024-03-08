@@ -1,7 +1,7 @@
 <?php
 /** @var int $routeKeyLevelFrom */
 /** @var int $routeKeyLevelTo */
-$dungeonSelectId      = 'dungeon_id_select_temporary';
+$dungeonSelectId = 'dungeon_id_select_temporary';
 ?>
 
 @include('common.general.inline', ['path' => 'common/forms/createtemporaryroute', 'options' => [
@@ -47,7 +47,7 @@ $dungeonSelectId      = 'dungeon_id_select_temporary';
         </div>
     </div>
 
-    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsdifficulty', ['id' => 'dungeon_speedrun_required_npc_mode_temporary', 'dungeonSelectId' => $dungeonSelectId])
+    @include('common.dungeonroute.create.dungeondifficultyselect', ['id' => 'dungeon_difficulty_select_temporary', 'dungeonSelectId' => $dungeonSelectId])
 
     <div class="col-lg-12">
         <div class="form-group">

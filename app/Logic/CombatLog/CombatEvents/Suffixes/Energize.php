@@ -14,40 +14,27 @@ class Energize extends Suffix
 
     private int $maxPower;
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;
     }
 
-    /**
-     * @return float
-     */
     public function getOverEnergize(): float
     {
         return $this->overEnergize;
     }
 
-    /**
-     * @return int
-     */
     public function getPowerType(): int
     {
         return $this->powerType;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxPower(): int
     {
         return $this->maxPower;
     }
 
     /**
-     * @param array $parameters
      * @return HasParameters|$this
      */
     public function setParameters(array $parameters): HasParameters
@@ -65,17 +52,11 @@ class Energize extends Suffix
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getOptionalParameterCount(): int
     {
         return 1;
     }
 
-    /**
-     * @return int
-     */
     public function getParameterCount(): int
     {
         return 4;

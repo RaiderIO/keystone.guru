@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
@@ -12,6 +11,7 @@ use App\Models\EnemyActiveAura;
 use App\Models\Mapping\MappingVersion;
 use App\Models\RaidMarker;
 use App\Models\Spell;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
@@ -26,22 +26,16 @@ use Throwable;
 
 class AjaxEnemyController extends AjaxMappingModelBaseController
 {
-    use PublicKeyDungeonRoute;
-
     /**
-     * @param APIEnemyFormRequest         $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MappingVersion              $mappingVersion
-     * @param Enemy|null                  $enemy
-     *
      * @return Enemy|Model
+     *
      * @throws Throwable
      */
     public function store(
         APIEnemyFormRequest         $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        Enemy                       $enemy = null
+        ?Enemy                      $enemy = null
     ): Enemy {
         $validated = $request->validated();
 
@@ -53,9 +47,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
-
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
             foreach ($activeAuras as $activeAura) {
@@ -70,9 +63,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     }
                 }
             }
-
             $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
-
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
                 $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
@@ -84,11 +75,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request      $request
-     * @param DungeonRoute $dungeonRoute
-     * @param Enemy        $enemy
-     *
      * @return array|ResponseFactory|Response
+     *
      * @throws AuthorizationException
      */
     public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
@@ -114,7 +102,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 $result = ['name' => ''];
             }
 
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
@@ -122,26 +110,29 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @param Request $request
-     * @param Enemy   $enemy
+     * @return Response
      *
-     * @return Response|ResponseFactory
      * @throws Throwable
      */
-    public function delete(Request $request, Enemy $enemy)
-    {
-        return DB::transaction(function () use ($request, $enemy) {
+    public function delete(
+        Request $request,
+        Enemy   $enemy
+    ): Response {
+        return DB::transaction(function () use ($enemy) {
             try {
                 if ($enemy->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments
                     $this->mappingChanged($enemy, null);
 
                     if (Auth::check()) {
-                        broadcast(new ModelDeletedEvent($enemy->floor->dungeon, Auth::getUser(), $enemy));
+                        /** @var User $user */
+                        $user = Auth::getUser();
+                        broadcast(new ModelDeletedEvent($enemy->floor->dungeon, $user, $enemy));
                     }
                 }
+
                 $result = response()->noContent();
-            } catch (Exception $ex) {
+            } catch (Exception) {
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
 

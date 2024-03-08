@@ -17,10 +17,9 @@ trait ListsKillzones
     /**
      * Lists all killzones of a dungeon route.
      *
-     * @param DungeonRoute|null $dungeonRoute
-     * @return Collection
+     * @return Collection<KillZone>
      */
-    function listKillzones(?DungeonRoute $dungeonRoute = null): Collection
+    public function listKillzones(?DungeonRoute $dungeonRoute = null): Collection
     {
         return KillZone::where('dungeon_route_id', $dungeonRoute->id)->get();
     }

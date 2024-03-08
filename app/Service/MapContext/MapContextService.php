@@ -17,31 +17,11 @@ use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 
 class MapContextService implements MapContextServiceInterface
 {
-    private CacheServiceInterface $cacheService;
-
-    private CoordinatesServiceInterface $coordinatesService;
-
-    private OverpulledEnemyServiceInterface $overpulledEnemyService;
-
-    /**
-     * @param CacheServiceInterface           $cacheService
-     * @param CoordinatesServiceInterface     $coordinatesService
-     * @param OverpulledEnemyServiceInterface $overpulledEnemyService
-     */
-    public function __construct(CacheServiceInterface $cacheService, CoordinatesServiceInterface $coordinatesService, OverpulledEnemyServiceInterface $overpulledEnemyService)
+    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly OverpulledEnemyServiceInterface $overpulledEnemyService)
     {
-        $this->cacheService           = $cacheService;
-        $this->coordinatesService     = $coordinatesService;
-        $this->overpulledEnemyService = $overpulledEnemyService;
     }
 
-    /**
-     * @param DungeonRoute $dungeonRoute
-     * @param Floor        $floor
-     * @param string|null  $mapFacadeStyle
-     * @return MapContextDungeonRoute
-     */
-    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, string $mapFacadeStyle = null): MapContextDungeonRoute
+    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, ?string $mapFacadeStyle = null): MapContextDungeonRoute
     {
         return new MapContextDungeonRoute(
             $this->cacheService,
@@ -52,12 +32,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    /**
-     * @param LiveSession $liveSession
-     * @param Floor       $floor
-     *
-     * @return MapContextLiveSession
-     */
     public function createMapContextLiveSession(LiveSession $liveSession, Floor $floor): MapContextLiveSession
     {
         return new MapContextLiveSession(
@@ -69,13 +43,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    /**
-     * @param Dungeon        $dungeon
-     * @param Floor          $floor
-     * @param MappingVersion $mappingVersion
-     *
-     * @return MapContextDungeonExplore
-     */
     public function createMapContextDungeonExplore(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion): MapContextDungeonExplore
     {
         return new MapContextDungeonExplore(
@@ -87,13 +54,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    /**
-     * @param Dungeon        $dungeon
-     * @param Floor          $floor
-     * @param MappingVersion $mappingVersion
-     *
-     * @return MapContextMappingVersionEdit
-     */
     public function createMapContextMappingVersionEdit(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion): MapContextMappingVersionEdit
     {
         return new MapContextMappingVersionEdit(
@@ -104,6 +64,4 @@ class MapContextService implements MapContextServiceInterface
             $mappingVersion
         );
     }
-
-
 }

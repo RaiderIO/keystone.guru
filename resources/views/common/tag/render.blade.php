@@ -1,6 +1,6 @@
 <?php
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $tags */
-$edit = $edit ?? false;
+$edit ??= false;
 ?>
 @foreach($tags as $tag)
     <span

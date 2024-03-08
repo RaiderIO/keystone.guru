@@ -16,56 +16,31 @@
                 "release_changelog_id": 229,
                 "release_changelog_category_id": 1,
                 "ticket_id": 2175,
-                "change": "The way deployments are performed has drastically changed. The only thing you should notice of this is that there will now be no downtime whenever an update is performed instead of the 5 mins it was before. Hurrah!",
-                "category": {
-                    "id": 1,
-                    "key": "general_changes",
-                    "name": "releasechangelogcategories.general_changes"
-                }
+                "change": "The way deployments are performed has drastically changed. The only thing you should notice of this is that there will now be no downtime whenever an update is performed instead of the 5 mins it was before. Hurrah!"
             },
             {
                 "release_changelog_id": 229,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2202,
-                "change": "Attempting to share routes for dungeons which aren't supported in MDT will no longer throw up an error message. All MDT functionality is hidden instead.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Attempting to share routes for dungeons which aren't supported in MDT will no longer throw up an error message. All MDT functionality is hidden instead."
             },
             {
                 "release_changelog_id": 229,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2168,
-                "change": "Light mode route cards are once again readable.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Light mode route cards are once again readable."
             },
             {
                 "release_changelog_id": 229,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2198,
-                "change": "Search page no longer has both a season _and_ an expansion selected at the same time, leading to only Dawn of the Infinite results being shown (since they are part of the current season and expansion).",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Search page no longer has both a season _and_ an expansion selected at the same time, leading to only Dawn of the Infinite results being shown (since they are part of the current season and expansion)."
             },
             {
                 "release_changelog_id": 229,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2177,
-                "change": "Improved the way paths\/drawn lines are handled - they will no longer error out in very rare circumstances.",
-                "category": {
-                    "id": 5,
-                    "key": "bugfixes",
-                    "name": "releasechangelogcategories.bugfixes"
-                }
+                "change": "Improved the way paths\/drawn lines are handled - they will no longer error out in very rare circumstances."
             }
         ]
     }
