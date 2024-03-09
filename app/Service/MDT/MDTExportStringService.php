@@ -30,9 +30,6 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /** @var int How far away do we create notes in MDT */
     private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
-    /** @var string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
-    private readonly string $encodedString;
-
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
 

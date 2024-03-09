@@ -320,14 +320,14 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                 <select>
                     @for($i = 1; $i <= 10; $i++)
                         <option
-                            value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                            value="{{ $i }}" {{ $currentRating !== null && (int) $currentRating === $i ? 'selected' : '' }}>
                             {{ $i }}
                         </option>
                     @endfor
                 </select>
             </div>
 
-            @if($currentRating === false)
+            @if($currentRating === null)
                 <div class="form-group">
                     <p>
                         {{ __('views/common.maps.controls.header.rate_this_route_explanation') }}

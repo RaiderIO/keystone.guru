@@ -145,7 +145,7 @@ class PatreonService implements PatreonServiceInterface
             // If the user has no benefits (maybe user unsubbed or didn't pay up)
             if ($newBenefits->isEmpty()) {
                 // Remove all their tiers
-                $user->patreonUserLink->patreonuserbenefits()->delete();
+                $user->patreonUserLink->patreonUserBenefits()->delete();
                 $this->log->applyPaidBenefitsForMemberRemovedAllBenefits();
             } else {
                 // Update the patreon benefits to their new status

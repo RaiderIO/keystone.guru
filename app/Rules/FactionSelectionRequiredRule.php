@@ -14,10 +14,8 @@ class FactionSelectionRequiredRule implements ValidationRule
 {
     /**
      * The request control provider instance.
-     *
-     * @var Request
      */
-    public $request;
+    public ParameterBag $request;
 
     /**
      * Create a new rule instance.

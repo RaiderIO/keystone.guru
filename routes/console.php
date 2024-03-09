@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 
 /*
@@ -14,5 +15,6 @@ use Illuminate\Foundation\Inspiring;
 */
 
 Artisan::command('inspire', function () {
+    /** @var $this Command */
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');

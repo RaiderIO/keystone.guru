@@ -84,7 +84,7 @@ class UserController extends Controller
         try {
             if (isset($user->patreonUserLink)) {
                 // Remove old patreon benefits
-                $user->patreonUserLink->patreonuserbenefits()->delete();
+                $user->patreonUserLink->patreonUserBenefits()->delete();
             } else {
                 // Create a dummy patreon link
                 $patreonUserLink = PatreonUserLink::create([
@@ -126,7 +126,7 @@ class UserController extends Controller
 
         if (isset($user->patreonUserLink)) {
             // Remove old patreon benefits
-            $user->patreonUserLink->patreonuserbenefits()->delete();
+            $user->patreonUserLink->patreonUserBenefits()->delete();
 
             foreach ($newPatreonBenefitIds as $newPatreonBenefitId) {
                 PatreonUserBenefit::create([

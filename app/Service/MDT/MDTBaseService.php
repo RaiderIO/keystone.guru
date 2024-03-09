@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUndefinedClassInspection */
-
 namespace App\Service\MDT;
 
 use Illuminate\Support\Facades\Artisan;
