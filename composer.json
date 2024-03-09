@@ -97,6 +97,7 @@
         "deployer/deployer": "^7.3",
         "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",
+        "larastan/larastan": "^2.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",

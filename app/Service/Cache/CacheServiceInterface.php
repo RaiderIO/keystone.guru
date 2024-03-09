@@ -17,4 +17,6 @@ interface CacheServiceInterface
     public function has(string $key): bool;
 
     public function dropCaches(): void;
+
+    public function clearIdleKeys(?int $seconds = null): int;
 }

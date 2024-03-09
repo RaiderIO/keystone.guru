@@ -4,15 +4,25 @@ namespace App\Service\Cache;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
     private bool $cacheEnabled = true;
+
+    public function __construct(private readonly CacheServiceLoggingInterface $log)
+    {
+
+    }
+
 
     private function getTtl(string $key): ?DateInterval
     {
@@ -137,5 +147,67 @@ class CacheService implements CacheServiceInterface
         foreach ($dungeonRouteIds as $dungeonRouteId) {
             DungeonRoute::dropCaches($dungeonRouteId);
         }
+    }
+
+    public function clearIdleKeys(?int $seconds = null): int
+    {
+        // Only keys starting with this prefix may be cleaned up by this task, ex.
+        // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
+        // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
+        $keyWhitelistRegex = [
+            sprintf('/%s:.{40}(?::.{40})*/', config('database.redis.options.prefix')),
+        ];
+
+        try {
+            $this->log->clearIdleKeysStart($seconds);
+            $i                = 0;
+            $nextKey          = 0;
+            $deletedKeysCount = 0;
+
+            do {
+                $result = Redis::command('SCAN', [$nextKey]);
+
+                $nextKey = (int)$result[0];
+
+                $toDelete = [];
+                foreach ($result[1] as $redisKey) {
+//                $this->info($redisKey);
+                    $output = [];
+                    foreach ($keyWhitelistRegex as $regex) {
+                        if (preg_match($regex, (string)$redisKey, $output) !== false) {
+                            $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
+//                        $this->info(sprintf('- Match - idletime: %d', $idleTime));
+                            if ($idleTime > $seconds) {
+                                $toDelete[] = $redisKey;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                if (!empty($toDelete)) {
+                    $toDeleteCount = count($toDelete);
+
+                    // https://redis.io/commands/del/
+
+                    $nrOfDeletedKeys  = Redis::command('DEL', $toDelete);
+                    $deletedKeysCount += $nrOfDeletedKeys;
+                    if ($nrOfDeletedKeys !== $toDeleteCount) {
+                        $this->log->clearIdleKeysFailedToDeleteAllKeys($nrOfDeletedKeys, $toDeleteCount);
+                    }
+                }
+
+                $i++;
+                if ($i % 1000 === 0) {
+                    $this->log->clearIdleKeysProgress($i, $deletedKeysCount);
+                    $deletedKeysCount = 0;
+                }
+            } while ($nextKey > 0);
+        } finally {
+            $this->log->clearIdleKeysEnd();
+        }
+
+        return $deletedKeysCount;
     }
 }
