@@ -155,7 +155,7 @@ class CacheService implements CacheServiceInterface
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
         // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
         $keyWhitelistRegex = [
-            sprintf('/%s_database-%s:.{40}(?::.{40})*/', Str::slug(config('app.name')), config('cache.prefix')),
+            sprintf('/%s:.{40}(?::.{40})*/', config('database.redis.options.prefix')),
         ];
 
         try {
