@@ -21,8 +21,6 @@ class FactionSelectionRequiredRule implements ValidationRule
 
     /**
      * Create a new rule instance.
-     *
-     * @return void
      */
     public function __construct(ParameterBag $request)
     {

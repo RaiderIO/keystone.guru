@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Psr\Log\LogLevel;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
@@ -25,10 +27,8 @@ class LoginController extends Controller
 
     /**
      * Where to redirect users after login.
-     *
-     * @var string
      */
-    protected $redirectTo = '/';
+    protected string $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -39,6 +39,22 @@ class LoginController extends Controller
     {
         $this->middleware('guest', ['except' => 'logout']);
     }
+
+    protected function attemptLogin(Request $request): bool
+    {
+        try {
+            return $this->guard()->attempt(
+                $this->credentials($request), $request->boolean('remember')
+            );
+        } catch (RuntimeException $exception) {
+            $all = $request->all();
+            unset($all['password']);
+            logger()->log(LogLevel::ERROR, $exception->getMessage(), $all);
+
+            throw $exception;
+        }
+    }
+
 
     /**
      * The user has been authenticated.

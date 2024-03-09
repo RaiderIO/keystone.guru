@@ -29,8 +29,6 @@ class CreateGithubRelease extends GithubReleaseCommand
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {

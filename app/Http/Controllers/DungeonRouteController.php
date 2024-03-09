@@ -457,6 +457,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @param mixed $dungeonroute
      * @return Application|Factory|View
      *
      * @throws AuthorizationException
@@ -464,7 +465,7 @@ class DungeonRouteController extends Controller
     public function embed(
         EmbedFormRequest           $request,
         MapContextServiceInterface $mapContextService,
-        DungeonRoute               $dungeonroute,
+        mixed                      $dungeonroute,
         string                     $floorIndex = '1')
     {
         if (!is_numeric($floorIndex)) {

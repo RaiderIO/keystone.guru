@@ -13,8 +13,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Random\RandomException;
 use Session;
 
 class RegisterController extends Controller
@@ -68,6 +70,7 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
+     * @throws RandomException
      */
     protected function create(array $data): User
     {
@@ -81,7 +84,7 @@ class RegisterController extends Controller
             'email'                 => $data['email'],
             'echo_color'            => randomHexColor(),
             'game_server_region_id' => $data['region'] ?? GameServerRegion::DEFAULT_REGION,
-            'password'              => bcrypt($data['password']),
+            'password'              => Hash::make($data['password']),
             'legal_agreed'          => $data['legal_agreed'],
             'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);

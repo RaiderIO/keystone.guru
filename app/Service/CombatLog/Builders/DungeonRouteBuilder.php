@@ -3,6 +3,7 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
+use App\Jobs\RefreshEnemyForces;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -18,6 +19,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -96,7 +98,7 @@ abstract class DungeonRouteBuilder
     /**
      * @return void
      */
-    protected function buildFinished()
+    protected function buildFinished(): void
     {
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
@@ -392,7 +394,7 @@ abstract class DungeonRouteBuilder
 
         if ($closestEnemy->getEnemy() === null) {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                $closestEnemy?->getEnemy()->id,
+                null,
                 $closestEnemy->getDistanceBetweenEnemies(),
                 $closestEnemy->getDistanceBetweenLastPullAndEnemy()
             );
