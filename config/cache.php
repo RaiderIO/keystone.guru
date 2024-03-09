@@ -110,7 +110,5 @@ return [
     | that reason, you may prefix every cache key to avoid collisions.
     |
     */
-    'prefix' => env('CACHE_PREFIX', Str::slug(
-        sprintf('%s-%s-cache', env('APP_NAME', 'laravel'), config('app.type'))
-    )),
+    'prefix' => env('CACHE_PREFIX', ''),
 ];

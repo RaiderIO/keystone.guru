@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
+use App\Service\Cache\Logging\CacheServiceLogging;
+use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLogging;
@@ -48,6 +50,9 @@ class LoggingServiceProvider extends ServiceProvider
 
         // AffixGroup
         $this->app->bind(AffixGroupEaseTierServiceLoggingInterface::class, AffixGroupEaseTierServiceLogging::class);
+
+        // Cache
+        $this->app->bind(CacheServiceLoggingInterface::class, CacheServiceLogging::class);
 
         // Combat log
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
