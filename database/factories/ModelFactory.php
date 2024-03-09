@@ -15,6 +15,7 @@
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
@@ -23,7 +24,7 @@ $factory->define(User::class, function (Faker\Generator $faker) {
     return [
         'name'           => $faker->name(),
         'email'          => $faker->unique()->safeEmail(),
-        'password'       => $password ?: $password = bcrypt('secret'),
+        'password'       => $password ?: $password = Hash::make('secret'),
         'remember_token' => Str::random(10),
     ];
 });

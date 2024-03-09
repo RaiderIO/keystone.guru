@@ -11,13 +11,15 @@
 @section('content')
     @include('common.general.messages')
 
-    @if( Auth::user()->dungeonRoutes()->count() === 0)
-        <div class="row form-group text-center">
-            <div class="col">
-                {{ __('views/profile.overview.welcome_text') }}
+    @auth
+        @if( Auth::user()->dungeonRoutes()->count() === 0)
+            <div class="row form-group text-center">
+                <div class="col">
+                    {{ __('views/profile.overview.welcome_text') }}
+                </div>
             </div>
-        </div>
-    @endif
+        @endif
+    @endauth
 
     <div class="row form-group mb-4">
         <div class="col text-center">

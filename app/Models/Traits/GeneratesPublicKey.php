@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Random\RandomException;
 
 /**
  * Trait GeneratesPublicKey
@@ -12,7 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 trait GeneratesPublicKey
 {
     /**
-     * @return string Generates a random public key that is displayed to the user in the URL.
+     * Generates a random public key that is displayed to the user in the URL.
+     * @throws RandomException
      */
     public static function generateRandomPublicKey(int $length = 7, string $column = 'public_key', bool $checkUsages = true): string
     {
