@@ -12,6 +12,12 @@ class CacheServiceLogging extends StructuredLogging implements CacheServiceLoggi
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function clearIdleKeysRegexError(string $regex, string $redisKey): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+
     public function clearIdleKeysFailedToDeleteAllKeys(int $amount, int $total): void
     {
         $this->error(__METHOD__, get_defined_vars());
