@@ -14,6 +14,8 @@ use Illuminate\Console\Command;
  */
 class LocalizationSync extends Command
 {
+    private const LANG_HODOR = 'ho-HO';
+
     /**
      * The name and signature of the console command.
      *
@@ -44,7 +46,7 @@ class LocalizationSync extends Command
         $baseLang   = $this->argument('base');
         $targetLang = $this->argument('target');
 
-        $langDir   = resource_path() . DIRECTORY_SEPARATOR . 'lang';
+        $langDir   = base_path() . DIRECTORY_SEPARATOR . 'lang';
         $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
         $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
 
@@ -94,7 +96,7 @@ class LocalizationSync extends Command
                 continue;
             }
 
-            $shortTargetPath = str_replace(resource_path(), '', $targetPath);
+            $shortTargetPath = str_replace(base_path(), '', $targetPath);
             if ($target === false || $target != $result) {
                 file_put_contents($targetPath, $result);
 
@@ -175,7 +177,11 @@ class LocalizationSync extends Command
                         $segment = $match[1] . $lemmas[$key] . $match[1];
                     } // mark value as not specified
                     else {
-                        $segment = $match[1] . '@todo ' . $targetLang . ': ' . $key . $match[1];
+                        if ($targetLang === self::LANG_HODOR) {
+                            $segment = $match[1] . 'hodor' . $match[1];
+                        } else {
+                            $segment = $match[1] . '@todo ' . $targetLang . ': ' . $key . $match[1];
+                        }
                     }
 
                     array_pop($tree);
