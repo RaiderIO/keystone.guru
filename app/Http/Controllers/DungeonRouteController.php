@@ -33,12 +33,12 @@ use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
-    public function new(): View
+    public function create(): View
     {
         return view('dungeonroute.new');
     }
 
-    public function newtemporary(): View
+    public function createTemporary(): View
     {
         return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all()]);
     }
