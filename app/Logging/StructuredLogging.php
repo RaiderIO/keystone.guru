@@ -6,6 +6,7 @@ use App\Logic\Utils\Stopwatch;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
 use Illuminate\Log\LogManager;
+use Illuminate\Support\Str;
 use Monolog\Level;
 
 class StructuredLogging implements StructuredLoggingInterface
@@ -55,7 +56,8 @@ class StructuredLogging implements StructuredLoggingInterface
 
     protected function start(string $functionName, array $context = []): void
     {
-        $targetKey = str_replace('start', '', strtolower($functionName));
+        $targetKey = Str::replaceEnd('start', '', strtolower($functionName));
+
         if (isset($this->groupedContexts[$targetKey])) {
             $this->log(
                 Level::Error,
@@ -72,7 +74,7 @@ class StructuredLogging implements StructuredLoggingInterface
 
     protected function end(string $functionName, array $context = []): void
     {
-        $targetKey = str_replace('end', '', strtolower($functionName));
+        $targetKey = Str::replaceEnd('end', '', strtolower($functionName));
 
         $this->log(Level::Info, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
 

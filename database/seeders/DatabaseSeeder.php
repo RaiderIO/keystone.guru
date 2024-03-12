@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
