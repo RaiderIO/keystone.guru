@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUndefinedClassInspection */
-
 namespace App\Service\MDT;
 
 use Illuminate\Support\Facades\Artisan;
@@ -14,7 +12,7 @@ class MDTBaseService
      */
     protected function getLua(): Lua
     {
-        $lua = new Lua();
+        $lua = new Lua(null);
 
         // Load libraries (yeah can do this with ->library function as well)
         $lua->eval(file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')));

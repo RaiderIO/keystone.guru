@@ -8,12 +8,15 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Random\RandomException;
 
 class LaratrustSeeder extends Seeder implements TableSeederInterface
 {
     /**
      * Run the database seeds.
+     * @throws RandomException
      */
     public function run(): void
     {
@@ -75,7 +78,7 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                     'public_key'      => User::generateRandomPublicKey(),
                     'echo_color'      => randomHexColor(),
                     'email'           => $key . '@app.com',
-                    'password'        => bcrypt('password'),
+                    'password'        => Hash::make('password'),
                     'legal_agreed'    => 1,
                     'legal_agreed_ms' => -1,
                 ]);

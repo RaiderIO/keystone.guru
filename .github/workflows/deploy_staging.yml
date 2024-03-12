@@ -26,4 +26,4 @@ jobs:
           ssh-private-key: ${{ secrets.DEPLOYER_SSH_PRIVATE_KEY }}
           ssh-known-hosts: ${{ secrets.DEPLOYER_SSH_KNOWN_HOSTS }}
       - name: Deploy
-        run: dep deploy staging.keystone.guru --branch=development -vvv
+        run: dep deploy staging.keystone.guru -vvv

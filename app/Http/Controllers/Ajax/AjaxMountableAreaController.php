@@ -6,6 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\MountableArea\MountableAreaFormRequest;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -51,7 +52,9 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                     $this->mappingChanged($mountableArea, null);
 
                     if (Auth::check()) {
-                        broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, Auth::getUser(), $mountableArea));
+                        /** @var User $user */
+                        $user = Auth::user();
+                        broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
                     }
                 }
 

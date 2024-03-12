@@ -54,7 +54,7 @@ trait ChecksForDuplicates
     /**
      * Abort because a duplicate has been found.
      */
-    public function abortDuplicate()
+    public function abortDuplicate(): void
     {
         abort(Http::BAD_REQUEST, 'This object already exists. Please refresh the page.');
     }
@@ -62,7 +62,7 @@ trait ChecksForDuplicates
     /**
      * Checks a list of vertices for duplicates.
      */
-    public function checkForDuplicateVertices($className, $verticesArray)
+    public function checkForDuplicateVertices($className, $verticesArray): void
     {
         // Store them
         $failures = 0;

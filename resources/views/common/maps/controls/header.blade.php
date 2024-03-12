@@ -315,19 +315,21 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                 <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
             <div class="form-group">
                 <h5>
-                    {{ __('views/common.maps.controls.header.rate_this_route') }}
+                    <label for="rating_select">
+                        {{ __('views/common.maps.controls.header.rate_this_route') }}
+                    </label>
                 </h5>
-                <select>
+                <select id="rating_select" name="rating_select">
                     @for($i = 1; $i <= 10; $i++)
                         <option
-                            value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                            value="{{ $i }}" {{ $currentRating !== null && (int) $currentRating === $i ? 'selected' : '' }}>
                             {{ $i }}
                         </option>
                     @endfor
                 </select>
             </div>
 
-            @if($currentRating === false)
+            @if($currentRating === null)
                 <div class="form-group">
                     <p>
                         {{ __('views/common.maps.controls.header.rate_this_route_explanation') }}

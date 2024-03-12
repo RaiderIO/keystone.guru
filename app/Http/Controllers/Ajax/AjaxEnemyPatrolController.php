@@ -8,6 +8,7 @@ use App\Http\Requests\EnemyPatrol\EnemyPatrolFormRequest;
 use App\Models\EnemyPatrol;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -68,14 +69,16 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return Response
      */
-    public function delete(Request $request, EnemyPatrol $enemyPatrol)
+    public function delete(Request $request, MappingVersion $mappingVersion, EnemyPatrol $enemyPatrol): Response
     {
         try {
             if ($enemyPatrol->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemyPatrol->floor->dungeon, Auth::getUser(), $enemyPatrol));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments

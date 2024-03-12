@@ -32,7 +32,7 @@ $dungeonSelectId = 'dungeon_id_select';
 
     @include('common.team.select', ['required' => false, 'selectedId' => $dungeonroute?->team_id])
 
-    @include('common.dungeonroute.create.dungeonspeedrunrequirednpcsdifficulty', ['dungeon_select_id' => $dungeonSelectId, 'dungeonroute' => $dungeonroute])
+    @include('common.dungeonroute.create.dungeondifficultyselect', ['dungeon_select_id' => $dungeonSelectId, 'dungeonroute' => $dungeonroute])
 
 
     <div class="form-group">

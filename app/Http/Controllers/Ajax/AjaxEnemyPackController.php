@@ -6,6 +6,7 @@ use App\Events\Model\ModelDeletedEvent;
 use App\Http\Requests\EnemyPack\EnemyPackFormRequest;
 use App\Models\EnemyPack;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +33,7 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
      * @throws Exception
      * @throws Throwable
      */
-    public function delete(Request $request, EnemyPack $enemyPack): Response
+    public function delete(Request $request, MappingVersion $mappingVersion, EnemyPack $enemyPack): Response
     {
         return DB::transaction(function () use ($enemyPack) {
             if ($enemyPack->delete()) {
@@ -40,7 +41,9 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
                 $this->mappingChanged($enemyPack, null);
 
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, Auth::getUser(), $enemyPack));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, $user, $enemyPack));
                 }
 
                 $result = response()->noContent();

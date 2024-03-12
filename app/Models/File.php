@@ -34,7 +34,7 @@ class File extends Model
      *
      * @throws Exception
      */
-    public function delete()
+    public function delete(): void
     {
         if (parent::delete()) {
             $this->deleteFromDisk();

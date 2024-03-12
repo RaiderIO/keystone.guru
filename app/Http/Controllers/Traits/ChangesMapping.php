@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 trait ChangesMapping
 {
     /**
-     * @param Model|MappingModelInterface|null $beforeModel
-     * @param Model|MappingModelInterface|null $afterModel
+     * @param MappingModelInterface|null $beforeModel
+     * @param MappingModelInterface|null $afterModel
      *
      * @throws Exception
      */

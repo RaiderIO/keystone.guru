@@ -181,29 +181,27 @@ class ProfileController extends Controller
         $newPassword        = $request->get('new_password');
         $newPasswordConfirm = $request->get('new_password-confirm');
 
+        /** @var User $user */
         $user = Auth::getUser();
 
         $error = [];
         // Check if the entered PW was correct
-        if (Auth::attempt(['name' => $user->name, 'password' => $currentPw])) {
-            // New passwords must match
-            if ($newPassword === $newPasswordConfirm) {
-                // But not the same password as he/she had
-                if ($currentPw !== $newPassword) {
-                    $user->password = Hash::make($newPassword);
-                    $user->save();
-                    Session::flash('status', __('controller.profile.flash.password_changed'));
-
-                    // @todo Send an e-mail letting the user know the password has been changed
-                } else {
-                    $error = ['passwords_match' => __('controller.profile.flash.new_password_equals_old_password')];
-                }
-            } else {
-                $error = ['passwords_no_match' => __('controller.profile.flash.new_passwords_do_not_match')];
-            }
-        } else {
+        if (!Auth::attempt(['name' => $user->name, 'password' => $currentPw])) {
             $error = ['passwords_incorrect' => __('controller.profile.flash.current_password_is_incorrect')];
+        } // New passwords must match
+        else if ($newPassword !== $newPasswordConfirm) {
+            $error = ['passwords_no_match' => __('controller.profile.flash.new_passwords_do_not_match')];
+        } // But not the same password as they had
+        else if ($currentPw === $newPassword) {
+            $error = ['passwords_match' => __('controller.profile.flash.new_password_equals_old_password')];
+        } else {
+            $user->update([
+                'password' => Hash::make($newPassword),
+            ]);
+            Session::flash('status', __('controller.profile.flash.password_changed'));
         }
+
+        // @todo Send an e-mail letting the user know the password has been changed
 
         return view('profile.edit')->withErrors($error);
     }
@@ -247,12 +245,14 @@ class ProfileController extends Controller
      */
     public function delete(Request $request): RedirectResponse
     {
-        if (Auth::getUser()->hasRole('admin')) {
+        /** @var User $user */
+        $user = Auth::getUser();
+        if ($user->hasRole('admin')) {
             throw new Exception(__('controller.profile.flash.admins_cannot_delete_themselves'));
         }
 
         try {
-            User::findOrFail(Auth::id())->delete();
+            User::findOrFail($user->id)->delete();
             Auth::logout();
             Session::flash('status', __('controller.profile.flash.account_deleted_successfully'));
         } catch (Exception) {

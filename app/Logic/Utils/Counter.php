@@ -17,7 +17,7 @@ class Counter
     /**
      * Increase a new or existing counter.
      */
-    public static function increase(string $counterName)
+    public static function increase(string $counterName): void
     {
         // Resuming a paused timer
         if (isset(self::$counters[$counterName])) {

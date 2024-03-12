@@ -37,7 +37,7 @@ class AjaxTagController extends Controller
     /**
      * @return Tag[]|Collection
      */
-    public function list(Request $request, TagCategory $category)
+    public function get(Request $request, TagCategory $category)
     {
         return Tag::where('tag_category_id', $category->id)->where('user_id', Auth::id())->get();
     }

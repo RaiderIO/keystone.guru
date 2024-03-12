@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
-use Illuminate\Database\Eloquent\Relations\belongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id

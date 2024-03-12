@@ -14,6 +14,7 @@ use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -109,7 +110,9 @@ class AjaxKillZoneController extends Controller
 
             if (Auth::check()) {
                 // Something's updated; broadcast it
-                broadcast(new ModelChangedEvent($dungeonroute, Auth::user(), $killZone));
+                /** @var User $user */
+                $user = Auth::user();
+                broadcast(new ModelChangedEvent($dungeonroute, $user, $killZone));
             }
         } else {
             throw new Exception('Unable to save kill zone!');
@@ -235,7 +238,9 @@ class AjaxKillZoneController extends Controller
 
             if ($killZone->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $killZone));
+                    /** @var User $user */
+                    $user = Auth::user();
+                    broadcast(new ModelDeletedEvent($dungeonRoute, $user, $killZone));
                 }
 
                 $dungeonRoute->load('killZones');
@@ -275,12 +280,14 @@ class AjaxKillZoneController extends Controller
                 $dungeonRoute->pridefulEnemies()->delete();
 
                 if (Auth::check()) {
+                    /** @var User $user */
+                    $user = Auth::user();
                     foreach ($killZones as $killZone) {
-                        broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $killZone));
+                        broadcast(new ModelDeletedEvent($dungeonRoute, $user, $killZone));
                     }
 
                     foreach ($pridefulEnemies as $pridefulEnemy) {
-                        broadcast(new ModelDeletedEvent($dungeonRoute, Auth::user(), $pridefulEnemy));
+                        broadcast(new ModelDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
                     }
                 }
 

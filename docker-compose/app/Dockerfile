@@ -118,9 +118,14 @@ COPY var/ /var/
 
 COPY root/ /root/
 
+COPY .env /tmp/.env
+
 # Import .env file and apply it to the current environment
-RUN export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst) && \
-    envsubst < /root/.config/composer/auth.json
+RUN cd /tmp && \
+    export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst) && \
+    envsubst < /root/.config/composer/auth.json > /root/.config/composer/auth.json.tmp && \
+    mv /root/.config/composer/auth.json.tmp /root/.config/composer/auth.json &&  \
+    rm /tmp/.env
 
 # Set working directory
 WORKDIR /var/www

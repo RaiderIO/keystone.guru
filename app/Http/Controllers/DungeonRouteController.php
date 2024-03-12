@@ -33,12 +33,12 @@ use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
-    public function new(): View
+    public function create(): View
     {
         return view('dungeonroute.new');
     }
 
-    public function newtemporary(): View
+    public function createTemporary(): View
     {
         return view('dungeonroute.newtemporary', ['dungeons' => Dungeon::all()]);
     }
@@ -457,6 +457,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @param mixed $dungeonroute
      * @return Application|Factory|View
      *
      * @throws AuthorizationException
@@ -464,7 +465,7 @@ class DungeonRouteController extends Controller
     public function embed(
         EmbedFormRequest           $request,
         MapContextServiceInterface $mapContextService,
-        DungeonRoute               $dungeonroute,
+        mixed                      $dungeonroute,
         string                     $floorIndex = '1')
     {
         if (!is_numeric($floorIndex)) {

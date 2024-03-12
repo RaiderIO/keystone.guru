@@ -39,7 +39,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
-    public function report(Throwable $e)
+    public function report(Throwable $e): void
     {
         parent::report($e);
     }

@@ -25,12 +25,12 @@ class DungeonRouteCorrection
         return $this->obsoleteEnemies;
     }
 
-    public function addObsoleteEnemy(int $enemyId)
+    public function addObsoleteEnemy(int $enemyId): void
     {
         $this->obsoleteEnemies->push($enemyId);
     }
 
-    public function addObsoleteEnemies(Collection $enemies)
+    public function addObsoleteEnemies(Collection $enemies): void
     {
         $this->obsoleteEnemies = $this->obsoleteEnemies->merge($enemies);
     }

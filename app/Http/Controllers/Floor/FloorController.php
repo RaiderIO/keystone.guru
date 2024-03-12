@@ -74,7 +74,7 @@ class FloorController extends Controller
     /**
      * @return Factory|View
      */
-    public function new(Request $request, Dungeon $dungeon): View
+    public function create(Request $request, Dungeon $dungeon): View
     {
         return view('admin.floor.edit', [
             'dungeon' => $dungeon,

@@ -53,7 +53,7 @@ trait CompressesImages
      *
      * @throws Exception
      */
-    public function compressPng(string $source, string $target)
+    public function compressPng(string $source, string $target): void
     {
         // this will ensure that $pathToPngFile points to compressed file
         // and avoid re-compressing if it's been done already

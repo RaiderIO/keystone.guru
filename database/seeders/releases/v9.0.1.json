@@ -1,0 +1,23 @@
+{
+    "id": 225,
+    "release_changelog_id": 232,
+    "version": "v9.0.1",
+    "title": "Hotfixes for v9.0 release",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-03-09T20:38:31+00:00",
+    "updated_at": "2024-03-09T20:38:31+00:00",
+    "changelog": {
+        "id": 232,
+        "release_id": 225,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 232,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2250,
+                "change": "[Hotfixed] Fixed embedded routes not working. Fixed auto-route generator crashing. Fixed API crashing. Fixed MDT exports not working (what didn't I break?! These were fixed within an hour of release though, but I'll try to do better with some automated tests.) Ongoing: intermittent login issues."
+            }
+        ]
+    }
+}

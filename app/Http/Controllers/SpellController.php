@@ -75,7 +75,7 @@ class SpellController extends Controller
      *
      * @return Factory|View
      */
-    public function new(): View
+    public function create(): View
     {
         return view('admin.spell.edit', [
             'dispelTypes' => Spell::ALL_DISPEL_TYPES,

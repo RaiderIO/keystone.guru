@@ -19,8 +19,12 @@ L.Draw.MapIcon = L.Draw.Marker.extend({
  * @property {Number} seasonal_index
  */
 class MapIcon extends Icon {
-    constructor(map, layer) {
-        super(map, layer, {name: 'map_icon', route_suffix: 'mapicon', has_route_model_binding: true, ignore_mapping_version_suffix: true});
+    constructor(map, layer, options) {
+        super(
+            map,
+            layer,
+            $.extend({}, {name: 'map_icon', route_suffix: 'mapicon', has_route_model_binding: true, ignore_mapping_version_suffix: true}, options)
+        );
 
         this.label = 'MapIcon';
     }

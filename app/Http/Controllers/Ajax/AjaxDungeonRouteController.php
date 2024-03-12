@@ -12,7 +12,6 @@ use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteDataFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
 use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
@@ -26,7 +25,6 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\EnemyForcesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
-use App\Logic\MapContext\DungeonRouteProperties;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -62,7 +60,6 @@ use Throwable;
 
 class AjaxDungeonRouteController extends Controller
 {
-    use DungeonRouteProperties;
     use ListsBrushlines;
     use ListsDungeonFloorSwitchMarkers;
     use ListsEnemies;
@@ -70,14 +67,13 @@ class AjaxDungeonRouteController extends Controller
     use ListsEnemyPatrols;
     use ListsMapIcons;
     use ListsPaths;
-    use PublicKeyDungeonRoute;
 
     /**
      * @return mixed
      *
      * @throws Exception
      */
-    public function list(Request $request)
+    public function get(Request $request)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);

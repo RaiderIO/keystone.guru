@@ -10,6 +10,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession;
+use App\Models\User;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -57,7 +58,9 @@ class AjaxOverpulledEnemyController extends Controller
             }
 
             if (Auth::check()) {
-                broadcast(new OverpulledEnemyChangedEvent($liveSession, Auth::getUser(), $overpulledEnemy, $enemy));
+                /** @var User $user */
+                $user = Auth::getUser();
+                broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
             }
         }
 
@@ -94,7 +97,9 @@ class AjaxOverpulledEnemyController extends Controller
                     ->first();
 
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, Auth::getUser(), $overpulledEnemy, $enemy));
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $overpulledEnemy, $enemy));
                 }
 
                 // Optionally don't calculate the return value

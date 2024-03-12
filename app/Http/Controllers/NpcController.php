@@ -13,6 +13,7 @@ use App\Models\NpcBolsteringWhitelist;
 use App\Models\NpcClassification;
 use App\Models\NpcSpell;
 use App\Models\Spell;
+use App\Models\User;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -141,16 +142,18 @@ class NpcController extends Controller
 
             // Prevent sending multiple messages for the same dungeon
             $messagesSentToDungeons = collect();
+            /** @var User $user */
+            $user = Auth::user();
             if ($npcAllDungeon || $npcBeforeAllDungeon) {
                 // Broadcast the event for all dungeons
                 foreach (Dungeon::all() as $dungeon) {
                     if ($npc->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
-                        broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npc));
+                        broadcast(new ModelChangedEvent($dungeon, $user, $npc));
                         $messagesSentToDungeons->push($dungeon->id);
                     }
 
                     if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
-                        broadcast(new ModelChangedEvent($dungeon, Auth::user(), $npcBefore));
+                        broadcast(new ModelChangedEvent($dungeon, $user, $npcBefore));
                         $messagesSentToDungeons->push($dungeon->id);
                     }
                 }
@@ -161,12 +164,12 @@ class NpcController extends Controller
             if (!$npcAllDungeon) {
                 // Let previous dungeon know that this NPC is no longer available
                 if ($messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new ModelChangedEvent($npc->dungeon, Auth::user(), $npc));
+                    broadcast(new ModelChangedEvent($npc->dungeon, $user, $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
 
                 if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new ModelChangedEvent($npcBefore->dungeon, Auth::user(), $npc));
+                    broadcast(new ModelChangedEvent($npcBefore->dungeon, $user, $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
             }
@@ -189,7 +192,7 @@ class NpcController extends Controller
      *
      * @return Factory|View
      */
-    public function new()
+    public function create()
     {
         return view('admin.npc.edit', [
             'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),

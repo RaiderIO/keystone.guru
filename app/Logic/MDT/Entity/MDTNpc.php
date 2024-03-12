@@ -41,9 +41,9 @@ class MDTNpc implements Arrayable
         $this->clones = $this->rawMdtNpc['clones'];
 
         // Correct clones that don't have a sublevel set
-        foreach ($this->clones as $this->index => $clone) {
+        foreach ($this->clones as $index => $clone) {
             if (!isset($clone['sublevel'])) {
-                $this->clones[$this->index]['sublevel'] = 1;
+                $this->clones[$index]['sublevel'] = 1;
             }
         }
 

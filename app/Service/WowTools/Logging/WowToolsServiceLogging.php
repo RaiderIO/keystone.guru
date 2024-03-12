@@ -11,6 +11,11 @@ class WowToolsServiceLogging extends StructuredLogging implements WowToolsServic
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function getDisplayIdInvalidResponse(): void
+    {
+        $this->error(__METHOD__);
+    }
+
     public function getDisplayIdRequestError(string $error): void
     {
         $this->error(__METHOD__, get_defined_vars());

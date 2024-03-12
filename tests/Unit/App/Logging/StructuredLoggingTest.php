@@ -39,9 +39,9 @@ class StructuredLoggingTest extends PublicTestCase
 
 
         // Act
-        $log->start('startStart', $persistentContext);
+        $log->start('firstStart', $persistentContext);
         $log->debug('log', $context);
-        $log->end('startEnd');
+        $log->end('firstEnd');
 
         // Assert
         // Already checked in the callback

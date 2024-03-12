@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use Carbon\Exceptions\InvalidFormatException;
 use DateTimeInterface;
 use Eloquent;
 use Illuminate\Support\Carbon;
@@ -12,6 +13,7 @@ use Illuminate\Support\Carbon;
 trait SerializesDates
 {
     public static string $SERIALIZED_DATE_TIME_FORMAT = 'c';
+    public static string $DATABASE_DATE_TIME_FORMAT   = 'Y-m-d H:i:s';
 
     /**
      * Prepare a date for array / JSON serialization.
@@ -28,7 +30,11 @@ trait SerializesDates
     public function setCreatedAtAttribute($value): void
     {
         if (is_string($value)) {
-            $this->attributes['created_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
+            try {
+                $this->attributes['created_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
+            } catch (InvalidFormatException $exception) {
+                $this->attributes['created_at'] = Carbon::createFromFormat(self::$DATABASE_DATE_TIME_FORMAT, $value);
+            }
         } else {
             $this->attributes['created_at'] = $value;
         }
@@ -37,7 +43,11 @@ trait SerializesDates
     public function setUpdatedAtAttribute($value): void
     {
         if (is_string($value)) {
-            $this->attributes['updated_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
+            try {
+                $this->attributes['created_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
+            } catch (InvalidFormatException $exception) {
+                $this->attributes['created_at'] = Carbon::createFromFormat(self::$DATABASE_DATE_TIME_FORMAT, $value);
+            }
         } else {
             $this->attributes['updated_at'] = $value;
         }

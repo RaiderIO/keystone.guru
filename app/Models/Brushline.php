@@ -13,7 +13,7 @@ use App\Models\Floor\Floor;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\hasOne;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int          $id
@@ -60,7 +60,7 @@ class Brushline extends Model
         return $this->belongsTo(Floor::class);
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

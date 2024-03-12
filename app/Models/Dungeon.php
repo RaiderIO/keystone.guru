@@ -33,6 +33,8 @@ use Mockery\Exception;
  * @property string                                  $slug The url friendly slug of the dungeon.
  * @property string                                  $key Shorthand key of the dungeon
  * @property bool                                    $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
+ * @property bool                                    $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
+ * @property bool                                    $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
  * @property bool                                    $facade_enabled True if this dungeon uses facades, false if it does not.
  * @property bool                                    $active True if this dungeon is active, false if it is not.
  * @property bool                                    $mdt_supported True if MDT is supported for this dungeon, false if it is not.
@@ -73,6 +75,8 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'game_version_id',
         'active',
         'speedrun_enabled',
+        'speedrun_difficulty_10_man_enabled',
+        'speedrun_difficulty_25_man_enabled',
         'facade_enabled',
         'zone_id',
         'map_id',
