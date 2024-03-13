@@ -46,7 +46,7 @@ class LocalizationSync extends Command
         $baseLang   = $this->argument('base');
         $targetLang = $this->argument('target');
 
-        $langDir   = base_path() . DIRECTORY_SEPARATOR . 'lang';
+        $langDir   = lang_path();
         $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
         $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
 
@@ -180,7 +180,9 @@ class LocalizationSync extends Command
                         if ($targetLang === self::LANG_HODOR) {
                             $segment = $match[1] . 'hodor' . $match[1];
                         } else {
-                            $segment = $match[1] . '@todo ' . $targetLang . ': ' . $key . $match[1];
+                            $segment = $match[1] .
+                                /*'@todo ' . $targetLang . ': ' . $key .*/
+                                $match[1];
                         }
                     }
 
