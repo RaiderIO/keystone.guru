@@ -2,22 +2,22 @@
 
 return [
     'classic'            => [
-        'name' => '@todo ru-RU: .classic.name',
+        'name' => '',
     ],
     'tbc'                => [
-        'name' => '@todo ru: .tbc.name',
+        'name' => '',
     ],
     'wotlk'              => [
-        'name' => '@todo ru: .wotlk.name',
+        'name' => '',
     ],
     'cata'               => [
-        'name' => '@todo ru: .cata.name',
+        'name' => '',
     ],
     'mop'                => [
-        'name' => '@todo ru: .mop.name',
+        'name' => '',
     ],
     'wod'                => [
-        'name' => '@todo ru: .wod.name',
+        'name' => '',
     ],
     'legion'             => [
         'name' => 'Легион',
@@ -29,6 +29,6 @@ return [
         'name' => 'Темные земли',
     ],
     'dragonflight'       => [
-        'name' => '@todo ru: .dragonflight.name',
+        'name' => '',
     ],
 ];

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'previous' => '@todo de: .previous',
-    'next'     => '@todo de: .next',
+    'previous' => '',
+    'next'     => '',
 
 ];

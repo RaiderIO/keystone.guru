@@ -44,9 +44,9 @@ return [
     ],
     'edit'           => [
         'title'                                   => 'Редактировать %s',
-        'linkpreview_title'                       => '@todo ru: .edit.linkpreview_title',
-        'linkpreview_default_description'         => '@todo ru: .edit.linkpreview_default_description',
-        'linkpreview_default_description_sandbox' => '@todo ru: .edit.linkpreview_default_description_sandbox',
+        'linkpreview_title'                       => '',
+        'linkpreview_default_description'         => '',
+        'linkpreview_default_description_sandbox' => '',
     ],
     'embed'          => [
         'title'            => 'Встроить :routeTitle',
@@ -54,8 +54,8 @@ return [
         'select_floor'     => 'Выбрать уровень',
         'affixes_title'    => 'Аффикс',
         'affixes_selected' => '{0} аффиксов выбрано',
-        'view_route'       => '@todo ru-RU: .embed.view_route',
-        'present_route'    => '@todo ru-RU: .embed.present_route',
+        'view_route'       => '',
+        'present_route'    => '',
         'copy_mdt_string'  => 'Скопировать строку MDT',
     ],
     'limitreached'   => [
@@ -82,9 +82,9 @@ return [
     ],
     'view'           => [
         'any'                                     => 'Все',
-        'linkpreview_title'                       => '@todo ru: .view.linkpreview_title',
-        'linkpreview_default_description'         => '@todo ru: .view.linkpreview_default_description',
-        'linkpreview_default_description_sandbox' => '@todo ru: .view.linkpreview_default_description_sandbox',
-        'linkpreview_default_description_explore' => '@todo ru-RU: .view.linkpreview_default_description_explore',
+        'linkpreview_title'                       => '',
+        'linkpreview_default_description'         => '',
+        'linkpreview_default_description_sandbox' => '',
+        'linkpreview_default_description_explore' => '',
     ],
 ];

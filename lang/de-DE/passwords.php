@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'password' => '@todo de: .password',
-    'reset'    => '@todo de: .reset',
-    'sent'     => '@todo de: .sent',
-    'token'    => '@todo de: .token',
-    'user'     => '@todo de: .user',
+    'password' => '',
+    'reset'    => '',
+    'sent'     => '',
+    'token'    => '',
+    'user'     => "",
 
 ];

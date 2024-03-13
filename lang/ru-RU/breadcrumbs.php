@@ -9,7 +9,7 @@ return [
         'routes_expansion' => ':expansion маршруты',
 
         'dungeon' => [
-            'explore' => '@todo ru-RU: .home.dungeon.explore',
+            'explore' => '',
         ],
 
         'dungeonroutes' => [
@@ -19,12 +19,12 @@ return [
             'this_week_affixes' => 'Текущие Аффиксы',
             'new'               => 'Новые',
 
-            'routes_season' => '@todo ru-RU: .home.dungeonroutes.routes_season',
+            'routes_season' => '',
             'season'        => [
-                'popular'           => '@todo ru-RU: .home.dungeonroutes.season.popular',
-                'next_week_affixes' => '@todo ru-RU: .home.dungeonroutes.season.next_week_affixes',
-                'this_week_affixes' => '@todo ru-RU: .home.dungeonroutes.season.this_week_affixes',
-                'new'               => '@todo ru-RU: .home.dungeonroutes.season.new',
+                'popular'           => '',
+                'next_week_affixes' => '',
+                'this_week_affixes' => '',
+                'new'               => '',
             ],
 
             'discoverdungeon' => [
@@ -77,8 +77,8 @@ return [
             ],
 
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc10man' => '@todo ru-RU: .home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man',
-                'new_dungeonspeedrunrequirednpc25man' => '@todo ru-RU: .home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man',
+                'new_dungeonspeedrunrequirednpc10man' => '',
+                'new_dungeonspeedrunrequirednpc25man' => '',
             ],
 
             'npcs' => [
@@ -88,7 +88,7 @@ return [
             ],
 
             'npcenemyforces' => [
-                'edit_npc_enemy_forces' => '@todo ru-RU: .home.admin.npcenemyforces.edit_npc_enemy_forces',
+                'edit_npc_enemy_forces' => '',
             ],
 
             'spells' => [

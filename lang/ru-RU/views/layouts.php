@@ -6,7 +6,7 @@ return [
         'staging_banner_take_me_away' => 'Переведите меня на главную страницу!',
     ],
     'app'      => [
-        'linkpreview_title'       => '@todo ru: .app.linkpreview_title',
-        'linkpreview_description' => '@todo ru: .app.linkpreview_description',
+        'linkpreview_title'       => '',
+        'linkpreview_description' => '',
     ],
 ];

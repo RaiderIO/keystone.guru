@@ -3,7 +3,7 @@
 return [
     'admintools'                  => [
         'error' => [
-            'mdt_string_parsing_failed'           => '@todo ru-RU: .admintools.error.mdt_string_parsing_failed',
+            'mdt_string_parsing_failed'           => '',
             'mdt_string_format_not_recognized'    => 'Формат строки MDT не распознан.',
             'invalid_mdt_string'                  => 'Неверная строка MDT',
             'invalid_mdt_string_exception'        => 'Неверная строка MDT: %s',
@@ -17,7 +17,7 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => '@todo ru-RU: .admintools.flash.thumbnail_regenerate_result',
+            'thumbnail_regenerate_result' => '',
             'caches_dropped_successfully' => 'Кеш сброшен успешно',
             'releases_exported'           => 'Релизы экспортированы',
             'exception'                   => [
@@ -38,8 +38,8 @@ return [
     ],
     'brushline'                   => [
         'error' => [
-            'unable_to_save_brushline'   => '@todo ru-RU: .brushline.error.unable_to_save_brushline',
-            'unable_to_delete_brushline' => '@todo ru-RU: .brushline.error.unable_to_delete_brushline',
+            'unable_to_save_brushline'   => '',
+            'unable_to_delete_brushline' => '',
         ],
     ],
     'dungeon'                     => [
@@ -62,10 +62,10 @@ return [
         'next_week_affixes' => 'Аффиксы следующей неделе',
         'new'               => 'Новые',
         'season'            => [
-            'popular'           => '@todo ru-RU: .dungeonroutediscover.season.popular',
-            'this_week_affixes' => '@todo ru-RU: .dungeonroutediscover.season.this_week_affixes',
-            'next_week_affixes' => '@todo ru-RU: .dungeonroutediscover.season.next_week_affixes',
-            'new'               => '@todo ru-RU: .dungeonroutediscover.season.new',
+            'popular'           => '',
+            'this_week_affixes' => '',
+            'next_week_affixes' => '',
+            'new'               => '',
         ],
         'dungeon'           => [
             'popular'           => '%s популярные маршруты',
@@ -75,10 +75,10 @@ return [
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
-        'no_linked_npc' => '@todo ru: .dungeonspeedrunrequirednpcs.no_linked_npc',
+        'no_linked_npc' => '',
         'flash'         => [
-            'npc_added_successfully'   => '@todo ru: .dungeonspeedrunrequirednpcs.flash.npc_added_successfully',
-            'npc_deleted_successfully' => '@todo ru: .dungeonspeedrunrequirednpcs.flash.npc_deleted_successfully',
+            'npc_added_successfully'   => '',
+            'npc_deleted_successfully' => '',
         ],
     ],
     'expansion'                   => [
@@ -90,8 +90,8 @@ return [
     ],
     'generic'                     => [
         'error' => [
-            'floor_not_found_in_dungeon' => '@todo ru-RU: .generic.error.floor_not_found_in_dungeon',
-            'not_found'                  => '@todo ru-RU: .generic.error.not_found',
+            'floor_not_found_in_dungeon' => '',
+            'not_found'                  => '',
         ],
     ],
     'oauthlogin'                  => [
@@ -99,7 +99,7 @@ return [
             'registered_successfully' => 'Регистрация прошла успешно.',
             'user_exists'             => 'Пользователь с таким именем уже существует %s. Может быть вы уже зарегистрированы?',
             'email_exists'            => 'Пользователь с таким электронным адресом уже существует %s. Может быть вы уже зарегистрированы?',
-            'permission_denied'       => '@todo ru-RU: .oauthlogin.flash.permission_denied',
+            'permission_denied'       => '',
         ],
     ],
     'register'                    => [
@@ -120,13 +120,13 @@ return [
         ],
     ],
     'mappingversion'              => [
-        'created_successfully' => '@todo ru: .mappingversion.created_successfully',
-        'deleted_successfully' => '@todo ru: .mappingversion.deleted_successfully',
+        'created_successfully' => '',
+        'deleted_successfully' => '',
     ],
     'mdtimport'                   => [
         'unknown_dungeon' => 'Неизвестное подземелье',
         'error'           => [
-            'mdt_string_parsing_failed'             => '@todo ru-RU: .mdtimport.error.mdt_string_parsing_failed',
+            'mdt_string_parsing_failed'             => '',
             'mdt_string_format_not_recognized'      => 'Формат строки MDT не распознан.',
             'invalid_mdt_string_exception'          => 'Недействительная строка MDT: %s',
             'invalid_mdt_string'                    => 'Недействительная строка MDT',
@@ -136,18 +136,18 @@ return [
     ],
     'path'                        => [
         'error' => [
-            'unable_to_save_path'   => '@todo ru-RU: .path.error.unable_to_save_path',
-            'unable_to_delete_path' => '@todo ru-RU: .path.error.unable_to_delete_path',
+            'unable_to_save_path'   => '',
+            'unable_to_delete_path' => '',
         ],
     ],
     'patreon'                     => [
         'flash' => [
-            'unlink_successful'       => '@todo ru: .patreon.flash.unlink_successful',
-            'link_successful'         => '@todo ru: .patreon.flash.link_successful',
-            'patreon_session_expired' => '@todo ru: .patreon.flash.patreon_session_expired',
-            'session_expired'         => '@todo ru: .patreon.flash.session_expired',
-            'patreon_error_occurred'  => '@todo ru: .patreon.flash.patreon_error_occurred',
-            'internal_error_occurred' => '@todo ru: .patreon.flash.internal_error_occurred',
+            'unlink_successful'       => '',
+            'link_successful'         => '',
+            'patreon_session_expired' => '',
+            'session_expired'         => '',
+            'patreon_error_occurred'  => '',
+            'internal_error_occurred' => '',
         ],
     ],
     'profile'                     => [
@@ -195,8 +195,8 @@ return [
             'account_deleted_successfully'      => 'Аккаунт успешно удален.',
             'account_deletion_error'            => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
             'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',
-            'all_benefits_granted_successfully' => '@todo ru-RU: .user.flash.all_benefits_granted_successfully',
-            'error_granting_all_benefits'       => '@todo ru-RU: .user.flash.error_granting_all_benefits',
+            'all_benefits_granted_successfully' => '',
+            'error_granting_all_benefits'       => '',
         ],
     ],
 ];

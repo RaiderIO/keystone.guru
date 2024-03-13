@@ -23,8 +23,8 @@ return [
         'copy_to_clipboard_title'   => 'Скопировать в буфер обмена',
         'refresh_invite_link_title' => 'Обновить ссылку для приглашения',
 
-        'ad_free_giveaway_description_not_available' => '@todo ru-RU: .edit.ad_free_giveaway_description_not_available',
-        'ad_free_giveaway_description_available'     => '@todo ru-RU: .edit.ad_free_giveaway_description_available',
+        'ad_free_giveaway_description_not_available' => '',
+        'ad_free_giveaway_description_available'     => '',
 
         'default_role' => 'Роль по умолчанию',
 
@@ -32,8 +32,8 @@ return [
                          Персональные теги, которые могли быть прикреплены или не были прикреплены владельцем маршрута, не будут видны.',
     ],
     'invite' => [
-        'linkpreview_title'       => '@todo ru: .invite.linkpreview_title',
-        'linkpreview_description' => '@todo ru: .invite.linkpreview_description',
+        'linkpreview_title'       => '',
+        'linkpreview_description' => '',
 
         'title'        => 'Приглашение в команду %s',
         'header'       => 'Приглашение в команду %s',

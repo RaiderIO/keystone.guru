@@ -16,8 +16,8 @@ return [
         'start_date'                        => 'Дата начала (%s)',
         '2'                                 => '+2',
         '7'                                 => '+7',
-        '14'                                => '@todo ru-RU: .affixes.14',
-        'seasonal'                          => '@todo ru-RU: .affixes.seasonal',
+        '14'                                => '',
+        'seasonal'                          => '',
         'previous'                          => 'Предыдущий',
         'next'                              => 'Следующий',
         'updated_at'                        => 'Обновлено %s. Для получения дополнительной информации об аффиксах и M+ посетите',
@@ -44,8 +44,8 @@ return [
         'header' => 'Keystone.guru встроит тестовое окно на ваш сайт',
     ],
     'health'    => [
-        'title'  => '@todo ru-RU: .health.title',
-        'header' => '@todo ru-RU: .health.header',
+        'title'  => '',
+        'header' => '',
     ],
     'mapping'   => [
         'title'                         => 'Карты',

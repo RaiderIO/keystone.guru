@@ -2,39 +2,39 @@
 
 return [
     '400' => [
-        'title'   => '@todo de: .400.title',
-        'message' => '@todo de: .400.message',
+        'title'   => '',
+        'message' => '',
     ],
     '401' => [
-        'title'   => '@todo de: .401.title',
-        'message' => '@todo de: .401.message',
+        'title'   => '',
+        'message' => '',
     ],
     '403' => [
-        'title'   => '@todo de: .403.title',
-        'message' => '@todo de: .403.message',
+        'title'   => '',
+        'message' => '',
     ],
     '404' => [
-        'title'   => '@todo de: .404.title',
-        'message' => '@todo de: .404.message',
+        'title'   => '',
+        'message' => '',
     ],
     '410' => [
-        'title'   => '@todo de: .410.title',
-        'message' => '@todo de: .410.message',
+        'title'   => '',
+        'message' => '',
     ],
     '419' => [
-        'title'   => '@todo de: .419.title',
-        'message' => '@todo de: .419.message',
+        'title'   => '',
+        'message' => '',
     ],
     '429' => [
-        'title'   => '@todo de: .429.title',
-        'message' => '@todo de: .429.message',
+        'title'   => '',
+        'message' => '',
     ],
     '500' => [
-        'title'   => '@todo de: .500.title',
-        'message' => '@todo de: .500.message',
+        'title'   => '',
+        'message' => '',
     ],
     '503' => [
-        'title'   => '@todo de: .503.title',
-        'message' => '@todo de: .503.message',
+        'title'   => '',
+        'message' => '',
     ],
 ];

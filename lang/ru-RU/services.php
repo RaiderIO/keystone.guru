@@ -2,6 +2,6 @@
 
 return [
     'npcservice' => [
-        'all_dungeons' => '@todo ru: .npcservice.all_dungeons',
+        'all_dungeons' => '',
     ],
 ];

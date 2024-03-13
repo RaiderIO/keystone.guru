@@ -2,33 +2,33 @@
 
 return [
     'classic'            => [
-        'name' => '@todo de-DE: .classic.name',
+        'name' => '',
     ],
     'tbc'                => [
-        'name' => '@todo de: .tbc.name',
+        'name' => '',
     ],
     'wotlk'              => [
-        'name' => '@todo de: .wotlk.name',
+        'name' => '',
     ],
     'cata'               => [
-        'name' => '@todo de: .cata.name',
+        'name' => '',
     ],
     'mop'                => [
-        'name' => '@todo de: .mop.name',
+        'name' => '',
     ],
     'wod'                => [
-        'name' => '@todo de: .wod.name',
+        'name' => '',
     ],
     'legion'             => [
-        'name' => '@todo de: .legion.name',
+        'name' => '',
     ],
     'battle_for_azeroth' => [
-        'name' => '@todo de: .battle_for_azeroth.name',
+        'name' => '',
     ],
     'shadowlands'        => [
-        'name' => '@todo de: .shadowlands.name',
+        'name' => '',
     ],
     'dragonflight'       => [
-        'name' => '@todo de: .dragonflight.name',
+        'name' => '',
     ],
 ];

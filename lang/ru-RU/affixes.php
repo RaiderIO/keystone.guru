@@ -106,24 +106,24 @@ return [
         'description' => 'Противники в подземелье завладели реликвиями Предвечных. Уничтожьте эти реликвии, чтобы призвать автомов и получить мощное усиление. Порядок уничтожения влияет на то, какое усиление вы получите.',
     ],
     'shrouded'              => [
-        'name'        => '@todo ru: .shrouded.name',
-        'description' => '@todo ru: .shrouded.description',
+        'name'        => '',
+        'description' => '',
     ],
     'thundering'            => [
-        'name'        => '@todo ru: .thundering.name',
-        'description' => '@todo ru: .thundering.description',
+        'name'        => '',
+        'description' => '',
     ],
     'afflicted'             => [
-        'name'        => '@todo ru-RU: .afflicted.name',
-        'description' => '@todo ru-RU: .afflicted.description',
+        'name'        => '',
+        'description' => '',
     ],
     'entangling'            => [
-        'name'        => '@todo ru-RU: .entangling.name',
-        'description' => '@todo ru-RU: .entangling.description',
+        'name'        => '',
+        'description' => '',
     ],
     'incorporeal'           => [
-        'name'        => '@todo ru-RU: .incorporeal.name',
-        'description' => '@todo ru-RU: .incorporeal.description',
+        'name'        => '',
+        'description' => '',
     ],
     'seasonal_index_preset' => '%s расстановка %d',
 ];

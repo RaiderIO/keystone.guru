@@ -17,8 +17,8 @@ return [
         'restoration' => 'Исцеление',
     ],
     'evoker'       => [
-        'devastation'  => '@todo ru-RU: .evoker.devastation',
-        'preservation' => '@todo ru-RU: .evoker.preservation',
+        'devastation'  => '',
+        'preservation' => '',
     ],
     'hunter'       => [
         'beast_mastery' => 'Повелитель зверей',
