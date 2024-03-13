@@ -51,7 +51,7 @@ class DungeonController extends Controller
     /**
      * @return Factory|View
      */
-    public function new(): View
+    public function create(): View
     {
         $dungeons            = Dungeon::all()->keyBy('key');
         $availableKeysSelect = collect();

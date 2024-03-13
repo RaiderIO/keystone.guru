@@ -16,6 +16,7 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\TeamUser;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -74,7 +75,9 @@ class TeamController extends Controller
 
             if ($new) {
                 // If saving team + logo was successful, save our own user as its first member
-                $team->addMember(Auth::user(), TeamUser::ROLE_ADMIN);
+                /** @var User $user */
+                $user = Auth::user();
+                $team->addMember($user, TeamUser::ROLE_ADMIN);
             }
         }
 
@@ -84,7 +87,7 @@ class TeamController extends Controller
     /**
      * @return Factory|View
      */
-    public function new(): View
+    public function create(): View
     {
         return view('team.new');
     }
@@ -98,6 +101,7 @@ class TeamController extends Controller
     {
         $this->authorize('edit', $team);
 
+        /** @var User $user */
         $user = Auth::user();
 
         return view('team.edit', [
@@ -203,7 +207,9 @@ class TeamController extends Controller
         if ($team->isCurrentUserMember()) {
             $result = view('team.invite', ['team' => $team, 'member' => true]);
         } else {
-            $team->addMember(Auth::getUser(), $team->default_role);
+            /** @var User $user */
+            $user = Auth::getUser();
+            $team->addMember($user, $team->default_role);
 
             Session::flash('status', sprintf(__('controller.team.flash.invite_accept_success'), $team->name));
             $result = redirect()->route('team.edit', ['team' => $team]);

@@ -21,9 +21,12 @@ use Teapot\StatusCode\Http;
 
 class AjaxTeamController extends Controller
 {
-    public function list(Request $request)
+    public function get(Request $request)
     {
-        return Auth::user()->teams()->get();
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $user->teams;
     }
 
     /**

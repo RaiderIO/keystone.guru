@@ -21,7 +21,7 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
 {
     use ListsDungeonFloorSwitchMarkers;
 
-    public function list(Request $request): Collection
+    public function get(Request $request): Collection
     {
         return $this->listDungeonFloorSwitchMarkers($request->get('floor_id'));
     }

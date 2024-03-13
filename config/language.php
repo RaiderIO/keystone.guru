@@ -140,7 +140,7 @@ return [
     */
 
     // Only allow DE when debugging, it's still WIP
-    'allowed' => env('app.debug') ? ['en-US', 'de-DE', 'ru-RU'] : ['en-US', 'ru-RU'],
+    'allowed' => env('APP_DEBUG') ? ['en-US', 'de-DE', 'ru-RU', 'ho-HO'] : ['en-US', 'ru-RU'],
 
     /*
     |--------------------------------------------------------------------------
@@ -171,6 +171,7 @@ return [
         ['short' => 'et', 'long' => 'et-EE', 'english' => 'Estonian', 'native' => 'Eesti'],
         ['short' => 'he', 'long' => 'he-IL', 'english' => 'Hebrew', 'native' => 'עִבְרִית'],
         ['short' => 'hi', 'long' => 'hi-IN', 'english' => 'Hindi', 'native' => 'हिन्दी'],
+        ['short' => 'ho', 'long' => 'ho-HO', 'english' => 'Hodor', 'native' => 'Hodor'],
         ['short' => 'hr', 'long' => 'hr-HR', 'english' => 'Croatian', 'native' => 'Hrvatski'],
         ['short' => 'hu', 'long' => 'hu-HU', 'english' => 'Hungarian', 'native' => 'Magyar'],
         ['short' => 'hy', 'long' => 'hy-AM', 'english' => 'Armenian', 'native' => 'Հայերեն'],

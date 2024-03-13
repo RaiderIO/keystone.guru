@@ -73,7 +73,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function list(Request $request)
+    public function get(Request $request)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
