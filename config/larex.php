@@ -146,7 +146,8 @@ return [
      | The source language is the language used as the base for the translation.
      | This value is used by the "larex:import" command to set the first language column in the CSV file.
      |
+     | Wotuu: HERE IT WANTS DASHES BUT IT EXPORTS IT AS UNDERSCORES, YOU TELL ME MAN
      */
 
-    'source_language' => 'en',
+    'source_language' => 'en-US',
 ];
