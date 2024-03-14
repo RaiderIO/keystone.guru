@@ -63,7 +63,7 @@
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "fakerphp/faker": "^1.23",
-        "genealabs/laravel-model-caching": "^0.13",
+        "genealabs/laravel-model-caching": "^11.0",
         "graham-campbell/github": "^12.4",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^3.4",
