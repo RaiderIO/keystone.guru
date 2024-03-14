@@ -3,7 +3,7 @@
 return [
 
     'npcservice' => [
-        'all_dungeons' => 'hodor',
+        'all_dungeons' => 'Hodor',
     ],
 
 ];

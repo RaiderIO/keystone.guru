@@ -2,10 +2,10 @@
 
 return [
 
-    'us' => 'hodor',
-    'eu' => 'hodor',
-    'cn' => 'hodor',
-    'tw' => 'hodor',
-    'kr' => 'hodor',
+    'us' => 'Hodor',
+    'eu' => 'Hodor',
+    'cn' => 'Hodor',
+    'tw' => 'Hodor',
+    'kr' => 'Hodor',
 
 ];

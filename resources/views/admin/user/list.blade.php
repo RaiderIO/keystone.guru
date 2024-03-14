@@ -1,7 +1,7 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.user.list.title')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.user.list.title')])
 
 @section('header-title')
-    {{ __('views/admin.user.list.header') }}
+    {{ __('view_admin.user.list.header') }}
 @endsection
 
 @section('scripts')
@@ -141,14 +141,14 @@
     <table id="admin_user_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="5%">{{ __('views/admin.user.list.table_header_id') }}</th>
-            <th width="15%">{{ __('views/admin.user.list.table_header_name') }}</th>
-            <th width="15%">{{ __('views/admin.user.list.table_header_email') }}</th>
-            <th width="10%">{{ __('views/admin.user.list.table_header_routes') }}</th>
-            <th width="10%">{{ __('views/admin.user.list.table_header_roles') }}</th>
-            <th width="15%">{{ __('views/admin.user.list.table_header_registered') }}</th>
-            <th width="10%">{{ __('views/admin.user.list.table_header_actions') }}</th>
-            <th width="10%">{{ __('views/admin.user.list.table_header_patreons') }}</th>
+            <th width="5%">{{ __('view_admin.user.list.table_header_id') }}</th>
+            <th width="15%">{{ __('view_admin.user.list.table_header_name') }}</th>
+            <th width="15%">{{ __('view_admin.user.list.table_header_email') }}</th>
+            <th width="10%">{{ __('view_admin.user.list.table_header_routes') }}</th>
+            <th width="10%">{{ __('view_admin.user.list.table_header_roles') }}</th>
+            <th width="15%">{{ __('view_admin.user.list.table_header_registered') }}</th>
+            <th width="10%">{{ __('view_admin.user.list.table_header_actions') }}</th>
+            <th width="10%">{{ __('view_admin.user.list.table_header_patreons') }}</th>
         </tr>
         </thead>
     </table>

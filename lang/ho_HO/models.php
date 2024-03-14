@@ -3,13 +3,13 @@
 return [
 
     'dungeonroute' => [
-        'title_temporary_route' => 'hodor',
-        'title_clone' => 'hodor',
-        'subtitle_clone_of' => 'hodor',
-        'permission_dratnos' => 'hodor',
-        'permission_petko' => 'hodor',
-        'subtitle_temporary_route' => 'hodor',
-        'subtitle_author' => 'hodor',
+        'title_temporary_route' => 'Hodor',
+        'title_clone' => 'Hodor',
+        'subtitle_clone_of' => 'Hodor',
+        'permission_dratnos' => 'Hodor',
+        'permission_petko' => 'Hodor',
+        'subtitle_temporary_route' => 'Hodor',
+        'subtitle_author' => 'Hodor',
     ],
 
 ];

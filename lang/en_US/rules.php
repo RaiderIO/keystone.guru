@@ -5,16 +5,16 @@ return [
     'create_route_npc_chronological_rule' => [
         'message' => 'Npc(s) :npcs diedAt must be before engagedAt!',
     ],
-    'dungeon_route_level_rule' => [
+    'dungeon_route_level_rule'            => [
         'message' => 'You must select a key level range.',
     ],
-    'faction_selection_required_rule' => [
+    'faction_selection_required_rule'     => [
         'message' => 'You need to select a faction for this dungeon.',
     ],
-    'json_string_count_rule' => [
+    'json_string_count_rule'              => [
         'message' => 'Json string must have at least :count elements.',
     ],
-    'map_icon_type_role_check_rule' => [
+    'map_icon_type_role_check_rule'       => [
         'message' => 'That map icon type is not available for your access level.',
     ],
 

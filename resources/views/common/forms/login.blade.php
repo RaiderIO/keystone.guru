@@ -14,12 +14,12 @@ $errors   ??= collect();
               action="{{ route('login', ['redirect' => $redirect]) }}">
             {{ csrf_field() }}
             <h3>
-                {{ __('views/common.forms.login.login') }}
+                {{ __('view_common.forms.login.login') }}
             </h3>
 
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}login_email" class="control-label">
-                    {{ __('views/common.forms.login.email_address') }}
+                    {{ __('view_common.forms.login.email_address') }}
                 </label>
 
                 <div class="col col-xl-{{ $width }}">
@@ -30,7 +30,7 @@ $errors   ??= collect();
 
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}login_password" class="control-label">
-                    {{ __('views/common.forms.login.password') }}
+                    {{ __('view_common.forms.login.password') }}
                 </label>
 
                 <div class="col col-xl-{{ $width }}">
@@ -41,7 +41,7 @@ $errors   ??= collect();
 
             <div class="form-group">
                 <label for="{{ $modalClass }}login_remember">
-                    {{ __('views/common.forms.login.remember_me') }}
+                    {{ __('view_common.forms.login.remember_me') }}
                 </label>
                 <div class="col col-xl-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
                     <input id="{{ $modalClass }}login_remember" type="checkbox"
@@ -52,11 +52,11 @@ $errors   ??= collect();
             <div class="form-group">
                 <div class="col-xl-12">
                     <button type="submit" class="btn btn-primary">
-                        {{ __('views/common.forms.login.login') }}
+                        {{ __('view_common.forms.login.login') }}
                     </button>
 
                     <a class="btn btn-link" href="{{ route('password.request') }}">
-                        {{ __('views/common.forms.login.forgot_your_password') }}
+                        {{ __('view_common.forms.login.forgot_your_password') }}
                     </a>
                 </div>
             </div>
@@ -64,7 +64,7 @@ $errors   ??= collect();
     </div>
     <div class="col border-left border-white">
         <h3>
-            {{ __('views/common.forms.login.login_through_oauth2') }}
+            {{ __('view_common.forms.login.login_through_oauth2') }}
         </h3>
         @include('common.forms.oauth')
     </div>

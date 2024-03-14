@@ -9,7 +9,7 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                     <a href="#" class="btn btn-link" data-toggle="collapse"
                        data-target="#simulate_route_advanced_collapse"
                        aria-expanded="false" aria-controls="simulate_route_advanced_collapse">
-                        {{ __('views/common.modal.simulateoptions.advanced.advanced_options') }}
+                        {{ __('view_common.modal.simulateoptions.advanced.advanced_options') }}
                     </a>
                 </h5>
             </div>
@@ -20,21 +20,21 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                 <div class="card-body">
                     @if(!$hasAdvancedSimulation)
                         @component('common.general.alert', ['type' => 'warning', 'name' => 'simulateoptions-advanced-patreon-only'])
-                            {!! __('views/common.modal.simulateoptions.advanced.patreon_only', ['patreon' =>
-                                         sprintf('<a href="https://www.patreon.com/keystoneguru" target="_blank" rel="noopener noreferrer">%s</a>', __('views/common.modal.simulateoptions.advanced.patreon_link_text'))
+                            {!! __('view_common.modal.simulateoptions.advanced.patreon_only', ['patreon' =>
+                                         sprintf('<a href="https://www.patreon.com/keystoneguru" target="_blank" rel="noopener noreferrer">%s</a>', __('view_common.modal.simulateoptions.advanced.patreon_link_text'))
                                          ]) !!}
                         @endcomponent
                     @endif
 
                     @component('common.general.alert', ['type' => 'info', 'name' => 'simulateoptions-advanced-description'])
-                        {!! __('views/common.modal.simulateoptions.advanced.description') !!}
+                        {!! __('view_common.modal.simulateoptions.advanced.description') !!}
                     @endcomponent
 
                     <div class="form-group">
                         <label for="simulate_hp_percent">
-                            {{ __('views/common.modal.simulate.ranged_pull_compensation_yards') }}
+                            {{ __('view_common.modal.simulate.ranged_pull_compensation_yards') }}
                             <i class="fas fa-info-circle" data-toggle="tooltip"
-                               title="{{ __('views/common.modal.simulate.ranged_pull_compensation_yards_title') }}"></i>
+                               title="{{ __('view_common.modal.simulate.ranged_pull_compensation_yards_title') }}"></i>
                         </label>
                         <div class="row">
                             <div class="col">
@@ -51,9 +51,9 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
 
                     <div class="form-group">
                         <label for="simulate_use_mounts">
-                            {{ __('views/common.modal.simulate.use_mounts') }}
+                            {{ __('view_common.modal.simulate.use_mounts') }}
                             <i class="fas fa-info-circle" data-toggle="tooltip"
-                               title="{{ __('views/common.modal.simulate.use_mounts_title') }}"></i>
+                               title="{{ __('view_common.modal.simulate.use_mounts_title') }}"></i>
                         </label>
                         <div class="row">
                             <div class="col">

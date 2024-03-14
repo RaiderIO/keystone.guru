@@ -2,11 +2,11 @@
 
 return [
 
-    'no_attributes' => 'hodor',
-    'rogue_shroud_skip' => 'hodor',
-    'warlock_gate_skip' => 'hodor',
-    'mage_slow_fall_skip' => 'hodor',
-    'invisibility_potion' => 'hodor',
-    'death_skip' => 'hodor',
+    'no_attributes' => 'Hodor',
+    'rogue_shroud_skip' => 'Hodor',
+    'warlock_gate_skip' => 'Hodor',
+    'mage_slow_fall_skip' => 'Hodor',
+    'invisibility_potion' => 'Hodor',
+    'death_skip' => 'Hodor',
 
 ];

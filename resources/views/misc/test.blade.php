@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.credits.title')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.credits.title')])
 
-@section('header-title', __('views/misc.credits.header'))
+@section('header-title', __('view_misc.credits.header'))
 
 @section('content')
 

@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['title' => __('views/auth.login.title'), 'showAds' => false])
+@extends('layouts.sitepage', ['title' => __('view_auth.login.title'), 'showAds' => false])
 
 @section('content')
     <div class="pt-4">

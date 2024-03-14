@@ -99,9 +99,9 @@ $breadcrumbsParams ??= [];
         @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
-                {{ __('views/layouts.sitepage.staging_banner_description') }}
+                {{ __('view_layouts.sitepage.staging_banner_description') }}
                 <br>
-                <a href="https://keystone.guru/">{{ __('views/layouts.sitepage.staging_banner_take_me_away') }}</a>
+                <a href="https://keystone.guru/">{{ __('view_layouts.sitepage.staging_banner_take_me_away') }}</a>
             </div>
         @endif
 

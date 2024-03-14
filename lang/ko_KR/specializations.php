@@ -1,68 +1,70 @@
 <?php
 
 return [
+
     'death_knight' => [
-        'blood'  => '',
-        'frost'  => '',
+        'blood' => '',
+        'frost' => '',
         'unholy' => '',
     ],
     'demon_hunter' => [
-        'havoc'     => '',
+        'havoc' => '',
         'vengeance' => '',
     ],
-    'druid'        => [
-        'balance'     => '',
-        'feral'       => '',
-        'guardian'    => '',
+    'druid' => [
+        'balance' => '',
+        'feral' => '',
+        'guardian' => '',
         'restoration' => '',
     ],
-    'evoker'       => [
-        'devastation'  => '',
+    'evoker' => [
+        'devastation' => '',
         'preservation' => '',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => '',
-        'marksman'      => '',
-        'survival'      => '',
+        'marksman' => '',
+        'survival' => '',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => '',
-        'fire'   => '',
-        'frost'  => '',
+        'fire' => '',
+        'frost' => '',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => '',
         'mistweaver' => '',
         'windwalker' => '',
     ],
-    'paladin'      => [
-        'holy'        => '',
-        'protection'  => '',
+    'paladin' => [
+        'holy' => '',
+        'protection' => '',
         'retribution' => '',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => '',
-        'holy'       => '',
-        'shadow'     => '',
+        'holy' => '',
+        'shadow' => '',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => '',
-        'outlaw'        => '',
-        'subtlety'      => '',
+        'outlaw' => '',
+        'subtlety' => '',
     ],
-    'shaman'       => [
-        'elemental'   => '',
+    'shaman' => [
+        'elemental' => '',
         'enhancement' => '',
         'restoration' => '',
     ],
-    'warlock'      => [
-        'affliction'  => '',
-        'demonology'  => '',
+    'warlock' => [
+        'affliction' => '',
+        'demonology' => '',
         'destruction' => '',
     ],
-    'warrior'      => [
-        'arms'       => '',
-        'fury'       => '',
+    'warrior' => [
+        'arms' => '',
+        'fury' => '',
         'protection' => '',
     ],
+
 ];

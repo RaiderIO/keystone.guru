@@ -2,10 +2,10 @@
 
 return [
 
-    'password' => 'hodor',
-    'reset' => 'hodor',
-    'sent' => 'hodor',
-    'token' => 'hodor',
-    'user' => 'hodor',
+    'password' => 'Hodor',
+    'reset' => 'Hodor',
+    'sent' => 'Hodor',
+    'token' => 'Hodor',
+    'user' => 'Hodor',
 
 ];

@@ -95,7 +95,7 @@ class FloorController extends Controller
                 'floorCouplings' => FloorCoupling::where('floor1_id', $floor->id)->get(),
             ]);
         } else {
-            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
+            Session::flash('warning', sprintf(__('view_admin.floor.flash.invalid_floor_id'), __($floor->name), __($dungeon->name)));
 
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
@@ -122,7 +122,7 @@ class FloorController extends Controller
                 'mappingVersion' => $mappingVersion,
             ]);
         } else {
-            Session::flash('warning', sprintf(__('views/admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));
+            Session::flash('warning', sprintf(__('view_admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));
 
             return redirect()->route('admin.dungeon.edit', ['dungeon' => $dungeon]);
         }
@@ -139,7 +139,7 @@ class FloorController extends Controller
         $floor = $this->store($request, $dungeon, $floor);
 
         // Message to the user
-        Session::flash('status', __('views/admin.floor.flash.floor_updated'));
+        Session::flash('status', __('view_admin.floor.flash.floor_updated'));
 
         // Display the edit page
         return $this->edit($request, $dungeon, $floor);
@@ -154,7 +154,7 @@ class FloorController extends Controller
         $floor = $this->store($request, $dungeon);
 
         // Message to the user
-        Session::flash('status', __('views/admin.floor.flash.floor_created'));
+        Session::flash('status', __('view_admin.floor.flash.floor_created'));
 
         return redirect()->route('admin.floor.edit', [
             'dungeon' => $dungeon,

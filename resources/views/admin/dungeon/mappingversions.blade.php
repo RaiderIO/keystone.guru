@@ -15,12 +15,12 @@
     </script>
 @endsection
 
-<h4>{{ __('views/admin.dungeon.edit.mapping_versions.title') }}</h4>
+<h4>{{ __('view_admin.dungeon.edit.mapping_versions.title') }}</h4>
 {{--@if(!$hasUnmergedMappingVersion)--}}
 <div class="float-right">
     <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"
        class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('views/admin.dungeon.edit.mapping_versions.add_mapping_version') }}
+        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}
     </a>
 </div>
 {{--@endif--}}
@@ -28,11 +28,11 @@
 <table id="admin_dungeon_mapping_versions_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_merged') }}</th>
-        <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_id') }}</th>
-        <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_version') }}</th>
-        <th width="50%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_created_at') }}</th>
-        <th width="10%">{{ __('views/admin.dungeon.edit.mapping_versions.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_merged') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_id') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_version') }}</th>
+        <th width="50%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_created_at') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -48,7 +48,7 @@
             <td>
                 <a class="btn btn-danger"
                    href="{{ route('admin.mappingversion.delete', ['dungeon' => $dungeon->slug, 'mappingVersion' => $mappingVersion]) }}">
-                    <i class="fas fa-trash"></i>&nbsp;{{ __('views/admin.dungeon.edit.mapping_versions.delete') }}
+                    <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.dungeon.edit.mapping_versions.delete') }}
                 </a>
             </td>
         </tr>

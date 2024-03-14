@@ -2,11 +2,11 @@
 
 return [
 
-    'ad-free' => 'hodor',
-    'unlimited-dungeonroutes' => 'hodor',
-    'unlisted-routes' => 'hodor',
-    'animated-polylines' => 'hodor',
-    'advanced-simulation' => 'hodor',
-    'ad-free-team-members' => 'hodor',
+    'ad-free' => 'Hodor',
+    'unlimited-dungeonroutes' => 'Hodor',
+    'unlisted-routes' => 'Hodor',
+    'animated-polylines' => 'Hodor',
+    'advanced-simulation' => 'Hodor',
+    'ad-free-team-members' => 'Hodor',
 
 ];

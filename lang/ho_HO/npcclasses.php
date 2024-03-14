@@ -2,15 +2,15 @@
 
 return [
 
-    'melee' => 'hodor',
-    'ranged' => 'hodor',
-    'caster' => 'hodor',
-    'healer' => 'hodor',
-    'caster_melee' => 'hodor',
-    'healer_caster' => 'hodor',
-    'healer_melee' => 'hodor',
-    'ranged_caster' => 'hodor',
-    'ranged_healer' => 'hodor',
-    'ranged_melee' => 'hodor',
+    'melee' => 'Hodor',
+    'ranged' => 'Hodor',
+    'caster' => 'Hodor',
+    'healer' => 'Hodor',
+    'caster_melee' => 'Hodor',
+    'healer_caster' => 'Hodor',
+    'healer_melee' => 'Hodor',
+    'ranged_caster' => 'Hodor',
+    'ranged_healer' => 'Hodor',
+    'ranged_melee' => 'Hodor',
 
 ];

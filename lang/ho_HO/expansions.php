@@ -3,34 +3,34 @@
 return [
 
     'classic' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'tbc' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'wotlk' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'cata' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'mop' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'wod' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'legion' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'battle_for_azeroth' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'shadowlands' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
     'dragonflight' => [
-        'name' => 'hodor',
+        'name' => 'Hodor',
     ],
 
 ];

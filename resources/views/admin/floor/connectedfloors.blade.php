@@ -8,20 +8,20 @@ $floorCouplings ??= collect();
 $connectedFloorCandidates = $dungeon->floors;
 ?>
 @if($connectedFloorCandidates->isNotEmpty())
-    {!! Form::label('connectedfloors[]', __('views/admin.floor.edit.connected_floors'), ['class' => 'font-weight-bold']) !!}
+    {!! Form::label('connectedfloors[]', __('view_admin.floor.edit.connected_floors'), ['class' => 'font-weight-bold']) !!}
     <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-                __('views/admin.floor.edit.connected_floors_title')
+                __('view_admin.floor.edit.connected_floors_title')
                  }}"></i>
 
     <div class="row mb-4">
         <div class="col-2">
-            {{ __('views/admin.floor.edit.connected') }}
+            {{ __('view_admin.floor.edit.connected') }}
         </div>
         <div class="col-8">
-            {{ __('views/admin.floor.edit.floor_name') }}
+            {{ __('view_admin.floor.edit.floor_name') }}
         </div>
         <div class="col-2">
-            {{ __('views/admin.floor.edit.direction') }}
+            {{ __('view_admin.floor.edit.direction') }}
         </div>
     </div>
 
@@ -46,11 +46,11 @@ $connectedFloorCandidates = $dungeon->floors;
             </div>
             <div class="col-2">
                 {!! Form::select(sprintf('floor_%s_direction', $connectedFloorCandidate->id), [
-                            \App\Models\Floor\FloorCoupling::DIRECTION_NONE => __('views/admin.floor.edit.floor_direction.none'),
-                            \App\Models\Floor\FloorCoupling::DIRECTION_UP => __('views/admin.floor.edit.floor_direction.up'),
-                            \App\Models\Floor\FloorCoupling::DIRECTION_DOWN => __('views/admin.floor.edit.floor_direction.down'),
-                            \App\Models\Floor\FloorCoupling::DIRECTION_LEFT => __('views/admin.floor.edit.floor_direction.left'),
-                            \App\Models\Floor\FloorCoupling::DIRECTION_RIGHT => __('views/admin.floor.edit.floor_direction.right')
+                            \App\Models\Floor\FloorCoupling::DIRECTION_NONE => __('view_admin.floor.edit.floor_direction.none'),
+                            \App\Models\Floor\FloorCoupling::DIRECTION_UP => __('view_admin.floor.edit.floor_direction.up'),
+                            \App\Models\Floor\FloorCoupling::DIRECTION_DOWN => __('view_admin.floor.edit.floor_direction.down'),
+                            \App\Models\Floor\FloorCoupling::DIRECTION_LEFT => __('view_admin.floor.edit.floor_direction.left'),
+                            \App\Models\Floor\FloorCoupling::DIRECTION_RIGHT => __('view_admin.floor.edit.floor_direction.right')
                         ], isset($floorCoupling) ? $floorCoupling->direction : '', array_merge(['class' => 'form-control selectpicker'], $disabled)) !!}
             </div>
         </div>

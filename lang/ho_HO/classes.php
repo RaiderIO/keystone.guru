@@ -2,18 +2,18 @@
 
 return [
 
-    'death_knight' => 'hodor',
-    'demon_hunter' => 'hodor',
-    'druid' => 'hodor',
-    'evoker' => 'hodor',
-    'hunter' => 'hodor',
-    'mage' => 'hodor',
-    'monk' => 'hodor',
-    'paladin' => 'hodor',
-    'priest' => 'hodor',
-    'rogue' => 'hodor',
-    'shaman' => 'hodor',
-    'warlock' => 'hodor',
-    'warrior' => 'hodor',
+    'death_knight' => 'Hodor',
+    'demon_hunter' => 'Hodor',
+    'druid' => 'Hodor',
+    'evoker' => 'Hodor',
+    'hunter' => 'Hodor',
+    'mage' => 'Hodor',
+    'monk' => 'Hodor',
+    'paladin' => 'Hodor',
+    'priest' => 'Hodor',
+    'rogue' => 'Hodor',
+    'shaman' => 'Hodor',
+    'warlock' => 'Hodor',
+    'warrior' => 'Hodor',
 
 ];

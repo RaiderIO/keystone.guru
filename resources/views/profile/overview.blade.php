@@ -1,4 +1,4 @@
-@extends('layouts.sitepage', ['rootClass' => 'col-xl-10 offset-xl-1', 'wide' => true, 'title' => __('views/profile.overview.title')])
+@extends('layouts.sitepage', ['rootClass' => 'col-xl-10 offset-xl-1', 'wide' => true, 'title' => __('view_profile.overview.title')])
 
 <?php
 /**
@@ -15,7 +15,7 @@
         @if( Auth::user()->dungeonRoutes()->count() === 0)
             <div class="row form-group text-center">
                 <div class="col">
-                    {{ __('views/profile.overview.welcome_text') }}
+                    {{ __('view_profile.overview.welcome_text') }}
                 </div>
             </div>
         @endif
@@ -24,22 +24,22 @@
     <div class="row form-group mb-4">
         <div class="col text-center">
             <a class="btn btn-info" href="{{ route('profile.favorites') }}">
-                <i class="fa fa-star"></i> {{ __('views/profile.overview.favorites') }}
+                <i class="fa fa-star"></i> {{ __('view_profile.overview.favorites') }}
             </a>
         </div>
         <div class="col text-center">
             <a class="btn btn-info" href="{{ route('profile.tags') }}">
-                <i class="fa fa-tag"></i> {{ __('views/profile.overview.tags') }}
+                <i class="fa fa-tag"></i> {{ __('view_profile.overview.tags') }}
             </a>
         </div>
         <div class="col text-center">
             <a class="btn btn-info" href="{{ route('team.list') }}">
-                <i class="fa fa-users"></i> {{ __('views/profile.overview.teams') }}
+                <i class="fa fa-users"></i> {{ __('view_profile.overview.teams') }}
             </a>
         </div>
         <div class="col text-center">
             <a class="btn btn-info" href="{{ route('profile.edit') }}">
-                <i class="fa fa-user"></i> {{ __('views/profile.overview.profile') }}
+                <i class="fa fa-user"></i> {{ __('view_profile.overview.profile') }}
             </a>
         </div>
     </div>
@@ -48,7 +48,7 @@
         <div class="row">
             <div class="col">
                 <h3>
-                    {{ __('views/profile.overview.route_coverage') }}
+                    {{ __('view_profile.overview.route_coverage') }}
                 </h3>
             </div>
             <div class="col-auto">
@@ -76,7 +76,7 @@
     @endif
 
     <h3>
-        {{ __('views/profile.overview.route_overview') }}
+        {{ __('view_profile.overview.route_overview') }}
     </h3>
     @include('common.dungeonroute.table', ['view' => 'profile'])
 @endsection

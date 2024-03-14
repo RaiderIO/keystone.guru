@@ -2,10 +2,10 @@
 
 return [
 
-    'normal' => 'hodor',
-    'elite' => 'hodor',
-    'boss' => 'hodor',
-    'finalboss' => 'hodor',
-    'rare' => 'hodor',
+    'normal' => 'Hodor',
+    'elite' => 'Hodor',
+    'boss' => 'Hodor',
+    'finalboss' => 'Hodor',
+    'rare' => 'Hodor',
 
 ];

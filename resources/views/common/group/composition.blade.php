@@ -109,7 +109,7 @@ $factions ??= $allFactions;
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="form-group">
-            {!! Form::label('faction_id', __('views/common.group.composition.faction')) !!}
+            {!! Form::label('faction_id', __('view_common.group.composition.faction')) !!}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
             {!! Form::select('faction_id', $factions->pluck('name', 'id'), old('faction_id'), ['class' => 'form-control selectpicker']) !!}
         </div>
@@ -118,7 +118,7 @@ $factions ??= $allFactions;
         <div class="col-md-1">
             <div class="form-group">
                 <button id="reload_button" class="btn btn-warning">
-                    <i class="fas fa-undo"></i> {{ __('views/common.group.composition.undo') }}
+                    <i class="fas fa-undo"></i> {{ __('view_common.group.composition.undo') }}
                 </button>
             </div>
         </div>
@@ -129,7 +129,7 @@ $factions ??= $allFactions;
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
-            {!! Form::label('specialization[]', sprintf(__('views/common.group.composition.party_member_nr'), $i)) !!}
+            {!! Form::label('specialization[]', sprintf(__('view_common.group.composition.party_member_nr'), $i)) !!}
             <select data-live-search="true" name="specialization[]"
                     class="form-control selectpicker specializationselect" data-id="{{$i}}">
 

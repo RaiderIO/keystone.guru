@@ -1,21 +1,21 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.mapping.title')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.mapping.title')])
 
-@section('header-title', __('views/misc.mapping.header'))
+@section('header-title', __('view_misc.mapping.header'))
 
 @section('content')
-    <h2>{{ __('views/misc.mapping.enemy_forces_mapping_progress') }}</h2>
+    <h2>{{ __('view_misc.mapping.enemy_forces_mapping_progress') }}</h2>
     <div class="row">
         <div class="col-lg-2 font-weight-bold">
-            {{ __('views/misc.mapping.dungeon') }}
+            {{ __('view_misc.mapping.dungeon') }}
         </div>
         <div class="col-lg-4 font-weight-bold">
-            {{ __('views/misc.mapping.enemy_forces_assigned') }}
+            {{ __('view_misc.mapping.enemy_forces_assigned') }}
         </div>
         <div class="col-lg-4 font-weight-bold">
-            {{ __('views/misc.mapping.npcs_assigned_to_enemies') }}
+            {{ __('view_misc.mapping.npcs_assigned_to_enemies') }}
         </div>
         <div class="col-lg-2 font-weight-bold">
-            {{ __('views/misc.mapping.teeming') }}
+            {{ __('view_misc.mapping.teeming') }}
         </div>
     </div>
     @foreach(\App\Models\Dungeon::with(['npcs'])->active()->get() as $dungeon )
@@ -33,7 +33,7 @@
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
                         <span class="text-left">
-                        {{ __('views/misc.mapping.enemy_forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
+                        {{ __('view_misc.mapping.enemy_forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
                         </span>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
                         <span class="text-left">
-                        {{ __('views/misc.mapping.npcs_assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
+                        {{ __('view_misc.mapping.npcs_assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
                         </span>
                     </div>
                 </div>

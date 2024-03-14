@@ -3,13 +3,13 @@
 
 $id         ??= 'team_id_select';
 $name       ??= 'team_id';
-$label      ??= __('views/common.team.select.team');
+$label      ??= __('view_common.team.select.team');
 $required   ??= true;
 $selectedId ??= null;
 
 $teamsSelect = $teams->pluck('name', 'id')->toArray();
 if (!$required) {
-    $teamsSelect = [-1 => __('views/common.team.select.select_team')] + $teamsSelect;
+    $teamsSelect = [-1 => __('view_common.team.select.select_team')] + $teamsSelect;
 }
 ?>
 <div class="form-group">
@@ -24,7 +24,7 @@ if (!$required) {
         @endif
         <div class="col-auto">
             <a href="{{ route('team.new') }}" class="btn btn-success">
-                <i class="fa fa-plus"></i> {{ __('views/common.team.select.create_team') }}
+                <i class="fa fa-plus"></i> {{ __('view_common.team.select.create_team') }}
             </a>
         </div>
     </div>

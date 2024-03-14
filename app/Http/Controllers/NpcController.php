@@ -202,7 +202,7 @@ class NpcController extends Controller
                 ->groupBy('dungeon_id')
                 ->mapWithKeys(static function ($value, $key) {
                     // Halls of Valor => [npcs]
-                    $dungeonName = $key === -1 ? __('views/admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+                    $dungeonName = $key === -1 ? __('view_admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
 
                     return [
                         $dungeonName => $value->pluck('name', 'id')
@@ -243,7 +243,7 @@ class NpcController extends Controller
             $npc = $this->store($request, $npc);
 
             // Message to the user
-            Session::flash('status', __('views/admin.npc.flash.npc_updated'));
+            Session::flash('status', __('view_admin.npc.flash.npc_updated'));
 
             // Display the edit page
             return $this->edit($request, $npcService, $npc);
@@ -259,7 +259,7 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        Session::flash('status', sprintf(__('views/admin.npc.flash.npc_created'), $npc->name));
+        Session::flash('status', sprintf(__('view_admin.npc.flash.npc_created'), $npc->name));
 
         return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }

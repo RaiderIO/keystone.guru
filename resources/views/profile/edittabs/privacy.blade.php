@@ -4,33 +4,33 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
     <h4>
-        {{ __('views/profile.edit.privacy') }}
+        {{ __('view_profile.edit.privacy') }}
     </h4>
     {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->id], 'method' => 'patch']) }}
     <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
-        {!! Form::label('analytics_cookie_opt_out', __('views/profile.edit.ga_cookies_opt_out')) !!}
+        {!! Form::label('analytics_cookie_opt_out', __('view_profile.edit.ga_cookies_opt_out')) !!}
         {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}
     </div>
-    {!! Form::submit(__('views/profile.edit.submit'), ['class' => 'btn btn-info']) !!}
+    {!! Form::submit(__('view_profile.edit.submit'), ['class' => 'btn btn-info']) !!}
     {!! Form::close() !!}
 </div>
 
 <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
     <h4>
-        {{ __('views/profile.edit.reports') }}
+        {{ __('view_profile.edit.reports') }}
     </h4>
     <p>
-        {{ __('views/profile.edit.reports_description') }}
+        {{ __('view_profile.edit.reports_description') }}
     </p>
 
     <table id="user_reports_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="5%">{{ __('views/profile.edit.reports_table_header_id') }}</th>
-            <th width="10%">{{ __('views/profile.edit.reports_table_header_category') }}</th>
-            <th width="60%">{{ __('views/profile.edit.reports_table_header_message') }}</th>
-            <th width="15%">{{ __('views/profile.edit.reports_table_header_created_at') }}</th>
-            <th width="10%">{{ __('views/profile.edit.reports_table_header_status') }}</th>
+            <th width="5%">{{ __('view_profile.edit.reports_table_header_id') }}</th>
+            <th width="10%">{{ __('view_profile.edit.reports_table_header_category') }}</th>
+            <th width="60%">{{ __('view_profile.edit.reports_table_header_message') }}</th>
+            <th width="15%">{{ __('view_profile.edit.reports_table_header_created_at') }}</th>
+            <th width="10%">{{ __('view_profile.edit.reports_table_header_status') }}</th>
         </tr>
         </thead>
 
@@ -45,7 +45,7 @@
                 <td>{{ $report->created_at }}</td>
                 <td>
                     <button class="btn btn-success mark_as_handled_btn" data-id="{{$report->id}}">
-                        <i class="fas fa-check-circle"></i> {{ __('views/profile.edit.reports_table_action_handled') }}
+                        <i class="fas fa-check-circle"></i> {{ __('view_profile.edit.reports_table_action_handled') }}
                     </button>
                 </td>
             </tr>

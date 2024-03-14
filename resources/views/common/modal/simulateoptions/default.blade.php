@@ -8,9 +8,9 @@
     <!-- General settings -->
 <div class="form-group">
     <label for="simulate_key_level">
-        {{ __('views/common.modal.simulate.key_level') }}
+        {{ __('view_common.modal.simulate.key_level') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('views/common.modal.simulate.key_level_title') }}"></i>
+           title="{{ __('view_common.modal.simulate.key_level_title') }}"></i>
     </label>
     <div class="row">
         <div class="col">
@@ -22,9 +22,9 @@
 @if($isShrouded)
     <div class="form-group">
         <label for="simulate_shrouded_bounty_type">
-            {{ __('views/common.modal.simulate.shrouded_bounty_type') }}
+            {{ __('view_common.modal.simulate.shrouded_bounty_type') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('views/common.modal.simulate.shrouded_bounty_type_title') }}"></i>
+               title="{{ __('view_common.modal.simulate.shrouded_bounty_type_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -39,9 +39,9 @@
 <div class="form-group row">
     <div class="col">
         <label for="simulate_affix">
-            {{ __('views/common.modal.simulate.affix') }}
+            {{ __('view_common.modal.simulate.affix') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('views/common.modal.simulate.affix_title') }}"></i>
+               title="{{ __('view_common.modal.simulate.affix_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -52,9 +52,9 @@
     @if($isThundering)
         <div class="col">
             <label for="simulate_thundering">
-                {{ __('views/common.modal.simulate.simulate_thundering_clear_seconds') }}
+                {{ __('view_common.modal.simulate.simulate_thundering_clear_seconds') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip"
-                   title="{{ __('views/common.modal.simulate.simulate_thundering_clear_seconds_title') }}"></i>
+                   title="{{ __('view_common.modal.simulate.simulate_thundering_clear_seconds_title') }}"></i>
             </label>
             <div class="row">
                 <div class="col">
@@ -70,9 +70,9 @@
 <div class="form-group row no-gutters">
     <div class="col">
         <label for="simulate_bloodlust">
-            {{ __('views/common.modal.simulate.bloodlust') }}
+            {{ __('view_common.modal.simulate.bloodlust') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('views/common.modal.simulate.bloodlust_title') }}"></i>
+               title="{{ __('view_common.modal.simulate.bloodlust_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -82,7 +82,7 @@
     </div>
     <div class="col">
         <label for="simulate_arcane_intellect">
-            {{ __('views/common.modal.simulate.arcane_intellect') }}
+            {{ __('view_common.modal.simulate.arcane_intellect') }}
         </label>
         <div class="row">
             <div class="col">
@@ -92,7 +92,7 @@
     </div>
     <div class="col">
         <label for="simulate_power_word_fortitude">
-            {{ __('views/common.modal.simulate.power_word_fortitude') }}
+            {{ __('view_common.modal.simulate.power_word_fortitude') }}
         </label>
         <div class="row">
             <div class="col">
@@ -102,7 +102,7 @@
     </div>
     <div class="col">
         <label for="simulate_battle_shout">
-            {{ __('views/common.modal.simulate.battle_shout') }}
+            {{ __('view_common.modal.simulate.battle_shout') }}
         </label>
         <div class="row">
             <div class="col">
@@ -112,7 +112,7 @@
     </div>
     <div class="col">
         <label for="simulate_mystic_touch">
-            {{ __('views/common.modal.simulate.mystic_touch') }}
+            {{ __('view_common.modal.simulate.mystic_touch') }}
         </label>
         <div class="row">
             <div class="col">
@@ -122,7 +122,7 @@
     </div>
     <div class="col">
         <label for="simulate_chaos_brand">
-            {{ __('views/common.modal.simulate.chaos_brand') }}
+            {{ __('view_common.modal.simulate.chaos_brand') }}
         </label>
         <div class="row">
             <div class="col">
@@ -134,9 +134,9 @@
 
 <div class="form-group">
     <label for="simulate_hp_percent">
-        {{ __('views/common.modal.simulate.hp_percent') }}
+        {{ __('view_common.modal.simulate.hp_percent') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('views/common.modal.simulate.hp_percent_title') }}"></i>
+           title="{{ __('view_common.modal.simulate.hp_percent_title') }}"></i>
     </label>
     <div class="row">
         <div class="col">
@@ -147,9 +147,9 @@
 
 <div class="form-group">
     <label for="simulate_bloodlust_per_pull">
-        {{ __('views/common.modal.simulate.bloodlust_per_pull') }}
+        {{ __('view_common.modal.simulate.bloodlust_per_pull') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('views/common.modal.simulate.bloodlust_per_pull_title') }}"></i>
+           title="{{ __('view_common.modal.simulate.bloodlust_per_pull_title') }}"></i>
     </label>
     <div class="row">
         <div class="col">

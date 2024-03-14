@@ -1,34 +1,36 @@
 <?php
 
 return [
-    'classic'            => [
+
+    'classic' => [
         'name' => '',
     ],
-    'tbc'                => [
+    'tbc' => [
         'name' => '',
     ],
-    'wotlk'              => [
+    'wotlk' => [
         'name' => '',
     ],
-    'cata'               => [
+    'cata' => [
         'name' => '',
     ],
-    'mop'                => [
+    'mop' => [
         'name' => '',
     ],
-    'wod'                => [
+    'wod' => [
         'name' => '',
     ],
-    'legion'             => [
+    'legion' => [
         'name' => '',
     ],
     'battle_for_azeroth' => [
         'name' => '',
     ],
-    'shadowlands'        => [
+    'shadowlands' => [
         'name' => '',
     ],
-    'dragonflight'       => [
+    'dragonflight' => [
         'name' => '',
     ],
+
 ];

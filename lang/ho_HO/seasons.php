@@ -2,6 +2,6 @@
 
 return [
 
-    'name' => 'hodor',
+    'name' => 'Hodor',
 
 ];

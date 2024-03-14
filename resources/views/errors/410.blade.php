@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('views/errors.410.title'),
+    'title' => __('view_errors.410.title'),
     'code' => 410,
-    'message' => __('views/errors.410.message')
+    'message' => __('view_errors.410.message')
     ])

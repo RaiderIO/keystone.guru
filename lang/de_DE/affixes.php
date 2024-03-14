@@ -126,4 +126,5 @@ return [
         'description' => '',
     ],
     'seasonal_index_preset' => '',
+
 ];

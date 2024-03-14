@@ -7,11 +7,11 @@
 $navs = [
     route('dungeonroutes.search') => [
         'fa'   => 'fas fa-search',
-        'text' => __('views/common.layout.header.search')
+        'text' => __('view_common.layout.header.search')
     ],
     route('dungeon.explore.list') => [
         'fa'   => 'fas fa-compass',
-        'text' => __('views/common.layout.header.explore')
+        'text' => __('view_common.layout.header.explore')
     ]
 ];
 
@@ -23,8 +23,8 @@ foreach ($activeExpansions as $expansion) {
             ),
             __($expansion->name),
 //            $expansion->hasTimewalkingEvent() ?
-//                __('views/common.layout.header.routes_timewalking', ['expansion' => __($expansion->name)]) :
-            __('views/common.layout.header.routes', ['expansion' => __($expansion->name)])
+//                __('view_common.layout.header.routes_timewalking', ['expansion' => __($expansion->name)]) :
+            __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
 
@@ -40,10 +40,10 @@ if($currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VE
     ];
 }
 
-$navs[__('views/common.layout.header.expansion_routes')] = $expansionRoutes;
+$navs[__('view_common.layout.header.expansion_routes')] = $expansionRoutes;
 
 $navs[route('misc.affixes')] = [
-    'text' => __('views/common.layout.header.affixes')
+    'text' => __('view_common.layout.header.affixes')
 ];
 
 ?>
@@ -59,7 +59,7 @@ $navs[route('misc.affixes')] = [
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"
-                aria-label="{{ __('views/common.layout.header.toggle_navigation_title') }}">
+                aria-label="{{ __('view_common.layout.header.toggle_navigation_title') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -68,7 +68,7 @@ $navs[route('misc.affixes')] = [
                 <li class="nav-item px-3">
                     <a class="btn btn-accent" href="#"
                        data-toggle="modal" data-target="#create_route_modal">
-                        <i class="fas fa-plus"></i> {{__('views/common.layout.header.create_route')}}
+                        <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}
                     </a>
                 </li>
                 @foreach($navs as $route => $opts)
@@ -83,7 +83,7 @@ $navs[route('misc.affixes')] = [
                                 @endisset
                                 {{ $opts['text'] }}
                                 @if(isset($opts['new']) && $opts['new'])
-                                    <sup class="text-success">{{ __('views/common.layout.header.new') }}</sup>
+                                    <sup class="text-success">{{ __('view_common.layout.header.new') }}</sup>
                                 @endif
                             </a>
                         </li>

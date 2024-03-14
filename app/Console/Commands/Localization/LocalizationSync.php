@@ -57,6 +57,18 @@ class LocalizationSync extends Command
 
     public function scanDir(string $baseLang, string $targetLang, string $baseDir, string $targetDir): void
     {
+        if (!file_exists($baseDir)) {
+            $this->error(sprintf('Unable to find base dir %s', $baseDir));
+
+            return;
+        }
+
+        if (!file_exists($targetDir)) {
+            $this->error(sprintf('Unable to find target dir %s', $targetDir));
+
+            return;
+        }
+
         foreach (scandir($baseDir) as $name) {
             if ($name == '.' || $name == '..' || preg_match('#\.[0-9]{8}_[0-9]{6}\.php$#', $name)) {
                 continue;
@@ -113,7 +125,7 @@ class LocalizationSync extends Command
      *
      * @param false|array $lemmas
      */
-    public function parse(string $targetLang, string $content, $lemmas = false): string
+    public function parse(string $targetLang, string $content, mixed $lemmas = false): mixed
     {
         $result      = $lemmas === false ? [] : '';
         $tree        = [null];
@@ -178,7 +190,7 @@ class LocalizationSync extends Command
                     } // mark value as not specified
                     else {
                         if ($targetLang === self::LANG_HODOR) {
-                            $segment = $match[1] . 'hodor' . $match[1];
+                            $segment = $match[1] . 'Hodor' . $match[1];
                         } else {
                             $segment = $match[1] .
                                 /*'@todo ' . $targetLang . ': ' . $key .*/

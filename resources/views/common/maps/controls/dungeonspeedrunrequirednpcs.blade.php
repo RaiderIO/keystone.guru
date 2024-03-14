@@ -16,7 +16,7 @@
         <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
                 data-target="#edit_route_dungeon_speedrun_required_npcs_collapse"
                 aria-expanded="false" aria-controls="collapseExample">
-            {{ __('views/common.maps.controls.pulls.toggle_all_required_enemies') }}
+            {{ __('view_common.maps.controls.pulls.toggle_all_required_enemies') }}
 
         </button>
     </div>

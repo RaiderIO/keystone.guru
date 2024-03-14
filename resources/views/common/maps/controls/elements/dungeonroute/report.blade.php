@@ -8,8 +8,8 @@
             <i class="fas fa-flag"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">
                                 {{ isset($current_report) ?
-                            __('views/common.maps.controls.view.report_for_moderation_finished') :
-                            __('views/common.maps.controls.view.report_for_moderation') }}
+                            __('view_common.maps.controls.view.report_for_moderation_finished') :
+                            __('view_common.maps.controls.view.report_for_moderation') }}
                             </span>
         </a>
     </div>

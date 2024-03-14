@@ -2,7 +2,7 @@
 
 return [
 
-    'previous' => 'hodor',
-    'next' => 'hodor',
+    'previous' => 'Hodor',
+    'next' => 'Hodor',
 
 ];

@@ -4,9 +4,9 @@
 
 $showStyle = 'regular';
 ?>
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.embed.title')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.embed.title')])
 
-@section('header-title', __('views/misc.embed.header'))
+@section('header-title', __('view_misc.embed.header'))
 
 @section('content')
     <div class="row justify-content-center">

@@ -1,14 +1,14 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.expansion.list.title')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.expansion.list.title')])
 
 @section('header-title')
     <div class="row">
         <div class="col-lg">
-            <h4>{{ __('views/admin.expansion.list.header') }}</h4>
+            <h4>{{ __('view_admin.expansion.list.header') }}</h4>
         </div>
         <div class="ml-auto">
             <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto"
                role="button">
-                <i class="fas fa-plus"></i> {{ __('views/admin.expansion.list.create_expansion') }}
+                <i class="fas fa-plus"></i> {{ __('view_admin.expansion.list.create_expansion') }}
             </a>
         </div>
     </div>
@@ -28,12 +28,12 @@
     <table id="admin_expansion_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="50px">{{ __('views/admin.expansion.list.table_header_active') }}</th>
-            <th width="10%">{{ __('views/admin.expansion.list.table_header_icon') }}</th>
-            <th width="10%">{{ __('views/admin.expansion.list.table_header_id') }}</th>
-            <th width="50%">{{ __('views/admin.expansion.list.table_header_name') }}</th>
-            <th width="20%">{{ __('views/admin.expansion.list.table_header_color') }}</th>
-            <th width="10%">{{ __('views/admin.expansion.list.table_header_actions') }}</th>
+            <th width="50px">{{ __('view_admin.expansion.list.table_header_active') }}</th>
+            <th width="10%">{{ __('view_admin.expansion.list.table_header_icon') }}</th>
+            <th width="10%">{{ __('view_admin.expansion.list.table_header_id') }}</th>
+            <th width="50%">{{ __('view_admin.expansion.list.table_header_name') }}</th>
+            <th width="20%">{{ __('view_admin.expansion.list.table_header_color') }}</th>
+            <th width="10%">{{ __('view_admin.expansion.list.table_header_actions') }}</th>
         </tr>
         </thead>
 
@@ -56,7 +56,7 @@
                 <td>
                     <a class="btn btn-primary"
                        href="{{ route('admin.expansion.edit', ['expansion' => $expansion]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.expansion.list.edit') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.expansion.list.edit') }}
                     </a>
                 </td>
             </tr>

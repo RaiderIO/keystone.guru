@@ -14,7 +14,7 @@
     <div class="row no-gutters pull_workbench_row">
         <div class="col">
             <div data-toggle="tooltip"
-                 title="{{ __('views/common.maps.controls.pullsworkbench.description') }}">
+                 title="{{ __('view_common.maps.controls.pullsworkbench.description') }}">
                 <button id="map_killzonessidebar_killzone_description" class="btn btn-primary"
                         data-toggle="modal" data-target="#map_killzonessidebar_killzone_description_modal">
                     <i class="fas fa-font"></i>
@@ -26,7 +26,7 @@
     <div class="row no-gutters pull_workbench_row">
         <div class="col">
             <div data-toggle="tooltip"
-                 title="{{ __('views/common.maps.controls.pullsworkbench.spells') }}">
+                 title="{{ __('view_common.maps.controls.pullsworkbench.spells') }}">
                 <button id="map_killzonessidebar_killzone_spells" class="btn btn-primary"
                         data-toggle="modal" data-target="#map_killzonessidebar_killzone_spells_modal">
                     <i class="fas fa-magic"></i>
@@ -59,7 +59,7 @@
     <div class="row no-gutters pull_workbench_row">
         <div class="col">
             <div data-toggle="tooltip"
-                 title="{{ __('views/common.maps.controls.pullsworkbench.delete_killzone') }}">
+                 title="{{ __('view_common.maps.controls.pullsworkbench.delete_killzone') }}">
                 <button id="map_killzonessidebar_killzone_delete" class="btn btn-danger">
                     <i class="fa fa-trash"></i>
                 </button>
@@ -76,7 +76,7 @@
         <div class="form-group">
             {!! Form::label(
                 'map_killzonessidebar_killzone_description_modal_textarea',
-                __('views/common.maps.controls.pullsworkbench.modal.description.label'),
+                __('view_common.maps.controls.pullsworkbench.modal.description.label'),
                 ['id' => 'map_killzonessidebar_killzone_description_modal_label']
             ) !!}
             {{ Form::textarea('map_killzonessidebar_killzone_description_modal_textarea', '', [
@@ -86,7 +86,7 @@
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-dismiss="modal">
-                {{ __('views/common.maps.controls.pullsworkbench.modal.description.save') }}
+                {{ __('view_common.maps.controls.pullsworkbench.modal.description.save') }}
             </div>
         </div>
     @endcomponent
@@ -95,7 +95,7 @@
         <div class="form-group">
             {!! Form::label(
                 'map_killzonessidebar_killzone_spells_modal_select',
-                __('views/common.maps.controls.pullsworkbench.modal.spells.label'),
+                __('view_common.maps.controls.pullsworkbench.modal.spells.label'),
                 ['id' => 'map_killzonessidebar_killzone_spells_modal_label']
             ) !!}
             <select id="map_killzonessidebar_killzone_spells_modal_select"
@@ -121,7 +121,7 @@
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_spells_modal_save" class="btn btn-primary" data-dismiss="modal">
-                {{ __('views/common.maps.controls.pullsworkbench.modal.spells.save') }}
+                {{ __('view_common.maps.controls.pullsworkbench.modal.spells.save') }}
             </div>
         </div>
     @endcomponent

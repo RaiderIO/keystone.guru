@@ -3,7 +3,7 @@
 ?>
 <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
     <h4>
-        {{ __('views/profile.edit.patreon') }}
+        {{ __('view_profile.edit.patreon') }}
     </h4>
     @isset($user->patreonUserLink)
         @php(ob_start())
@@ -13,26 +13,26 @@
         @if($user->patreonUserLink->refresh_token === \App\Models\Patreon\PatreonUserLink::PERMANENT_TOKEN)
             <p class="mt-2">
                 <span class="text-info"><i class="fa fa-check-circle"></i></span>
-                {!! __('views/profile.edit.patreon_status_granted_manually', ['patreon' => $patreonLink]) !!}
+                {!! __('view_profile.edit.patreon_status_granted_manually', ['patreon' => $patreonLink]) !!}
             </p>
         @else
             <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}">
-                {{ __('views/profile.edit.unlink_from_patreon') }}
+                {{ __('view_profile.edit.unlink_from_patreon') }}
             </a>
 
             <p class="mt-2">
                 <span class="text-info"><i class="fa fa-check-circle"></i></span>
-                {!! __('views/profile.edit.link_to_patreon_success', ['patreon' => $patreonLink]) !!}
+                {!! __('view_profile.edit.link_to_patreon_success', ['patreon' => $patreonLink]) !!}
             </p>
         @endif
 
         <table class="default_table table-striped">
             <tr>
                 <th class="pl-1">
-                    {{ __('views/profile.edit.patreon_benefit_table.header_active') }}
+                    {{ __('view_profile.edit.patreon_benefit_table.header_active') }}
                 </th>
                 <th>
-                    {{ __('views/profile.edit.patreon_benefit_table.header_benefit') }}
+                    {{ __('view_profile.edit.patreon_benefit_table.header_benefit') }}
                 </th>
             </tr>
             @foreach(\App\Models\Patreon\PatreonBenefit::all() as $patreonBenefit)
@@ -58,12 +58,12 @@
                             'state' => csrf_token()
                             ])
                         }}">
-            {{ __('views/profile.edit.link_to_patreon') }}
+            {{ __('view_profile.edit.link_to_patreon') }}
         </a>
 
         <p class="mt-2">
             <span class="text-info"><i class="fa fa-info-circle"></i></span>
-            {{ __('views/profile.edit.link_to_patreon_description') }}
+            {{ __('view_profile.edit.link_to_patreon_description') }}
         </p>
     @endisset
 </div>

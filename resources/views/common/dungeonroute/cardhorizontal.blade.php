@@ -18,7 +18,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
     } else if ($dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL)) {
         $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
     }
-    
+
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
     if (!isset($tierAffixGroup)) {
         // Try to come up with a sensible default
@@ -74,13 +74,13 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                 @if( !$dungeonroute->mappingVersion->isLatestForDungeon() )
                     <div class="col-auto">
                         <i class="fas fa-exclamation-triangle text-warning"
-                           title="{{ __('views/common.dungeonroute.card.outdated_mapping_version') }}"
+                           title="{{ __('view_common.dungeonroute.card.outdated_mapping_version') }}"
                            data-toggle="tooltip"></i>
                     </div>
                 @endif
                 @if( $showAffixes )
                     <div class="col-auto ml-1">
-                            <?php 
+                            <?php
     ob_start();
     ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
@@ -93,7 +93,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                                 ])
                             </div>
                         @endforeach
-                            <?php 
+                            <?php
     $affixes = ob_get_clean();
     ?>
                         <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
@@ -154,7 +154,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
             <div class="row no-gutters footer">
                 <div class="col bg-card-footer px-2 py-1">
                     <small class="text-muted">
-                        {{ __('views/common.dungeonroute.card.by_author') }}
+                        {{ __('view_common.dungeonroute.card.by_author') }}
                         @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
                         @if( $dungeonroute->rating > 1 )
                             -
@@ -162,7 +162,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                         @endif
                         -
                         <span data-toggle="tooltip" title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
-                            {{ sprintf(__('views/common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
+                            {{ sprintf(__('view_common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
                         </span>
                     </small>
                 </div>
@@ -176,14 +176,14 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                         <a class="dropdown-item" href="#" data-toggle="modal"
                            data-target="#userreport_dungeonroute_modal"
                            data-publickey="{{ $dungeonroute->public_key }}">
-                            <i class="fas fa-flag"></i> {{ __('views/common.dungeonroute.card.report') }}
+                            <i class="fas fa-flag"></i> {{ __('view_common.dungeonroute.card.report') }}
                         </a>
                         @auth
                             @if(Auth::user()->hasRole('admin'))
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item refresh_thumbnail"
                                    data-publickey="{{ $dungeonroute->public_key }}">
-                                    <i class="fas fa-sync"></i> {{ __('views/common.dungeonroute.card.refresh_thumbnail') }}
+                                    <i class="fas fa-sync"></i> {{ __('view_common.dungeonroute.card.refresh_thumbnail') }}
                                 </a>
                             @endif
                         @endauth
@@ -194,7 +194,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
     </div>
 </div>
 
-    <?php 
+    <?php
     return ob_get_clean();
 };
 

@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/legal.cookies.title')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_legal.cookies.title')])
 
-@section('header-title', __('views/legal.cookies.header'))
+@section('header-title', __('view_legal.cookies.header'))
 
 @section('content')
     <p>

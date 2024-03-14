@@ -20,6 +20,6 @@ $routeLoaderSelector ??= '#category_route_load_more_loader';
 
 @if(!$hasLoader)
     <div id="category_route_load_more_loader" class="text-center">
-        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.dungeonroute.search.loadmore.loading') }}
+        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_common.dungeonroute.search.loadmore.loading') }}
     </div>
 @endif

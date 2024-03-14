@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'bolstering'            => [
         'name'        => '',
         'description' => '',
@@ -126,4 +127,5 @@ return [
         'description' => '',
     ],
     'seasonal_index_preset' => '',
+
 ];

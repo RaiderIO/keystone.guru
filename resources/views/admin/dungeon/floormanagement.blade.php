@@ -21,21 +21,21 @@ $mappingVersionsSelect = $dungeon->mappingVersions
     </script>
 @endsection
 
-<h4>{{ __('views/admin.dungeon.edit.floor_management.title') }}</h4>
+<h4>{{ __('view_admin.dungeon.edit.floor_management.title') }}</h4>
 <div class="float-right">
     <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
        class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('views/admin.dungeon.edit.floor_management.add_floor') }}
+        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.floor_management.add_floor') }}
     </a>
 </div>
 
 <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('views/admin.dungeon.edit.floor_management.table_header_id') }}</th>
-        <th width="10%">{{ __('views/admin.dungeon.edit.floor_management.table_header_index') }}</th>
-        <th width="40%">{{ __('views/admin.dungeon.edit.floor_management.table_header_name') }}</th>
-        <th width="40%">{{ __('views/admin.dungeon.edit.floor_management.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_id') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_index') }}</th>
+        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
+        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -52,7 +52,7 @@ $mappingVersionsSelect = $dungeon->mappingVersions
                         <div class="col-auto">
                             <a class="btn btn-primary"
                                href="{{ route('admin.floor.edit', ['dungeon' => $dungeon->slug, 'floor' => $floor->id]) }}">
-                                <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.dungeon.edit.floor_management.floor_edit_edit') }}
+                                <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.dungeon.edit.floor_management.floor_edit_edit') }}
                             </a>
                         </div>
                         <div class="col">
