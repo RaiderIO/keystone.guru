@@ -124,7 +124,7 @@ return [
     | This option indicates the language code and name to be used, short/long
     | and english/native.
     | Short: language code (en)
-    | Long: languagecode-COUNTRYCODE (en-GB)
+    | Long: languagecode_COUNTRYCODE (en_GB)
     |
     */
 
@@ -140,7 +140,7 @@ return [
     */
 
     // Only allow DE when debugging, it's still WIP
-    'allowed' => env('APP_DEBUG') ? ['en_US', 'de_DE', 'ru_RU', 'ho_HO'] : ['en_US', 'ru_RU'],
+    'allowed' => env('APP_DEBUG') ? ['en', 'de', 'ru_RU', 'ho_HO'] : ['en', 'ru'],
 
     /*
     |--------------------------------------------------------------------------
@@ -158,7 +158,7 @@ return [
         ['short' => 'cn', 'long' => 'zh_CN', 'english' => 'Chinese (S)', 'native' => '简体中文'],
         ['short' => 'cs', 'long' => 'cs_CZ', 'english' => 'Czech', 'native' => 'Čeština'],
         ['short' => 'da', 'long' => 'da_DK', 'english' => 'Danish', 'native' => 'Dansk'],
-        ['short' => 'de', 'long' => 'de_DE', 'english' => 'German', 'native' => 'Deutsch'],
+        ['short' => 'de', 'long' => 'de', 'english' => 'German', 'native' => 'Deutsch'],
         ['short' => 'de', 'long' => 'de_AT', 'english' => 'Austrian', 'native' => 'Österreichisches Deutsch'],
         ['short' => 'fi', 'long' => 'fi_FI', 'english' => 'Finnish', 'native' => 'Suomi'],
         ['short' => 'fr', 'long' => 'fr_FR', 'english' => 'French', 'native' => 'Français'],
@@ -166,7 +166,7 @@ return [
         ['short' => 'en', 'long' => 'en_AU', 'english' => 'English (AU)', 'native' => 'English (AU)'],
         ['short' => 'en', 'long' => 'en_CA', 'english' => 'English (CA)', 'native' => 'English (CA)'],
         ['short' => 'en', 'long' => 'en_GB', 'english' => 'English (GB)', 'native' => 'English (GB)'],
-        ['short' => 'en', 'long' => 'en_US', 'english' => 'English (US)', 'native' => 'English (US)'],
+        ['short' => 'en', 'long' => 'en', 'english' => 'English (US)', 'native' => 'English (US)'],
         ['short' => 'es', 'long' => 'es_ES', 'english' => 'Spanish', 'native' => 'Español'],
         ['short' => 'et', 'long' => 'et_EE', 'english' => 'Estonian', 'native' => 'Eesti'],
         ['short' => 'he', 'long' => 'he_IL', 'english' => 'Hebrew', 'native' => 'עִבְרִית'],
@@ -176,7 +176,7 @@ return [
         ['short' => 'hu', 'long' => 'hu_HU', 'english' => 'Hungarian', 'native' => 'Magyar'],
         ['short' => 'hy', 'long' => 'hy_AM', 'english' => 'Armenian', 'native' => 'Հայերեն'],
         ['short' => 'id', 'long' => 'id_ID', 'english' => 'Indonesian', 'native' => 'Bahasa Indonesia'],
-        ['short' => 'it', 'long' => 'it_IT', 'english' => 'Italian', 'native' => 'Italiano'],
+        ['short' => 'it', 'long' => 'it', 'english' => 'Italian', 'native' => 'Italiano'],
         ['short' => 'ir', 'long' => 'fa_IR', 'english' => 'Persian', 'native' => 'فارسی'],
         ['short' => 'jp', 'long' => 'ja_JP', 'english' => 'Japanese', 'native' => '日本語'],
         ['short' => 'ka', 'long' => 'ka_GE', 'english' => 'Georgian', 'native' => 'ქართული'],
@@ -193,7 +193,7 @@ return [
         ['short' => 'pt_BR', 'long' => 'pt_BR', 'english' => 'Brazilian', 'native' => 'Português do Brasil'],
         ['short' => 'pt', 'long' => 'pt_PT', 'english' => 'Portuguese', 'native' => 'Português'],
         ['short' => 'ro', 'long' => 'ro_RO', 'english' => 'Romanian', 'native' => 'Română'],
-        ['short' => 'ru', 'long' => 'ru_RU', 'english' => 'Russian', 'native' => 'Русский'],
+        ['short' => 'ru', 'long' => 'ru', 'english' => 'Russian', 'native' => 'Русский'],
         ['short' => 'sr', 'long' => 'sr_RS', 'english' => 'Serbian (Cyrillic)', 'native' => 'Српски језик'],
         ['short' => 'sr', 'long' => 'sr_CS', 'english' => 'Serbian (Latin)', 'native' => 'Српски језик'],
         ['short' => 'sq', 'long' => 'sq_AL', 'english' => 'Albanian', 'native' => 'Shqip'],
