@@ -146,7 +146,7 @@ class ReleaseController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      */
-    public function list(): View
+    public function get(): View
     {
         return view('admin.release.list', ['models' => Release::orderBy('id', 'desc')->get()]);
     }

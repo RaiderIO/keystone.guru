@@ -9,7 +9,7 @@ use Request;
 
 class APIDungeonController extends Controller
 {
-    public function list(Request $request): DungeonCollectionResource
+    public function get(Request $request): DungeonCollectionResource
     {
         return new DungeonCollectionResource(
             Dungeon::active()->paginate(50)

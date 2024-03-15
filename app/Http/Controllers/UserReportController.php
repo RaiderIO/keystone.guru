@@ -13,7 +13,7 @@ class UserReportController extends Controller
      *
      * @return Factory|
      */
-    public function list(): View
+    public function get(): View
     {
         $userReports = UserReport::where('status', 0)->get();
         // Ugly way of loading this relationship, eager loading with dynamic relations don't work!
