@@ -2,7 +2,7 @@
 
 return [
 
-    'failed' => 'Hodor',
+    'failed'   => 'Hodor',
     'throttle' => 'Hodor',
 
 ];

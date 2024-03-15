@@ -2,11 +2,11 @@
 
 return [
 
-    'ad-free' => '',
+    'ad-free'                 => '',
     'unlimited-dungeonroutes' => '',
-    'unlisted-routes' => '',
-    'animated-polylines' => '',
-    'advanced-simulation' => '',
-    'ad-free-team-members' => '',
+    'unlisted-routes'         => '',
+    'animated-polylines'      => '',
+    'advanced-simulation'     => '',
+    'ad-free-team-members'    => '',
 
 ];

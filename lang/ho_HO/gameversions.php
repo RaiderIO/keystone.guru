@@ -2,16 +2,16 @@
 
 return [
 
-    'retail' => [
-        'name' => 'Hodor',
+    'retail'  => [
+        'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'wotlk' => [
-        'name' => 'Hodor',
+    'wotlk'   => [
+        'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
     'classic' => [
-        'name' => 'Hodor',
+        'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
 

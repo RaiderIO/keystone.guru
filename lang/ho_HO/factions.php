@@ -3,7 +3,7 @@
 return [
 
     'unspecified' => 'Hodor',
-    'horde' => 'Hodor',
-    'alliance' => 'Hodor',
+    'horde'       => 'Hodor',
+    'alliance'    => 'Hodor',
 
 ];

@@ -3,9 +3,9 @@
 return [
 
     'password' => '',
-    'reset' => '',
-    'sent' => '',
-    'token' => '',
-    'user' => '',
+    'reset'    => '',
+    'sent'     => '',
+    'token'    => '',
+    'user'     => '',
 
 ];

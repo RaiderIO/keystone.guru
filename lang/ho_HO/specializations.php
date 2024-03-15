@@ -3,67 +3,67 @@
 return [
 
     'death_knight' => [
-        'blood' => 'Hodor',
-        'frost' => 'Hodor',
+        'blood'  => 'Hodor',
+        'frost'  => 'Hodor',
         'unholy' => 'Hodor',
     ],
     'demon_hunter' => [
-        'havoc' => 'Hodor',
+        'havoc'     => 'Hodor',
         'vengeance' => 'Hodor',
     ],
-    'druid' => [
-        'balance' => 'Hodor',
-        'feral' => 'Hodor',
-        'guardian' => 'Hodor',
+    'druid'        => [
+        'balance'     => 'Hodor',
+        'feral'       => 'Hodor',
+        'guardian'    => 'Hodor',
         'restoration' => 'Hodor',
     ],
-    'evoker' => [
-        'devastation' => 'Hodor',
+    'evoker'       => [
+        'devastation'  => 'Hodor',
         'preservation' => 'Hodor',
     ],
-    'hunter' => [
+    'hunter'       => [
         'beast_mastery' => 'Hodor',
-        'marksman' => 'Hodor',
-        'survival' => 'Hodor',
+        'marksman'      => 'Hodor',
+        'survival'      => 'Hodor',
     ],
-    'mage' => [
+    'mage'         => [
         'arcane' => 'Hodor',
-        'fire' => 'Hodor',
-        'frost' => 'Hodor',
+        'fire'   => 'Hodor',
+        'frost'  => 'Hodor',
     ],
-    'monk' => [
+    'monk'         => [
         'brewmaster' => 'Hodor',
         'mistweaver' => 'Hodor',
         'windwalker' => 'Hodor',
     ],
-    'paladin' => [
-        'holy' => 'Hodor',
-        'protection' => 'Hodor',
+    'paladin'      => [
+        'holy'        => 'Hodor',
+        'protection'  => 'Hodor',
         'retribution' => 'Hodor',
     ],
-    'priest' => [
+    'priest'       => [
         'discipline' => 'Hodor',
-        'holy' => 'Hodor',
-        'shadow' => 'Hodor',
+        'holy'       => 'Hodor',
+        'shadow'     => 'Hodor',
     ],
-    'rogue' => [
+    'rogue'        => [
         'assassination' => 'Hodor',
-        'outlaw' => 'Hodor',
-        'subtlety' => 'Hodor',
+        'outlaw'        => 'Hodor',
+        'subtlety'      => 'Hodor',
     ],
-    'shaman' => [
-        'elemental' => 'Hodor',
+    'shaman'       => [
+        'elemental'   => 'Hodor',
         'enhancement' => 'Hodor',
         'restoration' => 'Hodor',
     ],
-    'warlock' => [
-        'affliction' => 'Hodor',
-        'demonology' => 'Hodor',
+    'warlock'      => [
+        'affliction'  => 'Hodor',
+        'demonology'  => 'Hodor',
         'destruction' => 'Hodor',
     ],
-    'warrior' => [
-        'arms' => 'Hodor',
-        'fury' => 'Hodor',
+    'warrior'      => [
+        'arms'       => 'Hodor',
+        'fury'       => 'Hodor',
         'protection' => 'Hodor',
     ],
 

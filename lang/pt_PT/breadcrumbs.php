@@ -3,94 +3,94 @@
 return [
 
     'home' => [
-        'keystone_guru' => '',
-        'affixes' => '',
-        'changelog' => '',
-        'routes' => '',
+        'keystone_guru'    => '',
+        'affixes'          => '',
+        'changelog'        => '',
+        'routes'           => '',
         'routes_expansion' => '',
-        'dungeon' => [
+        'dungeon'          => [
             'explore' => '',
         ],
-        'dungeonroute' => [
+        'dungeonroute'     => [
             'new' => '',
         ],
-        'dungeonroutes' => [
-            'search' => '',
-            'popular' => '',
+        'dungeonroutes'    => [
+            'search'            => '',
+            'popular'           => '',
             'next_week_affixes' => '',
             'this_week_affixes' => '',
-            'new' => '',
-            'routes_season' => '',
-            'season' => [
-                'popular' => '',
+            'new'               => '',
+            'routes_season'     => '',
+            'season'            => [
+                'popular'           => '',
                 'next_week_affixes' => '',
                 'this_week_affixes' => '',
-                'new' => '',
+                'new'               => '',
             ],
-            'discoverdungeon' => [
-                'popular' => '',
+            'discoverdungeon'   => [
+                'popular'           => '',
                 'next_week_affixes' => '',
                 'this_week_affixes' => '',
-                'new' => '',
+                'new'               => '',
             ],
         ],
-        'my_profile' => '',
-        'my_routes' => '',
-        'my_tags' => '',
-        'my_teams' => '',
-        'overview' => '',
-        'new_team' => '',
-        'edit_team' => '',
-        'join_team' => '',
-        'admin' => [
-            'admin' => '',
-            'tools' => [
-                'admin_tools' => '',
+        'my_profile'       => '',
+        'my_routes'        => '',
+        'my_tags'          => '',
+        'my_teams'         => '',
+        'overview'         => '',
+        'new_team'         => '',
+        'edit_team'        => '',
+        'join_team'        => '',
+        'admin'            => [
+            'admin'                      => '',
+            'tools'                      => [
+                'admin_tools'               => '',
                 'view_exported_dungeondata' => '',
-                'view_exported_releases' => '',
-                'select_exception' => '',
-                'mdt_diff' => '',
-                'view_mdt_string_contents' => '',
-                'import_npcs' => '',
+                'view_exported_releases'    => '',
+                'select_exception'          => '',
+                'mdt_diff'                  => '',
+                'view_mdt_string_contents'  => '',
+                'import_npcs'               => '',
             ],
-            'releases' => '',
-            'new_release' => '',
-            'edit_release' => '',
-            'expansions' => [
-                'expansions' => '',
-                'new_expansion' => '',
+            'releases'                   => '',
+            'new_release'                => '',
+            'edit_release'               => '',
+            'expansions'                 => [
+                'expansions'     => '',
+                'new_expansion'  => '',
                 'edit_expansion' => '',
             ],
-            'dungeons' => [
-                'dungeons' => '',
-                'new_dungeon' => '',
+            'dungeons'                   => [
+                'dungeons'     => '',
+                'new_dungeon'  => '',
                 'edit_dungeon' => '',
             ],
-            'floors' => [
-                'new_floor' => '',
+            'floors'                     => [
+                'new_floor'  => '',
                 'edit_floor' => '',
             ],
             'dungeonspeedrunrequirednpc' => [
                 'new_dungeonspeedrunrequirednpc10man' => '',
                 'new_dungeonspeedrunrequirednpc25man' => '',
             ],
-            'npcs' => [
-                'npcs' => '',
-                'new_npc' => '',
+            'npcs'                       => [
+                'npcs'     => '',
+                'new_npc'  => '',
                 'edit_npc' => '',
             ],
-            'npcenemyforces' => [
+            'npcenemyforces'             => [
                 'edit_npc_enemy_forces' => '',
             ],
-            'spells' => [
-                'spells' => '',
-                'new_spell' => '',
+            'spells'                     => [
+                'spells'     => '',
+                'new_spell'  => '',
                 'edit_spell' => '',
             ],
-            'users' => [
+            'users'                      => [
                 'users' => '',
             ],
-            'user_reports' => [
+            'user_reports'               => [
                 'user_reports' => '',
             ],
         ],

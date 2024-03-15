@@ -3,6 +3,6 @@
 return [
 
     'previous' => 'Hodor',
-    'next' => 'Hodor',
+    'next'     => 'Hodor',
 
 ];

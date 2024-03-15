@@ -2,13 +2,13 @@
 
 return [
 
-    'legion' => [
+    'legion'             => [
         'name' => 'Легион',
     ],
     'battle_for_azeroth' => [
         'name' => 'Битва за Азерот',
     ],
-    'shadowlands' => [
+    'shadowlands'        => [
         'name' => 'Темные земли',
     ],
 

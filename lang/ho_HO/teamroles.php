@@ -2,9 +2,9 @@
 
 return [
 
-    'member' => 'Hodor',
+    'member'       => 'Hodor',
     'collaborator' => 'Hodor',
-    'moderator' => 'Hodor',
-    'admin' => 'Hodor',
+    'moderator'    => 'Hodor',
+    'admin'        => 'Hodor',
 
 ];

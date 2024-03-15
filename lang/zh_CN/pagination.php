@@ -3,6 +3,6 @@
 return [
 
     'previous' => '',
-    'next' => '',
+    'next'     => '',
 
 ];
