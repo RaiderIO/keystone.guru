@@ -50,7 +50,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         <div class="col-auto px-1">
             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
             @if($dungeon->floors()->count() > 1)
-                {!! Form::select('map_floor_selection_dropdown', [__('views/dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
+                {!! Form::select('map_floor_selection_dropdown', [__('view_dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
             @endif
         </div>
         @if($embedOptions['show']['presenterButton'])
@@ -58,7 +58,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                 <a class="btn btn btn-warning float-right h-100 text-white"
                    href="{{ $presentRouteUrl }}"
                    target="_blank">
-                    <i class="fas fa-video"></i> {{ __('views/dungeonroute.embed.present_route') }}
+                    <i class="fas fa-video"></i> {{ __('view_dungeonroute.embed.present_route') }}
                 </a>
             </div>
         @endif
@@ -66,17 +66,17 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             <a class="btn btn btn-primary float-right h-100"
                href="{{ $viewRouteUrl }}"
                target="_blank">
-                <i class="fas fa-external-link-alt"></i> {{ __('views/dungeonroute.embed.view_route') }}
+                <i class="fas fa-external-link-alt"></i> {{ __('view_dungeonroute.embed.view_route') }}
             </a>
         </div>
         @if($dungeon->mdt_supported)
             <div class="col-auto pl-1">
                 <div id="embed_copy_mdt_string" class="btn btn btn-primary float-right h-100">
-                    <i class="fas fa-file-export"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                    <i class="fas fa-file-export"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>
                 <div id="embed_copy_mdt_string_loader" class="btn btn btn-primary float-right h-100" disabled
                      style="display: none;">
-                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('views/dungeonroute.embed.copy_mdt_string') }}
+                    <i class="fas fa-circle-notch fa-spin"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>
             </div>
         @endif

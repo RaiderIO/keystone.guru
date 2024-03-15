@@ -3,9 +3,9 @@
 /** @var $categories \Illuminate\Support\Collection|\App\Models\ReleaseChangelogCategory[] */
 /** @var $isUserAdmin boolean */
 ?>
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.changelog.title')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.changelog.title')])
 
-@section('header-title', __('views/misc.changelog.header'))
+@section('header-title', __('view_misc.changelog.header'))
 <?php // Only add the releases when we're an admin, otherwise empty it ?>
 @include('common.general.inline', ['path' => 'release/view', 'options' => array_merge(
     ['max_release' => $releases->first()->id],

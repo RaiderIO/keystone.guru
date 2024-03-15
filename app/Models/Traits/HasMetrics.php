@@ -32,7 +32,6 @@ trait HasMetrics
             ->where('model_class', $this::class)
             ->where('category', $category)
             ->where('tag', $tag)
-            ->get()
             ->first();
 
         return $metricAggregation->value;

@@ -58,7 +58,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
                 '- %s mapping version %s (%s, %d, %d enemies)',
                 $hasMappingVersion ? 'Updated' : 'Created',
                 $mappingVersion->version,
-                __($mappingVersion->dungeon->name, [], 'en-US'),
+                __($mappingVersion->dungeon->name, [], 'en_US'),
                 $mappingVersion->id,
                 $mappingVersion->enemies()->count(),
             )

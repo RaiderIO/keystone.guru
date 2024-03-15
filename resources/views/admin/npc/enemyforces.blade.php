@@ -14,14 +14,14 @@
     </script>
 @endsection
 
-<h4>{{ __('views/admin.npcenemyforces.title') }}</h4>
+<h4>{{ __('view_admin.npcenemyforces.title') }}</h4>
 <table id="admin_npc_enemy_forces_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('views/admin.npcenemyforces.table_header_id') }}</th>
-        <th width="40%">{{ __('views/admin.npcenemyforces.table_header_mapping_version') }}</th>
-        <th width="10%">{{ __('views/admin.npcenemyforces.table_header_enemy_forces') }}</th>
-        <th width="20%">{{ __('views/admin.npcenemyforces.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.npcenemyforces.table_header_id') }}</th>
+        <th width="40%">{{ __('view_admin.npcenemyforces.table_header_mapping_version') }}</th>
+        <th width="10%">{{ __('view_admin.npcenemyforces.table_header_enemy_forces') }}</th>
+        <th width="20%">{{ __('view_admin.npcenemyforces.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -34,11 +34,11 @@
             <td>{{ $npcEnemyForces->enemy_forces }}</td>
             <td>
                 @if($npcEnemyForces->mappingVersion->merged)
-                    {{ __('views/admin.npcenemyforces.mapping_version_read_only') }}
+                    {{ __('view_admin.npcenemyforces.mapping_version_read_only') }}
                 @else
                     <a class="btn btn-info"
                        href="{{ route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces]) }}">
-                        <i class="fas fa-edit"></i>&nbsp;{{ __('views/admin.npcenemyforces.edit_enemy_forces') }}
+                        <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.npcenemyforces.edit_enemy_forces') }}
                     </a>
                 @endif
             </td>

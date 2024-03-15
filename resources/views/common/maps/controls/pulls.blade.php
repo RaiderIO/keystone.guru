@@ -63,18 +63,18 @@ $showAds                ??= true;
                 <div class="p-1">
                     <div class="row pr-2 mb-2 no-gutters">
                         <div class="col-auto" data-toggle="tooltip"
-                             title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
+                             title="{{ __('view_common.maps.controls.pulls.settings_title') }}">
                             <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
                                 <i class='fas fa-cog'></i>
                             </button>
                         </div>
                         <div class="col pl-2 pr-2">
                             <div id="killzones_new_pull" class="btn btn-success w-100">
-                                <i class="fas fa-plus"></i> {{__('views/common.maps.controls.pulls.new_pull')}}
+                                <i class="fas fa-plus"></i> {{__('view_common.maps.controls.pulls.new_pull')}}
                             </div>
                         </div>
                         <div class="col-auto" data-toggle="tooltip"
-                             title="{{ __('views/common.maps.controls.pulls.delete_all_pulls_title') }}">
+                             title="{{ __('view_common.maps.controls.pulls.delete_all_pulls_title') }}">
                             <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -90,7 +90,7 @@ $showAds                ??= true;
             @else
                 <div class="row p-1 pr-2 mb-2 no-gutters">
                     <div class="col-auto" data-toggle="tooltip"
-                         title="{{ __('views/common.maps.controls.pulls.settings_title') }}">
+                         title="{{ __('view_common.maps.controls.pulls.settings_title') }}">
                         <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
@@ -110,16 +110,16 @@ $showAds                ??= true;
 
             <div id="killzones_loading" class="row no-gutters">
                 <div class="col text-center">
-                    <h5>{{ __('views/common.maps.controls.pulls.loading') }}</h5>
+                    <h5>{{ __('view_common.maps.controls.pulls.loading') }}</h5>
                 </div>
             </div>
             <div id="killzones_no_pulls" class="row no-gutters" style="display: none;">
                 <div class="col text-center">
                     <h5>
                         @if($edit)
-                            {{ __('views/common.maps.controls.pulls.no_pulls_created_edit') }}
+                            {{ __('view_common.maps.controls.pulls.no_pulls_created_edit') }}
                         @else
-                            {{ __('views/common.maps.controls.pulls.no_pulls_created_view') }}
+                            {{ __('view_common.maps.controls.pulls.no_pulls_created_view') }}
                         @endif
                     </h5>
                 </div>

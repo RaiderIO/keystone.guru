@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('views/misc.about.title')])
+@extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.about.title')])
 
-@section('header-title', __('views/misc.about.header'))
+@section('header-title', __('view_misc.about.header'))
 
 @section('content')
     <h5>

@@ -16,15 +16,15 @@
 
 <h4>
     @if($difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN )
-        {{ __('views/admin.floor.edit.speedrun_required_npcs.title_10_man') }}
+        {{ __('view_admin.floor.edit.speedrun_required_npcs.title_10_man') }}
     @else
-        {{ __('views/admin.floor.edit.speedrun_required_npcs.title_25_man') }}
+        {{ __('view_admin.floor.edit.speedrun_required_npcs.title_25_man') }}
     @endif
 </h4>
 <div class="float-right">
     <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]) }}"
        class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('views/admin.floor.edit.speedrun_required_npcs.add_npc') }}
+        <i class="fas fa-plus"></i> {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc') }}
     </a>
 </div>
 
@@ -32,10 +32,10 @@
        class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('views/admin.floor.edit.speedrun_required_npcs.table_header_id') }}</th>
-        <th width="70%">{{ __('views/admin.floor.edit.speedrun_required_npcs.table_header_npc') }}</th>
-        <th width="10%">{{ __('views/admin.floor.edit.speedrun_required_npcs.table_header_count') }}</th>
-        <th width="10%">{{ __('views/admin.floor.edit.speedrun_required_npcs.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.floor.edit.speedrun_required_npcs.table_header_id') }}</th>
+        <th width="70%">{{ __('view_admin.floor.edit.speedrun_required_npcs.table_header_npc') }}</th>
+        <th width="10%">{{ __('view_admin.floor.edit.speedrun_required_npcs.table_header_count') }}</th>
+        <th width="10%">{{ __('view_admin.floor.edit.speedrun_required_npcs.table_header_actions') }}</th>
     </tr>
     </thead>
 
@@ -59,7 +59,7 @@
                             'difficulty' => $difficulty,
                         ])
                         }}">
-                    <i class="fas fa-trash"></i>&nbsp;{{ __('views/admin.floor.edit.speedrun_required_npcs.npc_delete') }}
+                    <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.floor.edit.speedrun_required_npcs.npc_delete') }}
                 </a>
             </td>
         </tr>

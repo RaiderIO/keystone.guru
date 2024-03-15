@@ -15,7 +15,7 @@
             },
             "theme": "classic",
             "content": {
-                "link": "{{ __('views/common.thirdparty.cookieconsent.learn_more') }}",
+                "link": "{{ __('view_common.thirdparty.cookieconsent.learn_more') }}",
                 "href": "/cookies"
             }
         });

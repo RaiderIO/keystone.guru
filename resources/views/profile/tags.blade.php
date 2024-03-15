@@ -1,7 +1,7 @@
-@extends('layouts.sitepage', ['title' => __('views/profile.tags.title')])
+@extends('layouts.sitepage', ['title' => __('view_profile.tags.title')])
 
 @section('header-title')
-    {{ __('views/profile.tags.header') }}
+    {{ __('view_profile.tags.header') }}
 @endsection
 
 @section('content')
@@ -10,9 +10,9 @@
     <p>
         {!!
             sprintf(
-                __('views/profile.tags.description'),
+                __('view_profile.tags.description'),
                  '<a href="' . route('profile.routes') . '">' .
-                 __('views/profile.tags.link_your_personal_route_overview') .
+                 __('view_profile.tags.link_your_personal_route_overview') .
                  ' </a>'
              )
          !!}

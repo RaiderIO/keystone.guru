@@ -79,7 +79,7 @@ class Stopwatch
 
     private static function getElapsedString(string $timerName): string
     {
-        return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : sprintf(' (%s)', $timerName), StopWatch::elapsed($timerName));
+        return sprintf('Elapsed time%s: %s ms', $timerName === 'default' ? '' : sprintf(' (%s)', $timerName), Stopwatch::elapsed($timerName));
     }
 
     /**

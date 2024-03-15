@@ -25,7 +25,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"
-                aria-label="{{ __('views/common.maps.controls.header.toggle_navigation') }}">
+                aria-label="{{ __('view_common.maps.controls.header.toggle_navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -41,7 +41,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                         @if(!$stopped)
                                             <button id="stop_live_session" class="btn btn-danger btn-sm"
                                                     data-toggle="modal" data-target="#stop_live_session_modal">
-                                                <i class="fas fa-stop"></i> {{ __('views/common.maps.controls.header.stop') }}
+                                                <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
                                             </button>
                                         @endif
                                         <div id="stopped_live_session_container" class="row no-gutters"
@@ -49,7 +49,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                             <div class="row">
                                                 <div class="col">
                                                 <span id="stopped_live_session_countdown">
-                                                    {{ $stopped ? sprintf(__('views/common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
+                                                    {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
                                                 </span>
                                                 </div>
                                             </div>
@@ -58,12 +58,12 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                                     @if($mayUserEdit)
                                                         <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                                                            class="btn-sm btn-success w-100">
-                                                            <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
+                                                            <i class="fas fa-edit"></i> {{ __('view_common.maps.controls.header.edit_route') }}
                                                         </a>
                                                     @else
                                                         <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                                                            class="btn-sm btn-success w-100">
-                                                            <i class="fas fa-eye"></i> {{ __('views/common.maps.controls.header.view_route') }}
+                                                            <i class="fas fa-eye"></i> {{ __('view_common.maps.controls.header.view_route') }}
                                                         </a>
                                                     @endif
                                                 </div>
@@ -72,7 +72,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                     @else
                                         <button class="btn btn-success btn-sm" data-toggle="modal"
                                                 data-target="#start_live_session_modal">
-                                            <i class="fas fa-play"></i> {{ __('views/common.maps.controls.header.start') }}
+                                            <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
                                         </button>
                                     @endif
                                 </div>
@@ -92,10 +92,10 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                         @isset($dungeonroute)
                                             {{ $dungeonroute->title }}
                                         @elseif($mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore)
-                                            {{ __('views/common.maps.map.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
+                                            {{ __('view_common.maps.map.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
                                         @else
                                             <a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
-                                                {{ sprintf(__('views/common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
+                                                {{ sprintf(__('view_common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
                                             </a>
                                         @endisset
                                     </h5>
@@ -136,11 +136,11 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                             <div class="row no-gutters">
                                 <div class="col">
                                     <span data-toggle="tooltip"
-                                          title="{{ __('views/common.maps.map.new_mapping_version_header_description') }}">
+                                          title="{{ __('view_common.maps.map.new_mapping_version_header_description') }}">
                                             <span class="text-warning">
                                                 <i class="fas fa-exclamation-triangle"></i>
                                             </span>
-                                        {{ __('views/common.maps.map.new_mapping_version_header_title') }}
+                                        {{ __('view_common.maps.map.new_mapping_version_header_title') }}
                                     </span>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                             'dungeonroute' => $dungeonroute]
                                         ) }}">
                                         <button class="btn btn-success btn-sm">
-                                            <i class="fas fa-save"></i> {{ __('views/common.maps.controls.header.save_to_profile') }}
+                                            <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
                                         </button>
                                     </a>
                                 </div>
@@ -184,7 +184,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                         <button id="edit_route_admin_settings_button"
                                                 class="btn btn-info btn-sm" data-toggle="modal"
                                                 data-target="#edit_route_admin_settings_modal">
-                                            <i class="fas fa-toolbox"></i> {{ __('views/common.maps.controls.header.edit_route_admin_settings') }}
+                                            <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
                                         </button>
                                     </div>
                                 </div>
@@ -198,7 +198,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                 <div class="col">
                                     <button id="simulate_route_button" class="btn btn-info btn-sm" data-toggle="modal"
                                             data-target="#simulate_modal">
-                                        <i class="fas fa-atom"></i> {{ __('views/common.maps.controls.header.simulate_route') }}
+                                        <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
                                     </button>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                         <button id="edit_route_settings_button" class="btn btn-info btn-sm"
                                                 data-toggle="modal"
                                                 data-target="#edit_route_settings_modal">
-                                            <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_route_settings') }}
+                                            <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
                                         </button>
                                     </div>
                                 </div>
@@ -228,7 +228,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                     <button id="edit_mapping_version_button" class="btn btn-info btn-sm"
                                             data-toggle="modal"
                                             data-target="#edit_mapping_version_modal">
-                                        <i class="fas fa-cog"></i> {{ __('views/common.maps.controls.header.edit_mapping_version') }}
+                                        <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
                                     </button>
                                 </div>
                             </div>
@@ -243,7 +243,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
-                                        <i class="fas fa-share"></i> {{ __('views/common.maps.controls.header.share') }}
+                                        <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
                                     </button>
                                 </div>
                             </div>
@@ -285,59 +285,61 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
     @endcomponent
 
     @component('common.general.modal', ['id' => 'start_live_session_modal'])
-        <h3 class="card-title">{{ __('views/common.maps.controls.header.start_live_session') }}</h3>
+        <h3 class="card-title">{{ __('view_common.maps.controls.header.start_live_session') }}</h3>
 
         <p>
-            {{ __('views/common.maps.controls.header.start_live_session_paragraph_1') }}
+            {{ __('view_common.maps.controls.header.start_live_session_paragraph_1') }}
             <br><br>
-            {{ __('views/common.maps.controls.header.start_live_session_paragraph_2') }}
+            {{ __('view_common.maps.controls.header.start_live_session_paragraph_2') }}
             <br><br>
-            {{ __('views/common.maps.controls.header.start_live_session_paragraph_3') }}
+            {{ __('view_common.maps.controls.header.start_live_session_paragraph_3') }}
             <br><br>
-            {{ __('views/common.maps.controls.header.start_live_session_paragraph_4') }}
+            {{ __('view_common.maps.controls.header.start_live_session_paragraph_4') }}
         </p>
 
         <div class="row">
             <div class="col">
                 <a href="{{ route('dungeonroute.livesession.create', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                    class="btn btn-success w-100">
-                    <i class="fas fa-play"></i> {{ __('views/common.maps.controls.header.create_live_session') }}
+                    <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.create_live_session') }}
                 </a>
             </div>
         </div>
     @endcomponent
 
     @component('common.general.modal', ['id' => 'stop_live_session_modal'])
-        <h3 class="card-title">{{ __('views/common.maps.controls.header.live_session_concluded') }}</h3>
+        <h3 class="card-title">{{ __('view_common.maps.controls.header.live_session_concluded') }}</h3>
 
             <?php // You cannot rate your own routes ?>
         @if($dungeonroute->author_id !== Auth::id())
                 <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
             <div class="form-group">
                 <h5>
-                    {{ __('views/common.maps.controls.header.rate_this_route') }}
+                    <label for="rating_select">
+                        {{ __('view_common.maps.controls.header.rate_this_route') }}
+                    </label>
                 </h5>
-                <select>
+                <select id="rating_select" name="rating_select">
                     @for($i = 1; $i <= 10; $i++)
                         <option
-                            value="{{ $i }}" {{ $currentRating !== false && (int) $currentRating === $i ? 'selected' : '' }}>
+                            value="{{ $i }}" {{ $currentRating !== null && (int) $currentRating === $i ? 'selected' : '' }}>
                             {{ $i }}
                         </option>
                     @endfor
                 </select>
             </div>
 
-            @if($currentRating === false)
+            @if($currentRating === null)
                 <div class="form-group">
                     <p>
-                        {{ __('views/common.maps.controls.header.rate_this_route_explanation') }}
+                        {{ __('view_common.maps.controls.header.rate_this_route_explanation') }}
                     </p>
                 </div>
             @endif
         @else
             <div class="form-group">
                 <p>
-                    {{ __('views/common.maps.controls.header.you_cannot_rate_your_own_route') }}
+                    {{ __('view_common.maps.controls.header.you_cannot_rate_your_own_route') }}
                 </p>
             </div>
         @endif
@@ -345,19 +347,19 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
         <div class="row form-group">
             <div class="col">
                 <button data-dismiss="modal" class="btn btn-outline-info w-100">
-                    <i class="fas fa-chart-line"></i> {{ __('views/common.maps.controls.header.review_live_session') }}
+                    <i class="fas fa-chart-line"></i> {{ __('view_common.maps.controls.header.review_live_session') }}
                 </button>
             </div>
             <div class="col">
                 @if($mayUserEdit)
                     <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                        class="btn btn-success w-100">
-                        <i class="fas fa-edit"></i> {{ __('views/common.maps.controls.header.edit_route') }}
+                        <i class="fas fa-edit"></i> {{ __('view_common.maps.controls.header.edit_route') }}
                     </a>
                 @else
                     <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                        class="btn btn-success w-100">
-                        <i class="fas fa-eye"></i> {{ __('views/common.maps.controls.header.view_route') }}
+                        <i class="fas fa-eye"></i> {{ __('view_common.maps.controls.header.view_route') }}
                     </a>
                 @endif
             </div>

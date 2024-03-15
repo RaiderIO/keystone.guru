@@ -3,7 +3,7 @@
     'disableDefaultRootClasses' => true,
     'breadcrumbs' => $breadcrumbs,
     'breadcrumbsParams' => $breadcrumbsParams,
-    'title' => __('views/dungeonroute.discover.discover.title'),
+    'title' => __('view_dungeonroute.discover.discover.title'),
 ])
 
 <?php
@@ -39,7 +39,7 @@
 
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
-        'title' => __('views/dungeonroute.discover.discover.popular'),
+        'title' => __('view_dungeonroute.discover.discover.popular'),
         'link' => isset($season) ?
             route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]) :
             route('dungeonroutes.popular', ['expansion' => $expansion]),
@@ -59,7 +59,7 @@
         @if($currentAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
                 'expansion' => $expansion,
-                'title' => __('views/dungeonroute.discover.discover.popular_by_current_affixes'),
+                'title' => __('view_dungeonroute.discover.discover.popular_by_current_affixes'),
                 'link' => isset($season) ?
                     route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]) :
                     route('dungeonroutes.thisweek', ['expansion' => $expansion]) ,
@@ -80,7 +80,7 @@
         @if($nextAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
                 'expansion' => $expansion,
-                'title' => __('views/dungeonroute.discover.discover.popular_by_next_affixes'),
+                'title' => __('view_dungeonroute.discover.discover.popular_by_next_affixes'),
                 'link' => isset($season) ?
                     route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]) :
                     route('dungeonroutes.nextweek', ['expansion' => $expansion]),
@@ -101,7 +101,7 @@
 
     @include('dungeonroute.discover.panel', [
         'expansion' => $expansion,
-        'title' => __('views/dungeonroute.discover.discover.newly_published_routes'),
+        'title' => __('view_dungeonroute.discover.discover.newly_published_routes'),
         'link' => isset($season) ?
             route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]) :
             route('dungeonroutes.new', ['expansion' => $expansion]),

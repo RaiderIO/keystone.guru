@@ -28,6 +28,7 @@ yarn-error.log
 .env
 .phpstorm.meta.php
 _ide_helper.php
+.phpunit.result.cache
 /.phpunit.cache
 
 # Docker compose

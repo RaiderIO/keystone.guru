@@ -3,10 +3,10 @@
 ?>
 @extends('layouts.sitepage', [
     'showAds' => false,
-    'title' => __('views/admin.tools.dungeonroute.viewcontents.title', ['dungeonRouteTitle' => $dungeonroute->title]),
+    'title' => __('view_admin.tools.dungeonroute.viewcontents.title', ['dungeonRouteTitle' => $dungeonroute->title]),
     ])
 
-@section('header-title', __('views/admin.tools.dungeonroute.viewcontents.header', ['dungeonRouteTitle' => $dungeonroute->title]))
+@section('header-title', __('view_admin.tools.dungeonroute.viewcontents.header', ['dungeonRouteTitle' => $dungeonroute->title]))
 
 @section('content')
     <div id="dungeonrouteAccordion">

@@ -22,7 +22,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
     @if((new Jenssegers\Agent\Agent())->browser() === 'IE')
         @component('common.general.alert', ['type' => 'warning', 'dismiss' => false])
-            {{ __('views/home.ie_not_supported') }}
+            {{ __('view_home.ie_not_supported') }}
         @endcomponent
     @endif
 
@@ -35,21 +35,21 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-9">
                     <h1 class="mbr-section-title mbr-fonts-style mb-3 display-1">
-                        <strong>{{ __('views/home.tagline') }}</strong>
+                        <strong>{{ __('view_home.tagline') }}</strong>
                     </h1>
 
                     <p class="mbr-text mbr-fonts-style display-7">
-                        {{ __('views/home.tagline_description') }}
+                        {{ __('view_home.tagline_description') }}
                     </p>
                     <div class="mbr-section-btn mt-3">
                         <a class="btn btn-primary display-4" href="{{ $currentSeason !== null ?
                                 route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index]) :
                                 route('dungeonroutes') }}">
-                            <i class="fas fa-binoculars"></i>&nbsp;{{ __('views/home.discover_routes') }}
+                            <i class="fas fa-binoculars"></i>&nbsp;{{ __('view_home.discover_routes') }}
                         </a>
                         <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
                            data-target="#create_route_modal">
-                            <i class="fas fa-plus"></i>&nbsp;{{__('views/home.create_route')}}
+                            <i class="fas fa-plus"></i>&nbsp;{{__('view_home.create_route')}}
                         </a>
                     </div>
                 </div>
@@ -68,10 +68,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image" src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}"
-                             alt="{{ __('views/home.discover_new_routes') }}"
+                             alt="{{ __('view_home.discover_new_routes') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ url('images/home/lux_feature_discover_new_routes.jpg') }}"
-                             alt="{{ __('views/home.discover_new_routes') }}"
+                             alt="{{ __('view_home.discover_new_routes') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
@@ -80,10 +80,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('views/home.discover_new_routes') }}</strong>
+                            <strong>{{ __('view_home.discover_new_routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {!! __('views/home.discover_new_routes_description',
+                            {!! __('view_home.discover_new_routes_description',
                                     ['archon_gg' => '<a href="https://www.archon.gg/wow" target="_blank">archon.gg</a>',
                                     'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
                         </p>
@@ -100,11 +100,11 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
-                             alt="{{ __('views/home.create_your_own_routes') }}"
+                             alt="{{ __('view_home.create_your_own_routes') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image"
                              src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
-                             alt="{{ __('views/home.create_your_own_routes') }}"
+                             alt="{{ __('view_home.create_your_own_routes') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
@@ -113,10 +113,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('views/home.create_your_own_routes') }}</strong>
+                            <strong>{{ __('view_home.create_your_own_routes') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {!! __('views/home.create_your_own_routes_description',
+                            {!! __('view_home.create_your_own_routes_description',
                                     ['createANewRoute' => sprintf('<a href="#" data-toggle="modal" data-target="#create_route_modal">%s</a>', __('create a new route'))]) !!}
                         </p>
                     </div>
@@ -133,10 +133,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_get_organized.jpg') }}"
-                             alt="{{ __('views/home.get_organized') }}"
+                             alt="{{ __('view_home.get_organized') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ url('images/home/lux_feature_get_organized.jpg') }}"
-                             alt="{{ __('views/home.get_organized') }}"
+                             alt="{{ __('view_home.get_organized') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
@@ -145,10 +145,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('views/home.get_organized') }}</strong>
+                            <strong>{{ __('view_home.get_organized') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('views/home.get_organized_description') }}
+                            {{ __('view_home.get_organized_description') }}
                         </p>
                     </div>
                 </div>
@@ -163,10 +163,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="image-wrapper">
                         <img class="darkly_image"
                              src="{{ url('images/home/darkly_feature_custom_dungeon_mapping.jpg') }}"
-                             alt="{{ __('views/home.custom_dungeon_mapping') }}"
+                             alt="{{ __('view_home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ url('images/home/lux_feature_custom_dungeon_mapping.jpg') }}"
-                             alt="{{ __('views/home.custom_dungeon_mapping') }}"
+                             alt="{{ __('view_home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
@@ -175,10 +175,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg">
                     <div class="text-wrapper">
                         <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
-                            <strong>{{ __('views/home.custom_dungeon_mapping') }}</strong>
+                            <strong>{{ __('view_home.custom_dungeon_mapping') }}</strong>
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
-                            {{ __('views/home.custom_dungeon_mapping_description') }}
+                            {{ __('view_home.custom_dungeon_mapping_description') }}
                         </p>
                     </div>
                 </div>
@@ -193,7 +193,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row">
                 <div class="col-12 col-lg-9">
                     <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                        <strong>{{ __('views/home.features') }}</strong>
+                        <strong>{{ __('view_home.features') }}</strong>
                     </h3>
 
                 </div>
@@ -206,10 +206,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <i class="fas fa-file-export mbr-iconfont"></i>
                             </div>
                             <h5 class="card-title mbr-fonts-style display-7">
-                                <strong>{{ __('views/home.feature_mdt_import_export') }}</strong>
+                                <strong>{{ __('view_home.feature_mdt_import_export') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('views/home.feature_mdt_import_export_description') }}
+                                {{ __('view_home.feature_mdt_import_export_description') }}
                             </p>
                         </div>
                     </div>
@@ -221,10 +221,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <i class="fas fa-route mbr-iconfont"></i>
                             </div>
                             <h5 class="card-title mbr-fonts-style display-7">
-                                <strong>{{ __('views/home.feature_fluid_mapping_experience') }}</strong>
+                                <strong>{{ __('view_home.feature_fluid_mapping_experience') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('views/home.feature_fluid_mapping_experience_description') }}
+                                {{ __('view_home.feature_fluid_mapping_experience_description') }}
                             </p>
                         </div>
                     </div>
@@ -236,10 +236,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <i class="fas fa-mobile-alt mbr-iconfont"></i>
                             </div>
                             <h5 class="card-title mbr-fonts-style display-7">
-                                <strong>{{ __('views/home.feature_mobile_friendly') }}</strong>
+                                <strong>{{ __('view_home.feature_mobile_friendly') }}</strong>
                             </h5>
                             <p class="card-text mbr-fonts-style display-7">
-                                {{ __('views/home.feature_mobile_friendly_description') }}
+                                {{ __('view_home.feature_mobile_friendly_description') }}
                             </p>
                         </div>
                     </div>
@@ -255,7 +255,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
             <div class="mbr-section-head mb-4">
                 <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
-                    <strong>{{ __('views/home.live_demo') }}</strong>
+                    <strong>{{ __('view_home.live_demo') }}</strong>
                 </h3>
             </div>
 
@@ -279,7 +279,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="row h-100 justify-content-center align-items-center no-gutters">
                         <div class="col">
                             <h2 style="opacity: 1;">
-                                <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/home.loading') }}
+                                <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_home.loading') }}
                             </h2>
                         </div>
                     </div>
@@ -310,15 +310,15 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     <div class="card-wrapper">
                         <div class="card-box align-center">
                             <h4 class="card-title mbr-fonts-style align-center mb-4 display-1">
-                                <strong>{{ __('views/home.start_planning_today') }}</strong>
+                                <strong>{{ __('view_home.start_planning_today') }}</strong>
                             </h4>
                             <p class="mbr-text mbr-fonts-style mb-4 display-7">
-                                {{ sprintf(__('views/home.join_other_users'), (int)($userCount / 1000) * 1000) }}
+                                {{ sprintf(__('view_home.join_other_users'), (int)($userCount / 1000) * 1000) }}
                             </p>
                             <div class="mbr-section-btn mt-3">
                                 <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
                                    data-target="#create_route_modal">
-                                    <i class="fas fa-plus"></i>&nbsp;{{__('views/home.create_route')}}
+                                    <i class="fas fa-plus"></i>&nbsp;{{__('view_home.create_route')}}
                                 </a>
                             </div>
                         </div>

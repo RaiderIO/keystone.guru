@@ -14,7 +14,7 @@ $url  ??= null;
           @if( $url === null )
               data-toggle="tooltip"
           title="{{ sprintf(
-            __('views/common.dungeonroute.tier.data_by_archon_gg'),
+            __('view_common.dungeonroute.tier.data_by_archon_gg'),
                 $affixgroup->getTextAttribute()
             )}}"
           @endif

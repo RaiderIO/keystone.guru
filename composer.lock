@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc9e1fe6b4a4cf37c8489dd4c1fb929c",
+    "content-hash": "60f29f8cc41a0d39fff4234f6d41e486",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -4967,7 +4967,7 @@
             "time": "2023-02-08T01:06:31+00:00"
         },
         {
-            "name": "paquettg/php-html-parser-php-8-fix",
+            "name": "paquettg/php-html-parser",
             "version": "3.1",
             "source": {
                 "type": "git",
@@ -10587,6 +10587,67 @@
             "time": "2024-02-15T10:45:45+00:00"
         },
         {
+            "name": "crowdin/crowdin-api-client",
+            "version": "1.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crowdin/crowdin-api-client-php.git",
+                "reference": "2f6108604cc0f9951340cce99bb272d7402339dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crowdin/crowdin-api-client-php/zipball/2f6108604cc0f9951340cce99bb272d7402339dc",
+                "reference": "2f6108604cc0f9951340cce99bb272d7402339dc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.2 || ^7",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3.0",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CrowdinApiClient\\FrameworkSupport\\Laravel\\CrowdinServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CrowdinApiClient\\": "src/CrowdinApiClient"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Crowdin",
+                    "homepage": "https://crowdin.com"
+                }
+            ],
+            "description": "PHP client library for Crowdin API v2",
+            "homepage": "https://github.com/crowdin/crowdin-api-client-php",
+            "keywords": [
+                "API-Client",
+                "api",
+                "client",
+                "crowdin",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/crowdin/crowdin-api-client-php/issues",
+                "source": "https://github.com/crowdin/crowdin-api-client-php/tree/1.12.0"
+            },
+            "time": "2023-11-02T07:38:26+00:00"
+        },
+        {
             "name": "deployer/deployer",
             "version": "v7.3.3",
             "source": {
@@ -10887,6 +10948,215 @@
                 }
             ],
             "time": "2024-02-27T03:16:03+00:00"
+        },
+        {
+            "name": "loilo/fuse",
+            "version": "6.6.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/loilo/Fuse.git",
+                "reference": "f75260d8e48e4781bd557ccecb5d4c1c7caa18a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/loilo/Fuse/zipball/f75260d8e48e4781bd557ccecb5d4c1c7caa18a6",
+                "reference": "f75260d8e48e4781bd557ccecb5d4c1c7caa18a6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "dms/phpunit-arraysubset-asserts": "^0.3.0 || ^0.4.0 || ^0.5.0",
+                "phpunit/phpunit": "^8.0 || ^9.0",
+                "psalm/plugin-phpunit": "^0.16.1 || ^0.17.0 || ^0.18.0",
+                "squizlabs/php_codesniffer": "^3.6",
+                "vimeo/psalm": "^4.9 || ^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Core/computeScore.php",
+                    "src/Core/config.php",
+                    "src/Core/format.php",
+                    "src/Core/parse.php",
+                    "src/Helpers/get.php",
+                    "src/Helpers/sort.php",
+                    "src/Helpers/types.php",
+                    "src/Search/Bitap/computeScore.php",
+                    "src/Search/Bitap/convertMaskToIndices.php",
+                    "src/Search/Bitap/createPatternAlphabet.php",
+                    "src/Search/Bitap/search.php",
+                    "src/Search/Extended/parseQuery.php",
+                    "src/Transform/transformMatches.php",
+                    "src/Transform/transformScore.php"
+                ],
+                "psr-4": {
+                    "Fuse\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Florian Reuschel",
+                    "email": "florian@loilo.de"
+                }
+            ],
+            "description": "Fuzzy search for PHP based on Bitap algorithm",
+            "support": {
+                "issues": "https://github.com/loilo/Fuse/issues",
+                "source": "https://github.com/loilo/Fuse/tree/v6.6.5"
+            },
+            "time": "2023-06-27T06:40:01+00:00"
+        },
+        {
+            "name": "lukasss93/laravel-larex",
+            "version": "v4.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Lukasss93/laravel-larex.git",
+                "reference": "44d304dbd03f7b992359adec9354892b799bfbf0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Lukasss93/laravel-larex/zipball/44d304dbd03f7b992359adec9354892b799bfbf0",
+                "reference": "44d304dbd03f7b992359adec9354892b799bfbf0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-json": "*",
+                "illuminate/support": "^8.0|^9.0|^10.0",
+                "loilo/fuse": "^6.4.6",
+                "php": "^8.0",
+                "spatie/laravel-collection-macros": "^7.12",
+                "spatie/simple-excel": "^3.0.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^8.0",
+                "pestphp/pest": "^1.21",
+                "psalm/plugin-laravel": "^2.0",
+                "vimeo/psalm": "^4.24"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Lukasss93\\Larex\\LarexServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Lukasss93\\Larex\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luca Patera",
+                    "email": "lucapatera@outlook.it",
+                    "homepage": "https://www.lucapatera.it/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Translate your Laravel application from a single CSV file!",
+            "keywords": [
+                "csv",
+                "i18n",
+                "laravel",
+                "localization",
+                "translation"
+            ],
+            "support": {
+                "issues": "https://github.com/Lukasss93/laravel-larex/issues",
+                "source": "https://github.com/Lukasss93/laravel-larex/tree/v4.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Lukasss93",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-04-18T21:08:57+00:00"
+        },
+        {
+            "name": "lukasss93/laravel-larex-crowdin",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Lukasss93/laravel-larex-crowdin.git",
+                "reference": "a33f72db602d902bd52ef38045ae59ad78dc6dfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Lukasss93/laravel-larex-crowdin/zipball/a33f72db602d902bd52ef38045ae59ad78dc6dfc",
+                "reference": "a33f72db602d902bd52ef38045ae59ad78dc6dfc",
+                "shasum": ""
+            },
+            "require": {
+                "crowdin/crowdin-api-client": "^1.7",
+                "ext-json": "*",
+                "ext-simplexml": "*",
+                "illuminate/support": "^8.0|^9.0|^10.0",
+                "loilo/fuse": "^6.4",
+                "lukasss93/laravel-larex": "^4.4",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^8.0",
+                "pestphp/pest": "^1.21",
+                "vimeo/psalm": "^4.24"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Lukasss93\\LarexCrowdin\\LarexCrowdinServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Lukasss93\\LarexCrowdin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luca Patera",
+                    "email": "lucapatera@outlook.it",
+                    "homepage": "https://www.lucapatera.it/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Larex Crowdin",
+            "support": {
+                "issues": "https://github.com/Lukasss93/laravel-larex-crowdin/issues",
+                "source": "https://github.com/Lukasss93/laravel-larex-crowdin/tree/v2.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Lukasss93",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-05-08T17:07:00+00:00"
         },
         {
             "name": "maximebf/debugbar",
@@ -11191,6 +11461,99 @@
                 }
             ],
             "time": "2023-10-11T15:45:01+00:00"
+        },
+        {
+            "name": "openspout/openspout",
+            "version": "v4.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openspout/openspout.git",
+                "reference": "28f6a0e45acc3377f34c26cc3866e21f0447e0c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openspout/openspout/zipball/28f6a0e45acc3377f34c26cc3866e21f0447e0c8",
+                "reference": "28f6a0e45acc3377f34c26cc3866e21f0447e0c8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-fileinfo": "*",
+                "ext-filter": "*",
+                "ext-libxml": "*",
+                "ext-xmlreader": "*",
+                "ext-zip": "*",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+            },
+            "require-dev": {
+                "ext-zlib": "*",
+                "friendsofphp/php-cs-fixer": "^3.46.0",
+                "infection/infection": "^0.27.9",
+                "phpbench/phpbench": "^1.2.15",
+                "phpstan/phpstan": "^1.10.55",
+                "phpstan/phpstan-phpunit": "^1.3.15",
+                "phpstan/phpstan-strict-rules": "^1.5.2",
+                "phpunit/phpunit": "^10.5.5"
+            },
+            "suggest": {
+                "ext-iconv": "To handle non UTF-8 CSV files (if \"php-mbstring\" is not already installed or is too limited)",
+                "ext-mbstring": "To handle non UTF-8 CSV files (if \"iconv\" is not already installed)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OpenSpout\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrien Loison",
+                    "email": "adrien@box.com"
+                }
+            ],
+            "description": "PHP Library to read and write spreadsheet files (CSV, XLSX and ODS), in a fast and scalable way",
+            "homepage": "https://github.com/openspout/openspout",
+            "keywords": [
+                "OOXML",
+                "csv",
+                "excel",
+                "memory",
+                "odf",
+                "ods",
+                "office",
+                "open",
+                "php",
+                "read",
+                "scale",
+                "spreadsheet",
+                "stream",
+                "write",
+                "xlsx"
+            ],
+            "support": {
+                "issues": "https://github.com/openspout/openspout/issues",
+                "source": "https://github.com/openspout/openspout/tree/v4.23.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/filippotessarotto",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Slamdunk",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-01-09T09:30:37+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -13061,6 +13424,85 @@
             "time": "2024-01-03T15:49:39+00:00"
         },
         {
+            "name": "spatie/laravel-collection-macros",
+            "version": "7.14.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-collection-macros.git",
+                "reference": "defd9f18f89d575f95924b6dd7019689fa40678d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-collection-macros/zipball/defd9f18f89d575f95924b6dd7019689fa40678d",
+                "reference": "defd9f18f89d575f95924b6dd7019689fa40678d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "amphp/parallel": "^1.4.3|^2.2",
+                "amphp/parallel-functions": "^1.1.0|^2.0",
+                "mockery/mockery": "^1.6.2",
+                "orchestra/testbench": "^8.5.9|^9.0",
+                "pestphp/pest": "^2.0",
+                "phpunit/phpunit": "10.2.2|^10.5",
+                "spatie/laravel-ray": "^1.32.5",
+                "symfony/stopwatch": "^6.3|^7.0"
+            },
+            "suggest": {
+                "amphp/parallel-functions": "Required when using the parallel*-macros."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\CollectionMacros\\CollectionMacroServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\CollectionMacros\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://github.com/freekmurze",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://github.com/sebastiandedeyne",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A set of useful Laravel collection macros",
+            "homepage": "https://github.com/spatie/laravel-collection-macros",
+            "keywords": [
+                "laravel-collection-macros",
+                "spatie"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/laravel-collection-macros/tree/7.14.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-08T11:51:32+00:00"
+        },
+        {
             "name": "spatie/laravel-ignition",
             "version": "2.4.2",
             "source": {
@@ -13153,6 +13595,67 @@
             "time": "2024-02-09T16:08:40+00:00"
         },
         {
+            "name": "spatie/simple-excel",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/simple-excel.git",
+                "reference": "69bc09c53564109037b413aff2a2460589b24201"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/simple-excel/zipball/69bc09c53564109037b413aff2a2460589b24201",
+                "reference": "69bc09c53564109037b413aff2a2460589b24201",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^9.0|^10.0|^11.0",
+                "openspout/openspout": "^4.19",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "pestphp/pest-plugin-laravel": "^1.3|^2.3",
+                "phpunit/phpunit": "^9.4|^10.5",
+                "spatie/pest-plugin-snapshots": "^1.1|^2.1",
+                "spatie/phpunit-snapshot-assertions": "^4.0|^5.1",
+                "spatie/temporary-directory": "^1.2|^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\SimpleExcel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Read and write simple Excel and CSV files",
+            "homepage": "https://github.com/spatie/simple-excel",
+            "keywords": [
+                "simple-excel",
+                "spatie"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/simple-excel/tree/3.4.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-04T08:29:10+00:00"
+        },
+        {
             "name": "theseer/tokenizer",
             "version": "1.2.2",
             "source": {
@@ -13208,7 +13711,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
-                "reference": "2c7151bb60dab9ac33597660f82c1768b8d51231"
+                "reference": "7febbdab79949b493c253c13fd8816c4ca0d3187"
             },
             "type": "library"
         }

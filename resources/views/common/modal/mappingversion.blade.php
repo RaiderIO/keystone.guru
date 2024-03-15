@@ -6,7 +6,7 @@
 
 <div class="form-group">
     <label for="map_mapping_version_enemy_forces_required">
-        {{ __('views/common.modal.mappingversion.enemy_forces_required') }}
+        {{ __('view_common.modal.mappingversion.enemy_forces_required') }}
     </label>
     <div class="row">
         <div class="col">
@@ -18,7 +18,7 @@
 
 <div class="form-group">
     <label for="map_mapping_version_enemy_forces_required_teeming">
-        {{ __('views/common.modal.mappingversion.enemy_forces_required_teeming') }}
+        {{ __('view_common.modal.mappingversion.enemy_forces_required_teeming') }}
     </label>
     <div class="row">
         <div class="col">
@@ -30,7 +30,7 @@
 
 <div class="form-group">
     <label for="map_mapping_version_enemy_forces_shrouded">
-        {{ __('views/common.modal.mappingversion.enemy_forces_shrouded') }}
+        {{ __('view_common.modal.mappingversion.enemy_forces_shrouded') }}
     </label>
     <div class="row">
         <div class="col">
@@ -42,7 +42,7 @@
 
 <div class="form-group">
     <label for="map_mapping_version_enemy_forces_shrouded_zul_gamux">
-        {{ __('views/common.modal.mappingversion.enemy_forces_shrouded_zul_gamux') }}
+        {{ __('view_common.modal.mappingversion.enemy_forces_shrouded_zul_gamux') }}
     </label>
     <div class="row">
         <div class="col">
@@ -54,7 +54,7 @@
 
 <div class="form-group">
     <label for="map_mapping_version_timer_max_seconds">
-        {{ __('views/common.modal.mappingversion.timer_max_seconds') }}
+        {{ __('view_common.modal.mappingversion.timer_max_seconds') }}
     </label>
     <div class="row">
         <div class="col">
@@ -66,7 +66,7 @@
 
 <div class="form-group">
     <div id="save_mapping_version" class="offset-xl-5 col-xl-2 btn btn-success">
-        <i class="fas fa-save"></i> {{ __('views/common.modal.mappingversion.save') }}
+        <i class="fas fa-save"></i> {{ __('view_common.modal.mappingversion.save') }}
     </div>
     <div id="save_mapping_version_saving" class="offset-xl-5 col-xl-2 btn btn-success disabled"
          style="display: none;">

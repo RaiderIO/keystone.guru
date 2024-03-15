@@ -17,6 +17,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Enemy;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
@@ -977,12 +978,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             'mapping_version_id' => $mappingVersion->id,
 
             // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
-            'faction_id'         => isset($decoded['faction']) ? ((int)$decoded['faction'] === 1 ? 2 : 3) : 1,
+            'faction_id'         => isset($decoded['faction']) ?
+                ((int)$decoded['faction'] === 1 ? Faction::ALL[Faction::FACTION_HORDE] : Faction::ALL[Faction::FACTION_ALLIANCE])
+                : Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
             // Needs to be explicit otherwise redirect to edit will not have this value
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
-            'teeming'            => boolval($decoded['value']['teeming']),
-            'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en-US') : $titleSlug,
+            'teeming'            => boolval($decoded['value']['teeming'] ?? false),
+            'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $titleSlug,
             'difficulty'         => 'Casual',
             'level_min'          => $decoded['difficulty'] ?? 2,
             'level_max'          => $decoded['difficulty'] ?? 2,

@@ -115,11 +115,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_UNIT_DIED       => UnitDied::class,
         self::SPECIAL_EVENT_UNIT_DISSIPATES => UnitDissipates::class,
 
-        self::SPECIAL_EVENT_SPELL_ABSORBED       => SpellAbsorbedBuilder::class,
-        self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE => EnvironmentalDamageBuilder::class,
         self::SPECIAL_EVENT_DAMAGE_SPLIT         => DamageSplit::class,
-        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED => DamageShieldMissedBuilder::class,
-        self::SPECIAL_EVENT_DAMAGE_SHIELD        => DamageShieldBuilder::class,
         self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
 
         self::SPECIAL_EVENT_EMOTE           => Emote::class,
@@ -128,6 +124,13 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
         self::SPECIAL_EVENT_WORLD_MARKER_PLACED  => WorldMarkerPlaced::class,
         self::SPECIAL_EVENT_WORLD_MARKER_REMOVED => WorldMarkerRemoved::class,
+    ];
+
+    private const SPECIAL_EVENT_BUILDER_CLASS_MAPPING = [
+        self::SPECIAL_EVENT_DAMAGE_SHIELD        => DamageShieldBuilder::class,
+        self::SPECIAL_EVENT_SPELL_ABSORBED       => SpellAbsorbedBuilder::class,
+        self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE => EnvironmentalDamageBuilder::class,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED => DamageShieldMissedBuilder::class,
     ];
 
     public function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)
@@ -159,13 +162,14 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     ): SpecialEvent {
         foreach (self::SPECIAL_EVENT_CLASS_MAPPING as $specialEvent => $className) {
             if (Str::startsWith($eventName, $specialEvent)) {
-                $interfaces = class_implements($className);
-                if (isset($interfaces[SpecialEventBuilderInterface::class])) {
-                    /** @var $className SpecialEventBuilderInterface */
-                    return $className::create($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-                }
-
                 return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
+            }
+        }
+
+        foreach (self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING as $specialEvent => $className) {
+            if (Str::startsWith($eventName, $specialEvent)) {
+                /** @var $className SpecialEventBuilderInterface */
+                return $className::create($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
             }
         }
 

@@ -17,7 +17,7 @@ class AjaxUserController
      *
      * @throws Exception
      */
-    public function list(Request $request)
+    public function get(Request $request)
     {
         $users = User::with(['patreonUserLink', 'roles', 'dungeonroutes'])->selectRaw('users.*');
 

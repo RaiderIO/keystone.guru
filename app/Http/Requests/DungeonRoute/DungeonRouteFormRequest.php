@@ -32,7 +32,7 @@ class DungeonRouteFormRequest extends FormRequest
             'dungeon_route_title'       => 'nullable|string|max:80',
             'dungeon_route_description' => 'nullable|string|max:1000',
             'dungeon_route_sandbox'     => 'int',
-            'dungeon_route_level'       => new DungeonRouteLevelRule($this->request),
+            'dungeon_route_level'       => new DungeonRouteLevelRule(),
             // Only active dungeons are allowed
             'dungeon_id'                => ['required', Rule::in(
                 Dungeon::select('dungeons.id')

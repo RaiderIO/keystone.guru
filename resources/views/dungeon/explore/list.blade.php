@@ -1,9 +1,9 @@
 @extends('layouts.sitepage', [
     'rootClass' => 'discover',
-    'title' => __('views/dungeon.explore.list.title')
+    'title' => __('view_dungeon.explore.list.title')
 ])
 
-@section('header-title', __('views/dungeon.explore.list.header'))
+@section('header-title', __('view_dungeon.explore.list.header'))
 
 @section('content')
     @include('common.dungeon.gridtabs', [

@@ -1,9 +1,9 @@
-@extends('layouts.sitepage', ['title' => __('views/dungeonroute.unavailable.title')])
+@extends('layouts.sitepage', ['title' => __('view_dungeonroute.unavailable.title')])
 @section('header-title', $headerTitle)
 
 @section('content')
     <div class="text-center">
-        {{ __('views/dungeonroute.unavailable.unavailable_description') }}
+        {{ __('view_dungeonroute.unavailable.unavailable_description') }}
     </div>
 @endsection
 

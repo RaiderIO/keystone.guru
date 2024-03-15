@@ -1,5 +1,5 @@
 @extends('errors.error-layout', [
-    'title' => __('views/errors.403.title'),
+    'title' => __('view_errors.403.title'),
     'code' => 403,
-    'message' => $exception->getMessage() ?: __('views/errors.403.message')
+    'message' => $exception->getMessage() ?: __('view_errors.403.message')
     ])

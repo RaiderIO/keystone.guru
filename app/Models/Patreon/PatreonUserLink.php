@@ -6,22 +6,24 @@ use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                         $id
- * @property int                         $user_id
- * @property string                      $email
- * @property string                      scope
- * @property string                      $access_token
- * @property string                      $refresh_token
- * @property string                      $version
- * @property string                      $expires_at
- * @property User                        $user
- * @property Collection|PatreonBenefit[] $patreonbenefits
+ * @property int                            $id
+ * @property int                            $user_id
+ * @property string                         $email
+ * @property string                         scope
+ * @property string                         $access_token
+ * @property string                         $refresh_token
+ * @property string                         $version
+ * @property string                         $expires_at
+ * @property User                           $user
+ *
+ * @property Collection<PatreonUserBenefit> $patreonUserBenefits
+ * @property Collection<PatreonBenefit>     $patreonBenefits
  *
  * @mixin Eloquent
  */
@@ -55,12 +57,12 @@ class PatreonUserLink extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function patreonuserbenefits(): HasMany
+    public function patreonUserBenefits(): HasMany
     {
         return $this->hasMany(PatreonUserBenefit::class);
     }
 
-    public function patreonbenefits(): BelongsToMany
+    public function patreonBenefits(): BelongsToMany
     {
         return $this->belongsToMany(PatreonBenefit::class, 'patreon_user_benefits');
     }
@@ -76,7 +78,7 @@ class PatreonUserLink extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(static function (PatreonUserLink $item) {
-            $item->patreonuserbenefits()->delete();
+            $item->patreonUserBenefits()->delete();
         });
     }
 }

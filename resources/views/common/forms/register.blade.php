@@ -29,14 +29,14 @@ $errors   ??= collect();
               action="{{ route('register', ['redirect' => $redirect]) }}">
             {{ csrf_field() }}
             <h3>
-                {{ __('views/common.forms.register.register') }}
+                {{ __('view_common.forms.register.register') }}
             </h3>
 
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_name" class="control-label">
-                    {{ __('views/common.forms.register.username') }} <span class="form-required">*</span>
+                    {{ __('view_common.forms.register.username') }} <span class="form-required">*</span>
                     <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{__('views/common.forms.register.username_title')}}"></i>
+                       title="{{__('view_common.forms.register.username_title')}}"></i>
                 </label>
 
                 <div class="col-md-{{ $width }}">
@@ -47,9 +47,9 @@ $errors   ??= collect();
 
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_email" class="control-label">
-                    {{ __('views/common.forms.register.email_address') }} <span class="form-required">*</span>
+                    {{ __('view_common.forms.register.email_address') }} <span class="form-required">*</span>
                     <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{__('views/common.forms.register.email_address_title')}}">
+                       title="{{__('view_common.forms.register.email_address_title')}}">
 
                     </i>
                 </label>
@@ -61,13 +61,13 @@ $errors   ??= collect();
 
             <div class="form-group{{ $errors->has('region') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_region" class="control-label">
-                    {{ __('views/common.forms.register.region') }}
+                    {{ __('view_common.forms.register.region') }}
                 </label>
 
 
                 <div class="col-md-{{ $width }}">
                     {!! Form::select('region', array_merge(
-                    ['-1' => __('views/common.forms.register.select_region')],
+                    ['-1' => __('view_common.forms.register.select_region')],
                     $allRegions->mapWithKeys(function (\App\Models\GameServerRegion $region){
                         return [$region->id => __($region->name)];
                     })->toArray()), null, ['class' => 'form-control']) !!}
@@ -76,7 +76,7 @@ $errors   ??= collect();
 
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_password" class="control-label">
-                    {{ __('views/common.forms.register.password') }} <span class="form-required">*</span>
+                    {{ __('view_common.forms.register.password') }} <span class="form-required">*</span>
                 </label>
 
                 <div class="col-md-{{ $width }}">
@@ -88,7 +88,7 @@ $errors   ??= collect();
             <div class="form-group">
                 <label for="{{ $modalClass }}register_password-confirm"
                        class="control-label">
-                    {{ __('views/common.forms.register.confirm_password') }} <span class="form-required">*</span>
+                    {{ __('view_common.forms.register.confirm_password') }} <span class="form-required">*</span>
                 </label>
 
                 <div class="col-md-{{ $width }}">
@@ -99,10 +99,10 @@ $errors   ??= collect();
 
             <div class="form-group">
                 <label for="{{ $modalClass }}legal_agreed" class="control-label">
-                    {!! sprintf(__('views/common.forms.register.legal_agree'),
-                     '<a href="' . route('legal.terms') . '">' . __('views/common.forms.register.terms_of_service') . '</a>',
-                     '<a href="' . route('legal.privacy') . '">' . __('views/common.forms.register.privacy_policy') . '</a>',
-                     '<a href="' . route('legal.cookies') . '">' . __('views/common.forms.register.cookie_policy') . '</a>')
+                    {!! sprintf(__('view_common.forms.register.legal_agree'),
+                     '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
+                     '<a href="' . route('legal.privacy') . '">' . __('view_common.forms.register.privacy_policy') . '</a>',
+                     '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
                      !!}
                 </label>
                 {!! Form::checkbox('legal_agreed', 1, 0, ['id' => $modalClass . 'legal_agreed', 'class' => 'form-control left_checkbox']) !!}
@@ -112,7 +112,7 @@ $errors   ??= collect();
             <div class="form-group">
                 <div class="col-md-12">
                     <button type="submit" class="btn btn-primary">
-                        {{ __('views/common.forms.register.register') }}
+                        {{ __('view_common.forms.register.register') }}
                     </button>
                 </div>
             </div>
@@ -120,15 +120,15 @@ $errors   ??= collect();
     </div>
     <div class="col border-left border-white">
         <h3>
-            {{ __('views/common.forms.register.register_through_oauth2') }}
+            {{ __('view_common.forms.register.register_through_oauth2') }}
         </h3>
         <p>
-            {!! sprintf(__('views/common.forms.register.legal_agree_oauth2'),
-             '<a href="' . route('legal.terms') . '">' . __('views/common.forms.register.terms_of_service') . '</a>',
-             '<a href="' . route('legal.privacy') . '">' . __('views/common.forms.register.privacy_policy') . '</a>',
-             '<a href="' . route('legal.cookies') . '">' . __('views/common.forms.register.cookie_policy') . '</a>')
+            {!! sprintf(__('view_common.forms.register.legal_agree_oauth2'),
+             '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
+             '<a href="' . route('legal.privacy') . '">' . __('view_common.forms.register.privacy_policy') . '</a>',
+             '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
              !!}
-            {{ __('views/common.forms.oauth.battletag_warning') }}
+            {{ __('view_common.forms.oauth.battletag_warning') }}
         </p>
         <hr>
         @include('common.forms.oauth')

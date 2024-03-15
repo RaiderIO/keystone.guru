@@ -1146,21 +1146,17 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @return float|bool Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
+     * @return float|null Gets the rating the current user (whoever is logged in atm) has given this dungeon route.
      */
-    public function getRatingByCurrentUser()
+    public function getRatingByCurrentUser(): ?float
     {
-        $result = false;
+        $result = null;
+        /** @var User $user */
         $user   = Auth::user();
         if ($user !== null) {
-            $rating = DungeonRouteRating::where('dungeon_route_id', $this->id)
+            $result = DungeonRouteRating::where('dungeon_route_id', $this->id)
                 ->where('user_id', $user->id)
-                ->get(['rating'])
-                ->first();
-
-            if ($rating !== null) {
-                $result = $rating->rating;
-            }
+                ->first()?->rating;
         }
 
         return $result;

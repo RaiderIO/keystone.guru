@@ -2,9 +2,9 @@
 /** @var $mappingVersionUsage \Illuminate\Support\Collection */
 ?>
 
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.tools.dungeonroute.mappingversions.title')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.dungeonroute.mappingversions.title')])
 
-@section('header-title', __('views/admin.tools.dungeonroute.mappingversions.header'))
+@section('header-title', __('view_admin.tools.dungeonroute.mappingversions.header'))
 
 @section('scripts')
     @parent
@@ -22,9 +22,9 @@
         <table id="admin_dungeon_route_mapping_versions_unused_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>
-                <th width="40%">{{ __('views/admin.tools.dungeonroute.mappingversions.table_header_mapping_version_name') }}</th>
-                <th width="40%">{{ __('views/admin.tools.dungeonroute.mappingversions.table_header_count') }}</th>
-                <th width="20%">{{ __('views/admin.tools.dungeonroute.mappingversions.table_header_actions') }}</th>
+                <th width="40%">{{ __('view_admin.tools.dungeonroute.mappingversions.table_header_mapping_version_name') }}</th>
+                <th width="40%">{{ __('view_admin.tools.dungeonroute.mappingversions.table_header_count') }}</th>
+                <th width="20%">{{ __('view_admin.tools.dungeonroute.mappingversions.table_header_actions') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -43,9 +43,9 @@
         <table id="admin_dungeon_route_mapping_versions_used_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>
-                <th width="40%">{{ __('views/admin.tools.dungeonroute.mappingversions.table_header_mapping_version_name') }}</th>
-                <th width="40%">{{ __('views/admin.tools.dungeonroute.mappingversions.table_header_count') }}</th>
-                <th width="20%">{{ __('views/admin.tools.dungeonroute.mappingversions.table_header_actions') }}</th>
+                <th width="40%">{{ __('view_admin.tools.dungeonroute.mappingversions.table_header_mapping_version_name') }}</th>
+                <th width="40%">{{ __('view_admin.tools.dungeonroute.mappingversions.table_header_count') }}</th>
+                <th width="20%">{{ __('view_admin.tools.dungeonroute.mappingversions.table_header_actions') }}</th>
             </tr>
             </thead>
             <tbody>

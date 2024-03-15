@@ -9,9 +9,7 @@ use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Str;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
@@ -154,8 +152,9 @@ class CacheService implements CacheServiceInterface
         // Only keys starting with this prefix may be cleaned up by this task, ex.
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
         // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
+        $prefix            = config('database.redis.options.prefix');
         $keyWhitelistRegex = [
-            sprintf('/%s:.{40}(?::.{40})*/', config('database.redis.options.prefix')),
+            sprintf('/%s[a-z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ];
 
         try {
@@ -171,12 +170,14 @@ class CacheService implements CacheServiceInterface
 
                 $toDelete = [];
                 foreach ($result[1] as $redisKey) {
-//                $this->info($redisKey);
                     $output = [];
                     foreach ($keyWhitelistRegex as $regex) {
-                        if (preg_match($regex, (string)$redisKey, $output) !== false) {
+                        $matchResult = preg_match($regex, (string)$redisKey, $output);
+                        if ($matchResult === false) {
+                            $this->log->clearIdleKeysRegexError($regex, $redisKey);
+                            break;
+                        } else if ($matchResult > 0) {
                             $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
-//                        $this->info(sprintf('- Match - idletime: %d', $idleTime));
                             if ($idleTime > $seconds) {
                                 $toDelete[] = $redisKey;
                             }
@@ -190,8 +191,12 @@ class CacheService implements CacheServiceInterface
                     $toDeleteCount = count($toDelete);
 
                     // https://redis.io/commands/del/
+                    $toDeleteWithoutPrefix = [];
+                    foreach ($toDelete as $key) {
+                        $toDeleteWithoutPrefix[] = str_replace($prefix, '', $key);
+                    }
 
-                    $nrOfDeletedKeys  = Redis::command('DEL', $toDelete);
+                    $nrOfDeletedKeys  = Redis::command('DEL', $toDeleteWithoutPrefix);
                     $deletedKeysCount += $nrOfDeletedKeys;
                     if ($nrOfDeletedKeys !== $toDeleteCount) {
                         $this->log->clearIdleKeysFailedToDeleteAllKeys($nrOfDeletedKeys, $toDeleteCount);

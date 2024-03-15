@@ -94,7 +94,7 @@ class ReleaseController extends Controller
      *
      * @return Factory|View
      */
-    public function new(): View
+    public function create(): View
     {
         return view('admin.release.edit', [
             'categories' => ReleaseChangelogCategory::all(),

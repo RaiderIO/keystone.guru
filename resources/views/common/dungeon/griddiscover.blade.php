@@ -47,7 +47,7 @@ for ($i = 0;
                     <div class="d-lg-inline d-none">
                         <p class="card-text text-center">
                             <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
-                                {{ __('views/common.dungeon.griddiscover.popular') }}
+                                {{ __('view_common.dungeon.griddiscover.popular') }}
                             </a>
 
                             &middot;
@@ -56,7 +56,7 @@ for ($i = 0;
                                 @if($currentAffixGroup !== null)
                                         <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]); ?>
                                     <a href="{{ $url }}">
-                                        {{ __('views/common.dungeon.griddiscover.this_week') }}
+                                        {{ __('view_common.dungeon.griddiscover.this_week') }}
                                     </a>
                                         <?php ob_start() ?>
                                     @if($tiers->has($currentAffixGroup->id))
@@ -70,7 +70,7 @@ for ($i = 0;
                                     {!! ($thisWeekTier = ob_get_clean()) !!}
                                 @else
                                     <span class="text-muted">
-                                        {{ __('views/common.dungeon.griddiscover.this_week') }}
+                                        {{ __('view_common.dungeon.griddiscover.this_week') }}
                                     </span>
                                     @endif
 
@@ -79,7 +79,7 @@ for ($i = 0;
                                     @if($nextAffixGroup !== null)
                                             <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]); ?>
                                         <a href="{{ $url }}">
-                                            {{ __('views/common.dungeon.griddiscover.next_week') }}
+                                            {{ __('view_common.dungeon.griddiscover.next_week') }}
                                         </a>
                                             <?php ob_start() ?>
                                         @if($tiers->has($nextAffixGroup->id))
@@ -93,7 +93,7 @@ for ($i = 0;
                                         {!! ($nextWeekTier = ob_get_clean()) !!}
                                     @else
                                         <span class="text-muted">
-                                        {{ __('views/common.dungeon.griddiscover.next_week') }}
+                                        {{ __('view_common.dungeon.griddiscover.next_week') }}
                                     </span>
                                         @endif
 
@@ -101,7 +101,7 @@ for ($i = 0;
                                     @endif
 
                                     <a href="{{ route('dungeonroutes.discoverdungeon.new', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
-                                        {{ __('views/common.dungeon.griddiscover.new') }}
+                                        {{ __('view_common.dungeon.griddiscover.new') }}
                                     </a>
                         </p>
                     </div>
@@ -111,7 +111,7 @@ for ($i = 0;
                         <div class="col">
                             <h4>
                                 <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
-                                    {{ __('views/common.dungeon.griddiscover.popular') }}
+                                    {{ __('view_common.dungeon.griddiscover.popular') }}
                                 </a>
                             </h4>
                         </div>
@@ -120,12 +120,12 @@ for ($i = 0;
                                 <h4>
                                     @isset($thisWeekTier)
                                         <a href="{{ route('dungeonroutes.discoverdungeon.thisweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
-                                            {{ __('views/common.dungeon.griddiscover.this_week') }}
+                                            {{ __('view_common.dungeon.griddiscover.this_week') }}
                                         </a>
                                         {!! $thisWeekTier !!}
                                     @else
                                         <span class="text-muted">
-                                            {{ __('views/common.dungeon.griddiscover.this_week') }}
+                                            {{ __('view_common.dungeon.griddiscover.this_week') }}
                                         </span>
                                     @endisset
                                 </h4>
@@ -136,7 +136,7 @@ for ($i = 0;
                         <div class="col">
                             <h4>
                                 <a href="{{ route('dungeonroutes.discoverdungeon.new', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
-                                    {{ __('views/common.dungeon.griddiscover.new') }}
+                                    {{ __('view_common.dungeon.griddiscover.new') }}
                                 </a>
                             </h4>
                         </div>
@@ -145,12 +145,12 @@ for ($i = 0;
                                 <h4>
                                     @isset($nextWeekTier)
                                         <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon->slug]) }}">
-                                            {{ __('views/common.dungeon.griddiscover.next_week') }}
+                                            {{ __('view_common.dungeon.griddiscover.next_week') }}
                                         </a>
                                         {!! $nextWeekTier !!}
                                     @else
                                         <span class="text-muted">
-                                            {{ __('views/common.dungeon.griddiscover.next_week') }}
+                                            {{ __('view_common.dungeon.griddiscover.next_week') }}
                                         </span>
                                     @endisset
                                 </h4>

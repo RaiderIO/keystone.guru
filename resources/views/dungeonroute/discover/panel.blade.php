@@ -53,7 +53,7 @@ $cache            ??= true;
         <div class="row mt-4">
             <div class="col-xl text-center">
                 <a href="{{ $link }}">
-                    >> {{ __('views/dungeonroute.discover.panel.show_more') }}
+                    >> {{ __('view_dungeonroute.discover.panel.show_more') }}
                 </a>
             </div>
         </div>

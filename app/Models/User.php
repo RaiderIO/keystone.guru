@@ -210,7 +210,7 @@ class User extends Authenticatable implements LaratrustUser
         if ($this->hasRole('admin')) {
             $result = collect(array_keys(PatreonBenefit::ALL));
         } else if (isset($this->patreonUserLink)) {
-            $result = $this->patreonUserLink->patreonbenefits->pluck(['key']);
+            $result = $this->patreonUserLink->patreonBenefits->pluck(['key']);
         } else {
             $result = collect();
         }

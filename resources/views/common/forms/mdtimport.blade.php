@@ -24,12 +24,12 @@
     <div class="row mb-2">
         <div class="col">
             {!! Form::label('import_string',
-            __('views/common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', [], false)
+            __('view_common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', [], false)
             !!}
         </div>
         <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
             <div class="btn btn-outline-warning" data-toggle="tooltip"
-                 title="{{ __('views/common.forms.mdtimport.reset_title') }}">
+                 title="{{ __('view_common.forms.mdtimport.reset_title') }}">
                 <i class="fas fa-undo"></i>
             </div>
         </div>
@@ -41,7 +41,7 @@
     <div class="form-group">
         <div class="text-info">
             <i class="fas fa-info-circle"></i> {{ sprintf(
-                    __('views/common.forms.mdtimport.unregistered_user_all_routes_temporary'),
+                    __('view_common.forms.mdtimport.unregistered_user_all_routes_temporary'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                     )
                 }}
@@ -51,10 +51,10 @@
 @else
     <div class="form-group">
         <label for="mdt_import_sandbox">
-            {{ __('views/common.forms.mdtimport.temporary_route') }}
+            {{ __('view_common.forms.mdtimport.temporary_route') }}
             <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
                 sprintf(
-                    __('views/common.forms.mdtimport.temporary_route_title'),
+                    __('view_common.forms.mdtimport.temporary_route_title'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')
                 )
                  }}"></i>
@@ -66,7 +66,7 @@
 <div class="form-group">
     <div class="bg-info p-1 import_mdt_string_loader" style="display: none;">
         <?php /* I'm Dutch, of course the loading indicator is a stroopwafel */ ?>
-        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('views/common.forms.mdtimport.parsing_your_string') }}
+        <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_common.forms.mdtimport.parsing_your_string') }}
     </div>
 </div>
 
@@ -90,13 +90,13 @@
 
 <div class="form-group import_as_this_week_container" style="display: none;">
     <label for="import_as_this_week">
-        {{ __('views/common.forms.mdtimport.import_as_this_week') }}
+        {{ __('view_common.forms.mdtimport.import_as_this_week') }}
     </label>
     {!! Form::checkbox('import_as_this_week', 1, false, ['id' => 'import_as_this_week', 'class' => 'form-control left_checkbox']) !!}
 </div>
 
 <div class="form-group">
-    {!! Form::submit(__('views/common.forms.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+    {!! Form::submit(__('view_common.forms.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
     <div class="col-md">
 
     </div>

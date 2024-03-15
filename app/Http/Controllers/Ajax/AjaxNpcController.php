@@ -46,7 +46,7 @@ class AjaxNpcController extends Controller
     /**
      * @throws Exception
      */
-    public function list(Request $request): array
+    public function get(Request $request): array
     {
         $npcs = Npc::with(['dungeon', 'type', 'classification', 'enemyForces'])
             ->selectRaw('npcs.*, COUNT(enemies.id) as enemy_count')

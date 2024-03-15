@@ -4,23 +4,30 @@ namespace Tests\Feature\App\Service\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
+use DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\Exception;
 use Tests\TestCases\PublicTestCase;
 use Tests\Unit\Fixtures\LoggingFixtures;
 use Tests\Unit\Fixtures\ServiceFixtures;
+use Throwable;
 
 final class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
     #[Test]
-    #[Group('AffixGroupEaseTierService')]
+    #[Group('AffixGroupEaseTierService2')]
     public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull(): void
     {
         // Arrange
         $affixGroupId = 124;
-        $response = $this->getResponse();
+        $response     = $this->getResponse();
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
@@ -38,6 +45,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             ->method('parseTierListParseTierStart');
 
         $log->expects($this->never())
+            ->method('parseTierListUnknownAffixGroup');
+
+        $log->expects($this->never())
             ->method('parseTierListUnknownDungeon');
 
         // 8 dungeons
@@ -51,7 +61,10 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Act
         $result = null;
         try {
-            $result = $affixGroupEaseTierService->parseTierList($response);
+            // Should not be needed if we use repositories, but we're not at the moment..
+            DB::transaction(function () use (&$result, $affixGroupEaseTierService, $response) {
+                $result = $affixGroupEaseTierService->parseTierList($response);
+            });
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
             $result?->delete();
@@ -62,6 +75,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertGreaterThan(0, $result->id);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError(): void
@@ -69,7 +85,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $response = $this->getResponse('response_unknown_affix');
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
@@ -98,6 +114,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError(): void
@@ -105,7 +124,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $response = $this->getResponse('response_unknown_dungeon');
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
@@ -128,26 +147,29 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertInstanceOf(AffixGroupEaseTierPull::class, $result);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull(): void
     {
         // Arrange
-        $response = $this->getResponse();
+        $response               = $this->getResponse();
         $responseDifferentAffix = $this->getResponse('response_different_affix');
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
             $log
         );
         // Act
-        $result = null;
+        $result                         = null;
         $previousAffixGroupEaseTierPull = null;
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
-            $result = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
+            $result                         = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
             $previousAffixGroupEaseTierPull?->delete();
@@ -166,6 +188,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertNotEquals($previousAffixGroupEaseTierPull->tiers_hash, $result->tiers_hash);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenSameResponse_ShouldReturnNull(): void
@@ -173,18 +198,18 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $response = $this->getResponse();
 
-        $log = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             null,
             $log
         );
         // Act
-        $result = null;
+        $result                         = null;
         $previousAffixGroupEaseTierPull = null;
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
-            $result = $affixGroupEaseTierService->parseTierList($response);
+            $result                         = $affixGroupEaseTierService->parseTierList($response);
         } finally {
             // If it was successful, delete the entry again, so we have a clean database.
             $previousAffixGroupEaseTierPull?->delete();

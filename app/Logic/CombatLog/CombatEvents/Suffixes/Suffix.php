@@ -4,7 +4,6 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
-use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\EnvironmentalDamageV20;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -78,8 +77,6 @@ abstract class Suffix implements HasParameters
 
     public const SUFFIX_SUMMON = 'SUMMON';
 
-    public const SUFFIX_ENVIRONMENTAL_DAMAGE = 'ENVIRONMENTAL_DAMAGE';
-
     public const SUFFIX_EMPOWER_START = 'EMPOWER_START';
 
     public const SUFFIX_EMPOWER_END = 'EMPOWER_END';
@@ -118,7 +115,6 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DURABILITY_DAMAGE,
         self::SUFFIX_CREATE,
         self::SUFFIX_SUMMON,
-        self::SUFFIX_ENVIRONMENTAL_DAMAGE,
         self::SUFFIX_EMPOWER_START,
         self::SUFFIX_EMPOWER_END,
     ];
@@ -157,7 +153,6 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DURABILITY_DAMAGE     => DurabilityDamage::class,
         self::SUFFIX_CREATE                => Create::class,
         self::SUFFIX_SUMMON                => Summon::class,
-        self::SUFFIX_ENVIRONMENTAL_DAMAGE  => EnvironmentalDamageV20::class,
         self::SUFFIX_EMPOWER_START         => EmpowerStart::class,
         self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];

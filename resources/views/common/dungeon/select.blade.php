@@ -10,7 +10,7 @@
  */
 $id                   ??= 'dungeon_id_select';
 $name                 ??= 'dungeon_id';
-$label                ??= __('views/common.dungeon.select.dungeon');
+$label                ??= __('view_common.dungeon.select.dungeon');
 $required             ??= true;
 $showAll              = !isset($showAll) || $showAll;
 $showSeasons          = isset($showSeasons) && $showSeasons && $currentUserGameVersion->has_seasons;
@@ -39,14 +39,14 @@ if (!isset($dungeons)) {
 
     // Show a selector to only show all dungeons in a specific season
     if ($allowSeasonSelection) {
-        $dungeonsSelect[__('views/common.dungeon.select.seasons')] = [];
+        $dungeonsSelect[__('view_common.dungeon.select.seasons')] = [];
         foreach ($seasons as $season) {
-            $dungeonsSelect[__('views/common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] = $season->name;
+            $dungeonsSelect[__('view_common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] = $season->name;
         }
     }
 
     if ($showAll) {
-        $dungeonsSelect[__('views/common.dungeon.select.all')] = [-1 => __('views/common.dungeon.select.all_dungeons')];
+        $dungeonsSelect[__('view_common.dungeon.select.all')] = [-1 => __('view_common.dungeon.select.all_dungeons')];
     }
 
     if ($showExpansions) {
@@ -54,8 +54,8 @@ if (!isset($dungeons)) {
 
         foreach ($validExpansions as $expansion) {
             $key                                                         = sprintf('expansion-%d', $expansion->id);
-            $dungeonsSelect[__('views/common.dungeon.select.all')][$key] =
-                __('views/common.dungeon.select.all_expansion_dungeons', ['expansion' => __($expansion->name)]);
+            $dungeonsSelect[__('view_common.dungeon.select.all')][$key] =
+                __('view_common.dungeon.select.all_expansion_dungeons', ['expansion' => __($expansion->name)]);
 
             if ($selected === null) {
                 $selected = $key;
@@ -124,7 +124,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     {!! Form::select($name, $dungeonsSelect, $selected, array_merge(['id' => $id], ['class' => 'form-control selectpicker', 'data-live-search' => 'true'])) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
-            <i class="fa fa-exclamation-triangle"></i> {{ __('views/common.dungeon.select.siege_of_boralus_warning') }}
+            <i class="fa fa-exclamation-triangle"></i> {{ __('view_common.dungeon.select.siege_of_boralus_warning') }}
         </div>
     @endif
 

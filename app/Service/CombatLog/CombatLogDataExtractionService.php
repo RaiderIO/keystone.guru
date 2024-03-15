@@ -71,14 +71,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     $currentKeyAffixGroup = $affixGroups->first();
                 }
 
-                $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en-US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
+                $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en_US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
             } else if ($parsedEvent instanceof ZoneChange) {
                 if ($currentKeyLevel !== 1) {
                     $this->log->extractDataSetZoneFailedChallengeModeActive();
                 } else {
                     $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
 
-                    $this->log->extractDataSetZone(__($dungeon->name, [], 'en-US'));
+                    $this->log->extractDataSetZone(__($dungeon->name, [], 'en_US'));
                 }
             }
 

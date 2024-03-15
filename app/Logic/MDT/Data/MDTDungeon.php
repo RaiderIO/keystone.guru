@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUndefinedClassInspection */
-
 /**
  * Created by PhpStorm.
  * User: Wouter
@@ -27,7 +25,6 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
 use Lua;
-use LuaException;
 
 /**
  * @author Wouter
@@ -120,8 +117,8 @@ class MDTDungeon
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      *
-     * @param Floor|Collection $floors The floors that you want to get the clones for.
-     * @return Collection|Enemy[]
+     * @param Collection<Floor> $floors The floors that you want to get the clones for.
+     * @return Collection<Enemy>
      */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
@@ -319,12 +316,8 @@ class MDTDungeon
                         end
                     ';
 
-            try {
-                $lua = new Lua();
-                $lua->eval($eval);
-            } catch (LuaException $ex) {
-                dd($ex, $expansionName, $mdtDungeonName, $eval);
-            }
+            $lua = new Lua(null);
+            $lua->eval($eval);
         }
 
         return $lua;

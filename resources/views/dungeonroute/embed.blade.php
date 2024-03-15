@@ -3,7 +3,7 @@
     'custom' => true,
     'footer' => false,
     'header' => false,
-    'title' => __('views/dungeonroute.embed.title', ['routeTitle' => $dungeonroute->title]),
+    'title' => __('view_dungeonroute.embed.title', ['routeTitle' => $dungeonroute->title]),
     'bodyClass' => 'overflow-hidden',
     'cookieConsent' => false,
 ])
@@ -16,7 +16,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['ex
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes         = [-1 => __('views/dungeonroute.embed.any')];
+    $affixes         = [-1 => __('view_dungeonroute.embed.any')];
     $selectedAffixes = -1;
 }
 ?>
