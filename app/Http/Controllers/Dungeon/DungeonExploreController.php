@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class DungeonExploreController extends Controller
 {
-    public function list(Request $request): View
+    public function get(Request $request): View
     {
         return view('dungeon.explore.list');
     }

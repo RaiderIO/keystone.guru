@@ -235,7 +235,7 @@ class ProfileController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function list(Request $request): \Illuminate\View\View
+    public function get(Request $request): \Illuminate\View\View
     {
         return view('profile.list');
     }

@@ -121,7 +121,7 @@ class DungeonController extends Controller
      *
      * @return Factory|
      */
-    public function list(): View
+    public function get(): View
     {
         return view('admin.dungeon.list', [
             'models' => Dungeon::with(['mappingVersions'])

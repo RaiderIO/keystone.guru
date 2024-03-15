@@ -133,7 +133,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('explore')->group(static function () {
-        Route::get('/', (new DungeonExploreController())->list(...))->name('dungeon.explore.list');
+        Route::get('/', (new DungeonExploreController())->get(...))->name('dungeon.explore.list');
         Route::prefix('{dungeon}')->group(static function () {
             Route::get('/', (new DungeonExploreController())->viewDungeon(...))->name('dungeon.explore.view');
             Route::get('/{floorIndex}', (new DungeonExploreController())->viewDungeonFloor(...))->name('dungeon.explore.view.floor');
@@ -193,7 +193,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::patch('/', (new ProfileController())->changepassword(...))->name('profile.changepassword');
             Route::post('tag', (new ProfileController())->createtag(...))->name('profile.tag.create');
         });
-        Route::get('teams', (new TeamController())->list(...))->name('team.list');
+        Route::get('teams', (new TeamController())->get(...))->name('team.list');
         Route::prefix('team')->group(static function () {
             Route::get('new', (new TeamController())->create(...))->name('team.new');
             Route::get('{team}', (new TeamController())->edit(...))->name('team.edit');
@@ -206,7 +206,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
     Route::middleware(['auth', 'role:admin'])->group(static function () {
         // Only admins may view a list of profiles
-        Route::get('profiles', (new ProfileController())->list(...))->name('profile.list');
+        Route::get('profiles', (new ProfileController())->get(...))->name('profile.list');
         Route::get('phpinfo', (new SiteController())->phpinfo(...))->name('misc.phpinfo');
         Route::prefix('admin')->group(static function () {
             // Dungeons
@@ -237,7 +237,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     });
                 });
             });
-            Route::get('dungeons', (new DungeonController())->list(...))->name('admin.dungeons');
+            Route::get('dungeons', (new DungeonController())->get(...))->name('admin.dungeons');
             // Expansions
             Route::prefix('expansion')->group(static function () {
                 Route::get('new', (new ExpansionController())->create(...))->name('admin.expansion.new');
@@ -245,14 +245,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('new', (new ExpansionController())->savenew(...))->name('admin.expansion.savenew');
                 Route::patch('{expansion}', (new ExpansionController())->update(...))->name('admin.expansion.update');
             });
-            Route::get('expansions', (new ExpansionController())->list(...))->name('admin.expansions');
+            Route::get('expansions', (new ExpansionController())->get(...))->name('admin.expansions');
             // Releases
             Route::prefix('release')->group(static function () {
                 Route::get('new', (new ReleaseController())->create(...))->name('admin.release.new');
                 Route::get('{release}', (new ReleaseController())->edit(...))->name('admin.release.edit');
                 Route::post('new', (new ReleaseController())->savenew(...))->name('admin.release.savenew');
                 Route::patch('{release}', (new ReleaseController())->update(...))->name('admin.release.update');
-                Route::get('/', (new ReleaseController())->list(...))->name('admin.releases');
+                Route::get('/', (new ReleaseController())->get(...))->name('admin.releases');
             });
             // NPCs
             Route::prefix('npc')->group(static function () {
@@ -267,7 +267,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     });
                 });
             });
-            Route::get('npcs', (new NpcController())->list(...))->name('admin.npcs');
+            Route::get('npcs', (new NpcController())->get(...))->name('admin.npcs');
             // Spells
             Route::prefix('spell')->group(static function () {
                 Route::get('new', (new SpellController())->create(...))->name('admin.spell.new');
@@ -275,15 +275,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('new', (new SpellController())->savenew(...))->name('admin.spell.savenew');
                 Route::patch('{spell}', (new SpellController())->update(...))->name('admin.spell.update');
             });
-            Route::get('spells', (new SpellController())->list(...))->name('admin.spells');
+            Route::get('spells', (new SpellController())->get(...))->name('admin.spells');
             Route::prefix('user')->group(static function () {
                 Route::post('{user}/makeadmin', (new UserController())->makeadmin(...))->name('admin.user.makeadmin');
                 Route::post('{user}/makeuser', (new UserController())->makeuser(...))->name('admin.user.makeuser');
                 Route::delete('{user}/delete', (new UserController())->delete(...))->name('admin.user.delete');
                 Route::get('{user}/grantAllBenefits', (new UserController())->grantAllBenefits(...))->name('admin.user.grantallbenefits');
             });
-            Route::get('users', (new UserController())->list(...))->name('admin.users');
-            Route::get('userreports', (new UserReportController())->list(...))->name('admin.userreports');
+            Route::get('users', (new UserController())->get(...))->name('admin.users');
+            Route::get('userreports', (new UserReportController())->get(...))->name('admin.userreports');
             Route::prefix('tools')->group(static function () {
                 Route::get('/', (new AdminToolsController())->index(...))->name('admin.tools');
                 Route::get('/combatlog', (new AdminToolsController())->combatlog(...))->name('admin.combatlog');

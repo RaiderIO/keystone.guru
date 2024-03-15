@@ -23,7 +23,7 @@ class UserController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      */
-    public function list(): View
+    public function get(): View
     {
         return view('admin.user.list', [
             'patreonBenefits' => PatreonBenefit::all(),

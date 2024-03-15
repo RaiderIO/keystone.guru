@@ -2,7 +2,7 @@
 /** @var $hasNewChangelog boolean */
 ?>
 <div class="home">
-    <section class="footer1 cid-soU7JptK9v" once="footers" id="footer1-m">
+    <section class="footer1 cid-soU7JptK9v" id="footer1-m">
 
 
         <div class="container">
@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-12 mt-4">
                     <p class="mbr-text mb-0 mbr-fonts-style copyright align-center display-7">
-                        @lang('views/common.layout.footer.all_rights_reserved', ['date' => date('Y'), 'nameAndVersion' => $nameAndVersion])
+                        @lang('view_common.layout.footer.all_rights_reserved', ['date' => date('Y'), 'nameAndVersion' => $nameAndVersion])
                     </p>
                 </div>
             </div>

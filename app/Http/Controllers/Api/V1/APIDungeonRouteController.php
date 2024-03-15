@@ -23,7 +23,7 @@ class APIDungeonRouteController extends Controller
      *     @OA\Response(response=200, description="Successful operation")
      * )
      */
-    public function list(DungeonRouteListRequest $request): DungeonRouteCollectionResource
+    public function get(DungeonRouteListRequest $request): DungeonRouteCollectionResource
     {
         $validated = $request->validated();
 
