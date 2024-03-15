@@ -3,14 +3,14 @@ $selected ??= '';
 
 // https://gist.github.com/Xeoncross/1204255
 $regions = [
-    __('views/common.forms.timezoneselect.africa')     => DateTimeZone::AFRICA,
-    __('views/common.forms.timezoneselect.america')    => DateTimeZone::AMERICA,
-    __('views/common.forms.timezoneselect.antarctica') => DateTimeZone::ANTARCTICA,
-    __('views/common.forms.timezoneselect.asia')       => DateTimeZone::ASIA,
-    __('views/common.forms.timezoneselect.atlantic')   => DateTimeZone::ATLANTIC,
-    __('views/common.forms.timezoneselect.europe')     => DateTimeZone::EUROPE,
-    __('views/common.forms.timezoneselect.indian')     => DateTimeZone::INDIAN,
-    __('views/common.forms.timezoneselect.pacific')    => DateTimeZone::PACIFIC
+    __('view_common.forms.timezoneselect.africa')     => DateTimeZone::AFRICA,
+    __('view_common.forms.timezoneselect.america')    => DateTimeZone::AMERICA,
+    __('view_common.forms.timezoneselect.antarctica') => DateTimeZone::ANTARCTICA,
+    __('view_common.forms.timezoneselect.asia')       => DateTimeZone::ASIA,
+    __('view_common.forms.timezoneselect.atlantic')   => DateTimeZone::ATLANTIC,
+    __('view_common.forms.timezoneselect.europe')     => DateTimeZone::EUROPE,
+    __('view_common.forms.timezoneselect.indian')     => DateTimeZone::INDIAN,
+    __('view_common.forms.timezoneselect.pacific')    => DateTimeZone::PACIFIC
 ];
 $timezones = [];
 foreach ($regions as $name => $mask) {
@@ -28,7 +28,7 @@ foreach ($regions as $name => $mask) {
 // View
 ?>
 <label for="timezone">
-    {{ __('views/common.forms.timezoneselect.timezone') }}
+    {{ __('view_common.forms.timezoneselect.timezone') }}
 </label>
 <select id="timezone" name="timezone" class="form-control">
     @foreach ($timezones as $region => $list)

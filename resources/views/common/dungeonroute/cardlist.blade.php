@@ -51,7 +51,7 @@ $renderDungeonRouteCollection = static function (\Illuminate\Support\Collection 
 @if($dungeonroutes->isEmpty())
     <div class="row no-gutters">
         <div class="col-xl text-center">
-            {{ __('views/common.dungeonroute.cardlist.no_dungeonroutes') }}
+            {{ __('view_common.dungeonroute.cardlist.no_dungeonroutes') }}
         </div>
     </div>
 @else

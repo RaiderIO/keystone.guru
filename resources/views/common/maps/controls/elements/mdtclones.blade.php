@@ -8,7 +8,7 @@
             </div>
             <div class="col">
                 <label for="map_enemy_visuals_map_mdt_clones_to_enemies">
-                    {{ __('views/common.maps.controls.elements.mdtclones.mdt') }}
+                    {{ __('view_common.maps.controls.elements.mdtclones.mdt') }}
                 </label>
             </div>
         </div>
@@ -22,7 +22,7 @@
                     <i class="fas fa-puzzle-piece"></i>
                 </div>
                 <div class="col">
-                    {{ __('views/common.maps.controls.elements.mdtclones.auto_solve') }}
+                    {{ __('view_common.maps.controls.elements.mdtclones.auto_solve') }}
                 </div>
             </div>
         </div>

@@ -75,7 +75,7 @@ trait DungeonRouteProperties
                 'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
             ]),
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'            => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(static fn(string $name) => __($name, [], 'en-US')),
+            'uniqueAffixes'            => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(static fn(string $name) => __($name, [], 'en_US')),
         ];
     }
 }

@@ -985,7 +985,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // Needs to be explicit otherwise redirect to edit will not have this value
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'teeming'            => boolval($decoded['value']['teeming'] ?? false),
-            'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en-US') : $titleSlug,
+            'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $titleSlug,
             'difficulty'         => 'Casual',
             'level_min'          => $decoded['difficulty'] ?? 2,
             'level_max'          => $decoded['difficulty'] ?? 2,

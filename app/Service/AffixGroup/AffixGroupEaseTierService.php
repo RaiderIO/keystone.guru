@@ -85,10 +85,12 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
             $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
                 // Translate the name of the dungeon to English (from a key), and then match it
-                $ksgDungeonName = __($dungeon->name, [], 'en-US');
+                $ksgDungeonName = __($dungeon->name, [], 'en_US');
 
                 return self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName;
             });
+
+            dump($dungeonList->keys());
 
             $affixGroupEaseTiersAttributes = [];
             foreach ($tierListsResponse['encounterTierList']['tierLists'][0]['tiers'] as $tierList) {
@@ -206,7 +208,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix) => __($affix->name, [], 'en-US') === $affixName)->isEmpty());
+            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {

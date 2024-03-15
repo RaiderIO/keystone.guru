@@ -22,7 +22,7 @@
                 "source": {
                     "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
                     "type": "git",
-                    "reference": "2cbed0fe73e52956c4d8b3d2a074c13223fd6a24"
+                    "reference": "7febbdab79949b493c253c13fd8816c4ca0d3187"
                 }
             }
         },
@@ -98,6 +98,8 @@
         "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",
         "larastan/larastan": "^2.0",
+        "lukasss93/laravel-larex": "^4.4",
+        "lukasss93/laravel-larex-crowdin": "^2.2",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",

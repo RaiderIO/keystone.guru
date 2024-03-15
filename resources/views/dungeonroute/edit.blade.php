@@ -6,7 +6,7 @@ $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 $sandbox = $dungeonroute->isSandbox();
 ?>
 
-@extends('layouts.map', ['title' => sprintf(__('views/dungeonroute.edit.title'), $dungeonroute->title)])
+@extends('layouts.map', ['title' => sprintf(__('view_dungeonroute.edit.title'), $dungeonroute->title)])
 
 @include('common.general.inline', [
     'path' => 'dungeonroute/edit',
@@ -20,12 +20,12 @@ $sandbox = $dungeonroute->isSandbox();
 
 @section('linkpreview')
     @include('common.general.linkpreview', [
-        'title' => sprintf(__('views/dungeonroute.edit.linkpreview_title'), $dungeonroute->title),
+        'title' => sprintf(__('view_dungeonroute.edit.linkpreview_title'), $dungeonroute->title),
         'description' => !empty($dungeonroute->description) ?
             $dungeonroute->description :
             ($dungeonroute->isSandbox() ?
-            sprintf(__('views/dungeonroute.edit.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name)) :
-            sprintf(__('views/dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name)),
+            sprintf(__('view_dungeonroute.edit.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name)) :
+            sprintf(__('view_dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name)),
             'image' => $dungeonroute->dungeon->getImageUrl()
     ])
 @endsection

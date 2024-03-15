@@ -68,9 +68,9 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(function (Dungeon $dung
      class="form-group"
      style="display: {{ isset($dungeonroute) && $dungeonroute->dungeon->speedrun_enabled ? '' : 'none' }} ">
     <label for="{{ $id }}">
-        {{ __('views/common.forms.createroute.dungeon_speedrun_required_npc_difficulty') }}
+        {{ __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty') }}
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-            __('views/common.forms.createroute.dungeon_speedrun_required_npc_difficulty_title')
+            __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty_title')
              }}"></i>
     </label>
     {!! Form::select(

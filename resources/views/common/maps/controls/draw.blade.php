@@ -19,7 +19,7 @@
                            class="btn btn-info">
                             <i class="fas fa-eye"></i>
                             <span class="map_controls_element_label_toggle" style="display: none;">
-                                {{ __('views/common.maps.controls.draw.view_this_route') }}
+                                {{ __('view_common.maps.controls.draw.view_this_route') }}
                             </span>
                         </a>
                     </div>
@@ -46,7 +46,7 @@
             <div id="edit_route_draw_admin_map_actions_container" class="mb-2">
                 <div class="row">
                     <div class="col">
-                        {{ __('views/common.maps.controls.draw.admin') }}
+                        {{ __('view_common.maps.controls.draw.admin') }}
                     </div>
                 </div>
                 @include('common.maps.controls.elements.mdtclones')

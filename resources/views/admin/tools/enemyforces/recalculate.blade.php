@@ -1,6 +1,6 @@
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.tools.enemyforces.recalculate.title')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.enemyforces.recalculate.title')])
 
-@section('header-title', __('views/admin.tools.enemyforces.recalculate.header'))
+@section('header-title', __('view_admin.tools.enemyforces.recalculate.header'))
 
 @section('content')
     {{ Form::open(['route' => 'admin.tools.enemyforces.recalculate.submit']) }}
@@ -8,7 +8,7 @@
         @include('common.dungeon.select', ['activeOnly' => false])
     </div>
     <div class="form-group">
-        {!! Form::submit(__('views/admin.tools.enemyforces.recalculate.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}
+        {!! Form::submit(__('view_admin.tools.enemyforces.recalculate.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}
         <div class="col-md">
 
         </div>

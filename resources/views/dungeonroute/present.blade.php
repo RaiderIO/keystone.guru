@@ -13,7 +13,7 @@
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes         = [-1 => __('views/dungeonroute.view.any')];
+    $affixes         = [-1 => __('view_dungeonroute.view.any')];
     $selectedAffixes = -1;
 }
 
@@ -22,11 +22,11 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 @section('linkpreview')
     <?php
     $defaultDescription = $dungeonroute->author === null ?
-        sprintf(__('views/dungeonroute.view.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name))
-        : sprintf(__('views/dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author?->name);
+        sprintf(__('view_dungeonroute.view.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name))
+        : sprintf(__('view_dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author?->name);
     ?>
     @include('common.general.linkpreview', [
-        'title' => sprintf(__('views/dungeonroute.view.linkpreview_title'), $dungeonroute->title),
+        'title' => sprintf(__('view_dungeonroute.view.linkpreview_title'), $dungeonroute->title),
         'description' => empty($dungeonroute->description) ? $defaultDescription : $dungeonroute->description,
         'image' => $dungeonroute->dungeon->getImageUrl()
     ])

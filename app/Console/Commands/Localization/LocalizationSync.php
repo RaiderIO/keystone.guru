@@ -14,6 +14,8 @@ use Illuminate\Console\Command;
  */
 class LocalizationSync extends Command
 {
+    private const LANG_HODOR = 'ho-HO';
+
     /**
      * The name and signature of the console command.
      *
@@ -44,7 +46,7 @@ class LocalizationSync extends Command
         $baseLang   = $this->argument('base');
         $targetLang = $this->argument('target');
 
-        $langDir   = resource_path() . DIRECTORY_SEPARATOR . 'lang';
+        $langDir   = lang_path();
         $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
         $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
 
@@ -55,6 +57,18 @@ class LocalizationSync extends Command
 
     public function scanDir(string $baseLang, string $targetLang, string $baseDir, string $targetDir): void
     {
+        if (!file_exists($baseDir)) {
+            $this->error(sprintf('Unable to find base dir %s', $baseDir));
+
+            return;
+        }
+
+        if (!file_exists($targetDir)) {
+            $this->error(sprintf('Unable to find target dir %s', $targetDir));
+
+            return;
+        }
+
         foreach (scandir($baseDir) as $name) {
             if ($name == '.' || $name == '..' || preg_match('#\.[0-9]{8}_[0-9]{6}\.php$#', $name)) {
                 continue;
@@ -94,7 +108,7 @@ class LocalizationSync extends Command
                 continue;
             }
 
-            $shortTargetPath = str_replace(resource_path(), '', $targetPath);
+            $shortTargetPath = str_replace(base_path(), '', $targetPath);
             if ($target === false || $target != $result) {
                 file_put_contents($targetPath, $result);
 
@@ -111,7 +125,7 @@ class LocalizationSync extends Command
      *
      * @param false|array $lemmas
      */
-    public function parse(string $targetLang, string $content, $lemmas = false): string
+    public function parse(string $targetLang, string $content, mixed $lemmas = false): mixed
     {
         $result      = $lemmas === false ? [] : '';
         $tree        = [null];
@@ -175,7 +189,13 @@ class LocalizationSync extends Command
                         $segment = $match[1] . $lemmas[$key] . $match[1];
                     } // mark value as not specified
                     else {
-                        $segment = $match[1] . '@todo ' . $targetLang . ': ' . $key . $match[1];
+                        if ($targetLang === self::LANG_HODOR) {
+                            $segment = $match[1] . 'Hodor' . $match[1];
+                        } else {
+                            $segment = $match[1] .
+                                /*'@todo ' . $targetLang . ': ' . $key .*/
+                                $match[1];
+                        }
                     }
 
                     array_pop($tree);

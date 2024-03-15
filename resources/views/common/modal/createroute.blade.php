@@ -3,7 +3,7 @@
         <li class="nav-item">
             <a class="nav-link active" id="create_route_tab" data-toggle="tab" href="#create" role="tab"
                aria-controls="create_route" aria-selected="true">
-                {{ __('views/common.modal.createroute.create_route') }}
+                {{ __('view_common.modal.createroute.create_route') }}
             </a>
         </li>
     @endauth
@@ -11,13 +11,13 @@
         <a class="nav-link {{ Auth::check() ? '' : 'active'}} " id="create_temporary_route_tab" data-toggle="tab"
            href="#create-temporary" role="tab"
            aria-controls="create_temporary_route_tab" aria-selected="false">
-            {{ __('views/common.modal.createroute.create_temporary_route') }}
+            {{ __('view_common.modal.createroute.create_temporary_route') }}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="create_route_import_mdt_tab" data-toggle="tab" href="#import" role="tab"
            aria-controls="create_route_import_mdt" aria-selected="false">
-            {{ __('views/common.modal.createroute.import_from_mdt') }}
+            {{ __('view_common.modal.createroute.import_from_mdt') }}
         </a>
     </li>
 </ul>

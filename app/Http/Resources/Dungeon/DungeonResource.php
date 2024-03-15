@@ -23,7 +23,7 @@ class DungeonResource extends JsonResource
         return [
             'id'               => $this->id,
             'expansion_id'     => $this->expansion_id,
-            'name'             => __($this->name, [], 'en-US'),
+            'name'             => __($this->name, [], 'en_US'),
             'slug'             => $this->slug,
             'key'              => $this->key,
             'speedrun_enabled' => $this->speedrun_enabled,

@@ -1,0 +1,35 @@
+{
+    "id": 226,
+    "release_changelog_id": 233,
+    "version": "v9.0.2",
+    "title": "Various bugfixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-03-13T16:21:58+00:00",
+    "updated_at": "2024-03-13T16:21:58+00:00",
+    "changelog": {
+        "id": 233,
+        "release_id": 226,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 233,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2267,
+                "change": "Fixed an issue causing failed background tasks to crash the job runner."
+            },
+            {
+                "release_changelog_id": 233,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2268,
+                "change": "Fixed a rare MDT import issue where it didn't have a teeming field set."
+            },
+            {
+                "release_changelog_id": 233,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2270,
+                "change": "It's now once again possible to add Brushlines and Paths to routes."
+            }
+        ]
+    }
+}

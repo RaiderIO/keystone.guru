@@ -79,7 +79,7 @@ if (Auth::check()) {
 <div class="row no-gutters">
     @if($team instanceof \App\Models\Team)
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('team_name', __('views/common.dungeonroute.table.team')) !!}
+            {!! Form::label('team_name', __('view_common.dungeonroute.table.team')) !!}
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
         </div>
     @endisset
@@ -94,13 +94,13 @@ if (Auth::check()) {
         ])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('affixes[]', __('views/common.dungeonroute.table.affixes')) !!}
+        {!! Form::label('affixes[]', __('view_common.dungeonroute.table.affixes')) !!}
         {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
             ['id' => 'affixes',
             'class' => 'form-control affixselect selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('views/common.dungeonroute.table.affixes_selected')]) !!}
+            'data-count-selected-text' => __('view_common.dungeonroute.table.affixes_selected')]) !!}
     </div>
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
@@ -108,11 +108,11 @@ if (Auth::check()) {
         'showNoAttributes' => true])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('dungeonroute_requirements_select', __('views/common.dungeonroute.table.requirements')) !!}
+        {!! Form::label('dungeonroute_requirements_select', __('view_common.dungeonroute.table.requirements')) !!}
         <?php
-        $requirements = ['enough_enemy_forces' => __('views/common.dungeonroute.table.enemy_enemy_forces')];
+        $requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.table.enemy_enemy_forces')];
         if (Auth::check() && $view !== 'favorites') {
-            $requirements['favorite'] = __('views/common.dungeonroute.table.favorite');
+            $requirements['favorite'] = __('view_common.dungeonroute.table.favorite');
         }
         ?>
         {!! Form::select('dungeon_id', $requirements, 0, [
@@ -120,20 +120,20 @@ if (Auth::check()) {
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('views/common.dungeonroute.table.requirements_selected')
+            'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected')
         ]) !!}
     </div>
     @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('dungeonroute_tags_select[]', __('views/common.dungeonroute.table.tags')) !!}
+            {!! Form::label('dungeonroute_tags_select[]', __('view_common.dungeonroute.table.tags')) !!}
             {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,
                 ['id' => 'dungeonroute_tags_select',
                 'class' => 'form-control selectpicker',
                 'multiple' => 'multiple',
                 // Change the original text
-                'title' => $searchTags->isEmpty() ? __('views/common.dungeonroute.table.tags_title') : false,
+                'title' => $searchTags->isEmpty() ? __('view_common.dungeonroute.table.tags_title') : false,
                 'data-selected-text-format' => 'count > 1',
-                'data-count-selected-text' => __('views/common.dungeonroute.table.tags_selected')]) !!}
+                'data-count-selected-text' => __('view_common.dungeonroute.table.tags_selected')]) !!}
         </div>
     @endif
     <div class="col-lg pl-1 pr-1">
@@ -141,7 +141,7 @@ if (Auth::check()) {
             &nbsp;
         </div>
         <button id="dungeonroute_filter" class="btn btn-info col-lg">
-            <i class="fas fa-filter"></i> {{ __('views/common.dungeonroute.table.filter') }}
+            <i class="fas fa-filter"></i> {{ __('view_common.dungeonroute.table.filter') }}
         </button>
     </div>
     <div class="col-lg pl-1 pr-1">

@@ -56,7 +56,7 @@ class CreateMissing extends Command
                 $expansion = $expansions->get($expansionKey);
 
                 $nameTranslationKey = sprintf('dungeons.%s.%s.name', $expansionKey, $dungeonKey);
-                $nameTranslated     = __($nameTranslationKey, [], 'en-US');
+                $nameTranslated     = __($nameTranslationKey, [], 'en_US');
 
                 Dungeon::create([
                     'expansion_id'      => $expansion->id,

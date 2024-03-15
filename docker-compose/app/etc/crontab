@@ -7,5 +7,7 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
+# @TODO this doesn't work - need to split off in a separate container? Crontab doesn't run at all
 # m h dom mon dow  user  command
   * * *   *   *    root  php /var/www/artisan schedule:run >> /var/log/keystone.guru/scheduler/scheduler.log 2>&1
+  * * *   *   *    root  chown -R www-data:www-data /var/www/storage/logs 2>&1

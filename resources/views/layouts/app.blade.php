@@ -56,7 +56,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
 
     @sectionMissing('linkpreview')
         @include('common.general.linkpreview', [
-            'title' => __('views/layouts.app.linkpreview_title'),
+            'title' => __('view_layouts.app.linkpreview_title'),
         ])
     @endif
 

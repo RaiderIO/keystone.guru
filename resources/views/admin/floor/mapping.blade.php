@@ -11,10 +11,10 @@
     'custom' => true,
     'footer' => false,
     'header' => false,
-    'title' => sprintf(__('views/admin.floor.mapping.title'), __($floor->dungeon->name))
+    'title' => sprintf(__('view_admin.floor.mapping.title'), __($floor->dungeon->name))
 ])
 @section('header-title')
-    {{ sprintf(__('views/admin.floor.mapping.header'), __($floor->dungeon->name)) }}
+    {{ sprintf(__('view_admin.floor.mapping.header'), __($floor->dungeon->name)) }}
 @endsection
 
 @section('content')

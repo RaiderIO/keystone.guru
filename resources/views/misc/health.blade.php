@@ -5,9 +5,9 @@
     $tyrannical->base_health = 100000;
 
 ?>
-@extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false, 'title' => __('views/misc.health.title')])
+@extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false, 'title' => __('view_misc.health.title')])
 
-@section('header-title', __('views/misc.health.header'))
+@section('header-title', __('view_misc.health.header'))
 
 @section('content')
 

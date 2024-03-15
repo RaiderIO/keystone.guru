@@ -138,7 +138,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         foreach ($dungeon->floors as $floor) {
                             if ($floor->ingame_min_x === null || $floor->ingame_min_y === null || $floor->ingame_max_x === null || $floor->ingame_max_y === null) {
                                 throw new Exception(
-                                    sprintf('Floor %s is not configured yet - cannot place enemies on it!', __($floor->name, [], 'en-US'))
+                                    sprintf('Floor %s is not configured yet - cannot place enemies on it!', __($floor->name, [], 'en_US'))
                                 );
                             }
                         }

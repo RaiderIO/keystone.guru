@@ -1,5 +1,5 @@
 @if(!empty($modified))
-**{{ __('views/app.commit.modified.modified') }}**:
+**{{ __('view_app.commit.modified.modified') }}**:
     @foreach($modified as $file)
 = {{ $file }}
     @endforeach

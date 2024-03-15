@@ -2,9 +2,9 @@
     /** @var $mappingVersionsSelect array */
 ?>
 
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('views/admin.tools.mdt.dungeonmappingversiontomdtmapping.title')])
+@extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.mdt.dungeonmappingversiontomdtmapping.title')])
 
-@section('header-title', __('views/admin.tools.mdt.dungeonmappingversiontomdtmapping.header'))
+@section('header-title', __('view_admin.tools.mdt.dungeonmappingversiontomdtmapping.header'))
 
 @section('content')
     {{ Form::open(['route' => 'admin.tools.mdt.dungeonmappingversiontomdtmapping.submit']) }}
@@ -12,7 +12,7 @@
         {!! Form::select('mapping_version_id', $mappingVersionsSelect, true, ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
     </div>
     <div class="form-group">
-        {!! Form::submit(__('views/admin.tools.mdt.dungeonmappingversiontomdtmapping.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}
+        {!! Form::submit(__('view_admin.tools.mdt.dungeonmappingversiontomdtmapping.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}
         <div class="col-md">
 
         </div>

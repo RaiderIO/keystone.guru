@@ -7,7 +7,7 @@
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
-    $affixes         = [-1 => __('views/dungeonroute.livesession.view.any')];
+    $affixes         = [-1 => __('view_dungeonroute.livesession.view.any')];
     $selectedAffixes = -1;
 }
 

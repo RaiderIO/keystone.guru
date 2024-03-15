@@ -6,11 +6,11 @@ ob_start();
     <!-- Timer -->
     <div class="row no-gutters">
         <div class="col">
-            {{ __('views/common.maps.controls.elements.dungeonrouteinfo.timer') }}
+            {{ __('view_common.maps.controls.elements.dungeonrouteinfo.timer') }}
         </div>
     </div>
     <div class="row no-gutters">
-        <div class="col pl-2" data-toggle="tooltip" title="{{ sprintf(__('views/common.maps.controls.elements.dungeonrouteinfo.timer_title'),
+        <div class="col pl-2" data-toggle="tooltip" title="{{ sprintf(__('view_common.maps.controls.elements.dungeonrouteinfo.timer_title'),
                         gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusTwoSeconds()),
                         gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusThreeSeconds()))
                         }}">
@@ -21,7 +21,7 @@ ob_start();
     <!-- Group setup -->
     <div class="row no-gutters">
         <div class="col">
-            {{ __('views/common.maps.controls.elements.dungeonrouteinfo.group_setup') }}
+            {{ __('view_common.maps.controls.elements.dungeonrouteinfo.group_setup') }}
         </div>
     </div>
     <div class="row no-gutters">
@@ -32,7 +32,7 @@ ob_start();
 
     <div class="row no-gutters">
         <div class="col">
-            {{ __('views/common.maps.controls.elements.dungeonrouteinfo.affixes') }}
+            {{ __('view_common.maps.controls.elements.dungeonrouteinfo.affixes') }}
         </div>
     </div>
     @foreach($dungeonroute->affixes as $affixgroup)
@@ -49,7 +49,7 @@ ob_start();
                 data-content="{{ $content }}" data-html="true">
             <i class="fa fa-info-circle"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">
-                {{ __('views/common.maps.controls.elements.dungeonrouteinfo.route_info_title') }}
+                {{ __('view_common.maps.controls.elements.dungeonrouteinfo.route_info_title') }}
             </span>
         </button>
     </div>

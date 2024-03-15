@@ -6,22 +6,22 @@
 $user      = Auth::getUser();
 $isOAuth   = $user->password === '';
 $menuItems = [
-    ['icon' => 'fa-user', 'text' => __('views/profile.edit.profile'), 'target' => '#profile'],
-    ['icon' => 'fa-cog', 'text' => __('views/profile.edit.account'), 'target' => '#account'],
-    ['icon' => 'fab fa-patreon', 'text' => __('views/profile.edit.patreon'), 'target' => '#patreon'],
+    ['icon' => 'fa-user', 'text' => __('view_profile.edit.profile'), 'target' => '#profile'],
+    ['icon' => 'fa-cog', 'text' => __('view_profile.edit.account'), 'target' => '#account'],
+    ['icon' => 'fab fa-patreon', 'text' => __('view_profile.edit.patreon'), 'target' => '#patreon'],
 ];
 // Optionally add this menu item
 if (!$isOAuth) {
-    $menuItems[] = ['icon' => 'fa-key', 'text' => __('views/profile.edit.change_password'), 'target' => '#change-password'];
+    $menuItems[] = ['icon' => 'fa-key', 'text' => __('view_profile.edit.change_password'), 'target' => '#change-password'];
 }
 
-$menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('views/profile.edit.privacy'), 'target' => '#privacy'];
-$menuItems[] = ['icon' => 'fa-flag', 'text' => __('views/profile.edit.reports'), 'target' => '#reports'];
+$menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('view_profile.edit.privacy'), 'target' => '#privacy'];
+$menuItems[] = ['icon' => 'fa-flag', 'text' => __('view_profile.edit.reports'), 'target' => '#reports'];
 
-$menuTitle = sprintf(__('views/profile.edit.menu_title'), $user->name);
+$menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
 ?>
 @extends('layouts.sitepage', ['wide' => true,
-    'title' => __('views/profile.edit.title'),
+    'title' => __('view_profile.edit.title'),
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
     'menuModelEdit' => $user

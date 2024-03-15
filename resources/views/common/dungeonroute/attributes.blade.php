@@ -8,13 +8,13 @@ $showNoAttributes ??= false;
 <div class="form-group">
     @if($showNoAttributes)
         <label for="attributes" data-toggle="tooltip"
-               title="{{ __('views/common.dungeonroute.attributes.no_attributes_title') }}">
-            {{ __('views/common.dungeonroute.attributes.attributes') }}
+               title="{{ __('view_common.dungeonroute.attributes.no_attributes_title') }}">
+            {{ __('view_common.dungeonroute.attributes.attributes') }}
         </label>
     @else
-        <label for="attributes">{{ __('views/common.dungeonroute.attributes.attributes') }}</label>
+        <label for="attributes">{{ __('view_common.dungeonroute.attributes.attributes') }}</label>
         <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
-        __('views/common.dungeonroute.attributes.select_attributes_title')
+        __('view_common.dungeonroute.attributes.select_attributes_title')
          }}"></i>
     @endif
     <?php
@@ -39,7 +39,7 @@ $showNoAttributes ??= false;
     <select multiple name="attributes[]" id="attributes" class="form-control selectpicker"
             size="{{ $allRouteAttributeCount + $routeAttributes->count() }}"
             data-selected-text-format="count > 1"
-            data-count-selected-text="{{__('views/common.dungeonroute.attributes.attributes_selected')}}">
+            data-count-selected-text="{{__('view_common.dungeonroute.attributes.attributes_selected')}}">
         @foreach ($routeAttributes as $category => $categoryAttributes)
             <optgroup label="{{ ucfirst($category) }}">
                 @foreach ($categoryAttributes as $attribute)
