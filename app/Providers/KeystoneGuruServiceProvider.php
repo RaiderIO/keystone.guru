@@ -460,11 +460,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $shroudedBountyTypes = [];
             foreach (SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {
-                $shroudedBountyTypes[$bountyType] = __(sprintf('views/common.modal.simulate.shrouded_bounty_types.%s', $bountyType));
+                $shroudedBountyTypes[$bountyType] = __(sprintf('view_common.modal.simulate.shrouded_bounty_types.%s', $bountyType));
             }
             $affixes = [];
             foreach (SimulationCraftRaidEventsOptions::ALL_AFFIXES as $affix) {
-                $affixes[$affix] = __(sprintf('views/common.modal.simulate.affixes.%s', $affix));
+                $affixes[$affix] = __(sprintf('view_common.modal.simulate.affixes.%s', $affix));
             }
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
