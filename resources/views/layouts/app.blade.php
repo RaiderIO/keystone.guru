@@ -1,10 +1,14 @@
 <?php
-/** @var $isProduction string */
-/** @var $revision string */
-/** @var $theme string */
-/** @var $hasNewChangelog bool */
-/** @var $latestRelease \App\Models\Release */
-/** @var $latestReleaseSpotlight \App\Models\Release */
+/**
+ * @var $isLocal string
+ * @var $isMapping string
+ * @var $isProduction string
+ * @var $revision string
+ * @var $theme string
+ * @var $hasNewChangelog bool
+ * @var $latestRelease \App\Models\Release
+ * @var $latestReleaseSpotlight \App\Models\Release
+ */
 
 // Show ads or not
 $showAds ??= true;
@@ -92,6 +96,12 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
     @endif
     @if($analytics)
         @include('common.thirdparty.analytics')
+    @endif
+    @if($analytics)
+        @include('common.thirdparty.analytics')
+    @endif
+    @if(!$isLocal)
+        @include('common.thirdparty.rollbar.rollbar')
     @endif
 </head>
 <body class="{{ $bodyClass }}">
