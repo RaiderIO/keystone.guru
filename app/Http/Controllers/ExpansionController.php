@@ -86,7 +86,7 @@ class ExpansionController extends Controller
      *
      * @return Factory|
      */
-    public function list(): View
+    public function get(): View
     {
         return view('admin.expansion.list', ['expansions' => Expansion::all()]);
     }

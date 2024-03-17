@@ -203,7 +203,7 @@ return [
 //        ['short' => 'th', 'long' => 'th_TH', 'english' => 'Thai', 'native' => 'ไทย'],
 //        ['short' => 'tr', 'long' => 'tr_TR', 'english' => 'Turkish', 'native' => 'Türkçe'],
 //        ['short' => 'tw', 'long' => 'zh_TW', 'english' => 'Chinese (T)', 'native' => '繁體中文'],
-//        ['short' => 'uk', 'long' => 'uk_UA', 'english' => 'Ukrainian', 'native' => 'Українська'],
+        ['short' => 'uk', 'long' => 'uk_UA', 'english' => 'Ukrainian', 'native' => 'Українська'],
 //        ['short' => 'ur', 'long' => 'ur_PK', 'english' => 'Urdu (Pakistan)', 'native' => 'اردو'],
 //        ['short' => 'uz', 'long' => 'uz_UZ', 'english' => 'Uzbek', 'native' => "O'zbek"],
 //        ['short' => 'vi', 'long' => 'vi_VN', 'english' => 'Vietnamese', 'native' => 'Tiếng Việt'],

@@ -144,6 +144,7 @@ class KillZone extends Model
     {
         return $useCache && $this->enemiesCache !== null ?
             $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
+                ->with(['npc'])
                 ->join('kill_zone_enemies', static function (JoinClause $clause) {
                     $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
                         ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');

@@ -20,12 +20,12 @@ Route::prefix('v1')->group(static function () {
         Route::post('route', (new APICombatLogController())->createRoute(...))->name('api.v1.combatlog.route.create');
     });
     Route::prefix('route')->group(static function () {
-        Route::get('/', (new APIDungeonRouteController())->list(...))->name('api.v1.route.list');
+        Route::get('/', (new APIDungeonRouteController())->get(...))->name('api.v1.route.list');
         Route::post('/{dungeonRoute}/thumbnail', (new APIDungeonRouteController())->createThumbnails(...))->name('api.v1.route.thumbnail.create');
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', (new APIDungeonRouteThumbnailJobController())->get(...))->name('api.v1.thumbnailjob.get');
     });
     // Static data
     Route::prefix('dungeon')->group(static function () {
-        Route::get('/', (new APIDungeonController())->list(...))->name('api.v1.combatlog.dungeon.list');
+        Route::get('/', (new APIDungeonController())->get(...))->name('api.v1.combatlog.dungeon.list');
     });
 });

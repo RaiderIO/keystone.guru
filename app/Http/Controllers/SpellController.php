@@ -137,7 +137,7 @@ class SpellController extends Controller
      *
      * @return Factory|
      */
-    public function list(): View
+    public function get(): View
     {
         return view('admin.spell.list', ['models' => Spell::all()]);
     }

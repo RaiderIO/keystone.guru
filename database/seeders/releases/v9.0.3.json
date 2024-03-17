@@ -1,0 +1,23 @@
+{
+    "id": 227,
+    "release_changelog_id": 234,
+    "version": "v9.0.3",
+    "title": "Various bugfixes for v9.0.2 release",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2024-03-15T21:49:24+00:00",
+    "updated_at": "2024-03-15T21:49:24+00:00",
+    "changelog": {
+        "id": 234,
+        "release_id": 227,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 234,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2283,
+                "change": "Fixed crashes loading certain overview pages."
+            }
+        ]
+    }
+}

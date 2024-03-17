@@ -269,7 +269,7 @@ class NpcController extends Controller
      *
      * @return Factory|
      */
-    public function list(): View
+    public function get(): View
     {
         return view('admin.npc.list', ['models' => Npc::all()]);
     }

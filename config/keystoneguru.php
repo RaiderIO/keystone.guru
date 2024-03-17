@@ -347,6 +347,10 @@ return [
         'param_2' => env('PLAYWIRE_PARAM_2'),
     ],
 
+    'rollbar' => [
+        'access_token' => env('ROLLBAR_ACCESS_TOKEN'),
+    ],
+
     'api' => [
         'dungeon_route' => [
             'thumbnail' => [

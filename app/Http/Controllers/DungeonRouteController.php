@@ -338,10 +338,11 @@ class DungeonRouteController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function clone(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, ThumbnailServiceInterface $thumbnailService)
+    public function copy(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, ThumbnailServiceInterface $thumbnailService)
     {
         $this->authorize('clone', $dungeonroute);
 
+        /** @var User $user */
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute()) {

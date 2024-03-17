@@ -90,8 +90,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 return self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName;
             });
 
-            dump($dungeonList->keys());
-
             $affixGroupEaseTiersAttributes = [];
             foreach ($tierListsResponse['encounterTierList']['tierLists'][0]['tiers'] as $tierList) {
                 /** @var array{tier: string, entries: array} $tierList */
