@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
 use Monolog\Level;
+use Rollbar\Rollbar;
 
 class StructuredLogging implements StructuredLoggingInterface
 {
@@ -140,6 +141,12 @@ class StructuredLogging implements StructuredLoggingInterface
         // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
         $this->logger()->channel($this->channel)->log(
             $levelName,
+            sprintf('%s%s', $startPadding, $messageWithContextCounts),
+            array_merge($this->cachedContext, $context)
+        );
+
+        Rollbar::logger()->log(
+            \Rollbar\Payload\Level::DEBUG,
             sprintf('%s%s', $startPadding, $messageWithContextCounts),
             array_merge($this->cachedContext, $context)
         );

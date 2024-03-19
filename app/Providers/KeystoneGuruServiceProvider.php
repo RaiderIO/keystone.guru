@@ -10,6 +10,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Release;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\User;
@@ -475,6 +476,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
+        });
+
+        // Thirdparty
+        view()->composer('common.thirdparty.rollbar.rollbar', static function (View $view) use ($globalViewVariables) {
+            /** @var Release $latestRelease */
+            $latestRelease = $globalViewVariables['latestRelease'];
+            $view->with('latestRelease', $latestRelease);
         });
 
         // Profile pages

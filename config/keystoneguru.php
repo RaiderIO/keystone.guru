@@ -348,7 +348,8 @@ return [
     ],
 
     'rollbar' => [
-        'access_token' => env('ROLLBAR_ACCESS_TOKEN'),
+        'client_access_token' => env('ROLLBAR_CLIENT_ACCESS_TOKEN'),
+        'server_access_token' => env('ROLLBAR_SERVER_ACCESS_TOKEN'),
     ],
 
     'api' => [

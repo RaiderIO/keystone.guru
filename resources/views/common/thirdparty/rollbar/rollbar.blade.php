@@ -1,7 +1,12 @@
+<?php
+/**
+ * @var \App\Models\Release $latestRelease
+ */
+?>
 <!--suppress ALL -->
 <script>
     var _rollbarConfig = {
-        accessToken: '{{ config('keystoneguru.rollbar.access_token') }}',
+        accessToken: '{{ config('keystoneguru.rollbar.client_access_token') }}',
         captureUncaught: true,
         captureUnhandledRejections: true,
         payload: {
@@ -9,7 +14,7 @@
             // context: 'rollbar/test'
             client: {
                 javascript: {
-                    code_version: '1.0',
+                    code_version: '{{ $latestRelease->version }}',
                     // source_map_enabled: true,
                     // guess_uncaught_frames: true
                 }

@@ -81,6 +81,7 @@
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.1",
         "predis/predis": "^2.0",
+        "rollbar/rollbar-laravel": "^8.0",
         "santigarcor/laratrust": "^8.2",
         "shrikeh/teapot": "^2.3",
         "socialiteproviders/battlenet": "^4.1.0",
