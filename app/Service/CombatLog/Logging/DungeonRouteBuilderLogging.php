@@ -2,10 +2,10 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 use Exception;
 
-class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRouteBuilderLoggingInterface
+class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements DungeonRouteBuilderLoggingInterface
 {
     public function createPullStart(int $killZoneIndex): void
     {

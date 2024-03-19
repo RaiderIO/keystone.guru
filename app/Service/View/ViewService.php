@@ -28,20 +28,11 @@ use Illuminate\Support\Facades\App;
 
 class ViewService implements ViewServiceInterface
 {
-    /** @var CacheServiceInterface */
-    private $cacheService;
-
-    /** @var ExpansionServiceInterface */
-    private $expansionService;
-
-    /** @var AffixGroupEaseTierServiceInterface */
-    private $easeTierService;
-
-    public function __construct()
-    {
-        $this->cacheService     = App::make(CacheServiceInterface::class);
-        $this->expansionService = App::make(ExpansionServiceInterface::class);
-        $this->easeTierService  = App::make(AffixGroupEaseTierServiceInterface::class);
+    public function __construct(
+        private readonly CacheServiceInterface              $cacheService,
+        private readonly ExpansionServiceInterface          $expansionService,
+        private readonly AffixGroupEaseTierServiceInterface $easeTierService,
+    ) {
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class DebugInfoContextLoggerLogging extends StructuredLogging implements DebugInfoContextLoggerLoggingInterface
+class DebugInfoContextLoggerLogging extends RollbarStructuredLogging implements DebugInfoContextLoggerLoggingInterface
 {
     public function handleStart(string $url, string $method): void
     {

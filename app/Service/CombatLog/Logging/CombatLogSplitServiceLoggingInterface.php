@@ -4,7 +4,7 @@ namespace App\Service\CombatLog\Logging;
 
 use App\Logging\StructuredLoggingInterface;
 
-interface CombatLogSplitServiceLoggingInterface extends StructuredLoggingInterface
+interface CombatLogSplitServiceLoggingInterface
 {
     public function splitCombatLogOnChallengeModesStart(string $filePath): void;
 
