@@ -20,7 +20,7 @@ $chunks     = $affixgroup->affixes->chunk($chunkCount);
         foreach ($chunk as $affix) {
             ?>
         <div class="col">
-            <div class="row no-gutters">
+            <div class="row no-gutters m-auto">
                 <div class="col-auto {{ $center ? 'm-auto' : '' }}">
                     @include('common.affixgroup.affix', ['showText' => $showText, 'media' => $media, 'affix' => $affix])
                 </div>

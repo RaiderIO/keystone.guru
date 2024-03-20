@@ -146,7 +146,7 @@ return [
             'driver'           => 'monolog',
             'handler'          => MonologHandler::class,
             'access_token'     => env('ROLLBAR_SERVER_TOKEN'),
-            'level'            => 'debug',
+            'level'            => 'warning',
             'person_fn'        => 'Auth::user',
             'capture_email'    => false,
             'capture_username' => true,
