@@ -20,7 +20,8 @@
                 }
             },
             custom: {
-                trace_id: '{{ correlationId() }}',
+                <?php // See sitescripts.blade.php ?>
+                correlation_id: correlationId,
             }
         }
     };
