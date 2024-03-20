@@ -4,7 +4,6 @@ use App\Providers\ControllerServiceProvider;
 use App\Providers\HelperServiceProvider;
 use App\Providers\KeystoneGuruServiceProvider;
 use App\Providers\LoggingServiceProvider;
-use App\Providers\RollbarServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -188,10 +187,9 @@ return [
          * Keystone.guru Service Providers...
          */
         HelperServiceProvider::class,
-        KeystoneGuruServiceProvider::class,
         LoggingServiceProvider::class,
+        KeystoneGuruServiceProvider::class,
         ControllerServiceProvider::class,
-        RollbarServiceProvider::class,
     ])->toArray(),
 
     /*

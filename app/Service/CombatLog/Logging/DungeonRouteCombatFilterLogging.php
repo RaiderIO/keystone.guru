@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class DungeonRouteCombatFilterLogging extends StructuredLogging implements DungeonRouteCombatFilterLoggingInterface
+class DungeonRouteCombatFilterLogging extends RollbarStructuredLogging implements DungeonRouteCombatFilterLoggingInterface
 {
     /**
      * {@inheritDoc}

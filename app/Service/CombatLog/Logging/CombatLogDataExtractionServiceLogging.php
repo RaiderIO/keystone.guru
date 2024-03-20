@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CombatLogDataExtractionServiceLogging extends StructuredLogging implements CombatLogDataExtractionServiceLoggingInterface
+class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging implements CombatLogDataExtractionServiceLoggingInterface
 {
     public function extractDataTimestampNotSet(): void
     {

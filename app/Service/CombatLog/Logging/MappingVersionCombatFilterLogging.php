@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class MappingVersionCombatFilterLogging extends StructuredLogging implements MappingVersionCombatFilterLoggingInterface
+class MappingVersionCombatFilterLogging extends RollbarStructuredLogging implements MappingVersionCombatFilterLoggingInterface
 {
     /**
      * {@inheritDoc}

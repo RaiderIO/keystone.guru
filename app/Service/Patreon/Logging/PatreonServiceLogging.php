@@ -2,9 +2,9 @@
 
 namespace App\Service\Patreon\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class PatreonServiceLogging extends StructuredLogging implements PatreonServiceLoggingInterface
+class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonServiceLoggingInterface
 {
     public function loadCampaignBenefitsAdminUserNull(): void
     {
