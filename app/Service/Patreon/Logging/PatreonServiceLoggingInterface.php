@@ -10,6 +10,8 @@ interface PatreonServiceLoggingInterface
 
     public function loadCampaignBenefitsRetrieveTiersErrors(array $tiersAndBenefitsResponse): void;
 
+    public function loadCampaignBenefitsRetrieveTiersIncludedNotSet(array $tiersAndBenefitsResponse): void;
+
     public function loadCampaignBenefitsEnd(): void;
 
     public function loadCampaignTiersAdminUserNull(): void;
@@ -18,6 +20,8 @@ interface PatreonServiceLoggingInterface
 
     public function loadCampaignTiersRetrieveTiersAndBenefitsErrors(array $tiersAndBenefitsResponse): void;
 
+    public function loadCampaignTiersRetrieveMembersIncludedNotSet(array $tiersAndBenefitsResponse): void;
+
     public function loadCampaignTiersEnd(): void;
 
     public function loadCampaignMembersAdminUserNull(): void;
@@ -25,6 +29,8 @@ interface PatreonServiceLoggingInterface
     public function loadCampaignMembersStart(): void;
 
     public function loadCampaignTiersRetrieveMembersErrors(array $membersResponse): void;
+
+    public function loadCampaignTiersRetrieveMembersDataNotSet(array $membersResponse): void;
 
     public function loadCampaignMembersEnd(): void;
 
