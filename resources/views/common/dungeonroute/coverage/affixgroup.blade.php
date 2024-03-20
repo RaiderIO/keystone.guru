@@ -125,9 +125,9 @@ $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(static fn($n
                                                 'affixgroups' => $affixGroup->id,
                                                 ]) }}&dungeons={{ $dungeon->id }}"
                                 >
-{{--                                    <i class="fa fa-search text-info">--}}
+                                    <i class="fa fa-search text-info">
 
-{{--                                    </i>--}}
+                                    </i>
                                 </a>
                             </div>
                         @endif
