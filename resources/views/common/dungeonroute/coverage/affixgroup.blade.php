@@ -68,6 +68,7 @@ $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(static fn($n
                         'affixgroup' => $affixGroup,
                         'showText' => false,
                         'cols' => $selectedSeason->seasonal_affix_id === null ? 1 : 2,
+                        'center' => true
                     ])
                 </th>
             @endforeach
@@ -124,9 +125,9 @@ $seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(static fn($n
                                                 'affixgroups' => $affixGroup->id,
                                                 ]) }}&dungeons={{ $dungeon->id }}"
                                 >
-                                    <i class="fa fa-search text-info">
+{{--                                    <i class="fa fa-search text-info">--}}
 
-                                    </i>
+{{--                                    </i>--}}
                                 </a>
                             </div>
                         @endif
