@@ -28,20 +28,11 @@ use Illuminate\Support\Facades\App;
 
 class ViewService implements ViewServiceInterface
 {
-    /** @var CacheServiceInterface */
-    private $cacheService;
-
-    /** @var ExpansionServiceInterface */
-    private $expansionService;
-
-    /** @var AffixGroupEaseTierServiceInterface */
-    private $easeTierService;
-
-    public function __construct()
-    {
-        $this->cacheService     = App::make(CacheServiceInterface::class);
-        $this->expansionService = App::make(ExpansionServiceInterface::class);
-        $this->easeTierService  = App::make(AffixGroupEaseTierServiceInterface::class);
+    public function __construct(
+        private readonly CacheServiceInterface              $cacheService,
+        private readonly ExpansionServiceInterface          $expansionService,
+        private readonly AffixGroupEaseTierServiceInterface $easeTierService,
+    ) {
     }
 
     /**
@@ -53,7 +44,8 @@ class ViewService implements ViewServiceInterface
             // Build a list of some common
             $demoRoutes = DungeonRoute::where('demo', true)
                 ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
-                ->orderBy('dungeon_id')->get();
+                ->orderBy('dungeon_id')
+                ->get();
 
             $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
 
@@ -91,6 +83,8 @@ class ViewService implements ViewServiceInterface
             $appRevision = trim(file_get_contents(base_path('version')));
 
             return [
+                'isLocal'                         => config('app.env') === 'local',
+                'isMapping'                       => config('app.env') === 'mapping',
                 'isProduction'                    => config('app.env') === 'production',
                 'demoRoutes'                      => $demoRoutes,
                 'demoRouteDungeons'               => $demoRouteDungeons,

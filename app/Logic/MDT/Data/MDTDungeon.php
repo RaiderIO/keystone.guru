@@ -316,7 +316,7 @@ class MDTDungeon
                         end
                     ';
 
-            $lua = new Lua(null);
+            $lua = new Lua();
             $lua->eval($eval);
         }
 

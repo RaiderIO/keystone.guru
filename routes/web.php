@@ -158,7 +158,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('live/{livesession}', (new LiveSessionController())->view(...))->name('dungeonroute.livesession.view');
                 Route::get('live/{livesession}/{floorIndex}', (new LiveSessionController())->viewfloor(...))->name('dungeonroute.livesession.viewfloor');
                 // Clone a route
-                Route::get('clone', (new DungeonRouteController())->clone(...))->name('dungeonroute.clone');
+                Route::get('clone', (new DungeonRouteController())->copy(...))->name('dungeonroute.clone');
                 // Claiming a route that was made by /sandbox functionality
                 Route::get('claim', (new DungeonRouteController())->claim(...))->name('dungeonroute.claim');
                 Route::get('migrate/{seasonalType}', (new DungeonRouteController())->migrateToSeasonalType(...))->name('dungeonroute.migrate');

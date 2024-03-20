@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CreateRouteDungeonRouteServiceLogging extends StructuredLogging implements CreateRouteDungeonRouteServiceLoggingInterface
+class CreateRouteDungeonRouteServiceLogging extends RollbarStructuredLogging implements CreateRouteDungeonRouteServiceLoggingInterface
 {
     /**
      * {@inheritDoc}

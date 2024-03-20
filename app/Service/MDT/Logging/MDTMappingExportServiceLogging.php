@@ -2,9 +2,9 @@
 
 namespace App\Service\MDT\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class MDTMappingExportServiceLogging extends StructuredLogging implements MDTMappingExportServiceLoggingInterface
+class MDTMappingExportServiceLogging extends RollbarStructuredLogging implements MDTMappingExportServiceLoggingInterface
 {
     public function getDungeonEnemiesEnemiesWithoutNpcIdFound(array $enemyIds): void
     {

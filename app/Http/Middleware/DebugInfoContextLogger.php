@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use Closure;
 use Illuminate\Http\Request;
@@ -10,6 +11,12 @@ use Log;
 
 class DebugInfoContextLogger
 {
+
+    public function __construct(private readonly DebugInfoContextLoggerLoggingInterface $log)
+    {
+    }
+
+
     public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
         $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
@@ -27,15 +34,15 @@ class DebugInfoContextLogger
 
         Log::withContext($context);
 
-        // @TODO use structured logging?
-        logger()->debug('DebugInfoContextLogger::handle', [
-            'url'    => $request->url(),
-            'method' => $request->method(),
-        ]);
+        try {
+            $this->log->handleStart($request->url(), $request->method());
 
-        /** @var Response $response */
-        $response = $next($request);
-        $response->header('X-Correlation-Id', $context['correlationId']);
+            /** @var Response $response */
+            $response = $next($request);
+            $response->header('X-Correlation-Id', $context['correlationId']);
+        } finally {
+            $this->log->handleEnd();
+        }
 
         return $response;
     }

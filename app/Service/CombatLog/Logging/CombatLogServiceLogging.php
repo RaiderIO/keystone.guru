@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CombatLogServiceLogging extends StructuredLogging implements CombatLogServiceLoggingInterface
+class CombatLogServiceLogging extends RollbarStructuredLogging implements CombatLogServiceLoggingInterface
 {
     public function parseCombatLogToEventsUnableToParseRawEvent(string $rawEvent): void
     {

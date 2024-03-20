@@ -10,8 +10,10 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Release;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
+use App\Models\User;
 use App\Models\UserReport;
 use App\Service\AdProvider\AdProviderService;
 use App\Service\AdProvider\AdProviderServiceInterface;
@@ -206,6 +208,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // All views
         view()->share('isMobile', (new Agent())->isMobile());
+        view()->share('isLocal', $globalViewVariables['isLocal']);
+        view()->share('isMapping', $globalViewVariables['isMapping']);
         view()->share('isProduction', $globalViewVariables['isProduction']);
         view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
 
@@ -218,17 +222,17 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Can use the Auth() global here!
         view()->composer('*', static function (View $view) use ($gameVersionService, $expansionService, &$isUserAdmin, &$adFree, &$userOrDefaultRegion, &$currentUserGameVersion, &$currentExpansion) {
             // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
+            /** @var User|null $user */
+            $user = Auth::getUser();
             if ($isUserAdmin === null) {
-                $isUserAdmin = Auth::check() && Auth::getUser()->hasRole('admin');
+                $isUserAdmin = optional($user)->hasRole('admin');
             }
             if ($adFree === null) {
-                $adFree = Auth::check() && (
-                        Auth::user()->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
-                        Auth::user()->hasAdFreeGiveaway()
-                    );
+                $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
+                    optional($user)->hasAdFreeGiveaway();
             }
             $userOrDefaultRegion    ??= GameServerRegion::getUserOrDefaultRegion();
-            $currentUserGameVersion ??= $gameVersionService->getGameVersion(Auth::user());
+            $currentUserGameVersion ??= $gameVersionService->getGameVersion($user);
             $currentExpansion       ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (!str_starts_with((string)$view->getName(), 'layouts')) {
@@ -472,6 +476,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
+        });
+
+        // Thirdparty
+        view()->composer('common.thirdparty.rollbar.rollbar', static function (View $view) use ($globalViewVariables) {
+            /** @var Release $latestRelease */
+            $latestRelease = $globalViewVariables['latestRelease'];
+            $view->with('latestRelease', $latestRelease);
         });
 
         // Profile pages
