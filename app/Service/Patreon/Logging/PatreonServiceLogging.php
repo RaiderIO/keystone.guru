@@ -21,6 +21,11 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function loadCampaignBenefitsRetrieveTiersIncludedNotSet(array $tiersAndBenefitsResponse): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function loadCampaignBenefitsEnd(): void
     {
         $this->end(__METHOD__);
@@ -37,6 +42,11 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     public function loadCampaignTiersRetrieveTiersAndBenefitsErrors(array $tiersAndBenefitsResponse): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function loadCampaignTiersRetrieveMembersIncludedNotSet(array $tiersAndBenefitsResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -60,6 +70,12 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function loadCampaignTiersRetrieveMembersDataNotSet(array $membersResponse): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
 
     public function loadCampaignMembersEnd(): void
     {

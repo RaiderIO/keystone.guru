@@ -77,7 +77,7 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array|null Null whenever we couldn't authenticate with the refreshToken provided
+     * @return array{errors: ?array, data: array}|null Null whenever we couldn't authenticate with the accessToken provided
      */
     public function getCampaignMembers(string $accessToken): ?array
     {
