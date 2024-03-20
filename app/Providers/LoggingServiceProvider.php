@@ -40,6 +40,8 @@ use App\Service\Patreon\Logging\PatreonApiServiceLogging;
 use App\Service\Patreon\Logging\PatreonApiServiceLoggingInterface;
 use App\Service\Patreon\Logging\PatreonServiceLogging;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
+use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLogging;
+use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 use Illuminate\Support\ServiceProvider;
@@ -80,6 +82,9 @@ class LoggingServiceProvider extends ServiceProvider
         // Patreon
         $this->app->bind(PatreonServiceLoggingInterface::class, PatreonServiceLogging::class);
         $this->app->bind(PatreonApiServiceLoggingInterface::class, PatreonApiServiceLogging::class);
+
+        // Structured logging
+        $this->app->bind(StructuredLoggingServiceLoggingInterface::class, StructuredLoggingServiceLogging::class);
 
         // Wow Tools
         $this->app->bind(WowToolsServiceLoggingInterface::class, WowToolsServiceLogging::class);

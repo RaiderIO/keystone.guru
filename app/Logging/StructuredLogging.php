@@ -128,6 +128,11 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $this->log(Level::Critical, $functionName, $context);
     }
 
+    protected function alert(string $functionName, array $context = []): void
+    {
+        $this->log(Level::Alert, $functionName, $context);
+    }
+
     protected function emergency(string $functionName, array $context = []): void
     {
         $this->log(Level::Emergency, $functionName, $context);
@@ -150,7 +155,8 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $levelName = $level->getName();
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
         $fixedLength  = 7;
-        $startPadding = str_repeat(' ', $fixedLength - strlen($levelName));
+        $levelNameLength = strlen($levelName);
+        $startPadding = str_repeat(' ', max(0, $fixedLength - $levelNameLength));
 
         $messageWithContextCounts = trim(
             sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0])

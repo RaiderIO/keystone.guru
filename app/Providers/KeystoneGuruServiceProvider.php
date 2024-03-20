@@ -84,6 +84,8 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
+use App\Service\StructuredLogging\StructuredLoggingService;
+use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
@@ -124,6 +126,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
+        $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);

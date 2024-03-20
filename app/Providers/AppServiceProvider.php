@@ -7,7 +7,7 @@ use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use Monolog\Logger;
+use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,13 +31,13 @@ class AppServiceProvider extends ServiceProvider
             'root'          => base_path(),
             // @TODO I don't like this query here
             'code_version'  => Release::latest()->first()->version,
-            'minimum_level' => Logger::WARNING,
+            'minimum_level' => Level::WARNING,
             'person'        => [
                 'id'       => optional($user)->id ?? 0,
                 'username' => optional($user)->name,
             ],
             'custom'        => [
-                'correlation_id' => correlationId(),
+                'correlationId' => correlationId(),
             ],
         ]);
     }
