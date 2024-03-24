@@ -223,7 +223,7 @@ return [
             'trademark'           => 'Торговая марка',
             'trademark_footer'    => 'World of Warcraft, Warcraft и Blizzard Entertainment являются товарными знаками или зарегистрированными товарными знаками Blizzard Entertainment, Inc. в США и / или других странах. Этот веб-сайт не связан с Blizzard Entertainment ».',
             'social'              => 'Социальные сети',
-            'all_rights_reserved' => '©:date :nameAndVersion - Все права защищены',
+            'all_rights_reserved' => ':nameAndVersion - Все права защищены',
         ],
         'header'  => [
             'toggle_navigation_title' => 'Включить навигацию',

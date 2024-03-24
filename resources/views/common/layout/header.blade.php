@@ -1,8 +1,17 @@
 <?php
-/** @var \App\Models\GameVersion\GameVersion $currentUserGameVersion */
-/** @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions */
-/** @var \App\Models\Season $currentSeason */
-/** @var \App\Models\Season $nextSeason */
+
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
+/**
+ * @var GameVersion              $currentUserGameVersion
+ * @var Collection|GameVersion[] $allGameVersions
+ * @var Collection|Expansion[]   $activeExpansions
+ * @var Season                   $currentSeason
+ * @var Season                   $nextSeason
+ */
 
 $navs = [
     route('dungeonroutes.search') => [
@@ -28,7 +37,7 @@ foreach ($activeExpansions as $expansion) {
         );
 }
 
-if($currentUserGameVersion->key === \App\Models\GameVersion\GameVersion::GAME_VERSION_RETAIL ) {
+if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
         $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
             'text' => $nextSeason->name
@@ -47,9 +56,28 @@ $navs[route('misc.affixes')] = [
 ];
 
 ?>
+<div
+    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
+    <div class="container">
+        <div class="row">
+            @foreach ($allGameVersions as $gameVersion)
+                @php($isSelectedGameVersion = $currentUserGameVersion->id === $gameVersion->id)
+                <div class="game_version col-auto px-2 {{ $isSelectedGameVersion ? 'bg-primary' : '' }}">
+                    <a class="{{ $isSelectedGameVersion ? 'active' : '' }}"
+                       href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
+                        @include('common.gameversion.gameversion', ['gameVersion' => $gameVersion, 'width' => 50, 'showName' => true])
+                    </a>
+                </div>
+            @endforeach
+            <div class="col">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+</div>
 <div class="navbar-top-fixed-spacer"></div>
 <nav
-    class="navbar fixed-top navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }} bg-header"
+    class="navbar navbar-second fixed-top navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }} bg-header"
     data-toggle="navbar-shrink">
     <div class="container">
         <a class="navbar-brand" href="/">

@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-12 mt-4">
                     <p class="mbr-text mb-0 mbr-fonts-style copyright align-center display-7">
-                        @lang('view_common.layout.footer.all_rights_reserved', ['date' => date('Y'), 'nameAndVersion' => $nameAndVersion])
+                        {{ $nameAndVersion }}
                     </p>
                 </div>
             </div>

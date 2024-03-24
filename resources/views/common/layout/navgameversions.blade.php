@@ -3,9 +3,8 @@
  * @var \Illuminate\Support\Collection|\App\Models\GameVersion\GameVersion[] $allGameVersions
  * @var \App\Models\GameVersion\GameVersion $currentUserGameVersion
  */
-$user = Auth::user();
 ?>
-<li class="nav-item dropdown">
+<li class="nav-item dropdown d-none d-lg-block">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @include('common.gameversion.gameversion', ['gameVersion' => $currentUserGameVersion])

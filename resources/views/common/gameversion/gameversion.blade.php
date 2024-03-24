@@ -1,9 +1,12 @@
 <?php
+use App\Models\GameVersion\GameVersion;
+
 /**
- * @var \App\Models\GameVersion\GameVersion $gameVersion
- * @var int|null $width
- * @var bool $showName
+ * @var GameVersion $gameVersion
+ * @var int|null    $width
+ * @var bool        $showName
  */
+
 $width    ??= null;
 $showName ??= false;
 ?>

@@ -99,4 +99,19 @@
   .modal .modal-content .close {
     color: black;
   }
+
+  .game_version_header {
+    a {
+      color: var(--theme-light)
+    }
+
+    a.active {
+      color: var(--theme-text-contrast)
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var(--theme-text-contrast)
+    }
+  }
 }
