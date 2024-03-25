@@ -62,10 +62,13 @@ $navs[route('misc.affixes')] = [
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
                 @php($isSelectedGameVersion = $currentUserGameVersion->id === $gameVersion->id)
-                <div class="game_version col-auto px-2 {{ $isSelectedGameVersion ? 'bg-primary' : '' }}">
+                <div class="game_version col-auto px-2 m-1  {{ $isSelectedGameVersion ? 'bg-primary' : '' }}">
                     <a class="{{ $isSelectedGameVersion ? 'active' : '' }}"
                        href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
-                        @include('common.gameversion.gameversion', ['gameVersion' => $gameVersion, 'width' => 50, 'showName' => true])
+                        @include('common.gameversion.gameversionheader', [
+                            'gameVersion' => $gameVersion,
+                            'iconType' => $isSelectedGameVersion ? 'black' : 'white'
+                        ])
                     </a>
                 </div>
             @endforeach
@@ -126,7 +129,7 @@ $navs[route('misc.affixes')] = [
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ $headerText }}
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="{{ $dropdownId }}">
+                            <div class="dropdown-menu text-center text-lg-left" aria-labelledby="{{ $dropdownId }}">
                                 @foreach($opts as $optsKey => $text)
                                     <a class="dropdown-item" href="{{ $optsKey }}">{!! $text !!}</a>
                                 @endforeach
