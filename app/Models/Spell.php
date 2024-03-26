@@ -11,9 +11,9 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 /**
  * @property int    $id
  * @property string $category
+ * @property string $dispel_type
  * @property string $icon_name
  * @property string $name
- * @property string $dispel_type
  * @property int    $schools_mask
  * @property bool   $aura
  * @property bool   $selectable
@@ -100,6 +100,23 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public const CATEGORY_EVOKER = 'evoker';
 
+    public const ALL_CATEGORY = [
+        self::CATEGORY_GENERAL,
+        self::CATEGORY_WARRIOR,
+        self::CATEGORY_HUNTER,
+        self::CATEGORY_DEATH_KNIGHT,
+        self::CATEGORY_MAGE,
+        self::CATEGORY_PRIEST,
+        self::CATEGORY_MONK,
+        self::CATEGORY_ROGUE,
+        self::CATEGORY_WARLOCK,
+        self::CATEGORY_SHAMAN,
+        self::CATEGORY_PALADIN,
+        self::CATEGORY_DRUID,
+        self::CATEGORY_DEMON_HUNTER,
+        self::CATEGORY_EVOKER,
+    ];
+
     // Some hard coded spells that we have exceptions for in the code
     public const SPELL_BLOODLUST = 2825;
 
@@ -127,9 +144,9 @@ class Spell extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Application|UrlGenerator|string
+     * @return string
      */
-    public function getIconUrlAttribute()
+    public function getIconUrlAttribute(): string
     {
         return url(sprintf('/images/spells/%s.png', $this->icon_name));
     }
