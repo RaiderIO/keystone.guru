@@ -112,7 +112,7 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public const CATEGORY_EVOKER = 'evoker';
 
-    public const ALL_CATEGORY = [
+    public const ALL_CATEGORIES = [
         self::CATEGORY_GENERAL,
         self::CATEGORY_WARRIOR,
         self::CATEGORY_HUNTER,
@@ -192,7 +192,7 @@ class Spell extends CacheModel implements MappingModelInterface
      */
     public function getIconUrlAttribute(): string
     {
-        return url(sprintf('/images/spells/%s.png', $this->icon_name));
+        return url(sprintf('/images/spells/%s.jpg', $this->icon_name));
     }
 
     public function getDungeonId(): ?int

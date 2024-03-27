@@ -30,6 +30,7 @@ class SpellFormRequest extends FormRequest
             'id'             => 'required',
             'name'           => 'required|string',
             'icon_name'      => 'required|string',
+            'category'       => Rule::in(Spell::ALL_CATEGORIES),
             'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
             'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
             'schools'        => 'array',

@@ -264,6 +264,7 @@ return [
             'game_id'           => 'Game ID',
             'name'              => 'Name',
             'icon_name'         => 'Icon name',
+            'category'          => 'Category',
             'dispel_type'       => 'Dispel type',
             'cooldown_group'    => 'Cooldown group',
             'schools'           => 'Schools',

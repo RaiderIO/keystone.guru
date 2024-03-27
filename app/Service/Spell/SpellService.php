@@ -90,7 +90,7 @@ class SpellService implements SpellServiceInterface
 
         $characterClassNameSlug = Str::slug($characterClassName, '_');
 
-        if (!in_array($characterClassNameSlug, Spell::ALL_CATEGORY)) {
+        if (!in_array($characterClassNameSlug, Spell::ALL_CATEGORIES)) {
             $this->log->getCategoryNameFromClassNameUnableToFindCategory($characterClassNameSlug);
 
             return null;

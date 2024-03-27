@@ -1,3 +1,15 @@
+<?php
+use App\Models\Floor\Floor;
+use App\Models\Spell;
+
+/**
+ * @var Spell         $spell
+ * @var Floor         $floor
+ * @var array<string> $categories
+ * @var array<string> $dispelTypes
+ * @var array<string> $cooldownGroups
+ */
+?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$spell ?? null],
     'showAds' => false,
@@ -6,19 +18,6 @@
 @section('header-title')
     {{ isset($spell) ? __('view_admin.spell.edit.header_edit') : __('view_admin.spell.edit.header_new') }}
 @endsection
-
-<?php
-
-use App\Models\Floor\Floor;
-use App\Models\Spell;
-
-/**
- * @var Spell         $spell
- * @var Floor         $floor
- * @var array<string> $dispelTypes
- * @var array<string> $cooldownGroups
- */
-?>
 
 @section('content')
     @isset($spell)
@@ -42,6 +41,12 @@ use App\Models\Spell;
         {!! Form::label('icon_name', __('view_admin.spell.edit.icon_name') . '<span class="form-required">*</span>', [], false) !!}
         {!! Form::text('icon_name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'icon_name'])
+    </div>
+
+    <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
+        {!! Form::label('category', __('view_admin.spell.edit.category') . '<span class="form-required">*</span>', [], false) !!}
+        {!! Form::select('category', $categories, null, ['class' => 'form-control selectpicker']) !!}
+        @include('common.forms.form-error', ['key' => 'category'])
     </div>
 
     <div class="form-group{{ $errors->has('dispel_type') ? ' has-error' : '' }}">

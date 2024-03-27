@@ -45,6 +45,7 @@ class SpellController extends Controller
         $spellBefore = clone $spell;
 
         $spell->id             = $validated['id'];
+        $spell->category       = $validated['category'];
         $spell->dispel_type    = $validated['dispel_type'];
         $spell->cooldown_group = $validated['cooldown_group'];
         $spell->icon_name      = $validated['icon_name'];
@@ -77,16 +78,7 @@ class SpellController extends Controller
      */
     public function create(): View
     {
-        return view('admin.spell.edit', [
-            'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
-            'schools'        => Spell::ALL_SCHOOLS,
-            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
-                return [
-                    $cooldownGroupKey =>
-                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey), [], 'en_US'),
-                ];
-            })->toArray(),
-        ]);
+        return view('admin.spell.edit', $this->getEditViewParams());
     }
 
     /**
@@ -94,17 +86,9 @@ class SpellController extends Controller
      */
     public function edit(Request $request, Spell $spell): View
     {
-        return view('admin.spell.edit', [
-            'spell'          => $spell,
-            'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
-            'schools'        => Spell::ALL_SCHOOLS,
-            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
-                return [
-                    $cooldownGroupKey =>
-                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey), [], 'en_US'),
-                ];
-            })->toArray(),
-        ]);
+        return view('admin.spell.edit', array_merge($this->getEditViewParams(), [
+            'spell' => $spell,
+        ]));
     }
 
     /**
@@ -152,5 +136,25 @@ class SpellController extends Controller
     public function get(): View
     {
         return view('admin.spell.list', ['models' => Spell::all()]);
+    }
+
+    private function getEditViewParams(): array
+    {
+        return [
+            'categories'     => collect(Spell::ALL_CATEGORIES)->mapWithKeys(function (string $category) {
+                return [
+                    $category =>
+                        __(sprintf('spells.category.%s', $category), [], 'en_US'),
+                ];
+            })->toArray(),
+            'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
+            'schools'        => Spell::ALL_SCHOOLS,
+            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
+                return [
+                    $cooldownGroupKey =>
+                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey), [], 'en_US'),
+                ];
+            })->toArray(),
+        ];
     }
 }
