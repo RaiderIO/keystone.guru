@@ -11,14 +11,29 @@ class SpellServiceLogging extends StructuredLogging implements SpellServiceLoggi
         $this->error(__METHOD__);
     }
 
-    public function importFromCsvUnableToFindCharacterClass(string $indexClassName): void
+    public function importFromCsvSpellAlreadySet(int $spellId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function importFromCsvInsertResult(bool $insertResult): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+
+    public function getCategoryNameFromClassNameUnableToFindCharacterClass(string $indexClassName): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function importFromCsvUnableToFindCategory(string $categoryName): void
+    public function getCategoryNameFromClassNameUnableToFindCategory(string $categoryName): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function getCooldownGroupNameFromCooldownGroupUnableToFindCategory(string $cooldownGroup): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }

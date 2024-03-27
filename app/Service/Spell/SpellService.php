@@ -33,59 +33,79 @@ class SpellService implements SpellServiceInterface
         $indexClassSpellName = array_search('Class Spell', $headers);
         $indexClassName      = array_search('Class', $headers);
         $indexImagelink      = array_search('Imagelink', $headers);
-        $indexActive         = array_search('Active', $headers);
+        $indexActive         = array_search('Active (True/False)', $headers);
 
         $spellAttributes = [];
 
         foreach ($csv as $index => $row) {
 
-            $characterClassName = null;
+            $spellId = $row[$indexClassSpellId];
 
-            // General = null
-            if ($row[$indexClassName] !== 'General') {
-                $characterClass = $this->getClassFromRow($row[$indexClassName]);
+            if (isset($spellAttributes[$spellId])) {
+                $this->log->importFromCsvSpellAlreadySet($spellId);
 
-                if ($characterClass === null) {
-                    $this->log->importFromCsvUnableToFindCharacterClass($row[$indexClassName]);
-
-                    break;
-                }
-
-                $characterClassName = __($characterClass->name, [], 'en');
-
-                $categoryName = sprintf('spells.%s', Str::slug($characterClassName, '_'));
-
-                if (!in_array($categoryName, Spell::ALL_CATEGORY)) {
-                    $this->log->importFromCsvUnableToFindCategory($categoryName);
-
-                    break;
-                }
+                continue;
             }
 
-            $spellAttributes[] = [
-                'id'           => $row[$indexClassSpellId],
-                'category'     => $characterClassName,
-                'dispel_type'  => 'Magic',
-                'icon_name'    => $row[$indexClassIconName],
-                'name'         => $row[$indexClassSpellName],
-                'schools_mask' => 0,
-                'aura'         => 0,
-                'selectable'   => $row[$indexActive],
-            ];
+            $categoryName = $row[$indexClassName] === 'General' ?
+                null :
+                $this->getCategoryNameFromRowClassName($row[$indexClassName]);
 
-            break;
+            $cooldownGroupName = $this->getCooldownGroupNameFromRowCooldownGroup($row[$indexCooldownGroup]);
+
+            $spellAttributes[$spellId] = [
+                'id'             => $spellId,
+                'category'       => $categoryName,
+                'cooldown_group' => $cooldownGroupName,
+                'dispel_type'    => 'Magic',
+                'icon_name'      => $row[$indexClassIconName],
+                'name'           => $row[$indexClassSpellName],
+                'schools_mask'   => 0,
+                'aura'           => 0,
+                'selectable'     => $row[$indexActive] === 'TRUE',
+            ];
         }
 
-        dd($spellAttributes);
+        Spell::truncate();
+
+        $insertResult = Spell::insert($spellAttributes);
+
+        $this->log->importFromCsvInsertResult($insertResult);
+
+        return $insertResult;
     }
 
-    public function getClassFromRow(string $csvClass): ?CharacterClass
+    public function getCategoryNameFromRowClassName(string $rowClassName): ?string
+    {
+        $characterClass = $this->getCharacterClassFromClassName($rowClassName);
+
+        if ($characterClass === null) {
+            $this->log->getCategoryNameFromClassNameUnableToFindCharacterClass($rowClassName);
+
+            return null;
+        }
+
+        // Based on the character class name, find the category
+        $characterClassName = __($characterClass->name, [], 'en_US');
+
+        $characterClassNameSlug = Str::slug($characterClassName, '_');
+
+        if (!in_array($characterClassNameSlug, Spell::ALL_CATEGORY)) {
+            $this->log->getCategoryNameFromClassNameUnableToFindCategory($characterClassNameSlug);
+
+            return null;
+        }
+
+        return sprintf('spells.category.%s', $characterClassNameSlug);
+    }
+
+    public function getCharacterClassFromClassName(string $csvClass): ?CharacterClass
     {
         $result           = null;
         $characterClasses = CharacterClass::all();
 
         foreach ($characterClasses as $characterClass) {
-            $name = __($characterClass->name, [], 'en');
+            $name = __($characterClass->name, [], 'en_US');
 
             if (str_starts_with($csvClass, $name)) {
                 $result = $characterClass;
@@ -94,5 +114,18 @@ class SpellService implements SpellServiceInterface
         }
 
         return $result;
+    }
+
+    public function getCooldownGroupNameFromRowCooldownGroup(string $cooldownGroup): ?string
+    {
+        $cooldownGroupSlug = Str::slug($cooldownGroup, '_');
+
+        if (!in_array($cooldownGroupSlug, Spell::ALL_COOLDOWN_GROUPS)) {
+            $this->log->getCooldownGroupNameFromCooldownGroupUnableToFindCategory($cooldownGroupSlug);
+
+            return null;
+        }
+
+        return sprintf('spells.cooldown_group.%s', $cooldownGroupSlug);
     }
 }

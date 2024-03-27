@@ -5,12 +5,11 @@ namespace App\Models;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
 use Eloquent;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
  * @property int    $id
  * @property string $category
+ * @property string $cooldown_group
  * @property string $dispel_type
  * @property string $icon_name
  * @property string $name
@@ -32,6 +31,19 @@ class Spell extends CacheModel implements MappingModelInterface
     public $hidden = ['pivot'];
 
     protected $appends = ['icon_url'];
+
+    protected $fillable = [
+        'id',
+        'category',
+        'cooldown_group',
+        'dispel_type',
+        'icon_name',
+        'name',
+        'schools_mask',
+        'aura',
+        'selectable',
+        'icon_url',
+    ];
 
     public const SCHOOL_PHYSICAL = 1;
 
@@ -115,6 +127,38 @@ class Spell extends CacheModel implements MappingModelInterface
         self::CATEGORY_DRUID,
         self::CATEGORY_DEMON_HUNTER,
         self::CATEGORY_EVOKER,
+    ];
+
+    public const COOLDOWN_GROUP_ALL            = 'all';
+    public const COOLDOWN_GROUP_CD_EXTERNAL    = 'cd_external';
+    public const COOLDOWN_GROUP_CD_GROUP       = 'cd_group';
+    public const COOLDOWN_GROUP_CD_PERSONAL    = 'cd_personal';
+    public const COOLDOWN_GROUP_DR_EXTERNAL    = 'dr_external';
+    public const COOLDOWN_GROUP_DR_GROUP       = 'dr_group';
+    public const COOLDOWN_GROUP_DR_PERSONAL    = 'dr_personal';
+    public const COOLDOWN_GROUP_GROUP_DR       = 'group_dr';
+    public const COOLDOWN_GROUP_GROUP_HEAL_DPS = 'group_heal_dps';
+    public const COOLDOWN_GROUP_IMMUNITY       = 'immunity';
+    public const COOLDOWN_GROUP_MOVEMENT       = 'movement';
+    public const COOLDOWN_GROUP_PERSONAL       = 'personal';
+    public const COOLDOWN_GROUP_PERSONAL_CD    = 'personal_cd';
+    public const COOLDOWN_GROUP_UTILITY        = 'utility';
+
+    public const ALL_COOLDOWN_GROUPS = [
+        self::COOLDOWN_GROUP_ALL,
+        self::COOLDOWN_GROUP_CD_EXTERNAL,
+        self::COOLDOWN_GROUP_CD_GROUP,
+        self::COOLDOWN_GROUP_CD_PERSONAL,
+        self::COOLDOWN_GROUP_DR_EXTERNAL,
+        self::COOLDOWN_GROUP_DR_GROUP,
+        self::COOLDOWN_GROUP_DR_PERSONAL,
+        self::COOLDOWN_GROUP_GROUP_DR,
+        self::COOLDOWN_GROUP_GROUP_HEAL_DPS,
+        self::COOLDOWN_GROUP_IMMUNITY,
+        self::COOLDOWN_GROUP_MOVEMENT,
+        self::COOLDOWN_GROUP_PERSONAL,
+        self::COOLDOWN_GROUP_PERSONAL_CD,
+        self::COOLDOWN_GROUP_UTILITY,
     ];
 
     // Some hard coded spells that we have exceptions for in the code
