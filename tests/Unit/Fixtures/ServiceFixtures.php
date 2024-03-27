@@ -18,6 +18,8 @@ use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\Spell\Logging\SpellServiceLoggingInterface;
+use App\Service\Spell\SpellService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\MockObject\Exception;
@@ -117,6 +119,23 @@ class ServiceFixtures
         return $testCase
             ->getMockBuilder(CoordinatesService::class)
             ->onlyMethods($methodsNotToMock)
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getSpellServiceMock(
+        PublicTestCase               $testCase,
+        array                        $methodsNotToMock = [],
+        SpellServiceLoggingInterface $log = null
+    ): MockObject|SpellService {
+        return $testCase
+            ->getMockBuilder(SpellService::class)
+            ->onlyMethods($methodsNotToMock)
+            ->setConstructorArgs([
+                $log ?? LoggingFixtures::createSpellServiceLogging($testCase),
+            ])
             ->getMock();
     }
 }

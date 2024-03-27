@@ -46,18 +46,12 @@ class Spell extends CacheModel implements MappingModelInterface
     ];
 
     public const SCHOOL_PHYSICAL = 1;
-
-    public const SCHOOL_HOLY = 2;
-
-    public const SCHOOL_FIRE = 4;
-
-    public const SCHOOL_NATURE = 8;
-
-    public const SCHOOL_FROST = 16;
-
-    public const SCHOOL_SHADOW = 32;
-
-    public const SCHOOL_ARCANE = 64;
+    public const SCHOOL_HOLY     = 2;
+    public const SCHOOL_FIRE     = 4;
+    public const SCHOOL_NATURE   = 8;
+    public const SCHOOL_FROST    = 16;
+    public const SCHOOL_SHADOW   = 32;
+    public const SCHOOL_ARCANE   = 64;
 
     public const ALL_SCHOOLS = [
         'Physical' => self::SCHOOL_PHYSICAL,
@@ -69,13 +63,10 @@ class Spell extends CacheModel implements MappingModelInterface
         'Arcane'   => self::SCHOOL_ARCANE,
     ];
 
-    public const DISPEL_TYPE_MAGIC = 'Magic';
-
+    public const DISPEL_TYPE_MAGIC   = 'Magic';
     public const DISPEL_TYPE_DISEASE = 'Disease';
-
-    public const DISPEL_TYPE_POISON = 'Poison';
-
-    public const DISPEL_TYPE_CURSE = 'Curse';
+    public const DISPEL_TYPE_POISON  = 'Poison';
+    public const DISPEL_TYPE_CURSE   = 'Curse';
 
     public const ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
@@ -84,33 +75,20 @@ class Spell extends CacheModel implements MappingModelInterface
         self::DISPEL_TYPE_CURSE,
     ];
 
-    public const CATEGORY_GENERAL = 'general';
-
-    public const CATEGORY_WARRIOR = 'warrior';
-
-    public const CATEGORY_HUNTER = 'hunter';
-
+    public const CATEGORY_GENERAL      = 'general';
+    public const CATEGORY_WARRIOR      = 'warrior';
+    public const CATEGORY_HUNTER       = 'hunter';
     public const CATEGORY_DEATH_KNIGHT = 'death_knight';
-
-    public const CATEGORY_MAGE = 'mage';
-
-    public const CATEGORY_PRIEST = 'priest';
-
-    public const CATEGORY_MONK = 'monk';
-
-    public const CATEGORY_ROGUE = 'rogue';
-
-    public const CATEGORY_WARLOCK = 'warlock';
-
-    public const CATEGORY_SHAMAN = 'shaman';
-
-    public const CATEGORY_PALADIN = 'paladin';
-
-    public const CATEGORY_DRUID = 'druid';
-
+    public const CATEGORY_MAGE         = 'mage';
+    public const CATEGORY_PRIEST       = 'priest';
+    public const CATEGORY_MONK         = 'monk';
+    public const CATEGORY_ROGUE        = 'rogue';
+    public const CATEGORY_WARLOCK      = 'warlock';
+    public const CATEGORY_SHAMAN       = 'shaman';
+    public const CATEGORY_PALADIN      = 'paladin';
+    public const CATEGORY_DRUID        = 'druid';
     public const CATEGORY_DEMON_HUNTER = 'demon_hunter';
-
-    public const CATEGORY_EVOKER = 'evoker';
+    public const CATEGORY_EVOKER       = 'evoker';
 
     public const ALL_CATEGORIES = [
         self::CATEGORY_GENERAL,
