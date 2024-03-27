@@ -4,11 +4,11 @@ namespace App\Service\Traits;
 
 trait Curl
 {
-    private function curlGet(string $url): string
+    public function curlGet(string $url, array $options = []): string
     {
         $ch = curl_init();
 
-        curl_setopt_array($ch, [
+        curl_setopt_array($ch, $options + [
             CURLOPT_RETURNTRANSFER => true,   // return web page
             CURLOPT_HEADER         => false,  // don't return headers
             CURLOPT_FOLLOWLOCATION => true,   // follow redirects
@@ -30,7 +30,19 @@ trait Curl
         return $response;
     }
 
-    private function curlPost(string $url, array $postBody): string
+    /**
+     * @param string $url
+     * @param string $filePath
+     * @return bool
+     */
+    public function curlSaveToFile(string $url, string $filePath): bool
+    {
+        $rawImage = $this->curlGet($url);
+
+        return file_put_contents($filePath, $rawImage) !== false;
+    }
+
+    public function curlPost(string $url, array $postBody): string
     {
         // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord
         $ch = curl_init();

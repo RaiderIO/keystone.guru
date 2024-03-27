@@ -4,7 +4,9 @@ namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc;
+use App\Models\Spell;
 use App\Service\Traits\Curl;
+use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -19,6 +21,11 @@ class WowheadService implements WowheadServiceInterface
     use Curl;
 
     private const HEALTH_IDENTIFYING_TOKEN = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
+
+    public function __construct(
+        private readonly WowheadServiceLoggingInterface $log
+    ) {
+    }
 
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int
     {
@@ -71,10 +78,58 @@ class WowheadService implements WowheadServiceInterface
         return $health;
     }
 
-    /**
-     * @return false|string
-     */
-    private function getStringBetween(string $string, string $start, string $end)
+    public function downloadMissingSpellIcons(): bool
+    {
+        $result = true;
+
+        $this->log->downloadMissingSpellIconsStart();
+        try {
+            $targetFolder = resource_path('assets/images/spells');
+            Spell::each(function (Spell $spell) use (&$result, $targetFolder) {
+                $targetFile = sprintf('%s/%s.jpg', $targetFolder, $spell->icon_name);
+
+                // Not missing = we continue
+                if (file_exists($targetFile)) {
+                    $this->log->downloadMissingSpellIconsFileExists($targetFile);
+
+                    return true;
+                }
+
+                $result = $result && $this->downloadSpellIcon($spell, $targetFolder);
+
+                // Don't DDOS
+                $this->sleep();
+
+                return true;
+            }, 1000);
+        } finally {
+            $this->log->downloadMissingSpellIconsEnd();
+        }
+
+        return $result;
+    }
+
+    public function downloadSpellIcon(Spell $spell, string $targetFolder): bool
+    {
+        $fileName       = sprintf('%s.jpg', $spell->icon_name);
+        $targetFilePath = sprintf('%s/%s', $targetFolder, $fileName);
+
+        $result = $this->curlSaveToFile(
+            sprintf('https://wow.zamimg.com/images/wow/icons/large/%s', $fileName),
+            $targetFilePath
+        );
+
+        $this->log->downloadSpellIconDownloadResult($targetFilePath, $result);
+
+        return $result;
+    }
+
+    public function sleep(int $seconds = 1): void
+    {
+        sleep($seconds);
+    }
+
+    private function getStringBetween(string $string, string $start, string $end): string
     {
         $string = ' ' . $string;
         $ini    = strpos($string, $start);

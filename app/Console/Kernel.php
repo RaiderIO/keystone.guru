@@ -55,6 +55,7 @@ use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Thumbnail\DeleteExpiredJobs;
 use App\Console\Commands\View\Cache;
 use App\Console\Commands\Wowhead\FetchHealth;
+use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Logic\Scheduler\UpdateDungeonRouteRating;
@@ -169,6 +170,7 @@ class Kernel extends ConsoleKernel
 
         // Wowhead
         FetchHealth::class,
+        FetchMissingSpellIcons::class,
 
         // WowTools
         RefreshDisplayIds::class,
