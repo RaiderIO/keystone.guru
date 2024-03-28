@@ -4204,7 +4204,7 @@
     {
         "id": 42,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4494,
         "map_id": 619,
         "challenge_mode_id": null,
@@ -4245,7 +4245,7 @@
     {
         "id": 43,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4277,
         "map_id": 601,
         "challenge_mode_id": null,
@@ -4357,7 +4357,7 @@
     {
         "id": 44,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4196,
         "map_id": 600,
         "challenge_mode_id": null,
@@ -4434,7 +4434,7 @@
     {
         "id": 45,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4416,
         "map_id": 604,
         "challenge_mode_id": null,
@@ -4475,7 +4475,7 @@
     {
         "id": 46,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4272,
         "map_id": 602,
         "challenge_mode_id": null,
@@ -4552,7 +4552,7 @@
     {
         "id": 47,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4820,
         "map_id": 668,
         "challenge_mode_id": null,
@@ -4593,7 +4593,7 @@
     {
         "id": 48,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4264,
         "map_id": 599,
         "challenge_mode_id": null,
@@ -4634,7 +4634,7 @@
     {
         "id": 49,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4813,
         "map_id": 658,
         "challenge_mode_id": null,
@@ -4675,7 +4675,7 @@
     {
         "id": 50,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4100,
         "map_id": 595,
         "challenge_mode_id": null,
@@ -4752,7 +4752,7 @@
     {
         "id": 51,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4809,
         "map_id": 632,
         "challenge_mode_id": null,
@@ -4793,7 +4793,7 @@
     {
         "id": 52,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4265,
         "map_id": 576,
         "challenge_mode_id": null,
@@ -4834,7 +4834,7 @@
     {
         "id": 53,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4228,
         "map_id": 578,
         "challenge_mode_id": null,
@@ -5016,7 +5016,7 @@
     {
         "id": 54,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4415,
         "map_id": 1494,
         "challenge_mode_id": null,
@@ -5057,7 +5057,7 @@
     {
         "id": 55,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4723,
         "map_id": 650,
         "challenge_mode_id": null,
@@ -5098,7 +5098,7 @@
     {
         "id": 56,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 206,
         "map_id": 574,
         "challenge_mode_id": null,
@@ -5210,7 +5210,7 @@
     {
         "id": 57,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 1196,
         "map_id": 575,
         "challenge_mode_id": null,
@@ -5287,7 +5287,7 @@
     {
         "id": 58,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4812,
         "map_id": 631,
         "challenge_mode_id": null,
@@ -5604,7 +5604,7 @@
     {
         "id": 59,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 2159,
         "map_id": 249,
         "challenge_mode_id": null,
@@ -5645,7 +5645,7 @@
     {
         "id": 60,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 3456,
         "map_id": 533,
         "challenge_mode_id": null,
@@ -6255,7 +6255,7 @@
     {
         "id": 61,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4722,
         "map_id": 649,
         "challenge_mode_id": null,
@@ -6318,7 +6318,7 @@
     {
         "id": 62,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4500,
         "map_id": 616,
         "challenge_mode_id": null,
@@ -6359,7 +6359,7 @@
     {
         "id": 63,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4493,
         "map_id": 615,
         "challenge_mode_id": null,
@@ -6400,7 +6400,7 @@
     {
         "id": 64,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4987,
         "map_id": 724,
         "challenge_mode_id": null,
@@ -6441,7 +6441,7 @@
     {
         "id": 65,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4273,
         "map_id": 603,
         "challenge_mode_id": null,
@@ -7226,7 +7226,7 @@
     {
         "id": 66,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4603,
         "map_id": 624,
         "challenge_mode_id": null,
@@ -8181,7 +8181,7 @@
     {
         "id": 78,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 719,
         "map_id": 48,
         "challenge_mode_id": null,
@@ -8293,7 +8293,7 @@
     {
         "id": 79,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1584,
         "map_id": 230,
         "challenge_mode_id": null,
@@ -8370,7 +8370,7 @@
     {
         "id": 80,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1581,
         "map_id": 36,
         "challenge_mode_id": null,
@@ -8447,7 +8447,7 @@
     {
         "id": 81,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "challenge_mode_id": null,
@@ -8559,7 +8559,7 @@
     {
         "id": 82,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 721,
         "map_id": 90,
         "challenge_mode_id": null,
@@ -8706,7 +8706,7 @@
     {
         "id": 83,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1583,
         "map_id": 10000,
         "challenge_mode_id": null,
@@ -8953,7 +8953,7 @@
     {
         "id": 84,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2100,
         "map_id": 349,
         "challenge_mode_id": null,
@@ -9030,7 +9030,7 @@
     {
         "id": 85,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2437,
         "map_id": 389,
         "challenge_mode_id": null,
@@ -9071,7 +9071,7 @@
     {
         "id": 86,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 722,
         "map_id": 129,
         "challenge_mode_id": null,
@@ -9112,7 +9112,7 @@
     {
         "id": 87,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 491,
         "map_id": 47,
         "challenge_mode_id": null,
@@ -9153,7 +9153,7 @@
     {
         "id": 88,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9194,7 +9194,7 @@
     {
         "id": 89,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9235,7 +9235,7 @@
     {
         "id": 90,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9276,7 +9276,7 @@
     {
         "id": 91,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9317,7 +9317,7 @@
     {
         "id": 92,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2057,
         "map_id": 289,
         "challenge_mode_id": null,
@@ -9476,7 +9476,7 @@
     {
         "id": 93,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 209,
         "map_id": 33,
         "challenge_mode_id": null,
@@ -9734,7 +9734,7 @@
     {
         "id": 94,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2017,
         "map_id": 329,
         "challenge_mode_id": null,
@@ -9811,7 +9811,7 @@
     {
         "id": 95,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 717,
         "map_id": 34,
         "challenge_mode_id": null,
@@ -9852,7 +9852,7 @@
     {
         "id": 96,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1477,
         "map_id": 109,
         "challenge_mode_id": null,
@@ -10046,7 +10046,7 @@
     {
         "id": 97,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1337,
         "map_id": 70,
         "challenge_mode_id": null,
@@ -10123,7 +10123,7 @@
     {
         "id": 98,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 718,
         "map_id": 43,
         "challenge_mode_id": null,
@@ -10164,7 +10164,7 @@
     {
         "id": 99,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1176,
         "map_id": 209,
         "challenge_mode_id": null,
@@ -10205,7 +10205,7 @@
     {
         "id": 100,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "challenge_mode_id": null,
@@ -10246,7 +10246,7 @@
     {
         "id": 101,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "challenge_mode_id": null,
@@ -10499,7 +10499,7 @@
     {
         "id": 104,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1583,
         "map_id": 229,
         "challenge_mode_id": 167,
@@ -11211,7 +11211,7 @@
     {
         "id": 107,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 721,
         "map_id": 90,
         "challenge_mode_id": null,

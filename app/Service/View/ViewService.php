@@ -76,6 +76,8 @@ class ViewService implements ViewServiceInterface
 
             // Spells
             $selectableSpellsByCategory = Spell::where('selectable', true)
+                ->orderBy('category')
+                ->orderBy('name')
                 ->get()
                 ->groupBy('category')
                 ->mapWithKeys(static fn(Collection $spells, string $key) => [__($key) => $spells]);
