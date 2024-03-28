@@ -77,6 +77,7 @@ class SpellService implements SpellServiceInterface
     {
         // Try to match the category directly first
         $categorySlug = Str::slug($rowClassName, '_');
+
         if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
             // Try to find the associated class first, then use that class to identify the category
             $characterClass = $this->getCharacterClassFromClassName($rowClassName);

@@ -100,8 +100,8 @@
     },
     {
         "id": 2825,
-        "category": "shaman",
-        "cooldown_group": "all",
+        "category": "spells.category.general",
+        "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "spell_nature_bloodlust",
         "name": "Bloodlust",
@@ -133,7 +133,7 @@
     },
     {
         "id": 5512,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "warlock_-healthstone",
@@ -617,7 +617,7 @@
     },
     {
         "id": 78151,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "ability_shaman_heroism",
@@ -639,7 +639,7 @@
     },
     {
         "id": 80353,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "ability_mage_timewarp",
@@ -969,7 +969,7 @@
     },
     {
         "id": 120257,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "inv_misc_drum_01",
@@ -1134,7 +1134,7 @@
     },
     {
         "id": 191380,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "inv_10_alchemy_bottle_shape4_red",
@@ -1497,7 +1497,7 @@
     },
     {
         "id": 264667,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "spell_shadow_unholyfrenzy",
@@ -1860,7 +1860,7 @@
     },
     {
         "id": 390386,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.all",
         "dispel_type": "Magic",
         "icon_name": "ability_evoker_furyoftheaspects",
