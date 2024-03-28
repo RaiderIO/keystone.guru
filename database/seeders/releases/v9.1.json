@@ -1,0 +1,29 @@
+{
+    "id": 229,
+    "release_changelog_id": 236,
+    "version": "v9.1",
+    "title": "Added much more selectable spells for pulls",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-03-28T11:24:52+00:00",
+    "updated_at": "2024-03-28T11:24:52+00:00",
+    "changelog": {
+        "id": 236,
+        "release_id": 229,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 236,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2293,
+                "change": "Game version selector is now moved to the top header to match Raider.io's look and feel."
+            },
+            {
+                "release_changelog_id": 236,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2297,
+                "change": "Added much more spells\/cooldowns to attach to your pulls (thanks Bunten!)"
+            }
+        ]
+    }
+}

@@ -1,9 +1,19 @@
+<?php
+
+use App\Models\Spell;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<Spell> $models
+ */
+?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.spell.list.title')])
 
 @section('header-title')
     {{ __('view_admin.spell.list.header') }}
 @endsection
 @section('header-addition')
+    <!--suppress HtmlDeprecatedAttribute -->
     <a href="{{ route('admin.spell.new') }}" class="btn btn-success text-white float-right" role="button">
         <i class="fas fa-plus"></i> {{ __('view_admin.spell.list.create_spell') }}
     </a>
@@ -31,9 +41,9 @@
         </thead>
 
         <tbody>
-        @foreach ($models->all() as $spell)
+        @foreach ($models as $spell)
             <tr>
-                <td><img src="{{ $spell->icon_url }}" width="48px"/></td>
+                <td><img src="{{ $spell->icon_url }}" width="48px" alt="{{ $spell->name }}"/></td>
                 <td>{{ $spell->id }}</td>
                 <td>{{ $spell->name }}</td>
                 <td>

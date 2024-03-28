@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Spell;
+use App\Models\User;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,7 +15,10 @@ class SpellFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        /** @var User $user */
+        $user = Auth::user();
+
+        return optional($user)->hasRole('admin') ?? false;
     }
 
     /**
@@ -22,16 +26,17 @@ class SpellFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'id'          => 'required',
-            'name'        => 'required|string',
-            'icon_name'   => 'required|string',
-            'dispel_type' => Rule::in(Spell::ALL_DISPEL_TYPES),
-            'schools'     => 'array',
-            'schools.*'   => Rule::in(Spell::ALL_SCHOOLS),
-            'aura'        => 'boolean',
+        return [
+            'id'             => 'required',
+            'name'           => 'required|string',
+            'icon_name'      => 'required|string',
+            'category'       => Rule::in(Spell::ALL_CATEGORIES),
+            'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
+            'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
+            'schools'        => 'array',
+            'schools.*'      => Rule::in(Spell::ALL_SCHOOLS),
+            'aura'           => 'boolean',
+            'selectable'     => 'boolean',
         ];
-
-        return $rules;
     }
 }

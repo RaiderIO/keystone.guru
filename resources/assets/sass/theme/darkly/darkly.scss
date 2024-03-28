@@ -13,10 +13,12 @@
   }
 
   .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
     background-image: url('/images/home/darkly_header.jpg');
   }
 
   .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
     background-image: url('/images/home/darkly_footer.jpg');
   }
 
@@ -40,6 +42,21 @@
   .card_dungeonroute.dungeon_image {
     .menu_actions_btn {
       font-size: 0.9rem;
+    }
+  }
+
+  .game_version_header {
+    a {
+      color: var(--theme-light)
+    }
+
+    a.active {
+      color: var(--theme-text-contrast)
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var(--theme-text-contrast)
     }
   }
 

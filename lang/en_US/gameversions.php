@@ -1,18 +1,16 @@
 <?php
 
 return [
-
     'retail'  => [
         'name'        => 'Retail',
         'description' => 'Retail',
     ],
     'wotlk'   => [
-        'name'        => 'WotLK',
-        'description' => 'WotLK',
+        'name'        => 'Wrath',
+        'description' => 'Wrath',
     ],
     'classic' => [
-        'name'        => 'Classic',
-        'description' => 'Classic',
+        'name'        => 'Classic Era',
+        'description' => 'Classic Era',
     ],
-
 ];

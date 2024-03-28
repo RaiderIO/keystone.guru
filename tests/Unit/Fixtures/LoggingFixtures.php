@@ -1,10 +1,11 @@
-<?php /** @noinspection PhpDocSignatureInspection */
+<?php
 
 namespace Tests\Unit\Fixtures;
 
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
+use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Log\LogManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -13,12 +14,11 @@ use Tests\TestCases\PublicTestCase;
 class LoggingFixtures
 {
     /**
-     * @return MockObject|LogManager
      * @throws Exception
      */
     public static function createLogManager(
         PublicTestCase $testCase
-    ): MockObject {
+    ): MockObject|LogManager {
         $logManager = $testCase->createMock(LogManager::class);
         $logManager->method('channel')->willReturnSelf();
 
@@ -26,32 +26,38 @@ class LoggingFixtures
     }
 
     /**
-     * @return MockObject|AffixGroupEaseTierServiceLoggingInterface
      * @throws Exception
      */
     public static function createAffixGroupEaseTierServiceLogging(
         PublicTestCase $testCase
-    ): MockObject {
+    ): MockObject|AffixGroupEaseTierServiceLoggingInterface {
         return $testCase->createMock(AffixGroupEaseTierServiceLoggingInterface::class);
     }
 
     /**
-     * @return MockObject|CombatLogServiceLoggingInterface
      * @throws Exception
      */
     public static function createCombatLogServiceLogging(
         PublicTestCase $testCase
-    ): MockObject {
+    ): MockObject|CombatLogServiceLoggingInterface {
         return $testCase->createMock(CombatLogServiceLoggingInterface::class);
     }
 
     /**
-     * @return MockObject|CombatLogDungeonRouteServiceLoggingInterface
      * @throws Exception
      */
     public static function createCombatLogDungeonRouteServiceLogging(
         PublicTestCase $testCase
-    ): MockObject {
+    ): MockObject|CombatLogDungeonRouteServiceLoggingInterface {
         return $testCase->createMock(CombatLogDungeonRouteServiceLoggingInterface::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createSpellServiceLogging(
+        PublicTestCase $testCase
+    ): MockObject|SpellServiceLoggingInterface {
+        return $testCase->createMock(SpellServiceLoggingInterface::class);
     }
 }

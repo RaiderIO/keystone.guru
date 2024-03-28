@@ -223,7 +223,6 @@ return [
             'trademark'           => 'Trademark',
             'trademark_footer'    => 'World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with Blizzard Entertainment.',
             'social'              => 'Social',
-            'all_rights_reserved' => '©:date :nameAndVersion - All Rights Reserved',
         ],
         'header'  => [
             'toggle_navigation_title' => 'Toggle navigation',

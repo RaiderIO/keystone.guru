@@ -49,11 +49,13 @@ use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
+use App\Console\Commands\Spell\ImportCsv;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Thumbnail\DeleteExpiredJobs;
 use App\Console\Commands\View\Cache;
 use App\Console\Commands\Wowhead\FetchHealth;
+use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Logic\Scheduler\UpdateDungeonRouteRating;
@@ -150,6 +152,9 @@ class Kernel extends ConsoleKernel
         RefreshOutdatedThumbnails::class,
         Telemetry::class,
 
+        // Spell
+        ImportCsv::class,
+
         // Supervisor
         StartSupervisor::class,
         StopSupervisor::class,
@@ -165,6 +170,7 @@ class Kernel extends ConsoleKernel
 
         // Wowhead
         FetchHealth::class,
+        FetchMissingSpellIcons::class,
 
         // WowTools
         RefreshDisplayIds::class,

@@ -95,8 +95,10 @@ class ViewService implements ViewServiceInterface
                 'appVersion'                      => $latestRelease->version,
                 'appRevision'                     => $appRevision,
                 'appVersionAndName'               => sprintf(
-                    '%s/%s-%s',
+                    '%s® © 2018-%d %s - %s (%s)',
                     config('app.name'),
+                    date('Y'),
+                    'Ludicrous Speed, LLC.',
                     $latestRelease->version,
                     substr($appRevision, 0, 6)
                 ),
