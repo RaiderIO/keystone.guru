@@ -47,9 +47,7 @@ class SpellService implements SpellServiceInterface
                 continue;
             }
 
-            $categoryName = $row[$indexClassName] === 'General' ?
-                null :
-                $this->getCategoryNameFromRowClassName($row[$indexClassName]);
+            $categoryName = $this->getCategoryNameFromRowClassName($row[$indexClassName]);
 
             $cooldownGroupName = $this->getCooldownGroupNameFromRowCooldownGroup($row[$indexCooldownGroup]);
 
@@ -77,26 +75,31 @@ class SpellService implements SpellServiceInterface
 
     public function getCategoryNameFromRowClassName(string $rowClassName): ?string
     {
-        $characterClass = $this->getCharacterClassFromClassName($rowClassName);
+        // Try to match the category directly first
+        $categorySlug = Str::slug($rowClassName, '_');
+        if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
+            // Try to find the associated class first, then use that class to identify the category
+            $characterClass = $this->getCharacterClassFromClassName($rowClassName);
 
-        if ($characterClass === null) {
-            $this->log->getCategoryNameFromClassNameUnableToFindCharacterClass($rowClassName);
+            if ($characterClass === null) {
+                $this->log->getCategoryNameFromClassNameUnableToFindCharacterClass($rowClassName);
 
-            return null;
+                return null;
+            }
+
+            // Based on the character class name translation, find the category
+            $characterClassName = __($characterClass->name, [], 'en_US');
+
+            $categorySlug = Str::slug($characterClassName, '_');
+
+            if (!in_array($categorySlug, Spell::ALL_CATEGORIES)) {
+                $this->log->getCategoryNameFromClassNameUnableToFindCategory($categorySlug);
+
+                return null;
+            }
         }
 
-        // Based on the character class name, find the category
-        $characterClassName = __($characterClass->name, [], 'en_US');
-
-        $characterClassNameSlug = Str::slug($characterClassName, '_');
-
-        if (!in_array($characterClassNameSlug, Spell::ALL_CATEGORIES)) {
-            $this->log->getCategoryNameFromClassNameUnableToFindCategory($characterClassNameSlug);
-
-            return null;
-        }
-
-        return sprintf('spells.category.%s', $characterClassNameSlug);
+        return sprintf('spells.category.%s', $categorySlug);
     }
 
     public function getCharacterClassFromClassName(string $csvClass): ?CharacterClass

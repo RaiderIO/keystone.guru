@@ -114,11 +114,11 @@ class ServiceFixtures
 
     public static function getCoordinatesServiceMock(
         PublicTestCase $testCase,
-        array          $methodsNotToMock = []
+        array          $methodsToMock = []
     ): MockObject|CoordinatesServiceInterface {
         return $testCase
             ->getMockBuilder(CoordinatesService::class)
-            ->onlyMethods($methodsNotToMock)
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 
@@ -127,12 +127,12 @@ class ServiceFixtures
      */
     public static function getSpellServiceMock(
         PublicTestCase               $testCase,
-        array                        $methodsNotToMock = [],
+        array                        $methodsToMock = [],
         SpellServiceLoggingInterface $log = null
     ): MockObject|SpellService {
         return $testCase
             ->getMockBuilder(SpellService::class)
-            ->onlyMethods($methodsNotToMock)
+            ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $log ?? LoggingFixtures::createSpellServiceLogging($testCase),
             ])
