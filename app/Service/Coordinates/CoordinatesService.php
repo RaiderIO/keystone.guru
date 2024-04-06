@@ -78,7 +78,7 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         $result = clone $latLng;
         // Nothing to do if facade is not enabled - the coordinates are the same always
-        if (!$mappingVersion->dungeon->facade_enabled) {
+        if (!$mappingVersion->facade_enabled) {
             return $result;
         }
 

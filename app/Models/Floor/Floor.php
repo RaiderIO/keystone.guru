@@ -71,8 +71,8 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[]                      $reverseConnectedFloors
  *
  * @method static Builder active()
- * @method static Builder indexOrFacade(int $floorIndex)
- * @method static Builder defaultOrFacade()
+ * @method static Builder indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)
+ * @method static Builder defaultOrFacade(MappingVersion $mappingVersion)
  *
  * @mixin Eloquent
  */
@@ -262,9 +262,9 @@ class Floor extends CacheModel implements MappingModelInterface
         return $query->where('floors.active', 1);
     }
 
-    public function scopeIndexOrFacade(Builder $builder, int $floorIndex, ?string $mapFacadeStyle = null): Builder
+    public function scopeIndexOrFacade(Builder $builder, MappingVersion $mappingVersion, int $floorIndex, ?string $mapFacadeStyle = null): Builder
     {
-        $useFacade = ($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE;
+        $useFacade = (($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
         // Facade should be FORCED to use floor index 1
         if ($useFacade && $floorIndex > 1) {
@@ -282,9 +282,9 @@ class Floor extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
-    public function scopeDefaultOrFacade(Builder $builder): Builder
+    public function scopeDefaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
     {
-        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $useFacade = (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
         return $builder->where(static function (Builder $builder) {
             $builder->where('facade', 1)

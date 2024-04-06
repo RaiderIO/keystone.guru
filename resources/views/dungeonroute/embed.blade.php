@@ -49,6 +49,7 @@ if (count($affixes) == 0) {
     <div class="wrapper embed_wrapper {{ $embedOptions['style'] }}">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
+            'mappingVersion' => $dungeonroute->mappingVersion,
             'dungeonroute' => $dungeonroute,
             'mapBackgroundColor' => $embedOptions['mapBackgroundColor'],
             'embed' => true,

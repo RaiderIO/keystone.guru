@@ -5,6 +5,7 @@ namespace App\Logic\MapContext;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
+use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
@@ -19,7 +20,7 @@ trait DungeonRouteProperties
     {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
 
-        return $this->floor->dungeon->floorsForMapFacade($useFacade)->active()->get();
+        return $this->floor->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
     }
 
     private function getDungeonRoutesProperties(CoordinatesServiceInterface $coordinatesService, array $publicKeys): Collection

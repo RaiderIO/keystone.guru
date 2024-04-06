@@ -36,6 +36,7 @@ use Illuminate\Support\Collection;
  * @property int                                   $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
  * @property int                                   $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null                           $mdt_mapping_hash
+ * @property bool                                  $facade_enabled True if this mapping version uses facades, false if it does not.
  * @property bool                                  $merged Not saved in the database
  * @property Carbon                                $updated_at
  * @property Carbon                                $created_at
@@ -67,6 +68,7 @@ class MappingVersion extends Model
         'enemy_forces_shrouded',
         'enemy_forces_shrouded_zul_gamux',
         'timer_max_seconds',
+        'facade_enabled',
         'mdt_mapping_hash',
         'merged',
     ];
@@ -79,9 +81,21 @@ class MappingVersion extends Model
         'enemy_forces_shrouded',
         'enemy_forces_shrouded_zul_gamux',
         'timer_max_seconds',
+        'facade_enabled',
         'mdt_mapping_hash',
         'updated_at',
         'created_at',
+    ];
+
+    protected $casts = [
+        'dungeon_id'                      => 'integer',
+        'version'                         => 'integer',
+        'enemy_forces_required'           => 'integer',
+        'enemy_forces_required_teeming'   => 'integer',
+        'enemy_forces_shrouded'           => 'integer',
+        'enemy_forces_shrouded_zul_gamux' => 'integer',
+        'timer_max_seconds'               => 'integer',
+        'facade_enabled'                  => 'integer',
     ];
 
     protected $appends = [
@@ -238,7 +252,7 @@ class MappingVersion extends Model
             ->get()
             ->makeHidden(['enemyactiveauras']);
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             foreach ($enemies as $enemy) {
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
@@ -281,7 +295,7 @@ class MappingVersion extends Model
         /** @var Collection|EnemyPack[] $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with(['floor', 'enemies:enemies.id,enemies.enemy_pack_id'])->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             $enemyPacks = $enemyPacks->map(function (EnemyPack $enemyPack) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack, $enemyPack->floor);
                 $enemyPack->setRelation('floor', $newFloor);
@@ -299,7 +313,7 @@ class MappingVersion extends Model
         /** @var Collection|EnemyPatrol[] $enemyPatrols */
         $enemyPatrols = $this->enemyPatrols()->with('floor')->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             $enemyPatrols = $enemyPatrols->map(function (EnemyPatrol $enemyPatrol) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPatrol->polyline, $enemyPatrol->floor);
                 $enemyPatrol->setRelation('floor', $newFloor);
@@ -319,7 +333,7 @@ class MappingVersion extends Model
             ->with(['floor'])
             ->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             foreach ($mapIcons as $mapIcon) {
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
@@ -341,7 +355,7 @@ class MappingVersion extends Model
             ->with('floor')
             ->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 // Load some attributes prior to changing the floor_id, otherwise they get messed up
                 $dungeonFloorSwitchMarker->setAttribute('source_floor_id', $dungeonFloorSwitchMarker->floor_id);
@@ -368,7 +382,7 @@ class MappingVersion extends Model
         /** @var Collection|MountableArea[] $mountableAreas */
         $mountableAreas = $this->mountableAreas()->with('floor')->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             $mountableAreas = $mountableAreas->map(function (MountableArea $mountableArea) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea, $mountableArea->floor);
                 $mountableArea->setRelation('floor', $newFloor);

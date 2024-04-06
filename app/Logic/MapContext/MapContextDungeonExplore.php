@@ -20,7 +20,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
     {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
 
-        return $this->floor->dungeon->floorsForMapFacade($useFacade)->active()->get();
+        return $this->floor->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
     }
 
     public function getType(): string

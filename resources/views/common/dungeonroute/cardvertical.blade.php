@@ -33,7 +33,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
     $tierAffixGroup        = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade(true)->get();
+    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade($dungeonroute->mappingVersion, true)->get();
     $owlClass     = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
     ob_start();
     ?>
