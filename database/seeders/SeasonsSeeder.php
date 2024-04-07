@@ -185,7 +185,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => null,
-                'index'                   => 3,
+                'index'                   => 4,
                 'start'                   => '2024-04-22 00:00:00',
                 'presets'                 => 0,
                 'affix_group_count'       => 10,

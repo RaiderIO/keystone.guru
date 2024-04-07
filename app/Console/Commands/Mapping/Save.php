@@ -212,7 +212,7 @@ class Save extends Command
             // for each and every re-import
             $demoRoute->setHidden(['id', 'updated_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
                                    'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
-                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon']);
+                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon', 'mappingVersion']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                               'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
                               'pridefulEnemies', 'mapicons']);

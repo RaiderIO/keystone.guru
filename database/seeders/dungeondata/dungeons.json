@@ -13,7 +13,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -54,7 +53,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -293,7 +291,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -422,7 +419,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -463,7 +459,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -504,7 +499,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -545,7 +539,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -657,7 +650,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -922,7 +914,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1034,7 +1025,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1075,7 +1065,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1362,7 +1351,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1403,7 +1391,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1515,7 +1502,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1592,7 +1578,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1633,7 +1618,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1674,7 +1658,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1751,7 +1734,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1792,7 +1774,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1869,7 +1850,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1910,7 +1890,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1987,7 +1966,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2239,7 +2217,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -2443,7 +2420,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2520,7 +2496,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2632,7 +2607,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -2709,7 +2683,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -2750,7 +2723,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2897,7 +2869,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3009,7 +2980,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3050,7 +3020,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3127,7 +3096,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3204,7 +3172,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3351,7 +3318,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3463,7 +3429,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3651,7 +3616,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3798,7 +3762,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3945,7 +3908,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -3986,7 +3948,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4027,7 +3988,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4068,7 +4028,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4215,7 +4174,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4256,7 +4214,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4368,7 +4325,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4445,7 +4401,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4486,7 +4441,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4563,7 +4517,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4604,7 +4557,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4645,7 +4597,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4686,7 +4637,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4763,7 +4713,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4804,7 +4753,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4845,7 +4793,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5027,7 +4974,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5068,7 +5014,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5109,7 +5054,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5221,7 +5165,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5298,7 +5241,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5615,7 +5557,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5656,7 +5597,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -6266,7 +6206,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6329,7 +6268,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6370,7 +6308,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6411,7 +6348,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6452,7 +6388,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7237,7 +7172,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -7278,7 +7212,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7373,6 +7306,47 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 280,
+                "index": 4,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.algeth_ar_academy.floors.algeth_ar_academy",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 936,
+                        "floor1_id": 280,
+                        "floor2_id": 144,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 937,
+                        "floor1_id": 280,
+                        "floor2_id": 145,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 938,
+                        "floor1_id": 280,
+                        "floor2_id": 146,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7390,7 +7364,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7450,6 +7423,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 281,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.brackenhide_hollow.floors.brackenhide_hollow",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 939,
+                        "floor1_id": 281,
+                        "floor2_id": 147,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 940,
+                        "floor1_id": 281,
+                        "floor2_id": 148,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7467,7 +7475,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7527,6 +7534,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 274,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.halls_of_infusion.floors.halls_of_infusion",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 910,
+                        "floor1_id": 274,
+                        "floor2_id": 149,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 911,
+                        "floor1_id": 274,
+                        "floor2_id": 150,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7544,7 +7586,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7604,6 +7645,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 275,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.neltharus.floors.neltharus",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 916,
+                        "floor1_id": 275,
+                        "floor2_id": 151,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 917,
+                        "floor1_id": 275,
+                        "floor2_id": 152,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7621,7 +7697,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7645,6 +7720,35 @@
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 278,
+                "index": 2,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.the_nokhud_offensive.floors.the_nokhud_offensive",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 930,
+                        "floor1_id": 278,
+                        "floor2_id": 153,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7662,7 +7766,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7722,6 +7825,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 276,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.ruby_life_pools.floors.ruby_life_pools",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 918,
+                        "floor1_id": 276,
+                        "floor2_id": 154,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 919,
+                        "floor1_id": 276,
+                        "floor2_id": 155,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7739,7 +7877,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7904,6 +8041,59 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 277,
+                "index": 6,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.the_azure_vault",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 925,
+                        "floor1_id": 277,
+                        "floor2_id": 156,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 926,
+                        "floor1_id": 277,
+                        "floor2_id": 157,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 927,
+                        "floor1_id": 277,
+                        "floor2_id": 158,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 928,
+                        "floor1_id": 277,
+                        "floor2_id": 159,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 929,
+                        "floor1_id": 277,
+                        "floor2_id": 160,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7921,7 +8111,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7981,6 +8170,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 279,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.floors.uldaman_legacy_of_tyr",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 931,
+                        "floor1_id": 279,
+                        "floor2_id": 161,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 932,
+                        "floor1_id": 279,
+                        "floor2_id": 162,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7998,7 +8222,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8110,7 +8333,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8151,7 +8373,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8192,7 +8413,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -8304,7 +8524,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -8381,7 +8600,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -8458,7 +8676,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -8570,7 +8787,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -8717,7 +8933,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -8964,7 +9179,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9041,7 +9255,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9082,7 +9295,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9123,7 +9335,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9164,7 +9375,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9205,7 +9415,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9246,7 +9455,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9287,7 +9495,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9328,7 +9535,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9487,7 +9693,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9745,7 +9950,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9822,7 +10026,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9863,7 +10066,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10057,7 +10259,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10134,7 +10335,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10175,7 +10375,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10216,7 +10415,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10257,7 +10455,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10334,7 +10531,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -10411,7 +10607,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10510,7 +10705,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10622,7 +10816,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10869,7 +11062,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -11222,7 +11414,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {

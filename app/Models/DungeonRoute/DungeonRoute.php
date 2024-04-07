@@ -202,7 +202,15 @@ class DungeonRoute extends Model
         'popularity',
     ];
 
-    protected $with = ['dungeon', 'faction', 'specializations', 'classes', 'races', 'affixes'];
+    protected $with = [
+        'mappingVersion',
+        'dungeon',
+        'faction',
+        'specializations',
+        'classes',
+        'races',
+        'affixes',
+    ];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -1152,7 +1160,7 @@ class DungeonRoute extends Model
     {
         $result = null;
         /** @var User $user */
-        $user   = Auth::user();
+        $user = Auth::user();
         if ($user !== null) {
             $result = DungeonRouteRating::where('dungeon_route_id', $this->id)
                 ->where('user_id', $user->id)

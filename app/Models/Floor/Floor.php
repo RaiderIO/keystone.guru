@@ -103,6 +103,7 @@ class Floor extends CacheModel implements MappingModelInterface
     protected $fillable = [
         'dungeon_id',
         'index',
+        'mdt_sub_level',
         'name',
         'default',
         'facade',
