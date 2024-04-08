@@ -6,6 +6,7 @@
 @section('scripts')
     @parent
 
+    <!--suppress HtmlDeprecatedAttribute -->
     <script type="text/javascript">
         $(function () {
             $('#admin_dungeon_mapping_versions_table').DataTable({
@@ -21,6 +22,12 @@
     <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"
        class="btn btn-success text-white pull-right" role="button">
         <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}
+    </a>
+</div>
+<div class="float-right mr-2">
+    <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"
+       class="btn btn-success text-white pull-right" role="button">
+        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}
     </a>
 </div>
 {{--@endif--}}

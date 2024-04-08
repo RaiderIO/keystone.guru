@@ -35,14 +35,15 @@ return [
             ],
 
             'mapping_versions' => [
-                'title'                   => 'Mapping versions',
-                'add_mapping_version'     => 'Add mapping version',
-                'delete'                  => 'Delete',
-                'table_header_merged'     => 'Merged',
-                'table_header_id'         => 'Id',
-                'table_header_version'    => 'Version',
-                'table_header_created_at' => 'Created at',
-                'table_header_actions'    => 'Actions',
+                'title'                    => 'Mapping versions',
+                'add_bare_mapping_version' => 'Add bare mapping version',
+                'add_mapping_version'      => 'Add mapping version',
+                'delete'                   => 'Delete',
+                'table_header_merged'      => 'Merged',
+                'table_header_id'          => 'Id',
+                'table_header_version'     => 'Version',
+                'table_header_created_at'  => 'Created at',
+                'table_header_actions'     => 'Actions',
             ],
         ],
         'list' => [
