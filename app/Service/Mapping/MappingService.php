@@ -25,7 +25,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @return Collection|MappingChangeLog[]
+     * @return Collection<MappingChangeLog>
      */
     public function getUnmergedMappingChanges(): Collection
     {
@@ -41,6 +41,9 @@ class MappingService implements MappingServiceInterface
         return $result;
     }
 
+    /**
+     * @return Collection<Dungeon>
+     */
     public function getDungeonsWithUnmergedMappingChanges(): Collection
     {
         $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
@@ -73,6 +76,7 @@ class MappingService implements MappingServiceInterface
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? null,
             'version'          => $newVersion,
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
@@ -86,6 +90,7 @@ class MappingService implements MappingServiceInterface
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $hash,
             'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
+            'facade_enabled'   => $dungeon->currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
@@ -103,6 +108,7 @@ class MappingService implements MappingServiceInterface
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $sourceMappingVersion->mdt_mapping_hash,
             'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
+            'facade_enabled'   => $dungeon->currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);

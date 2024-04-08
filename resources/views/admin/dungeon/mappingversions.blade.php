@@ -36,6 +36,7 @@
     <thead>
     <tr>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_merged') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_facade') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_id') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_version') }}</th>
         <th width="50%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_created_at') }}</th>
@@ -48,6 +49,9 @@
         <tr>
             <td>
                 <i class="fas {{ $mappingVersion->merged ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
+            </td>
+            <td>
+                <i class="fas {{ $mappingVersion->facade_enabled ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
             </td>
             <td>{{ $mappingVersion->id }}</td>
             <td>{{ $mappingVersion->version }}</td>
