@@ -110,7 +110,7 @@ class MappingVersion extends Model
 
     private ?Collection $cachedFloorUnionsOnFloor = null;
 
-    private ?Collection $cachedFloorUnionForFloor = null;
+    private ?Collection $cachedFloorUnionsForFloor = null;
 
     private ?int $isLatestForDungeonCache = null;
 
@@ -222,25 +222,47 @@ class MappingVersion extends Model
         return $floorUnions;
     }
 
-    public function getFloorUnionForFloor(int $floorId): ?FloorUnion
+    public function getFloorUnionForLatLng(CoordinatesServiceInterface $coordinatesService, MappingVersion $mappingVersion, LatLng $latLng): ?FloorUnion
     {
-        if ($this->cachedFloorUnionForFloor === null) {
-            $this->cachedFloorUnionForFloor = collect();
+        $floor = $latLng->getFloor();
+        if ($floor === null) {
+            return null;
         }
 
-        if ($this->cachedFloorUnionForFloor->has($floorId)) {
-            return $this->cachedFloorUnionForFloor->get($floorId);
+        if ($this->cachedFloorUnionsForFloor === null) {
+            $this->cachedFloorUnionsForFloor = collect();
         }
 
-        /** @var FloorUnion|null $floorUnion */
-        $floorUnion = $this->floorUnions()
-            ->where('target_floor_id', $floorId)
-            ->with(['floor', 'targetFloor'])
-            ->first();
+        /** @var Collection<FloorUnion> $floorUnions */
+        if ($this->cachedFloorUnionsForFloor->has($floor->id)) {
+            $floorUnions = $this->cachedFloorUnionsForFloor->get($floor->id);
+        } else {
+            $floorUnions = $this->floorUnions()
+                ->where('target_floor_id', $floor->id)
+                ->with(['floor', 'targetFloor'])
+                ->get();
 
-        $this->cachedFloorUnionForFloor->put($floorId, $floorUnion);
+            $this->cachedFloorUnionsForFloor->put($floor->id, $floorUnions);
+        }
 
-        return $floorUnion;
+        // Now that we know the floor union candidates, check which floor union we need to use
+        $result = null;
+        // If we have more than 1 target we must make a choice based on the floor union areas attached to the floor union
+        if ($floorUnions->count() > 1) {
+            foreach ($floorUnions as $floorUnion) {
+                // We need to translate the target point using this floor union first, prior to checking the floor union areas
+                // Only if the translated point falls in the floor union area, can we properly check if this floor union matches
+                $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng, $floorUnion);
+                foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                    if ($floorUnionArea->containsPoint($coordinatesService, $tmpConvertedLatLng)) {
+                        $result = $floorUnion;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function mapContextEnemies(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
