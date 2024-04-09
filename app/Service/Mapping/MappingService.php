@@ -120,6 +120,10 @@ class MappingService implements MappingServiceInterface
     {
         // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
         // MDT mapping
+        foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+            $dungeonFloorSwitchMarker->cloneForNewMappingVersion($targetMappingVersion);
+        }
+
         foreach ($sourceMappingVersion->mapIcons as $mapIcon) {
             $mapIcon->cloneForNewMappingVersion($targetMappingVersion);
         }
@@ -149,7 +153,13 @@ class MappingService implements MappingServiceInterface
         }
 
         // Load the newly generated relationships
-        $targetMappingVersion->load(['mapIcons', 'mountableAreas', 'floorUnions', 'floorUnionAreas']);
+        $targetMappingVersion->load([
+            'dungeonFloorSwitchMarkers',
+            'mapIcons',
+            'mountableAreas',
+            'floorUnions',
+            'floorUnionAreas',
+        ]);
 
         return $targetMappingVersion;
     }
