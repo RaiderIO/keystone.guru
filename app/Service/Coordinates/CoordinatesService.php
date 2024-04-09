@@ -133,7 +133,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $result;
     }
 
-    public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?FloorUnion $forceFloorUnion = null ): LatLng
+    public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?FloorUnion $forceFloorUnion = null): LatLng
     {
         $sourceFloor = $latLng->getFloor();
 

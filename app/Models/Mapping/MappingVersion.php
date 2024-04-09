@@ -262,6 +262,8 @@ class MappingVersion extends Model
                     }
                 }
             }
+        } else {
+            $result = $floorUnions->first();
         }
 
         return $result;
