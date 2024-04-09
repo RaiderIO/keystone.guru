@@ -164,42 +164,42 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public function enemiesForExport(): HasMany
     {
-        return $this->hasMany(Enemy::class);
+        return $this->hasMany(Enemy::class)->orderBy('id');
     }
 
     public function enemyPacksForExport(): HasMany
     {
-        return $this->hasMany(EnemyPack::class);
+        return $this->hasMany(EnemyPack::class)->orderBy('id');
     }
 
     public function enemyPatrolsForExport(): HasMany
     {
-        return $this->hasMany(EnemyPatrol::class);
+        return $this->hasMany(EnemyPatrol::class)->orderBy('id');
     }
 
     public function mapIconsForExport(): HasMany
     {
-        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', null);
+        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', null)->orderBy('id');
     }
 
     public function mountableAreasForExport(): HasMany
     {
-        return $this->hasMany(MountableArea::class);
+        return $this->hasMany(MountableArea::class)->orderBy('id');
     }
 
     public function floorUnionsForExport(): HasMany
     {
-        return $this->hasMany(FloorUnion::class);
+        return $this->hasMany(FloorUnion::class)->orderBy('id');
     }
 
     public function floorUnionAreasForExport(): HasMany
     {
-        return $this->hasMany(FloorUnionArea::class);
+        return $this->hasMany(FloorUnionArea::class)->orderBy('id');
     }
 
     public function dungeonFloorSwitchMarkersForExport(): HasMany
     {
-        return $this->hasMany(DungeonFloorSwitchMarker::class);
+        return $this->hasMany(DungeonFloorSwitchMarker::class)->orderBy('id');
     }
 
     public function floorcouplings(): HasMany
