@@ -7,6 +7,7 @@ use App\Http\Controllers\Ajax\AjaxMappingModelBaseController;
 use App\Http\Requests\Floor\FloorUnionAreaFormRequest;
 use App\Models\Floor\FloorUnionArea;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -20,15 +21,13 @@ use Throwable;
 class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @return FloorUnionArea|Model
-     *
      * @throws Throwable
      */
     public function store(
         FloorUnionAreaFormRequest $request,
         MappingVersion            $mappingVersion,
         ?FloorUnionArea           $floorUnionArea = null
-    ): FloorUnionArea {
+    ): FloorUnionArea|Model {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
@@ -42,7 +41,7 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
      *
      * @throws Throwable
      */
-    public function delete(Request $request, FloorUnionArea $floorUnionArea)
+    public function delete(Request $request, MappingVersion $mappingVersion, FloorUnionArea $floorUnionArea)
     {
         return DB::transaction(function () use ($floorUnionArea) {
             try {
@@ -51,7 +50,9 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
                     $this->mappingChanged($floorUnionArea, null);
 
                     if (Auth::check()) {
-                        broadcast(new ModelDeletedEvent($floorUnionArea->floor->dungeon, Auth::getUser(), $floorUnionArea));
+                        /** @var User $user */
+                        $user = Auth::getUser();
+                        broadcast(new ModelDeletedEvent($floorUnionArea->floor->dungeon, $user, $floorUnionArea));
                     }
                 }
 

@@ -136,6 +136,18 @@ class MappingService implements MappingServiceInterface
             }
         }
 
+        // Copy these properties over only if the dungeons match - doesn't make sense otherwise
+        if ($sourceMappingVersion->dungeon_id === $targetMappingVersion->dungeon_id) {
+            $targetMappingVersion->update([
+                'enemy_forces_required'           => $sourceMappingVersion->enemy_forces_required,
+                'enemy_forces_required_teeming'   => $sourceMappingVersion->enemy_forces_required_teeming,
+                'enemy_forces_shrouded'           => $sourceMappingVersion->enemy_forces_shrouded,
+                'enemy_forces_shrouded_zul_gamux' => $sourceMappingVersion->enemy_forces_shrouded_zul_gamux,
+                'timer_max_seconds'               => $sourceMappingVersion->timer_max_seconds,
+                'facade_enabled'                  => $sourceMappingVersion->facade_enabled,
+            ]);
+        }
+
         // Load the newly generated relationships
         $targetMappingVersion->load(['mapIcons', 'mountableAreas', 'floorUnions', 'floorUnionAreas']);
 

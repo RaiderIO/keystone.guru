@@ -40,7 +40,9 @@ use Illuminate\Support\Collection;
  * @property bool                                  $merged Not saved in the database
  * @property Carbon                                $updated_at
  * @property Carbon                                $created_at
+ *
  * @property Dungeon                               $dungeon
+ *
  * @property Collection|DungeonRoute[]             $dungeonRoutes
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
  * @property Collection|Enemy[]                    $enemies
