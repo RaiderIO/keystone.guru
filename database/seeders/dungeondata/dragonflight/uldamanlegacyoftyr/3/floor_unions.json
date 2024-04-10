@@ -20,8 +20,8 @@
         "rotation": 115
     },
     {
-        "id": 208,
-        "mapping_version_id": 316,
+        "id": 201,
+        "mapping_version_id": 311,
         "floor_id": 279,
         "target_floor_id": 161,
         "lat": -108.93,
@@ -30,8 +30,8 @@
         "rotation": 180
     },
     {
-        "id": 209,
-        "mapping_version_id": 316,
+        "id": 202,
+        "mapping_version_id": 311,
         "floor_id": 279,
         "target_floor_id": 162,
         "lat": -209,
