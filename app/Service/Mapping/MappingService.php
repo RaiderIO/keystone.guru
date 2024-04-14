@@ -3,6 +3,7 @@
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
@@ -120,18 +121,39 @@ class MappingService implements MappingServiceInterface
     {
         // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
         // MDT mapping
+
+        // Dungeon Floor Switch Markers
+        $dungeonFloorSwitchMarkerIdMapping = [];
+        $newDungeonFloorSwitchMarkers      = [];
+
         foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-            $dungeonFloorSwitchMarker->cloneForNewMappingVersion($targetMappingVersion);
+            /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
+            $newDungeonFloorSwitchMarker                                      = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
+                $targetMappingVersion
+            );
+            $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
+            $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
         }
 
+        // Restore the links between the floor switches
+        foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
+            $newDungeonFloorSwitchMarker->update([
+                'linked_dungeon_floor_switch_marker_id' =>
+                    $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+            ]);
+        }
+
+        // Map Icons
         foreach ($sourceMappingVersion->mapIcons as $mapIcon) {
             $mapIcon->cloneForNewMappingVersion($targetMappingVersion);
         }
 
+        // Mountable Areas
         foreach ($sourceMappingVersion->mountableAreas as $mountableArea) {
             $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
         }
 
+        // Floor Unions (and areas)
         foreach ($sourceMappingVersion->floorUnions as $floorUnion) {
             /** @var FloorUnion $newFloorUnion */
             $newFloorUnion = $floorUnion->cloneForNewMappingVersion($targetMappingVersion);
