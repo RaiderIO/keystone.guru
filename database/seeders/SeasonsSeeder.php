@@ -182,6 +182,27 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_THRONE_OF_THE_TIDES,
                     ])->orderBy('expansions.released_at')
                     ->get(),
+            ], [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
+                'seasonal_affix_id'       => null,
+                'index'                   => 4,
+                'start'                   => '2024-04-22 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 10,
+                'start_affix_group_index' => 1,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
+                        Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE,
+                        Dungeon::DUNGEON_RUBY_LIFE_POOLS,
+                        Dungeon::DUNGEON_THE_AZURE_VAULT,
+                        Dungeon::DUNGEON_HALLS_OF_INFUSION,
+                        Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
+                        Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
+                        Dungeon::DUNGEON_NELTHARUS,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
             ],
         ];
 

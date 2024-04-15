@@ -1,20 +1,30 @@
 <?php
+use App\Logic\MapContext\MapContext;
+use App\Logic\MapContext\MapContextDungeonExplore;
+use App\Logic\MapContext\MapContextDungeonRoute;
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use App\Models\LiveSession;
+use App\Models\Mapping\MappingVersion;
+use App\Models\User;
+
 /**
- * @var \App\Models\User                                  $user
- * @var \App\Logic\MapContext\MapContext           $mapContext
- * @var \App\Models\Dungeon                        $dungeon
- * @var \App\Models\Floor\Floor                    $floor
- * @var \App\Models\Mapping\MappingVersion         $mappingVersion
- * @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute
- * @var \App\Models\LiveSession|null               $livesession
- * @var bool|null                                  $admin
- * @var bool|null                                  $embed
- * @var string|null                                $embedStyle
- * @var bool|null                                  $edit
- * @var array                                      $show
- * @var bool                                       $adFree
- * @var string|null                                $mapBackgroundColor
- * @var string|null                                $mapFacadeStyle
+ * @var User              $user
+ * @var MapContext        $mapContext
+ * @var Dungeon           $dungeon
+ * @var Floor             $floor
+ * @var MappingVersion    $mappingVersion
+ * @var DungeonRoute|null $dungeonroute
+ * @var LiveSession|null  $livesession
+ * @var bool|null         $admin
+ * @var bool|null         $embed
+ * @var string|null       $embedStyle
+ * @var bool|null         $edit
+ * @var array             $show
+ * @var bool              $adFree
+ * @var string|null       $mapBackgroundColor
+ * @var string|null       $mapFacadeStyle
  */
 
 $user               = Auth::user();
@@ -25,7 +35,6 @@ $edit               = isset($edit) && $edit;
 $mapClasses         ??= '';
 $dungeonroute       ??= null;
 $livesession        ??= null;
-$mappingVersion     ??= null;
 $mapBackgroundColor ??= null;
 
 // Ensure default values for showing/hiding certain elements
@@ -44,8 +53,8 @@ $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_por
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
-$mapFacadeStyle                   ??= \App\Models\User::getCurrentUserMapFacadeStyle();
-$useFacade                        = $mapFacadeStyle === \App\Models\User::MAP_FACADE_STYLE_FACADE;
+$mapFacadeStyle                   ??= User::getCurrentUserMapFacadeStyle();
+$useFacade                        = $mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
 
 // Allow echo to be overridden
 $echo           ??= Auth::check() && !$sandboxMode;
@@ -134,9 +143,9 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                    @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                        <a class="map_faction_display_control map_controls_custom" href="#"
-                           data-faction="{{ strtolower($faction->key) }}"
+            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
@@ -145,10 +154,10 @@ if ($isAdmin) {
 								 alt="Faction"/>
                         </a>
 
-                    @endforeach
-                </div>
-                <ul class="leaflet-draw-actions"></ul>
+            @endforeach
             </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
 
 
         </script>
@@ -172,14 +181,14 @@ if ($isAdmin) {
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
         @include('common.maps.controls.draw', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($useFacade)->active())->get(),
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($useFacade)->active())->get(),
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
@@ -187,7 +196,7 @@ if ($isAdmin) {
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [
             'isAdmin' => $isAdmin,
-            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($useFacade)->active())->get(),
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
@@ -255,7 +264,7 @@ if ($isAdmin) {
 
 
 
-    @if($mapContext instanceof \App\Logic\MapContext\MapContextDungeonRoute || $mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore)
+    @if($mapContext instanceof MapContextDungeonRoute || $mapContext instanceof MapContextDungeonExplore)
         @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
             @include('common.modal.userreport.dungeonroute', ['dungeonroute' => $dungeonroute])
         @endcomponent

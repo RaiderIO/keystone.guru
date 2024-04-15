@@ -227,6 +227,16 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             ['season_id' => 12, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SANGUINE]],
             ['season_id' => 12, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING]],
 
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_AFFLICTED, Affix::AFFIX_BOLSTERING]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_INCORPOREAL, Affix::AFFIX_SANGUINE]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BURSTING]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SPITEFUL]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_STORMING, Affix::AFFIX_RAGING]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BOLSTERING]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_INCORPOREAL, Affix::AFFIX_SPITEFUL]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_AFFLICTED, Affix::AFFIX_RAGING]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_VOLCANIC, Affix::AFFIX_SANGUINE]],
+            ['season_id' => 13, 'expansion_id' => $dragonflight, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING]],
         ];
 
         $affixGroupAttributes          = [];
