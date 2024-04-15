@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
+use App\Models\Opensearch\CombatLogEvent;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -32,10 +32,19 @@ class Random extends Command
     /**
      * Execute the console command.
      */
-    public function handle(
-        StructuredLoggingServiceInterface $structuredLoggingService
-    ): int {
-        $structuredLoggingService->all();
+    public function handle(): int
+    {
+
+        $combatLogEvent = new CombatLogEvent();
+        $combatLogEvent->setAttributes(
+            \CombatLogEventFactory::new()->definition()
+        );
+
+        CombatLogEvent::opensearch()
+            ->documents()
+            ->create([$combatLogEvent->id]);
+
+//        $structuredLoggingService->all();
 
 //        dd($combatLogSplitService->splitCombatLogOnChallengeModes(
 //            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')

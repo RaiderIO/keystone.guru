@@ -60,6 +60,7 @@
         "akaunting/laravel-language": "^1.0",
         "barryvdh/laravel-ide-helper": "^2.13",
         "beyondcode/laravel-server-timing": "^1.4",
+        "codeartmk/opensearch-laravel": "^1.0",
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "fakerphp/faker": "^1.23",
