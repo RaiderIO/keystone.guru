@@ -29,7 +29,7 @@ PUT _index_template/combat_log_events-template
         "challenge_mode_id": {
           "type": "integer"
         },
-        "key_level": {
+        "level": {
           "type": "integer"
         },
         "affix_id": {
@@ -58,11 +58,11 @@ PUT _index_template/combat_log_events-template
         "event_type": {
           "type": "keyword"
         },
-        "player": {
+        "characters": {
           "type": "nested",
           "dynamic": false,
           "properties": {
-            "guid": {
+            "id": {
               "type": "keyword"
             },
             "class_id": {
@@ -231,11 +231,11 @@ PUT /combat_log_events-000001
       "event_type": {
         "type": "keyword"
       },
-      "player": {
+      "characters": {
         "type": "nested",
         "dynamic": false,
         "properties": {
-          "guid": {
+          "id": {
             "type": "keyword"
           },
           "class_id": {
