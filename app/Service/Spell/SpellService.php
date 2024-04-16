@@ -41,6 +41,12 @@ class SpellService implements SpellServiceInterface
 
             $spellId = $row[$indexClassSpellId];
 
+            if (empty($spellId)) {
+                $this->log->importFromCsvSpellIdEmpty();
+
+                continue;
+            }
+
             if (isset($spellAttributes[$spellId])) {
                 $this->log->importFromCsvSpellAlreadySet($spellId);
 
