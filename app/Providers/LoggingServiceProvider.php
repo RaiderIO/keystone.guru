@@ -8,6 +8,8 @@ use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLogging;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLogging;
+use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLogging;
@@ -64,6 +66,9 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Cache
         $this->app->bind(CacheServiceLoggingInterface::class, CacheServiceLogging::class);
+
+        // Challenge Mode Run Data
+        $this->app->bind(ChallengeModeRunDataServiceLoggingInterface::class, ChallengeModeRunDataServiceLogging::class);
 
         // Combat log
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);

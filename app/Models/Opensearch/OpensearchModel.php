@@ -3,19 +3,18 @@
 namespace App\Models\Opensearch;
 
 use Codeart\OpensearchLaravel\OpenSearchable;
-use Ramsey\Uuid\Uuid;
+use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
-abstract class OpensearchModel implements OpenSearchable
+/**
+ * @mixin Eloquent
+ */
+abstract class OpensearchModel extends Model implements OpenSearchable
 {
     public function setAttributes(array $attributes): void
     {
         foreach ($attributes as $key => $value) {
             $this->$key = $value;
         }
-    }
-
-    public static function generateId(): string
-    {
-        return Uuid::uuid7();
     }
 }

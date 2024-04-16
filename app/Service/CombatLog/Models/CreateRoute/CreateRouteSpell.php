@@ -8,7 +8,11 @@ class CreateRouteSpell
 {
     private Carbon $castAtCarbon;
 
-    public function __construct(public int $spellId, public string $playerUid, public string $castAt, public CreateRouteCoord $coord)
+    public function __construct(
+        public int              $spellId,
+        public string           $playerUid,
+        public string           $castAt,
+        public CreateRouteCoord $coord)
     {
     }
 

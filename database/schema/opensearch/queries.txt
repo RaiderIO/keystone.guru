@@ -49,6 +49,9 @@ PUT _index_template/combat_log_events-template
         "duration_ms": {
           "type": "integer"
         },
+        "ui_map_id": {
+          "type": "int"
+        },
         "pos_x": {
           "type": "float"
         },
@@ -221,6 +224,9 @@ PUT /combat_log_events-000001
       },
       "duration_ms": {
         "type": "integer"
+      },
+      "ui_map_id": {
+        "type": "int"
       },
       "pos_x": {
         "type": "float"

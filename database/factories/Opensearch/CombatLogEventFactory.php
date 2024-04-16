@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Affix;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
-use App\Models\Opensearch\CombatLogEvent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

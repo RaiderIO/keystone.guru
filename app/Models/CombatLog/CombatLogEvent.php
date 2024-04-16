@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Opensearch;
+namespace App\Models\CombatLog;
 
+use App\Models\Opensearch\OpensearchModel;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -11,16 +12,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $run_id
  * @property int    $challenge_mode_id
  * @property int    $level
- * @property int[]  $affix_id
+ * @property string $affix_ids
  * @property bool   $success
  * @property string $start
  * @property string $end
  * @property int    $duration_ms
+ * @property int    $ui_map_id
  * @property float  $pos_x
  * @property float  $pos_y
  * @property string $event_type
- * @property array  $characters
- * @property array  $context
+ * @property string $characters
+ * @property string $context
  */
 class CombatLogEvent extends OpensearchModel
 {
@@ -35,6 +37,8 @@ class CombatLogEvent extends OpensearchModel
         self::EVENT_TYPE_ENEMY_KILLED,
         self::EVENT_TYPE_SPELL_CAST,
     ];
+
+    protected $connection = 'combatlog';
 
     public function openSearchMapping(): array
     {
@@ -114,22 +118,28 @@ class CombatLogEvent extends OpensearchModel
 
     public function openSearchArray(): array
     {
+        // Just crash if this returns non-array
+//        $decoded = json_decode($this->post_body, true);
+//        'start'             => Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['start'])->getTimestampMs(),
+//        'end'               => Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['end'])->getTimestampMs(),
+
         return [
             '@timestamp'        => $this->timestamp,
             'id'                => $this->id,
             'run_id'            => $this->run_id,
             'challenge_mode_id' => $this->challenge_mode_id,
             'level'             => $this->level,
-            'affix_id'          => $this->affix_id,
+            'affix_id'          => json_decode($this->affix_ids, true),
             'success'           => $this->success,
             'start'             => $this->start,
             'end'               => $this->end,
             'duration_ms'       => $this->duration_ms,
+            'ui_map_id'         => $this->ui_map_id,
             'pos_x'             => $this->pos_x,
             'pos_y'             => $this->pos_y,
             'event_type'        => $this->event_type,
-            'characters'        => $this->characters,
-            'context'           => $this->context,
+            'characters'        => json_decode($this->characters, true),
+            'context'           => json_decode($this->context, true),
         ];
     }
 }

@@ -24,6 +24,8 @@ use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
@@ -130,6 +132,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
+        $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);

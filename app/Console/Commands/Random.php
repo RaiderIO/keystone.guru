@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Opensearch\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEvent;
 use Illuminate\Console\Command;
 
 class Random extends Command
