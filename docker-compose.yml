@@ -165,7 +165,7 @@ services:
     volumes:
       - opensearch-data1:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
     ports:
-      - 9200:9200 # REST API
+      - 9201:9201 # REST API
       - 9600:9600 # Performance Analyzer
     networks:
       - opensearch-net
@@ -201,11 +201,11 @@ services:
     image: keystone.guru-opensearch-dashboards
     container_name: keystone.guru-opensearch-dashboards
     ports:
-      - 5601:5601 # Map host port 5601 to container port 5601
+      - 5602:5601 # Map host port 5601 to container port 5601
     expose:
-      - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
+      - "5602" # Expose port 5601 for web access to OpenSearch Dashboards
     environment:
-      - 'OPENSEARCH_HOSTS: ["https://keystone.guru-opensearch-node1:9200","https://keystone.guru-opensearch-node2:9200"]'
+      - 'OPENSEARCH_HOSTS: ["https://keystone.guru-opensearch-node1:9201","https://keystone.guru-opensearch-node2:9201"]'
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
 #    volumes:
 #      - /docker-compose/opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
