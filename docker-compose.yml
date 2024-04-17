@@ -72,6 +72,7 @@ services:
       - '--default-authentication-plugin=mysql_native_password'
     volumes:
       - ./docker-compose/mysql:/var/lib/mysql
+      - ./docker-compose/data:/tmp/data
     networks:
       - keystone.guru
 
@@ -92,6 +93,7 @@ services:
       - '--default-authentication-plugin=mysql_native_password'
     volumes:
       - ./docker-compose/mysql-combatlog:/var/lib/mysql
+      - ./docker-compose/data:/tmp/data
     networks:
       - keystone.guru
 
@@ -168,7 +170,7 @@ services:
       - 9201:9201 # REST API
       - 9600:9600 # Performance Analyzer
     networks:
-      - opensearch-net
+      - keystone.guru
 
   opensearch-node2:
     image: opensearchproject/opensearch:latest
@@ -192,7 +194,7 @@ services:
     volumes:
       - opensearch-data2:/usr/share/opensearch/data
     networks:
-      - opensearch-net
+      - keystone.guru
 
   opensearch-dashboards:
     build:
@@ -210,7 +212,7 @@ services:
 #    volumes:
 #      - /docker-compose/opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
     networks:
-      - opensearch-net
+      - keystone.guru
 
 volumes:
   opensearch-data1:
@@ -223,4 +225,3 @@ secrets:
 networks:
   keystone.guru:
     driver: bridge
-  opensearch-net:

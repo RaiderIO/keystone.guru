@@ -3,11 +3,11 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Opensearch\OpensearchModel;
+use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * @property string $timestamp
  * @property string $id
  * @property string $run_id
  * @property int    $challenge_mode_id
@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $event_type
  * @property string $characters
  * @property string $context
+ *
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class CombatLogEvent extends OpensearchModel
 {
@@ -124,15 +127,15 @@ class CombatLogEvent extends OpensearchModel
 //        'end'               => Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['end'])->getTimestampMs(),
 
         return [
-            '@timestamp'        => $this->timestamp,
+            '@timestamp'        => $this->created_at->getTimestamp(),
             'id'                => $this->id,
             'run_id'            => $this->run_id,
             'challenge_mode_id' => $this->challenge_mode_id,
             'level'             => $this->level,
             'affix_id'          => json_decode($this->affix_ids, true),
-            'success'           => $this->success,
-            'start'             => $this->start,
-            'end'               => $this->end,
+            'success'           => $this->success ? 'true' : 'false',
+            'start'             => Carbon::parse($this->start)->getTimestamp(),
+            'end'               => Carbon::parse($this->end)->getTimestamp(),
             'duration_ms'       => $this->duration_ms,
             'ui_map_id'         => $this->ui_map_id,
             'pos_x'             => $this->pos_x,
@@ -141,5 +144,10 @@ class CombatLogEvent extends OpensearchModel
             'characters'        => json_decode($this->characters, true),
             'context'           => json_decode($this->context, true),
         ];
+    }
+
+    public function openSearchIndexName(): string
+    {
+        return 'combat_log_events';
     }
 }

@@ -57,9 +57,6 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
 
             $decoded = json_decode($challengeModeRunData->post_body, true);
 
-            $start = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['start'])->getTimestampMs();
-            $end   = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['end'])->getTimestampMs();
-
             $dungeon = $this->getDungeonFromMapId($decoded['challengeMode']['mapId']);
 
             if ($dungeon === null) {
@@ -67,6 +64,13 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
 
                 return false;
             }
+
+            $start = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['start']);
+            $end   = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['end']);
+            $now   = Carbon::now();
+
+            // Have to load this separately - cannot do that in ::all() call
+            $dungeon->load(['currentMappingVersion']);
 
             $defaultAttributes = [
                 'run_id'            => $decoded['metadata']['runId'],
@@ -79,7 +83,8 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
                 'duration_ms'       => $decoded['challengeMode']['durationMs'],
                 'characters'        => json_encode([]),
                 'context'           => json_encode([]),
-                'created_at'        => $start,
+                'created_at'        => $now,
+                'updated_at'        => $now,
             ];
 
             $this->log->convertChallengeModeRunDefaultAttributes($defaultAttributes);
@@ -89,7 +94,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
                     'event_type' => CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
                     'pos_x'      => $killedNpc['coord']['x'],
                     'pos_y'      => $killedNpc['coord']['y'],
-                    'ui_map_id'  => $killedNpc['coord']['ui_map_id'],
+                    'ui_map_id'  => $killedNpc['coord']['uiMapId'],
                 ]));
             }
 

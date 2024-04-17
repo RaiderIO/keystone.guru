@@ -34,15 +34,9 @@ class Random extends Command
      */
     public function handle(): int
     {
-
-        $combatLogEvent = new CombatLogEvent();
-        $combatLogEvent->setAttributes(
-            \CombatLogEventFactory::new()->definition()
-        );
-
         CombatLogEvent::opensearch()
             ->documents()
-            ->create([$combatLogEvent->id]);
+            ->createAll();
 
 //        $structuredLoggingService->all();
 

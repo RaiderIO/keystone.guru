@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\AdProvider\SyncAdsTxt;
 use App\Console\Commands\Cache\RedisClearIdleKeys;
+use App\Console\Commands\ChallengeModeRunData\ConvertToEvents;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\CreateMappingVersion;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
@@ -77,6 +78,9 @@ class Kernel extends ConsoleKernel
 
         // Cache
         RedisClearIdleKeys::class,
+
+        // Challenge Mode Run Data
+        ConvertToEvents::class,
 
         // CombatLog
         CreateDungeonRoutes::class,
