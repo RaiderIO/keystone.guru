@@ -5,11 +5,11 @@ namespace App\Service\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
+use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Must;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
-use Illuminate\Support\Collection;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
@@ -19,16 +19,16 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     }
 
     /**
-     * @return Collection<CombatLogEvent>
+     * @return CombatLogEventSearchResult
      */
-    public function getCombatLogEvents(CombatLogEventFilter $filters): Collection
+    public function getCombatLogEvents(CombatLogEventFilter $filters): CombatLogEventSearchResult
     {
-        $result = collect();
+        $combatLogEvents = collect();
 
         try {
             $this->log->getCombatLogEventsStart($filters->toArray());
 
-            $result = CombatLogEvent::opensearch()
+            $combatLogEvents = CombatLogEvent::opensearch()
                 ->builder()
                 ->search([
                     Query::make([
@@ -41,13 +41,13 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 ])
                 ->get();
 
-            $result = CombatLogEvent::openSearchResultToModels($result);
+            $combatLogEvents = CombatLogEvent::openSearchResultToModels($combatLogEvents);
         } catch (\Exception $e) {
             $this->log->getCombatLogEventsException($e);
         } finally {
             $this->log->getCombatLogEventsEnd();
         }
 
-        return $result;
+        return new CombatLogEventSearchResult($combatLogEvents, 10);
     }
 }

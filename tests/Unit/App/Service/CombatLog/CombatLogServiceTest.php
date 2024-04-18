@@ -2,13 +2,7 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\LoggingFixtures;
-use Tests\Unit\Fixtures\ServiceFixtures;
 
 final class CombatLogServiceTest extends PublicTestCase
 {

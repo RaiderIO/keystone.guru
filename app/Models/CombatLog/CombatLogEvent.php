@@ -6,7 +6,6 @@ use App\Models\Opensearch\OpensearchModel;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Collection;
 
 /**
  * @property string $id
@@ -43,6 +42,24 @@ class CombatLogEvent extends OpensearchModel
     ];
 
     protected $connection = 'combatlog';
+
+    protected $fillable = [
+        'id',
+        'run_id',
+        'challenge_mode_id',
+        'level',
+        'affix_ids',
+        'success',
+        'start',
+        'end',
+        'duration_ms',
+        'ui_map_id',
+        'pos_x',
+        'pos_y',
+        'event_type',
+        'characters',
+        'context',
+    ];
 
     public function openSearchMapping(): array
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Fixtures\Traits;
+namespace Tests\Fixtures\Traits;
 
 use App\Logic\SimulationCraft\RaidEventPullEnemy;
 use App\Models\Enemy;

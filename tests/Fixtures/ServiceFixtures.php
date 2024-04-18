@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Fixtures;
+namespace Tests\Fixtures;
 
 use App\Models\Season;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
@@ -12,6 +12,8 @@ use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventService;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -135,6 +137,23 @@ class ServiceFixtures
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $log ?? LoggingFixtures::createSpellServiceLogging($testCase),
+            ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getCombatLogEventServiceMock(
+        PublicTestCase                        $testCase,
+        array                                 $methodsToMock = [],
+        CombatLogEventServiceLoggingInterface $log = null
+    ): MockObject|CombatLogEventService {
+        return $testCase
+            ->getMockBuilder(CombatLogEventService::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+                $log ?? LoggingFixtures::createCombatLogEventServiceLogging($testCase),
             ])
             ->getMock();
     }

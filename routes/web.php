@@ -19,6 +19,7 @@ use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
 use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
+use App\Http\Controllers\Ajax\AjaxHeatmapController;
 use App\Http\Controllers\Ajax\AjaxKillZoneController;
 use App\Http\Controllers\Ajax\AjaxLiveSessionController;
 use App\Http\Controllers\Ajax\AjaxMapIconController;
@@ -360,11 +361,16 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
         Route::post('/profile/legal', (new AjaxProfileController())->legalAgree(...));
 
+        Route::prefix('heatmap')->group(static function () {
+            Route::post('/data', (new AjaxHeatmapController())->getData(...))->name('ajax.heatmap.data');
+        });
+
         // Metrics
         Route::prefix('metric')->group(static function () {
             Route::post('/', (new AjaxMetricController())->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', (new AjaxMetricController())->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });
+
         // Must be an admin to perform these actions
         Route::middleware(['auth', 'role:admin'])->group(static function () {
             Route::prefix('admin')->group(static function () {
@@ -414,6 +420,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('dungeonRoute')->group(static function () {
             Route::post('/data', (new AjaxDungeonRouteController())->getDungeonRoutesData(...));
         });
+
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {
             Route::post('/brushline', (new AjaxBrushlineController())->store(...))->name('ajax.dungeonroute.brushline.create');
@@ -445,6 +452,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
             Route::post('/simulate', (new AjaxDungeonRouteController())->simulate(...))->name('api.dungeonroute.simulate');
         });
+
         // Must be logged in to perform these actions
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::prefix('{dungeonRoute}')->group(static function () {

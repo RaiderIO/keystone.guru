@@ -9,8 +9,8 @@ use App\Service\Coordinates\CoordinatesService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\ServiceFixtures;
 
 final class CoordinatesServiceTest extends PublicTestCase
 {

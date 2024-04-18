@@ -3,9 +3,9 @@
 namespace App\Service\CombatLogEvent;
 
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
-use Illuminate\Support\Collection;
+use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 
 interface CombatLogEventServiceInterface
 {
-    public function getCombatLogEvents(CombatLogEventFilter $filters): Collection;
+    public function getCombatLogEvents(CombatLogEventFilter $filters): CombatLogEventSearchResult;
 }

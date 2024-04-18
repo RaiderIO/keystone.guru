@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\Unit\Fixtures;
+namespace Tests\Fixtures;
 
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Log\LogManager;
 use PHPUnit\Framework\MockObject\Exception;
@@ -59,5 +60,14 @@ class LoggingFixtures
         PublicTestCase $testCase
     ): MockObject|SpellServiceLoggingInterface {
         return $testCase->createMock(SpellServiceLoggingInterface::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createCombatLogEventServiceLogging(
+        PublicTestCase $testCase
+    ): MockObject|CombatLogEventServiceLoggingInterface {
+        return $testCase->createMock(CombatLogEventServiceLoggingInterface::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Fixtures\Traits;
+namespace Tests\Fixtures\Traits;
 
 use App\Models\Enemy;
 use Tests\TestCase;
