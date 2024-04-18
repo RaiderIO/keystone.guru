@@ -6,6 +6,7 @@ use App\Models\Opensearch\OpensearchModel;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Collection;
 
 /**
  * @property string $id
@@ -121,11 +122,6 @@ class CombatLogEvent extends OpensearchModel
 
     public function openSearchArray(): array
     {
-        // Just crash if this returns non-array
-//        $decoded = json_decode($this->post_body, true);
-//        'start'             => Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['start'])->getTimestampMs(),
-//        'end'               => Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $decoded['challengeMode']['end'])->getTimestampMs(),
-
         return [
             '@timestamp'        => $this->created_at->getTimestamp(),
             'id'                => $this->id,
@@ -144,6 +140,29 @@ class CombatLogEvent extends OpensearchModel
             'characters'        => json_decode($this->characters, true),
             'context'           => json_decode($this->context, true),
         ];
+    }
+
+    public function openSearchArrayToModel(array $row): self
+    {
+        $this->setRawAttributes([
+            'id'                => $row['id'],
+            'run_id'            => $row['run_id'],
+            'challenge_mode_id' => $row['challenge_mode_id'],
+            'level'             => $row['level'],
+            'affix_ids'         => json_encode($row['affix_id'], true),
+            'success'           => $row['id'],
+            'start'             => Carbon::createFromTimestamp($row['start']),
+            'end'               => Carbon::createFromTimestamp($row['end']),
+            'duration_ms'       => $row['duration_ms'],
+            'ui_map_id'         => $row['ui_map_id'],
+            'pos_x'             => $row['pos_x'],
+            'pos_y'             => $row['pos_y'],
+            'event_type'        => $row['event_type'],
+            'characters'        => json_encode($row['characters'], true),
+            'context'           => json_encode($row['context'], true),
+        ]);
+
+        return $this;
     }
 
     public function openSearchIndexName(): string

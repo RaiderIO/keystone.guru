@@ -34,6 +34,8 @@ use App\Service\CombatLog\Logging\MappingVersionCombatFilterLogging;
 use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLogging;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
 use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
@@ -83,6 +85,9 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(MappingVersionCombatFilterLoggingInterface::class, MappingVersionCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);
         $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);
+
+        // Combat log event
+        $this->app->bind(CombatLogEventServiceLoggingInterface::class, CombatLogEventServiceLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingExportServiceLoggingInterface::class, MDTMappingExportServiceLogging::class);

@@ -3,6 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\Dungeon;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -32,11 +35,17 @@ class Random extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
-        CombatLogEvent::opensearch()
-            ->documents()
-            ->createAll();
+    public function handle(
+        CombatLogEventServiceInterface $combatLogEventService
+    ): int {
+
+        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
+            new CombatLogEventFilter(
+                Dungeon::find(69)
+            )
+        );
+
+        dd($combatLogEvents->count());
 
 //        $structuredLoggingService->all();
 

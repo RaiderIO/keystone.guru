@@ -38,6 +38,8 @@ use App\Service\CombatLog\CreateRouteDungeonRouteService;
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventService;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Discord\DiscordApiService;
@@ -133,6 +135,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
+        $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
