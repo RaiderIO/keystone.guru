@@ -128,6 +128,7 @@ let scripts = [
     // Map plugins
     'resources/assets/js/custom/mapplugins/mapplugin.js',
     'resources/assets/js/custom/mapplugins/patherplugin.js',
+    'resources/assets/js/custom/mapplugins/heatplugin.js',
 
     // Map object groups
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroup.js',

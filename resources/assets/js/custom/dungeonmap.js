@@ -157,7 +157,8 @@ class DungeonMap extends Signalable {
 
         /** @var Array Any map enhancement through 3rd-party javascript */
         this.mapPlugins = [
-            this.patherPlugin = new PatherPlugin(this),
+            this.pluginPather = new PatherPlugin(this),
+            this.pluginHeat = new HeatPlugin(this)
         ];
         /** @type MapState */
         this.mapState = null;
@@ -181,11 +182,11 @@ class DungeonMap extends Signalable {
         // this.leafletMap.zoomControl.setPosition('topright');
 
         // Special handling for brush drawing
-        this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
+        this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function () {
             // Disable pather if we were doing it
-            self.patherPlugin.togglePather(false);
+            self.pluginPather.togglePather(false);
         });
-        this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
+        this.leafletMap.on(L.Draw.Event.DRAWSTOP, function () {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
         });
@@ -236,27 +237,27 @@ class DungeonMap extends Signalable {
             refreshTooltips();
         });
 
-        this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+        this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function () {
             self.toolbarActive = true;
             // If we were doing anything, we're no longer doing it
             // self.setMapState(null);
         });
-        this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+        this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function () {
             self.toolbarActive = false;
         });
-        this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
+        this.leafletMap.on(L.Draw.Event.DELETESTART, function () {
             self.setMapState(new DeleteMapState(self));
         });
-        this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
+        this.leafletMap.on(L.Draw.Event.DELETESTOP, function () {
             if (self.getMapState() instanceof DeleteMapState) {
                 self.setMapState(null);
             }
         });
 
-        this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
+        this.leafletMap.on(L.Draw.Event.EDITSTART, function () {
             self.setMapState(new EditMapState(self));
         });
-        this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+        this.leafletMap.on(L.Draw.Event.EDITSTOP, function () {
             if (self.getMapState() instanceof EditMapState) {
                 self.setMapState(null);
             }
@@ -638,8 +639,6 @@ class DungeonMap extends Signalable {
     refreshLeafletMap(clearMapState = true, center = null, zoom = null) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        let self = this;
-
         this._refreshingMap = true;
 
         this.signal('map:beforerefresh', {dungeonmap: this});
@@ -770,13 +769,13 @@ class DungeonMap extends Signalable {
     togglePather(enabled) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        this.patherPlugin.toggle(enabled);
+        this.pluginPather.toggle(enabled);
     }
 
     refreshPather() {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        this.patherPlugin.refresh();
+        this.pluginPather.refresh();
     }
 
     /**
