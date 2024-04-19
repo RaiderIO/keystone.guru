@@ -37,6 +37,7 @@ use App\Models\Floor\Floor;
                 'controls' => [
                     'view' => true,
                     'pulls' => false,
+                    'heatmapSearch' => true,
                     'enemyInfo' => true,
                 ],
             ],

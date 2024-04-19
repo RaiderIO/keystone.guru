@@ -1,4 +1,5 @@
 <?php
+
 use App\Logic\MapContext\MapContext;
 use App\Logic\MapContext\MapContextDungeonExplore;
 use App\Logic\MapContext\MapContextDungeonRoute;
@@ -38,14 +39,15 @@ $livesession        ??= null;
 $mapBackgroundColor ??= null;
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                ??= [];
-$show['controls']['enemyInfo']   ??= true;
-$show['controls']['pulls']       ??= true;
-$show['controls']['enemyForces'] = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']        ??= false;
-$show['controls']['view']        ??= false;
-$show['controls']['present']     ??= false;
-$show['controls']['live']        ??= false;
+$show['controls']                  ??= [];
+$show['controls']['enemyInfo']     ??= true;
+$show['controls']['pulls']         ??= true;
+$show['controls']['heatmapSearch'] ??= false;
+$show['controls']['enemyForces']   = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']          ??= false;
+$show['controls']['view']          ??= false;
+$show['controls']['present']       ??= false;
+$show['controls']['live']          ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -212,6 +214,14 @@ if ($isAdmin) {
             'embed' => $embed,
             'embedStyle' => $embedStyle,
             'dungeonroute' => $dungeonroute,
+        ])
+    @endif
+
+    @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
+        @include('common.maps.controls.heatmapsearch', [
+            'showAds' => $showAds && !$adFree,
+            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
         ])
     @endif
 
