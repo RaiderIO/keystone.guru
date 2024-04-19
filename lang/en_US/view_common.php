@@ -301,6 +301,10 @@ return [
                 'enemy_info'      => 'Enemy info',
                 'report_an_issue' => 'Report an issue',
             ],
+            'heatmapsearch'  => [
+                'settings_title' => 'Map settings',
+                'filter'         => 'Filter',
+            ],
             'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',

@@ -42,6 +42,22 @@ $showAds                        ??= true;
             <i class="fas {{ $shouldShowHeatmapSearchSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
+        <div class="p-1">
+            <div class="row pr-2 mb-2 no-gutters">
+                <div class="col-auto" data-toggle="tooltip"
+                     title="{{ __('view_common.maps.controls.heatmapsearch.settings_title') }}">
+                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                        <i class='fas fa-cog'></i>
+                    </button>
+                </div>
+                <div class="col pl-2 pr-2">
+                    <div id="heatmap_search_filter_btn" class="btn btn-success w-100">
+                        <i class="fas fa-filter"></i> {{__('view_common.maps.controls.heatmapsearch.filter')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="heatmap_search_container" data-simplebar>
             <div id="heatmap_search_options_container">
                 <h5>{{ __('view_common.maps.controls.pulls.loading') }}</h5>
