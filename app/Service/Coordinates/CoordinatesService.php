@@ -59,6 +59,12 @@ class CoordinatesService implements CoordinatesServiceInterface
         $ingameMapSizeX = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;
         $ingameMapSizeY = $targetFloor->ingame_max_y - $targetFloor->ingame_min_y;
 
+        if ((int)$ingameMapSizeX === 0 || (int)$ingameMapSizeY === 0) {
+            throw new InvalidArgumentException(
+                sprintf('Floor %s (%d) does not have ingame coordinates set!', __($targetFloor->name, [], 'en_US'), $targetFloor->id)
+            );
+        }
+
         $factorX = (($targetFloor->ingame_min_x - $ingameXY->getX()) / $ingameMapSizeX);
         $factorY = (($targetFloor->ingame_min_y - $ingameXY->getY()) / $ingameMapSizeY);
 

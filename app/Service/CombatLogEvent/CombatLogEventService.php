@@ -14,7 +14,7 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
-        private CombatLogEventServiceLoggingInterface $log
+        private readonly CombatLogEventServiceLoggingInterface $log
     ) {
     }
 
@@ -48,6 +48,6 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $this->log->getCombatLogEventsEnd();
         }
 
-        return new CombatLogEventSearchResult($combatLogEvents, 10);
+        return new CombatLogEventSearchResult($filters, $combatLogEvents, 10);
     }
 }

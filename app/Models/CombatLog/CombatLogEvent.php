@@ -2,10 +2,15 @@
 
 namespace App\Models\CombatLog;
 
+use App\Logic\Structs\IngameXY;
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
 use App\Models\Opensearch\OpensearchModel;
+use App\Models\Traits\HasLatLng;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $id
@@ -60,6 +65,18 @@ class CombatLogEvent extends OpensearchModel
         'characters',
         'context',
     ];
+
+
+    public function dungeon(): BelongsTo
+    {
+        return $this->belongsTo(Dungeon::class, 'challenge_mode_id', 'challenge_mode_id');
+    }
+
+    public function floor(): BelongsTo
+    {
+        return $this->belongsTo(Floor::class, 'ui_map_id', 'ui_map_id');
+    }
+
 
     public function openSearchMapping(): array
     {
@@ -185,5 +202,12 @@ class CombatLogEvent extends OpensearchModel
     public function openSearchIndexName(): string
     {
         return 'combat_log_events';
+    }
+
+    public function getIngameXY(): IngameXY
+    {
+        // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
+        // later
+        return new IngameXY($this->pos_x, $this->pos_y);
     }
 }

@@ -8,11 +8,11 @@ use RectorPrefix202402\Illuminate\Contracts\Support\Arrayable;
 class CombatLogEventFilter implements Arrayable
 {
     public function __construct(
-        private readonly ?Dungeon $dungeon = null
+        private readonly Dungeon $dungeon
     ) {
     }
 
-    public function getDungeon(): ?Dungeon
+    public function getDungeon(): Dungeon
     {
         return $this->dungeon;
     }

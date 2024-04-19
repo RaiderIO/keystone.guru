@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\GetDataFormRequest;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Teapot\StatusCode;
 
@@ -13,12 +14,13 @@ class AjaxHeatmapController extends Controller
 {
     public function getData(
         GetDataFormRequest             $request,
-        CombatLogEventServiceInterface $combatLogEventService
+        CombatLogEventServiceInterface $combatLogEventService,
+        CoordinatesServiceInterface    $coordinatesService
     ): JsonResponse {
         return \response()->json(
             $combatLogEventService->getCombatLogEvents(
                 CombatLogEventFilter::fromArray($request->validated())
-            )->toArray(),
+            )->toArray($coordinatesService),
             StatusCode::OK
         );
     }

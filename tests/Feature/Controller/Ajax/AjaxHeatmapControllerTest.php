@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Dungeon;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -21,14 +22,19 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     public function getData_givenSimpleFilter_shouldReturnData(): void
     {
         // Arrange
-        $combatLogEventCount = 10;
-        $dungeonRouteCount   = 10;
+        $combatLogEventCount  = 10;
+        $dungeonRouteCount    = 10;
+        $dungeon = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+        $combatLogEventFilter = new CombatLogEventFilter(
+            $dungeon
+        );
 
         $combatLogEventService = ServiceFixtures::getCombatLogEventServiceMock($this, ['getCombatLogEvents']);
         $combatLogEventService->method('getCombatLogEvents')
             ->willReturn(
                 new CombatLogEventSearchResult(
-                    $this->createCombatLogEvents($combatLogEventCount),
+                    $combatLogEventFilter,
+                    $this->createCombatLogEvents($dungeon, $combatLogEventCount),
                     $dungeonRouteCount
                 )
             );
@@ -36,13 +42,16 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'dungeon_id' => Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION)->id,
+            'dungeon_id' => $combatLogEventFilter->getDungeon()->id,
         ]);
 
         // Assert
         $response->assertOk();
 
         $responseArr = json_decode($response->content(), true);
+
+        dump($responseArr);
+
         $this->assertCount($combatLogEventCount, $responseArr['data']);
         $this->assertEquals($dungeonRouteCount, $responseArr['dungeon_route_count']);
     }
