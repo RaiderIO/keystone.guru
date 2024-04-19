@@ -304,6 +304,8 @@ return [
             'heatmapsearch'  => [
                 'settings_title' => 'Map settings',
                 'filter'         => 'Filter',
+                'key_level'      => 'Key level',
+                'affixes'        => 'Affixes',
             ],
             'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',

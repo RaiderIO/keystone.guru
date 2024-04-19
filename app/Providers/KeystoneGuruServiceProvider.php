@@ -441,8 +441,22 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Maps
+        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
+        });
         view()->composer('common.maps.controls.pulls', static function (View $view) {
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+        });
+        view()->composer('dungeonroute.discover.search', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('currentExpansion', $regionViewVariables['currentExpansion']);
+            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
         });
 
         view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use ($globalViewVariables) {

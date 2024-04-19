@@ -1,6 +1,27 @@
+<?php
+
+use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
+use App\Service\Season\SeasonService;
+use Illuminate\Support\Collection;
+
+/**
+ * @var GameVersion            $currentUserGameVersion
+ * @var Expansion              $currentExpansion
+ * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
+ * @var Collection<Affix>      $featuredAffixesByActiveExpansion
+ * @var SeasonService          $seasonService
+ * @var Season                 $currentSeason
+ * @var Season|null            $nextSeason
+ */
+
+?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover',
-    'title' => __('view_dungeonroute.discover.search.page_title')
+    'title' => __('view_dungeonroute.discover.search.page_title'),
 ])
 
 @inject('seasonService', 'App\Service\Season\SeasonService')
@@ -8,15 +29,7 @@
 @section('header-title')
     {{ __('view_dungeonroute.discover.search.header') }}
 @endsection
-<?php
-/** @var $currentUserGameVersion \App\Models\GameVersion\GameVersion */
-/** @var $currentExpansion \App\Models\Expansion */
-/** @var $allAffixGroupsByActiveExpansion \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
-/** @var $featuredAffixesByActiveExpansion \Illuminate\Support\Collection|\App\Models\Affix[] */
-/** @var $seasonService \App\Service\Season\SeasonService */
-/** @var $currentSeason \App\Models\Season */
-/** @var $nextSeason \App\Models\Season|null */
-?>
+
 @include('common.general.inline', ['path' => 'dungeonroute/discover/search', 'options' =>  [
         'gameVersion' => $currentUserGameVersion,
         'levelMin' => config('keystoneguru.keystone.levels.min'),
@@ -25,7 +38,7 @@
         'currentSeason' => $currentSeason->id,
         'nextSeason' => $nextSeason?->id,
         'currentExpansion' => $currentExpansion->shortname,
-    ]
+    ],
 ])
 
 @section('scripts')
@@ -42,6 +55,7 @@
 @section('content')
     @include('common.dungeon.gridtabs', ['id' => 'search_dungeon', 'tabsId' => 'search_dungeon_select_tabs'])
 
+    <!--suppress HtmlFormInputWithoutLabel -->
     <div class="row mb-2">
         <div class="col-xl-3">
 
@@ -52,13 +66,13 @@
     </div>
     <div class="row">
         <div class="col-xl-3">
-            @component('common.dungeonroute.search.filter', ['key' => 'title', 'text' => __('view_dungeonroute.discover.search.title')])
+            @component('common.search.filter', ['key' => 'title', 'text' => __('view_dungeonroute.discover.search.title')])
                 {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('view_dungeonroute.discover.search.title_placeholder'), 'autocomplete' => 'off']) !!}
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'level', 'text' => __('view_dungeonroute.discover.search.key_level')])
+            @component('common.search.filter', ['key' => 'level', 'text' => __('view_dungeonroute.discover.search.key_level')])
                 <input id="level" type="text" name="level" value="{{ old('level') }}" style="display: none;"/>
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'affixes', 'text' => __('view_dungeonroute.discover.search.affixes')])
+            @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_dungeonroute.discover.search.affixes')])
                 @foreach($allAffixGroupsByActiveExpansion as $expansion => $affixgroups)
                     <div class="filter_affix {{ $expansion }}" style="display: none;">
                         <div class="row">
@@ -73,16 +87,16 @@
                             </div>
                         </div>
 
-                        <?php
-                        /** @noinspection PhpUndefinedVariableInspection */
-                        $featuredAffixes = $featuredAffixesByActiveExpansion->get($expansion);
+                            <?php
+                            /** @var Collection<Affix> $featuredAffixes */
+                            $featuredAffixes = $featuredAffixesByActiveExpansion->get($expansion);
 
-                        $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : 5);
-                        ?>
+                            $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : 5);
+                            ?>
                         @foreach($chunkedFeaturedAffixes as $affixRow)
                             <div class="row mt-2 pl-2 featured_affixes">
                                 @foreach($affixRow as $affix)
-                                    <?php /** @var $affix \App\Models\Affix */ ?>
+                                        <?php /** @var $affix Affix */ ?>
                                     <div class="col px-xl-1">
                                         <div
                                             class="select_icon class_icon affix_icon_{{ strtolower($affix->key) }} selectable"
@@ -97,7 +111,7 @@
                     </div>
                 @endforeach
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'enemy_forces', 'text' => __('view_dungeonroute.discover.search.enemy_forces')])
+            @component('common.search.filter', ['key' => 'enemy_forces', 'text' => __('view_dungeonroute.discover.search.enemy_forces')])
                 <input id="enemy_forces" type="checkbox"
                        checked="checked"
                        data-toggle="toggle" data-width="100%" data-height="20px"
@@ -105,10 +119,10 @@
                        data-on="{{ __('view_dungeonroute.discover.search.enemy_forces_complete') }}"
                        data-off="{{ __('view_dungeonroute.discover.search.enemy_forces_incomplete') }}">
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'rating', 'text' => __('view_dungeonroute.discover.search.rating')])
+            @component('common.search.filter', ['key' => 'rating', 'text' => __('view_dungeonroute.discover.search.rating')])
                 <input id="rating" type="text" name="level" value="{{ old('rating') }}" style="display: none;"/>
             @endcomponent
-            @component('common.dungeonroute.search.filter', ['key' => 'user', 'text' => __('view_dungeonroute.discover.search.user'), 'expanded' => false])
+            @component('common.search.filter', ['key' => 'user', 'text' => __('view_dungeonroute.discover.search.user'), 'expanded' => false])
                 {!! Form::text('user', request('user'), ['id' => 'user', 'class' => 'form-control', 'placeholder' => __('view_dungeonroute.discover.search.user_placeholder'), 'autocomplete' => 'off']) !!}
             @endcomponent
         </div>
