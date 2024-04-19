@@ -52,11 +52,6 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         }
 
-        // Restore selected expansion tab
-        if (this.filters.expansion.getValue() !== '') {
-            $(`#${this.filters.expansion.getValue()}-grid-tab`).tab('show');
-        }
-
         // Whenever the tab is changed, apply the new filter
         let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
@@ -81,13 +76,23 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             }
         });
 
-        if (this.options.gameVersion.has_seasons) {
-            this._selectSeason(this.options.nextSeason ?? this.options.currentSeason);
+        // If we have seasons and should select one
+        if (this.options.gameVersion.has_seasons && this.filters.expansion.getValue() === '') {
+            // If we didn't have an expansion from the URL, select the first tab instead
+            let selectedSeason = this.filters.season.getValue() ?? this.options.nextSeason ?? this.options.currentSeason;
+
+            $(`#season-${selectedSeason}-grid-tab`).tab('show');
+            this._selectSeason(selectedSeason);
             this._selectExpansion(null);
         } else {
-            // Select the first tab instead
+            // If we didn't have an expansion from the URL, select the first tab instead (we don't have seasons so 0 is correct)
+            let selectedExpansion = this.filters.expansion.getValue() !== '' ?
+                this.filters.expansion.getValue() :
+                $($tabs[0]).data('expansion');
+
+            $(`#${selectedExpansion}-grid-tab`).tab('show');
             this._selectSeason(null);
-            this._selectExpansion($($tabs[0]).data('expansion'));
+            this._selectExpansion(selectedExpansion);
         }
 
         this.initialized = true;
@@ -112,7 +117,6 @@ class DungeonrouteDiscoverSearch extends InlineCode {
 
             $(`.filter_affix`).hide().filter(`.${expansion}`).show();
         }
-        console.warn('expansion: ', expansion);
         this.filters.expansion.setValue(expansion);
     }
 
@@ -126,14 +130,14 @@ class DungeonrouteDiscoverSearch extends InlineCode {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#season-${season}-grid-content .grid_dungeon`).addClass('selectable');
         }
-        this.filters.season.setValue(season);
 
         // Update the affix group list
-        // @TODO #1252
-        this.filters.affixgroups.options.selector = `.filter_affix.shadowlands select`;
+        this.filters.affixgroups.options.selector = `.filter_affix.${this.options.currentExpansion} select`;
         this.filters.affixgroups.activate();
 
-        $(`.filter_affix`).hide().filter(`.shadowlands`).show();
+        $(`.filter_affix`).hide().filter(`.${this.options.currentExpansion}`).show();
+
+        this.filters.season.setValue(season);
     }
 
     /**
