@@ -4,10 +4,11 @@ class SearchParams {
      * @param filters {SearchFilter[]}
      * @param queryParameters {{}}
      */
-    constructor(filters, queryParameters) {
+    constructor(filters, queryParameters = {}) {
         this.filters = filters;
 
-        this.params = $.extend({}, queryParameters);
+        this.params = {};
+        this.addQueryParameters(queryParameters);
 
         for (let name in this.filters) {
             if (this.filters.hasOwnProperty(name)) {
@@ -24,6 +25,10 @@ class SearchParams {
                 }
             }
         }
+    }
+
+    addQueryParameters(queryParameters = {}) {
+        this.params = $.extend(this.params, queryParameters);
     }
 
     /**

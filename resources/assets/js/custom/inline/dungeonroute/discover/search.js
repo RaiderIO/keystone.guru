@@ -3,14 +3,16 @@ class DungeonrouteDiscoverSearch extends InlineCode {
     constructor(options) {
         super(options);
 
-        this.searchHandler = new SearchHandler();
+        this.searchHandler = new SearchHandlerDungeonRoute(
+            `#route_list`,
+            `#route_list_load_more`,
+            $.extend({}, {
+                limit: options.limit,
+                routeLoaderSelector: `#route_list_overlay`,
+            }, this.options));
+
         // Previous search params are used to prevent searching for the same thing multiple times for no reason
         this._previousSearchParams = null;
-        // The current offset
-        this.offset = 0;
-        this.limit = this.options.limit;
-        this.loading = false;
-        this.hasMore = true;
         this.initialized = false;
 
         this.filters = {
@@ -53,7 +55,7 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         }
 
         // Whenever the tab is changed, apply the new filter
-        let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
 
             if (typeof expansion !== 'undefined') {
@@ -63,16 +65,6 @@ class DungeonrouteDiscoverSearch extends InlineCode {
                 let season = $(e.target).data('season');
                 self._selectSeason(season);
                 self._selectExpansion(null);
-            }
-        });
-
-        this.$loadMore = $('#route_list_load_more');
-
-        $(window).on('resize scroll', function () {
-            let inViewport = self.$loadMore.isInViewport();
-
-            if (!self.loading && inViewport && self.hasMore) {
-                self._search(true);
             }
         });
 
@@ -187,44 +179,22 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         }
     }
 
-    _search(searchMore = false) {
+    _search() {
         if (!this.initialized) {
             return;
         }
-        let self = this;
 
-        // If we're not searching for more, we have to start over with searching and replace the entire contents
-        if (!searchMore) {
-            this.offset = 0;
-        }
-
-        let searchParams = new SearchParams(this.filters, {offset: this.offset, limit: this.limit});
+        let searchParams = new SearchParams(this.filters);
 
         this._updateFilters();
         this._updateUrl(searchParams);
 
         // Only search if the search parameters have changed
-        if (searchMore || this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
-            this.searchHandler.search($('#route_list'), searchParams, {
-                beforeSend: function () {
-                    self.loading = true;
-                    $('#route_list_overlay').show();
-                },
-                success: function (html, textStatus, xhr) {
-                    self.hasMore = xhr.status !== 204;
-                    if (self.hasMore) {
-                        // Increase the offset so that we load new rows whenever we fetch more
-                        self.offset += self.limit;
-                    }
-                },
-                complete: function () {
-                    self.loading = false;
-                    $('#route_list_overlay').hide();
-                }
-            });
-
-            this._previousSearchParams = searchParams;
+        if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
+            this.searchHandler.search(searchParams);
         }
+
+        this._previousSearchParams = searchParams;
     }
 
     cleanup() {

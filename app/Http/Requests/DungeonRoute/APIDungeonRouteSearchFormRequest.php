@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Expansion;
+use App\Models\Season;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -39,6 +40,7 @@ class APIDungeonRouteSearchFormRequest extends FormRequest
             'offset'    => 'integer|required',
             'limit'     => 'integer|required',
             'title'     => 'string',
+            'season'    => Rule::exists(Season::class, 'id'),
             'expansion' => [Rule::in(
                 Expansion::active()
                     ->get()
