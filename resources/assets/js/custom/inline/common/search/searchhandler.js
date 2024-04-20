@@ -1,6 +1,8 @@
 class SearchHandler {
-    constructor() {
+    constructor(options) {
+        this.options = options;
 
+        this.loading = false;
     }
 
     /**
@@ -13,6 +15,14 @@ class SearchHandler {
 
     /**
      *
+     * @protected
+     */
+    getAjaxOptions() {
+        return {};
+    }
+
+    /**
+     *
      * @param searchParams {SearchParams}
      * @param options {{}}
      */
@@ -20,12 +30,19 @@ class SearchHandler {
         console.assert(this instanceof SearchHandler, 'this was not a SearchHandler', this);
         console.assert(searchParams instanceof SearchParams, 'searchParams was not null or a SearchParams', searchParams);
 
-        $.ajax({
+        let self = this;
+
+        $.ajax($.extend({}, {
             type: 'GET',
             url: this.getSearchUrl(),
             dataType: 'html',
             data: searchParams.params,
             beforeSend: function () {
+                self.loading = true;
+                if (typeof self.options.loaderSelector !== 'undefined') {
+                    $(self.options.loaderSelector).show();
+                }
+
                 if (options.hasOwnProperty('beforeSend')) {
                     options.beforeSend();
                 }
@@ -36,10 +53,15 @@ class SearchHandler {
                 }
             },
             complete: function () {
+                self.loading = false;
+                if (typeof self.options.loaderSelector !== 'undefined') {
+                    $(self.options.loaderSelector).hide();
+                }
+
                 if (options.hasOwnProperty('complete')) {
                     options.complete();
                 }
             }
-        });
+        }, this.getAjaxOptions()));
     }
 }

@@ -347,6 +347,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::put('/{tag}/all', (new AjaxTagController())->updateAll(...))->name('ajax.tag.updateall');
             Route::delete('/{tag}/all', (new AjaxTagController())->deleteAll(...))->name('ajax.tag.deleteall');
         });
+        Route::prefix('heatmap')->group(static function () {
+            Route::post('/data', (new AjaxHeatmapController())->getData(...))->name('ajax.heatmap.data');
+        });
+
         Route::get('/{publickey}/data', (new AjaxDungeonRouteController())->data(...));
 
         Route::post('userreport/dungeonroute/{dungeonroute}', (new AjaxUserReportController())->dungeonrouteStore(...))->name('ajax.userreport.dungeonroute');
@@ -360,10 +364,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::post('/mdt/details', (new MDTImportController())->details(...))->name('mdt.details');
 
         Route::post('/profile/legal', (new AjaxProfileController())->legalAgree(...));
-
-        Route::prefix('heatmap')->group(static function () {
-            Route::post('/data', (new AjaxHeatmapController())->getData(...))->name('ajax.heatmap.data');
-        });
 
         // Metrics
         Route::prefix('metric')->group(static function () {

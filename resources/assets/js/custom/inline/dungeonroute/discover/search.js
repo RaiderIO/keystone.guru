@@ -1,19 +1,16 @@
-class DungeonrouteDiscoverSearch extends InlineCode {
+class DungeonrouteDiscoverSearch extends SearchInlineBase {
 
     constructor(options) {
         super(options);
 
         this.searchHandler = new SearchHandlerDungeonRoute(
-            `#route_list`,
-            `#route_list_load_more`,
+            this.options.targetContainerSelector,
+            this.options.loadMoreSelector,
             $.extend({}, {
                 limit: options.limit,
-                routeLoaderSelector: `#route_list_overlay`,
-            }, this.options));
-
-        // Previous search params are used to prevent searching for the same thing multiple times for no reason
-        this._previousSearchParams = null;
-        this.initialized = false;
+                loaderSelector: this.options.loaderSelector,
+            }, this.options)
+        );
 
         this.filters = {
             'season': new SearchFilterManualSeason(this._search.bind(this)),
@@ -35,24 +32,6 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         super.activate();
 
         let self = this;
-
-        for (let index in this.filters) {
-            if (this.filters.hasOwnProperty(index)) {
-                this.filters[index].activate();
-            }
-        }
-
-        // Set default values for the filters
-        let queryParams = getQueryParams();
-
-        // Find the query parameters
-        for (let key in queryParams) {
-            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(key)) {
-                let value = queryParams[key];
-
-                this.filters[key].setValue(value);
-            }
-        }
 
         // Whenever the tab is changed, apply the new filter
         let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
@@ -132,69 +111,12 @@ class DungeonrouteDiscoverSearch extends InlineCode {
         this.filters.season.setValue(season);
     }
 
-    /**
-     *
-     * @private
-     */
-    _updateFilters() {
-        let html = '';
-
-        for (let index in this.filters) {
-            if (this.filters.hasOwnProperty(index)) {
-                let filter = this.filters[index];
-                let value = filter.getValue();
-
-                if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
-                    html += filter.getFilterHeaderHtml();
-                }
-            }
-        }
-
-        $('#route_list_current_filters').html(
-            `<span class="mr-2">${lang.get('messages.filters')}:</span>${html}`
-        )
-    }
-
-    /**
-     * Updates the URL according to the passed searchParams (so users can press F5 and be where they left off, ish)
-     * @param searchParams
-     * @private
-     */
-    _updateUrl(searchParams) {
-        let urlParams = [];
-        let blacklist = ['offset', 'limit'];
-        for (let index in searchParams.params) {
-            if (searchParams.params.hasOwnProperty(index) && !blacklist.includes(index)) {
-                urlParams.push(`${index}=${encodeURIComponent(searchParams.params[index])}`);
-            }
-        }
-
-        let newUrl = `?${urlParams.join('&')}`;
-
-        // If it not just contains the question mark..
-        if (newUrl.length > 1) {
-            history.pushState({page: 1},
-                newUrl,
-                newUrl);
-        }
-    }
-
     _search() {
         if (!this.initialized) {
             return;
         }
 
-        let searchParams = new SearchParams(this.filters);
-
-        this._updateFilters();
-        this._updateUrl(searchParams);
-
-        // Only search if the search parameters have changed
-        if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
-            this.searchHandler.search(searchParams);
-        }
-
-        this._previousSearchParams = searchParams;
+        return super._search();
     }
 
     cleanup() {

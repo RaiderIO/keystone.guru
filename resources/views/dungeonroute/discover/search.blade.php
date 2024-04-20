@@ -31,6 +31,10 @@ use Illuminate\Support\Collection;
 @endsection
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/search', 'options' =>  [
+        'targetContainerSelector' => '#route_list',
+        'loadMoreSelector' => '#route_list_load_more',
+        'currentFiltersSelector' => '#route_list_current_filters',
+        'loaderSelector' => '#route_list_overlay',
         'gameVersion' => $currentUserGameVersion,
         'levelMin' => config('keystoneguru.keystone.levels.min'),
         'levelMax' => config('keystoneguru.keystone.levels.max'),

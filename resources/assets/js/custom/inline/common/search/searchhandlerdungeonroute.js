@@ -1,6 +1,6 @@
 class SearchHandlerDungeonRoute extends SearchHandler {
     constructor(targetContainerSelector, loadMoreSelector, options) {
-        super();
+        super(options);
 
         let self = this;
 
@@ -9,7 +9,6 @@ class SearchHandlerDungeonRoute extends SearchHandler {
 
         this.offset = 0;
         this.limit = typeof options.limit !== 'undefined' ? options.limit : 10;
-        this.options = options;
         this.hasMore = true;
         this.loading = false;
         /** {SearchParams} */
@@ -43,12 +42,6 @@ class SearchHandlerDungeonRoute extends SearchHandler {
         let self = this;
 
         let extendedOptions = $.extend({}, options, {
-            beforeSend: function () {
-                self.loading = true;
-                if (typeof self.options.routeLoaderSelector !== 'undefined') {
-                    $(self.options.routeLoaderSelector).show();
-                }
-            },
             success: function (html, textStatus, xhr) {
                 self.applySearchResultToContainer(searchParams, html);
 
@@ -59,12 +52,6 @@ class SearchHandlerDungeonRoute extends SearchHandler {
                     self.offset += self.limit;
                 }
             },
-            complete: function () {
-                self.loading = false;
-                if (typeof self.options.routeLoaderSelector !== 'undefined') {
-                    $(self.options.routeLoaderSelector).hide();
-                }
-            }
         });
 
         // New searches cause the "search more" offset to reset to 0
