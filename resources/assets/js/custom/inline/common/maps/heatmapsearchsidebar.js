@@ -2,17 +2,13 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
 
     constructor(options) {
-        super(options);
+        super(new SearchHandlerHeatmap($.extend({}, {
+            // loaderSelector: `#route_list_overlay`,
+        }, options)), options);
 
         this.sidebar = new Sidebar(options);
 
         this._draggable = null;
-
-        this.searchHandler = new SearchHandlerHeatmap(
-            $.extend({}, {
-                // loaderSelector: `#route_list_overlay`,
-            }, this.options)
-        );
 
         // Previous search params are used to prevent searching for the same thing multiple times for no reason
         this._previousSearchParams = null;
@@ -43,13 +39,20 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             this.sidebar.showSidebar();
         }
 
-        this._search();
+        console.log('Activating!');
+        this._search( {
+            success: function (json) {
+                getState().getDungeonMap().pluginHeat.setRawLatLngs(json.data);
+            }
+        }, {
+            dungeon_id: getState().getMapContext().getDungeon().id
+        });
     }
 
-    _search() {
-
-        super._search();
-    }
+    // _search(queryParameters) {
+    //
+    //     super._search();
+    // }
 
     /**
      *

@@ -14,30 +14,4 @@ class SearchHandlerHeatmap extends SearchHandler {
             dataType: 'json'
         };
     }
-
-    /**
-     * @param searchParams {SearchParams}
-     * @param options {{}}
-     */
-    search(searchParams, options = {}) {
-        console.assert(this instanceof SearchHandlerHeatmap, 'this is not a SearchHandlerHeatmap', this);
-
-        let self = this;
-
-        let extendedOptions = $.extend({}, options, {
-            success: function (json) {
-                self.applySearchResultToMap(searchParams, json);
-            },
-        });
-
-        super.search(searchParams, extendedOptions);
-
-        this.previousSearchParams = searchParams;
-    }
-
-    applySearchResultToMap(searchParams, json) {
-        console.assert(this instanceof SearchHandlerHeatmap, 'this is not a SearchHandlerHeatmap', this);
-
-
-    }
 }

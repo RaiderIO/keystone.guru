@@ -1,8 +1,10 @@
 class SearchInlineBase extends InlineCode {
 
-    constructor(options) {
+    constructor(searchHandler, options) {
         super(options);
 
+        /** @type {SearchHandler} */
+        this.searchHandler = searchHandler;
         // Previous search params are used to prevent searching for the same thing multiple times for no reason
         this._previousSearchParams = null;
         this.filters = {};
@@ -64,7 +66,7 @@ class SearchInlineBase extends InlineCode {
     /**
      * Updates the URL according to the passed searchParams (so users can press F5 and be where they left off, ish)
      *
-     * @param searchParams
+     * @param searchParams {SearchParams}
      * @protected
      */
     _updateUrl(searchParams) {
@@ -87,18 +89,19 @@ class SearchInlineBase extends InlineCode {
     }
 
     /**
-     *
+     * @param options {Object}
+     * @param queryParameters {Object}
      * @protected
      */
-    _search() {
-        let searchParams = new SearchParams(this.filters);
+    _search(options = {}, queryParameters = {}) {
+        let searchParams = new SearchParams(this.filters, queryParameters);
 
         this._updateFilters();
         this._updateUrl(searchParams);
 
         // Only search if the search parameters have changed
         if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {
-            this.searchHandler.search(searchParams);
+            this.searchHandler.search(searchParams, options);
         }
 
         this._previousSearchParams = searchParams;

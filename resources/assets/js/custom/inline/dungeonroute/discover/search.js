@@ -1,16 +1,14 @@
 class DungeonrouteDiscoverSearch extends SearchInlineBase {
 
     constructor(options) {
-        super(options);
-
-        this.searchHandler = new SearchHandlerDungeonRoute(
-            this.options.targetContainerSelector,
-            this.options.loadMoreSelector,
+        super(new SearchHandlerDungeonRoute(
+            options.targetContainerSelector,
+            options.loadMoreSelector,
             $.extend({}, {
                 limit: options.limit,
-                loaderSelector: this.options.loaderSelector,
-            }, this.options)
-        );
+                loaderSelector: options.loaderSelector,
+            }, options)
+        ), options);
 
         this.filters = {
             'season': new SearchFilterManualSeason(this._search.bind(this)),
@@ -111,7 +109,7 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
         this.filters.season.setValue(season);
     }
 
-    _search() {
+    _search(options = {}, queryParameters = {}) {
         if (!this.initialized) {
             return;
         }
