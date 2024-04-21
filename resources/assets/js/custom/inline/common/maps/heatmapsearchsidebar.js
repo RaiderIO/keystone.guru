@@ -14,8 +14,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._previousSearchParams = null;
 
         this.filters = {
-            'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            'affixgroups': new SearchFilterAffixGroups(`.filter_affix.${this.options.currentExpansion} select`, this._search.bind(this)),
+            'level': new SearchFilterLevel('#filter_level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
+            'affixgroups': new SearchFilterAffixGroups(`#filter_affixes`, this._search.bind(this)),
             'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
         };
     }
@@ -39,8 +39,11 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             this.sidebar.showSidebar();
         }
 
-        console.log('Activating!');
-        this._search( {
+        this._search();
+    }
+
+    _search(queryParameters, options) {
+        super._search( {
             success: function (json) {
                 getState().getDungeonMap().pluginHeat.setRawLatLngs(json.data);
             }
@@ -48,11 +51,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             dungeon_id: getState().getMapContext().getDungeon().id
         });
     }
-
-    // _search(queryParameters) {
-    //
-    //     super._search();
-    // }
 
     /**
      *

@@ -33,6 +33,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'stateCookie' => 'heatmap_search_sidebar_state',
     'defaultState' => $defaultState,
     'hideOnMove' => $hideOnMove,
+    'currentFiltersSelector' => '#heatmap_search_options_current_filters',
+//    'loaderSelector' => '#route_list_overlay',
+    'levelMin' => config('keystoneguru.keystone.levels.min'),
+    'levelMax' => config('keystoneguru.keystone.levels.max'),
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
     'sidebarSelector' => '#heatmap_search_sidebar',
@@ -81,9 +85,16 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
         <div class="heatmap_search_container p-2" data-simplebar>
             <div id="heatmap_search_options_container">
+                <div class="row mb-2">
+                    <div id="heatmap_search_options_current_filters" class="col">
+
+                    </div>
+                </div>
+
                 @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level')])
-                    <input id="level" type="text" name="level" value="{{ old('level') }}"/>
+                    <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
                 @endcomponent
+
                 @if($dungeon->gameVersion->has_seasons)
                     @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_common.maps.controls.heatmapsearch.affixes')])
                         <div class="filter_affix">
