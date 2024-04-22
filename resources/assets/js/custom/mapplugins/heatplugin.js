@@ -23,7 +23,7 @@ class HeatPlugin extends MapPlugin {
             for (let index in this.rawLatLngs) {
                 let rawLatLng = this.rawLatLngs[index];
                 if (rawLatLng.floor_id === floorId) {
-                    result.push(new L.latLng(rawLatLng.lat, rawLatLng.lng));
+                    result.push([rawLatLng.lat, rawLatLng.lng, 3]);
                 }
             }
             this.rawLatLngsByFloorId[floorId] = result;
@@ -40,7 +40,7 @@ class HeatPlugin extends MapPlugin {
         if (!this.isEnabled()) {
             return;
         }
-        
+
         this.heatLayer = L.heatLayer([]);
 
         this.heatLayer.addTo(this.map.leafletMap);

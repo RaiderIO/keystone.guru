@@ -49,9 +49,14 @@ class CombatLogEventSearchResult
                     $combatLogEvent->getIngameXY()->setFloor($floors->get($combatLogEvent->ui_map_id))
                 );
 
-                return ($useFacade ?
+                $latLngArray = ($useFacade ?
                     $coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
                     $latLng)->toArrayWithFloor();
+
+                $latLngArray['lat'] = round($latLngArray['lat'], 2);
+                $latLngArray['lng'] = round($latLngArray['lng'], 2);
+
+                return $latLngArray;
             })->toArray(),
             'dungeon_route_count' => $this->dungeonRouteCount,
         ];

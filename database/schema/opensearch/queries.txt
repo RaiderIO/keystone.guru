@@ -50,7 +50,7 @@ PUT _index_template/combat_log_events-template
           "type": "integer"
         },
         "ui_map_id": {
-          "type": "int"
+          "type": "integer"
         },
         "pos_x": {
           "type": "float"
@@ -226,7 +226,7 @@ PUT /combat_log_events-000001
         "type": "integer"
       },
       "ui_map_id": {
-        "type": "int"
+        "type": "integer"
       },
       "pos_x": {
         "type": "float"
