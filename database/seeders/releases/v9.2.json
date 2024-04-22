@@ -1,0 +1,23 @@
+{
+    "id": 231,
+    "release_changelog_id": 238,
+    "version": "v9.2",
+    "title": "Dragonflight Season 4 support",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-04-22T20:52:05+00:00",
+    "updated_at": "2024-04-22T20:52:05+00:00",
+    "changelog": {
+        "id": 238,
+        "release_id": 231,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 238,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2318,
+                "change": "Added Season 4. Thanks to Nnoggie for combining all floors and the effort with mapping!"
+            }
+        ]
+    }
+}
