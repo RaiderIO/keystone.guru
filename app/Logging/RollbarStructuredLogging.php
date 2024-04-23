@@ -10,8 +10,8 @@ abstract class RollbarStructuredLogging extends StructuredLogging
     {
         parent::__construct();
 
-        $this->addLogger(
-            Rollbar::logger()
-        );
+//        $this->addLogger(
+//            Rollbar::logger()
+//        );
     }
 }

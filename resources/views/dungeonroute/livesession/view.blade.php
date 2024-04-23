@@ -30,6 +30,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'dungeonroute' => $dungeonroute,
+            'mappingVersion' => $dungeonroute->mappingVersion,
             'livesession' => $livesession,
             'edit' => false,
             'floorId' => $floor->id,
