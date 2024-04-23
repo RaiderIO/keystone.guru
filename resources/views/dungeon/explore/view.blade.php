@@ -47,7 +47,6 @@ use App\Models\Floor\Floor;
                 'killzonepath',
                 'floorunion',
                 'floorunionarea',
-                'mountablearea',
             ],
         ])
     </div>
