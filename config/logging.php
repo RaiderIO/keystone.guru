@@ -4,6 +4,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
+use Rollbar\Laravel\MonologHandler;
 
 return [
 
@@ -54,7 +55,7 @@ return [
     'channels' => [
         'stack' => [
             'driver'            => 'stack',
-            'channels'          => ['daily', 'discord'],
+            'channels'          => ['daily', 'discord', 'rollbar'],
             'ignore_exceptions' => false,
         ],
 
@@ -140,6 +141,16 @@ return [
             //                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
             //            ],
         ],
+
+//        'rollbar' => [
+//            'driver'           => 'monolog',
+//            'handler'          => MonologHandler::class,
+//            'access_token'     => env('ROLLBAR_SERVER_TOKEN'),
+//            'level'            => 'warning',
+//            'person_fn'        => 'Auth::user',
+//            'capture_email'    => false,
+//            'capture_username' => true,
+//        ],
 
         'null' => [
             'driver'  => 'monolog',

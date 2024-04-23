@@ -1,0 +1,35 @@
+{
+    "id": 230,
+    "release_changelog_id": 237,
+    "version": "v9.1.1",
+    "title": "Classic Era and Wrath dungeons are no longer assigned to an incorrect game version",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2024-03-28T21:20:04+00:00",
+    "updated_at": "2024-03-28T21:20:04+00:00",
+    "changelog": {
+        "id": 237,
+        "release_id": 230,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 237,
+                "release_changelog_category_id": 1,
+                "ticket_id": null,
+                "change": "The new spells that you can attach to your pulls are now ordered alphabetically (by category, name)."
+            },
+            {
+                "release_changelog_id": 237,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Classic Era and Wrath dungeons are no longer assigned to an incorrect game version."
+            },
+            {
+                "release_changelog_id": 237,
+                "release_changelog_category_id": 5,
+                "ticket_id": null,
+                "change": "Added missing Bloodlust icon."
+            }
+        ]
+    }
+}

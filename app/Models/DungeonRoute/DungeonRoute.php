@@ -202,7 +202,15 @@ class DungeonRoute extends Model
         'popularity',
     ];
 
-    protected $with = ['dungeon', 'faction', 'specializations', 'classes', 'races', 'affixes'];
+    protected $with = [
+        'mappingVersion',
+        'dungeon',
+        'faction',
+        'specializations',
+        'classes',
+        'races',
+        'affixes',
+    ];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -760,17 +768,19 @@ class DungeonRoute extends Model
 
         // Overwrite the author_id if it's not been set yet
         $new = !isset($this->id);
-        if ($new) {
-            $this->author_id  = Auth::id() ?? -1;
-            $this->public_key = DungeonRoute::generateRandomPublicKey();
-        }
+        /** @var User|null $user */
+        $user = Auth::user();
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
-        // Cannot assign $this->dungeon lest ->save() method crashes
-        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
-        $this->mapping_version_id = $dungeon->currentMappingVersion->id;
-        $teamIdFromRequest        = (int)$request->get('team_id', $this->team_id);
-        $this->team_id            = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
+        if ($new) {
+            $this->author_id          = $user?->id ?? -1;
+            $this->public_key         = DungeonRoute::generateRandomPublicKey();
+            $this->setRelation('dungeon', Dungeon::findOrFail($this->dungeon_id));
+            $this->mapping_version_id = $this->dungeon->currentMappingVersion->id;
+        }
+
+        $teamIdFromRequest = (int)$request->get('team_id', $this->team_id);
+        $this->team_id     = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead
@@ -797,7 +807,7 @@ class DungeonRoute extends Model
         $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
         $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
 
-        if (User::findOrFail(Auth::id())->hasRole('admin')) {
+        if ($user?->hasRole('admin')) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
 
@@ -925,16 +935,13 @@ class DungeonRoute extends Model
                         ->first();
 
                     // Only if the route was found!
-                    if ($templateRoute !== null) {
-                        // Clone its innards to this route
-                        $templateRoute->cloneRelationsInto($this, [
-                            $templateRoute->paths,
-                            $templateRoute->brushlines,
-                            $templateRoute->killZones,
-                            $templateRoute->enemyRaidMarkers,
-                            $templateRoute->mapicons,
-                        ]);
-                    }
+                    $templateRoute?->cloneRelationsInto($this, [
+                        $templateRoute->paths,
+                        $templateRoute->brushlines,
+                        $templateRoute->killZones,
+                        $templateRoute->enemyRaidMarkers,
+                        $templateRoute->mapicons,
+                    ]);
                 }
             }
 
@@ -1152,7 +1159,7 @@ class DungeonRoute extends Model
     {
         $result = null;
         /** @var User $user */
-        $user   = Auth::user();
+        $user = Auth::user();
         if ($user !== null) {
             $result = DungeonRouteRating::where('dungeon_route_id', $this->id)
                 ->where('user_id', $user->id)

@@ -8,4 +8,6 @@ use App\Models\Npc;
 interface WowheadServiceInterface
 {
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int;
+
+    public function downloadMissingSpellIcons(): bool;
 }

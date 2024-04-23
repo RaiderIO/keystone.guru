@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CombatLogDungeonRouteServiceLogging extends StructuredLogging implements CombatLogDungeonRouteServiceLoggingInterface
+class CombatLogDungeonRouteServiceLogging extends RollbarStructuredLogging implements CombatLogDungeonRouteServiceLoggingInterface
 {
     public function convertCombatLogToDungeonRoutesStart(string $combatLogFilePath): void
     {

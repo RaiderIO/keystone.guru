@@ -1,9 +1,14 @@
 <?php
+
+use App\Logic\MapContext\MapContext;
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+
 /**
- * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor\Floor
- * @var $title string
- * @var $mapContext \App\Logic\MapContext\MapContext
+ * @var Dungeon    $dungeon
+ * @var Floor      $floor
+ * @var string     $title
+ * @var MapContext $mapContext
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -14,7 +19,7 @@
     @include('common.general.linkpreview', [
         'title' => sprintf(__('view_dungeonroute.view.linkpreview_title'), $title),
         'description' => $defaultDescription,
-        'image' => $dungeon->getImageUrl()
+        'image' => $dungeon->getImageUrl(),
     ])
 @endsection
 
@@ -22,6 +27,7 @@
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
+            'mappingVersion' => $dungeon->currentMappingVersion,
             'floor' => $floor,
             'edit' => false,
             'echo' => false,
@@ -41,7 +47,6 @@
                 'killzonepath',
                 'floorunion',
                 'floorunionarea',
-                'mountablearea'
             ],
         ])
     </div>

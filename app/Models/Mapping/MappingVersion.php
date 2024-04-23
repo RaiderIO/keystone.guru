@@ -36,10 +36,13 @@ use Illuminate\Support\Collection;
  * @property int                                   $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
  * @property int                                   $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null                           $mdt_mapping_hash
+ * @property bool                                  $facade_enabled True if this mapping version uses facades, false if it does not.
  * @property bool                                  $merged Not saved in the database
  * @property Carbon                                $updated_at
  * @property Carbon                                $created_at
+ *
  * @property Dungeon                               $dungeon
+ *
  * @property Collection|DungeonRoute[]             $dungeonRoutes
  * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
  * @property Collection|Enemy[]                    $enemies
@@ -67,6 +70,7 @@ class MappingVersion extends Model
         'enemy_forces_shrouded',
         'enemy_forces_shrouded_zul_gamux',
         'timer_max_seconds',
+        'facade_enabled',
         'mdt_mapping_hash',
         'merged',
     ];
@@ -79,9 +83,21 @@ class MappingVersion extends Model
         'enemy_forces_shrouded',
         'enemy_forces_shrouded_zul_gamux',
         'timer_max_seconds',
+        'facade_enabled',
         'mdt_mapping_hash',
         'updated_at',
         'created_at',
+    ];
+
+    protected $casts = [
+        'dungeon_id'                      => 'integer',
+        'version'                         => 'integer',
+        'enemy_forces_required'           => 'integer',
+        'enemy_forces_required_teeming'   => 'integer',
+        'enemy_forces_shrouded'           => 'integer',
+        'enemy_forces_shrouded_zul_gamux' => 'integer',
+        'timer_max_seconds'               => 'integer',
+        'facade_enabled'                  => 'integer',
     ];
 
     protected $appends = [
@@ -96,7 +112,7 @@ class MappingVersion extends Model
 
     private ?Collection $cachedFloorUnionsOnFloor = null;
 
-    private ?Collection $cachedFloorUnionForFloor = null;
+    private ?Collection $cachedFloorUnionsForFloor = null;
 
     private ?int $isLatestForDungeonCache = null;
 
@@ -208,25 +224,49 @@ class MappingVersion extends Model
         return $floorUnions;
     }
 
-    public function getFloorUnionForFloor(int $floorId): ?FloorUnion
+    public function getFloorUnionForLatLng(CoordinatesServiceInterface $coordinatesService, MappingVersion $mappingVersion, LatLng $latLng): ?FloorUnion
     {
-        if ($this->cachedFloorUnionForFloor === null) {
-            $this->cachedFloorUnionForFloor = collect();
+        $floor = $latLng->getFloor();
+        if ($floor === null) {
+            return null;
         }
 
-        if ($this->cachedFloorUnionForFloor->has($floorId)) {
-            return $this->cachedFloorUnionForFloor->get($floorId);
+        if ($this->cachedFloorUnionsForFloor === null) {
+            $this->cachedFloorUnionsForFloor = collect();
         }
 
-        /** @var FloorUnion|null $floorUnion */
-        $floorUnion = $this->floorUnions()
-            ->where('target_floor_id', $floorId)
-            ->with(['floor', 'targetFloor'])
-            ->first();
+        /** @var Collection<FloorUnion> $floorUnions */
+        if ($this->cachedFloorUnionsForFloor->has($floor->id)) {
+            $floorUnions = $this->cachedFloorUnionsForFloor->get($floor->id);
+        } else {
+            $floorUnions = $this->floorUnions()
+                ->where('target_floor_id', $floor->id)
+                ->with(['floor', 'targetFloor'])
+                ->get();
 
-        $this->cachedFloorUnionForFloor->put($floorId, $floorUnion);
+            $this->cachedFloorUnionsForFloor->put($floor->id, $floorUnions);
+        }
 
-        return $floorUnion;
+        // Now that we know the floor union candidates, check which floor union we need to use
+        $result = null;
+        // If we have more than 1 target we must make a choice based on the floor union areas attached to the floor union
+        if ($floorUnions->count() > 1) {
+            foreach ($floorUnions as $floorUnion) {
+                // We need to translate the target point using this floor union first, prior to checking the floor union areas
+                // Only if the translated point falls in the floor union area, can we properly check if this floor union matches
+                $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng, $floorUnion);
+                foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                    if ($floorUnionArea->containsPoint($coordinatesService, $tmpConvertedLatLng)) {
+                        $result = $floorUnion;
+                        break;
+                    }
+                }
+            }
+        } else {
+            $result = $floorUnions->first();
+        }
+
+        return $result;
     }
 
     public function mapContextEnemies(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
@@ -238,7 +278,7 @@ class MappingVersion extends Model
             ->get()
             ->makeHidden(['enemyactiveauras']);
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             foreach ($enemies as $enemy) {
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
@@ -281,7 +321,7 @@ class MappingVersion extends Model
         /** @var Collection|EnemyPack[] $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with(['floor', 'enemies:enemies.id,enemies.enemy_pack_id'])->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             $enemyPacks = $enemyPacks->map(function (EnemyPack $enemyPack) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPack, $enemyPack->floor);
                 $enemyPack->setRelation('floor', $newFloor);
@@ -299,7 +339,7 @@ class MappingVersion extends Model
         /** @var Collection|EnemyPatrol[] $enemyPatrols */
         $enemyPatrols = $this->enemyPatrols()->with('floor')->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             $enemyPatrols = $enemyPatrols->map(function (EnemyPatrol $enemyPatrol) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $enemyPatrol->polyline, $enemyPatrol->floor);
                 $enemyPatrol->setRelation('floor', $newFloor);
@@ -319,7 +359,7 @@ class MappingVersion extends Model
             ->with(['floor'])
             ->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             foreach ($mapIcons as $mapIcon) {
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this,
@@ -341,7 +381,7 @@ class MappingVersion extends Model
             ->with('floor')
             ->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 // Load some attributes prior to changing the floor_id, otherwise they get messed up
                 $dungeonFloorSwitchMarker->setAttribute('source_floor_id', $dungeonFloorSwitchMarker->floor_id);
@@ -368,7 +408,7 @@ class MappingVersion extends Model
         /** @var Collection|MountableArea[] $mountableAreas */
         $mountableAreas = $this->mountableAreas()->with('floor')->get();
 
-        if ($useFacade) {
+        if ($this->facade_enabled && $useFacade) {
             $mountableAreas = $mountableAreas->map(function (MountableArea $mountableArea) use ($coordinatesService) {
                 $newFloor = $this->convertVerticesForFacade($coordinatesService, $mountableArea, $mountableArea->floor);
                 $mountableArea->setRelation('floor', $newFloor);

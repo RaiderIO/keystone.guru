@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class ResultEventDungeonRouteBuilderLogging extends StructuredLogging implements ResultEventDungeonRouteBuilderLoggingInterface
+class ResultEventDungeonRouteBuilderLogging extends RollbarStructuredLogging implements ResultEventDungeonRouteBuilderLoggingInterface
 {
     public function buildStart(string $toDateTimeString, string $eventName): void
     {

@@ -1,0 +1,29 @@
+{
+    "id": 232,
+    "release_changelog_id": 239,
+    "version": "v9.2.1",
+    "title": "Map bugfixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-04-23T20:47:14+00:00",
+    "updated_at": "2024-04-23T20:47:14+00:00",
+    "changelog": {
+        "id": 239,
+        "release_id": 232,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 239,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2334,
+                "change": "Updating your route's settings no longer automatically updates your mapping version to the latest version. This is intended to be an explicit action."
+            },
+            {
+                "release_changelog_id": 239,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2335,
+                "change": "Hidden map elements no longer toggle back on the moment you open another route. Mountable areas now stay hidden as a result and don't pop back up the moment you start editing a route. Mountable areas are now togglable in all map versions (view, edit, explore, live session), but are disabled by default."
+            }
+        ]
+    }
+}

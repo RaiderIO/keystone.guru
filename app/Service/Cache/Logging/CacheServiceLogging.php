@@ -2,9 +2,9 @@
 
 namespace App\Service\Cache\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CacheServiceLogging extends StructuredLogging implements CacheServiceLoggingInterface
+class CacheServiceLogging extends RollbarStructuredLogging implements CacheServiceLoggingInterface
 {
 
     public function clearIdleKeysStart(?int $seconds): void

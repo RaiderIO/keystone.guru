@@ -19,9 +19,11 @@ class DungeonExploreController extends Controller
 
     public function viewDungeon(Request $request, Dungeon $dungeon): RedirectResponse
     {
+        $dungeon->load(['currentMappingVersion']);
+
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade()
+            ->defaultOrFacade($dungeon->currentMappingVersion)
             ->first();
 
         return redirect()->route('dungeon.explore.view.floor', [
@@ -39,16 +41,17 @@ class DungeonExploreController extends Controller
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
+        $dungeon->load(['currentMappingVersion']);
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($floorIndex)
+            ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade()
+                ->defaultOrFacade($dungeon->currentMappingVersion)
                 ->first();
 
             return redirect()->route('dungeon.explore.view.floor', [

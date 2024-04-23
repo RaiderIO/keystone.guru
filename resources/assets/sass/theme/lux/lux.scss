@@ -18,10 +18,12 @@
   }
 
   .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
     background-image: url('/images/home/lux_header.jpg');
   }
 
   .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
     background-image: url('/images/home/lux_footer.jpg');
   }
 
@@ -98,5 +100,24 @@
 
   .modal .modal-content .close {
     color: black;
+  }
+
+  .game_version_header {
+    img {
+      filter: invert(1);
+    }
+
+    a {
+      color: var(--theme-text-contrast)
+    }
+
+    a.active {
+      color: var(--theme-light)
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var(--theme-text-contrast)
+    }
   }
 }

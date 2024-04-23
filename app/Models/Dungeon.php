@@ -35,7 +35,6 @@ use Mockery\Exception;
  * @property bool                                    $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
  * @property bool                                    $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
  * @property bool                                    $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
- * @property bool                                    $facade_enabled True if this dungeon uses facades, false if it does not.
  * @property bool                                    $active True if this dungeon is active, false if it is not.
  * @property bool                                    $mdt_supported True if MDT is supported for this dungeon, false if it is not.
  * @property Expansion                               $expansion
@@ -77,7 +76,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'speedrun_enabled',
         'speedrun_difficulty_10_man_enabled',
         'speedrun_difficulty_25_man_enabled',
-        'facade_enabled',
         'zone_id',
         'map_id',
         'challenge_mode_id',
@@ -664,26 +662,24 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return $this->floors()->active();
     }
 
-    public function floorsForMapFacade(bool $useFacade): HasMany
+    public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
+        $useFacade = $useFacade ?? $mappingVersion->facade_enabled;
+
         // If we use facade
         // If we have facade, only return facade floor
         // Otherwise, return all non-facade floors
 
         return $this->hasMany(Floor::class)
-            ->select('floors.*')
-            ->join('dungeons', 'floors.dungeon_id', 'dungeons.id')
-            ->where(static function (Builder $builder) use ($useFacade) {
+            ->where(static function (Builder $builder) use ($mappingVersion, $useFacade) {
                 $builder->when(!$useFacade, static function (Builder $builder) {
                     $builder->where('facade', 0);
-                })->when($useFacade, static function (Builder $builder) use ($useFacade) {
-                    $builder->where(static function (Builder $builder) use ($useFacade) {
-                        $builder->where('facade_enabled', true)
-                            ->where('facade', $useFacade);
-                    })->orWhere(static function (Builder $builder) {
-                        $builder->where('facade_enabled', false)
-                            ->where('facade', 0);
-                    });
+                })->when($useFacade, static function (Builder $builder) use ($mappingVersion, $useFacade) {
+                    if ($mappingVersion->facade_enabled) {
+                        $builder->where('facade', $useFacade);
+                    } else {
+                        $builder->where('facade', 0);
+                    }
                 });
             })
             ->orderBy('index');

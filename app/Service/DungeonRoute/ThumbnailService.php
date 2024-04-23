@@ -191,7 +191,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        foreach ($dungeonRoute->dungeon->floorsForMapFacade(true)->active()->get() as $floor) {
+        foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
             /** @var Floor $floor */
             // Set it for processing in a queue
             ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floor->index);

@@ -28,20 +28,11 @@ use Illuminate\Support\Facades\App;
 
 class ViewService implements ViewServiceInterface
 {
-    /** @var CacheServiceInterface */
-    private $cacheService;
-
-    /** @var ExpansionServiceInterface */
-    private $expansionService;
-
-    /** @var AffixGroupEaseTierServiceInterface */
-    private $easeTierService;
-
-    public function __construct()
-    {
-        $this->cacheService     = App::make(CacheServiceInterface::class);
-        $this->expansionService = App::make(ExpansionServiceInterface::class);
-        $this->easeTierService  = App::make(AffixGroupEaseTierServiceInterface::class);
+    public function __construct(
+        private readonly CacheServiceInterface              $cacheService,
+        private readonly ExpansionServiceInterface          $expansionService,
+        private readonly AffixGroupEaseTierServiceInterface $easeTierService,
+    ) {
     }
 
     /**
@@ -85,6 +76,8 @@ class ViewService implements ViewServiceInterface
 
             // Spells
             $selectableSpellsByCategory = Spell::where('selectable', true)
+                ->orderBy('category')
+                ->orderBy('name')
                 ->get()
                 ->groupBy('category')
                 ->mapWithKeys(static fn(Collection $spells, string $key) => [__($key) => $spells]);
@@ -104,8 +97,10 @@ class ViewService implements ViewServiceInterface
                 'appVersion'                      => $latestRelease->version,
                 'appRevision'                     => $appRevision,
                 'appVersionAndName'               => sprintf(
-                    '%s/%s-%s',
+                    '%s® © 2018-%d %s - %s (%s)',
                     config('app.name'),
+                    date('Y'),
+                    'Ludicrous Speed, LLC.',
                     $latestRelease->version,
                     substr($appRevision, 0, 6)
                 ),

@@ -8,8 +8,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
 use Monolog\Level;
+use Psr\Log\LoggerInterface;
 
-class StructuredLogging implements StructuredLoggingInterface
+abstract class StructuredLogging implements StructuredLoggingInterface
 {
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
@@ -19,6 +20,9 @@ class StructuredLogging implements StructuredLoggingInterface
 
     private ?string $channel = null;
 
+    /** @var LogManager[] */
+    private array $loggers = [];
+
     public function __construct()
     {
         /** @var Application|Container $app */
@@ -26,6 +30,10 @@ class StructuredLogging implements StructuredLoggingInterface
 
         if ($app->runningInConsole()) {
             $this->setChannel('stderr');
+        }
+
+        foreach ($this->getDefaultLoggers() as $defaultLogger) {
+            $this->addLogger($defaultLogger);
         }
     }
 
@@ -119,14 +127,26 @@ class StructuredLogging implements StructuredLoggingInterface
         $this->log(Level::Critical, $functionName, $context);
     }
 
+    protected function alert(string $functionName, array $context = []): void
+    {
+        $this->log(Level::Alert, $functionName, $context);
+    }
+
     protected function emergency(string $functionName, array $context = []): void
     {
         $this->log(Level::Emergency, $functionName, $context);
     }
 
-    protected function logger(): LogManager
+    protected function getDefaultLoggers(): array
     {
-        return logger();
+        return [
+            logger(),
+        ];
+    }
+
+    protected function addLogger(LoggerInterface $logger): void
+    {
+        $this->loggers[] = $logger;
     }
 
     private function log(Level $level, string $functionName, array $context = []): void
@@ -134,22 +154,32 @@ class StructuredLogging implements StructuredLoggingInterface
         $levelName = $level->getName();
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
         $fixedLength  = 7;
-        $startPadding = str_repeat(' ', $fixedLength - strlen($levelName));
+        $levelNameLength = strlen($levelName);
+        $startPadding = str_repeat(' ', max(0, $fixedLength - $levelNameLength));
 
-        $messageWithContextCounts = trim(sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0]));
-        // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
-        $this->logger()->channel($this->channel)->log(
-            $levelName,
-            sprintf('%s%s', $startPadding, $messageWithContextCounts),
-            array_merge($this->cachedContext, $context)
+        $messageWithContextCounts = trim(
+            sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0])
         );
+        // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
+
+        foreach ($this->loggers as $logger) {
+            if ($logger instanceof LogManager) {
+                $logger = $logger->channel($this->channel);
+            }
+
+            $logger->log(
+                $levelName,
+                sprintf('%s%s', $startPadding, $messageWithContextCounts),
+                array_merge($this->cachedContext, $context)
+            );
+        }
     }
 
     private function cacheGroupedContexts(): void
     {
         $this->cachedContext = [];
 
-        foreach($this->groupedContexts as $key => $context) {
+        foreach ($this->groupedContexts as $key => $context) {
             $this->cachedContext = array_merge($this->cachedContext, $context);
         }
     }

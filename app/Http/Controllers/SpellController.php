@@ -36,30 +36,31 @@ class SpellController extends Controller
             $spell = new Spell();
         }
 
+        $validated = $request->validated();
+
         //        else {
         //            $oldId = $spell->id;
         //        }
 
         $spellBefore = clone $spell;
 
-        $spell->id          = $request->get('id');
-        $spell->dispel_type = $request->get('dispel_type');
-        $spell->icon_name   = $request->get('icon_name');
-        $spell->name        = $request->get('name');
-        $schools            = $request->get('schools', []);
-        $mask               = 0;
+        $spell->id             = $validated['id'];
+        $spell->category       = $validated['category'];
+        $spell->dispel_type    = $validated['dispel_type'];
+        $spell->cooldown_group = $validated['cooldown_group'];
+        $spell->icon_name      = $validated['icon_name'];
+        $spell->name           = $validated['name'];
+        $schools               = $validated['schools'] ?? [];
+        $mask                  = 0;
         foreach ($schools as $school) {
             $mask |= (int)$school;
         }
 
         $spell->schools_mask = $mask;
-        $spell->aura         = $request->get('aura', false);
+        $spell->aura         = $validated['aura'] ?? false;
+        $spell->selectable   = $validated['selectable'] ?? false;
 
         if ($spell->save()) {
-            //            if ($oldId > 0) {
-            //                Enemy::where('spell_id', $oldId)->update(['spell_id' => $spell->id]);
-            //            }
-
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($spellBefore, $spell);
         } // We gotta update any existing enemies with the old ID to the new ID, makes it easier to convert ids
@@ -77,10 +78,7 @@ class SpellController extends Controller
      */
     public function create(): View
     {
-        return view('admin.spell.edit', [
-            'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools'     => Spell::ALL_SCHOOLS,
-        ]);
+        return view('admin.spell.edit', $this->getEditViewParams());
     }
 
     /**
@@ -88,11 +86,9 @@ class SpellController extends Controller
      */
     public function edit(Request $request, Spell $spell): View
     {
-        return view('admin.spell.edit', [
-            'spell'       => $spell,
-            'dispelTypes' => Spell::ALL_DISPEL_TYPES,
-            'schools'     => Spell::ALL_SCHOOLS,
-        ]);
+        return view('admin.spell.edit', array_merge($this->getEditViewParams(), [
+            'spell' => $spell,
+        ]));
     }
 
     /**
@@ -140,5 +136,25 @@ class SpellController extends Controller
     public function get(): View
     {
         return view('admin.spell.list', ['models' => Spell::all()]);
+    }
+
+    private function getEditViewParams(): array
+    {
+        return [
+            'categories'     => collect(Spell::ALL_CATEGORIES)->mapWithKeys(function (string $category) {
+                return [
+                    $category =>
+                        __(sprintf('spells.category.%s', $category), [], 'en_US'),
+                ];
+            })->toArray(),
+            'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
+            'schools'        => Spell::ALL_SCHOOLS,
+            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
+                return [
+                    $cooldownGroupKey =>
+                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey), [], 'en_US'),
+                ];
+            })->toArray(),
+        ];
     }
 }

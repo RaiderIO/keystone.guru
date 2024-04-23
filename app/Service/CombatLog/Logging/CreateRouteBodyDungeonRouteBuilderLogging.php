@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CreateRouteBodyDungeonRouteBuilderLogging extends StructuredLogging implements CreateRouteBodyDungeonRouteBuilderLoggingInterface
+class CreateRouteBodyDungeonRouteBuilderLogging extends RollbarStructuredLogging implements CreateRouteBodyDungeonRouteBuilderLoggingInterface
 {
     public function buildKillZonesCreateNewActivePull(): void
     {

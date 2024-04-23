@@ -2,10 +2,10 @@
 
 namespace App\Service\MDT\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 use Exception;
 
-class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMappingImportServiceLoggingInterface
+class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements MDTMappingImportServiceLoggingInterface
 {
     public function importMappingVersionFromMDTMappingChanged(?string $mdtMappingHash, string $latestMdtMappingHash): void
     {
@@ -190,11 +190,6 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
     public function importDungeonFloorSwitchMarkersStart(): void
     {
         $this->start(__METHOD__, get_defined_vars());
-    }
-
-    public function importDungeonFloorSwitchMarkersRestoreFromPreviousMappingVersion(): void
-    {
-        $this->debug(__METHOD__);
     }
 
     public function importDungeonFloorSwitchMarkersImportFromMDT(): void

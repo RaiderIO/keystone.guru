@@ -10,6 +10,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Release;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\User;
@@ -83,6 +84,10 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
+use App\Service\Spell\SpellService;
+use App\Service\Spell\SpellServiceInterface;
+use App\Service\StructuredLogging\StructuredLoggingService;
+use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
@@ -123,6 +128,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
+        $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
+        $this->app->bind(SpellServiceInterface::class, SpellService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
@@ -269,7 +276,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
         });
 
-        view()->composer('common.layout.navgameversions', static function (View $view) use ($globalViewVariables) {
+        view()->composer(['common.layout.header', 'common.layout.navgameversions'], static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
@@ -475,6 +482,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
+        });
+
+        // Thirdparty
+        view()->composer('common.thirdparty.rollbar.rollbar', static function (View $view) use ($globalViewVariables) {
+            /** @var Release $latestRelease */
+            $latestRelease = $globalViewVariables['latestRelease'];
+            $view->with('latestRelease', $latestRelease);
         });
 
         // Profile pages

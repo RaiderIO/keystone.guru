@@ -13,7 +13,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -54,7 +53,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -293,7 +291,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -422,7 +419,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -463,7 +459,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -504,7 +499,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -545,7 +539,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -657,7 +650,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -922,7 +914,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1034,7 +1025,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1075,7 +1065,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1362,7 +1351,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1403,7 +1391,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1515,7 +1502,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1592,7 +1578,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1633,7 +1618,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1674,7 +1658,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1751,7 +1734,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1792,7 +1774,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1869,7 +1850,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1910,7 +1890,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1987,7 +1966,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2239,7 +2217,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -2443,7 +2420,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2520,7 +2496,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2632,7 +2607,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -2709,7 +2683,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -2750,7 +2723,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2897,7 +2869,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3009,7 +2980,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3050,7 +3020,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3127,7 +3096,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3204,7 +3172,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3351,7 +3318,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3463,7 +3429,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3651,7 +3616,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3798,7 +3762,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -3945,7 +3908,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -3986,7 +3948,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4027,7 +3988,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4068,7 +4028,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4204,7 +4163,7 @@
     {
         "id": 42,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4494,
         "map_id": 619,
         "challenge_mode_id": null,
@@ -4215,7 +4174,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4245,7 +4203,7 @@
     {
         "id": 43,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4277,
         "map_id": 601,
         "challenge_mode_id": null,
@@ -4256,7 +4214,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4357,7 +4314,7 @@
     {
         "id": 44,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4196,
         "map_id": 600,
         "challenge_mode_id": null,
@@ -4368,7 +4325,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4434,7 +4390,7 @@
     {
         "id": 45,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4416,
         "map_id": 604,
         "challenge_mode_id": null,
@@ -4445,7 +4401,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4475,7 +4430,7 @@
     {
         "id": 46,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4272,
         "map_id": 602,
         "challenge_mode_id": null,
@@ -4486,7 +4441,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4552,7 +4506,7 @@
     {
         "id": 47,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4820,
         "map_id": 668,
         "challenge_mode_id": null,
@@ -4563,7 +4517,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4593,7 +4546,7 @@
     {
         "id": 48,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4264,
         "map_id": 599,
         "challenge_mode_id": null,
@@ -4604,7 +4557,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4634,7 +4586,7 @@
     {
         "id": 49,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4813,
         "map_id": 658,
         "challenge_mode_id": null,
@@ -4645,7 +4597,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4675,7 +4626,7 @@
     {
         "id": 50,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4100,
         "map_id": 595,
         "challenge_mode_id": null,
@@ -4686,7 +4637,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4752,7 +4702,7 @@
     {
         "id": 51,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4809,
         "map_id": 632,
         "challenge_mode_id": null,
@@ -4763,7 +4713,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4793,7 +4742,7 @@
     {
         "id": 52,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4265,
         "map_id": 576,
         "challenge_mode_id": null,
@@ -4804,7 +4753,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4834,7 +4782,7 @@
     {
         "id": 53,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4228,
         "map_id": 578,
         "challenge_mode_id": null,
@@ -4845,7 +4793,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5016,7 +4963,7 @@
     {
         "id": 54,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4415,
         "map_id": 1494,
         "challenge_mode_id": null,
@@ -5027,7 +4974,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5057,7 +5003,7 @@
     {
         "id": 55,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4723,
         "map_id": 650,
         "challenge_mode_id": null,
@@ -5068,7 +5014,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5098,7 +5043,7 @@
     {
         "id": 56,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 206,
         "map_id": 574,
         "challenge_mode_id": null,
@@ -5109,7 +5054,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5210,7 +5154,7 @@
     {
         "id": 57,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 1196,
         "map_id": 575,
         "challenge_mode_id": null,
@@ -5221,7 +5165,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -5287,7 +5230,7 @@
     {
         "id": 58,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4812,
         "map_id": 631,
         "challenge_mode_id": null,
@@ -5298,7 +5241,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5604,7 +5546,7 @@
     {
         "id": 59,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 2159,
         "map_id": 249,
         "challenge_mode_id": null,
@@ -5615,7 +5557,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5645,7 +5586,7 @@
     {
         "id": 60,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 3456,
         "map_id": 533,
         "challenge_mode_id": null,
@@ -5656,7 +5597,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -6255,7 +6195,7 @@
     {
         "id": 61,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4722,
         "map_id": 649,
         "challenge_mode_id": null,
@@ -6266,7 +6206,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6318,7 +6257,7 @@
     {
         "id": 62,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4500,
         "map_id": 616,
         "challenge_mode_id": null,
@@ -6329,7 +6268,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6359,7 +6297,7 @@
     {
         "id": 63,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4493,
         "map_id": 615,
         "challenge_mode_id": null,
@@ -6370,7 +6308,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6400,7 +6337,7 @@
     {
         "id": 64,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4987,
         "map_id": 724,
         "challenge_mode_id": null,
@@ -6411,7 +6348,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6441,7 +6377,7 @@
     {
         "id": 65,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4273,
         "map_id": 603,
         "challenge_mode_id": null,
@@ -6452,7 +6388,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7226,7 +7161,7 @@
     {
         "id": 66,
         "expansion_id": 6,
-        "game_version_id": 2,
+        "game_version_id": 3,
         "zone_id": 4603,
         "map_id": 624,
         "challenge_mode_id": null,
@@ -7237,7 +7172,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -7278,7 +7212,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7373,6 +7306,47 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 280,
+                "index": 4,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.algeth_ar_academy.floors.algeth_ar_academy",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 936,
+                        "floor1_id": 280,
+                        "floor2_id": 144,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 937,
+                        "floor1_id": 280,
+                        "floor2_id": 145,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 938,
+                        "floor1_id": 280,
+                        "floor2_id": 146,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7390,7 +7364,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7450,6 +7423,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 281,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.brackenhide_hollow.floors.brackenhide_hollow",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 939,
+                        "floor1_id": 281,
+                        "floor2_id": 147,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 940,
+                        "floor1_id": 281,
+                        "floor2_id": 148,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7467,7 +7475,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7527,6 +7534,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 274,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.halls_of_infusion.floors.halls_of_infusion",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 910,
+                        "floor1_id": 274,
+                        "floor2_id": 149,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 911,
+                        "floor1_id": 274,
+                        "floor2_id": 150,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7544,7 +7586,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7604,6 +7645,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 275,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.neltharus.floors.neltharus",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 916,
+                        "floor1_id": 275,
+                        "floor2_id": 151,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 917,
+                        "floor1_id": 275,
+                        "floor2_id": 152,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7621,7 +7697,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7645,6 +7720,35 @@
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 278,
+                "index": 2,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.the_nokhud_offensive.floors.the_nokhud_offensive",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 930,
+                        "floor1_id": 278,
+                        "floor2_id": 153,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7662,7 +7766,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7722,6 +7825,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 276,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.ruby_life_pools.floors.ruby_life_pools",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 918,
+                        "floor1_id": 276,
+                        "floor2_id": 154,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 919,
+                        "floor1_id": 276,
+                        "floor2_id": 155,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7739,7 +7877,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7904,6 +8041,59 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 277,
+                "index": 6,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.the_azure_vault.floors.the_azure_vault",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 925,
+                        "floor1_id": 277,
+                        "floor2_id": 156,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 926,
+                        "floor1_id": 277,
+                        "floor2_id": 157,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 927,
+                        "floor1_id": 277,
+                        "floor2_id": 158,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 928,
+                        "floor1_id": 277,
+                        "floor2_id": 159,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 929,
+                        "floor1_id": 277,
+                        "floor2_id": 160,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7921,7 +8111,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -7981,6 +8170,41 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 279,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "name": "dungeons.dragonflight.uldaman_legacy_of_tyr.floors.uldaman_legacy_of_tyr",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": 150,
+                "enemy_engagement_max_range_patrols": 50,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 931,
+                        "floor1_id": 279,
+                        "floor2_id": 161,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 932,
+                        "floor1_id": 279,
+                        "floor2_id": 162,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -7998,7 +8222,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8110,7 +8333,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8151,7 +8373,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8181,7 +8402,7 @@
     {
         "id": 78,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 719,
         "map_id": 48,
         "challenge_mode_id": null,
@@ -8192,8 +8413,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 191,
@@ -8293,7 +8513,7 @@
     {
         "id": 79,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1584,
         "map_id": 230,
         "challenge_mode_id": null,
@@ -8304,8 +8524,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 194,
@@ -8370,7 +8589,7 @@
     {
         "id": 80,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1581,
         "map_id": 36,
         "challenge_mode_id": null,
@@ -8381,8 +8600,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 196,
@@ -8447,7 +8665,7 @@
     {
         "id": 81,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "challenge_mode_id": null,
@@ -8458,8 +8676,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 199,
@@ -8559,7 +8776,7 @@
     {
         "id": 82,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 721,
         "map_id": 90,
         "challenge_mode_id": null,
@@ -8570,8 +8787,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 204,
@@ -8706,7 +8922,7 @@
     {
         "id": 83,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1583,
         "map_id": 10000,
         "challenge_mode_id": null,
@@ -8717,8 +8933,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 208,
@@ -8953,7 +9168,7 @@
     {
         "id": 84,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2100,
         "map_id": 349,
         "challenge_mode_id": null,
@@ -8964,8 +9179,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 214,
@@ -9030,7 +9244,7 @@
     {
         "id": 85,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2437,
         "map_id": 389,
         "challenge_mode_id": null,
@@ -9041,8 +9255,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 216,
@@ -9071,7 +9284,7 @@
     {
         "id": 86,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 722,
         "map_id": 129,
         "challenge_mode_id": null,
@@ -9082,8 +9295,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 217,
@@ -9112,7 +9324,7 @@
     {
         "id": 87,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 491,
         "map_id": 47,
         "challenge_mode_id": null,
@@ -9123,8 +9335,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 218,
@@ -9153,7 +9364,7 @@
     {
         "id": 88,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9164,8 +9375,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 219,
@@ -9194,7 +9404,7 @@
     {
         "id": 89,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9205,8 +9415,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 220,
@@ -9235,7 +9444,7 @@
     {
         "id": 90,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9246,8 +9455,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 221,
@@ -9276,7 +9484,7 @@
     {
         "id": 91,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "challenge_mode_id": null,
@@ -9287,8 +9495,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 222,
@@ -9317,7 +9524,7 @@
     {
         "id": 92,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2057,
         "map_id": 289,
         "challenge_mode_id": null,
@@ -9328,8 +9535,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 223,
@@ -9476,7 +9682,7 @@
     {
         "id": 93,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 209,
         "map_id": 33,
         "challenge_mode_id": null,
@@ -9487,8 +9693,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 227,
@@ -9734,7 +9939,7 @@
     {
         "id": 94,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2017,
         "map_id": 329,
         "challenge_mode_id": null,
@@ -9745,8 +9950,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 234,
@@ -9811,7 +10015,7 @@
     {
         "id": 95,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 717,
         "map_id": 34,
         "challenge_mode_id": null,
@@ -9822,8 +10026,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 236,
@@ -9852,7 +10055,7 @@
     {
         "id": 96,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1477,
         "map_id": 109,
         "challenge_mode_id": null,
@@ -9863,8 +10066,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 242,
@@ -10046,7 +10248,7 @@
     {
         "id": 97,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1337,
         "map_id": 70,
         "challenge_mode_id": null,
@@ -10057,8 +10259,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 238,
@@ -10123,7 +10324,7 @@
     {
         "id": 98,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 718,
         "map_id": 43,
         "challenge_mode_id": null,
@@ -10134,8 +10335,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 240,
@@ -10164,7 +10364,7 @@
     {
         "id": 99,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1176,
         "map_id": 209,
         "challenge_mode_id": null,
@@ -10175,8 +10375,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 241,
@@ -10205,7 +10404,7 @@
     {
         "id": 100,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "challenge_mode_id": null,
@@ -10216,8 +10415,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 198,
@@ -10246,7 +10444,7 @@
     {
         "id": 101,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "challenge_mode_id": null,
@@ -10257,8 +10455,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 202,
@@ -10334,7 +10531,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -10411,7 +10607,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10499,7 +10694,7 @@
     {
         "id": 104,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 1583,
         "map_id": 229,
         "challenge_mode_id": 167,
@@ -10510,8 +10705,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 250,
@@ -10622,7 +10816,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -10869,7 +11062,6 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -11211,7 +11403,7 @@
     {
         "id": 107,
         "expansion_id": 4,
-        "game_version_id": 3,
+        "game_version_id": 2,
         "zone_id": 721,
         "map_id": 90,
         "challenge_mode_id": null,
@@ -11222,7 +11414,6 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 0,
-        "facade_enabled": 0,
         "mdt_supported": false,
         "floors": [
             {

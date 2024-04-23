@@ -13,10 +13,12 @@
   }
 
   .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
     background-image: url('/images/home/darkly_header.jpg');
   }
 
   .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
     background-image: url('/images/home/darkly_footer.jpg');
   }
 
@@ -42,4 +44,29 @@
       font-size: 0.9rem;
     }
   }
+
+  .game_version_header {
+    a {
+      color: var(--theme-light)
+    }
+
+    a.active {
+      color: var(--theme-text-contrast)
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var(--theme-text-contrast)
+    }
+  }
+
+  //.btn-info {
+  //  color: black;
+  //  background-color: #ffbd0a;
+  //  border-color: #dc9e0f;
+  //}
+  //
+  //.text-info {
+  //  color: #ffbd0a;
+  //}
 }

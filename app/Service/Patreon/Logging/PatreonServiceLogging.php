@@ -2,9 +2,9 @@
 
 namespace App\Service\Patreon\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class PatreonServiceLogging extends StructuredLogging implements PatreonServiceLoggingInterface
+class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonServiceLoggingInterface
 {
     public function loadCampaignBenefitsAdminUserNull(): void
     {
@@ -17,6 +17,11 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     public function loadCampaignBenefitsRetrieveTiersErrors(array $tiersAndBenefitsResponse): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function loadCampaignBenefitsRetrieveTiersIncludedNotSet(array $tiersAndBenefitsResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -41,6 +46,11 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function loadCampaignTiersRetrieveMembersIncludedNotSet(array $tiersAndBenefitsResponse): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function loadCampaignTiersEnd(): void
     {
         $this->end(__METHOD__);
@@ -60,6 +70,12 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function loadCampaignTiersRetrieveMembersDataNotSet(array $membersResponse): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
 
     public function loadCampaignMembersEnd(): void
     {

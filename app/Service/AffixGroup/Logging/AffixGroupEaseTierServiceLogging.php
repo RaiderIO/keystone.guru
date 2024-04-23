@@ -2,9 +2,9 @@
 
 namespace App\Service\AffixGroup\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class AffixGroupEaseTierServiceLogging extends StructuredLogging implements AffixGroupEaseTierServiceLoggingInterface
+class AffixGroupEaseTierServiceLogging extends RollbarStructuredLogging implements AffixGroupEaseTierServiceLoggingInterface
 {
     public function parseTierListUnknownAffixGroup(string $affixGroupString): void
     {

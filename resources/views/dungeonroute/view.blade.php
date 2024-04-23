@@ -36,6 +36,7 @@ $dungeon = $dungeonroute->dungeon;
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
+            'mappingVersion' => $dungeonroute->mappingVersion,
             'dungeonroute' => $dungeonroute,
             'edit' => false,
             'floorId' => $floor->id,
@@ -57,7 +58,6 @@ $dungeon = $dungeonroute->dungeon;
                 ]
             ],
             'hiddenMapObjectGroups' => [
-                'mountablearea',
                 'floorunion',
                 'floorunionarea',
             ],

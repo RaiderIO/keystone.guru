@@ -181,13 +181,14 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
+        Rollbar\Laravel\RollbarServiceProvider::class,
 
         /**
          * Keystone.guru Service Providers...
          */
         HelperServiceProvider::class,
-        KeystoneGuruServiceProvider::class,
         LoggingServiceProvider::class,
+        KeystoneGuruServiceProvider::class,
         ControllerServiceProvider::class,
     ])->toArray(),
 

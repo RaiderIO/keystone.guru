@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
+use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLogging;
@@ -38,6 +40,12 @@ use App\Service\Patreon\Logging\PatreonApiServiceLogging;
 use App\Service\Patreon\Logging\PatreonApiServiceLoggingInterface;
 use App\Service\Patreon\Logging\PatreonServiceLogging;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
+use App\Service\Spell\Logging\SpellServiceLogging;
+use App\Service\Spell\Logging\SpellServiceLoggingInterface;
+use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLogging;
+use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLoggingInterface;
+use App\Service\Wowhead\Logging\WowheadServiceLogging;
+use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 use Illuminate\Support\ServiceProvider;
@@ -47,6 +55,9 @@ class LoggingServiceProvider extends ServiceProvider
     public function register(): void
     {
         parent::register();
+
+        // Middleware
+        $this->app->bind(DebugInfoContextLoggerLoggingInterface::class, DebugInfoContextLoggerLogging::class);
 
         // AffixGroup
         $this->app->bind(AffixGroupEaseTierServiceLoggingInterface::class, AffixGroupEaseTierServiceLogging::class);
@@ -75,6 +86,15 @@ class LoggingServiceProvider extends ServiceProvider
         // Patreon
         $this->app->bind(PatreonServiceLoggingInterface::class, PatreonServiceLogging::class);
         $this->app->bind(PatreonApiServiceLoggingInterface::class, PatreonApiServiceLogging::class);
+
+        // Spell
+        $this->app->bind(SpellServiceLoggingInterface::class, SpellServiceLogging::class);
+
+        // Structured logging
+        $this->app->bind(StructuredLoggingServiceLoggingInterface::class, StructuredLoggingServiceLogging::class);
+
+        // Wowhead
+        $this->app->bind(WowheadServiceLoggingInterface::class, WowheadServiceLogging::class);
 
         // Wow Tools
         $this->app->bind(WowToolsServiceLoggingInterface::class, WowToolsServiceLogging::class);

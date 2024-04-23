@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class CombatLogSplitServiceLogging extends StructuredLogging implements CombatLogSplitServiceLoggingInterface
+class CombatLogSplitServiceLogging extends RollbarStructuredLogging implements CombatLogSplitServiceLoggingInterface
 {
     public function splitCombatLogOnChallengeModesStart(string $filePath): void
     {

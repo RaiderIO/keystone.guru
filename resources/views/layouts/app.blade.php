@@ -1,8 +1,8 @@
 <?php
 /**
- * @var $isLocal string
- * @var $isMapping string
- * @var $isProduction string
+ * @var $isLocal bool
+ * @var $isMapping bool
+ * @var $isProduction bool
  * @var $revision string
  * @var $theme string
  * @var $hasNewChangelog bool
@@ -93,9 +93,6 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
 
     @if(!$adFree && $showAds)
         @include('common.thirdparty.ads')
-    @endif
-    @if($analytics)
-        @include('common.thirdparty.analytics')
     @endif
     @if($analytics)
         @include('common.thirdparty.analytics')

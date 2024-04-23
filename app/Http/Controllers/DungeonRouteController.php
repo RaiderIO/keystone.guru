@@ -51,7 +51,7 @@ class DungeonRouteController extends Controller
     {
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->defaultOrFacade()
+            ->defaultOrFacade($dungeonroute->mappingVersion)
             ->first();
 
         return redirect()->route('dungeonroute.view.floor', [
@@ -104,13 +104,13 @@ class DungeonRouteController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                ->defaultOrFacade()
+                ->defaultOrFacade($dungeonroute->mappingVersion)
                 ->first();
 
             return redirect()->route('dungeonroute.view.floor', [
@@ -148,7 +148,7 @@ class DungeonRouteController extends Controller
     {
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->defaultOrFacade()
+            ->defaultOrFacade($dungeonroute->mappingVersion)
             ->first();
 
         return redirect()->route('dungeonroute.present.floor', [
@@ -199,13 +199,13 @@ class DungeonRouteController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                ->defaultOrFacade()
+                ->defaultOrFacade($dungeonroute->mappingVersion)
                 ->first();
 
             return redirect()->route('dungeonroute.present.floor', [
@@ -379,7 +379,7 @@ class DungeonRouteController extends Controller
     {
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->defaultOrFacade()
+            ->defaultOrFacade($dungeonroute->mappingVersion)
             ->first();
 
         return redirect()->route('dungeonroute.edit.floor', [
@@ -421,13 +421,13 @@ class DungeonRouteController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                ->defaultOrFacade()
+                ->defaultOrFacade($dungeonroute->mappingVersion)
                 ->first();
 
             return redirect()->route('dungeonroute.edit.floor', [
@@ -486,7 +486,7 @@ class DungeonRouteController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         $style                 = $request->get('style', 'regular');

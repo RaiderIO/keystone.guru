@@ -4,6 +4,7 @@ namespace App\Models\GameVersion;
 
 use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
+use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -33,14 +34,14 @@ class GameVersion extends CacheModel
 
     public const GAME_VERSION_RETAIL = 'retail';
 
-    public const GAME_VERSION_WOTLK = 'wotlk';
+    public const GAME_VERSION_WRATH = 'wotlk';
 
-    public const GAME_VERSION_CLASSIC = 'classic';
+    public const GAME_VERSION_CLASSIC_ERA = 'classic';
 
     public const ALL = [
-        self::GAME_VERSION_RETAIL  => 1,
-        self::GAME_VERSION_WOTLK   => 2,
-        self::GAME_VERSION_CLASSIC => 3,
+        self::GAME_VERSION_RETAIL      => 1,
+        self::GAME_VERSION_CLASSIC_ERA => 2,
+        self::GAME_VERSION_WRATH       => 3,
     ];
 
     /**
@@ -57,6 +58,7 @@ class GameVersion extends CacheModel
     public static function getUserOrDefaultGameVersion(): GameVersion
     {
         if (Auth::check()) {
+            /** @var User $user */
             $user = Auth::user();
             if ($user->game_version_id > 0 && $user->gameVersion !== null) {
                 return $user->gameVersion;

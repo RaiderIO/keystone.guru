@@ -2,9 +2,9 @@
 
 namespace App\Service\WowTools\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class WowToolsServiceLogging extends StructuredLogging implements WowToolsServiceLoggingInterface
+class WowToolsServiceLogging extends RollbarStructuredLogging implements WowToolsServiceLoggingInterface
 {
     public function getDisplayIdRequestStart(int $npcId): void
     {

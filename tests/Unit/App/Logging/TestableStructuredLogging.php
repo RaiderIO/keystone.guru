@@ -14,9 +14,9 @@ class TestableStructuredLogging extends StructuredLogging
      */
     public function __construct(LogManager $logManager)
     {
-        parent::__construct();
-
         $this->logManager = $logManager;
+
+        parent::__construct();
     }
 
 
@@ -65,8 +65,10 @@ class TestableStructuredLogging extends StructuredLogging
         parent::emergency($functionName, $context);
     }
 
-    protected function logger(): LogManager
+    protected function getDefaultLoggers(): array
     {
-        return $this->logManager;
+        return [
+            $this->logManager,
+        ];
     }
 }

@@ -1,0 +1,23 @@
+{
+    "id": 228,
+    "release_changelog_id": 235,
+    "version": "v9.0.4",
+    "title": "Rollbar support",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2024-03-19T21:21:10+00:00",
+    "updated_at": "2024-03-19T21:21:10+00:00",
+    "changelog": {
+        "id": 235,
+        "release_id": 228,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 235,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2286,
+                "change": "Added Rollbar support (error handling platform)."
+            }
+        ]
+    }
+}

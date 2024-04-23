@@ -38,6 +38,12 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
+            if (!isset($tiersAndBenefitsResponse['included'])) {
+                $this->log->loadCampaignBenefitsRetrieveTiersIncludedNotSet($tiersAndBenefitsResponse);
+
+                return null;
+            }
+
             return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'benefit')->toArray();
         } finally {
             $this->log->loadCampaignBenefitsEnd();
@@ -66,6 +72,12 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
+            if (!isset($tiersAndBenefitsResponse['included'])) {
+                $this->log->loadCampaignTiersRetrieveMembersIncludedNotSet($tiersAndBenefitsResponse);
+
+                return null;
+            }
+
             return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'tier')->toArray();
         } finally {
             $this->log->loadCampaignTiersEnd();
@@ -90,6 +102,13 @@ class PatreonService implements PatreonServiceInterface
 
                 return null;
             }
+
+            if (!isset($membersResponse['data'])) {
+                $this->log->loadCampaignTiersRetrieveMembersDataNotSet($membersResponse);
+
+                return null;
+            }
+
 
             return collect($membersResponse['data'])->filter(static fn($included) => $included['type'] === 'member')->toArray();
         } finally {

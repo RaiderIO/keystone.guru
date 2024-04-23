@@ -2,9 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\StructuredLogging;
+use App\Logging\RollbarStructuredLogging;
 
-class BaseCombatFilterLogging extends StructuredLogging implements BaseCombatFilterLoggingInterface
+class BaseCombatFilterLogging extends RollbarStructuredLogging implements BaseCombatFilterLoggingInterface
 {
     public function parseUnitDied(int $lineNr, string $guid): void
     {

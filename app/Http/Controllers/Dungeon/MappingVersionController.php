@@ -13,11 +13,31 @@ use Session;
 
 class MappingVersionController extends Controller
 {
-    public function savenew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
+    public function saveNew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
     {
         $mappingService->createNewMappingVersionFromPreviousMapping($dungeon);
 
         Session::flash('status', __('controller.mappingversion.created_successfully'));
+
+        return redirect()->route('admin.dungeon.edit', [
+            'dungeon' => $dungeon,
+        ]);
+    }
+
+    public function saveNewBare(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
+    {
+        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $newMappingVersion     = $mappingService->copyMappingVersionToDungeon(
+            $currentMappingVersion,
+            $dungeon
+        );
+
+        $mappingService->copyMappingVersionContentsToDungeon(
+            $currentMappingVersion,
+            $newMappingVersion
+        );
+
+        Session::flash('status', __('controller.mappingversion.created_bare_successfully'));
 
         return redirect()->route('admin.dungeon.edit', [
             'dungeon' => $dungeon,

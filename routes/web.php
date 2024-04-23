@@ -217,7 +217,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{dungeon}', (new DungeonController())->update(...))->name('admin.dungeon.update');
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
-                    Route::get('new', (new MappingVersionController())->savenew(...))->name('admin.mappingversion.new');
+                    Route::get('new', (new MappingVersionController())->saveNew(...))->name('admin.mappingversion.new');
+                    Route::get('new/bare', (new MappingVersionController())->saveNewBare(...))->name('admin.mappingversion.newbare');
                     Route::get('{mappingVersion}/delete', (new MappingVersionController())->delete(...))->name('admin.mappingversion.delete');
                 });
                 // Floors

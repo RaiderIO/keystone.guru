@@ -43,15 +43,17 @@ class RefreshAffixGroupEaseTiers extends Command
         try {
             $tierLists = $archonApiService->getDungeonEaseTierListOverall();
         } catch (InvalidResponseException $invalidResponseException) {
-            $this->error(sprintf('Invalid response: %s', $invalidResponseException->getMessage()));
+            $this->warn(sprintf('Invalid response: %s', $invalidResponseException->getMessage()));
 
-            return -1;
+            // Don't fail the deployment when this happens
+            return 0;
         }
 
         if (!isset($tierLists['encounterTierList'])) {
-            $this->error(sprintf('Invalid response: %s', json_encode($tierLists)));
+            $this->warn(sprintf('Invalid response: %s', json_encode($tierLists)));
 
-            return -1;
+            // Don't fail the deployment when this happens
+            return 0;
         }
 
         $affixGroupEaseTierService->parseTierList($tierLists);

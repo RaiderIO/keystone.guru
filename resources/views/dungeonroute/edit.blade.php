@@ -1,11 +1,17 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $floor \App\Models\Floor\Floor */
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+
+/**
+ * @var DungeonRoute $dungeonroute
+ * @var Floor        $floor
+ */
+
 $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
 
 $sandbox = $dungeonroute->isSandbox();
 ?>
-
 @extends('layouts.map', ['title' => sprintf(__('view_dungeonroute.edit.title'), $dungeonroute->title)])
 
 @include('common.general.inline', [
@@ -15,7 +21,7 @@ $sandbox = $dungeonroute->isSandbox();
         'dungeonroute' => $dungeonroute,
         'levelMin' => config('keystoneguru.keystone.levels.min'),
         'levelMax' => config('keystoneguru.keystone.levels.max'),
-    ]
+    ],
 ])
 
 @section('linkpreview')
@@ -26,7 +32,7 @@ $sandbox = $dungeonroute->isSandbox();
             ($dungeonroute->isSandbox() ?
             sprintf(__('view_dungeonroute.edit.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name)) :
             sprintf(__('view_dungeonroute.edit.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name)),
-            'image' => $dungeonroute->dungeon->getImageUrl()
+            'image' => $dungeonroute->dungeon->getImageUrl(),
     ])
 @endsection
 
@@ -34,6 +40,7 @@ $sandbox = $dungeonroute->isSandbox();
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
+            'mappingVersion' => $dungeonroute->mappingVersion,
             'dungeonroute' => $dungeonroute,
             'edit' => true,
             'sandboxMode' => $sandbox,
@@ -50,11 +57,11 @@ $sandbox = $dungeonroute->isSandbox();
                     'embed' => !$sandbox,
                     'mdt-export' => $dungeon->mdt_supported,
                     'publish' => !$sandbox,
-                ]
+                ],
             ],
             'hiddenMapObjectGroups' => [
                 'floorunion',
-                'floorunionarea'
+                'floorunionarea',
             ],
         ])
     </div>
