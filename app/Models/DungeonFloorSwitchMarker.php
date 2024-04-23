@@ -11,6 +11,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -138,14 +139,12 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
     {
         $direction = $this->direction;
 
-        $result = match ($direction) {
+        return match ($direction) {
             FloorCoupling::DIRECTION_UP => 1,
             FloorCoupling::DIRECTION_DOWN => -1,
             FloorCoupling::DIRECTION_LEFT => -2,
             default => 2,
         };
-
-        return $result;
     }
 
     //    /**

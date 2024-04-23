@@ -25,6 +25,7 @@ class APIMappingVersionFormRequest extends FormRequest
             'enemy_forces_shrouded'           => 'int|nullable',
             'enemy_forces_shrouded_zul_gamux' => 'int|nullable',
             'timer_max_seconds'               => 'int',
+            'facade_enabled'                  => 'nullable|boolean',
         ];
     }
 }

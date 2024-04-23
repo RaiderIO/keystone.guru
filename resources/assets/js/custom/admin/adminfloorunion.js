@@ -155,7 +155,11 @@ class FloorUnion extends Icon {
         return this.isEditable();
     }
 
+    getDisplayText() {
+        return this.toString();
+    }
+
     toString() {
-        return `Floor union-(${this.id})`;
+        return `Floor union-${this.id}`;
     }
 }

@@ -71,8 +71,8 @@ use Illuminate\Support\Collection;
  * @property Collection|Floor[]                      $reverseConnectedFloors
  *
  * @method static Builder active()
- * @method static Builder indexOrFacade(int $floorIndex)
- * @method static Builder defaultOrFacade()
+ * @method static Builder indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)
+ * @method static Builder defaultOrFacade(MappingVersion $mappingVersion)
  *
  * @mixin Eloquent
  */
@@ -103,6 +103,7 @@ class Floor extends CacheModel implements MappingModelInterface
     protected $fillable = [
         'dungeon_id',
         'index',
+        'mdt_sub_level',
         'name',
         'default',
         'facade',
@@ -163,42 +164,42 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public function enemiesForExport(): HasMany
     {
-        return $this->hasMany(Enemy::class);
+        return $this->hasMany(Enemy::class)->orderBy('id');
     }
 
     public function enemyPacksForExport(): HasMany
     {
-        return $this->hasMany(EnemyPack::class);
+        return $this->hasMany(EnemyPack::class)->orderBy('id');
     }
 
     public function enemyPatrolsForExport(): HasMany
     {
-        return $this->hasMany(EnemyPatrol::class);
+        return $this->hasMany(EnemyPatrol::class)->orderBy('id');
     }
 
     public function mapIconsForExport(): HasMany
     {
-        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', null);
+        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', null)->orderBy('id');
     }
 
     public function mountableAreasForExport(): HasMany
     {
-        return $this->hasMany(MountableArea::class);
+        return $this->hasMany(MountableArea::class)->orderBy('id');
     }
 
     public function floorUnionsForExport(): HasMany
     {
-        return $this->hasMany(FloorUnion::class);
+        return $this->hasMany(FloorUnion::class)->orderBy('id');
     }
 
     public function floorUnionAreasForExport(): HasMany
     {
-        return $this->hasMany(FloorUnionArea::class);
+        return $this->hasMany(FloorUnionArea::class)->orderBy('id');
     }
 
     public function dungeonFloorSwitchMarkersForExport(): HasMany
     {
-        return $this->hasMany(DungeonFloorSwitchMarker::class);
+        return $this->hasMany(DungeonFloorSwitchMarker::class)->orderBy('id');
     }
 
     public function floorcouplings(): HasMany
@@ -262,9 +263,9 @@ class Floor extends CacheModel implements MappingModelInterface
         return $query->where('floors.active', 1);
     }
 
-    public function scopeIndexOrFacade(Builder $builder, int $floorIndex, ?string $mapFacadeStyle = null): Builder
+    public function scopeIndexOrFacade(Builder $builder, MappingVersion $mappingVersion, int $floorIndex, ?string $mapFacadeStyle = null): Builder
     {
-        $useFacade = ($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE;
+        $useFacade = (($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
         // Facade should be FORCED to use floor index 1
         if ($useFacade && $floorIndex > 1) {
@@ -282,9 +283,9 @@ class Floor extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
-    public function scopeDefaultOrFacade(Builder $builder): Builder
+    public function scopeDefaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
     {
-        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $useFacade = (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
         return $builder->where(static function (Builder $builder) {
             $builder->where('facade', 1)

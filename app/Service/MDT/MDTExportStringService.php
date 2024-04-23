@@ -46,7 +46,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         foreach ($this->dungeonRoute->mapicons()->with(['floor'])->get() as $mapIcon) {
             /** @var MapIcon $mapIcon */
             $latLng = $mapIcon->getLatLng();
-            if ($this->dungeonRoute->dungeon->facade_enabled) {
+            if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
                     $latLng
@@ -95,7 +95,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $previousMdtCoordinates = null;
 
             foreach ($verticesLatLngs as $vertexLatLng) {
-                if ($this->dungeonRoute->dungeon->facade_enabled) {
+                if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                     $vertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                         $this->dungeonRoute->mappingVersion,
                         $vertexLatLng
@@ -130,7 +130,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $floor  = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
-            if ($this->dungeonRoute->dungeon->facade_enabled) {
+            if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
                     $latLng

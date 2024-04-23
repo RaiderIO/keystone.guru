@@ -20,19 +20,14 @@ class MDTMapPOI implements Arrayable
         self::TEMPLATE_VIGNETTE_PIN,
     ];
 
-    public const TYPE_MAP_LINK = 'mapLink';
-
-    public const TYPE_GRAVEYARD = 'graveyard';
-
-    public const TYPE_GENERAL_NOTE = 'generalNote';
-
-    public const TYPE_ZOOM = 'zoom';
-
+    public const TYPE_MAP_LINK             = 'mapLink';
+    public const TYPE_GRAVEYARD            = 'graveyard';
+    public const TYPE_GENERAL_NOTE         = 'generalNote';
+    public const TYPE_ZOOM                 = 'zoom';
     public const TYPE_IRON_DOCKS_IRON_STAR = 'ironDocksIronStar';
-
-    public const TYPE_NYALOTHA_SPIRE = 'nyalothaSpire';
-
-    public const TYPE_THE_UNDERROT_SKIP = 'tuSkip';
+    public const TYPE_NYALOTHA_SPIRE       = 'nyalothaSpire';
+    public const TYPE_THE_UNDERROT_SKIP    = 'tuSkip';
+    public const TYPE_BRACKENHIDE_CAGE     = 'brackenhideCage';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -42,6 +37,7 @@ class MDTMapPOI implements Arrayable
         self::TYPE_IRON_DOCKS_IRON_STAR,
         self::TYPE_NYALOTHA_SPIRE,
         self::TYPE_THE_UNDERROT_SKIP,
+        self::TYPE_BRACKENHIDE_CAGE,
     ];
 
     private readonly string $template;
@@ -61,7 +57,7 @@ class MDTMapPOI implements Arrayable
     /**
      * @throws Exception
      */
-    public function __construct(private readonly int $subLevel, private array $rawMapPOI)
+    public function __construct(private readonly int $subLevel, private readonly array $rawMapPOI)
     {
         $this->template        = $this->rawMapPOI['template'];
         $this->type            = $this->rawMapPOI['type'];

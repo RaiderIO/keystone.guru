@@ -11,6 +11,11 @@ class SpellServiceLogging extends StructuredLogging implements SpellServiceLoggi
         $this->error(__METHOD__);
     }
 
+    public function importFromCsvSpellIdEmpty(): void
+    {
+        $this->warning(__METHOD__);
+    }
+
     public function importFromCsvSpellAlreadySet(int $spellId): void
     {
         $this->warning(__METHOD__, get_defined_vars());

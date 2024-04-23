@@ -55,7 +55,7 @@ class MapObject extends Signalable {
             self._cleanDecorator();
         });
 
-        this.register(['shown', 'hidden', 'object:changed'], this, function (event) {
+        this.register(['shown', 'hidden', 'object:changed'], this, function () {
             if (self.isVisible()) {
                 self._rebuildDecorator();
             } else {
@@ -262,7 +262,7 @@ class MapObject extends Signalable {
                 // Popup trigger function, needs to be outside the synced function to prevent multiple bindings
                 // This also cannot be a private function since that'll apparently give different signatures as well
                 // (and thus trigger the submit function multiple times when clicked once)
-                let popupOpenFn = function (event) {
+                let popupOpenFn = function () {
                     self._initPopup();
                 };
 
@@ -752,7 +752,7 @@ class MapObject extends Signalable {
 
         // Floor states; most common reason for not being visible
         if (state.getCurrentFloor().id !== this.floor_id) {
-            // console.log(`Hiding map object ${this.id} due to floor ${this.floor_id} !== ${state.getCurrentFloor().id}`);
+            // console.log(`Hiding map object ${this.id} due to floor current floor ${state.getCurrentFloor().id} not matching object floor ${this.floor_id}`);
             return false;
         }
 

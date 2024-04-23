@@ -8,6 +8,7 @@ use App\Http\Requests\Floor\FloorUnionFormRequest;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -26,12 +27,13 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @return FloorUnion|Model
-     *
      * @throws Throwable
      */
-    public function store(FloorUnionFormRequest $request, MappingVersion $mappingVersion, ?FloorUnion $floorUnion = null): FloorUnion
-    {
+    public function store(
+        FloorUnionFormRequest $request,
+        MappingVersion        $mappingVersion,
+        ?FloorUnion           $floorUnion = null
+    ): FloorUnion|Model {
         $validated = $request->validated();
 
         return $this->storeModel($mappingVersion, $validated, FloorUnion::class, $floorUnion);
@@ -42,13 +44,15 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
      *
      * @throws Throwable
      */
-    public function delete(Request $request, FloorUnion $floorUnion)
+    public function delete(Request $request, MappingVersion $mappingVersion, FloorUnion $floorUnion)
     {
         return DB::transaction(static function () use ($floorUnion) {
             try {
                 if ($floorUnion->delete()) {
                     if (Auth::check()) {
-                        broadcast(new ModelDeletedEvent($floorUnion->floor->dungeon, Auth::getUser(), $floorUnion));
+                        /** @var User $user */
+                        $user = Auth::getUser();
+                        broadcast(new ModelDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
                     }
                 }
 

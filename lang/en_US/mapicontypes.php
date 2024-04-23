@@ -2,6 +2,7 @@
 
 return [
 
+    'unknown'                           => 'Unknown',
     'comment'                           => 'Comment',
     'door'                              => 'Door',
     'door_down'                         => 'Door Down',

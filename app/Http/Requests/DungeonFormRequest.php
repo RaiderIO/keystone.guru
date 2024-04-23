@@ -28,7 +28,6 @@ class DungeonFormRequest extends FormRequest
             'speedrun_enabled'                   => 'nullable|boolean',
             'speedrun_difficulty_10_man_enabled' => 'nullable|boolean',
             'speedrun_difficulty_25_man_enabled' => 'nullable|boolean',
-            'facade_enabled'                     => 'nullable|boolean',
             'game_version_id'                    => Rule::exists(GameVersion::class, 'id'),
             'zone_id'                            => 'int',
             'map_id'                             => 'int',

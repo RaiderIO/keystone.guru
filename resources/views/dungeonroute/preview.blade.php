@@ -34,6 +34,7 @@ $dungeon->load('floors');
 @endsection
 @section('content')
     @include('common.maps.map', [
+        'mappingVersion' => $dungeonroute->mappingVersion,
         'dungeonroute' => $dungeonroute,
         'showAds' => false,
         'edit' => false,

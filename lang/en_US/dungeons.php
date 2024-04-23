@@ -765,8 +765,9 @@ return [
         'halls_of_infusion'                    => [
             'name'   => 'Halls of Infusion',
             'floors' => [
-                'infusers_rotunda' => 'Infuser\'s Rotunda',
-                'infusion_chamber' => 'Infusion Chamber',
+                'infusers_rotunda'  => 'Infuser\'s Rotunda',
+                'infusion_chamber'  => 'Infusion Chamber',
+                'halls_of_infusion' => 'Halls of Infusion',
             ],
         ],
         'neltharus'                            => [
@@ -774,6 +775,7 @@ return [
             'floors' => [
                 'the_burning_cauldron' => 'The Burning Cauldron',
                 'chamber_of_flames'    => 'Chamber of Flames',
+                'neltharus'            => 'Neltharus',
             ],
         ],
         'ruby_life_pools'                      => [
@@ -781,6 +783,7 @@ return [
             'floors' => [
                 'infusion_chambers' => 'Infusion Chambers',
                 'ruby_overlook'     => 'Ruby Overlook',
+                'ruby_life_pools'   => 'Ruby Life Pools',
             ],
         ],
         'the_azure_vault'                      => [
@@ -791,6 +794,7 @@ return [
                 'mausoleum_of_legends'    => 'Mausoleum of Legends',
                 'the_infinity_seal'       => 'The Infinity Seal',
                 'sindragosas_lament'      => 'Sindragosa\'s Lament',
+                'the_azure_vault'         => 'The Azure Vault',
             ],
         ],
         'the_nokhud_offensive'                 => [
@@ -802,8 +806,9 @@ return [
         'uldaman_legacy_of_tyr'                => [
             'name'   => 'Uldaman: Legacy of Tyr',
             'floors' => [
-                'hall_of_the_keepers' => 'Hall of the Keepers',
-                'the_vault_of_tyr'    => 'The Vault of Tyr',
+                'hall_of_the_keepers'   => 'Hall of the Keepers',
+                'the_vault_of_tyr'      => 'The Vault of Tyr',
+                'uldaman_legacy_of_tyr' => 'Uldaman: Legacy of Tyr',
             ],
         ],
         'dawn_of_the_infinite_galakronds_fall' => [
