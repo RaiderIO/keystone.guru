@@ -58,7 +58,6 @@ $dungeon = $dungeonroute->dungeon;
                 ]
             ],
             'hiddenMapObjectGroups' => [
-                'mountablearea',
                 'floorunion',
                 'floorunionarea',
             ],

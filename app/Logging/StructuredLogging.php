@@ -9,7 +9,6 @@ use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
 use Monolog\Level;
 use Psr\Log\LoggerInterface;
-use Rollbar\Rollbar;
 
 abstract class StructuredLogging implements StructuredLoggingInterface
 {

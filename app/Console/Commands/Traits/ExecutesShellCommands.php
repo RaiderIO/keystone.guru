@@ -24,7 +24,10 @@ trait ExecutesShellCommands
 
         foreach ($cmds as $cmd) {
             if (!empty($cmd)) {
-                $cmdResult = trim(shell_exec($cmd));
+                $cmdResult = shell_exec($cmd);
+                if (is_string($cmdResult)) {
+                    $cmdResult = trim($cmdResult);
+                }
 
                 if ($echo) {
                     $this->info($cmdResult);

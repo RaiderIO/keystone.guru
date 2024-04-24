@@ -113,7 +113,7 @@ class CommonMapsMap extends InlineCode {
             // Live sessions
             $('#stop_live_session_modal select').barrating({
                 theme: 'fontawesome-stars',
-                onSelect: function (value, text, event) {
+                onSelect: function (value) {
                     self._rate(value);
                 }
             });
@@ -323,7 +323,7 @@ class CommonMapsMap extends InlineCode {
      */
     _setupFavorite() {
         let self = this;
-        $('#favorite').bind('change', function (el) {
+        $('#favorite').bind('change', function () {
             self._favorite($('#favorite').is(':checked'));
         });
 
@@ -457,7 +457,7 @@ class CommonMapsMap extends InlineCode {
                 $('#userreport_enemy_modal_submit').hide();
                 $('#userreport_enemy_modal_saving').show();
             },
-            success: function (json) {
+            success: function () {
                 $('#userreport_enemy_modal').modal('hide');
                 showSuccessNotification(lang.get('messages.user_report_enemy_success'));
             },
@@ -475,50 +475,56 @@ class CommonMapsMap extends InlineCode {
      */
     _mapObjectGroupVisibilityChanged() {
         let $mapObjectGroupVisibilityDropdown = $('#map_map_object_group_visibility_dropdown');
-        if ($mapObjectGroupVisibilityDropdown.length > 0) {
+        if ($mapObjectGroupVisibilityDropdown.length === 0) {
+            return;
+        }
 
-            /** @type array */
-            let hiddenInUI = $mapObjectGroupVisibilityDropdown.find('a:not(.active)').map(function (index, element) {
-                return $(element).data('group');
-            }).get();
+        /** @type array */
+        let hiddenInUI = $mapObjectGroupVisibilityDropdown.find('a:not(.active)').map(function (index, element) {
+            return $(element).data('group');
+        }).get();
 
-            /** @type array */
-            let cookieHiddenMapObjectGroups = [];
-            try {
-                cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
-            } catch (exception) {
-                // ignore
-            }
+        /** @type array */
+        let cookieHiddenMapObjectGroups = [];
+        try {
+            cookieHiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+        } catch (exception) {
+            // ignore
+            console.error('Exception!', exception);
+        }
 
-            let hiddenMapObjectGroups = [];
-            // Build a list of elements to hide from the UI
-            for (let index in MAP_OBJECT_GROUP_NAMES) {
-                let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
-                let group = getState().getDungeonMap().mapObjectGroupManager.getByName(mapObjectGroupName);
+        let hiddenMapObjectGroups = [];
+        // Build a list of elements to hide from the UI
+        for (let index in MAP_OBJECT_GROUP_NAMES) {
+            let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
+            let group = getState().getDungeonMap().mapObjectGroupManager.getByName(mapObjectGroupName);
 
-                if (group instanceof MapObjectGroup) {
-                    if (hiddenInUI.includes(mapObjectGroupName) ||
-                        // If it's managed in another way, and it's current hidden (changed by some other UI element)
-                        (!group.isUserToggleable() && !group.isShown())
-                    ) {
-                        hiddenMapObjectGroups.push(mapObjectGroupName);
-                        group.setVisibility(false);
-                    } else {
-                        group.setVisibility(true);
-                    }
+            if (group instanceof MapObjectGroup) {
+                if (hiddenInUI.includes(mapObjectGroupName) ||
+                    // If it's managed in another way, and it's current hidden (changed by some other UI element)
+                    (!group.isUserToggleable() && !group.isShown())
+                ) {
+                    hiddenMapObjectGroups.push(mapObjectGroupName);
+                    group.setVisibility(false);
 
                     // Remove it from the existing cookie list
                     cookieHiddenMapObjectGroups.splice(cookieHiddenMapObjectGroups.indexOf(mapObjectGroupName), 1);
+                } else {
+                    group.setVisibility(true);
                 }
+
             }
-
-            // If cookieHiddenMapObjectGroups contained any map object groups that are currently unavailable, we must still
-            // add them to our current list as to not lose our setting for it
-            hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);
-
-            // Update our cookie so that we know upon page refresh
-            Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
         }
+
+        console.log(`_mapObjectGroupVisibilityChanged`, hiddenMapObjectGroups, cookieHiddenMapObjectGroups);
+
+        // If cookieHiddenMapObjectGroups contained any map object groups that are currently unavailable, we must still
+        // add them to our current list as to not lose our setting for it
+        hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);
+
+        // Update our cookie so that we know upon page refresh
+        Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+
     }
 
     /**

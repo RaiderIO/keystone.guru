@@ -59,7 +59,6 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                 ]
             ],
             'hiddenMapObjectGroups' => [
-                'mountablearea',
                 'floorunion',
                 'floorunionarea',
             ],
