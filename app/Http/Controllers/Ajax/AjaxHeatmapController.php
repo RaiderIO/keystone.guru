@@ -29,7 +29,7 @@ class AjaxHeatmapController extends Controller
         CombatLogEventServiceInterface $combatLogEventService
     ): JsonResponse {
         return \response()->json(
-            $combatLogEventService->getGeotileGridAggregation(
+            $combatLogEventService->getGridAggregation(
                 CombatLogEventFilter::fromArray($request->validated())
             )->toArray(),
             StatusCode::OK

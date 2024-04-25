@@ -5,12 +5,11 @@ namespace App\Service\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
-use App\Service\CombatLogEvent\Models\CombatLogEventGeotileGridResult;
+use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
 use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
-use Codeart\OpensearchLaravel\Aggregations\Types\GeotileGrid;
-use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
+use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Must;
@@ -57,40 +56,89 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         return new CombatLogEventSearchResult($this->coordinatesService, $filters, $combatLogEvents, 10);
     }
 
-    public function getGeotileGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGeotileGridResult
+    public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
         $result = null;
 
         try {
             $this->log->getGeotileGridAggregationStart($filters->toArray());
 
-            $combatLogEvents = CombatLogEvent::opensearch()
-                ->builder()
-                ->search([
-                    Query::make([
-                        BoolQuery::make([
-                            Must::make([
-                                MatchOne::make('challenge_mode_id', $filters->getDungeon()->challenge_mode_id),
+            $gridResult = [];
+            // Repeat this query for each floor
+            foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
+                $searchResult = CombatLogEvent::opensearch()
+                    ->builder()
+                    ->search([
+                        Query::make([
+                            BoolQuery::make([
+                                Must::make([
+                                    MatchOne::make('ui_map_id', $floor->ui_map_id),
+                                ]),
                             ]),
                         ]),
-                    ]),
-                ])
-                ->aggregations([
-                    Aggregation::make(
-                        name: "per-floor",
-                        aggregationType: Terms::make(field: 'ui_map_id'),
-                        aggregation: Aggregation::make(
-                            name: 'grid',
-                            aggregationType: GeotileGrid::make('pos', 7)
-                        )),
-                ])
-                ->size(0)
-                ->get();
+                    ])
+                    ->aggregations([
+                        Aggregation::make(
+                            name: "heatmap",
+                            aggregationType: ScriptedMetric::make(
+                                mapScript: strtr('
+                                   int sizeX = :sizeX;
+                                   int sizeY = :sizeY;
 
-            $result = new CombatLogEventGeotileGridResult(
+                                   float minX = :minXf;
+                                   float minY = :minYf;
+                                   float maxX = :maxXf;
+                                   float maxY = :maxYf;
+
+                                   float width = maxX - minX;
+                                   float height = maxY - minY;
+                                   float stepX = width / sizeX;
+                                   float stepY = height / sizeY;
+
+                                   int gx = ((doc[\'pos_x\'].value - minX) / width * sizeX).intValue();
+                                   int gy = ((doc[\'pos_y\'].value - minY) / height * sizeY).intValue();
+                                   String key = ((gx * stepX) + minX).toString() + \',\' + ((gy * stepY) + minY).toString();
+                                   if (state.map.containsKey(key)) {
+                                     state.map[key] += 1;
+                                   } else {
+                                     state.map[key] = 1;
+                                   }
+                                 ', [
+                                    ':sizeX' => config('keystoneguru.heatmap.service.data.sizeX'),
+                                    ':sizeY' => config('keystoneguru.heatmap.service.data.sizeY'),
+                                    ':minX'  => $floor->ingame_min_x,
+                                    ':minY'  => $floor->ingame_min_y,
+                                    ':maxX'  => $floor->ingame_max_x,
+                                    ':maxY'  => $floor->ingame_max_y,
+                                ]),
+                                combineScript: 'return state.map',
+                                reduceScript: '
+                                   Map result = [:];
+                                   for (state in states) {
+                                     for (entry in state.entrySet()) {
+                                       if (result.containsKey(entry.getKey())) {
+                                         result[entry.getKey()] += entry.getValue();
+                                       } else {
+                                         result[entry.getKey()] = entry.getValue();
+                                       }
+                                     }
+                                   }
+                                   return result;
+                                 ',
+                                initScript: 'state.map = [:]'
+                            )
+                        ),
+                    ])
+                    ->size(0)
+                    ->get();
+
+                $gridResult[$floor->id] = $searchResult['aggregations']['heatmap']['value'];
+            }
+
+            $result = new CombatLogEventGridAggregationResult(
                 $this->coordinatesService,
                 $filters,
-                $combatLogEvents['aggregations']['per-floor']['buckets'],
+                $gridResult,
                 10 // @TODO fix this
             );
         } catch (\Exception $e) {

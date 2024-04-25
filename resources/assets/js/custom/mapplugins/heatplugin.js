@@ -19,16 +19,7 @@ class HeatPlugin extends MapPlugin {
         let result = [];
         if (this.rawLatLngsByFloorId.hasOwnProperty(floorId)) {
             result = this.rawLatLngsByFloorId[floorId];
-        } else {
-            for (let index in this.rawLatLngs) {
-                let rawLatLng = this.rawLatLngs[index];
-                if (rawLatLng.floor_id === floorId) {
-                    result.push([rawLatLng.lat, rawLatLng.lng, rawLatLng.weight]);
-                }
-            }
-            this.rawLatLngsByFloorId[floorId] = result;
         }
-
         this.heatLayer.setLatLngs(result);
     }
 
@@ -76,11 +67,23 @@ class HeatPlugin extends MapPlugin {
     }
 
     /**
-     * @param rawLatLngs {Object}
+     * @param rawLatLngsPerFloor {Object}
      */
-    setRawLatLngs(rawLatLngs) {
-        this.rawLatLngs = rawLatLngs;
+    setRawLatLngsPerFloor(rawLatLngsPerFloor) {
+        // Construct an easily referenced array that splits up the latLngs per floor
         this.rawLatLngsByFloorId = [];
+        for (let index in rawLatLngsPerFloor) {
+            let rawLatLngsOnFloor = rawLatLngsPerFloor[index];
+
+            this.rawLatLngsByFloorId[rawLatLngsOnFloor.floor_id] = [];
+            for (let latLngIndex in rawLatLngsOnFloor.lat_lngs) {
+                this.rawLatLngsByFloorId[rawLatLngsOnFloor.floor_id].push([
+                    rawLatLngsOnFloor.lat_lngs[latLngIndex].lat,
+                    rawLatLngsOnFloor.lat_lngs[latLngIndex].lng,
+                    rawLatLngsOnFloor.lat_lngs[latLngIndex].weight,
+                ])
+            }
+        }
 
         this._applyLatLngsForFloor(getState().getMapContext().getFloorId());
     }

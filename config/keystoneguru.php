@@ -352,6 +352,15 @@ return [
         'server_access_token' => env('ROLLBAR_SERVER_ACCESS_TOKEN'),
     ],
 
+    'heatmap' => [
+        'service' => [
+            'data' => [
+                'sizeX' => 200,
+                'sizeY' => 150,
+            ],
+        ],
+    ],
+
     'api' => [
         'dungeon_route' => [
             'thumbnail' => [

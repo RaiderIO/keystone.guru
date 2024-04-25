@@ -45,7 +45,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
     _search(queryParameters, options) {
         super._search( {
             success: function (json) {
-                getState().getDungeonMap().pluginHeat.setRawLatLngs(json.data);
+                getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
             }
         }, {
             dungeon_id: getState().getMapContext().getDungeon().id
