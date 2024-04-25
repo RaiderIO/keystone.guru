@@ -15,12 +15,16 @@
             "url": "https://github.com/Wotuu/laravel4-datatables-package"
         },
         {
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/opensearch-laravel"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "wotuu/keystone.guru.deployer",
                 "version": "0.1",
                 "source": {
-                    "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
+                    "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
                     "type": "git",
                     "reference": "7febbdab79949b493c253c13fd8816c4ca0d3187"
                 }
@@ -60,7 +64,7 @@
         "akaunting/laravel-language": "^1.0",
         "barryvdh/laravel-ide-helper": "^2.13",
         "beyondcode/laravel-server-timing": "^1.4",
-        "codeartmk/opensearch-laravel": "^1.0",
+        "codeartmk/opensearch-laravel": "dev-master",
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "fakerphp/faker": "^1.23",

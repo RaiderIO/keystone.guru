@@ -12,15 +12,26 @@ use Teapot\StatusCode;
 
 class AjaxHeatmapController extends Controller
 {
+//    public function getData(
+//        GetDataFormRequest             $request,
+//        CombatLogEventServiceInterface $combatLogEventService
+//    ): JsonResponse {
+//        return \response()->json(
+//            $combatLogEventService->getCombatLogEvents(
+//                CombatLogEventFilter::fromArray($request->validated())
+//            )->toArray(),
+//            StatusCode::OK
+//        );
+//    }
+
     public function getData(
         GetDataFormRequest             $request,
-        CombatLogEventServiceInterface $combatLogEventService,
-        CoordinatesServiceInterface    $coordinatesService
+        CombatLogEventServiceInterface $combatLogEventService
     ): JsonResponse {
         return \response()->json(
-            $combatLogEventService->getCombatLogEvents(
+            $combatLogEventService->getGeotileGridAggregation(
                 CombatLogEventFilter::fromArray($request->validated())
-            )->toArray($coordinatesService),
+            )->toArray(),
             StatusCode::OK
         );
     }

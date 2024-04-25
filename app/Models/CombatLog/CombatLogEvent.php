@@ -6,7 +6,6 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Opensearch\OpensearchModel;
-use App\Models\Traits\HasLatLng;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -113,11 +112,12 @@ class CombatLogEvent extends OpensearchModel
                     'duration_ms'       => [
                         'type' => 'integer',
                     ],
-                    'pos_x'             => [
-                        'type' => 'float',
+                    'ui_map_id'         => [
+                        'type' => 'integer',
                     ],
-                    'pos_y'             => [
-                        'type' => 'float',
+                    'pos'               => [
+                        'type'             => 'geo_point',
+                        'ignore_malformed' => true,
                     ],
                     'event_type'        => [
                         'type' => 'keyword',
@@ -168,8 +168,7 @@ class CombatLogEvent extends OpensearchModel
             'end'               => Carbon::parse($this->end)->getTimestamp(),
             'duration_ms'       => $this->duration_ms,
             'ui_map_id'         => $this->ui_map_id,
-            'pos_x'             => $this->pos_x,
-            'pos_y'             => $this->pos_y,
+            'pos'               => sprintf('POINT (%f %f)', $this->pos_x, $this->pos_y),
             'event_type'        => $this->event_type,
             'characters'        => json_decode($this->characters, true),
             'context'           => json_decode($this->context, true),
@@ -178,6 +177,9 @@ class CombatLogEvent extends OpensearchModel
 
     public function openSearchArrayToModel(array $row): self
     {
+        // POINT (355.730000 -91.230000);
+        $posArr = explode(' ', str_replace(['POINT (', ')'], '', $row['pos']));
+
         $this->setRawAttributes([
             'id'                => $row['id'],
             'run_id'            => $row['run_id'],
@@ -189,8 +191,8 @@ class CombatLogEvent extends OpensearchModel
             'end'               => Carbon::createFromTimestamp($row['end']),
             'duration_ms'       => $row['duration_ms'],
             'ui_map_id'         => $row['ui_map_id'],
-            'pos_x'             => $row['pos_x'],
-            'pos_y'             => $row['pos_y'],
+            'pos_x'             => (float)$posArr[0],
+            'pos_y'             => (float)$posArr[1],
             'event_type'        => $row['event_type'],
             'characters'        => json_encode($row['characters'], true),
             'context'           => json_encode($row['context'], true),

@@ -110,7 +110,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     {
         return CombatLogEvent::opensearch()
             ->documents()
-            ->createAll();
+            ->createAll(null, 1000);
     }
 
     public function getDungeonFromMapId(int $mapId): ?Dungeon

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "866692ecb2595905693830cdc9a34b72",
+    "content-hash": "bd42213c6177552a76a6e140e4aa12fb",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -472,16 +472,16 @@
         },
         {
             "name": "codeartmk/opensearch-laravel",
-            "version": "v1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codeartmk/opensearch-laravel.git",
-                "reference": "fa16d6aaebdc81757600ff07653e94c64cf4c48d"
+                "url": "https://github.com/Wotuu/opensearch-laravel.git",
+                "reference": "7d0fd25e954c4b9c809868df008dbdd602464d5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeartmk/opensearch-laravel/zipball/fa16d6aaebdc81757600ff07653e94c64cf4c48d",
-                "reference": "fa16d6aaebdc81757600ff07653e94c64cf4c48d",
+                "url": "https://api.github.com/repos/Wotuu/opensearch-laravel/zipball/7d0fd25e954c4b9c809868df008dbdd602464d5b",
+                "reference": "7d0fd25e954c4b9c809868df008dbdd602464d5b",
                 "shasum": ""
             },
             "require": {
@@ -492,6 +492,7 @@
                 "orchestra/testbench": "^8.0",
                 "phpunit/phpunit": "^10.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -505,7 +506,11 @@
                     "Codeart\\OpensearchLaravel\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Codeart\\OpensearchLaravel\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -521,10 +526,9 @@
             ],
             "description": "This package integrates the Opensearch client to work seamlessly with your Laravel Eloquent Model.",
             "support": {
-                "issues": "https://github.com/codeartmk/opensearch-laravel/issues",
-                "source": "https://github.com/codeartmk/opensearch-laravel/tree/v1.0.0"
+                "source": "https://github.com/Wotuu/opensearch-laravel/tree/master"
             },
-            "time": "2024-03-13T14:30:25+00:00"
+            "time": "2024-04-24T21:28:42+00:00"
         },
         {
             "name": "composer/class-map-generator",
@@ -5134,16 +5138,16 @@
         },
         {
             "name": "opensearch-project/opensearch-php",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opensearch-project/opensearch-php.git",
-                "reference": "8b6cdbce1c5c2436fa2458fc1c9f698d0fc760c7"
+                "reference": "b9dacd11f14460656aaceb3bae00287a23beef91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/8b6cdbce1c5c2436fa2458fc1c9f698d0fc760c7",
-                "reference": "8b6cdbce1c5c2436fa2458fc1c9f698d0fc760c7",
+                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/b9dacd11f14460656aaceb3bae00287a23beef91",
+                "reference": "b9dacd11f14460656aaceb3bae00287a23beef91",
                 "shasum": ""
             },
             "require": {
@@ -5195,9 +5199,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opensearch-project/opensearch-php/issues",
-                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.2.0"
+                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.3.0"
             },
-            "time": "2023-05-20T16:57:42+00:00"
+            "time": "2024-04-24T07:21:51+00:00"
         },
         {
             "name": "paquettg/php-html-parser",
@@ -14158,7 +14162,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "codeartmk/opensearch-laravel": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

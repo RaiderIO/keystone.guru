@@ -52,11 +52,9 @@ PUT _index_template/combat_log_events-template
         "ui_map_id": {
           "type": "integer"
         },
-        "pos_x": {
-          "type": "float"
-        },
-        "pos_y": {
-          "type": "float"
+        "pos": {
+          "type": "geo_point",
+          "ignore_malformed": true
         },
         "event_type": {
           "type": "keyword"
@@ -228,11 +226,9 @@ PUT /combat_log_events-000001
       "ui_map_id": {
         "type": "integer"
       },
-      "pos_x": {
-        "type": "float"
-      },
-      "pos_y": {
-        "type": "float"
+      "pos": {
+        "type": "geo_point",
+        "ignore_malformed": true
       },
       "event_type": {
         "type": "keyword"

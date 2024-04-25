@@ -12,4 +12,10 @@ interface CombatLogEventServiceLoggingInterface
     public function getCombatLogEventsException(Exception $e): void;
 
     public function getCombatLogEventsEnd(): void;
+
+    public function getGeotileGridAggregationStart(array $filters): void;
+
+    public function getGeotileGridAggregationException(Exception $e): void;
+
+    public function getGeotileGridAggregationEnd(): void;
 }

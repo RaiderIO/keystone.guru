@@ -14,9 +14,10 @@ class CombatLogEventSearchResult
      * @param Collection<CombatLogEvent> $combatLogEvents
      */
     public function __construct(
-        private readonly CombatLogEventFilter $combatLogEventFilter,
-        private readonly Collection           $combatLogEvents,
-        private readonly int                  $dungeonRouteCount
+        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly CombatLogEventFilter        $combatLogEventFilter,
+        private readonly Collection                  $combatLogEvents,
+        private readonly int                         $dungeonRouteCount
     ) {
 
     }
@@ -34,7 +35,7 @@ class CombatLogEventSearchResult
         return $this->dungeonRouteCount;
     }
 
-    public function toArray(CoordinatesServiceInterface $coordinatesService): array
+    public function toArray(): array
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();
         /** @var Collection<Floor> $floors */
@@ -44,13 +45,13 @@ class CombatLogEventSearchResult
 
         return [
             'data'                => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent)
-            use ($coordinatesService, $dungeon, $floors, $useFacade) {
-                $latLng = $coordinatesService->calculateMapLocationForIngameLocation(
+            use ($dungeon, $floors, $useFacade) {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
                     $combatLogEvent->getIngameXY()->setFloor($floors->get($combatLogEvent->ui_map_id))
                 );
 
                 $latLngArray = ($useFacade ?
-                    $coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
+                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
                     $latLng)->toArrayWithFloor();
 
                 $latLngArray['lat'] = round($latLngArray['lat'], 2);

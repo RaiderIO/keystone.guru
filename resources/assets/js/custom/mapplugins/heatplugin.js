@@ -23,7 +23,7 @@ class HeatPlugin extends MapPlugin {
             for (let index in this.rawLatLngs) {
                 let rawLatLng = this.rawLatLngs[index];
                 if (rawLatLng.floor_id === floorId) {
-                    result.push([rawLatLng.lat, rawLatLng.lng, 3]);
+                    result.push([rawLatLng.lat, rawLatLng.lng, rawLatLng.weight]);
                 }
             }
             this.rawLatLngsByFloorId[floorId] = result;

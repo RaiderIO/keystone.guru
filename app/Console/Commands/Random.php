@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use Illuminate\Console\Command;
@@ -36,16 +38,24 @@ class Random extends Command
      * Execute the console command.
      */
     public function handle(
-        CombatLogEventServiceInterface $combatLogEventService
+        CombatLogEventServiceInterface       $combatLogEventService,
+        ChallengeModeRunDataServiceInterface $challengeModeRunDataService
     ): int {
-
-        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
+        $combatLogEventService->getGeotileGridAggregation(
             new CombatLogEventFilter(
                 Dungeon::find(69)
             )
         );
 
-        dd($combatLogEvents->count());
+        $challengeModeRunDataService->insertAllToOpensearch();
+
+//        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        );
+//
+//        dd($combatLogEvents->count());
 
 //        $structuredLoggingService->all();
 
