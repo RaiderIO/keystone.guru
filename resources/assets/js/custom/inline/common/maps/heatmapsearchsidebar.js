@@ -3,7 +3,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
     constructor(options) {
         super(new SearchHandlerHeatmap($.extend({}, {
-            // loaderSelector: `#route_list_overlay`,
+            loaderSelector: options.loaderSelector,
         }, options)), options);
 
         this.sidebar = new Sidebar(options);
@@ -43,9 +43,20 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
     }
 
     _search(queryParameters, options) {
-        super._search( {
+        let self = this;
+
+        super._search({
+            beforeSend: function () {
+                $(self.options.searchResultSelector).hide();
+            },
             success: function (json) {
                 getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
+                $(self.options.searchResultDataDungeonRoutesSelector).html(
+                    json.run_count
+                );
+            },
+            complete: function () {
+                $(self.options.searchResultSelector).show();
             }
         }, {
             dungeon_id: getState().getMapContext().getDungeon().id

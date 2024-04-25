@@ -17,7 +17,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventFilter        $combatLogEventFilter,
         private readonly array                       $results,
-        private readonly int                         $dungeonRouteCount
+        private readonly int                         $runCount
     ) {
         $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
     }
@@ -83,8 +83,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
         }
 
         return [
-            'data'                => array_values($data),
-            'dungeon_route_count' => $this->dungeonRouteCount,
+            'data'      => array_values($data),
+            'run_count' => $this->runCount,
         ];
 
 

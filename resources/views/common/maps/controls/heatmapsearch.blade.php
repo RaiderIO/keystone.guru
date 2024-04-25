@@ -34,7 +34,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'defaultState' => $defaultState,
     'hideOnMove' => $hideOnMove,
     'currentFiltersSelector' => '#heatmap_search_options_current_filters',
-//    'loaderSelector' => '#route_list_overlay',
+    'loaderSelector' => '#heatmap_search_loader',
+    'searchResultSelector' => '#heatmap_search_result',
+    'searchResultDataDungeonRoutesSelector' => '#heatmap_search_result_data_dungeonroutes',
     'levelMin' => config('keystoneguru.keystone.levels.min'),
     'levelMax' => config('keystoneguru.keystone.levels.max'),
     'dependencies' => ['common/maps/map'],
@@ -76,8 +78,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     </button>
                 </div>
                 <div class="col pl-2 pr-2">
-                    <div id="heatmap_search_filter_btn" class="btn btn-success w-100">
-                        <i class="fas fa-filter"></i> {{__('view_common.maps.controls.heatmapsearch.filter')}}
+                    <div id="heatmap_search_loader" class="w-100 text-center">
+                        <h5 class="pt-2">
+                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_common.maps.controls.heatmapsearch.loading') }}
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -86,8 +90,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
         <div class="heatmap_search_container p-2" data-simplebar>
             <div id="heatmap_search_options_container">
                 <div class="row mb-2">
-                    <div id="heatmap_search_options_current_filters" class="col">
+                    <div class="col">
+                        <div id="heatmap_search_options_current_filters" class="pl-1">
 
+                        </div>
                     </div>
                 </div>
 
@@ -104,9 +110,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                         ['id' => 'filter_affixes',
                                         'class' => 'form-control affixselect selectpicker',
                                         'multiple' => 'multiple',
-                                        'title' => __('view_dungeonroute.discover.search.affixes_title'),
+                                        'title' => __('view_common.maps.controls.heatmapsearch.affixes_title'),
                                         'data-selected-text-format' => 'count > 1',
-                                        'data-count-selected-text' => __('view_dungeonroute.discover.search.affixes_selected')]) !!}
+                                        'data-count-selected-text' => __('view_common.maps.controls.heatmapsearch.affixes_selected')]) !!}
                                 </div>
                             </div>
                                 <?php
@@ -130,6 +136,14 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                         </div>
                     @endcomponent
                 @endif
+
+                <div class="row">
+                    <div id="heatmap_search_result" class="col" style="display: none;">
+                        <div class="pl-1">
+                            {!! __('view_common.maps.controls.heatmapsearch.data.dungeon_routes', ['id' => 'heatmap_search_result_data_dungeonroutes']) !!}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

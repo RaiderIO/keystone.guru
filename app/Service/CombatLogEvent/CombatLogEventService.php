@@ -9,6 +9,7 @@ use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
 use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
+use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
 use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
@@ -35,15 +36,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $combatLogEvents = CombatLogEvent::opensearch()
                 ->builder()
-                ->search([
-                    Query::make([
-                        BoolQuery::make([
-                            Must::make([
-                                MatchOne::make('challenge_mode_id', $filters->getDungeon()->challenge_mode_id),
-                            ]),
-                        ]),
-                    ]),
-                ])
+                ->search($filters->toOpensearchQuery())
                 ->get();
 
             $combatLogEvents = CombatLogEvent::openSearchResultToModels($combatLogEvents);
@@ -63,12 +56,14 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         try {
             $this->log->getGeotileGridAggregationStart($filters->toArray());
 
-            $gridResult = [];
+            $gridResult  = [];
+            $filterQuery = $filters->toOpensearchQuery();
+
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
                 $searchResult = CombatLogEvent::opensearch()
                     ->builder()
-                    ->search([
+                    ->search(array_merge($filterQuery, [
                         Query::make([
                             BoolQuery::make([
                                 Must::make([
@@ -76,7 +71,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                 ]),
                             ]),
                         ]),
-                    ])
+                    ]))
                     ->aggregations([
                         Aggregation::make(
                             name: "heatmap",
@@ -135,11 +130,24 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 $gridResult[$floor->id] = $searchResult['aggregations']['heatmap']['value'];
             }
 
+            // Request the amount of affected runs
+            $runCountSearchResult = CombatLogEvent::opensearch()
+                ->builder()
+                ->search($filterQuery)
+                ->aggregations([
+                    Aggregation::make(
+                        name: "run_count",
+                        aggregationType: Cardinality::make('run_id')
+                    ),
+                ])
+                ->size(0)
+                ->get();
+
             $result = new CombatLogEventGridAggregationResult(
                 $this->coordinatesService,
                 $filters,
                 $gridResult,
-                10 // @TODO fix this
+                $runCountSearchResult['aggregations']['run_count']['value']
             );
         } catch (\Exception $e) {
             $this->log->getGeotileGridAggregationException($e);

@@ -302,10 +302,16 @@ return [
                 'report_an_issue' => 'Report an issue',
             ],
             'heatmapsearch'  => [
-                'settings_title' => 'Map settings',
-                'filter'         => 'Filter',
-                'key_level'      => 'Key level',
-                'affixes'        => 'Affixes',
+                'settings_title'   => 'Map settings',
+                'filter'           => 'Filter',
+                'loading'          => 'Loading',
+                'key_level'        => 'Key level',
+                'affixes'          => 'Affixes',
+                'affixes_title'    => 'Affixes',
+                'affixes_selected' => '{0} affixes selected',
+                'data'             => [
+                    'dungeon_routes' => 'Showing data from <span id=":id"> </span> runs',
+                ],
             ],
             'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',
