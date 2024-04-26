@@ -57,21 +57,16 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $this->log->getGeotileGridAggregationStart($filters->toArray());
 
             $gridResult  = [];
-            $filterQuery = $filters->toOpensearchQuery();
 
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
+                $filterQuery = $filters->toOpensearchQuery([
+                    MatchOne::make('ui_map_id', $floor->ui_map_id)
+                ]);
+
                 $searchResult = CombatLogEvent::opensearch()
                     ->builder()
-                    ->search(array_merge($filterQuery, [
-                        Query::make([
-                            BoolQuery::make([
-                                Must::make([
-                                    MatchOne::make('ui_map_id', $floor->ui_map_id),
-                                ]),
-                            ]),
-                        ]),
-                    ]))
+                    ->search($filterQuery)
                     ->aggregations([
                         Aggregation::make(
                             name: "heatmap",
@@ -133,7 +128,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             // Request the amount of affected runs
             $runCountSearchResult = CombatLogEvent::opensearch()
                 ->builder()
-                ->search($filterQuery)
+                ->search($filters->toOpensearchQuery())
                 ->aggregations([
                     Aggregation::make(
                         name: "run_count",

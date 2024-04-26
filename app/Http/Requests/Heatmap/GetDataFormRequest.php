@@ -23,6 +23,7 @@ class GetDataFormRequest extends FormRequest
     {
         return [
             'dungeon_id' => ['required', Rule::exists(Dungeon::class, 'id')],
+            'level'      => ['nullable', 'regex:/^\d*;\d*$/',],
         ];
     }
 }
