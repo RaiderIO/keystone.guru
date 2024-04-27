@@ -11,9 +11,6 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
 use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
 use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
-use Codeart\OpensearchLaravel\Search\Query;
-use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
-use Codeart\OpensearchLaravel\Search\SearchQueries\Must;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
@@ -56,13 +53,19 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         try {
             $this->log->getGeotileGridAggregationStart($filters->toArray());
 
-            $gridResult  = [];
+            $gridResult = [];
 
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
                 $filterQuery = $filters->toOpensearchQuery([
-                    MatchOne::make('ui_map_id', $floor->ui_map_id)
+                    MatchOne::make('ui_map_id', $floor->ui_map_id),
                 ]);
+
+
+//                dd(json_encode(CombatLogEvent::opensearch()
+//                    ->builder()
+//                    ->search($filterQuery)
+//                    ->toArray()));
 
                 $searchResult = CombatLogEvent::opensearch()
                     ->builder()

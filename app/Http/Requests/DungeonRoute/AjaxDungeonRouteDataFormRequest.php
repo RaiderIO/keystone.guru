@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Heatmap;
+namespace App\Http\Requests\DungeonRoute;
 
-use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class GetDataFormRequest extends FormRequest
+class AjaxDungeonRouteDataFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +21,8 @@ class GetDataFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dungeon_id' => ['required', Rule::exists(Dungeon::class, 'id')],
-            'level'      => ['nullable', 'regex:/^\d*;\d*$/',],
+            'public_keys'   => 'array',
+            'public_keys.*' => Rule::exists('dungeon_routes', 'public_key'),
         ];
     }
 }
-

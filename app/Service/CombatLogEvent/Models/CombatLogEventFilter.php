@@ -8,9 +8,12 @@ use App\Models\Dungeon;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
+use Codeart\OpensearchLaravel\Search\SearchQueries\Filter;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Must;
+use Codeart\OpensearchLaravel\Search\SearchQueries\Should;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
+use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Term;
 use Illuminate\Support\Collection;
 use RectorPrefix202402\Illuminate\Contracts\Support\Arrayable;
 
@@ -185,6 +188,32 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
+        if ($this->affixes->isNotEmpty()) {
+            $must[] = BoolQuery::make([
+                Should::make(
+                    $this->affixes->map(function (Affix $affix) {
+                        return MatchOne::make('affix_id', $affix->affix_id);
+                    })->toArray()
+                ),
+            ]);
+        }
+
+        if ($this->affixGroups->isNotEmpty()) {
+            $must[] = BoolQuery::make([
+                Should::make(
+                    $this->affixGroups->map(function (AffixGroup $affixGroup) {
+                        return BoolQuery::make([
+                            Filter::make(
+                                $affixGroup->affixes->map(function (Affix $affix) {
+                                    return Term::make('affix_id', $affix->affix_id);
+                                })->toArray()
+                            ),
+                        ]);
+                    })->toArray()
+                ),
+            ]);
+        }
+
         return [
             Query::make([
                 BoolQuery::make([
@@ -205,6 +234,14 @@ class CombatLogEventFilter implements Arrayable
         if (isset($requestArray['level'])) {
             [$levelMin, $levelMax] = explode(';', $requestArray['level']);
             $combatLogEventFilter->setLevelMin((int)$levelMin)->setLevelMax((int)$levelMax);
+        }
+
+        if (isset($requestArray['affixes'])) {
+            $combatLogEventFilter->setAffixes(Affix::whereIn('id', $requestArray['affixes'])->get());
+        }
+
+        if (isset($requestArray['affix_groups'])) {
+            $combatLogEventFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
         }
 
         return $combatLogEventFilter;

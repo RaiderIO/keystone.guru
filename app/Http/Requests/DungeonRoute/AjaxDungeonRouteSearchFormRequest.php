@@ -10,7 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class APIDungeonRouteSearchFormRequest extends FormRequest
+class AjaxDungeonRouteSearchFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

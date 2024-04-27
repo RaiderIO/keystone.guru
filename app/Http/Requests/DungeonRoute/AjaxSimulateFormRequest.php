@@ -5,7 +5,7 @@ namespace App\Http\Requests\DungeonRoute;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Validation\Rule;
 
-class APISimulateFormRequest extends DungeonRouteFormRequest
+class AjaxSimulateFormRequest extends DungeonRouteFormRequest
 {
     /**
      * Get the validation rules that apply to the request.

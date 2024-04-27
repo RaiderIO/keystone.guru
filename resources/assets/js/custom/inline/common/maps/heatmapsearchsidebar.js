@@ -15,7 +15,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         this.filters = {
             'level': new SearchFilterLevel('#filter_level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            'affixgroups': new SearchFilterAffixGroups(`#filter_affixes`, this._search.bind(this)),
+            'affix_groups': new SearchFilterAffixGroups(`#filter_affixes`, this._search.bind(this)),
             'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
         };
     }
@@ -47,7 +47,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         super._search({
             beforeSend: function () {
-                $(self.options.searchResultSelector).hide();
+                $(self.options.searchResultSelector).css('visibility', 'hidden');
             },
             success: function (json) {
                 getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
@@ -56,7 +56,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 );
             },
             complete: function () {
-                $(self.options.searchResultSelector).show();
+                $(self.options.searchResultSelector).css('visibility', 'visible');
             }
         }, {
             dungeon_id: getState().getMapContext().getDungeon().id

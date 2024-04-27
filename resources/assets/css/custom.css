@@ -137,6 +137,7 @@ ul.light-slider {
     cursor: pointer;
 }
 
+.heatmap_search_container .select_icon.class_icon.selectable.selected,
 .discover .select_icon.class_icon.selectable.selected,
 .discover .grid_dungeon.selectable.selected {
     border: 0.125rem solid red;

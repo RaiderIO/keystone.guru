@@ -79,7 +79,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                 </div>
                 <div class="col pl-2 pr-2">
                     <div id="heatmap_search_loader" class="w-100 text-center">
-                        <h5 class="pt-2">
+                        <h5 class="pt-1">
                             <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_common.maps.controls.heatmapsearch.loading') }}
                         </h5>
                     </div>
@@ -138,7 +138,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                 @endif
 
                 <div class="row">
-                    <div id="heatmap_search_result" class="col" style="display: none;">
+                    <div id="heatmap_search_result" class="col" style="visibility: hidden;">
                         <div class="pl-1">
                             {!! __('view_common.maps.controls.heatmapsearch.data.dungeon_routes', ['id' => 'heatmap_search_result_data_dungeonroutes']) !!}
                         </div>

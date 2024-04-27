@@ -2,7 +2,6 @@ class SearchHandler {
     constructor(options) {
         this.options = options;
 
-        console.log(this.options);
         this.loading = false;
     }
 

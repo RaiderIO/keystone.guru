@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Heatmap\GetDataFormRequest;
+use App\Http\Requests\Heatmap\AjaxGetDataFormRequest;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -25,7 +25,7 @@ class AjaxHeatmapController extends Controller
 //    }
 
     public function getData(
-        GetDataFormRequest             $request,
+        AjaxGetDataFormRequest         $request,
         CombatLogEventServiceInterface $combatLogEventService
     ): JsonResponse {
         return \response()->json(
