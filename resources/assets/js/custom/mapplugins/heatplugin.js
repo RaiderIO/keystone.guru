@@ -10,7 +10,6 @@ class HeatPlugin extends MapPlugin {
         this.rawLatLngsByFloorId = [];
 
         getState().register('floorid:changed', this, function (floorIdChangedEvent) {
-            console.log(floorIdChangedEvent);
             self._applyLatLngsForFloor(floorIdChangedEvent.data.floorId);
         });
     }

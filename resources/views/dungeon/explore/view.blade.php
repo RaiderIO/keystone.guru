@@ -9,6 +9,7 @@ use App\Models\Floor\Floor;
  * @var Floor      $floor
  * @var string     $title
  * @var MapContext $mapContext
+ * @var boolean    $showHeatmapSearch
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -37,7 +38,7 @@ use App\Models\Floor\Floor;
                 'controls' => [
                     'view' => true,
                     'pulls' => false,
-                    'heatmapSearch' => true,
+                    'heatmapSearch' => $showHeatmapSearch,
                     'enemyInfo' => true,
                 ],
             ],

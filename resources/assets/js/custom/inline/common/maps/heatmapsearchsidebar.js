@@ -46,18 +46,14 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         let self = this;
 
         super._search({
-            beforeSend: function () {
-                $(self.options.searchResultSelector).css('visibility', 'hidden');
-            },
             success: function (json) {
                 getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
                 $(self.options.searchResultDataDungeonRoutesSelector).html(
                     json.run_count
                 );
-            },
-            complete: function () {
+
                 $(self.options.searchResultSelector).css('visibility', 'visible');
-            }
+            },
         }, {
             dungeon_id: getState().getMapContext().getDungeon().id
         });

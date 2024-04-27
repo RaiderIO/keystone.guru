@@ -7,6 +7,7 @@
  * @var string                                                 $id
  * @var string                                                 $tabsId
  * @var bool                                                   $selectable
+ * @var callable|null                                          $subtextFn
  */
 $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
 $selectable       ??= true;
@@ -14,8 +15,9 @@ $route            ??= null;
 $routeParams      ??= [];
 $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
     'dungeon' => $dungeon->key,
-    'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon]))
+    'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon])),
 ];
+$subtextFn        ??= null;
 
 ?>
 <div id="{{ $id }}">
@@ -82,6 +84,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                         'selectable' => true,
                         'route' => $route,
                         'links' => $route === null ? collect() : $nextSeason->dungeons->map($linkMapFn),
+                        'subtextFn' => $subtextFn,
                     ])
                 </div>
             @endif
@@ -95,6 +98,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                     'selectable' => true,
                     'route' => $route,
                     'links' => $route === null ? collect() : $currentSeason->dungeons->map($linkMapFn),
+                    'subtextFn' => $subtextFn,
                 ])
             </div>
         @endif
@@ -114,6 +118,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                         'selectable' => true,
                         'route' => $route,
                         'links' => $route === null ? collect() : $expansion->dungeons()->active()->get()->map($linkMapFn),
+                        'subtextFn' => $subtextFn,
                     ])
                 </div>
                 @php($index++)

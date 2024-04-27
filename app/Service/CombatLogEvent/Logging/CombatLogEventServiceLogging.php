@@ -37,5 +37,25 @@ class CombatLogEventServiceLogging extends StructuredLogging implements CombatLo
         $this->end(__METHOD__);
     }
 
+    public function getRunCountResult(int $runCount): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function getRunCountException(Exception $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getRunCountPerDungeonResult(array $runCount): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function getRunCountPerDungeonException(Exception $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
 
 }

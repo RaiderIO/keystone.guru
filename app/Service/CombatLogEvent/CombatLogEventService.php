@@ -3,6 +3,7 @@
 namespace App\Service\CombatLogEvent;
 
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\Dungeon;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
@@ -11,7 +12,9 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
 use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
 use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
+use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
+use Illuminate\Support\Collection;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
@@ -129,6 +132,27 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             }
 
             // Request the amount of affected runs
+            $runCount = $this->getRunCount($filters);
+
+            $result = new CombatLogEventGridAggregationResult(
+                $this->coordinatesService,
+                $filters,
+                $gridResult,
+                $runCount
+            );
+        } catch (\Exception $e) {
+            $this->log->getGeotileGridAggregationException($e);
+        } finally {
+            $this->log->getGeotileGridAggregationEnd();
+        }
+
+        return $result;
+    }
+
+    public function getRunCount(CombatLogEventFilter $filters): int
+    {
+        $result = 0;
+        try {
             $runCountSearchResult = CombatLogEvent::opensearch()
                 ->builder()
                 ->search($filters->toOpensearchQuery())
@@ -141,18 +165,58 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 ->size(0)
                 ->get();
 
-            $result = new CombatLogEventGridAggregationResult(
-                $this->coordinatesService,
-                $filters,
-                $gridResult,
-                $runCountSearchResult['aggregations']['run_count']['value']
-            );
+            $result = $runCountSearchResult['aggregations']['run_count']['value'];
+            $this->log->getRunCountResult($result);
         } catch (\Exception $e) {
-            $this->log->getGeotileGridAggregationException($e);
-        } finally {
-            $this->log->getGeotileGridAggregationEnd();
+            $this->log->getRunCountException($e);
         }
 
         return $result;
     }
+
+    /**
+     * @return Collection<int>
+     */
+    public function getRunCountPerDungeon(): Collection
+    {
+        $result = collect();
+        try {
+            /** @var Collection<Dungeon> $allDungeons */
+            $allDungeons = Dungeon::whereNotNull('challenge_mode_id')
+                ->get()
+                ->keyBy('challenge_mode_id');
+
+            $searchResult = CombatLogEvent::opensearch()
+                ->builder()
+                ->aggregations([
+                    Aggregation::make(
+                        name: "dungeons",
+                        aggregationType: Terms::make('challenge_mode_id', 10000),
+                        aggregation: Aggregation::make(
+                            name: "run_count",
+                            aggregationType: Cardinality::make('run_id')
+                        ),
+                    ),
+                ])
+                ->size(0)
+                ->get();
+
+            foreach ($searchResult['aggregations']['dungeons']['buckets'] as $bucket) {
+                $challengeModeId = $bucket['key'];
+                if ($allDungeons->has($challengeModeId)) {
+                    /** @var Dungeon $dungeon */
+                    $dungeon = $allDungeons->get($challengeModeId);
+
+                    $result->put($dungeon->id, $bucket['run_count']['value']);
+                }
+            }
+
+            $this->log->getRunCountPerDungeonResult($result->toArray());
+        } catch (\Exception $e) {
+            $this->log->getRunCountPerDungeonException($e);
+        }
+
+        return $result;
+    }
+
 }

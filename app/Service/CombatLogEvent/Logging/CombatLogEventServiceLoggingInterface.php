@@ -18,4 +18,12 @@ interface CombatLogEventServiceLoggingInterface
     public function getGeotileGridAggregationException(Exception $e): void;
 
     public function getGeotileGridAggregationEnd(): void;
+
+    public function getRunCountResult(int $runCount): void;
+
+    public function getRunCountException(Exception $e): void;
+
+    public function getRunCountPerDungeonResult(array $runCount): void;
+
+    public function getRunCountPerDungeonException(Exception $e): void;
 }

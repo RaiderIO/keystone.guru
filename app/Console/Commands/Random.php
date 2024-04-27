@@ -41,6 +41,9 @@ class Random extends Command
         CombatLogEventServiceInterface       $combatLogEventService,
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService
     ): int {
+
+        dd($combatLogEventService->getRunCountPerDungeon());
+
 //        dd($combatLogEventService->getGridAggregation(
 //            new CombatLogEventFilter(
 //                Dungeon::find(69)
@@ -48,7 +51,7 @@ class Random extends Command
 //        )->toArray());
 
 //        $challengeModeRunDataService->convert();
-        $challengeModeRunDataService->insertAllToOpensearch();
+//        $challengeModeRunDataService->insertAllToOpensearch();
 
 //        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
 //            new CombatLogEventFilter(
