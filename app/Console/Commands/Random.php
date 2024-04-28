@@ -42,7 +42,11 @@ class Random extends Command
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService
     ): int {
 
-        dd($combatLogEventService->getRunCountPerDungeon());
+        dd($combatLogEventService->getAvailableDateRange(
+            new CombatLogEventFilter(
+                Dungeon::find(69)
+            )
+        ));
 
 //        dd($combatLogEventService->getGridAggregation(
 //            new CombatLogEventFilter(

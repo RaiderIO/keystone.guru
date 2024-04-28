@@ -26,4 +26,8 @@ interface CombatLogEventServiceLoggingInterface
     public function getRunCountPerDungeonResult(array $runCount): void;
 
     public function getRunCountPerDungeonException(Exception $e): void;
+
+    public function getAvailableDateRangeResult(int $start, int $end): void;
+
+    public function getAvailableDateRangeException(Exception $e): void;
 }

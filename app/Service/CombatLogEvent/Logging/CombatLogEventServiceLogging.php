@@ -57,5 +57,13 @@ class CombatLogEventServiceLogging extends StructuredLogging implements CombatLo
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function getAvailableDateRangeResult(int $start, int $end): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
 
+    public function getAvailableDateRangeException(Exception $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }

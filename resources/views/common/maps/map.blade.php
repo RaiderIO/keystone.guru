@@ -23,6 +23,7 @@ use App\Models\User;
  * @var string|null       $embedStyle
  * @var bool|null         $edit
  * @var array             $show
+ * @var array|null        $controlOptions
  * @var bool              $adFree
  * @var string|null       $mapBackgroundColor
  * @var string|null       $mapFacadeStyle
@@ -37,6 +38,7 @@ $mapClasses         ??= '';
 $dungeonroute       ??= null;
 $livesession        ??= null;
 $mapBackgroundColor ??= null;
+$controlOptions     ??= [];
 
 // Ensure default values for showing/hiding certain elements
 $show['controls']                  ??= [];
@@ -218,11 +220,11 @@ if ($isAdmin) {
     @endif
 
     @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
-        @include('common.maps.controls.heatmapsearch', [
+        @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
             'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
             'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
-        ])
+        ]))
     @endif
 
     @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])

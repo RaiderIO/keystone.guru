@@ -71,12 +71,15 @@ class DungeonExploreController extends Controller
                 ]);
             }
 
+            $combatLogEventFilter = new CombatLogEventFilter($dungeon);
+
             return view('dungeon.explore.view', [
-                'dungeon'           => $dungeon,
-                'floor'             => $floor,
-                'title'             => __($dungeon->name),
-                'mapContext'        => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-                'showHeatmapSearch' => $combatLogEventService->getRunCount(new CombatLogEventFilter($dungeon)),
+                'dungeon'            => $dungeon,
+                'floor'              => $floor,
+                'title'              => __($dungeon->name),
+                'mapContext'         => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'showHeatmapSearch'  => $combatLogEventService->getRunCount($combatLogEventFilter),
+                'availableDateRange' => $combatLogEventService->getAvailableDateRange($combatLogEventFilter),
             ]);
         }
     }

@@ -9,8 +9,12 @@ use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
 use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
 use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
+use Codeart\OpensearchLaravel\Aggregations\Types\Maximum;
+use Codeart\OpensearchLaravel\Aggregations\Types\Minimum;
 use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
 use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
@@ -51,6 +55,79 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
     public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
+        // <editor-fold desc="OS Query">
+//        {
+//            "size": 0,
+//            "query": {
+//                    "bool": {
+//                        "must": [{
+//                            "match": {
+//                                "ui_map_id": 2082
+//                            }
+//                        }, {
+//                            "match": {
+//                                "challenge_mode_id": 406
+//                            }
+//                        }, {
+//                            "range": {
+//                                "level": {
+//                                    "gte": 13,
+//                                    "lte": 20
+//                                }
+//                            }
+//                        }, {
+//                            "bool": {
+//                                "should": [{
+//                                    "bool": {
+//                                        "filter": [{
+//                                            "term": {
+//                                                "affix_id": 10
+//                                                    }
+//                                                }, {
+//                                            "term": {
+//                                                "affix_id": 136
+//                                                    }
+//                                                }, {
+//                                            "term": {
+//                                                "affix_id": 8
+//                                                    }
+//                                                }
+//                                            ]
+//                                        }
+//                                    }, {
+//                                    "bool": {
+//                                        "must": [{
+//                                            "term": {
+//                                                "affix_id": 9
+//                                                    }
+//                                                }, {
+//                                            "term": {
+//                                                "affix_id": 134
+//                                                    }
+//                                                }, {
+//                                            "term": {
+//                                                "affix_id": 11
+//                                                    }
+//                                                }
+//                                            ]
+//                                        }
+//                                    }
+//                                ]
+//                            }
+//                        }
+//                    ]
+//                }
+//            },
+//            "aggs": {
+//                    "run_count": {
+//                        "cardinality": {
+//                            "field": "run_id"
+//                    }
+//                }
+//            }
+//        }
+        // </editor-fold>
+
         $result = null;
 
         try {
@@ -151,6 +228,20 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
     public function getRunCount(CombatLogEventFilter $filters): int
     {
+        // <editor-fold desc="OS Query">
+//        POST /combat_log_events/_search
+//        {
+//            "size": 0,
+//            "aggs": {
+//            "run_count": {
+//                "cardinality": {
+//                    "field": "run_id"
+//                    }
+//                }
+//            }
+//        }
+        // </editor-fold>
+
         $result = 0;
         try {
             $runCountSearchResult = CombatLogEvent::opensearch()
@@ -181,6 +272,28 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     {
         $result = collect();
         try {
+            // <editor-fold desc="OS Query">
+//            POST /combat_log_events/_search
+//            {
+//                "size": 0,
+//                "aggs": {
+//                "dungeon": {
+//                    "terms": {
+//                        "field": "challenge_mode_id",
+//                            "size": 10000
+//                        },
+//                        "aggs": {
+//                        "run_count": {
+//                            "cardinality": {
+//                                "field": "run_id"
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+            // </editor-fold>
+
             /** @var Collection<Dungeon> $allDungeons */
             $allDungeons = Dungeon::whereNotNull('challenge_mode_id')
                 ->get()
@@ -219,4 +332,35 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         return $result;
     }
 
+    public function getAvailableDateRange(CombatLogEventFilter $filters): ?CarbonPeriod
+    {
+        $result = null;
+        try {
+            $runCountSearchResult = CombatLogEvent::opensearch()
+                ->builder()
+                ->search($filters->toOpensearchQuery())
+                ->aggregations([
+                    Aggregation::make(
+                        name: "min_date",
+                        aggregationType: Minimum::make('start')
+                    ),
+                    Aggregation::make(
+                        name: "max_date",
+                        aggregationType: Maximum::make('start')
+                    ),
+                ])
+                ->size(0)
+                ->get();
+
+            $result = new CarbonPeriod(
+                Carbon::createFromTimestamp((int)$runCountSearchResult['aggregations']['min_date']['value_as_string'])->toDate(),
+                Carbon::createFromTimestamp((int)$runCountSearchResult['aggregations']['max_date']['value_as_string'])->toDate()
+            );
+            $this->log->getAvailableDateRangeResult($result->start->getTimestamp(), $result->end->getTimestamp());
+        } catch (\Exception $e) {
+            $this->log->getAvailableDateRangeException($e);
+        }
+
+        return $result;
+    }
 }

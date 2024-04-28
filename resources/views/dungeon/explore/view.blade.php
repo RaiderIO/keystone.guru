@@ -3,13 +3,15 @@
 use App\Logic\MapContext\MapContext;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use Carbon\CarbonPeriod;
 
 /**
- * @var Dungeon    $dungeon
- * @var Floor      $floor
- * @var string     $title
- * @var MapContext $mapContext
- * @var boolean    $showHeatmapSearch
+ * @var Dungeon      $dungeon
+ * @var Floor        $floor
+ * @var string       $title
+ * @var MapContext   $mapContext
+ * @var boolean      $showHeatmapSearch
+ * @var CarbonPeriod $availableDateRange
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -40,6 +42,11 @@ use App\Models\Floor\Floor;
                     'pulls' => false,
                     'heatmapSearch' => $showHeatmapSearch,
                     'enemyInfo' => true,
+                ],
+            ],
+            'controlOptions' => [
+                'heatmapSearch' => [
+                    'availableDateRange' => $availableDateRange,
                 ],
             ],
             'hiddenMapObjectGroups' => [

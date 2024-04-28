@@ -3,6 +3,7 @@
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,6 +17,7 @@ use Illuminate\Support\Collection;
  * @var bool                   $showAllEnabled
  * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
  * @var Collection<Affix>      $featuredAffixesByActiveExpansion
+ * @var CarbonPeriod           $availableDateRange
  */
 
 // By default, show it if we're not mobile, but allow overrides
@@ -150,7 +152,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                 </div>
                                 <div class="col">
                                     <input id="filter_date_from" type="date" name="date_range_from"
-                                           value="{{ old('date_range_from') }}" style="width: 110px"/>
+                                           value="{{ old('date_range_from') }}" style="width: 110px"
+                                           min="{{ $availableDateRange->start->toDateString() }}"
+                                           max="{{ $availableDateRange->end->toDateString() }}"/>
                                 </div>
                                 <div class="col">
                                     <div id="filter_date_from_clear_btn" class="btn btn-sm text-danger">
@@ -168,7 +172,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                 </div>
                                 <div class="col">
                                     <input id="filter_date_to" type="date" name="date_range_to"
-                                           value="{{ old('date_range_to') }}" style="width: 110px"/>
+                                           value="{{ old('date_range_to') }}" style="width: 110px"
+                                           min="{{ $availableDateRange->start->toDateString() }}"
+                                           max="{{ $availableDateRange->end->toDateString() }}">
                                 </div>
                                 <div class="col">
                                     <div id="filter_date_to_clear_btn" class="btn btn-sm text-danger">
