@@ -37,6 +37,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'loaderSelector' => '#heatmap_search_loader',
     'searchResultSelector' => '#heatmap_search_result',
     'searchResultDataDungeonRoutesSelector' => '#heatmap_search_result_data_dungeonroutes',
+    'filterDateFromClearBtnSelector' => '#filter_date_from_clear_btn',
+    'filterDateToClearBtnSelector' => '#filter_date_to_clear_btn',
     'levelMin' => config('keystoneguru.keystone.levels.min'),
     'levelMax' => config('keystoneguru.keystone.levels.max'),
     'dependencies' => ['common/maps/map'],
@@ -137,10 +139,53 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     @endcomponent
                 @endif
 
+                @component('common.search.filter', ['key' => 'date_range', 'text' => __('view_common.maps.controls.heatmapsearch.date_range')])
+                    <div class="row">
+                        <div class="col">
+                            <div class="row no-gutters">
+                                <div class="col">
+                                    <label
+                                        for="date_range_from">{{ __('view_common.maps.controls.heatmapsearch.date_range_from') }}
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <input id="filter_date_from" type="date" name="date_range_from"
+                                           value="{{ old('date_range_from') }}" style="width: 110px"/>
+                                </div>
+                                <div class="col">
+                                    <div id="filter_date_from_clear_btn" class="btn btn-sm text-danger">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row no-gutters">
+                                <div class="col">
+                                    <label
+                                        for="date_range_to">{{ __('view_common.maps.controls.heatmapsearch.date_range_to') }}
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <input id="filter_date_to" type="date" name="date_range_to"
+                                           value="{{ old('date_range_to') }}" style="width: 110px"/>
+                                </div>
+                                <div class="col">
+                                    <div id="filter_date_to_clear_btn" class="btn btn-sm text-danger">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endcomponent
+
                 <div class="row">
                     <div id="heatmap_search_result" class="col" style="visibility: hidden;">
                         <div class="pl-1">
-                            {!! __('view_common.maps.controls.heatmapsearch.data.dungeon_routes', ['id' => 'heatmap_search_result_data_dungeonroutes']) !!}
+                            {!! __('view_common.maps.controls.heatmapsearch.data.dungeon_routes', [
+                                'count' => '<span id="heatmap_search_result_data_dungeonroutes"> </span>',
+                            ]) !!}
                         </div>
                     </div>
                 </div>

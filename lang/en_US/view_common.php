@@ -309,8 +309,11 @@ return [
                 'affixes'          => 'Affixes',
                 'affixes_title'    => 'Affixes',
                 'affixes_selected' => '{0} affixes selected',
+                'date_range'       => 'Date range',
+                'date_range_from'  => 'From',
+                'date_range_to'    => 'To',
                 'data'             => [
-                    'dungeon_routes' => 'Showing data from <span id=":id"> </span> runs',
+                    'dungeon_routes' => 'Showing data from :count runs',
                 ],
             ],
             'header'         => [

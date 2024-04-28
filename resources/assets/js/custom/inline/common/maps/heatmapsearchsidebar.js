@@ -31,7 +31,12 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         this.map = getState().getDungeonMap();
 
-        // let self = this;
+        let clearInputFn = function () {
+            $($(this).closest('.row')).find('input').val(null);
+        };
+
+        $(this.options.filterDateFromClearBtnSelector).bind('click', clearInputFn)
+        $(this.options.filterDateToClearBtnSelector).bind('click', clearInputFn);
 
         this.sidebar.activate();
 
