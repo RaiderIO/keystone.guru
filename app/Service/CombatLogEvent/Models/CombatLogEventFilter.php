@@ -29,9 +29,9 @@ class CombatLogEventFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
-    private ?Carbon $dateStart = null;
+    private ?Carbon $dateFrom = null;
 
-    private ?Carbon $dateEnd = null;
+    private ?Carbon $dateTo = null;
 
     public function __construct(
         private readonly Dungeon $dungeon
@@ -124,18 +124,18 @@ class CombatLogEventFilter implements Arrayable
     /**
      * @return Carbon|null
      */
-    public function getDateStart(): ?Carbon
+    public function getDateFrom(): ?Carbon
     {
-        return $this->dateStart;
+        return $this->dateFrom;
     }
 
     /**
-     * @param Carbon|null $dateStart
+     * @param Carbon|null $dateFrom
      * @return CombatLogEventFilter
      */
-    public function setDateStart(?Carbon $dateStart): CombatLogEventFilter
+    public function setDateFrom(?Carbon $dateFrom): CombatLogEventFilter
     {
-        $this->dateStart = $dateStart;
+        $this->dateFrom = $dateFrom;
 
         return $this;
     }
@@ -143,18 +143,18 @@ class CombatLogEventFilter implements Arrayable
     /**
      * @return Carbon|null
      */
-    public function getDateEnd(): ?Carbon
+    public function getDateTo(): ?Carbon
     {
-        return $this->dateEnd;
+        return $this->dateTo;
     }
 
     /**
-     * @param Carbon|null $dateEnd
+     * @param Carbon|null $dateTo
      * @return CombatLogEventFilter
      */
-    public function setDateEnd(?Carbon $dateEnd): CombatLogEventFilter
+    public function setDateTo(?Carbon $dateTo): CombatLogEventFilter
     {
-        $this->dateEnd = $dateEnd;
+        $this->dateTo = $dateTo;
 
         return $this;
     }
@@ -172,8 +172,8 @@ class CombatLogEventFilter implements Arrayable
             'affixes'           => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
-            'dateStart'         => $this->dateStart?->toDateTimeString(),
-            'dateEnd'           => $this->dateEnd?->toDateTimeString(),
+            'dateStart'         => $this->dateFrom?->toDateTimeString(),
+            'dateEnd'           => $this->dateTo?->toDateTimeString(),
         ];
     }
 
@@ -214,6 +214,18 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
+        if ($this->dateTo !== null || $this->dateFrom !== null) {
+            $params = [];
+            if ($this->dateFrom !== null) {
+                $params['gte'] = $this->dateFrom->getTimestamp();
+            }
+            if ($this->dateTo !== null) {
+                $params['lte'] = $this->dateTo->getTimestamp();
+            }
+
+            $must[] = Range::make('start', $params);
+        }
+
         return [
             Query::make([
                 BoolQuery::make([
@@ -242,6 +254,14 @@ class CombatLogEventFilter implements Arrayable
 
         if (isset($requestArray['affix_groups'])) {
             $combatLogEventFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
+        }
+
+        if (isset($requestArray['date_range_from'])) {
+            $combatLogEventFilter->setDateFrom(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_from']));
+        }
+
+        if (isset($requestArray['date_range_to'])) {
+            $combatLogEventFilter->setDateTo(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_to']));
         }
 
         return $combatLogEventFilter;

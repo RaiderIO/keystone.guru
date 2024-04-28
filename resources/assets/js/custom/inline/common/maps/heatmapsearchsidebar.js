@@ -17,6 +17,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'level': new SearchFilterLevel('#filter_level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
             'affix_groups': new SearchFilterAffixGroups(`#filter_affixes`, this._search.bind(this)),
             'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
+            'date_range_from': new SearchFilterInputDateFrom(this.options.filterDateRangeFromSelector, this._search.bind(this)),
+            'date_range_to': new SearchFilterInputDateTo(this.options.filterDateRangeToSelector, this._search.bind(this)),
         };
     }
 
@@ -26,17 +28,20 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
      */
     activate() {
         super.activate();
-
         console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
+
+        let self = this;
 
         this.map = getState().getDungeonMap();
 
         let clearInputFn = function () {
             $($(this).closest('.row')).find('input').val(null);
+
+            self._search();
         };
 
-        $(this.options.filterDateFromClearBtnSelector).bind('click', clearInputFn)
-        $(this.options.filterDateToClearBtnSelector).bind('click', clearInputFn);
+        $(this.options.filterDateRangeFromClearBtnSelector).bind('click', clearInputFn)
+        $(this.options.filterDateRangeToClearBtnSelector).bind('click', clearInputFn);
 
         this.sidebar.activate();
 

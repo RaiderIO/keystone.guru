@@ -39,10 +39,17 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'loaderSelector' => '#heatmap_search_loader',
     'searchResultSelector' => '#heatmap_search_result',
     'searchResultDataDungeonRoutesSelector' => '#heatmap_search_result_data_dungeonroutes',
-    'filterDateFromClearBtnSelector' => '#filter_date_from_clear_btn',
-    'filterDateToClearBtnSelector' => '#filter_date_to_clear_btn',
+
     'levelMin' => config('keystoneguru.keystone.levels.min'),
     'levelMax' => config('keystoneguru.keystone.levels.max'),
+    'filterLevelSelector' => '#filter_level',
+    'filterAffixGroupsSelector' => '#filter_affixes',
+    'filterAffixesSelector' => '.select_icon.class_icon.selectable',
+    'filterDateRangeFromSelector' => '#filter_date_from',
+    'filterDateRangeToSelector' => '#filter_date_to',
+    'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
+    'filterDateRangeToClearBtnSelector' => '#filter_date_to_clear_btn',
+
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
     'sidebarSelector' => '#heatmap_search_sidebar',
@@ -146,13 +153,13 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                         <div class="col">
                             <div class="row no-gutters">
                                 <div class="col">
-                                    <label
-                                        for="date_range_from">{{ __('view_common.maps.controls.heatmapsearch.date_range_from') }}
+                                    <label for="date_range_from">
+                                        {{ __('view_common.maps.controls.heatmapsearch.date_range_from') }}
                                     </label>
                                 </div>
                                 <div class="col">
                                     <input id="filter_date_from" type="date" name="date_range_from"
-                                           value="{{ old('date_range_from') }}" style="width: 110px"
+                                           value="{{ old('date_range_from') }}" style="width: 115px"
                                            min="{{ $availableDateRange->start->toDateString() }}"
                                            max="{{ $availableDateRange->end->toDateString() }}"/>
                                 </div>
@@ -166,13 +173,13 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                         <div class="col">
                             <div class="row no-gutters">
                                 <div class="col">
-                                    <label
-                                        for="date_range_to">{{ __('view_common.maps.controls.heatmapsearch.date_range_to') }}
+                                    <label for="date_range_to">
+                                        {{ __('view_common.maps.controls.heatmapsearch.date_range_to') }}
                                     </label>
                                 </div>
                                 <div class="col">
                                     <input id="filter_date_to" type="date" name="date_range_to"
-                                           value="{{ old('date_range_to') }}" style="width: 110px"
+                                           value="{{ old('date_range_to') }}" style="width: 115px"
                                            min="{{ $availableDateRange->start->toDateString() }}"
                                            max="{{ $availableDateRange->end->toDateString() }}">
                                 </div>
