@@ -33,6 +33,10 @@ class CombatLogEventFilter implements Arrayable
 
     private ?Carbon $dateTo = null;
 
+    private ?int $durationMin = null;
+
+    private ?int $durationMax = null;
+
     public function __construct(
         private readonly Dungeon $dungeon
     ) {
@@ -159,6 +163,43 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getDurationMin(): ?int
+    {
+        return $this->durationMin;
+    }
+
+    /**
+     * @param int|null $durationMin
+     * @return CombatLogEventFilter
+     */
+    public function setDurationMin(?int $durationMin): CombatLogEventFilter
+    {
+        $this->durationMin = $durationMin;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDurationMax(): ?int
+    {
+        return $this->durationMax;
+    }
+
+    /**
+     * @param int|null $durationMax
+     * @return CombatLogEventFilter
+     */
+    public function setDurationMax(?int $durationMax): CombatLogEventFilter
+    {
+        $this->durationMax = $durationMax;
+
+        return $this;
+    }
 
     public function toArray(): array
     {
@@ -174,6 +215,8 @@ class CombatLogEventFilter implements Arrayable
             }),
             'dateStart'         => $this->dateFrom?->toDateTimeString(),
             'dateEnd'           => $this->dateTo?->toDateTimeString(),
+            'duration_min'      => $this->durationMin,
+            'duration_max'      => $this->durationMax,
         ];
     }
 
@@ -185,6 +228,13 @@ class CombatLogEventFilter implements Arrayable
             $must[] = Range::make('level', [
                 'gte' => $this->levelMin,
                 'lte' => $this->levelMax,
+            ]);
+        }
+
+        if ($this->durationMin !== null && $this->durationMax !== null) {
+            $must[] = Range::make('duration_ms', [
+                'gte' => $this->durationMin * 60000,
+                'lte' => $this->durationMax * 60000,
             ]);
         }
 
@@ -246,6 +296,11 @@ class CombatLogEventFilter implements Arrayable
         if (isset($requestArray['level'])) {
             [$levelMin, $levelMax] = explode(';', $requestArray['level']);
             $combatLogEventFilter->setLevelMin((int)$levelMin)->setLevelMax((int)$levelMax);
+        }
+
+        if (isset($requestArray['duration'])) {
+            [$durationMin, $durationMax] = explode(';', $requestArray['duration']);
+            $combatLogEventFilter->setdurationMin((int)$durationMin)->setdurationMax((int)$durationMax);
         }
 
         if (isset($requestArray['affixes'])) {

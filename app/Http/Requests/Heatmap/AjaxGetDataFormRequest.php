@@ -25,13 +25,14 @@ class AjaxGetDataFormRequest extends FormRequest
     {
         return [
             'dungeon_id'      => ['required', Rule::exists(Dungeon::class, 'id')],
-            'level'           => ['nullable', 'regex:/^\d*;\d*$/',],
+            'level'           => ['nullable', 'regex:/^\d*;\d*$/'],
             'affixes'         => ['nullable', 'array'],
             'affixes.*'       => ['integer', Rule::exists(Affix::class, 'id')],
             'affix_groups'    => ['nullable', 'array'],
             'affix_groups.*'  => ['integer', Rule::exists(AffixGroup::class, 'id')],
             'date_range_from' => ['nullable', 'date_format:Y-m-d'],
             'date_range_to'   => ['nullable', 'date_format:Y-m-d'],
+            'duration'        => ['nullable', 'regex:/^\d*;\d*$/'],
         ];
     }
 }
