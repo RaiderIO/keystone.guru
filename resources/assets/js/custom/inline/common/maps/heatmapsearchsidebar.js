@@ -14,11 +14,12 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._previousSearchParams = null;
 
         this.filters = {
-            'level': new SearchFilterLevel('#filter_level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
-            'affix_groups': new SearchFilterAffixGroups(`#filter_affixes`, this._search.bind(this)),
-            'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
+            'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.levelMin, this.options.levelMax),
+            'affix_groups': new SearchFilterAffixGroups(this.options.filterAffixGroupsSelector, this._search.bind(this)),
+            'affixes': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
             'date_range_from': new SearchFilterInputDateFrom(this.options.filterDateRangeFromSelector, this._search.bind(this)),
             'date_range_to': new SearchFilterInputDateTo(this.options.filterDateRangeToSelector, this._search.bind(this)),
+            'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };
     }
 

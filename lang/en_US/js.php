@@ -444,6 +444,7 @@ return [
     'filter_input_date_header'                                             => 'Date: :value',
     'filter_input_date_from_header'                                        => 'From date: :value',
     'filter_input_date_to_header'                                          => 'To date: :value',
+    'filter_input_duration_header'                                         => 'Duration: :value min',
     'specialization_select'                                                => 'Specialization...',
     'class_select'                                                         => 'Class...',
     'race_select'                                                          => 'Race...',

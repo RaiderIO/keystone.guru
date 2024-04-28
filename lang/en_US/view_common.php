@@ -312,6 +312,7 @@ return [
                 'date_range'       => 'Date range',
                 'date_range_from'  => 'From',
                 'date_range_to'    => 'To',
+                'duration'         => 'Duration',
                 'data'             => [
                     'dungeon_routes' => 'Showing data from :count runs',
                 ],

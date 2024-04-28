@@ -1,13 +1,13 @@
-class SearchFilterLevel extends SearchFilterInput {
-    constructor(selector, onChange, levelMin, levelMax) {
+class SearchFilterDuration extends SearchFilterInput {
+    constructor(selector, onChange, min, max) {
         super({
             selector: selector,
             onChange: onChange
         });
 
-        this.levelMin = levelMin;
-        this.levelMax = levelMax;
-        this.levelHandler = null;
+        this.min = min;
+        this.max = max;
+        this.durationHandler = null;
     }
 
     activate() {
@@ -16,7 +16,7 @@ class SearchFilterLevel extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.levelHandler = new LevelHandler(this.levelMin, this.levelMax)).apply(this.options.selector, {
+        (this.durationHandler = new DurationHandler(this.min, this.max)).apply(this.options.selector, {
             onFinish: function (data) {
                 self.options.onChange();
             }
@@ -24,7 +24,7 @@ class SearchFilterLevel extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_level_header')
+        return lang.get('messages.filter_input_duration_header')
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 

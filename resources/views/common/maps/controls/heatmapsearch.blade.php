@@ -42,6 +42,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
     'levelMin' => config('keystoneguru.keystone.levels.min'),
     'levelMax' => config('keystoneguru.keystone.levels.max'),
+    'durationMin' => 5,
+    'durationMax' => 60,
+
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
@@ -49,6 +52,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterDateRangeToSelector' => '#filter_date_to',
     'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
     'filterDateRangeToClearBtnSelector' => '#filter_date_to_clear_btn',
+    'filterDurationSelector' => '#filter_duration',
 
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
@@ -191,6 +195,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                             </div>
                         </div>
                     </div>
+                @endcomponent
+
+                @component('common.search.filter', ['key' => 'duration', 'text' => __('view_common.maps.controls.heatmapsearch.duration')])
+                    <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
                 @endcomponent
 
                 <div class="row">
