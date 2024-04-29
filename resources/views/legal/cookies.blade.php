@@ -3,6 +3,7 @@
 @section('header-title', __('view_legal.cookies.header'))
 
 @section('content')
+    <!--suppress HtmlDeprecatedAttribute -->
     <p>
         This website, https://keystone.guru/ (the "Website"), is operated by Keystone Guru.
     </p>
@@ -69,6 +70,7 @@
     </h5>
     <p>
         Removal of any of the following cookies will cause certain features to stop working.
+    </p>
     <table width="100%">
         <tr>
             <th>
@@ -85,7 +87,8 @@
             <td>
                 Uniquely identifies you as a secure user in an insecure environment, for more information visit the
                 <a href="https://support.cloudflare.com/hc/en-us/articles/200170156-What-does-the-Cloudflare-cfduid-cookie-do-">
-                    <i class="fas fa-external-link-alt"></i> Cloudflare Support Article</a>.
+                    <i class="fas fa-external-link-alt"></i> Cloudflare Support Article
+                </a>.
             </td>
         </tr>
         <tr>
@@ -213,7 +216,7 @@
                 hidden_map_object_groups
             </td>
             <td>
-                Remembers the what map elements are hidden from view in the map.
+                Remembers what map elements are hidden from view in the map.
             </td>
         </tr>
         <tr>
@@ -324,13 +327,13 @@
         </tr>
 
     </table>
-    </p>
 
     <h5>
         Where can I find more information about cookies?
     </h5>
     <p>
         You can learn more about cookies by visiting the following third party websites:
+    </p>
 
     <ul>
         <li>
@@ -341,9 +344,6 @@
                     class="fas fa-external-link-alt"></i></a>
         </li>
     </ul>
-
-
-    </p>
 
     This Cookies Policy was created by cookiespolicytemplate.com for https://keystone.guru/
 @endsection

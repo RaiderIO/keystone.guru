@@ -142,15 +142,15 @@ return [
             //            ],
         ],
 
-        'rollbar' => [
-            'driver'           => 'monolog',
-            'handler'          => MonologHandler::class,
-            'access_token'     => env('ROLLBAR_SERVER_TOKEN'),
-            'level'            => 'warning',
-            'person_fn'        => 'Auth::user',
-            'capture_email'    => false,
-            'capture_username' => true,
-        ],
+//        'rollbar' => [
+//            'driver'           => 'monolog',
+//            'handler'          => MonologHandler::class,
+//            'access_token'     => env('ROLLBAR_SERVER_TOKEN'),
+//            'level'            => 'warning',
+//            'person_fn'        => 'Auth::user',
+//            'capture_email'    => false,
+//            'capture_username' => true,
+//        ],
 
         'null' => [
             'driver'  => 'monolog',
