@@ -222,4 +222,18 @@ class CombatLogEvent extends OpensearchModel
         // later
         return new IngameXY($this->pos_x, $this->pos_y);
     }
+
+    public function setTimeInterval(Dungeon $dungeon, Carbon $start, int $durationMs): self
+    {
+        $success = $dungeon->currentMappingVersion->timer_max_seconds > ($durationMs / 1000);
+
+        $this->setAttributes([
+            'start'       => $start->toDateTimeString(),
+            'end'         => $start->addMilliseconds($durationMs)->toDateTimeString(),
+            'duration_ms' => $durationMs,
+            'success'     => $success,
+        ]);
+
+        return $this;
+    }
 }

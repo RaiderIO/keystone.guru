@@ -2,8 +2,11 @@
 
 namespace App\Service\CombatLogEvent;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
+use App\Models\Enemy;
+use App\Models\Season;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
@@ -55,7 +58,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
     public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
-        // <editor-fold desc="OS Query">
+        // <editor-fold desc="OS Query" defaultState="collapsed">
 //        {
 //            "size": 0,
 //            "query": {
@@ -228,7 +231,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
     public function getRunCount(CombatLogEventFilter $filters): int
     {
-        // <editor-fold desc="OS Query">
+        // <editor-fold desc="OS Query" defaultState="collapsed">
 //        POST /combat_log_events/_search
 //        {
 //            "size": 0,
@@ -272,7 +275,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     {
         $result = collect();
         try {
-            // <editor-fold desc="OS Query">
+            // <editor-fold desc="OS Query" defaultState="collapsed">
 //            POST /combat_log_events/_search
 //            {
 //                "size": 0,
@@ -334,6 +337,34 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
     public function getAvailableDateRange(CombatLogEventFilter $filters): ?CarbonPeriod
     {
+        // <editor-fold desc="OS Query" defaultState="collapsed">
+//        POST/combat_log_events/_search
+//        {
+//                "query": {
+//                    "bool": {
+//                        "must": [{
+//                            "match": {
+//                                "challenge_mode_id": 399
+//                            }
+//                        }
+//                    ]
+//                }
+//            },
+//            "aggs": {
+//                    "min_date": {
+//                        "min": {
+//                            "field": "start"
+//                    }
+//                },
+//                "max_date": {
+//                        "max": {
+//                            "field": "start"
+//                    }
+//                }
+//            }
+//        }
+        // </editor-fold>
+
         $result = null;
         try {
             $runCountSearchResult = CombatLogEvent::opensearch()
@@ -360,6 +391,77 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         } catch (\Exception $e) {
             $this->log->getAvailableDateRangeException($e);
         }
+
+        return $result;
+    }
+
+    public function generateCombatLogEvents(Season $season, string $type, int $count = 1, int $eventsPerRun = 5): Collection
+    {
+        $result = collect();
+
+        // 24 weeks, 24 hours
+        $now               = Carbon::now();
+        $seasonLengthHours = 24 * 7 * 24;
+
+        $runId              = null;
+        $runStart           = null;
+        $runDurationSeconds = null;
+        $affixGroup         = null;
+        $level              = null;
+        for ($i = 0; $i < $count; $i++) {
+            /** @var Dungeon $dungeon */
+            $dungeon = $season->dungeons->random();
+            // Cannot load directly on the relation - need to fix
+            $dungeon = $dungeon->load('currentMappingVersion');
+
+            if ($i % $eventsPerRun === 0) {
+                $dungeon->currentMappingVersion->load('enemies');
+
+                $runId              = sprintf('Generated run ID %d', rand(1000, 1000000));
+                $runStart           = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
+                $runDurationSeconds = rand(600, $dungeon->currentMappingVersion->timer_max_seconds);
+
+                /** @var AffixGroup $affixGroup */
+                $affixGroup = $season->affixgroups->random();
+
+                $level = rand(
+                    config('keystoneguru.keystone.levels.min'),
+                    config('keystoneguru.keystone.levels.max'),
+                );
+            }
+
+            /** @var Enemy $enemy */
+            $enemy = $dungeon->currentMappingVersion->enemies->random();
+            // Not ideal but I can't get the relation to load properly whenever the run is generated
+            $enemy->load(['floor']);
+            // We place all events exactly on a random enemy in the dungeon so that it appears something happened at this enemy,
+            // instead of randomly somewhere on the map, which may be way out of dungeon bounds.
+            $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng());
+
+            $result->push(
+                (new CombatLogEvent([
+                    '@timestamp'        => $now->unix(),
+                    'run_id'            => $runId,
+                    'challenge_mode_id' => $dungeon->challenge_mode_id,
+                    'level'             => $level,
+                    'affix_ids'         => json_encode($affixGroup->affixes->pluck('affix_id')->toArray()),
+                    'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
+                    'pos_x'             => round($enemyIngameXY->getX(), 2),
+                    'pos_y'             => round($enemyIngameXY->getY()),
+                    'event_type'        => $type,
+                ]))->setTimeInterval($dungeon, $runStart, $runDurationSeconds * 1000)
+            );
+        }
+
+        // Ok not fast but it'll do for now
+        foreach ($result as $combatLogEvent) {
+            $combatLogEvent->save();
+        }
+
+        // Insert into OS
+        CombatLogEvent::opensearch()
+            ->documents()
+            ->create($result->pluck('id')->toArray());
 
         return $result;
     }

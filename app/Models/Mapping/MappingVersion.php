@@ -27,32 +27,32 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                   $id
- * @property int                                   $dungeon_id
- * @property int                                   $version
- * @property int                                   $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
- * @property int                                   $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
- * @property int                                   $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
- * @property int                                   $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
- * @property int                                   $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
- * @property string|null                           $mdt_mapping_hash
- * @property bool                                  $facade_enabled True if this mapping version uses facades, false if it does not.
- * @property bool                                  $merged Not saved in the database
- * @property Carbon                                $updated_at
- * @property Carbon                                $created_at
+ * @property int                                  $id
+ * @property int                                  $dungeon_id
+ * @property int                                  $version
+ * @property int                                  $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
+ * @property int                                  $enemy_forces_required_teeming The amount of total enemy forces required to complete the dungeon when Teeming is enabled.
+ * @property int                                  $enemy_forces_shrouded The amount of enemy forces a regular Shrouded enemy gives in this dungeon.
+ * @property int                                  $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
+ * @property int                                  $timer_max_seconds The maximum timer (in seconds) that you have to complete the dungeon.
+ * @property string|null                          $mdt_mapping_hash
+ * @property bool                                 $facade_enabled True if this mapping version uses facades, false if it does not.
+ * @property bool                                 $merged Not saved in the database
+ * @property Carbon                               $updated_at
+ * @property Carbon                               $created_at
  *
- * @property Dungeon                               $dungeon
+ * @property Dungeon                              $dungeon
  *
- * @property Collection|DungeonRoute[]             $dungeonRoutes
- * @property Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers
- * @property Collection|Enemy[]                    $enemies
- * @property Collection|EnemyPack[]                $enemyPacks
- * @property Collection|EnemyPatrol[]              $enemyPatrols
- * @property Collection|MapIcon[]                  $mapIcons
- * @property Collection|MountableArea[]            $mountableAreas
- * @property Collection|FloorUnion[]               $floorUnions
- * @property Collection|FloorUnionArea[]           $floorUnionAreas
- * @property Collection|NpcEnemyForces[]           $npcEnemyForces
+ * @property Collection<DungeonRoute>             $dungeonRoutes
+ * @property Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers
+ * @property Collection<Enemy>                    $enemies
+ * @property Collection<EnemyPack>                $enemyPacks
+ * @property Collection<EnemyPatrol>              $enemyPatrols
+ * @property Collection<MapIcon>                  $mapIcons
+ * @property Collection<MountableArea>            $mountableAreas
+ * @property Collection<FloorUnion>               $floorUnions
+ * @property Collection<FloorUnionArea>           $floorUnionAreas
+ * @property Collection<NpcEnemyForces>           $npcEnemyForces
  *
  * @mixin Eloquent
  */

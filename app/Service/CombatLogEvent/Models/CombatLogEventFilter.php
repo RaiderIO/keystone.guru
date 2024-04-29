@@ -4,6 +4,7 @@ namespace App\Service\CombatLogEvent\Models;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Search\Query;
@@ -223,6 +224,7 @@ class CombatLogEventFilter implements Arrayable
     public function toOpensearchQuery(array $must = []): array
     {
         $must[] = MatchOne::make('challenge_mode_id', $this->getDungeon()->challenge_mode_id);
+        // $must[] = MatchOne::make('event_type', CombatLogEvent::EVENT_TYPE_PLAYER_DEATH);
 
         if ($this->levelMin !== null && $this->levelMax !== null) {
             $must[] = Range::make('level', [

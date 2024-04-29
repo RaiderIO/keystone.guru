@@ -1,11 +1,15 @@
 <?php
 
-use App\Models\Affix;
+namespace Database\Factories\CombatLog;
+
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
+use App\Models\Season;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CombatLogEventFactory extends Factory
@@ -17,21 +21,44 @@ class CombatLogEventFactory extends Factory
      */
     public function definition(): array
     {
-        $runDurationMin = $this->faker->numberBetween(15, 45);
-        $runAgeMin      = 5;
+        /** @var Expansion $expansion */
+        $expansion = Expansion::where('shortname', Expansion::EXPANSION_DRAGONFLIGHT)->first();
 
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::with(['currentMappingVersion'])
-            ->where('expansion_id', Expansion::where('shortname', Expansion::EXPANSION_DRAGONFLIGHT)->first()->id)
+            ->where('expansion_id', $expansion->id)
+            ->inRandomOrder()
+            ->first();
+
+        /** @var Season $season */
+        $season = Season::where('expansion_id', $expansion->id)
+            ->inRandomOrder()
+            ->first();
+
+        /** @var AffixGroup $affixGroup */
+        $affixGroup = $season->affixgroups()
             ->inRandomOrder()
             ->first();
 
         /** @var Floor $floor */
-        $floor = $dungeon->floors->first();
+        $floor = $dungeon->floors()->where('facade', 0)->first();
+
+        return $this->definitionFromState(
+            $dungeon,
+            $floor,
+            $affixGroup,
+        );
+    }
+
+    public function definitionFromState(Dungeon $dungeon, Floor $floor, AffixGroup $affixGroup): array
+    {
+        $runDurationMin = $this->faker->numberBetween(15, 45);
+        $runAgeMin      = 5;
+
+        $now = Carbon::now();
 
         return [
-            '@timestamp'        => Carbon::now()->unix(),
-            'id'                => CombatLogEvent::generateId(),
+            '@timestamp'        => $now->unix(),
             'run_id'            => sprintf(
                 'season-df-2 - logged: #%d - run: #%d',
                 $this->faker->numberBetween(100000, 1000000),
@@ -42,16 +69,31 @@ class CombatLogEventFactory extends Factory
                 config('keystoneguru.keystone.levels.min'),
                 config('keystoneguru.keystone.levels.max'),
             ),
-            'affix_id'          => Affix::inRandomOrder()->limit(3)->get()->pluck('id'),
+            'affix_id'          => $affixGroup->affixes->pluck('affix_id')->toArray(),
             'success'           => $dungeon->currentMappingVersion->timer_max_seconds > $runDurationMin * 60,
-            'start'             => Carbon::now()->subMinutes($runDurationMin + $runAgeMin)->unix(),
-            'end'               => Carbon::now()->subMinutes($runAgeMin)->unix(),
+            'start'             => $now->subMinutes($runDurationMin + $runAgeMin)->unix(),
+            'end'               => $now->subMinutes($runAgeMin)->unix(),
             'duration_ms'       => $runDurationMin * 60 * 1000,
+            'ui_map_id'         => $floor->ui_map_id,
             'pos_x'             => $this->faker->numberBetween($floor->ingame_min_x, $floor->ingame_max_x),
             'pos_y'             => $this->faker->numberBetween($floor->ingame_min_y, $floor->ingame_max_y),
             'event_type'        => CombatLogEvent::ALL_EVENT_TYPE[$this->faker->numberBetween(0, count(CombatLogEvent::ALL_EVENT_TYPE))],
             'characters'        => [],
             'context'           => [],
         ];
+    }
+
+    public function withType(string $type): self
+    {
+        return $this->state(fn(array $attributes) => [
+            'event_type' => $type,
+        ]);
+    }
+
+    public function withRunId(string $runId): self
+    {
+        return $this->state(fn(array $attributes) => [
+            'run_id' => $runId,
+        ]);
     }
 }

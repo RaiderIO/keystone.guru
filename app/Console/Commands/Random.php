@@ -3,11 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\CombatLog\CombatLogEvent;
-use App\Models\Dungeon;
-use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
+use App\Models\Season;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -42,11 +40,18 @@ class Random extends Command
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService
     ): int {
 
-        dd($combatLogEventService->getAvailableDateRange(
-            new CombatLogEventFilter(
-                Dungeon::find(69)
-            )
-        ));
+        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+            Season::findOrFail(13),
+            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+            1000,
+            10
+        );
+
+//        dd($combatLogEventService->getAvailableDateRange(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        ));
 
 //        dd($combatLogEventService->getGridAggregation(
 //            new CombatLogEventFilter(
