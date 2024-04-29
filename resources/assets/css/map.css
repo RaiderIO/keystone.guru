@@ -267,13 +267,13 @@ html, body, #map, #app, .wrapper {
     }
 }
 
-.route_sidebar.right:not(.mobile,.embed) .pulls_container {
+.route_sidebar.right:not(.mobile,.embed) .data_container {
     /** Bit of a hack, but the 158 is the height of the header now which somehow isn't taken into account */
     max-height: calc(100vh - 158px);
 }
 
 /** Pulls section of the sidebar, with an ad loaded, when editing, without a speedrun enabled */
-.route_sidebar.right.ad_loaded:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+.route_sidebar.right.ad_loaded:not(.mobile,.embed) .edit .data_container:not(.has_speedrun) {
     /** 250px is the height of the ad in the corner */
     /** 24 px is the height of the report buttons */
     /** 55 px is the height of the buttons at the top in the edit scenario */
@@ -282,7 +282,7 @@ html, body, #map, #app, .wrapper {
 
 @media (min-height: 1000px) {
     /** Pulls section of the sidebar, with a big ad loaded, when editing, without a speedrun enabled */
-    .route_sidebar.right.ad_loaded:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+    .route_sidebar.right.ad_loaded:not(.mobile,.embed) .edit .data_container:not(.has_speedrun) {
         /** 280px is the height of the ad in the corner */
         /** 24 px is the height of the report buttons */
         /** 55 px is the height of the buttons at the top in the edit scenario */
@@ -291,7 +291,7 @@ html, body, #map, #app, .wrapper {
 }
 
 /** Pulls section of the sidebar, adblock, when editing, without a speedrun enabled */
-.route_sidebar.right:not(.mobile,.embed) .edit .pulls_container:not(.has_speedrun) {
+.route_sidebar.right:not(.mobile,.embed) .edit .data_container:not(.has_speedrun) {
     /** 250px is the height of the ad in the corner */
     /** 24 px is the height of the report buttons */
     /** 55 px is the height of the buttons at the top in the edit scenario */
@@ -299,7 +299,7 @@ html, body, #map, #app, .wrapper {
 }
 
 /** Pulls section of the sidebar, when editing, WITH a speedrun enabled */
-.route_sidebar.right:not(.mobile,.embed) .edit .pulls_container {
+.route_sidebar.right:not(.mobile,.embed) .edit .data_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(50vh - (79px + 15px));
 }
@@ -345,39 +345,39 @@ html, body, #map, #app, .wrapper {
 }
 
 /** Pulls section of the sidebar, with ad loaded, when viewing, without a speedrun enabled */
-.route_sidebar.right.ad_loaded .pulls_container:not(.has_speedrun) {
+.route_sidebar.right.ad_loaded .data_container:not(.has_speedrun) {
     max-height: calc(100vh - (250px + 163px));
 }
 
 @media (min-height: 1000px) {
     /** Pulls section of the sidebar, with a big ad loaded, when viewing, without a speedrun enabled */
-    .route_sidebar.right.ad_loaded .pulls_container:not(.has_speedrun) {
+    .route_sidebar.right.ad_loaded .data_container:not(.has_speedrun) {
         max-height: calc(100vh - (280px + 163px));
     }
 }
 
 /** Pulls section of the sidebar, adblock, when viewing, without a speedrun enabled */
-.route_sidebar.right .pulls_container:not(.has_speedrun) {
+.route_sidebar.right .data_container:not(.has_speedrun) {
     max-height: calc(100vh - 163px);
 }
 
 /** When embedding a route */
-.route_sidebar.right.embed.regular .pulls_container:not(.has_speedrun) {
+.route_sidebar.right.embed.regular .data_container:not(.has_speedrun) {
     max-height: calc(100vh - 107px);
 }
 
-.route_sidebar.right.embed.compact .pulls_container:not(.has_speedrun) {
+.route_sidebar.right.embed.compact .data_container:not(.has_speedrun) {
     max-height: calc(100vh - 54px);
 }
 
 /** Pulls section of the sidebar, when viewing, WITH a speedrun enabled */
-.route_sidebar.right:not(.mobile,.embed) .pulls_container.has_speedrun {
+.route_sidebar.right:not(.mobile,.embed) .data_container.has_speedrun {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(50vh - (79px));
 }
 
 /** Pulls section of the sidebar, when viewing, with a speedrun enabled */
-.route_sidebar.right .pulls_container.has_speedrun {
+.route_sidebar.right .data_container.has_speedrun {
     max-height: calc(50vh - (79px));
 }
 
@@ -388,7 +388,7 @@ html, body, #map, #app, .wrapper {
 
 
 /** Pulls section of the sidebar, when viewing on mobile/embed, without a speedrun enabled */
-.route_sidebar.right .edit .pulls_container {
+.route_sidebar.right .edit .data_container {
     /** 55 px is the height of the buttons at the top in the edit scenario */
     max-height: calc(100vh - (109px + 63px));
 }

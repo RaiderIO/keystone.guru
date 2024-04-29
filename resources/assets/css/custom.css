@@ -137,7 +137,7 @@ ul.light-slider {
     cursor: pointer;
 }
 
-.heatmap_search_container .select_icon.class_icon.selectable.selected,
+.data_container .select_icon.class_icon.selectable.selected,
 .discover .select_icon.class_icon.selectable.selected,
 .discover .grid_dungeon.selectable.selected {
     border: 0.125rem solid red;
@@ -172,7 +172,8 @@ ul.light-slider {
 }
 
 .discover .card-img-caption .card-text.subtext {
-    top: 85%;
+    top: unset;
+    bottom: 5%;
     text-align: unset;
 }
 

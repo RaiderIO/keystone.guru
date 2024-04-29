@@ -58,7 +58,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     // Mobile sidebar options
     'sidebarSelector' => '#heatmap_search_sidebar',
     'sidebarToggleSelector' => '#heatmap_search_sidebar_trigger',
-    'sidebarScrollSelector' => '#heatmap_search_sidebar .heatmap_search_container',
+    'sidebarScrollSelector' => '#heatmap_search_sidebar .data_container',
     'anchor' => 'right',
     'edit' => $edit,
 ]])
@@ -102,7 +102,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
             </div>
         </div>
 
-        <div class="heatmap_search_container p-2" data-simplebar>
+        <div class="data_container p-2" data-simplebar>
             <div id="heatmap_search_options_container">
                 <div class="row mb-2">
                     <div class="col">
