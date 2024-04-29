@@ -44,6 +44,14 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         $(this.options.filterDateRangeFromClearBtnSelector).bind('click', clearInputFn)
         $(this.options.filterDateRangeToClearBtnSelector).bind('click', clearInputFn);
 
+        let $enabledState = $(this.options.enabledStateSelector);
+        $enabledState.on('change', function () {
+            let enabled = $(this).is(':checked');
+            self._toggleHeatmap(enabled);
+        });
+
+        this._toggleHeatmap($enabledState.is(':checked'));
+
         this.sidebar.activate();
 
         if (this.options.defaultState > 1 && $('#map').width() > this.options.defaultState) {
@@ -53,7 +61,15 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._search();
     }
 
+    _toggleHeatmap(enabled) {
+        console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
+        this.map.pluginHeat.toggle(enabled);
+
+        Cookies.set(this.options.enabledStateCookie, (enabled ? 1 : 0) + '', cookieDefaultAttributes);
+    }
+
     _search(queryParameters, options) {
+        console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
         let self = this;
 
         super._search({

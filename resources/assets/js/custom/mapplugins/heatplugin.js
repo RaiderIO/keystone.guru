@@ -4,6 +4,7 @@ class HeatPlugin extends MapPlugin {
 
         let self = this;
 
+        this.hidden = false;
         this.heatLayer = null;
         this.draw = false;
         this.rawLatLngs = [];
@@ -14,7 +15,14 @@ class HeatPlugin extends MapPlugin {
         });
     }
 
-    _applyLatLngsForFloor(floorId) {
+    _applyLatLngsForFloor(floorId, force = false) {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        if (this.hidden && !force) {
+            console.log(`Not showing LatLngs - Heatmap was disabled`);
+            return;
+        }
+
         let result = [];
         if (this.rawLatLngsByFloorId.hasOwnProperty(floorId)) {
             result = this.rawLatLngsByFloorId[floorId];
@@ -23,10 +31,14 @@ class HeatPlugin extends MapPlugin {
     }
 
     isEnabled() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
         return getState().getMapContext() instanceof MapContextDungeonExplore;
     }
 
     addToMap() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
         if (!this.isEnabled()) {
             return;
         }
@@ -52,6 +64,8 @@ class HeatPlugin extends MapPlugin {
     }
 
     removeFromMap() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
         if (!this.isEnabled()) {
             return;
         }
@@ -62,13 +76,19 @@ class HeatPlugin extends MapPlugin {
     }
 
     toggle(enabled) {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
 
+        this.hidden = !enabled;
+
+        this._applyLatLngsForFloor(enabled ? getState().getMapContext().getFloorId() : -1, true);
     }
 
     /**
      * @param rawLatLngsPerFloor {Object}
      */
     setRawLatLngsPerFloor(rawLatLngsPerFloor) {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
         // Construct an easily referenced array that splits up the latLngs per floor
         this.rawLatLngsByFloorId = [];
         for (let index in rawLatLngsPerFloor) {
@@ -88,6 +108,8 @@ class HeatPlugin extends MapPlugin {
     }
 
     clear() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
         this.setLatLngs([]);
     }
 }

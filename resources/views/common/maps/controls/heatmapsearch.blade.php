@@ -21,8 +21,10 @@ use Illuminate\Support\Collection;
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$pullsSidebarState              = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState                   ??= $isMobile ? 0 : $pullsSidebarState;
+$pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
+$defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
+$heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
+
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
 $hideOnMove                     ??= $isMobile;
 $showAds                        ??= true;
@@ -45,6 +47,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'durationMin' => 5,
     'durationMax' => 60,
 
+    'enabledStateCookie' => 'heatmap_search_enabled',
+    'enabledStateSelector' => '#heatmap_search_toggle',
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
@@ -98,6 +102,14 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                             <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_common.maps.controls.heatmapsearch.loading') }}
                         </h5>
                     </div>
+                </div>
+                <div class="col-auto">
+                    <input id="heatmap_search_toggle" type="checkbox"
+                           {{ $heatmapSearchEnabled ? 'checked' : '' }}
+                           data-toggle="toggle" data-width="100px" data-height="20px"
+                           data-onstyle="primary" data-offstyle="primary"
+                           data-on="{{ __('view_common.maps.controls.heatmapsearch.enabled') }}"
+                           data-off="{{ __('view_common.maps.controls.heatmapsearch.disabled') }}">
                 </div>
             </div>
         </div>

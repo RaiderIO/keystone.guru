@@ -303,6 +303,8 @@ return [
             ],
             'heatmapsearch'  => [
                 'settings_title'   => 'Map settings',
+                'enabled'          => 'Enabled',
+                'disabled'         => 'Disabled',
                 'filter'           => 'Filter',
                 'loading'          => 'Loading',
                 'key_level'        => 'Key level',
