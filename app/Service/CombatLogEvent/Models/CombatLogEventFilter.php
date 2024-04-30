@@ -4,7 +4,6 @@ namespace App\Service\CombatLogEvent\Models;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Search\Query;
@@ -39,7 +38,8 @@ class CombatLogEventFilter implements Arrayable
     private ?int $durationMax = null;
 
     public function __construct(
-        private readonly Dungeon $dungeon
+        private readonly Dungeon $dungeon,
+        private readonly string $eventType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -206,6 +206,7 @@ class CombatLogEventFilter implements Arrayable
     {
         return [
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
+            'event_type'        => $this->eventType,
             'level_min'         => $this->levelMin,
             'level_max'         => $this->levelMax,
             'affix_groups'      => $this->affixGroups->map(function (AffixGroup $affixGroup) {
@@ -214,8 +215,8 @@ class CombatLogEventFilter implements Arrayable
             'affixes'           => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
-            'dateStart'         => $this->dateFrom?->toDateTimeString(),
-            'dateEnd'           => $this->dateTo?->toDateTimeString(),
+            'date_start'        => $this->dateFrom?->toDateTimeString(),
+            'date_end'          => $this->dateTo?->toDateTimeString(),
             'duration_min'      => $this->durationMin,
             'duration_max'      => $this->durationMax,
         ];
@@ -224,7 +225,7 @@ class CombatLogEventFilter implements Arrayable
     public function toOpensearchQuery(array $must = []): array
     {
         $must[] = MatchOne::make('challenge_mode_id', $this->getDungeon()->challenge_mode_id);
-        // $must[] = MatchOne::make('event_type', CombatLogEvent::EVENT_TYPE_PLAYER_DEATH);
+        $must[] = MatchOne::make('event_type', $this->eventType);
 
         if ($this->levelMin !== null && $this->levelMax !== null) {
             $must[] = Range::make('level', [
@@ -292,7 +293,8 @@ class CombatLogEventFilter implements Arrayable
     public static function fromArray(array $requestArray): CombatLogEventFilter
     {
         $combatLogEventFilter = new CombatLogEventFilter(
-            dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id'])
+            dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
+            eventType: $requestArray['event_type']
         );
 
         if (isset($requestArray['level'])) {

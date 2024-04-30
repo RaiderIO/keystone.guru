@@ -1,7 +1,7 @@
 class SearchFilter {
-    constructor(options) {
-        console.assert(options.hasOwnProperty('onChange'), 'Filter options must have a onChange callback set', this);
-
+    constructor(selector, onChange, options = {}) {
+        this.selector = selector;
+        this.onChange = onChange;
         this.options = options;
     }
 

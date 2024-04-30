@@ -4,6 +4,7 @@ namespace App\Http\Requests\Heatmap;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -25,6 +26,7 @@ class AjaxGetDataFormRequest extends FormRequest
     {
         return [
             'dungeon_id'      => ['required', Rule::exists(Dungeon::class, 'id')],
+            'event_type'      => ['required', Rule::in(CombatLogEvent::ALL_EVENT_TYPE)],
             'level'           => ['nullable', 'regex:/^\d*;\d*$/'],
             'affixes'         => ['nullable', 'array'],
             'affixes.*'       => ['integer', Rule::exists(Affix::class, 'id')],

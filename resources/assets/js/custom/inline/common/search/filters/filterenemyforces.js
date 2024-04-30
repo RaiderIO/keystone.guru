@@ -1,26 +1,20 @@
 class SearchFilterEnemyForces extends SearchFilter {
-    constructor(selector, onChange) {
-        super({
-            selector: selector,
-            onChange: onChange
-        });
-    }
 
     activate() {
         super.activate();
 
-        $(this.options.selector).change(this.options.onChange);
+        $(this.selector).change(this.onChange);
     }
 
     getValue() {
-        return $(this.options.selector).is(':checked') ? 1 : 0;
+        return $(this.selector).is(':checked') ? 1 : 0;
     }
 
     setValue(value) {
         if (parseInt(value) === 1) {
-            $(this.options.selector).attr('checked', 'checked');
+            $(this.selector).attr('checked', 'checked');
         } else {
-            $(this.options.selector).removeAttr('checked');
+            $(this.selector).removeAttr('checked');
         }
     }
 

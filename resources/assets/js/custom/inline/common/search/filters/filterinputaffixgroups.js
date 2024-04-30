@@ -1,16 +1,9 @@
 class SearchFilterAffixGroups extends SearchFilterInput {
-    constructor(selector, onChange) {
-        super({
-            selector: selector,
-            onChange: onChange
-        });
-    }
-
     activate() {
         super.activate();
 
         // Grouped affixes
-        $(this.options.selector).off('change').change(this.options.onChange);
+        $(this.selector).off('change').change(this.onChange);
     }
 
     getFilterHeaderText() {

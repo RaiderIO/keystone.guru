@@ -441,6 +441,7 @@ return [
     'filter_input_expansion_header'                                        => 'Expansion: :value',
     'filter_input_season_header'                                           => 'Season: :value',
     'filter_input_user_header'                                             => 'User: :value',
+    'filter_input_event_type_header'                                       => 'Type: :value',
     'filter_input_date_header'                                             => 'Date: :value',
     'filter_input_date_from_header'                                        => 'From date: :value',
     'filter_input_date_to_header'                                          => 'To date: :value',

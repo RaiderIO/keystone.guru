@@ -1,9 +1,6 @@
 class SearchFilterLevel extends SearchFilterInput {
     constructor(selector, onChange, levelMin, levelMax) {
-        super({
-            selector: selector,
-            onChange: onChange
-        });
+        super(selector, onChange);
 
         this.levelMin = levelMin;
         this.levelMax = levelMax;
@@ -16,9 +13,9 @@ class SearchFilterLevel extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.levelHandler = new LevelHandler(this.levelMin, this.levelMax)).apply(this.options.selector, {
-            onFinish: function (data) {
-                self.options.onChange();
+        (this.levelHandler = new LevelHandler(this.levelMin, this.levelMax)).apply(this.selector, {
+            onFinish: function () {
+                self.onChange();
             }
         });
     }
@@ -33,7 +30,7 @@ class SearchFilterLevel extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.options.selector).data('ionRangeSlider').update({
+        $(this.selector).data('ionRangeSlider').update({
             from: value.split(';')[0],
             to: value.split(';')[1],
         });

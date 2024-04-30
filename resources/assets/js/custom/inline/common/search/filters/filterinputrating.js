@@ -1,24 +1,18 @@
 class SearchFilterRating extends SearchFilterInput {
-    constructor(selector, onChange) {
-        super({
-            selector: selector,
-            onChange: onChange
-        });
-    }
 
     activate() {
         super.activate();
 
         let self = this;
 
-        $(this.options.selector).ionRangeSlider({
+        $(this.selector).ionRangeSlider({
             grid: true,
             grid_snap: true,
             min: 1,
             max: 10,
             extra_classes: 'inverse',
-            onFinish: function (data) {
-                self.options.onChange();
+            onFinish: function () {
+                self.onChange();
             }
         });
     }
@@ -32,7 +26,7 @@ class SearchFilterRating extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.options.selector).data('ionRangeSlider').update({
+        $(this.selector).data('ionRangeSlider').update({
             from: value.split(';')[0],
             to: value.split(';')[1],
         });

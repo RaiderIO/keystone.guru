@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dungeon;
 
 use App\Http\Controllers\Controller;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
@@ -71,7 +72,7 @@ class DungeonExploreController extends Controller
                 ]);
             }
 
-            $combatLogEventFilter = new CombatLogEventFilter($dungeon);
+            $combatLogEventFilter = new CombatLogEventFilter($dungeon, CombatLogEvent::EVENT_TYPE_ENEMY_KILLED);
 
             return view('dungeon.explore.view', [
                 'dungeon'            => $dungeon,

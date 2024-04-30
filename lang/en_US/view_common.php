@@ -305,6 +305,7 @@ return [
                 'settings_title'   => 'Map settings',
                 'enabled'          => 'Enabled',
                 'disabled'         => 'Disabled',
+                'event_type'       => 'Event type',
                 'filter'           => 'Filter',
                 'loading'          => 'Loading',
                 'key_level'        => 'Key level',

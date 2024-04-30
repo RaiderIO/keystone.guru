@@ -2,6 +2,7 @@
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
@@ -49,6 +50,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
     'enabledStateCookie' => 'heatmap_search_enabled',
     'enabledStateSelector' => '#heatmap_search_toggle',
+    'filterEventTypeContainerSelector' => '#filter_event_type_container',
+    'filterEventTypeSelector' => 'input[name="event_type"]',
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
@@ -116,12 +119,28 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
         <div class="data_container p-2" data-simplebar>
             <div id="heatmap_search_options_container">
-                <div class="row mb-2">
+                <div class="row">
                     <div class="col">
                         <div id="heatmap_search_options_current_filters" class="pl-1">
 
                         </div>
                     </div>
+                </div>
+
+                <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100 mb-1" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="event_type"
+                               class="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
+                               value="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
+                               checked>
+                        <i class="fas fa-users"></i> {{ __('combatlogeventtypes.enemy_killed') }}
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="event_type"
+                               class="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}"
+                               value="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}">
+                        <i class="fas fa-skull-crossbones"></i> {{ __('combatlogeventtypes.player_death') }}
+                    </label>
                 </div>
 
                 @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level')])

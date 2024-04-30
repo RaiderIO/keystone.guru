@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'melee'         => '',
     'ranged'        => '',
     'caster'        => '',
@@ -11,4 +12,5 @@ return [
     'ranged_caster' => '',
     'ranged_healer' => '',
     'ranged_melee'  => '',
+
 ];

@@ -765,8 +765,9 @@ return [
         'halls_of_infusion'                    => [
             'name'   => '',
             'floors' => [
-                'infusers_rotunda' => '',
-                'infusion_chamber' => '',
+                'infusers_rotunda'  => '',
+                'infusion_chamber'  => '',
+                'halls_of_infusion' => '',
             ],
         ],
         'neltharus'                            => [
@@ -774,6 +775,7 @@ return [
             'floors' => [
                 'the_burning_cauldron' => '',
                 'chamber_of_flames'    => '',
+                'neltharus'            => '',
             ],
         ],
         'ruby_life_pools'                      => [
@@ -781,6 +783,7 @@ return [
             'floors' => [
                 'infusion_chambers' => '',
                 'ruby_overlook'     => '',
+                'ruby_life_pools'   => '',
             ],
         ],
         'the_azure_vault'                      => [
@@ -791,6 +794,7 @@ return [
                 'mausoleum_of_legends'    => '',
                 'the_infinity_seal'       => '',
                 'sindragosas_lament'      => '',
+                'the_azure_vault'         => '',
             ],
         ],
         'the_nokhud_offensive'                 => [
@@ -802,8 +806,9 @@ return [
         'uldaman_legacy_of_tyr'                => [
             'name'   => '',
             'floors' => [
-                'hall_of_the_keepers' => '',
-                'the_vault_of_tyr'    => '',
+                'hall_of_the_keepers'   => '',
+                'the_vault_of_tyr'      => '',
+                'uldaman_legacy_of_tyr' => '',
             ],
         ],
         'dawn_of_the_infinite_galakronds_fall' => [

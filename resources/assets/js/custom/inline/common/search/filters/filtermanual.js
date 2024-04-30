@@ -1,6 +1,6 @@
 class SearchFilterManual extends SearchFilter {
-    constructor(options) {
-        super(options);
+    constructor(onChange) {
+        super('', onChange);
 
         this.value = '';
     }
@@ -22,7 +22,7 @@ class SearchFilterManual extends SearchFilter {
             this.value = value;
 
             // Call on change
-            this.options.onChange();
+            this.onChange();
         }
     }
 }

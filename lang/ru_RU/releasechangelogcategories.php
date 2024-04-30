@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'general_changes'          => '',
     'route_changes'            => '',
     'map_changes'              => '',
@@ -13,4 +14,5 @@ return [
     'simulation_craft_changes' => '',
     'auto_route_changes'       => '',
     'api_changes'              => '',
+
 ];

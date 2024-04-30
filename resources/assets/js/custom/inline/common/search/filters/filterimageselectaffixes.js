@@ -1,8 +1,6 @@
 class SearchFilterAffixes extends SearchFilterImageSelect {
     constructor(selector, onChange) {
-        super({
-            selector: selector,
-            onChange: onChange,
+        super(selector, onChange, {
             array: true,
         });
     }

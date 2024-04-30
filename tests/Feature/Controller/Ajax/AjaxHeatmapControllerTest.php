@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
@@ -26,13 +27,17 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $dungeonRouteCount    = 10;
         $dungeon = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
         $combatLogEventFilter = new CombatLogEventFilter(
-            $dungeon
+            $dungeon,
+            CombatLogEvent::EVENT_TYPE_ENEMY_KILLED
         );
+
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
 
         $combatLogEventService = ServiceFixtures::getCombatLogEventServiceMock($this, ['getCombatLogEvents']);
         $combatLogEventService->method('getCombatLogEvents')
             ->willReturn(
                 new CombatLogEventSearchResult(
+                    $coordinatesService,
                     $combatLogEventFilter,
                     $this->createCombatLogEvents($dungeon, $combatLogEventCount),
                     $dungeonRouteCount

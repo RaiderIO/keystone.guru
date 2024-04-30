@@ -1,9 +1,6 @@
 class SearchFilterDuration extends SearchFilterInput {
     constructor(selector, onChange, min, max) {
-        super({
-            selector: selector,
-            onChange: onChange
-        });
+        super(selector, onChange);
 
         this.min = min;
         this.max = max;
@@ -16,9 +13,9 @@ class SearchFilterDuration extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.durationHandler = new DurationHandler(this.min, this.max)).apply(this.options.selector, {
-            onFinish: function (data) {
-                self.options.onChange();
+        (this.durationHandler = new DurationHandler(this.min, this.max)).apply(this.selector, {
+            onFinish: function () {
+                self.onChange();
             }
         });
     }
@@ -33,7 +30,7 @@ class SearchFilterDuration extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.options.selector).data('ionRangeSlider').update({
+        $(this.selector).data('ionRangeSlider').update({
             from: value.split(';')[0],
             to: value.split(';')[1],
         });
