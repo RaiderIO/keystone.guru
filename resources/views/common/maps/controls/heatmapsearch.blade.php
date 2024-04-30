@@ -162,7 +162,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                 </div>
                             </div>
                                 <?php
-                                $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : 5);
+                                $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));
                                 ?>
                             @foreach($chunkedFeaturedAffixes as $affixRow)
                                 <div class="row mt-2 pl-2 featured_affixes">
