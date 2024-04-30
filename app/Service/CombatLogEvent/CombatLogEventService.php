@@ -397,17 +397,17 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
     public function generateCombatLogEvents(Season $season, string $type, int $count = 1, int $eventsPerRun = 5): Collection
     {
-        $result = collect();
+        $combatLogEventAttributes = collect();
 
         // 24 weeks, 24 hours
         $now               = Carbon::now();
         $seasonLengthHours = 24 * 7 * 24;
 
-        $runId              = null;
-        $runStart           = null;
-        $runDurationSeconds = null;
-        $affixGroup         = null;
-        $level              = null;
+        $runId         = null;
+        $runStart      = null;
+        $runDurationMs = null;
+        $affixGroup    = null;
+        $level         = null;
         for ($i = 0; $i < $count; $i++) {
             /** @var Dungeon $dungeon */
             $dungeon = $season->dungeons->random();
@@ -417,9 +417,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             if ($i % $eventsPerRun === 0) {
                 $dungeon->currentMappingVersion->load('enemies');
 
-                $runId              = sprintf('Generated run ID %d', rand(1000, 1000000));
-                $runStart           = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
-                $runDurationSeconds = rand(600, $dungeon->currentMappingVersion->timer_max_seconds);
+                $runId         = sprintf('Generated run ID %d', rand(1000, 1000000));
+                $runStart      = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
+                $runDurationMs = rand(600, $dungeon->currentMappingVersion->timer_max_seconds) * 1000;
 
                 /** @var AffixGroup $affixGroup */
                 $affixGroup = $season->affixgroups->random();
@@ -438,30 +438,31 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             // instead of randomly somewhere on the map, which may be way out of dungeon bounds.
             $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng());
 
-            $result->push(
-                (new CombatLogEvent([
-                    '@timestamp'        => $now->unix(),
-                    'run_id'            => $runId,
-                    'challenge_mode_id' => $dungeon->challenge_mode_id,
-                    'level'             => $level,
-                    'affix_ids'         => json_encode($affixGroup->affixes->pluck('affix_id')->toArray()),
-                    'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
-                    'pos_x'             => round($enemyIngameXY->getX(), 2),
-                    'pos_y'             => round($enemyIngameXY->getY()),
-                    'event_type'        => $type,
-                ]))->setTimeInterval($dungeon, $runStart, $runDurationSeconds * 1000)
-            );
+            $combatLogEventAttributes->push([
+                '@timestamp'        => $now->unix(),
+                'run_id'            => $runId,
+                'challenge_mode_id' => $dungeon->challenge_mode_id,
+                'level'             => $level,
+                'affix_ids'         => json_encode($affixGroup->affixes->pluck('affix_id')->toArray()),
+                'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
+                'pos_x'             => round($enemyIngameXY->getX(), 2),
+                'pos_y'             => round($enemyIngameXY->getY()),
+                'event_type'        => $type,
+                'start'             => $runStart->toDateTimeString(),
+                'end'               => $runStart->addMilliseconds($runDurationMs)->toDateTimeString(),
+                'duration_ms'       => $runDurationMs,
+                'success'           => $dungeon->currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000),
+            ]);
         }
 
-        // Ok not fast but it'll do for now
-        foreach ($result as $combatLogEvent) {
-            $combatLogEvent->save();
-        }
+        CombatLogEvent::insert($combatLogEventAttributes->toArray());
+
+        $result = CombatLogEvent::orderByDesc('id')->take($count)->get();
 
         // Insert into OS
         CombatLogEvent::opensearch()
             ->documents()
-            ->create($result->pluck('id')->toArray());
+            ->create($combatLogEventAttributes->pluck('id')->toArray());
 
         return $result;
     }

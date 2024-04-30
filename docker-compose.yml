@@ -146,7 +146,7 @@ services:
 
   # https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/#sample-docker-composeyml
   opensearch-node1:
-    image: opensearchproject/opensearch:latest
+    image: opensearchproject/opensearch:2.13.0
     container_name: keystone.guru-opensearch-node1
     environment:
       - cluster.name=keystone.guru-opensearch-cluster
@@ -173,7 +173,7 @@ services:
       - keystone.guru
 
   opensearch-node2:
-    image: opensearchproject/opensearch:latest
+    image: opensearchproject/opensearch:2.13.0
     container_name: keystone.guru-opensearch-node2
     environment:
       - cluster.name=keystone.guru-opensearch-cluster
