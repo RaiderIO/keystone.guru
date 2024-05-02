@@ -11,6 +11,10 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\KillZone\KillZoneSpellRepositoryInterface;
 use App\Service\CombatLog\Builders\ResultEventDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -30,7 +34,15 @@ use InvalidArgumentException;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {
-    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
+    public function __construct(
+        protected CombatLogService                                    $combatLogService,
+        protected SeasonServiceInterface                              $seasonService,
+        protected CoordinatesServiceInterface                         $coordinatesService,
+        protected DungeonRouteRepositoryInterface                     $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface                         $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface                    $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface                    $killZoneSpellRepository,
+        private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
     {
     }
 
@@ -95,7 +107,15 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // Store found enemy positions in the database for analyzing
             $this->saveChallengeModeRun($resultEvents, $dungeonRoute);
 
-            $dungeonRoute = (new ResultEventDungeonRouteBuilder($this->coordinatesService, $dungeonRoute, $resultEvents))->build();
+            $dungeonRoute = (new ResultEventDungeonRouteBuilder(
+                $this->coordinatesService,
+                $this->dungeonRouteRepository,
+                $this->killZoneRepository,
+                $this->killZoneEnemyRepository,
+                $this->killZoneSpellRepository,
+                $dungeonRoute,
+                $resultEvents
+            ))->build();
 
             if (config('app.debug')) {
                 $this->generateMapIconsFromEvents(

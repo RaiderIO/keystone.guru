@@ -16,6 +16,11 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
+use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\KillZone\KillZoneSpellRepositoryInterface;
+use App\Service\CombatLog\Builders\CreateRouteBodyCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
@@ -36,17 +41,34 @@ use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 
 class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceInterface
 {
-    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, protected CreateRouteDungeonRouteServiceLoggingInterface $log)
-    {
+    public function __construct(
+        protected CombatLogService                               $combatLogService,
+        protected SeasonServiceInterface                         $seasonService,
+        protected CoordinatesServiceInterface                    $coordinatesService,
+        protected DungeonRouteRepositoryInterface                $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface                    $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface               $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface               $killZoneSpellRepository,
+        protected CreateRouteDungeonRouteServiceLoggingInterface $log
+    ) {
     }
 
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
-        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $this->coordinatesService, $createRouteBody))->build();
+        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder(
+            $this->seasonService,
+            $this->coordinatesService,
+            $this->dungeonRouteRepository,
+            $this->killZoneRepository,
+            $this->killZoneEnemyRepository,
+            $this->killZoneSpellRepository,
+            $createRouteBody
+        ))->build();
 
         $this->saveChallengeModeRun($createRouteBody, $dungeonRoute);
 
@@ -60,6 +82,21 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
         return $dungeonRoute;
     }
+
+    public function convertCreateRouteBodyToCombatLogEvents(CreateRouteBody $createRouteBody): Collection
+    {
+        // @TODO Replace with fake repositories!
+        return collect((new CreateRouteBodyCombatLogEventsBuilder(
+            $this->seasonService,
+            $this->coordinatesService,
+            $this->dungeonRouteRepository,
+            $this->killZoneRepository,
+            $this->killZoneEnemyRepository,
+            $this->killZoneSpellRepository,
+            $createRouteBody
+        ))->build());
+    }
+
 
     /**
      * @throws Exception

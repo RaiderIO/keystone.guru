@@ -31,7 +31,7 @@ use Exception;
  *
  * @since 24/06/2023
  */
-class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
+class CreateRouteBodyCombatLogEventsBuilder extends DungeonRouteBuilder
 {
     private readonly CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
 
@@ -46,7 +46,8 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
     ) {
         $dungeonRoute = $this->initDungeonRoute();
 
-        parent::__construct($coordinatesService,
+        parent::__construct(
+            $coordinatesService,
             $dungeonRouteRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,

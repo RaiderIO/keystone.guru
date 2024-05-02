@@ -6,6 +6,10 @@ use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\KillZone\KillZoneSpellRepositoryInterface;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
@@ -27,12 +31,21 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
     private readonly ResultEventDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
-        CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute,
+        CoordinatesServiceInterface      $coordinatesService,
+        DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        KillZoneRepositoryInterface      $killZoneRepository,
+        KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
+        KillZoneSpellRepositoryInterface $killZoneSpellRepository,
+        DungeonRoute                     $dungeonRoute,
         /** @var Collection|BaseResultEvent[] */
-        private readonly Collection $resultEvents
+        private readonly Collection      $resultEvents
     ) {
-        parent::__construct($coordinatesService, $dungeonRoute);
+        parent::__construct($coordinatesService,
+            $dungeonRouteRepository,
+            $killZoneRepository,
+            $killZoneEnemyRepository,
+            $killZoneSpellRepository,
+            $dungeonRoute);
 
         /** @var ResultEventDungeonRouteBuilderLoggingInterface $log */
         $log       = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
