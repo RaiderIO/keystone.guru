@@ -33,7 +33,7 @@ use Exception;
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 {
-    private readonly CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
+    protected CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
         private readonly SeasonServiceInterface $seasonService,
@@ -87,7 +87,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
-        $dungeonRoute = DungeonRoute::create([
+        $dungeonRoute = $this->dungeonRouteRepository->create([
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'author_id'          => Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
