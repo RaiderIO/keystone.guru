@@ -5,6 +5,8 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Floor\Floor;
+use App\Repositories\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\KillZone\KillZoneRepositoryInterface;
@@ -24,18 +26,22 @@ use Illuminate\Support\Collection;
 class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteBuilder
 {
     public function __construct(
-        SeasonServiceInterface           $seasonService,
-        CoordinatesServiceInterface      $coordinatesService,
-        DungeonRouteRepositoryInterface  $dungeonRouteRepository,
-        KillZoneRepositoryInterface      $killZoneRepository,
-        KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
-        KillZoneSpellRepositoryInterface $killZoneSpellRepository,
-        CreateRouteBody                  $createRouteBody
+        SeasonServiceInterface                    $seasonService,
+        CoordinatesServiceInterface               $coordinatesService,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
+        AffixGroupRepositoryInterface             $affixGroupRepository,
+        KillZoneRepositoryInterface               $killZoneRepository,
+        KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
+        KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
+        CreateRouteBody                           $createRouteBody
     ) {
         parent::__construct(
             $seasonService,
             $coordinatesService,
             $dungeonRouteRepository,
+            $dungeonRouteAffixGroupRepository,
+            $affixGroupRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
@@ -54,8 +60,9 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
         try {
             $this->log->getCombatLogEventsStart();
 
-            $start      = Carbon::parse(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->start);
-            $end        = Carbon::parse(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->end);
+            $now        = Carbon::now();
+            $start      = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->start);
+            $end        = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->end);
             $durationMS = (int)($end->diff($start)->f * 1000);
 
             $floors = $this->dungeonRoute->dungeon->floors->keyBy('id');
@@ -65,23 +72,28 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
                     /** @var Floor $floor */
                     $floor = $floors->get($enemy->floor_id);
 
+                    // Lazy loading
+                    $enemy->setRelation('floor', $floor);
+
                     $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng());
 
                     $result->push(new CombatLogEvent([
                         'run_id'            => $this->createRouteBody->metadata->runId,
                         'challenge_mode_id' => $this->createRouteBody->challengeMode->challengeModeId,
                         'level'             => $this->dungeonRoute->level_min,
-                        'affix_ids'         => $this->createRouteBody->challengeMode->affixes,
+                        'affix_ids'         => json_encode($this->createRouteBody->challengeMode->affixes),
                         'success'           => $this->createRouteBody->challengeMode->success,
-                        'start'             => $start->getTimestamp(),
-                        'end'               => $end->getTimestamp(),
+                        'start'             => $start,
+                        'end'               => $end,
                         'duration_ms'       => $durationMS,
                         'ui_map_id'         => $floor->ui_map_id,
                         'pos_x'             => $ingameXY->getX(),
                         'pos_y'             => $ingameXY->getY(),
-                        'event_type'        => App\Models\CombatLog\CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
-                        'characters'        => [],
-                        'context'           => [],
+                        'event_type'        => CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
+                        'characters'        => json_encode([]),
+                        'context'           => json_encode([]),
+                        'created_at'        => $now,
+                        'updated_at'        => $now,
                     ]));
                 }
             }
