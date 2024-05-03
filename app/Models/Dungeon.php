@@ -22,38 +22,38 @@ use Illuminate\Support\Collection;
 use Mockery\Exception;
 
 /**
- * @property int                                     $id The ID of this Dungeon.
- * @property int                                     $expansion_id The linked expansion to this dungeon.
- * @property int                                     $game_version_id The linked game version to this dungeon.
- * @property int                                     $zone_id The ID of the location that WoW has given this dungeon.
- * @property int                                     $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int                                     $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
- * @property int                                     $mdt_id The ID that MDT has given this dungeon.
- * @property string                                  $name The name of the dungeon.
- * @property string                                  $slug The url friendly slug of the dungeon.
- * @property string                                  $key Shorthand key of the dungeon
- * @property bool                                    $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
- * @property bool                                    $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
- * @property bool                                    $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
- * @property bool                                    $active True if this dungeon is active, false if it is not.
- * @property bool                                    $mdt_supported True if MDT is supported for this dungeon, false if it is not.
- * @property Expansion                               $expansion
- * @property GameVersion                             $gameVersion
- * @property MappingVersion                          $currentMappingVersion
- * @property Collection|MappingVersion[]             $mappingVersions
- * @property Collection|Floor[]                      $floors
- * @property Collection|Floor[]                      $activeFloors
- * @property Collection|DungeonRoute[]               $dungeonRoutes
- * @property Collection|DungeonRoute[]               $dungeonRoutesForExport
- * @property Collection|Npc[]                        $npcs
- * @property Collection|Enemy[]                      $enemies
- * @property Collection|EnemyPack[]                  $enemyPacks
- * @property Collection|EnemyPatrol[]                $enemyPatrols
- * @property Collection|MapIcon[]                    $mapIcons
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkers
- * @property Collection|MountableArea[]              $mountableAreas
- * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs10Man
- * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonSpeedrunRequiredNpcs25Man
+ * @property int                                    $id The ID of this Dungeon.
+ * @property int                                    $expansion_id The linked expansion to this dungeon.
+ * @property int                                    $game_version_id The linked game version to this dungeon.
+ * @property int                                    $zone_id The ID of the location that WoW has given this dungeon.
+ * @property int                                    $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int                                    $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int                                    $mdt_id The ID that MDT has given this dungeon.
+ * @property string                                 $name The name of the dungeon.
+ * @property string                                 $slug The url friendly slug of the dungeon.
+ * @property string                                 $key Shorthand key of the dungeon
+ * @property bool                                   $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
+ * @property bool                                   $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
+ * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
+ * @property bool                                   $active True if this dungeon is active, false if it is not.
+ * @property bool                                   $mdt_supported True if MDT is supported for this dungeon, false if it is not.
+ * @property Expansion                              $expansion
+ * @property GameVersion                            $gameVersion
+ * @property MappingVersion                         $currentMappingVersion
+ * @property Collection<MappingVersion>             $mappingVersions
+ * @property Collection<Floor>                      $floors
+ * @property Collection<Floor>                      $activeFloors
+ * @property Collection<DungeonRoute>               $dungeonRoutes
+ * @property Collection<DungeonRoute>               $dungeonRoutesForExport
+ * @property Collection<Npc>                        $npcs
+ * @property Collection<Enemy>                      $enemies
+ * @property Collection<EnemyPack>                  $enemyPacks
+ * @property Collection<EnemyPatrol>                $enemyPatrols
+ * @property Collection<MapIcon>                    $mapIcons
+ * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
+ * @property Collection<MountableArea>              $mountableAreas
+ * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
+ * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
  *
  * @method static Builder active()
  * @method static Builder inactive()

@@ -86,7 +86,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
     public function convertCreateRouteBodyToCombatLogEvents(CreateRouteBody $createRouteBody): Collection
     {
         // @TODO Replace with fake repositories!
-        return collect((new CreateRouteBodyCombatLogEventsBuilder(
+        $builder = new CreateRouteBodyCombatLogEventsBuilder(
             $this->seasonService,
             $this->coordinatesService,
             $this->dungeonRouteRepository,
@@ -94,7 +94,11 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $this->killZoneEnemyRepository,
             $this->killZoneSpellRepository,
             $createRouteBody
-        ))->build());
+        );
+
+        $builder->build();
+
+        return $builder->getCombatLogEvents();
     }
 
 

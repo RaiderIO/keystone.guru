@@ -42,7 +42,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         KillZoneRepositoryInterface             $killZoneRepository,
         KillZoneEnemyRepositoryInterface        $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface        $killZoneSpellRepository,
-        private readonly CreateRouteBody        $createRouteBody
+        protected readonly CreateRouteBody        $createRouteBody
     ) {
         $dungeonRoute = $this->initDungeonRoute();
 
