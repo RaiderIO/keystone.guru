@@ -63,7 +63,6 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
             $now        = Carbon::now();
             $start      = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->start);
             $end        = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->end);
-            $durationMS = (int)($end->diff($start)->f * 1000);
 
             $floors = $this->dungeonRoute->dungeon->floors->keyBy('id');
 
@@ -80,18 +79,18 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
                     $result->push(new CombatLogEvent([
                         'run_id'            => $this->createRouteBody->metadata->runId,
                         'challenge_mode_id' => $this->createRouteBody->challengeMode->challengeModeId,
-                        'level'             => $this->dungeonRoute->level_min,
+                        'level'             => $this->createRouteBody->challengeMode->level,
                         'affix_ids'         => json_encode($this->createRouteBody->challengeMode->affixes),
                         'success'           => $this->createRouteBody->challengeMode->success,
                         'start'             => $start,
                         'end'               => $end,
-                        'duration_ms'       => $durationMS,
+                        'duration_ms'       => $this->createRouteBody->challengeMode->durationMs,
                         'ui_map_id'         => $floor->ui_map_id,
                         'pos_x'             => $ingameXY->getX(),
                         'pos_y'             => $ingameXY->getY(),
                         'event_type'        => CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
-                        'characters'        => json_encode([]),
-                        'context'           => json_encode([]),
+                        'characters'        => "[]",
+                        'context'           => "[]",
                         'created_at'        => $now,
                         'updated_at'        => $now,
                     ]));

@@ -446,7 +446,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 'affix_ids'         => json_encode($affixGroup->affixes->pluck('affix_id')->toArray()),
                 'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
                 'pos_x'             => round($enemyIngameXY->getX(), 2),
-                'pos_y'             => round($enemyIngameXY->getY()),
+                'pos_y'             => round($enemyIngameXY->getY(), 2),
                 'event_type'        => $type,
                 'start'             => $runStart->toDateTimeString(),
                 'end'               => $runStart->addMilliseconds($runDurationMs)->toDateTimeString(),

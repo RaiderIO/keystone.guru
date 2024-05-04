@@ -9,8 +9,7 @@ class CreateRouteChallengeMode
         public string $end,
         public bool   $success,
         public int    $durationMs,
-        public int    $mapId,
-        public ?int   $challengeModeId,
+        public int   $challengeModeId,
         public int    $level,
         public array  $affixes)
     {
@@ -23,8 +22,7 @@ class CreateRouteChallengeMode
             $body['end'],
             $body['success'] ?? true,
             $body['durationMs'],
-            $body['mapId'],
-            $body['challengeModeId'] ?? null,
+            $body['challengeModeId'],
             $body['level'],
             $body['affixes'],
         );

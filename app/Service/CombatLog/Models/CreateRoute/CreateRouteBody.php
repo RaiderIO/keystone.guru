@@ -45,14 +45,10 @@ class CreateRouteBody
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
     ): DungeonRoute {
         try {
-            if ($this->challengeMode->challengeModeId !== null) {
-                $dungeon = Dungeon::where('challenge_mode_id', $this->challengeMode->challengeModeId)->firstOrFail();
-            } else {
-                $dungeon = Dungeon::where('map_id', $this->challengeMode->mapId)->firstOrFail();
-            }
+            $dungeon = Dungeon::where('challenge_mode_id', $this->challengeMode->challengeModeId)->firstOrFail();
         } catch (Exception) {
             throw new DungeonNotSupportedException(
-                sprintf('Dungeon with instance ID %d not found', $this->challengeMode->mapId)
+                sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId)
             );
         }
 

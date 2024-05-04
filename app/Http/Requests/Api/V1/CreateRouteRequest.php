@@ -34,10 +34,8 @@ class CreateRouteRequest extends APIFormRequest
             'challengeMode.start'           => ['required', $dateFormat],
             'challengeMode.end'             => ['required', $dateFormat],
             'challengeMode.durationMs'      => ['required', 'int'],
-            // @TODO Make non-optional when it's actually being sent
             'challengeMode.success'         => ['nullable', 'bool'],
-            'challengeMode.mapId'           => ['required', Rule::exists(Dungeon::class, 'map_id')],
-            'challengeMode.challengeModeId' => ['nullable', Rule::exists(Dungeon::class, 'challenge_mode_id')],
+            'challengeMode.challengeModeId' => ['required', Rule::exists(Dungeon::class, 'challenge_mode_id')],
             'challengeMode.level'           => ['required', 'int'],
             'challengeMode.affixes'         => ['required', 'array'],
             'challengeMode.affixes.*'       => ['required', Rule::exists(Affix::class, 'affix_id')],

@@ -147,7 +147,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 $challengeModeEndEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getSuccess(),
                 $challengeModeEndEvent->getTotalTimeMS(),
-                $challengeModeStartEvent->getInstanceID(),
                 $challengeModeStartEvent->getChallengeModeID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
                 $challengeModeStartEvent->getAffixIDs()
