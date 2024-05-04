@@ -545,7 +545,7 @@ class CommonMapsMap extends InlineCode {
 
                 // Inject the warnings, if there are any
                 if (json.warnings.length > 0) {
-                    (new MdtStringWarnings(json.warnings))
+                    (new MdtStringNoticesWarnings(json.warnings))
                         .render($('#mdt_export_result_warnings'));
                 }
 
