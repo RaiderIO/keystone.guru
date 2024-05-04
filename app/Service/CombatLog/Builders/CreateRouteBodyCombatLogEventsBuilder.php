@@ -4,6 +4,7 @@ namespace App\Service\CombatLog\Builders;
 
 use App;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -60,14 +61,20 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
         try {
             $this->log->getCombatLogEventsStart();
 
-            $now        = Carbon::now();
-            $start      = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->start);
-            $end        = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->end);
+            $now   = Carbon::now();
+            $start = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->start);
+            $end   = Carbon::createFromFormat(CreateRouteBody::DATE_TIME_FORMAT, $this->createRouteBody->challengeMode->end);
 
-            $floors = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floors  = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $enemies = $this->dungeonRoute->mappingVersion->enemies->keyBy(function (Enemy $enemy) {
+                return sprintf('%d-%d', $enemy->npc_id, $enemy->mdt_id);
+            });
 
             foreach ($this->dungeonRoute->killZones as $killZone) {
-                foreach ($killZone->getEnemies(true) as $enemy) {
+                foreach ($killZone->killZoneEnemies as $killZoneEnemy) {
+                    /** @var Enemy $enemy */
+                    $enemy = $enemies->get(sprintf('%d-%d', $killZoneEnemy->npc_id, $killZoneEnemy->mdt_id));
+
                     /** @var Floor $floor */
                     $floor = $floors->get($enemy->floor_id);
 
