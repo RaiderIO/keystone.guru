@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\KillZone;
+namespace App\Repositories\Interfaces\KillZone;
 
 use App\Models\KillZone\KillZone;
 use App\Repositories\BaseRepositoryInterface;

@@ -184,6 +184,7 @@ class DungeonRoute extends Model
     ];
 
     protected $fillable = [
+        'id',
         'public_key',
         'author_id',
         'dungeon_id',

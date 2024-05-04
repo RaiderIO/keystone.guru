@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\DungeonRoute;
+namespace App\Repositories\Interfaces\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Repositories\BaseRepositoryInterface;

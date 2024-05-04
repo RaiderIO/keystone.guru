@@ -2,15 +2,13 @@
 
 namespace App\Service\CombatLog\Models\CreateRoute;
 
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Faction;
 use App\Models\PublishedState;
-use App\Repositories\AffixGroup\AffixGroupRepositoryInterface;
-use App\Repositories\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
-use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;

@@ -2,20 +2,20 @@
 
 namespace App\Providers;
 
-use App\Repositories\AffixGroup\AffixGroupRepository;
-use App\Repositories\AffixGroup\AffixGroupRepositoryInterface;
-use App\Repositories\DungeonRoute\DungeonRouteAffixGroupRepository;
-use App\Repositories\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
-use App\Repositories\DungeonRoute\DungeonRouteRepository;
-use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
-use App\Repositories\KillZone\KillZoneEnemyRepository;
-use App\Repositories\KillZone\KillZoneEnemyRepositoryInterface;
-use App\Repositories\KillZone\KillZoneRepository;
-use App\Repositories\KillZone\KillZoneRepositoryInterface;
-use App\Repositories\KillZone\KillZoneSpellRepository;
-use App\Repositories\KillZone\KillZoneSpellRepositoryInterface;
-use App\Repositories\SpellRepository;
-use App\Repositories\SpellRepositoryInterface;
+use App\Repositories\Database\AffixGroup\AffixGroupRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteAffixGroupRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
+use App\Repositories\Database\KillZone\KillZoneEnemyRepository;
+use App\Repositories\Database\KillZone\KillZoneRepository;
+use App\Repositories\Database\KillZone\KillZoneSpellRepository;
+use App\Repositories\Database\SpellRepository;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider

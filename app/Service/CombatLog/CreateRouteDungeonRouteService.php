@@ -16,12 +16,18 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
-use App\Repositories\AffixGroup\AffixGroupRepositoryInterface;
-use App\Repositories\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
-use App\Repositories\DungeonRoute\DungeonRouteRepositoryInterface;
-use App\Repositories\KillZone\KillZoneEnemyRepositoryInterface;
-use App\Repositories\KillZone\KillZoneRepositoryInterface;
-use App\Repositories\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Stub\AffixGroup\AffixGroupRepository as AffixGroupRepositoryStub;
+use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
+use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneRepository as KillZoneRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneSpellRepository as KillZoneSpellRepositoryStub;
 use App\Service\CombatLog\Builders\CreateRouteBodyCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -102,12 +108,12 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         $builder = new CreateRouteBodyCombatLogEventsBuilder(
             $this->seasonService,
             $this->coordinatesService,
-            $this->dungeonRouteRepository,
-            $this->dungeonRouteAffixGroupRepository,
-            $this->affixGroupRepository,
-            $this->killZoneRepository,
-            $this->killZoneEnemyRepository,
-            $this->killZoneSpellRepository,
+            new DungeonRouteRepositoryStub(),
+            new DungeonRouteAffixGroupRepositoryStub(),
+            new AffixGroupRepositoryStub(),
+            new KillZoneRepositoryStub(),
+            new KillZoneEnemyRepositoryStub(),
+            new KillZoneSpellRepositoryStub(),
             $createRouteBody
         );
 

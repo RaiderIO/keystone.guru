@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Repositories\AffixGroup;
+namespace App\Repositories\Database\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
-use App\Repositories\BaseRepository;
+use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use Illuminate\Support\Collection;
 
-class AffixGroupRepository extends BaseRepository implements AffixGroupRepositoryInterface
+class AffixGroupRepository extends DatabaseRepository implements AffixGroupRepositoryInterface
 {
     public function __construct()
     {

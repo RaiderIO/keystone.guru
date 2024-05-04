@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\AffixGroup;
+namespace App\Repositories\Interfaces\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Repositories\BaseRepositoryInterface;
