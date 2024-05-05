@@ -103,6 +103,7 @@
         "deployer/deployer": "^7.3",
         "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",
+        "haydenpierce/class-finder": "^0.5.3",
         "larastan/larastan": "^2.0",
         "lukasss93/laravel-larex": "^4.4",
         "lukasss93/laravel-larex-crowdin": "^2.2",

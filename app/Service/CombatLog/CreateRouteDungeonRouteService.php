@@ -71,6 +71,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
     /**
      * @throws DungeonNotSupportedException
+     * @throws Exception
      */
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
@@ -101,6 +102,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
     /**
      * @throws DungeonNotSupportedException
+     * @throws Exception
      */
     public function convertCreateRouteBodyToCombatLogEvents(CreateRouteBody $createRouteBody): Collection
     {

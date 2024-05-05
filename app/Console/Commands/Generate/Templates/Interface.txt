@@ -1,0 +1,21 @@
+<?php
+
+namespace :namespace;
+
+use :modelFullClassName;
+use App\Repositories\BaseRepositoryInterface;
+
+/**
+ * @method :modelClassName create(array $attributes)
+ * @method :modelClassName find(int $id, array $columns = [])
+ * @method :modelClassName findOrFail(int $id, array $columns = [])
+ * @method :modelClassName findOrNew(int $id, array $columns = [])
+ * @method bool save(:modelClassName $model)
+ * @method bool update(:modelClassName $model, array $attributes = [], array $options = [])
+ * @method bool delete(:modelClassName $model)
+ * @method Collection<:modelClassName> all()
+ */
+interface :modelClassNameRepositoryInterface extends BaseRepositoryInterface
+{
+
+}

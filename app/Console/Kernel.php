@@ -19,6 +19,7 @@ use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
+use App\Console\Commands\Generate\Repository as GenerateRepository;
 use App\Console\Commands\Github\CreateGithubRelease;
 use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
@@ -105,6 +106,9 @@ class Kernel extends ConsoleKernel
         // Environment
         EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
+
+        // Generate
+        GenerateRepository::class,
 
         // Github
         CreateGithubRelease::class,
