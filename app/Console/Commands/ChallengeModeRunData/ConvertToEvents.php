@@ -12,7 +12,7 @@ class ConvertToEvents extends Command
      *
      * @var string
      */
-    protected $signature = 'challengemoderundata:convert';
+    protected $signature = 'challengemoderundata:convert {--translate}';
 
     /**
      * The console command description.
@@ -26,6 +26,8 @@ class ConvertToEvents extends Command
      */
     public function handle(ChallengeModeRunDataServiceInterface $challengeModeRunDataService): int
     {
-        return $challengeModeRunDataService->convert();
+        $translate = (bool)$this->option('translate');
+
+        return $challengeModeRunDataService->convert($translate);
     }
 }

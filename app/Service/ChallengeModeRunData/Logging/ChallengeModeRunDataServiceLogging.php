@@ -6,9 +6,9 @@ use App\Logging\StructuredLogging;
 
 class ChallengeModeRunDataServiceLogging extends StructuredLogging implements ChallengeModeRunDataServiceLoggingInterface
 {
-    public function convertStart(): void
+    public function convertStart(bool $translate): void
     {
-        $this->start(__METHOD__);
+        $this->start(__METHOD__, get_defined_vars());
     }
 
     public function convertEnd(): void
@@ -35,5 +35,21 @@ class ChallengeModeRunDataServiceLogging extends StructuredLogging implements Ch
     {
         $this->end(__METHOD__, get_defined_vars());
     }
+
+    public function convertChallengeModeRunDataAndTranslateStart(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    public function convertChallengeModeRunDataAndTranslateNoChallengeModeIdSet(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    public function convertChallengeModeRunDataAndTranslateEnd(int $count): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
+
 
 }

@@ -5,7 +5,9 @@ namespace App\Service\ChallengeModeRunData;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
+use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
+use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -16,26 +18,29 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     private Collection $dungeonCache;
 
     public function __construct(
+        private readonly CreateRouteDungeonRouteServiceInterface     $createRouteDungeonRouteService,
+        private readonly CombatLogEventRepositoryInterface           $combatLogEventRepository,
         private readonly ChallengeModeRunDataServiceLoggingInterface $log
     ) {
         $this->dungeonCache = collect();
     }
 
-    public function convert(): bool
+    public function convert(bool $translate = true): bool
     {
         $result = true;
 
         try {
-            $this->log->convertStart();
+            $this->log->convertStart($translate);
 
-            ChallengeModeRunData::chunk(100, function (Collection $rows) use (&$result) {
+            ChallengeModeRunData::chunk(100, function (Collection $rows) use ($translate, &$result) {
                 // Stop if there was an error
                 if (!$result) {
                     return false;
                 }
 
                 foreach ($rows as $row) {
-                    $result = $result && $this->convertChallengeModeRunData($row);
+                    $result = $result &&
+                        ($translate ? $this->convertChallengeModeRunDataAndTranslate($row) : $this->convertChallengeModeRunData($row));
                 }
 
                 return true;
@@ -101,6 +106,37 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
             $result = CombatLogEvent::insert($combatLogEventsAttributes->toArray());
         } finally {
             $this->log->convertChallengeModeRunDataEnd($combatLogEventsAttributes->count());
+        }
+
+        return $result;
+    }
+
+    public function convertChallengeModeRunDataAndTranslate(ChallengeModeRunData $challengeModeRunData): bool
+    {
+        $combatLogEventsAttributes = collect();
+        try {
+            $this->log->convertChallengeModeRunDataAndTranslateStart();
+
+            $decoded = json_decode($challengeModeRunData->post_body, true);
+
+            if(!isset($decoded['challengeMode']['challengeModeId'])){
+                $this->log->convertChallengeModeRunDataAndTranslateNoChallengeModeIdSet();
+
+                return true;
+            }
+
+            $combatLogEvents = $this->createRouteDungeonRouteService->convertCreateRouteBodyToCombatLogEvents(
+                CreateRouteBody::createFromArray($decoded)
+            );
+
+            $attributes = [];
+            foreach ($combatLogEvents as $combatLogEvent) {
+                $attributes[] = $combatLogEvent->getAttributes();
+            }
+
+            $result = $this->combatLogEventRepository->insert($attributes);
+        } finally {
+            $this->log->convertChallengeModeRunDataAndTranslateEnd($combatLogEventsAttributes->count());
         }
 
         return $result;

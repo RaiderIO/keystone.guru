@@ -4,6 +4,7 @@ namespace App\Repositories\Stub;
 
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 abstract class StubRepository extends BaseRepository
 {
@@ -21,11 +22,21 @@ abstract class StubRepository extends BaseRepository
         return true;
     }
 
-    public function find(int $id): Model
+    public function find(int $id, array $columns = []): Model
     {
         return new $this->class([
             'id' => $id,
         ]);
+    }
+
+    public function findOrFail(int $id, array $columns = []): Model
+    {
+        return $this->find($id, $columns);
+    }
+
+    public function findOrNew(int $id, array $columns = []): Model
+    {
+        return $this->find($id, $columns);
     }
 
     public function save(Model $model): bool
@@ -35,8 +46,22 @@ abstract class StubRepository extends BaseRepository
         return true;
     }
 
+    public function update(Model $model, array $attributes = [], array $options = []): bool
+    {
+        foreach ($attributes as $key => $value) {
+            $model->setAttribute($key, $value);
+        }
+
+        return true;
+    }
+
     public function delete(Model $model): bool
     {
         return true;
+    }
+
+    public function all(): Collection
+    {
+        return collect();
     }
 }
