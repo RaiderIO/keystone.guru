@@ -4,6 +4,7 @@ namespace :namespace;
 
 use :modelFullClassName;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Support\Collection;
 
 /**
  * @method :modelClassName create(array $attributes)
