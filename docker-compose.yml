@@ -154,6 +154,7 @@ services:
       - discovery.seed_hosts=keystone.guru-opensearch-node1,keystone.guru-opensearch-node2
       - cluster.initial_cluster_manager_nodes=keystone.guru-opensearch-node1,keystone.guru-opensearch-node2
       - bootstrap.memory_lock=true
+      - http.port=9201
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - "DISABLE_INSTALL_DEMO_CONFIG=true"
       - "DISABLE_SECURITY_PLUGIN=true"
@@ -181,6 +182,7 @@ services:
       - discovery.seed_hosts=keystone.guru-opensearch-node1,keystone.guru-opensearch-node2
       - cluster.initial_cluster_manager_nodes=keystone.guru-opensearch-node1,keystone.guru-opensearch-node2
       - bootstrap.memory_lock=true
+      - http.port=9201
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - "DISABLE_INSTALL_DEMO_CONFIG=true"
       - "DISABLE_SECURITY_PLUGIN=true"
