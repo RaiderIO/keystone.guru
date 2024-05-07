@@ -10,6 +10,7 @@ use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
@@ -50,15 +51,18 @@ abstract class DungeonRouteBuilder
 
     protected ?Floor $currentFloor;
 
-    /** @var Collection|Enemy[] */
+    /** @var Collection<Enemy> */
     protected Collection $availableEnemies;
 
     protected ActivePullCollection $activePullCollection;
 
-    /** @var Collection|int */
+    /** @var Collection<int> */
     protected Collection $validNpcIds;
 
     private int $killZoneIndex = 1;
+
+    /** @var Collection<KillZone> */
+    protected Collection $killZones;
 
     private readonly DungeonRouteBuilderLoggingInterface $log;
 
@@ -92,6 +96,11 @@ abstract class DungeonRouteBuilder
         // #1818 Filter out any NPC ids that are invalid
         $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
         $this->activePullCollection = new ActivePullCollection();
+
+        // This allows me to set the killZones in buildFinished, so that existing relations are still preserved
+        // If you don't Laravel probably starts resolving relations and it will lose relations that were set
+        // manually, which sucks when the repositories in these classes are actually Stubs
+        $this->killZones            = collect();
     }
 
     /**
@@ -104,6 +113,8 @@ abstract class DungeonRouteBuilder
      */
     protected function buildFinished(): void
     {
+        $this->dungeonRoute->setRelation('killZones', $this->killZones);
+
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
         $this->dungeonRouteRepository->find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
@@ -147,8 +158,6 @@ abstract class DungeonRouteBuilder
                             'mdt_id'       => $enemy->mdt_id,
                         ]);
 
-                        $killZone->killZoneEnemies->push($enemy);
-
                         $this->log->createPullEnemyAttachedToKillZone(
                             $killedEnemy->getNpcId(),
                             $killedEnemy->getX(),
@@ -159,6 +168,10 @@ abstract class DungeonRouteBuilder
                     $this->log->createPullFindEnemyForGuidEnd();
                 }
             }
+
+            $killZone->setRelation('killZoneEnemies', $killZoneEnemiesAttributes->map(function (array $attributes) {
+                return new KillZoneEnemy($attributes);
+            }));
 
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
                 $this->killZoneEnemyRepository->insert($killZoneEnemiesAttributes->toArray());
@@ -181,8 +194,7 @@ abstract class DungeonRouteBuilder
                     $this->log->createPullSpellsAttachedToKillZone($spellCount);
                 }
 
-                // Write the killzone back to the dungeon route
-                $this->dungeonRoute->setRelation('killZones', $this->dungeonRoute->killZones->push($killZone));
+                $this->killZones->push($killZone);
             } else {
                 // No enemies were inserted for this pull, so it's worthless. Delete it
                 $this->killZoneRepository->delete($killZone);

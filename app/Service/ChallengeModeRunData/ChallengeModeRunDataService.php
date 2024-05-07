@@ -119,7 +119,12 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
 
             $decoded = json_decode($challengeModeRunData->post_body, true);
 
-            if(!isset($decoded['challengeMode']['challengeModeId'])){
+            if (!isset($decoded['challengeMode']['challengeModeId'])) {
+                $decoded['challengeMode']['challengeModeId'] = $this->getDungeonFromMapId($decoded['challengeMode']['mapId'])
+                    ?->challenge_mode_id;
+            }
+
+            if ($decoded['challengeMode']['challengeModeId'] === null) {
                 $this->log->convertChallengeModeRunDataAndTranslateNoChallengeModeIdSet();
 
                 return true;

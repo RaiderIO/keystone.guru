@@ -74,6 +74,10 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
                 foreach ($killZone->killZoneEnemies as $killZoneEnemy) {
                     /** @var Enemy $enemy */
                     $enemy = $enemies->get(sprintf('%d-%d', $killZoneEnemy->npc_id, $killZoneEnemy->mdt_id));
+                    if ($enemy === null) {
+                        $this->log->getCombatLogEventsEnemyNotFound($enemy->npc_id, $enemy->mdt_id);
+                        continue;
+                    }
 
                     /** @var Floor $floor */
                     $floor = $floors->get($enemy->floor_id);
