@@ -11,4 +11,7 @@ use Laratrust\Models\Role as LaratrustRole;
 class Role extends LaratrustRole
 {
     //
+    public const ROLE_USER          = 'user';
+    public const ROLE_INTERNAL_TEAM = 'internal_team';
+    public const ROLE_ADMIN         = 'admin';
 }
