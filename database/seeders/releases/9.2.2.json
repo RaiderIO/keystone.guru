@@ -1,0 +1,23 @@
+{
+    "id": 233,
+    "release_changelog_id": 240,
+    "version": "v9.2.2",
+    "title": "Fixed Share modal not always loading a route's MDT string",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-05-04T19:45:29+00:00",
+    "updated_at": "2024-05-04T19:45:29+00:00",
+    "changelog": {
+        "id": 240,
+        "release_id": 233,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 240,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2354,
+                "change": "Routes that produced warnings when generating an MDT string now properly show their MDT string (instead of crashing in the background)."
+            }
+        ]
+    }
+}

@@ -115,7 +115,7 @@ class File extends Model
      */
     public static function saveFileToDB(UploadedFile $uploadedFile, Model $model, string $dir = 'upload'): File
     {
-        $disk = config('app.env') === 'local' ? 'public_uploads' : 'public';
+        $disk = config('app.env') === 'local' ? 'public_local' : 'public';
 
         // Ensure the path exists
         $rootDir    = config(sprintf('filesystems.disks.%s.root', $disk));

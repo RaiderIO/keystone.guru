@@ -47,11 +47,17 @@ class LoginController extends Controller
                 $this->credentials($request), $request->boolean('remember')
             );
         } catch (RuntimeException $exception) {
-            $all = $request->all();
-            unset($all['password']);
-            logger()->log(LogLevel::ERROR, $exception->getMessage(), $all);
+            // #2344 People trying to login with their OAuth account through normal methods (they don't have a password)
+            if ($exception->getMessage() === 'This password does not use the Bcrypt algorithm.') {
+                // Just tell them the credentials don't match, let them figure it out
+                return false;
+            } else {
+                $all = $request->all();
+                unset($all['password']);
+                logger()->log(LogLevel::ERROR, $exception->getMessage(), $all);
 
-            throw $exception;
+                throw $exception;
+            }
         }
     }
 
