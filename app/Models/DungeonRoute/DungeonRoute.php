@@ -130,6 +130,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|Tag[]                         $tags
  * @property Collection                               $routeattributes
  * @property Collection                               $routeattributesraw
+ * @property Collection<DungeonRouteThumbnailJob>     $dungeonRouteThumbnailJobs
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -360,6 +361,11 @@ class DungeonRoute extends Model
     public function enemyRaidMarkers(): HasMany
     {
         return $this->hasMany(DungeonRouteEnemyRaidMarker::class);
+    }
+
+    public function dungeonRouteThumbnailJobs(): HasMany
+    {
+        return $this->hasMany(DungeonRouteThumbnailJob::class);
     }
 
     public function mapicons(): HasMany
@@ -774,8 +780,8 @@ class DungeonRoute extends Model
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
         if ($new) {
-            $this->author_id          = $user?->id ?? -1;
-            $this->public_key         = DungeonRoute::generateRandomPublicKey();
+            $this->author_id  = $user?->id ?? -1;
+            $this->public_key = DungeonRoute::generateRandomPublicKey();
             $this->setRelation('dungeon', Dungeon::findOrFail($this->dungeon_id));
             $this->mapping_version_id = $this->dungeon->currentMappingVersion->id;
         }
@@ -1435,6 +1441,12 @@ class DungeonRoute extends Model
                 // @ because we don't care if it fails
                 @unlink($dungeonRoute->getAbsoluteThumbnailPath($floor->index));
             }
+
+            // Delete all API thumbnail jobs/thumbnails generated for it
+            foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob ) {
+                $dungeonRouteThumbnailJob->expire();
+            }
+
             // Dungeonroute settings
             $dungeonRoute->affixgroups()->delete();
             $dungeonRoute->routeattributesraw()->delete();
