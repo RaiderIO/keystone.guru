@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Rules\DungeonRouteLevelRule;
 use App\Rules\FactionSelectionRequiredRule;
@@ -72,7 +73,7 @@ class DungeonRouteFormRequest extends FormRequest
         ];
 
         // Validate demo state, optional or numeric
-        if ($user?->hasRole('admin')) {
+        if ($user?->hasRole(Role::ROLE_ADMIN)) {
             $rules['demo'] = 'numeric';
         }
 

@@ -9,6 +9,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
 use App\Models\Season;
@@ -237,7 +238,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var User|null $user */
             $user = Auth::getUser();
             if ($isUserAdmin === null) {
-                $isUserAdmin = optional($user)->hasRole('admin');
+                $isUserAdmin = optional($user)->hasRole(Role::ROLE_ADMIN);
             }
             if ($adFree === null) {
                 $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||

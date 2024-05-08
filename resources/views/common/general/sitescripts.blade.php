@@ -1,4 +1,7 @@
 <?php
+
+use App\Models\Laratrust\Role;
+
 $showLegalModal ??= true;
 ?>
 
@@ -8,7 +11,7 @@ $showLegalModal ??= true;
 
     let correlationId = "{{ correlationId() }}";
 
-    var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole('admin') ? 'true' : 'false' }};
+    var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) ? 'true' : 'false' }};
 
     var _legalStartTimer = new Date().getTime();
     @auth

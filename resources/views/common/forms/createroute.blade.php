@@ -1,7 +1,13 @@
 <?php
-/** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
-/** @var int $routeKeyLevelFrom */
-/** @var int $routeKeyLevelTo */
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
+
+/**
+ * @var DungeonRoute|null $dungeonroute
+ * @var int $routeKeyLevelFrom
+ * @var int $routeKeyLevelTo
+ */
 
 $teeming                = old('teeming') ?? false;
 $defaultSelectedAffixes = old('affixes') ?? [];
@@ -132,7 +138,7 @@ $dungeonSelectId = 'dungeon_id_select';
                                 ])
                         </div>
 
-                        @if(Auth::check() && Auth::user()->hasRole('admin'))
+                        @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))
                             <h3>
                                 {{ __('view_common.forms.createroute.admin') }}
                             </h3>

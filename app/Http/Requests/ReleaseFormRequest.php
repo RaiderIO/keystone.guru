@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Laratrust\Role;
 use App\Models\Release;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,7 +15,7 @@ class ReleaseFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
     /**

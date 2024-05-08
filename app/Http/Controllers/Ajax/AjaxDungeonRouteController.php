@@ -32,6 +32,7 @@ use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
@@ -668,7 +669,7 @@ class AjaxDungeonRouteController extends Controller
         // Enemy packs
         if (in_array('enemypack', $fields)) {
             // If logged in, and we're NOT an admin
-            if (Auth::check() && !Auth::user()->hasRole('admin')) {
+            if (Auth::check() && !Auth::user()->hasRole(Role::ROLE_ADMIN)) {
                 // Don't expose vertices
                 $enemyPackEnemies = true;
             }

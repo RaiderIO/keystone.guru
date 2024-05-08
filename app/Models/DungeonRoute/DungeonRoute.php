@@ -22,6 +22,7 @@ use App\Models\GameServerRegion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
@@ -677,7 +678,7 @@ class DungeonRoute extends Model
         $result = false;
         $result = match ($this->published_state_id) {
             PublishedState::ALL[PublishedState::UNPUBLISHED] => $this->mayUserEdit($user),
-            PublishedState::ALL[PublishedState::TEAM] => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole('admin')),
+            PublishedState::ALL[PublishedState::TEAM] => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
             PublishedState::ALL[PublishedState::WORLD_WITH_LINK], PublishedState::ALL[PublishedState::WORLD] => true,
             default => $result,
         };
@@ -690,7 +691,7 @@ class DungeonRoute extends Model
         if ($user === null) {
             return $this->isSandbox();
         } else {
-            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin') ||
+            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole(Role::ROLE_ADMIN) ||
                 // Route is part of a team, user is a collaborator, and route is not unpublished
                 ($this->team !== null && $this->team->isUserCollaborator($user) && $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]);
         }
@@ -814,7 +815,7 @@ class DungeonRoute extends Model
         $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
         $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
 
-        if ($user?->hasRole('admin')) {
+        if ($user?->hasRole(Role::ROLE_ADMIN)) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
 

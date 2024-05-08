@@ -75,7 +75,7 @@ class RegisterController extends Controller
     protected function create(array $data): User
     {
         // Attach User role to any new user
-        $userRole = Role::where('name', 'user')->first();
+        $userRole = Role::firstWhere('name', Role::ROLE_USER);
 
         /** @var User $user */
         $user = User::create([

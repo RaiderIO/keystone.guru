@@ -279,8 +279,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             Route::get('spells', (new SpellController())->get(...))->name('admin.spells');
             Route::prefix('user')->group(static function () {
-                Route::post('{user}/makeadmin', (new UserController())->makeadmin(...))->name('admin.user.makeadmin');
-                Route::post('{user}/makeuser', (new UserController())->makeuser(...))->name('admin.user.makeuser');
+                Route::post('{user}/make/{role}', (new UserController())->makeRole(...))->name('admin.user.make.role');
                 Route::delete('{user}/delete', (new UserController())->delete(...))->name('admin.user.delete');
                 Route::get('{user}/grantAllBenefits', (new UserController())->grantAllBenefits(...))->name('admin.user.grantallbenefits');
             });

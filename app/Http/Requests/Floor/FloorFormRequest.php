@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Floor;
 
+use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,7 @@ class FloorFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
     /**

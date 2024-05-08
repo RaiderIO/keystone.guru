@@ -1,6 +1,9 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
 
 <?php
+
+use App\Models\Laratrust\Role;
+
 /** @var $cacheService \App\Service\Cache\CacheServiceInterface */
 /** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
 /** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
@@ -11,7 +14,11 @@
 $showAffixes      ??= true;
 $showDungeonImage ??= false;
 
-$cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env) {
+$cacheFn = static function ()
+
+use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env)
+
+{
     $dominantAffix = 'keystone';
     if ($dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED)) {
         $dominantAffix = strtolower(\App\Models\Affix::AFFIX_FORTIFIED);
@@ -33,8 +40,8 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
     $tierAffixGroup        = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    $activeFloors = $dungeonroute->dungeon->floorsForMapFacade($dungeonroute->mappingVersion, true)->get();
-    $owlClass     = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
+    $activeFloors          = $dungeonroute->dungeon->floorsForMapFacade($dungeonroute->mappingVersion, true)->get();
+    $owlClass              = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
     ob_start();
     ?>
 <div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
@@ -85,8 +92,8 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                         @if( $showAffixes )
                             <div class="col-auto ml-1">
                                     <?php
-    ob_start();
-    ?>
+                                    ob_start();
+                                    ?>
                                 @foreach($dungeonroute->affixes as $affixgroup)
                                     <div
                                         class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
@@ -98,8 +105,8 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                                     </div>
                                 @endforeach
                                     <?php
-    $affixes = ob_get_clean();
-    ?>
+                                    $affixes = ob_get_clean();
+                                    ?>
                                 <div class="row no-gutters" data-container="body" data-toggle="popover"
                                      data-placement="bottom"
                                      data-html="true"
@@ -189,7 +196,7 @@ $cacheFn = static function () use ($showAffixes, $showDungeonImage, $dungeonrout
                                     <i class="fas fa-flag"></i> {{ __('view_common.dungeonroute.card.report') }}
                                 </a>
                                 @auth
-                                    @if(Auth::user()->hasRole('admin'))
+                                    @if(Auth::user()->hasRole(Role::ROLE_ADMIN))
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item refresh_thumbnail"
                                            data-publickey="{{ $dungeonroute->public_key }}">

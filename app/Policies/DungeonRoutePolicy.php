@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -72,7 +73,7 @@ class DungeonRoutePolicy
         }
 
         // Only authors or if the user is an admin
-        return ($dungeonroute->isOwnedByUser($user) || $user->hasRole('admin')) ?
+        return ($dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN)) ?
             $this->allow() :
             $this->deny();
     }
@@ -83,7 +84,7 @@ class DungeonRoutePolicy
     public function unpublish(User $user, DungeonRoute $dungeonroute): bool
     {
         // Only authors or if the user is an admin
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     /**
@@ -108,7 +109,7 @@ class DungeonRoutePolicy
      */
     public function clone(User $user, DungeonRoute $dungeonroute): bool
     {
-        return $dungeonroute->mayUserView($user) || $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->mayUserView($user) || $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     /**
@@ -133,7 +134,7 @@ class DungeonRoutePolicy
     public function delete(User $user, DungeonRoute $dungeonroute): bool
     {
         // Only the admin may delete routes
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     /**
@@ -142,7 +143,7 @@ class DungeonRoutePolicy
     public function restore(User $user, DungeonRoute $dungeonroute): bool
     {
         // Only authors or if the user is an admin
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole('admin');
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     /**
@@ -150,7 +151,7 @@ class DungeonRoutePolicy
      */
     public function forceDelete(User $user, DungeonRoute $dungeonroute): bool
     {
-        return $user->hasRole('admin');
+        return $user->hasRole(Role::ROLE_ADMIN);
     }
 
     public function addKillZone(?User $user, DungeonRoute $dungeonRoute): Response

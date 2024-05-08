@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Laratrust\Role;
 use App\Models\Spell;
-use App\Models\User;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -15,10 +15,7 @@ class SpellFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        /** @var User $user */
-        $user = Auth::user();
-
-        return optional($user)->hasRole('admin') ?? false;
+        return Auth::user()?->hasRole(Role::ROLE_ADMIN) ?? false;
     }
 
     /**

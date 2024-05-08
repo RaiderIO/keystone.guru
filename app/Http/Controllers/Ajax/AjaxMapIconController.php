@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -52,7 +52,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         /** @var User|null $user */
         $user = Auth::user();
 
-        $isUserAdmin = $user?->hasRole('admin');
+        $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
         // Must be an admin to use this endpoint like this!
         if ($dungeonRoute === null) {
             if (!$isUserAdmin) {
@@ -119,7 +119,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     {
         $dungeonRoute = $mapIcon->dungeonRoute;
 
-        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+        $isAdmin = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
         // Must be an admin to use this endpoint like this!
         if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
             return response(null, StatusCode::FORBIDDEN);
