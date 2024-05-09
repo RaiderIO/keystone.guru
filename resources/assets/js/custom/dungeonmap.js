@@ -184,7 +184,7 @@ class DungeonMap extends Signalable {
         // Special handling for brush drawing
         this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function () {
             // Disable pather if we were doing it
-            self.pluginPather.togglePather(false);
+            self.togglePather(false);
         });
         this.leafletMap.on(L.Draw.Event.DRAWSTOP, function () {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips

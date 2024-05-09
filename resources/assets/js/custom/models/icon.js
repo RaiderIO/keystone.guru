@@ -89,7 +89,7 @@ class Icon extends VersionableMapObject {
                 self._refreshVisual();
             }
         });
-        getState().register(['floorid:changed', 'mapzoomlevel:changed'], this, function (mapStateChangedEvent) {
+        getState().register(['floorid:changed', 'mapzoomlevel:changed'], this, function () {
             self._refreshVisual();
         });
     }
@@ -106,7 +106,6 @@ class Icon extends VersionableMapObject {
 
         let self = this;
         let mapIconTypes = getState().getMapContext().getStaticMapIconTypes();
-        let unknownMapIcon = getState().getMapContext().getUnknownMapIconType();
 
         let editableMapIconTypes = [];
         for (let i in mapIconTypes) {
@@ -242,7 +241,7 @@ class Icon extends VersionableMapObject {
     getDisplayText() {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
 
-        return this.comment !== null && this.comment.length > 0 ? this.comment.replaceAll('\n', '<br>') : this.map_icon_type.name;
+        return this.comment !== null && this.comment.length > 0 ? this.comment : this.map_icon_type.name;
     }
 
     /**
@@ -272,12 +271,18 @@ class Icon extends VersionableMapObject {
         if (this.comment !== null && this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
             let text = lang.get(this.getDisplayText());
 
+            // Remove all HTML from it
+            text = jQuery('<div/>').text(text)[0].outerHTML;
+
+            // But fix the line breaks
+            text = text.replaceAll('\n', ' <br> ');
+
             // Wrap the text
             if (text.length > 75) {
                 this.layer.bindTooltip(
                     jQuery('<div/>', {
                         class: 'map_map_icon_comment_tooltip'
-                    }).text(text)[0].outerHTML, $.extend({
+                    }).html(text)[0].outerHTML, $.extend({
                         direction: 'top'
                     }, this.getTooltipOptions())
                 );
