@@ -271,11 +271,7 @@ class Icon extends VersionableMapObject {
         if (this.comment !== null && this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
             let text = lang.get(this.getDisplayText());
 
-            // Remove all HTML from it
-            text = jQuery('<div/>').text(text)[0].outerHTML;
-
-            // But fix the line breaks
-            text = text.replaceAll('\n', ' <br> ');
+            text = c.map.sanitizeText(text);
 
             // Wrap the text
             if (text.length > 75) {

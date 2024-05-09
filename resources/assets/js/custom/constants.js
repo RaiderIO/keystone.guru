@@ -596,6 +596,19 @@ let c = {
             mouseSendFrequencyMs: 500,
             // The amount of users before an overflow is initiated
             userOverflowCount: 5
+        },
+        sanitizeText: function (text, convertLineEnding = true) {
+            if (text === null || typeof text !== 'string') {
+                return text;
+            }
+
+            let allowedTags = ['b', 'i', 'h3', 'h4', 'h5', 'br'];
+
+            if (convertLineEnding === true) {
+                text = text.replaceAll('\n', '<br>');
+            }
+
+            return filterHTML(text, allowedTags);
         }
     }
 };

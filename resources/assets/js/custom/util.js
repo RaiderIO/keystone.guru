@@ -204,6 +204,39 @@ function getCenteroid(latLngs) {
     return L.latLng(reduce[0], reduce[1]);
 }
 
+/**
+ *
+ * @param input
+ * @param allowedTags
+ * @returns {string}
+ */
+function filterHTML(input, allowedTags) {
+    // Create a temporary div element
+    let tempDiv = document.createElement('div');
+    // Set the input string as innerHTML of the temporary div
+    tempDiv.innerHTML = input;
+
+    // Select all elements within the temporary div
+    let allElements = tempDiv.querySelectorAll('*');
+
+    // Loop through each element
+    allElements.forEach(function(element) {
+        // If the tag of the element is not in the allowed tags array
+        if (!allowedTags.includes(element.tagName.toLowerCase())) {
+            // Replace the element with its inner text
+            let textNode = document.createTextNode(element.innerText);
+            element.parentNode.replaceChild(textNode, element);
+        } else {
+            // Remove all attributes from the element
+            Array.from(element.attributes).forEach(function(attr) {
+                element.removeAttribute(attr.name);
+            });
+        }
+    });
+
+    // Return the innerHTML of the temporary div (now filtered)
+    return tempDiv.innerHTML;
+}
 
 function getEnemies() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
