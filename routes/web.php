@@ -290,15 +290,18 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/combatlog', (new AdminToolsController())->combatlog(...))->name('admin.combatlog');
                 Route::get('/npcimport', (new AdminToolsController())->npcimport(...))->name('admin.tools.npcimport');
                 Route::post('/npcimport', (new AdminToolsController())->npcimportsubmit(...))->name('admin.tools.npcimport.submit');
+
                 // Dungeonroute
                 Route::get('/dungeonroute', (new AdminToolsController())->dungeonroute(...))->name('admin.tools.dungeonroute.view');
                 Route::post('/dungeonroute', (new AdminToolsController())->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
                 Route::get('/dungeonroute/mappingversions', (new AdminToolsController())->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
+
                 // Import enemy forces
                 Route::get('enemyforces/import', (new AdminToolsController())->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
                 Route::post('enemyforces/import', (new AdminToolsController())->enemyforcesimportsubmit(...))->name('admin.tools.enemyforces.import.submit');
                 Route::get('enemyforces/recalculate', (new AdminToolsController())->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', (new AdminToolsController())->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
+
                 // Thumbnails
                 Route::get('thumbnails/regenerate', (new AdminToolsController())->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
                 Route::post('thumbnails/regenerate', (new AdminToolsController())->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
@@ -306,22 +309,34 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     // View string contents
                     Route::get('string', (new AdminToolsController())->mdtview(...))->name('admin.tools.mdt.string.view');
                     Route::post('string', (new AdminToolsController())->mdtviewsubmit(...))->name('admin.tools.mdt.string.submit');
+
                     // View string contents as a dungeonroute
                     Route::get('string/dungeonroute', (new AdminToolsController())->mdtviewasdungeonroute(...))->name('admin.tools.mdt.string.viewasdungeonroute');
                     Route::post('string/dungeonroute', (new AdminToolsController())->mdtviewasdungeonroutesubmit(...))->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+
                     // View dungeonroute as string
                     Route::get('dungeonroute/string', (new AdminToolsController())->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
                     Route::post('dungeonroute/string', (new AdminToolsController())->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
                     // View mapping hash
                     Route::get('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
                     Route::post('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghashsubmit(...))->name('admin.tools.mdt.dungeonmappinghash.submit');
+
                     // Convert Mapping Version to MDT Mapping
                     Route::get('dungeonmappingversiontomdtmapping', (new AdminToolsController())->dungeonmappingversiontomdtmapping(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
                     Route::post('dungeonmappingversiontomdtmapping', (new AdminToolsController())->dungeonmappingversiontomdtmappingsubmit(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
                 });
+
                 // Wow.tools
                 Route::get('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
                 Route::post('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinatessubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
+
+                // Feature management
+                Route::get('features', (new AdminToolsController())->listFeatures(...))->name('admin.tools.features.list');
+                Route::post('features/toggle', (new AdminToolsController())->toggleFeature(...))->name('admin.tools.features.toggle');
+                Route::post('features/forget', (new AdminToolsController())->forgetFeature(...))->name('admin.tools.features.forget');
+
+
                 // Exception thrower
                 Route::get('exception', (new AdminToolsController())->exceptionselect(...))->name('admin.tools.exception.select');
                 Route::post('exception', (new AdminToolsController())->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');

@@ -24,6 +24,9 @@ return [
             'exception'                   => [
                 'internal_server_error' => 'Exception thrown in admin panel',
             ],
+            'feature_toggle_activated'    => 'Feature :feature is now activated',
+            'feature_toggle_deactivated'  => 'Feature :feature is now deactivated',
+            'feature_forgotten'           => 'Feature :feature successfully forgotten',
         ],
     ],
     'apidungeonroute'             => [

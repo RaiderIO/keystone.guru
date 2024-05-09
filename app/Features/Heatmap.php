@@ -2,16 +2,17 @@
 
 namespace App\Features;
 
+use App\Models\Laratrust\Role;
 use App\Models\User;
-use Illuminate\Support\Lottery;
 
 class Heatmap
 {
     /**
      * Resolve the feature's initial value.
      */
-    public function resolve(User $user): mixed
+    public function resolve(User $user): bool
     {
-        return $user->hasRole('');
+        // Only if we have Opensearch setup and we have the correct roles!
+        return !empty(config('opensearch-laravel.host')) && $user->hasRole([Role::ROLE_INTERNAL_TEAM, Role::ROLE_ADMIN]);
     }
 }

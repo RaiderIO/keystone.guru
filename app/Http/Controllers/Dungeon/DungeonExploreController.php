@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dungeon;
 
+use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
@@ -12,13 +13,15 @@ use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Laravel\Pennant\Feature;
+use Laravel\Pennant\FeatureManager;
 
 class DungeonExploreController extends Controller
 {
     public function get(Request $request, CombatLogEventServiceInterface $combatLogEventService): View
     {
         return view('dungeon.explore.list', [
-            'runCountPerDungeon' => $combatLogEventService->getRunCountPerDungeon(),
+            'runCountPerDungeon' => Feature::active(Heatmap::class) ? $combatLogEventService->getRunCountPerDungeon() : collect(),
         ]);
     }
 
@@ -79,8 +82,8 @@ class DungeonExploreController extends Controller
                 'floor'              => $floor,
                 'title'              => __($dungeon->name),
                 'mapContext'         => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-                'showHeatmapSearch'  => $combatLogEventService->getRunCount($combatLogEventFilter),
-                'availableDateRange' => $combatLogEventService->getAvailableDateRange($combatLogEventFilter),
+                'showHeatmapSearch'  => Feature::active(Heatmap::class) && $combatLogEventService->getRunCount($combatLogEventFilter),
+                'availableDateRange' => Feature::active(Heatmap::class) ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
             ]);
         }
     }

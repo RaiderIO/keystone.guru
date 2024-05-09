@@ -29,6 +29,7 @@ use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
+use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,6 +39,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
 use Session;
 use Throwable;
 
@@ -926,5 +928,43 @@ class AdminToolsController extends Controller
             case 'InternalServerError':
                 throw new Exception(__('controller.admintools.flash.exception.internal_server_error'));
         }
+    }
+
+    public function listFeatures(Request $request): View
+    {
+        return view('admin.tools.features.list', [
+            'features' => collect(ClassFinder::getClassesInNamespace('App\\Features')),
+        ]);
+    }
+
+    public function toggleFeature(Request $request): RedirectResponse
+    {
+        $feature = (string)$request->get('feature');
+
+        $wasActive = Feature::active($feature);
+        if ($wasActive) {
+            Feature::deactivateForEveryone($feature);
+        } else {
+            Feature::activateForEveryone($feature);
+        }
+
+        Session::flash('status', __(!$wasActive ?
+            'controller.admintools.flash.feature_toggle_activated' :
+            'controller.admintools.flash.feature_toggle_deactivated', [
+            'feature' => $feature,
+        ]));
+
+        return redirect()->route('admin.tools.features.list');
+    }
+
+    public function forgetFeature(Request $request): RedirectResponse
+    {
+        $feature = (string)$request->get('feature');
+
+        Feature::forget($feature);
+
+        Session::flash('status', __('controller.admintools.flash.feature_forgotten', ['feature' => $feature]));
+
+        return redirect()->route('admin.tools.features.list');
     }
 }

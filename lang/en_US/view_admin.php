@@ -337,6 +337,21 @@ return [
                 'submit'                    => 'Submit',
             ],
         ],
+        'features'     => [
+            'list' => [
+                'title'        => 'Feature management',
+                'header'       => 'Feature management',
+                'table_header' => [
+                    'enabled' => 'Enabled',
+                    'feature' => 'Feature',
+                    'actions' => 'Actions',
+                ],
+                'actions'      => [
+                    'toggle' => 'Toggle',
+                    'forget' => 'Forget',
+                ],
+            ],
+        ],
         'mdt'          => [
             'diff'                              => [
                 'title'                 => 'MDT Diff',
@@ -418,6 +433,9 @@ return [
 
             'subheader_mapping'  => 'Mapping',
             'force_sync_mapping' => 'Force sync mapping',
+
+            'subheader_features' => 'Features',
+            'manage_features'    => 'Manage features',
 
             'subheader_actions'   => 'Actions',
             'export_dungeon_data' => 'Export dungeon data',
