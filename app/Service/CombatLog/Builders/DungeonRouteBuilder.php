@@ -11,6 +11,7 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\Spell;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
@@ -59,6 +60,9 @@ abstract class DungeonRouteBuilder
     /** @var Collection<int> */
     protected Collection $validNpcIds;
 
+    /** @var Collection<int> */
+    protected Collection $validSpellIds;
+
     private int $killZoneIndex = 1;
 
     /** @var Collection<KillZone> */
@@ -95,12 +99,13 @@ abstract class DungeonRouteBuilder
 
         // #1818 Filter out any NPC ids that are invalid
         $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
+        $this->validSpellIds        = Spell::all('id')->pluck(['id']);
         $this->activePullCollection = new ActivePullCollection();
 
         // This allows me to set the killZones in buildFinished, so that existing relations are still preserved
-        // If you don't Laravel probably starts resolving relations and it will lose relations that were set
+        // If you don't Laravel probably starts resolving relations, and it will lose relations that were set
         // manually, which sucks when the repositories in these classes are actually Stubs
-        $this->killZones            = collect();
+        $this->killZones = collect();
     }
 
     /**

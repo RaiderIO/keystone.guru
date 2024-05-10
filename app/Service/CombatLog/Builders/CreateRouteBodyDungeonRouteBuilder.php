@@ -213,9 +213,20 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->createRouteBody->spells as $spell) {
             if ($lastDiedAt !== null) {
                 if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
+                    if ($this->validSpellIds->search($spell->spellId) === false) {
+                        $this->log->determineSpellsCastBetweenInvalidSpellIdBetween($spell->spellId);
+
+                        continue;
+                    }
                     $activePull->addSpell($spell->spellId);
                 }
             } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
+                if ($this->validSpellIds->search($spell->spellId) === false) {
+                    $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
+
+                    continue;
+                }
+
                 $activePull->addSpell($spell->spellId);
             }
         }

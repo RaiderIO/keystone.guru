@@ -17,4 +17,8 @@ interface CreateRouteBodyDungeonRouteBuilderLoggingInterface
     public function buildKillZonesEnemyKilled(string $uniqueUid, string $timestamp): void;
 
     public function buildKillZonesCreateNewFinalPull(array $guids): void;
+
+    public function determineSpellsCastBetweenInvalidSpellIdBetween(int $spellId): void;
+
+    public function determineSpellsCastBetweenInvalidSpellIdAfter(int $spellId): void;
 }

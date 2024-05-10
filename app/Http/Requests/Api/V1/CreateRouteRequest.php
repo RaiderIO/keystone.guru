@@ -48,7 +48,7 @@ class CreateRouteRequest extends APIFormRequest
             'npcs.*.coord.y'                => ['required', 'numeric'],
             'npcs.*.coord.uiMapId'          => ['required', Rule::exists(Floor::class, 'ui_map_id')],
             'spells'                        => 'nullable|array',
-            'spells.*.spellId'              => Rule::exists(Spell::class, 'id'),
+            'spells.*.spellId'              => 'integer',
             'spells.*.playerUid'            => 'string|max:32',
             'spells.*.castAt'               => $dateFormat,
             'spells.*.coord.x'              => 'numeric',
