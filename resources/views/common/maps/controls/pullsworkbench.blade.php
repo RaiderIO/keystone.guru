@@ -82,12 +82,12 @@ use Illuminate\Support\Collection;
                 __('view_common.maps.controls.pullsworkbench.modal.description.label'),
                 ['id' => 'map_killzonessidebar_killzone_description_modal_label']
             ) !!}
+            <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
+            </div>
             {{ Form::textarea('map_killzonessidebar_killzone_description_modal_textarea', '', [
                 'class' => 'form-control',
                 'id' => 'map_killzonessidebar_killzone_description_modal_textarea',
             ]) }}
-        </div>
-        <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-dismiss="modal">
