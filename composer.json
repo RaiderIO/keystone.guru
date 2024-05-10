@@ -100,7 +100,7 @@
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.8",
+        "barryvdh/laravel-debugbar": "^3.13",
         "deployer/deployer": "^7.3",
         "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",

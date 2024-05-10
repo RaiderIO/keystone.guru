@@ -23,16 +23,33 @@ trait CreatesCombatLogEvent
             /** @var Floor $randomFloor */
             $randomFloor = $dungeon->floors->where('facade', 0)->random(1)->first();
 
-            $result->push($this->createCombatLogEvent([
+            $result->push($this->createCombatLogEvent(array_merge([
                 'id'        => rand(1, 100000),
                 'ui_map_id' => $randomFloor->ui_map_id,
-                // Add 1 so that we're always in between the bounds
-                'pos_x'     => rand((int)$randomFloor->ingame_min_x + 1, (int)$randomFloor->ingame_max_x),
-                'pos_y'     => rand((int)$randomFloor->ingame_min_y + 1, (int)$randomFloor->ingame_max_y),
-            ]));
+            ], $this->getRandomCoordinates($randomFloor))));
         }
 
         return $result;
+    }
+
+    public function createGridAggregationResult(Dungeon $dungeon, int $rowCount): array
+    {
+        $result = collect();
+
+        foreach ($dungeon->floors()->where('facade', false)->get() as $floor) {
+            /** @var Floor $floor */
+            $rows = [];
+
+            for ($i = 0; $i < $rowCount; $i++) {
+                $coordinates              = $this->getRandomCoordinates($floor);
+                $coordinatesString        = sprintf('%s,%s', $coordinates['pos_x'], $coordinates['pos_y']);
+                $rows[$coordinatesString] = rand(1, 100);
+            }
+
+            $result->put($floor->id, $rows);
+        }
+
+        return $result->toArray();
     }
 
     public function createCombatLogEvent(?array $attributes = null): CombatLogEvent
@@ -50,6 +67,19 @@ trait CreatesCombatLogEvent
             'ui_map_id' => rand(1, 200),
             'pos_x'     => rand(0, 100),
             'pos_y'     => rand(0, 100),
+        ];
+    }
+
+    /**
+     * @param Floor $floor
+     * @return array
+     */
+    private function getRandomCoordinates(Floor $floor): array
+    {
+        return [
+            // Add 1 so that we're always in between the bounds
+            'pos_x' => rand((int)$floor->ingame_min_x + 1, (int)$floor->ingame_max_x),
+            'pos_y' => rand((int)$floor->ingame_min_y + 1, (int)$floor->ingame_max_y),
         ];
     }
 }

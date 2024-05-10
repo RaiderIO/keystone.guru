@@ -147,12 +147,14 @@ class ServiceFixtures
     public static function getCombatLogEventServiceMock(
         PublicTestCase                        $testCase,
         array                                 $methodsToMock = [],
+        CoordinatesServiceInterface           $coordinatesService = null,
         CombatLogEventServiceLoggingInterface $log = null
     ): MockObject|CombatLogEventService {
         return $testCase
             ->getMockBuilder(CombatLogEventService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
+                $coordinatesService ?? ServiceFixtures::getCoordinatesServiceMock($testCase),
                 $log ?? LoggingFixtures::createCombatLogEventServiceLogging($testCase),
             ])
             ->getMock();
