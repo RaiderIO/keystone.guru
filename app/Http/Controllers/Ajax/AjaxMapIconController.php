@@ -93,7 +93,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 ]);
 
                 $mapIcon->setRelation('floor', $latLng->getFloor());
+                // Ensure the dungeon is loaded (required for the base class)
+                $mapIcon->load(['floor.dungeon']);
             }
+
             // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
             // of a dungeon
             $mapIcon->update(array_merge($updateAttributes, [

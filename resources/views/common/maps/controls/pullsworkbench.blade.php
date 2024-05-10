@@ -1,5 +1,8 @@
 <?php
-/** @var \Illuminate\Support\Collection $spellsSelect */
+use Illuminate\Support\Collection;
+
+    // map_killzonessidebar_killzone_description_modal_supported_html_tags
+/** @var Collection $spellsSelect */
 ?>
 
 <div id="pull_sidebar_workbench" class="pull_workbench p-2" style="display: none;">
@@ -83,6 +86,8 @@
                 'class' => 'form-control',
                 'id' => 'map_killzonessidebar_killzone_description_modal_textarea',
             ]) }}
+        </div>
+        <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-dismiss="modal">

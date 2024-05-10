@@ -145,7 +145,8 @@ class Icon extends VersionableMapObject {
             new Attribute({
                 name: 'comment',
                 type: 'textarea',
-                default: ''
+                default: '',
+                description: lang.get('messages.map_icon_comment_description_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
             }),
             new Attribute({
                 name: 'lat',

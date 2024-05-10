@@ -357,8 +357,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label' => 'Description',
-                        'save'  => 'Save',
+                        'label'               => 'Description',
+                        'supported_html_tags' => 'Supported HTML tags: ',
+                        'save'                => 'Save',
                     ],
                     'spells'      => [
                         'label' => 'Spells',

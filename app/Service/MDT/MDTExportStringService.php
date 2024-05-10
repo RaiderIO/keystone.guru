@@ -62,7 +62,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
-                    5 => $mapIcon->comment ?? __($mapIcon->mapicontype?->name) ?? '',
+                    5 => strip_tags($mapIcon->comment ?? __($mapIcon->mapicontype?->name) ?? ''),
                 ],
             ];
         }
@@ -146,7 +146,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $floor->mdt_sub_level ?? $floor->index,
                     4 => true,
-                    5 => $killZone->description,
+                    5 => strip_tags($killZone->description), // MDT does not support HTML tags - get rid of them.
                 ],
             ];
         }

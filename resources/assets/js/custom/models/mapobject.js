@@ -479,6 +479,7 @@ class MapObject extends Signalable {
                         property: name,
                         map_object_name: mapObjectName,
                         label: lang.get(`messages.${mapObjectName}_${name}_label`),
+                        description: attribute.hasOwnProperty('description') ? attribute.description : false,
                         value: this._getValue(name, parentAttribute),
                         values: attribute.hasOwnProperty('values') ?
                             (typeof attribute.values === 'function' ? attribute.values() : attribute.values)
@@ -488,7 +489,7 @@ class MapObject extends Signalable {
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false,
                         multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
                         buttonType: attribute.hasOwnProperty('buttonType') ? attribute.buttonType : 'info',
-                        buttonText: attribute.buttonText ?? 'Do action'
+                        buttonText: attribute.buttonText ?? 'Do action',
                     })));
                 }
             }
