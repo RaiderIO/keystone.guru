@@ -597,7 +597,7 @@ let c = {
             // The amount of users before an overflow is initiated
             userOverflowCount: 5
         },
-        sanitizeTextDefaultAllowedTags: ['h3', 'h4', 'h5', 'b', 'i', 'br'],
+        sanitizeTextDefaultAllowedTags: ['h4', 'h5', 'h6', 'b', 'i', 'br'],
         sanitizeText: function (text, convertLineEnding = true) {
             if (text === null || typeof text !== 'string') {
                 return text;
