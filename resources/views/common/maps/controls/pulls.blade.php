@@ -26,7 +26,7 @@ $showAds                ??= true;
     // Mobile sidebar options
     'sidebarSelector' => '#pulls_sidebar',
     'sidebarToggleSelector' => '#pulls_sidebar_trigger',
-    'sidebarScrollSelector' => '#pulls_sidebar .pulls_container',
+    'sidebarScrollSelector' => '#pulls_sidebar .data_container',
     'anchor' => 'right',
     'newKillZoneSelector' => '#new_pull_btn',
     'killZonesContainerSelector' => '#killzones_container',
@@ -106,7 +106,7 @@ $showAds                ??= true;
             @endif
         @endif
 
-        <div class="pulls_container {{ $dungeon->speedrun_enabled ? 'has_speedrun' : '' }}" data-simplebar>
+        <div class="data_container {{ $dungeon->speedrun_enabled ? 'has_speedrun' : '' }}" data-simplebar>
 
             <div id="killzones_loading" class="row no-gutters">
                 <div class="col text-center">

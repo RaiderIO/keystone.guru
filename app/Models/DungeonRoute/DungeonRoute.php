@@ -22,6 +22,7 @@ use App\Models\GameServerRegion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
@@ -130,6 +131,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection|Tag[]                         $tags
  * @property Collection                               $routeattributes
  * @property Collection                               $routeattributesraw
+ * @property Collection<DungeonRouteThumbnailJob>     $dungeonRouteThumbnailJobs
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -184,6 +186,7 @@ class DungeonRoute extends Model
     ];
 
     protected $fillable = [
+        'id',
         'public_key',
         'author_id',
         'dungeon_id',
@@ -359,6 +362,11 @@ class DungeonRoute extends Model
     public function enemyRaidMarkers(): HasMany
     {
         return $this->hasMany(DungeonRouteEnemyRaidMarker::class);
+    }
+
+    public function dungeonRouteThumbnailJobs(): HasMany
+    {
+        return $this->hasMany(DungeonRouteThumbnailJob::class);
     }
 
     public function mapicons(): HasMany
@@ -670,7 +678,7 @@ class DungeonRoute extends Model
         $result = false;
         $result = match ($this->published_state_id) {
             PublishedState::ALL[PublishedState::UNPUBLISHED] => $this->mayUserEdit($user),
-            PublishedState::ALL[PublishedState::TEAM] => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole('admin')),
+            PublishedState::ALL[PublishedState::TEAM] => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
             PublishedState::ALL[PublishedState::WORLD_WITH_LINK], PublishedState::ALL[PublishedState::WORLD] => true,
             default => $result,
         };
@@ -683,7 +691,7 @@ class DungeonRoute extends Model
         if ($user === null) {
             return $this->isSandbox();
         } else {
-            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole('admin') ||
+            return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole(Role::ROLE_ADMIN) ||
                 // Route is part of a team, user is a collaborator, and route is not unpublished
                 ($this->team !== null && $this->team->isUserCollaborator($user) && $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]);
         }
@@ -773,8 +781,8 @@ class DungeonRoute extends Model
 
         $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
         if ($new) {
-            $this->author_id          = $user?->id ?? -1;
-            $this->public_key         = DungeonRoute::generateRandomPublicKey();
+            $this->author_id  = $user?->id ?? -1;
+            $this->public_key = DungeonRoute::generateRandomPublicKey();
             $this->setRelation('dungeon', Dungeon::findOrFail($this->dungeon_id));
             $this->mapping_version_id = $this->dungeon->currentMappingVersion->id;
         }
@@ -807,7 +815,7 @@ class DungeonRoute extends Model
         $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
         $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
 
-        if ($user?->hasRole('admin')) {
+        if ($user?->hasRole(Role::ROLE_ADMIN)) {
             $this->demo = intval($request->get('demo', 0)) > 0;
         }
 
@@ -1434,6 +1442,12 @@ class DungeonRoute extends Model
                 // @ because we don't care if it fails
                 @unlink($dungeonRoute->getAbsoluteThumbnailPath($floor->index));
             }
+
+            // Delete all API thumbnail jobs/thumbnails generated for it
+            foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob ) {
+                $dungeonRouteThumbnailJob->expire();
+            }
+
             // Dungeonroute settings
             $dungeonRoute->affixgroups()->delete();
             $dungeonRoute->routeattributesraw()->delete();

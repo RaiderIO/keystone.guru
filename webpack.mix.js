@@ -125,6 +125,11 @@ let scripts = [
     // Include in proper order
     'resources/assets/js/custom/signalable.js',
 
+    // Map plugins
+    'resources/assets/js/custom/mapplugins/mapplugin.js',
+    'resources/assets/js/custom/mapplugins/patherplugin.js',
+    'resources/assets/js/custom/mapplugins/heatplugin.js',
+
     // Map object groups
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/polygonmapobjectgroup.js',

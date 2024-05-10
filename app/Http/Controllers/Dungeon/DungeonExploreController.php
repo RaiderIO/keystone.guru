@@ -2,22 +2,30 @@
 
 namespace App\Http\Controllers\Dungeon;
 
+use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Laravel\Pennant\Feature;
+use Laravel\Pennant\FeatureManager;
 
 class DungeonExploreController extends Controller
 {
-    public function get(Request $request): View
+    public function get(Request $request, CombatLogEventServiceInterface $combatLogEventService): View
     {
-        return view('dungeon.explore.list');
+        return view('dungeon.explore.list', [
+            'runCountPerDungeon' => Feature::active(Heatmap::class) ? $combatLogEventService->getRunCountPerDungeon() : collect(),
+        ]);
     }
 
-    public function viewDungeon(Request $request, Dungeon $dungeon): RedirectResponse
+    public function viewDungeon(Request $request, CombatLogEventServiceInterface $combatLogEventService, Dungeon $dungeon): RedirectResponse
     {
         $dungeon->load(['currentMappingVersion']);
 
@@ -33,10 +41,11 @@ class DungeonExploreController extends Controller
     }
 
     public function viewDungeonFloor(
-        Request                    $request,
-        MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        string                     $floorIndex = '1'): View|RedirectResponse
+        Request                        $request,
+        MapContextServiceInterface     $mapContextService,
+        CombatLogEventServiceInterface $combatLogEventService,
+        Dungeon                        $dungeon,
+        string                         $floorIndex = '1'): View|RedirectResponse
     {
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
@@ -66,11 +75,15 @@ class DungeonExploreController extends Controller
                 ]);
             }
 
+            $combatLogEventFilter = new CombatLogEventFilter($dungeon, CombatLogEvent::EVENT_TYPE_ENEMY_KILLED);
+
             return view('dungeon.explore.view', [
-                'dungeon'    => $dungeon,
-                'floor'      => $floor,
-                'title'      => __($dungeon->name),
-                'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'dungeon'            => $dungeon,
+                'floor'              => $floor,
+                'title'              => __($dungeon->name),
+                'mapContext'         => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'showHeatmapSearch'  => Feature::active(Heatmap::class) && $combatLogEventService->getRunCount($combatLogEventFilter),
+                'availableDateRange' => Feature::active(Heatmap::class) ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
             ]);
         }
     }

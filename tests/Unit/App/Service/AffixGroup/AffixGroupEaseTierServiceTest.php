@@ -4,8 +4,8 @@ namespace Tests\Unit\App\Service\AffixGroup;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\ServiceFixtures;
 
 final class AffixGroupEaseTierServiceTest extends PublicTestCase
 {

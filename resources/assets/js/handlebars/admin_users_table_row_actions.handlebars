@@ -4,22 +4,17 @@
         {{actions_label}}
     </button>
     <div class="dropdown-menu" aria-labelledby="userActionsButton">
+        {{#each roles}}
+            <a class="dropdown-item" href="#">
+                <form method="POST" action="/admin/user/{{../user.id}}/make/{{name}}" accept-charset="UTF-8"
+                      autocomplete="off">
+                    <input name="_token" type="hidden" value="{{csrf_token}}">
+                    <input class="btn btn-info" name="submit" type="submit" value="{{../make_label}} {{display_name}}">
+                </form>
+            </a>
+        {{/each}}
         <a class="dropdown-item" href="#">
-            <form method="POST" action="/admin/user/{{id}}/makeadmin" accept-charset="UTF-8"
-                  autocomplete="off">
-                <input name="_token" type="hidden" value="{{csrf_token}}">
-                <input class="btn btn-info" name="submit" type="submit" value="{{make_admin_label}}">
-            </form>
-        </a>
-        <a class="dropdown-item" href="#">
-            <form method="POST" action="/admin/user/{{id}}/makeuser" accept-charset="UTF-8"
-                  autocomplete="off">
-                <input name="_token" type="hidden" value="{{csrf_token}}">
-                <input class="btn btn-info ml-1" name="submit" type="submit" value="{{make_user_label}}">
-            </form>
-        </a>
-        <a class="dropdown-item" href="#">
-            <form method="POST" action="/admin/user/{{id}}/delete" accept-charset="UTF-8"
+            <form method="POST" action="/admin/user/{{user.id}}/delete" accept-charset="UTF-8"
                   autocomplete="off">
                 <input name="_method" type="hidden" value="DELETE">
                 <input name="_token" type="hidden" value="{{csrf_token}}">
@@ -27,7 +22,7 @@
             </form>
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="/admin/user/{{id}}/grantAllBenefits">
+        <a class="dropdown-item" href="/admin/user/{{user.id}}/grantAllBenefits">
             {{grant_all_benefits_label}}
         </a>
     </div>

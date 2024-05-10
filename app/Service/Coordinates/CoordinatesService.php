@@ -32,6 +32,8 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         if ($floor === null) {
             throw new InvalidArgumentException('No floor set for latlng!');
+        } else if ($floor->facade) {
+            throw new InvalidArgumentException('Unable to convert latlng that is on facade floor!');
         }
 
         $ingameMapSizeX = $floor->ingame_max_x - $floor->ingame_min_x;
@@ -54,10 +56,18 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         if ($targetFloor === null) {
             throw new InvalidArgumentException('No floor set for ingame XY!');
+        } else if ($targetFloor->facade) {
+            throw new InvalidArgumentException('Unable to convert ingame XY that is on facade floor!');
         }
 
         $ingameMapSizeX = $targetFloor->ingame_max_x - $targetFloor->ingame_min_x;
         $ingameMapSizeY = $targetFloor->ingame_max_y - $targetFloor->ingame_min_y;
+
+        if ((int)$ingameMapSizeX === 0 || (int)$ingameMapSizeY === 0) {
+            throw new InvalidArgumentException(
+                sprintf('Floor %s (%d) does not have ingame coordinates set!', __($targetFloor->name, [], 'en_US'), $targetFloor->id)
+            );
+        }
 
         $factorX = (($targetFloor->ingame_min_x - $ingameXY->getX()) / $ingameMapSizeX);
         $factorY = (($targetFloor->ingame_min_y - $ingameXY->getY()) / $ingameMapSizeY);

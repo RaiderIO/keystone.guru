@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string           $run_id
  * @property string           $correlation_id
  * @property string           $post_body
+ *
  * @property ChallengeModeRun $challengeModeRun
  *
  * @author Wouter

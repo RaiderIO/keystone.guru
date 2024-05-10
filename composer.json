@@ -15,12 +15,16 @@
             "url": "https://github.com/Wotuu/laravel4-datatables-package"
         },
         {
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/opensearch-laravel"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "wotuu/keystone.guru.deployer",
                 "version": "0.1",
                 "source": {
-                    "url": "https://github.com/Wotuu/keystone.guru.deployer.git",
+                    "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
                     "type": "git",
                     "reference": "d6779fe7237a23268a7e5aaed95ba985d1388e70"
                 }
@@ -60,6 +64,7 @@
         "akaunting/laravel-language": "^1.0",
         "barryvdh/laravel-ide-helper": "^2.13",
         "beyondcode/laravel-server-timing": "^1.4",
+        "codeartmk/opensearch-laravel": "dev-master",
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^8.1",
         "fakerphp/faker": "^1.23",
@@ -70,6 +75,7 @@
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.45",
         "laravel/horizon": "^5.12",
+        "laravel/pennant": "^1.7",
         "laravel/socialite": "^5.6",
         "laravel/telescope": "^4.12",
         "laravel/tinker": "^2.8",
@@ -98,6 +104,7 @@
         "deployer/deployer": "^7.3",
         "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",
+        "haydenpierce/class-finder": "^0.5.3",
         "larastan/larastan": "^2.0",
         "lukasss93/laravel-larex": "^4.4",
         "lukasss93/laravel-larex-crowdin": "^2.2",

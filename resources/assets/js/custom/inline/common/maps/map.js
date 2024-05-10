@@ -516,8 +516,6 @@ class CommonMapsMap extends InlineCode {
             }
         }
 
-        console.log(`_mapObjectGroupVisibilityChanged`, hiddenMapObjectGroups, cookieHiddenMapObjectGroups);
-
         // If cookieHiddenMapObjectGroups contained any map object groups that are currently unavailable, we must still
         // add them to our current list as to not lose our setting for it
         hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);

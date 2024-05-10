@@ -55,6 +55,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             }
 
             if ($success) {
+
                 $model->load(['mappingVersion', 'floor', 'floor.dungeon']);
 
                 if ($onSaveSuccess != null) {
@@ -67,7 +68,6 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-
                     broadcast(new ModelChangedEvent($model->floor->dungeon, Auth::getUser(), $model));
                 }
 

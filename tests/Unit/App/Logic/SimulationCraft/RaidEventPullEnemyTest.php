@@ -9,11 +9,11 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use Tests\Fixtures\Traits\CreatesEnemy;
+use Tests\Fixtures\Traits\CreatesNpc;
+use Tests\Fixtures\Traits\CreatesRaidEventPullEnemy;
+use Tests\Fixtures\Traits\CreatesSimulationCraftRaidEventsOptions;
 use Tests\TestCase;
-use Tests\Unit\Fixtures\Traits\CreatesEnemy;
-use Tests\Unit\Fixtures\Traits\CreatesNpc;
-use Tests\Unit\Fixtures\Traits\CreatesRaidEventPullEnemy;
-use Tests\Unit\Fixtures\Traits\CreatesSimulationCraftRaidEventsOptions;
 
 final class RaidEventPullEnemyTest extends TestCase
 {

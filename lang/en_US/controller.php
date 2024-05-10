@@ -24,6 +24,9 @@ return [
             'exception'                   => [
                 'internal_server_error' => 'Exception thrown in admin panel',
             ],
+            'feature_toggle_activated'    => 'Feature :feature is now activated',
+            'feature_toggle_deactivated'  => 'Feature :feature is now deactivated',
+            'feature_forgotten'           => 'Feature :feature successfully forgotten',
         ],
     ],
     'apidungeonroute'             => [
@@ -190,9 +193,10 @@ return [
     ],
     'user'                        => [
         'flash' => [
-            'user_is_now_an_admin'              => 'User %s is now an admin',
-            'user_is_no_longer_an_admin'        => 'User %s is no longer an admin',
-            'user_is_now_a_user'                => 'User %s is now a user',
+            'user_is_now_an_admin'              => 'User :user is now an admin',
+            'user_is_no_longer_an_admin'        => 'User :user is no longer an admin',
+            'user_is_now_a_user'                => 'User :user is now a user',
+            'user_is_now_a_role'                => 'User :user is now a :role',
             'account_deleted_successfully'      => 'Account deleted successfully.',
             'account_deletion_error'            => 'An error occurred. Please try again.',
             'user_is_not_a_patron'              => 'This user is not a Patron.',

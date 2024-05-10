@@ -55,9 +55,9 @@
         <a href="{{ route('admin.tools.wowtools.import_ingame_coordinates') }}">{{ __('view_admin.tools.list.wowtools_import_ingame_coordinates') }}</a>
     </div>
 
-    <h4>{{ __('view_admin.tools.list.subheader_misc') }}</h4>
+    <h4>{{ __('view_admin.tools.list.subheader_features') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.exception.select') }}">{{ __('view_admin.tools.list.throw_an_exception') }}</a>
+        <a href="{{ route('admin.tools.features.list') }}">{{ __('view_admin.tools.list.manage_features') }}</a>
     </div>
 
     @if(config('app.type') === 'mapping')
@@ -67,6 +67,11 @@
                href="{{ route('admin.tools.mapping.forcesync') }}">{{ __('view_admin.tools.list.force_sync_mapping') }}</a>
         </div>
     @endif
+
+    <h4>{{ __('view_admin.tools.list.subheader_misc') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.exception.select') }}">{{ __('view_admin.tools.list.throw_an_exception') }}</a>
+    </div>
 
     <h3>{{ __('view_admin.tools.list.subheader_actions') }}</h3>
     <div class="form-group">

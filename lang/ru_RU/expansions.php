@@ -2,6 +2,24 @@
 
 return [
 
+    'classic'            => [
+        'name' => '',
+    ],
+    'tbc'                => [
+        'name' => '',
+    ],
+    'wotlk'              => [
+        'name' => '',
+    ],
+    'cata'               => [
+        'name' => '',
+    ],
+    'mop'                => [
+        'name' => '',
+    ],
+    'wod'                => [
+        'name' => '',
+    ],
     'legion'             => [
         'name' => 'Легион',
     ],
@@ -10,6 +28,9 @@ return [
     ],
     'shadowlands'        => [
         'name' => 'Темные земли',
+    ],
+    'dragonflight'       => [
+        'name' => '',
     ],
 
 ];

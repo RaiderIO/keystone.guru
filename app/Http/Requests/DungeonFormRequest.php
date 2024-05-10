@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,7 @@ class DungeonFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
     /**

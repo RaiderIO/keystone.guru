@@ -94,6 +94,11 @@ class LatLng implements Arrayable
         return ['lat' => $this->lat, 'lng' => $this->lng];
     }
 
+    public function toArrayWithFloor(): array
+    {
+        return ['lat' => $this->lat, 'lng' => $this->lng, 'floor_id' => optional($this->floor)->id];
+    }
+
     public function __clone()
     {
         return new LatLng(

@@ -20,22 +20,22 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int                        $id
- * @property int                        $dungeon_route_id
- * @property int                        $floor_id
- * @property string                     $color
- * @property string                     $description
- * @property int                        $index
- * @property float                      $lat
- * @property float                      $lng
- * @property DungeonRoute               $dungeonRoute
- * @property Floor                      $floor
- * @property Collection|int[]           $enemies
- * @property Collection|KillZoneEnemy[] $killZoneEnemies
- * @property Collection|KillZoneSpell[] $killZoneSpells
- * @property Collection|Spell[]         $spells
- * @property Carbon                     $updated_at
- * @property Carbon                     $created_at
+ * @property int                       $id
+ * @property int                       $dungeon_route_id
+ * @property int                       $floor_id
+ * @property string                    $color
+ * @property string                    $description
+ * @property int                       $index
+ * @property float                     $lat
+ * @property float                     $lng
+ * @property DungeonRoute              $dungeonRoute
+ * @property Floor                     $floor
+ * @property Collection<int>           $enemies
+ * @property Collection<KillZoneEnemy> $killZoneEnemies
+ * @property Collection<KillZoneSpell> $killZoneSpells
+ * @property Collection<Spell>         $spells
+ * @property Carbon                    $updated_at
+ * @property Carbon                    $created_at
  *
  * @mixin Eloquent
  */
@@ -79,10 +79,10 @@ class KillZone extends Model
         'lng'      => 'float',
     ];
 
-    /** @var Collection|int[]|null */
+    /** @var Collection<int>|null */
     private ?Collection $enemiesAttributeCache = null;
 
-    /** @var Collection|Enemy[]|null */
+    /** @var Collection<Enemy>|null */
     private ?Collection $enemiesCache = null;
 
     private ?Floor $dominantFloorCache = null;
@@ -138,7 +138,7 @@ class KillZone extends Model
     }
 
     /**
-     * @return Collection|Enemy[]
+     * @return Collection<Enemy>
      */
     public function getEnemies(bool $useCache = false): Collection
     {

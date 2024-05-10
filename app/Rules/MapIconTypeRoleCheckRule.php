@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Models\Laratrust\Role;
 use App\Models\MapIconType;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -22,7 +23,7 @@ class MapIconTypeRoleCheckRule implements ValidationRule
             $mapIconType = MapIconType::where('id', $value)->first();
 
             // Only allow admins to save admin_only icons
-            if ($mapIconType === null || $mapIconType->admin_only && !(Auth::check() && Auth::user()->hasRole('admin'))) {
+            if ($mapIconType === null || $mapIconType->admin_only && !(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))) {
                 $fail(__('rules.map_icon_type_role_check_rule.message'));
             }
         }

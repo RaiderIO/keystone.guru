@@ -301,6 +301,25 @@ return [
                 'enemy_info'      => 'Enemy info',
                 'report_an_issue' => 'Report an issue',
             ],
+            'heatmapsearch'  => [
+                'settings_title'   => 'Map settings',
+                'enabled'          => 'Enabled',
+                'disabled'         => 'Disabled',
+                'event_type'       => 'Event type',
+                'filter'           => 'Filter',
+                'loading'          => 'Loading',
+                'key_level'        => 'Key level',
+                'affixes'          => 'Affixes',
+                'affixes_title'    => 'Affixes',
+                'affixes_selected' => '{0} affixes selected',
+                'date_range'       => 'Date range',
+                'date_range_from'  => 'From',
+                'date_range_to'    => 'To',
+                'duration'         => 'Duration',
+                'data'             => [
+                    'dungeon_routes' => 'Showing data from :count runs',
+                ],
+            ],
             'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',
@@ -338,8 +357,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label' => 'Description',
-                        'save'  => 'Save',
+                        'label'               => 'Description',
+                        'supported_html_tags' => 'Supported HTML tags: ',
+                        'save'                => 'Save',
                     ],
                     'spells'      => [
                         'label' => 'Spells',

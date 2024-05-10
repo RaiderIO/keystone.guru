@@ -9,6 +9,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
 use App\Models\Season;
@@ -24,6 +25,8 @@ use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
@@ -36,6 +39,8 @@ use App\Service\CombatLog\CreateRouteDungeonRouteService;
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventService;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Discord\DiscordApiService;
@@ -130,6 +135,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
+        $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
+        $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
@@ -231,7 +238,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var User|null $user */
             $user = Auth::getUser();
             if ($isUserAdmin === null) {
-                $isUserAdmin = optional($user)->hasRole('admin');
+                $isUserAdmin = optional($user)->hasRole(Role::ROLE_ADMIN);
             }
             if ($adFree === null) {
                 $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
@@ -435,8 +442,22 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Maps
+        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
+        });
         view()->composer('common.maps.controls.pulls', static function (View $view) {
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+        });
+        view()->composer('dungeonroute.discover.search', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('currentExpansion', $regionViewVariables['currentExpansion']);
+            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
         });
 
         view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use ($globalViewVariables) {

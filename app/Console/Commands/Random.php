@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
+use App\Models\CombatLog\CombatLogEvent;
+use App\Models\Season;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -33,9 +36,41 @@ class Random extends Command
      * Execute the console command.
      */
     public function handle(
-        StructuredLoggingServiceInterface $structuredLoggingService
+        CombatLogEventServiceInterface       $combatLogEventService,
+        ChallengeModeRunDataServiceInterface $challengeModeRunDataService
     ): int {
-        $structuredLoggingService->all();
+
+        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+            Season::findOrFail(13),
+            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+            1000,
+            10
+        );
+
+//        dd($combatLogEventService->getAvailableDateRange(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        ));
+
+//        dd($combatLogEventService->getGridAggregation(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        )->toArray());
+
+//        $challengeModeRunDataService->convert();
+//        $challengeModeRunDataService->insertAllToOpensearch();
+
+//        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        );
+//
+//        dd($combatLogEvents->count());
+
+//        $structuredLoggingService->all();
 
 //        dd($combatLogSplitService->splitCombatLogOnChallengeModes(
 //            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')

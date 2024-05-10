@@ -88,7 +88,7 @@ abstract class OAuthLoginController extends LoginController
 
             $oAuthId = $this->getOAuthId($oauthUser->id);
             /** @var User $existingUser */
-            $existingUser = User::where('oauth_id', $oAuthId)->first();
+            $existingUser = User::firstWhere('oauth_id', $oAuthId);
             // Does this user exist..
             if ($existingUser === null) {
                 // Get a new template user
@@ -102,7 +102,7 @@ abstract class OAuthLoginController extends LoginController
                         $existingUser->save();
 
                         // Add it as a user
-                        $existingUser->addRole(Role::where('name', 'user')->first());
+                        $existingUser->addRole(Role::firstWhere('name', Role::ROLE_USER));
 
                         Session::flash('status', __('controller.oauthlogin.flash.registered_successfully'));
                     } else {

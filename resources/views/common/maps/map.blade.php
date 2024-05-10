@@ -1,4 +1,5 @@
 <?php
+
 use App\Logic\MapContext\MapContext;
 use App\Logic\MapContext\MapContextDungeonExplore;
 use App\Logic\MapContext\MapContextDungeonRoute;
@@ -22,6 +23,7 @@ use App\Models\User;
  * @var string|null       $embedStyle
  * @var bool|null         $edit
  * @var array             $show
+ * @var array|null        $controlOptions
  * @var bool              $adFree
  * @var string|null       $mapBackgroundColor
  * @var string|null       $mapFacadeStyle
@@ -36,16 +38,18 @@ $mapClasses         ??= '';
 $dungeonroute       ??= null;
 $livesession        ??= null;
 $mapBackgroundColor ??= null;
+$controlOptions     ??= [];
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                ??= [];
-$show['controls']['enemyInfo']   ??= true;
-$show['controls']['pulls']       ??= true;
-$show['controls']['enemyForces'] = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']        ??= false;
-$show['controls']['view']        ??= false;
-$show['controls']['present']     ??= false;
-$show['controls']['live']        ??= false;
+$show['controls']                  ??= [];
+$show['controls']['enemyInfo']     ??= true;
+$show['controls']['pulls']         ??= true;
+$show['controls']['heatmapSearch'] ??= false;
+$show['controls']['enemyForces']   = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']          ??= false;
+$show['controls']['view']          ??= false;
+$show['controls']['present']       ??= false;
+$show['controls']['live']          ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -215,6 +219,14 @@ if ($isAdmin) {
         ])
     @endif
 
+    @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
+        @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
+            'showAds' => $showAds && !$adFree,
+            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
+        ]))
+    @endif
+
     @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
         @include('common.maps.controls.enemyinfo')
     @endif
@@ -274,7 +286,8 @@ if ($isAdmin) {
         @endcomponent
     @endisset
 
-    @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
+    @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
+        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
         @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
             @include('common.modal.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
         @endcomponent

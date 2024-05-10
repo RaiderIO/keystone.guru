@@ -2,7 +2,7 @@
 
 namespace App\Models\SimulationCraft;
 
-use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxSimulateFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\GeneratesPublicKey;
@@ -110,7 +110,7 @@ class SimulationCraftRaidEventsOptions extends Model
         return $this->thundering_clear_seconds !== null;
     }
 
-    public static function fromRequest(APISimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
+    public static function fromRequest(AjaxSimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
     {
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
 
