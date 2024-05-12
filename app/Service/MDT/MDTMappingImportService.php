@@ -499,6 +499,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         throw new Exception('Unable to save dungeon floor switch marker!');
                     }
                 }
+            } else {
+                $this->log->importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(
+                    $currentMappingVersion->dungeonFloorSwitchMarkers->count()
+                );
             }
         } finally {
             $this->log->importDungeonFloorSwitchMarkersEnd();

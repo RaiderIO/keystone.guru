@@ -19,6 +19,11 @@ class HeatPlugin extends MapPlugin {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
 
         if (this.hidden && !force) {
+            console.log(`Not showing LatLngs - Heatmap was hidden by user`);
+            return;
+        }
+
+        if (!this.isEnabled()) {
             console.log(`Not showing LatLngs - Heatmap was disabled`);
             return;
         }

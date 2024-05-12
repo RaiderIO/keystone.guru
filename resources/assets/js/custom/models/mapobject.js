@@ -750,10 +750,11 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         let state = getState();
+        let debug = true;
 
         // Floor states; most common reason for not being visible
         if (state.getCurrentFloor().id !== this.floor_id) {
-            // console.log(`Hiding map object ${this.id} due to floor current floor ${state.getCurrentFloor().id} not matching object floor ${this.floor_id}`);
+            debug ? console.log(`Hiding map object ${this.id} due to floor current floor ${state.getCurrentFloor().id} not matching object floor ${this.floor_id}`) : null;
             return false;
         }
 
@@ -764,12 +765,12 @@ class MapObject extends Signalable {
             if (this.hasOwnProperty('teeming')) {
                 // If the map isn't teeming, but the enemy is teeming..
                 if (!mapContext.getTeeming() && this.teeming === 'visible') {
-                    // console.log(`Hiding enemy due to teeming A ${this.id}`);
+                    debug ? console.log(`Hiding enemy due to teeming A ${this.id}`) : null;
                     return false;
                 }
                 // If the map is teeming, but the enemy shouldn't be there for teeming maps..
                 else if (mapContext.getTeeming() && this.teeming === 'invisible') {
-                    // console.log(`Hiding enemy due to teeming B ${this.id}`);
+                    debug ? console.log(`Hiding enemy due to teeming B ${this.id}`) : null;
                     return false;
                 }
             }
@@ -781,7 +782,7 @@ class MapObject extends Signalable {
                         this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED
                     ) &&
                     mapContext.getSeasonalIndex() !== this.seasonal_index) {
-                    // console.warn(`Hiding enemy due to seasonal_index ${this.id}`);
+                    debug ? console.warn(`Hiding enemy due to seasonal_index ${this.id}`) : null;
                     return false;
                 }
             }
@@ -791,7 +792,7 @@ class MapObject extends Signalable {
             let faction = mapContext.getFaction();
             // Only when not in sandbox mode! (no idea why, it was like this)
             if (!this.map.isSandboxModeEnabled() && (this.faction !== 'any' && faction !== 'any' && this.faction !== faction)) {
-                // console.log(`Hiding enemy due to faction ${this.id}`);
+                debug ? console.log(`Hiding enemy due to faction ${this.id}`) : null;
                 return false;
             }
         }

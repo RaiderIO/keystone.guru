@@ -216,8 +216,8 @@
         "target_floor_id": 150,
         "linked_dungeon_floor_switch_marker_id": 1599,
         "direction": "down",
-        "lat": -190,
-        "lng": 193
+        "lat": -180.21,
+        "lng": 183.11
     },
     {
         "id": 1603,
@@ -227,7 +227,7 @@
         "target_floor_id": 150,
         "linked_dungeon_floor_switch_marker_id": 1600,
         "direction": "down",
-        "lat": -190,
-        "lng": 110
+        "lat": -180.64,
+        "lng": 121.04
     }
 ]

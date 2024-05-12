@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CombatLog\CombatLogEvent;
-use App\Models\Season;
+use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -37,15 +38,26 @@ class Random extends Command
      */
     public function handle(
         CombatLogEventServiceInterface       $combatLogEventService,
-        ChallengeModeRunDataServiceInterface $challengeModeRunDataService
+        ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
+        CoordinatesServiceInterface          $coordinatesService,
     ): int {
 
-        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
-            Season::findOrFail(13),
-            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
-            1000,
-            10
+        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
+        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+
+        $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+            $hallsOfInfusion->currentMappingVersion,
+            $dungeonFloorSwitchMarker->getLatLng()
         );
+
+        dd($latLng->toArrayWithFloor());
+
+//        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+//            Season::findOrFail(13),
+//            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+//            1000,
+//            10
+//        );
 
 //        dd($combatLogEventService->getAvailableDateRange(
 //            new CombatLogEventFilter(

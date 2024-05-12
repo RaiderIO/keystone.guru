@@ -202,6 +202,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(int $count): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importDungeonFloorSwitchMarkersEnd(): void
     {
         $this->end(__METHOD__, get_defined_vars());
