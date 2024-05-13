@@ -29,6 +29,9 @@ class MDTMapPOI implements Arrayable
     public const TYPE_THE_UNDERROT_SKIP    = 'tuSkip';
     public const TYPE_BRACKENHIDE_CAGE     = 'brackenhideCage';
     public const TYPE_BRACKENHIDE_CAULDRON = 'brackenhideCauldron';
+    public const TYPE_NELTHARUS_CHAIN      = 'neltharusChain';
+    public const TYPE_NELTHARUS_FOOD       = 'neltharusFood';
+    public const TYPE_NELTHARUS_SHIELD     = 'neltharusShield';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -40,6 +43,9 @@ class MDTMapPOI implements Arrayable
         self::TYPE_THE_UNDERROT_SKIP,
         self::TYPE_BRACKENHIDE_CAGE,
         self::TYPE_BRACKENHIDE_CAULDRON,
+        self::TYPE_NELTHARUS_CHAIN,
+        self::TYPE_NELTHARUS_FOOD,
+        self::TYPE_NELTHARUS_SHIELD,
     ];
 
     private readonly string $template;
