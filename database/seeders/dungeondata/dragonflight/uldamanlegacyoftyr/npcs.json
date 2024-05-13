@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 107143,
         "name": "Bromach",
-        "base_health": 5928030,
+        "base_health": 40151634,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -28,7 +28,7 @@
         "npc_class_id": 1,
         "display_id": 765,
         "name": "Burly Rock-Thrower",
-        "base_health": 988835,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -40,6 +40,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16194,
+                "mapping_version_id": 328,
+                "npc_id": 184019,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15917,
                 "mapping_version_id": 311,
@@ -106,7 +113,7 @@
         "npc_class_id": 1,
         "display_id": 92699,
         "name": "Hulking Berserker",
-        "base_health": 1483253,
+        "base_health": 10069516,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -118,6 +125,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16192,
+                "mapping_version_id": 328,
+                "npc_id": 184020,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15915,
                 "mapping_version_id": 311,
@@ -184,7 +198,7 @@
         "npc_class_id": 1,
         "display_id": 92697,
         "name": "Stonevault Geomancer",
-        "base_health": 889952,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -196,6 +210,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16191,
+                "mapping_version_id": 328,
+                "npc_id": 184022,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15914,
                 "mapping_version_id": 311,
@@ -262,7 +283,7 @@
         "npc_class_id": 1,
         "display_id": 103338,
         "name": "Vicious Basilisk",
-        "base_health": 791068,
+        "base_health": 5370409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -274,6 +295,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16193,
+                "mapping_version_id": 328,
+                "npc_id": 184023,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15916,
                 "mapping_version_id": 311,
@@ -340,7 +368,7 @@
         "npc_class_id": 1,
         "display_id": 108686,
         "name": "Runic Protector",
-        "base_health": 1582136,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -352,6 +380,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16199,
+                "mapping_version_id": 328,
+                "npc_id": 184107,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15922,
                 "mapping_version_id": 311,
@@ -418,7 +453,7 @@
         "npc_class_id": 1,
         "display_id": 109735,
         "name": "Sentinel Talondras",
-        "base_health": 6916035,
+        "base_health": 46843573,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -439,7 +474,7 @@
         "npc_class_id": 1,
         "display_id": 106056,
         "name": "Chrono-Lord Deios",
-        "base_health": 9880050,
+        "base_health": 66919390,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -460,7 +495,7 @@
         "npc_class_id": 1,
         "display_id": 6025,
         "name": "Earthen Custodian",
-        "base_health": 988835,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -472,6 +507,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16195,
+                "mapping_version_id": 328,
+                "npc_id": 184130,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15918,
                 "mapping_version_id": 311,
@@ -538,7 +580,7 @@
         "npc_class_id": 4,
         "display_id": 6026,
         "name": "Earthen Guardian",
-        "base_health": 1582136,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -550,6 +592,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16203,
+                "mapping_version_id": 328,
+                "npc_id": 184131,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15926,
                 "mapping_version_id": 311,
@@ -616,7 +665,7 @@
         "npc_class_id": 1,
         "display_id": 6009,
         "name": "Earthen Warder",
-        "base_health": 840510,
+        "base_health": 5706059,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -628,6 +677,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16198,
+                "mapping_version_id": 328,
+                "npc_id": 184132,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15921,
                 "mapping_version_id": 311,
@@ -694,7 +750,7 @@
         "npc_class_id": 1,
         "display_id": 92697,
         "name": "Scavenging Leaper",
-        "base_health": 346093,
+        "base_health": 2349553,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -706,6 +762,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16190,
+                "mapping_version_id": 328,
+                "npc_id": 184134,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15913,
                 "mapping_version_id": 311,
@@ -772,7 +835,7 @@
         "npc_class_id": 1,
         "display_id": 108689,
         "name": "Ebonstone Golem",
-        "base_health": 1779903,
+        "base_health": 12083419,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -784,6 +847,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16202,
+                "mapping_version_id": 328,
+                "npc_id": 184300,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15925,
                 "mapping_version_id": 311,
@@ -850,7 +920,7 @@
         "npc_class_id": 1,
         "display_id": 57297,
         "name": "Cavern Seeker",
-        "base_health": 791068,
+        "base_health": 5370409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -862,6 +932,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16201,
+                "mapping_version_id": 328,
+                "npc_id": 184301,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15924,
                 "mapping_version_id": 311,
@@ -928,7 +1005,7 @@
         "npc_class_id": 1,
         "display_id": 84003,
         "name": "Skittering Crawler",
-        "base_health": 791068,
+        "base_health": 5370409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -940,6 +1017,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16200,
+                "mapping_version_id": 328,
+                "npc_id": 184303,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15923,
                 "mapping_version_id": 311,
@@ -1006,7 +1090,7 @@
         "npc_class_id": 1,
         "display_id": 106782,
         "name": "Refti Custodian",
-        "base_health": 1779903,
+        "base_health": 12083419,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1018,6 +1102,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16196,
+                "mapping_version_id": 328,
+                "npc_id": 184319,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15919,
                 "mapping_version_id": 311,
@@ -1084,7 +1175,7 @@
         "npc_class_id": 1,
         "display_id": 106470,
         "name": "Infinite Timereaver",
-        "base_health": 1582136,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1096,6 +1187,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16205,
+                "mapping_version_id": 328,
+                "npc_id": 184331,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15928,
                 "mapping_version_id": 311,
@@ -1162,7 +1260,7 @@
         "npc_class_id": 1,
         "display_id": 19058,
         "name": "Infinite Agent",
-        "base_health": 1186602,
+        "base_health": 8055613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1174,6 +1272,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16204,
+                "mapping_version_id": 328,
+                "npc_id": 184335,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15927,
                 "mapping_version_id": 311,
@@ -1240,7 +1345,7 @@
         "npc_class_id": 1,
         "display_id": 107816,
         "name": "Emberon",
-        "base_health": 4446023,
+        "base_health": 30113726,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1261,7 +1366,7 @@
         "npc_class_id": 1,
         "display_id": 105883,
         "name": "Olaf",
-        "base_health": 3161616,
+        "base_health": 21414205,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1282,7 +1387,7 @@
         "npc_class_id": 1,
         "display_id": 105887,
         "name": "Baelog",
-        "base_health": 2964015,
+        "base_health": 20075817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1303,7 +1408,7 @@
         "npc_class_id": 1,
         "display_id": 105884,
         "name": "Eric \"The Swift\"",
-        "base_health": 2964015,
+        "base_health": 20075817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1345,7 +1450,7 @@
         "npc_class_id": 1,
         "display_id": 6026,
         "name": "Earthen Weaver",
-        "base_health": 889952,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1357,6 +1462,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16197,
+                "mapping_version_id": 328,
+                "npc_id": 186420,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15920,
                 "mapping_version_id": 311,
@@ -1600,7 +1712,7 @@
         "npc_class_id": 1,
         "display_id": 101939,
         "name": "Infinite Whelp",
-        "base_health": 197767,
+        "base_health": 1342602,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1612,6 +1724,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16206,
+                "mapping_version_id": 328,
+                "npc_id": 191311,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15929,
                 "mapping_version_id": 311,
