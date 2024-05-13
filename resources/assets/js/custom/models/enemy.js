@@ -460,6 +460,8 @@ class Enemy extends VersionableMapObject {
 
                 scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), hasFortified, hasTyrannical);
                 keyLevelLabel = ` (+${mapContext.getLevelMin()})`;
+            } else {
+                scaledHealth = Math.round(scaledHealth);
             }
 
             let percentageString = this.npc.health_percentage !== null && this.npc.health_percentage !== 100 ? ` (${this.npc.health_percentage}%)` : ``;
