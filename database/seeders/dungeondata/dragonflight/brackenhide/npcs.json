@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 105631,
         "name": "Claw Fighter",
-        "base_health": 889545,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -19,6 +19,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16068,
+                "mapping_version_id": 322,
+                "npc_id": 185508,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16000,
                 "mapping_version_id": 318,
@@ -106,7 +113,7 @@
         "npc_class_id": 4,
         "display_id": 105636,
         "name": "Trickclaw Mystic",
-        "base_health": 840125,
+        "base_health": 5706059,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -118,6 +125,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16070,
+                "mapping_version_id": 322,
+                "npc_id": 185528,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16002,
                 "mapping_version_id": 318,
@@ -205,7 +219,7 @@
         "npc_class_id": 1,
         "display_id": 105677,
         "name": "Bracken Warscourge",
-        "base_health": 1581412,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -217,6 +231,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16069,
+                "mapping_version_id": 322,
+                "npc_id": 185529,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16001,
                 "mapping_version_id": 318,
@@ -304,7 +325,7 @@
         "npc_class_id": 1,
         "display_id": 105689,
         "name": "Bonebolt Hunter",
-        "base_health": 790706,
+        "base_health": 5370409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -316,6 +337,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16066,
+                "mapping_version_id": 322,
+                "npc_id": 185534,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15998,
                 "mapping_version_id": 318,
@@ -403,7 +431,7 @@
         "npc_class_id": 1,
         "display_id": 108447,
         "name": "Filth Caller",
-        "base_health": 889545,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -415,6 +443,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16088,
+                "mapping_version_id": 322,
+                "npc_id": 185656,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16020,
                 "mapping_version_id": 318,
@@ -502,7 +537,7 @@
         "npc_class_id": 1,
         "display_id": 10270,
         "name": "Vicious Hyena",
-        "base_health": 691868,
+        "base_health": 4699108,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -514,6 +549,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16065,
+                "mapping_version_id": 322,
+                "npc_id": 185691,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15997,
                 "mapping_version_id": 318,
@@ -601,7 +643,7 @@
         "npc_class_id": 1,
         "display_id": 109135,
         "name": "Gutshot",
-        "base_health": 5532828,
+        "base_health": 37474858,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -622,7 +664,7 @@
         "npc_class_id": 1,
         "display_id": 106294,
         "name": "Treemouth",
-        "base_health": 6224432,
+        "base_health": 42159216,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -643,7 +685,7 @@
         "npc_class_id": 1,
         "display_id": 106069,
         "name": "Decatriarch Wratheye",
-        "base_health": 7904040,
+        "base_health": 53535512,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -664,7 +706,7 @@
         "npc_class_id": 1,
         "display_id": 105696,
         "name": "Rira Hackclaw",
-        "base_health": 3556818,
+        "base_health": 24090980,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -685,7 +727,7 @@
         "npc_class_id": 1,
         "display_id": 105695,
         "name": "Gashtooth",
-        "base_health": 3556818,
+        "base_health": 24090980,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -706,7 +748,7 @@
         "npc_class_id": 1,
         "display_id": 105697,
         "name": "Tricktotem",
-        "base_health": 3556818,
+        "base_health": 24090980,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -727,7 +769,7 @@
         "npc_class_id": 1,
         "display_id": 105637,
         "name": "Decay Speaker",
-        "base_health": 1186059,
+        "base_health": 8055613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -739,6 +781,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16072,
+                "mapping_version_id": 322,
+                "npc_id": 186191,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16004,
                 "mapping_version_id": 318,
@@ -826,7 +875,7 @@
         "npc_class_id": 1,
         "display_id": 105688,
         "name": "Cruel Bonecrusher",
-        "base_health": 1087222,
+        "base_health": 7384312,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -838,6 +887,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16067,
+                "mapping_version_id": 322,
+                "npc_id": 186206,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15999,
                 "mapping_version_id": 318,
@@ -925,7 +981,7 @@
         "npc_class_id": 1,
         "display_id": 105690,
         "name": "Rotbow Ranger",
-        "base_health": 1284898,
+        "base_health": 8726915,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -937,6 +993,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16084,
+                "mapping_version_id": 322,
+                "npc_id": 186208,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16016,
                 "mapping_version_id": 318,
@@ -1024,7 +1087,7 @@
         "npc_class_id": 1,
         "display_id": 105700,
         "name": "Brackenhide Shaper",
-        "base_health": 632566,
+        "base_health": 4296324,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1036,6 +1099,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16075,
+                "mapping_version_id": 322,
+                "npc_id": 186220,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16007,
                 "mapping_version_id": 318,
@@ -1123,7 +1193,7 @@
         "npc_class_id": 1,
         "display_id": 105699,
         "name": "Fetid Rotsinger",
-        "base_health": 1383736,
+        "base_health": 9398215,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1135,6 +1205,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16077,
+                "mapping_version_id": 322,
+                "npc_id": 186226,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16009,
                 "mapping_version_id": 318,
@@ -1222,7 +1299,7 @@
         "npc_class_id": 1,
         "display_id": 71690,
         "name": "Monstrous Decay",
-        "base_health": 1284898,
+        "base_health": 8726915,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1234,6 +1311,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16079,
+                "mapping_version_id": 322,
+                "npc_id": 186227,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16011,
                 "mapping_version_id": 318,
@@ -1321,7 +1405,7 @@
         "npc_class_id": 1,
         "display_id": 54677,
         "name": "Wilted Oak",
-        "base_health": 1976766,
+        "base_health": 13426021,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1333,6 +1417,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16078,
+                "mapping_version_id": 322,
+                "npc_id": 186229,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16010,
                 "mapping_version_id": 318,
@@ -1420,7 +1511,7 @@
         "npc_class_id": 1,
         "display_id": 105704,
         "name": "Skulking Gutstabber",
-        "base_health": 889545,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1432,6 +1523,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16082,
+                "mapping_version_id": 322,
+                "npc_id": 186242,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16014,
                 "mapping_version_id": 318,
@@ -1519,7 +1617,7 @@
         "npc_class_id": 1,
         "display_id": 10827,
         "name": "Fleshripper Vulture",
-        "base_health": 593030,
+        "base_health": 4027806,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1531,6 +1629,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16085,
+                "mapping_version_id": 322,
+                "npc_id": 186246,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16017,
                 "mapping_version_id": 318,
@@ -1618,7 +1723,7 @@
         "npc_class_id": 1,
         "display_id": 11908,
         "name": "Gutchewer Bear",
-        "base_health": 1087222,
+        "base_health": 7384312,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1630,6 +1735,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16086,
+                "mapping_version_id": 322,
+                "npc_id": 186284,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16018,
                 "mapping_version_id": 318,
@@ -1780,7 +1892,7 @@
         "npc_class_id": 1,
         "display_id": 106038,
         "name": "Stinkbreath",
-        "base_health": 2372119,
+        "base_health": 16111226,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1792,6 +1904,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16081,
+                "mapping_version_id": 322,
+                "npc_id": 187033,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16013,
                 "mapping_version_id": 318,
@@ -1879,7 +1998,7 @@
         "npc_class_id": 1,
         "display_id": 105554,
         "name": "Rageclaw",
-        "base_health": 2371212,
+        "base_health": 16111226,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1891,6 +2010,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16083,
+                "mapping_version_id": 322,
+                "npc_id": 187192,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16015,
                 "mapping_version_id": 318,
@@ -1978,7 +2104,7 @@
         "npc_class_id": 1,
         "display_id": 106068,
         "name": "Vile Rothexer",
-        "base_health": 1383207,
+        "base_health": 9398215,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1990,6 +2116,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16090,
+                "mapping_version_id": 322,
+                "npc_id": 187224,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16022,
                 "mapping_version_id": 318,
@@ -2077,7 +2210,7 @@
         "npc_class_id": 1,
         "display_id": 106070,
         "name": "Wither Biter",
-        "base_health": 296515,
+        "base_health": 2013904,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2089,6 +2222,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16087,
+                "mapping_version_id": 322,
+                "npc_id": 187231,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16019,
                 "mapping_version_id": 318,
@@ -2176,7 +2316,7 @@
         "npc_class_id": 1,
         "display_id": 106071,
         "name": "Witherling",
-        "base_health": 197676,
+        "base_health": 1342602,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2188,6 +2328,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16089,
+                "mapping_version_id": 322,
+                "npc_id": 187238,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16021,
                 "mapping_version_id": 318,
@@ -2275,7 +2422,7 @@
         "npc_class_id": 1,
         "display_id": 106099,
         "name": "Disease Slasher",
-        "base_health": 889205,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2287,6 +2434,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16091,
+                "mapping_version_id": 322,
+                "npc_id": 187315,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16023,
                 "mapping_version_id": 318,
@@ -2374,7 +2528,7 @@
         "npc_class_id": 1,
         "display_id": 104893,
         "name": "Decaying Slime",
-        "base_health": 197676,
+        "base_health": 1342602,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2386,6 +2540,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16074,
+                "mapping_version_id": 322,
+                "npc_id": 189299,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16006,
                 "mapping_version_id": 318,
@@ -2473,7 +2634,7 @@
         "npc_class_id": 1,
         "display_id": 68523,
         "name": "Infected Bear",
-        "base_health": 1581412,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2494,7 +2655,7 @@
         "npc_class_id": 1,
         "display_id": 81391,
         "name": "Infected Lasher",
-        "base_health": 138374,
+        "base_health": 939822,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2506,6 +2667,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16080,
+                "mapping_version_id": 322,
+                "npc_id": 189363,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16012,
                 "mapping_version_id": 318,
@@ -2593,7 +2761,7 @@
         "npc_class_id": 1,
         "display_id": 107352,
         "name": "Decayed Elder",
-        "base_health": 988383,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2605,6 +2773,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16076,
+                "mapping_version_id": 322,
+                "npc_id": 189531,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16008,
                 "mapping_version_id": 318,
@@ -2746,6 +2921,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16073,
+                "mapping_version_id": 322,
+                "npc_id": 191926,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16005,
                 "mapping_version_id": 318,
@@ -2904,7 +3086,7 @@
         "npc_class_id": 1,
         "display_id": 106068,
         "name": "Vile Rothexer",
-        "base_health": 1383207,
+        "base_health": 9398215,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2916,6 +3098,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16092,
+                "mapping_version_id": 322,
+                "npc_id": 194241,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16024,
                 "mapping_version_id": 318,
@@ -3158,7 +3347,7 @@
         "npc_class_id": 1,
         "display_id": 108586,
         "name": "Wither Slasher",
-        "base_health": 296515,
+        "base_health": 2013904,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -3179,7 +3368,7 @@
         "npc_class_id": 1,
         "display_id": 106068,
         "name": "Vile Rothexer",
-        "base_health": 1383736,
+        "base_health": 9398215,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -3191,6 +3380,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16093,
+                "mapping_version_id": 322,
+                "npc_id": 194487,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16025,
                 "mapping_version_id": 318,
@@ -3299,7 +3495,7 @@
         "npc_class_id": 1,
         "display_id": 109883,
         "name": "Rotfang Hyena",
-        "base_health": 658922,
+        "base_health": 5370409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -3320,7 +3516,7 @@
         "npc_class_id": 1,
         "display_id": 105677,
         "name": "Bracken Warscourge",
-        "base_health": 1580808,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -3332,6 +3528,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16071,
+                "mapping_version_id": 322,
+                "npc_id": 195135,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16003,
                 "mapping_version_id": 318,
@@ -3692,7 +3895,7 @@
         "npc_class_id": 1,
         "display_id": 105704,
         "name": "Gutstabber",
-        "base_health": 988005,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
