@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 107127,
         "name": "Leymor",
-        "base_health": 5022728,
+        "base_health": 46843573,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -28,8 +28,8 @@
         "npc_class_id": 1,
         "display_id": 109087,
         "name": "Telash Greywing",
-        "base_health": 5022728,
-        "health_percentage": 100,
+        "base_health": 42159216,
+        "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -49,7 +49,7 @@
         "npc_class_id": 1,
         "display_id": 108968,
         "name": "Umbrelskul",
-        "base_health": 6027274,
+        "base_health": 47780446,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -70,7 +70,7 @@
         "npc_class_id": 1,
         "display_id": 106829,
         "name": "Azureblade",
-        "base_health": 3587663,
+        "base_health": 33459695,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -91,7 +91,7 @@
         "npc_class_id": 1,
         "display_id": 104019,
         "name": "Arcane Construct",
-        "base_health": 1147041,
+        "base_health": 8055613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -103,6 +103,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16058,
+                "mapping_version_id": 321,
+                "npc_id": 186740,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15990,
                 "mapping_version_id": 317,
@@ -141,7 +148,7 @@
         "npc_class_id": 1,
         "display_id": 107911,
         "name": "Arcane Elemental",
-        "base_health": 716900,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -153,6 +160,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16053,
+                "mapping_version_id": 321,
+                "npc_id": 186741,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15985,
                 "mapping_version_id": 317,
@@ -191,7 +205,7 @@
         "npc_class_id": 1,
         "display_id": 106012,
         "name": "Crystal Thrasher",
-        "base_health": 981040,
+        "base_health": 10948634,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -203,6 +217,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16049,
+                "mapping_version_id": 321,
+                "npc_id": 187139,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15981,
                 "mapping_version_id": 317,
@@ -241,7 +262,7 @@
         "npc_class_id": 1,
         "display_id": 68973,
         "name": "Unstable Curator",
-        "base_health": 1147041,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -253,6 +274,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16054,
+                "mapping_version_id": 321,
+                "npc_id": 187154,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15986,
                 "mapping_version_id": 317,
@@ -291,7 +319,7 @@
         "npc_class_id": 1,
         "display_id": 105096,
         "name": "Rune Seal Keeper",
-        "base_health": 716900,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -303,6 +331,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16055,
+                "mapping_version_id": 321,
+                "npc_id": 187155,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15987,
                 "mapping_version_id": 317,
@@ -341,7 +376,7 @@
         "npc_class_id": 1,
         "display_id": 102138,
         "name": "Shrieking Whelp",
-        "base_health": 286760,
+        "base_health": 2685204,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -353,6 +388,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16046,
+                "mapping_version_id": 321,
+                "npc_id": 187159,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15978,
                 "mapping_version_id": 317,
@@ -391,7 +433,7 @@
         "npc_class_id": 1,
         "display_id": 64607,
         "name": "Crystal Fury",
-        "base_health": 674465,
+        "base_health": 7527186,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -403,6 +445,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16048,
+                "mapping_version_id": 321,
+                "npc_id": 187160,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15980,
                 "mapping_version_id": 317,
@@ -441,7 +490,7 @@
         "npc_class_id": 1,
         "display_id": 109739,
         "name": "Drakonid Breaker",
-        "base_health": 1147041,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -453,6 +502,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16062,
+                "mapping_version_id": 321,
+                "npc_id": 187240,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15994,
                 "mapping_version_id": 317,
@@ -491,7 +547,7 @@
         "npc_class_id": 1,
         "display_id": 106882,
         "name": "Tarasek Delver",
-        "base_health": 430140,
+        "base_health": 4027806,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -503,6 +559,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16063,
+                "mapping_version_id": 321,
+                "npc_id": 187242,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15995,
                 "mapping_version_id": 317,
@@ -541,7 +604,7 @@
         "npc_class_id": 1,
         "display_id": 102558,
         "name": "Nullmagic Hornswog",
-        "base_health": 716900,
+        "base_health": 5706059,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -553,6 +616,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16064,
+                "mapping_version_id": 321,
+                "npc_id": 187246,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15996,
                 "mapping_version_id": 317,
@@ -654,7 +724,7 @@
         "npc_class_id": 1,
         "display_id": 102138,
         "name": "Shrieking Whelp",
-        "base_health": 286760,
+        "base_health": 2685204,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -666,6 +736,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16052,
+                "mapping_version_id": 321,
+                "npc_id": 188100,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15984,
                 "mapping_version_id": 317,
@@ -704,7 +781,7 @@
         "npc_class_id": 1,
         "display_id": 107525,
         "name": "Astral Attendant",
-        "base_health": 430140,
+        "base_health": 4027806,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -716,6 +793,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16059,
+                "mapping_version_id": 321,
+                "npc_id": 189555,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15991,
                 "mapping_version_id": 317,
@@ -775,7 +859,7 @@
         "npc_class_id": 1,
         "display_id": 104202,
         "name": "Vault Guard",
-        "base_health": 788591,
+        "base_health": 7384312,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -787,6 +871,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16060,
+                "mapping_version_id": 321,
+                "npc_id": 190510,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15992,
                 "mapping_version_id": 317,
@@ -825,7 +916,7 @@
         "npc_class_id": 1,
         "display_id": 107894,
         "name": "Arcane Tender",
-        "base_health": 1147041,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -837,6 +928,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16051,
+                "mapping_version_id": 321,
+                "npc_id": 191164,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15983,
                 "mapping_version_id": 317,
@@ -875,7 +973,7 @@
         "npc_class_id": 1,
         "display_id": 107890,
         "name": "Volatile Sapling",
-        "base_health": 71691,
+        "base_health": 671302,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -887,6 +985,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16050,
+                "mapping_version_id": 321,
+                "npc_id": 191313,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15982,
                 "mapping_version_id": 317,
@@ -925,7 +1030,7 @@
         "npc_class_id": 1,
         "display_id": 104234,
         "name": "Scalebane Lieutenant",
-        "base_health": 1147041,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -937,6 +1042,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16061,
+                "mapping_version_id": 321,
+                "npc_id": 191739,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15993,
                 "mapping_version_id": 317,
@@ -1017,7 +1129,7 @@
         "npc_class_id": 1,
         "display_id": 76261,
         "name": "Conjured Lasher",
-        "base_health": 645211,
+        "base_health": 4833367,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1029,6 +1141,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16045,
+                "mapping_version_id": 321,
+                "npc_id": 196102,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15977,
                 "mapping_version_id": 317,
@@ -1067,7 +1186,7 @@
         "npc_class_id": 1,
         "display_id": 107894,
         "name": "Arcane Tender",
-        "base_health": 1147041,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1079,6 +1198,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16047,
+                "mapping_version_id": 321,
+                "npc_id": 196115,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15979,
                 "mapping_version_id": 317,
@@ -1117,7 +1243,7 @@
         "npc_class_id": 1,
         "display_id": 64607,
         "name": "Crystal Fury",
-        "base_health": 788591,
+        "base_health": 7384312,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1129,6 +1255,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16056,
+                "mapping_version_id": 321,
+                "npc_id": 196116,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15988,
                 "mapping_version_id": 317,
@@ -1167,7 +1300,7 @@
         "npc_class_id": 1,
         "display_id": 106012,
         "name": "Crystal Thrasher",
-        "base_health": 1147041,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1179,6 +1312,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16057,
+                "mapping_version_id": 321,
+                "npc_id": 196117,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15989,
                 "mapping_version_id": 317,
