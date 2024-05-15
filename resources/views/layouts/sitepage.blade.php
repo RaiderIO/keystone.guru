@@ -5,7 +5,10 @@
 /** @var $isMobile boolean */
 /** @var $nameAndVersion string */
 /** @var $theme string */
+
 /** @var $menuModelEdit \Illuminate\Database\Eloquent\Model */
+
+use App\Models\Laratrust\Role;
 
 $user = \Illuminate\Support\Facades\Auth::user();
 // Custom content or not
@@ -19,12 +22,12 @@ $footer ??= true;
 // Show ads if not set
 $showAds ??= true;
 // Any class to add to the root div
-$rootClass ??= '';
+$rootClass                 ??= '';
 $disableDefaultRootClasses ??= false;
 // Page title
 $title ??= null;
 // Breadcrumbs
-$breadcrumbs ??= $viewName;
+$breadcrumbs       ??= $viewName;
 $breadcrumbsParams ??= [];
 ?>
 @extends('layouts.app', ['title' => $title])
@@ -68,7 +71,7 @@ $breadcrumbsParams ??= [];
                                 <option
                                     data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                     @if($hasIcon)
-                                    data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                        data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
                                     @endif
                                     {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                 >{{ $hasIcon ? '' : $menuModel->name }}</option>
@@ -96,7 +99,7 @@ $breadcrumbsParams ??= [];
 
     @else
 
-        @if (!$isProduction && (!Auth::check() || !$user->hasRole('admin')))
+        @if (!$isProduction && (!Auth::check() || !$user->hasRole(Role::ROLE_ADMIN)))
             <div class="container-fluid alert alert-warning text-center mt-4">
                 <i class="fa fa-exclamation-triangle"></i>
                 {{ __('view_layouts.sitepage.staging_banner_description') }}

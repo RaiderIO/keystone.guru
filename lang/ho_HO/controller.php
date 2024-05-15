@@ -22,7 +22,6 @@ return [
             'caches_dropped_successfully' => 'Hodor',
             'releases_exported'           => 'Hodor',
             'exception'                   => [
-                'token_mismatch'        => 'Hodor',
                 'internal_server_error' => 'Hodor',
             ],
         ],
@@ -121,8 +120,9 @@ return [
         ],
     ],
     'mappingversion'              => [
-        'created_successfully' => 'Hodor',
-        'deleted_successfully' => 'Hodor',
+        'created_successfully'      => 'Hodor',
+        'created_bare_successfully' => '',
+        'deleted_successfully'      => 'Hodor',
     ],
     'mdtimport'                   => [
         'unknown_dungeon' => 'Hodor',

@@ -120,8 +120,9 @@ return [
         ],
     ],
     'mappingversion'              => [
-        'created_successfully' => '',
-        'deleted_successfully' => '',
+        'created_successfully'      => '',
+        'created_bare_successfully' => '',
+        'deleted_successfully'      => '',
     ],
     'mdtimport'                   => [
         'unknown_dungeon' => '',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Laratrust\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,8 +13,7 @@ class UserReportFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return \Auth::check() &&
-            (\Auth::user()->hasRole('user') || \Auth::user()->hasRole('admin'));
+        return Auth::user()?->hasRole(Role::ROLE_ALL);
     }
 
     /**

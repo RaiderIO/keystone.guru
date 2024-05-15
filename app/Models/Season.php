@@ -17,18 +17,18 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int                     $id
- * @property int                     $expansion_id
- * @property int                     $seasonal_affix_id
- * @property int                     $index
- * @property Carbon                  $start
- * @property int                     $presets
- * @property int                     $affix_group_count
- * @property int                     $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property string                  $name Dynamic attribute
- * @property Expansion               $expansion
- * @property Collection|AffixGroup[] $affixgroups
- * @property Collection|Dungeon[]    $dungeons
+ * @property int                    $id
+ * @property int                    $expansion_id
+ * @property int                    $seasonal_affix_id
+ * @property int                    $index
+ * @property Carbon                 $start
+ * @property int                    $presets
+ * @property int                    $affix_group_count
+ * @property int                    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property string                 $name Dynamic attribute
+ * @property Expansion              $expansion
+ * @property Collection<AffixGroup> $affixgroups
+ * @property Collection<Dungeon>    $dungeons
  *
  * @mixin Eloquent
  */
@@ -44,6 +44,10 @@ class Season extends CacheModel
     public $timestamps = false;
 
     protected $appends = ['name'];
+
+    protected $casts = [
+        'start' => 'date',
+    ];
 
     /** @var bool|null Cache for if we're a timewalking season or not */
     private ?bool $isTimewalkingSeason = null;

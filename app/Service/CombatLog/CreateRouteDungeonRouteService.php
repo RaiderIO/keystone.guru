@@ -16,7 +16,21 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Polyline;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Stub\AffixGroup\AffixGroupRepository as AffixGroupRepositoryStub;
+use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
+use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneRepository as KillZoneRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneSpellRepository as KillZoneSpellRepositoryStub;
+use App\Service\CombatLog\Builders\CreateRouteBodyCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
+use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteChallengeMode;
@@ -36,17 +50,42 @@ use App\Service\Season\SeasonServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 
 class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceInterface
 {
-    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, protected CreateRouteDungeonRouteServiceLoggingInterface $log)
-    {
+    public function __construct(
+        protected CombatLogService                               $combatLogService,
+        protected SeasonServiceInterface                         $seasonService,
+        protected CoordinatesServiceInterface                    $coordinatesService,
+        protected DungeonRouteRepositoryInterface                $dungeonRouteRepository,
+        protected DungeonRouteAffixGroupRepositoryInterface      $dungeonRouteAffixGroupRepository,
+        protected AffixGroupRepositoryInterface                  $affixGroupRepository,
+        protected KillZoneRepositoryInterface                    $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface               $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface               $killZoneSpellRepository,
+        protected CreateRouteDungeonRouteServiceLoggingInterface $log
+    ) {
     }
 
+    /**
+     * @throws DungeonNotSupportedException
+     * @throws Exception
+     */
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute
     {
-        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder($this->seasonService, $this->coordinatesService, $createRouteBody))->build();
+        $dungeonRoute = (new CreateRouteBodyDungeonRouteBuilder(
+            $this->seasonService,
+            $this->coordinatesService,
+            $this->dungeonRouteRepository,
+            $this->dungeonRouteAffixGroupRepository,
+            $this->affixGroupRepository,
+            $this->killZoneRepository,
+            $this->killZoneEnemyRepository,
+            $this->killZoneSpellRepository,
+            $createRouteBody
+        ))->build();
 
         $this->saveChallengeModeRun($createRouteBody, $dungeonRoute);
 
@@ -60,6 +99,30 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
 
         return $dungeonRoute;
     }
+
+    /**
+     * @throws DungeonNotSupportedException
+     * @throws Exception
+     */
+    public function convertCreateRouteBodyToCombatLogEvents(CreateRouteBody $createRouteBody): Collection
+    {
+        $builder = new CreateRouteBodyCombatLogEventsBuilder(
+            $this->seasonService,
+            $this->coordinatesService,
+            new DungeonRouteRepositoryStub(),
+            new DungeonRouteAffixGroupRepositoryStub(),
+            new AffixGroupRepositoryStub(),
+            new KillZoneRepositoryStub(),
+            new KillZoneEnemyRepositoryStub(),
+            new KillZoneSpellRepositoryStub(),
+            $createRouteBody
+        );
+
+        $builder->build();
+
+        return $builder->getCombatLogEvents();
+    }
+
 
     /**
      * @throws Exception
@@ -91,7 +154,6 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 $challengeModeEndEvent->getTimestamp()->format(CreateRouteBody::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getSuccess(),
                 $challengeModeEndEvent->getTotalTimeMS(),
-                $challengeModeStartEvent->getInstanceID(),
                 $challengeModeStartEvent->getChallengeModeID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
                 $challengeModeStartEvent->getAffixIDs()

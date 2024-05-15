@@ -12,6 +12,7 @@ class MDTBaseService
      */
     protected function getLua(): Lua
     {
+        /** @phpstan-ignore-next-line */
         $lua = new Lua();
 
         // Load libraries (yeah can do this with ->library function as well)

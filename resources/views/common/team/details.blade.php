@@ -1,3 +1,13 @@
+<?php
+
+use App\Models\Team;
+use App\Models\TeamUser;
+
+/**
+ * @var Team|null $model
+ */
+?>
+
 @isset($model)
     {{ Form::model($model, ['route' => ['team.update', $model->public_key], 'method' => 'patch', 'files' => true]) }}
 @else
@@ -24,8 +34,8 @@
 @if(isset($model) && isset($model->iconfile))
     <div class="form-group">
         {{__('view_common.team.details.current_logo') }}: <img src="{{ $model->iconfile->getURL() }}"
-                                                                alt="{{ __('view_common.team.details.team_logo_title') }}"
-                                                                style="max-width: 48px"/>
+                                                               alt="{{ __('view_common.team.details.team_logo_title') }}"
+                                                               style="max-width: 48px"/>
     </div>
 @endif
 
@@ -36,7 +46,7 @@
             __('view_common.team.details.submit'), ['class' => 'btn btn-info']) !!}
     </div>
     <div class="col">
-        @if(isset($model) && $model->getUserRole(Auth::user()) === 'admin')
+        @if(isset($model) && $model->getUserRole(Auth::user()) === TeamUser::ROLE_ADMIN)
             <button id="delete_team" class="btn btn-danger float-right">
                 <i class="fas fa-trash"></i> {{ __('view_common.team.details.disband_team') }}
             </button>

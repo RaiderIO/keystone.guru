@@ -147,7 +147,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
                 $npc->name              = $mdtNpc->getName();
                 $npc->base_health       = $mdtNpc->getHealth();
-                $npc->health_percentage = $mdtNpc->getHealthPercentage();
+                // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
+                $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
@@ -499,6 +500,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         throw new Exception('Unable to save dungeon floor switch marker!');
                     }
                 }
+            } else {
+                $this->log->importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(
+                    $currentMappingVersion->dungeonFloorSwitchMarkers->count()
+                );
             }
         } finally {
             $this->log->importDungeonFloorSwitchMarkersEnd();

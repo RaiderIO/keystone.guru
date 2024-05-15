@@ -3,7 +3,6 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Jobs\RefreshEnemyForces;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -12,14 +11,17 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
-use App\Models\KillZone\KillZoneSpell;
+use App\Models\Spell;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -50,21 +52,31 @@ abstract class DungeonRouteBuilder
 
     protected ?Floor $currentFloor;
 
-    /** @var Collection|Enemy[] */
+    /** @var Collection<Enemy> */
     protected Collection $availableEnemies;
 
     protected ActivePullCollection $activePullCollection;
 
-    /** @var Collection|int */
+    /** @var Collection<int> */
     protected Collection $validNpcIds;
 
+    /** @var Collection<int> */
+    protected Collection $validSpellIds;
+
     private int $killZoneIndex = 1;
+
+    /** @var Collection<KillZone> */
+    protected Collection $killZones;
 
     private readonly DungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
-        protected CoordinatesServiceInterface $coordinatesService,
-        protected DungeonRoute                $dungeonRoute
+        protected CoordinatesServiceInterface      $coordinatesService,
+        protected DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface      $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface $killZoneSpellRepository,
+        protected DungeonRoute                     $dungeonRoute
     ) {
         /** @var DungeonRouteBuilderLoggingInterface $log */
         $log       = App::make(DungeonRouteBuilderLoggingInterface::class);
@@ -87,7 +99,13 @@ abstract class DungeonRouteBuilder
 
         // #1818 Filter out any NPC ids that are invalid
         $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
+        $this->validSpellIds        = Spell::all('id')->pluck(['id']);
         $this->activePullCollection = new ActivePullCollection();
+
+        // This allows me to set the killZones in buildFinished, so that existing relations are still preserved
+        // If you don't Laravel probably starts resolving relations, and it will lose relations that were set
+        // manually, which sucks when the repositories in these classes are actually Stubs
+        $this->killZones = collect();
     }
 
     /**
@@ -100,9 +118,11 @@ abstract class DungeonRouteBuilder
      */
     protected function buildFinished(): void
     {
+        $this->dungeonRoute->setRelation('killZones', $this->killZones);
+
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
-        DungeonRoute::find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
+        $this->dungeonRouteRepository->find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
         $this->dungeonRoute->enemy_forces = $enemyForces;
     }
 
@@ -114,7 +134,7 @@ abstract class DungeonRouteBuilder
             /** @var Collection|ActivePullEnemy[] $killedEnemies */
             $killedEnemies = $activePull->getEnemiesKilled();
 
-            $killZone = KillZone::create([
+            $killZone = $this->killZoneRepository->create([
                 'dungeon_route_id' => $this->dungeonRoute->id,
                 'color'            => randomHexColorNoMapColors(),
                 'index'            => $this->killZoneIndex,
@@ -143,8 +163,6 @@ abstract class DungeonRouteBuilder
                             'mdt_id'       => $enemy->mdt_id,
                         ]);
 
-                        $killZone->killZoneEnemies->push($enemy);
-
                         $this->log->createPullEnemyAttachedToKillZone(
                             $killedEnemy->getNpcId(),
                             $killedEnemy->getX(),
@@ -156,8 +174,12 @@ abstract class DungeonRouteBuilder
                 }
             }
 
+            $killZone->setRelation('killZoneEnemies', $killZoneEnemiesAttributes->map(function (array $attributes) {
+                return new KillZoneEnemy($attributes);
+            }));
+
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
-                KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
+                $this->killZoneEnemyRepository->insert($killZoneEnemiesAttributes->toArray());
                 $this->killZoneIndex++;
                 $enemyCount = $killZoneEnemiesAttributes->count();
                 $this->log->createPullInsertedEnemies($enemyCount);
@@ -172,16 +194,15 @@ abstract class DungeonRouteBuilder
                 }
 
                 if ($killZoneSpellsAttributes->isNotEmpty()) {
-                    KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
+                    $this->killZoneSpellRepository->insert($killZoneSpellsAttributes->toArray());
                     $spellCount = $killZoneSpellsAttributes->count();
                     $this->log->createPullSpellsAttachedToKillZone($spellCount);
                 }
 
-                // Write the killzone back to the dungeon route
-                $this->dungeonRoute->setRelation('killZones', $this->dungeonRoute->killZones->push($killZone));
+                $this->killZones->push($killZone);
             } else {
                 // No enemies were inserted for this pull, so it's worthless. Delete it
-                $killZone->delete();
+                $this->killZoneRepository->delete($killZone);
                 $this->log->createPullNoEnemiesPullDeleted();
             }
         } finally {

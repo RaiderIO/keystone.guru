@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 107680,
         "name": "Balakar Khan",
-        "base_health": 5723357,
+        "base_health": 53535512,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -28,7 +28,7 @@
         "npc_class_id": 1,
         "display_id": 105722,
         "name": "Maruuk",
-        "base_health": 7154196,
+        "base_health": 66919390,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -49,7 +49,7 @@
         "npc_class_id": 1,
         "display_id": 105721,
         "name": "Teera",
-        "base_health": 7154196,
+        "base_health": 66919390,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -70,7 +70,7 @@
         "npc_class_id": 1,
         "display_id": 107145,
         "name": "The Raging Tempest",
-        "base_health": 7154196,
+        "base_health": 66919390,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -91,7 +91,7 @@
         "npc_class_id": 1,
         "display_id": 105823,
         "name": "Granyth",
-        "base_health": 5437189,
+        "base_health": 50858736,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -112,7 +112,7 @@
         "npc_class_id": 1,
         "display_id": 108673,
         "name": "Nokhud Plainstomper",
-        "base_health": 1290613,
+        "base_health": 12083419,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -124,6 +124,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16147,
+                "mapping_version_id": 326,
+                "npc_id": 191847,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15951,
                 "mapping_version_id": 315,
@@ -176,7 +183,7 @@
         "npc_class_id": 1,
         "display_id": 108667,
         "name": "Nokhud Longbow",
-        "base_health": 645307,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -188,6 +195,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16144,
+                "mapping_version_id": 326,
+                "npc_id": 192789,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15948,
                 "mapping_version_id": 315,
@@ -240,7 +254,7 @@
         "npc_class_id": 1,
         "display_id": 108672,
         "name": "Nokhud Warspear",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -252,6 +266,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16143,
+                "mapping_version_id": 326,
+                "npc_id": 192791,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15947,
                 "mapping_version_id": 315,
@@ -304,7 +325,7 @@
         "npc_class_id": 1,
         "display_id": 108670,
         "name": "Nokhud Beastmaster",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -316,6 +337,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16146,
+                "mapping_version_id": 326,
+                "npc_id": 192794,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15950,
                 "mapping_version_id": 315,
@@ -368,7 +396,7 @@
         "npc_class_id": 1,
         "display_id": 108597,
         "name": "Nokhud Hornsounder",
-        "base_health": 573606,
+        "base_health": 4699108,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -380,6 +408,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16145,
+                "mapping_version_id": 326,
+                "npc_id": 192796,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15949,
                 "mapping_version_id": 315,
@@ -432,7 +467,7 @@
         "npc_class_id": 1,
         "display_id": 108528,
         "name": "Nokhud Lancemaster",
-        "base_health": 1290613,
+        "base_health": 12083419,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -444,6 +479,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16148,
+                "mapping_version_id": 326,
+                "npc_id": 192800,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15952,
                 "mapping_version_id": 315,
@@ -496,7 +538,7 @@
         "npc_class_id": 1,
         "display_id": 101437,
         "name": "War Ohuna",
-        "base_health": 286803,
+        "base_health": 2685204,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -517,7 +559,7 @@
         "npc_class_id": 1,
         "display_id": 110840,
         "name": "Nokhud Thunderfist",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -529,6 +571,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16172,
+                "mapping_version_id": 326,
+                "npc_id": 193373,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15976,
                 "mapping_version_id": 315,
@@ -581,7 +630,7 @@
         "npc_class_id": 1,
         "display_id": 108222,
         "name": "Balara",
-        "base_health": 1720817,
+        "base_health": 16111226,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -593,6 +642,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16170,
+                "mapping_version_id": 326,
+                "npc_id": 193457,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15974,
                 "mapping_version_id": 315,
@@ -645,7 +701,7 @@
         "npc_class_id": 1,
         "display_id": 108221,
         "name": "Batak",
-        "base_health": 1720817,
+        "base_health": 16111226,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -657,6 +713,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16169,
+                "mapping_version_id": 326,
+                "npc_id": 193462,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15973,
                 "mapping_version_id": 315,
@@ -709,7 +772,7 @@
         "npc_class_id": 1,
         "display_id": 108818,
         "name": "Stormcaller Solongo",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -721,6 +784,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16156,
+                "mapping_version_id": 326,
+                "npc_id": 194315,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15960,
                 "mapping_version_id": 315,
@@ -773,7 +843,7 @@
         "npc_class_id": 1,
         "display_id": 108818,
         "name": "Stormcaller Zarii",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -785,6 +855,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16157,
+                "mapping_version_id": 326,
+                "npc_id": 194316,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15961,
                 "mapping_version_id": 315,
@@ -837,7 +914,7 @@
         "npc_class_id": 1,
         "display_id": 108819,
         "name": "Stormcaller Boroo",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -849,6 +926,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16150,
+                "mapping_version_id": 326,
+                "npc_id": 194317,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15954,
                 "mapping_version_id": 315,
@@ -901,7 +985,7 @@
         "npc_class_id": 1,
         "display_id": 108711,
         "name": "Primalist Stormspeaker",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -913,6 +997,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16152,
+                "mapping_version_id": 326,
+                "npc_id": 194894,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15956,
                 "mapping_version_id": 315,
@@ -965,7 +1056,7 @@
         "npc_class_id": 1,
         "display_id": 101201,
         "name": "Unstable Squall",
-        "base_health": 286803,
+        "base_health": 2685204,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -986,7 +1077,7 @@
         "npc_class_id": 1,
         "display_id": 108335,
         "name": "Primal Stormshield",
-        "base_health": 932110,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -998,6 +1089,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16154,
+                "mapping_version_id": 326,
+                "npc_id": 194896,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15958,
                 "mapping_version_id": 315,
@@ -1050,7 +1148,7 @@
         "npc_class_id": 1,
         "display_id": 107517,
         "name": "Stormsurge Totem",
-        "base_health": 344163,
+        "base_health": 3222243,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1071,7 +1169,7 @@
         "npc_class_id": 1,
         "display_id": 109038,
         "name": "Primalist Arcblade",
-        "base_health": 860408,
+        "base_health": 8055613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1083,6 +1181,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16149,
+                "mapping_version_id": 326,
+                "npc_id": 194898,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15953,
                 "mapping_version_id": 315,
@@ -1135,7 +1240,7 @@
         "npc_class_id": 1,
         "display_id": 108819,
         "name": "Stormcaller Arynga",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1147,6 +1252,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16153,
+                "mapping_version_id": 326,
+                "npc_id": 195265,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15957,
                 "mapping_version_id": 315,
@@ -1199,7 +1311,7 @@
         "npc_class_id": 1,
         "display_id": 102511,
         "name": "Primal Gust",
-        "base_health": 286803,
+        "base_health": 2685204,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1220,7 +1332,7 @@
         "npc_class_id": 1,
         "display_id": 110545,
         "name": "Primalist Thunderbeast",
-        "base_health": 1434014,
+        "base_health": 13426021,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1232,6 +1344,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16151,
+                "mapping_version_id": 326,
+                "npc_id": 195696,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15955,
                 "mapping_version_id": 315,
@@ -1284,7 +1403,7 @@
         "npc_class_id": 1,
         "display_id": 109006,
         "name": "Ukhel Corruptor",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1296,6 +1415,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16158,
+                "mapping_version_id": 326,
+                "npc_id": 195842,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15962,
                 "mapping_version_id": 315,
@@ -1348,7 +1474,7 @@
         "npc_class_id": 1,
         "display_id": 109035,
         "name": "Ukhel Deathspeaker",
-        "base_health": 860408,
+        "base_health": 8055613,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1360,6 +1486,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16164,
+                "mapping_version_id": 326,
+                "npc_id": 195851,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15968,
                 "mapping_version_id": 315,
@@ -1412,7 +1545,7 @@
         "npc_class_id": 1,
         "display_id": 109017,
         "name": "Risen Warrior",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1424,6 +1557,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16165,
+                "mapping_version_id": 326,
+                "npc_id": 195855,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15969,
                 "mapping_version_id": 315,
@@ -1476,7 +1616,7 @@
         "npc_class_id": 1,
         "display_id": 109018,
         "name": "Desecrated Bakar",
-        "base_health": 286803,
+        "base_health": 1678253,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1488,6 +1628,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16162,
+                "mapping_version_id": 326,
+                "npc_id": 195875,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15966,
                 "mapping_version_id": 315,
@@ -1540,7 +1687,7 @@
         "npc_class_id": 1,
         "display_id": 109019,
         "name": "Desecrated Ohuna",
-        "base_health": 573606,
+        "base_health": 5370409,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1552,6 +1699,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16161,
+                "mapping_version_id": 326,
+                "npc_id": 195876,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15965,
                 "mapping_version_id": 315,
@@ -1604,7 +1758,7 @@
         "npc_class_id": 1,
         "display_id": 109020,
         "name": "Risen Mystic",
-        "base_health": 573606,
+        "base_health": 6041710,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1616,6 +1770,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16163,
+                "mapping_version_id": 326,
+                "npc_id": 195877,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15967,
                 "mapping_version_id": 315,
@@ -1668,7 +1829,7 @@
         "npc_class_id": 1,
         "display_id": 109021,
         "name": "Ukhel Beastcaller",
-        "base_health": 1003810,
+        "base_health": 13426021,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1680,6 +1841,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16160,
+                "mapping_version_id": 326,
+                "npc_id": 195878,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15964,
                 "mapping_version_id": 315,
@@ -1732,7 +1900,7 @@
         "npc_class_id": 1,
         "display_id": 109014,
         "name": "Soulharvester Galtmaa",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1744,6 +1912,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16159,
+                "mapping_version_id": 326,
+                "npc_id": 195927,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15963,
                 "mapping_version_id": 315,
@@ -1796,7 +1971,7 @@
         "npc_class_id": 1,
         "display_id": 109015,
         "name": "Soulharvester Duuren",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1808,6 +1983,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16168,
+                "mapping_version_id": 326,
+                "npc_id": 195928,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15972,
                 "mapping_version_id": 315,
@@ -1860,7 +2042,7 @@
         "npc_class_id": 1,
         "display_id": 109036,
         "name": "Soulharvester Tumen",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1872,6 +2054,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16166,
+                "mapping_version_id": 326,
+                "npc_id": 195929,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15970,
                 "mapping_version_id": 315,
@@ -1924,7 +2113,7 @@
         "npc_class_id": 1,
         "display_id": 109037,
         "name": "Soulharvester Mandakh",
-        "base_health": 1147211,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1936,6 +2125,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16167,
+                "mapping_version_id": 326,
+                "npc_id": 195930,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15971,
                 "mapping_version_id": 315,
@@ -1988,7 +2184,7 @@
         "npc_class_id": 1,
         "display_id": 108223,
         "name": "Nokhud Neophyte",
-        "base_health": 717007,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2000,6 +2196,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16155,
+                "mapping_version_id": 326,
+                "npc_id": 196263,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15959,
                 "mapping_version_id": 315,
@@ -2052,7 +2255,7 @@
         "npc_class_id": 1,
         "display_id": 108529,
         "name": "Nokhud Defender",
-        "base_health": 1326463,
+        "base_health": 12419070,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -2064,6 +2267,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16171,
+                "mapping_version_id": 326,
+                "npc_id": 199717,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15975,
                 "mapping_version_id": 315,

@@ -8,6 +8,8 @@ use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLogging;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLogging;
+use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
 use App\Service\CombatLog\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLogging;
@@ -20,6 +22,8 @@ use App\Service\CombatLog\Logging\CombatLogServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLoggingInterface;
+use App\Service\CombatLog\Logging\CreateRouteBodyCombatLogEventsBuilderLogging;
+use App\Service\CombatLog\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLogging;
@@ -32,6 +36,8 @@ use App\Service\CombatLog\Logging\MappingVersionCombatFilterLogging;
 use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLogging;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
 use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLogging;
@@ -65,11 +71,15 @@ class LoggingServiceProvider extends ServiceProvider
         // Cache
         $this->app->bind(CacheServiceLoggingInterface::class, CacheServiceLogging::class);
 
+        // Challenge Mode Run Data
+        $this->app->bind(ChallengeModeRunDataServiceLoggingInterface::class, ChallengeModeRunDataServiceLogging::class);
+
         // Combat log
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
         $this->app->bind(CombatLogDungeonRouteServiceLoggingInterface::class, CombatLogDungeonRouteServiceLogging::class);
         $this->app->bind(DungeonRouteBuilderLoggingInterface::class, DungeonRouteBuilderLogging::class);
         $this->app->bind(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class, CreateRouteBodyDungeonRouteBuilderLogging::class);
+        $this->app->bind(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class, CreateRouteBodyCombatLogEventsBuilderLogging::class);
         $this->app->bind(CreateRouteDungeonRouteServiceLoggingInterface::class, CreateRouteDungeonRouteServiceLogging::class);
         $this->app->bind(ResultEventDungeonRouteBuilderLoggingInterface::class, ResultEventDungeonRouteBuilderLogging::class);
         $this->app->bind(CombatLogSplitServiceLoggingInterface::class, CombatLogSplitServiceLogging::class);
@@ -78,6 +88,9 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(MappingVersionCombatFilterLoggingInterface::class, MappingVersionCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);
         $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);
+
+        // Combat log event
+        $this->app->bind(CombatLogEventServiceLoggingInterface::class, CombatLogEventServiceLogging::class);
 
         // MDT
         $this->app->bind(MDTMappingExportServiceLoggingInterface::class, MDTMappingExportServiceLogging::class);

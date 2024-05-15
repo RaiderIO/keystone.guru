@@ -112,6 +112,9 @@ class PullWorkBench extends Signalable {
         $(`#map_killzonessidebar_killzone_description_modal_label`).text(
             lang.get('messages.pull_workbench_pull_description_label', {index: this.killZone.index})
         );
+        $(`#map_killzonessidebar_killzone_description_modal_supported_html_tags`).text(
+            lang.get('messages.pull_workbench_pull_supported_tags_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
+        );
         $(`#map_killzonessidebar_killzone_description_modal_textarea`).val(
             this.killZone.description ?? ''
         );
@@ -143,7 +146,7 @@ class PullWorkBench extends Signalable {
          */
         let $killAreaLabel = $(`#map_killzonessidebar_killzone_kill_area_label`);
 
-        let resultMessage = '';
+        let resultMessage;
         // Set and is currently 0
         if (this.killZone.hasKillArea()) {
             // It was not, update it

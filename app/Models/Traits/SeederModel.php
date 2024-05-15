@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use Auth;
@@ -22,7 +23,7 @@ trait SeederModel
         static::deleting(function(Model $model){
             /** @var User|null $user */
             $user = Auth::getUser();
-            return $user?->hasRole('admin') || $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy;
+            return $user?->hasRole(Role::ROLE_ADMIN) || $model instanceof MappingVersion || $model instanceof Floor || $model instanceof Enemy;
         });
     }
 }

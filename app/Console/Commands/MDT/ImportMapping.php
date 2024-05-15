@@ -16,7 +16,7 @@ class ImportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importmapping {dungeon} {--force=}';
+    protected $signature = 'mdt:importmapping {dungeon} {--force}';
 
     /**
      * The console command description.

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'view_route_not_published'                => '',
     'present_route_not_published'             => '',
     'embed_route_not_published'               => '',
@@ -10,4 +11,5 @@ return [
     'add_brushline_limit_reached'             => '',
     'add_path_limit_reached'                  => '',
     'add_map_icon_limit_reached'              => '',
+
 ];

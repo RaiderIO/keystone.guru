@@ -20,8 +20,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null     $image_height
  * @property float        $zoom_level
  * @property int          $quality
+ *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
+ *
  * @property Carbon       $created_at
  * @property Carbon       $updated_at
  *

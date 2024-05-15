@@ -2,7 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
+use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -33,9 +37,52 @@ class Random extends Command
      * Execute the console command.
      */
     public function handle(
-        StructuredLoggingServiceInterface $structuredLoggingService
+        CombatLogEventServiceInterface       $combatLogEventService,
+        ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
+        CoordinatesServiceInterface          $coordinatesService,
     ): int {
-        $structuredLoggingService->all();
+
+        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
+        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+
+        $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+            $hallsOfInfusion->currentMappingVersion,
+            $dungeonFloorSwitchMarker->getLatLng()
+        );
+
+        dd($latLng->toArrayWithFloor());
+
+//        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+//            Season::findOrFail(13),
+//            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+//            1000,
+//            10
+//        );
+
+//        dd($combatLogEventService->getAvailableDateRange(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        ));
+
+//        dd($combatLogEventService->getGridAggregation(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        )->toArray());
+
+//        $challengeModeRunDataService->convert();
+//        $challengeModeRunDataService->insertAllToOpensearch();
+
+//        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        );
+//
+//        dd($combatLogEvents->count());
+
+//        $structuredLoggingService->all();
 
 //        dd($combatLogSplitService->splitCombatLogOnChallengeModes(
 //            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')

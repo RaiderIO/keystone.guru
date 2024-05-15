@@ -26,36 +26,36 @@ use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 
 /**
- * @property int                       $id
- * @property string                    $public_key
- * @property int                       $game_server_region_id
- * @property int                       $patreon_user_link_id
- * @property int                       $game_version_id
- * @property string                    $name
- * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string                    $email
- * @property string                    $locale
- * @property string                    $theme
- * @property string                    $echo_color
- * @property bool                      $echo_anonymous
- * @property bool                      $changed_username
- * @property string                    $timezone
- * @property string                    $map_facade_style
- * @property string                    $password
- * @property string                    $raw_patreon_response_data
- * @property bool                      $legal_agreed
- * @property int                       $legal_agreed_ms
- * @property bool                      $analytics_cookie_opt_out
- * @property PatreonUserLink           $patreonUserLink
- * @property GameServerRegion          $gameServerRegion
- * @property GameVersion               $gameVersion
- * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
- * @property bool                      $is_admin
- * @property DungeonRoute[]|Collection $dungeonRoutes
- * @property UserReport[]|Collection   $reports
- * @property Team[]|Collection         $teams
- * @property Role[]|Collection         $roles
- * @property Tag[]|Collection          $tags
+ * @property int                      $id
+ * @property string                   $public_key
+ * @property int                      $game_server_region_id
+ * @property int                      $patreon_user_link_id
+ * @property int                      $game_version_id
+ * @property string                   $name
+ * @property string                   $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string                   $email
+ * @property string                   $locale
+ * @property string                   $theme
+ * @property string                   $echo_color
+ * @property bool                     $echo_anonymous
+ * @property bool                     $changed_username
+ * @property string                   $timezone
+ * @property string                   $map_facade_style
+ * @property string                   $password
+ * @property string                   $raw_patreon_response_data
+ * @property bool                     $legal_agreed
+ * @property int                      $legal_agreed_ms
+ * @property bool                     $analytics_cookie_opt_out
+ * @property PatreonUserLink          $patreonUserLink
+ * @property GameServerRegion         $gameServerRegion
+ * @property GameVersion              $gameVersion
+ * @property PatreonAdFreeGiveaway    $patreonAdFreeGiveaway
+ * @property bool                     $is_admin
+ * @property Collection<DungeonRoute> $dungeonRoutes
+ * @property Collection<UserReport>   $reports
+ * @property Collection<Team>         $teams
+ * @property Collection<Role>         $roles
+ * @property Collection<Tag>          $tags
  *
  * @mixin Eloquent
  */
@@ -125,7 +125,7 @@ class User extends Authenticatable implements LaratrustUser
 
     public function getIsAdminAttribute(): bool
     {
-        return $this->hasRole('admin');
+        return $this->hasRole(Role::ROLE_ADMIN);
     }
 
     public function dungeonRoutes(): HasMany
@@ -191,7 +191,7 @@ class User extends Authenticatable implements LaratrustUser
     public function hasPatreonBenefit(string $key): bool
     {
         // True for all admins
-        $result = $this->hasRole('admin');
+        $result = $this->hasRole(Role::ROLE_ADMIN);
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
@@ -207,7 +207,7 @@ class User extends Authenticatable implements LaratrustUser
     public function getPatreonBenefits(): Collection
     {
         // Admins have all patreon benefits
-        if ($this->hasRole('admin')) {
+        if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));
         } else if (isset($this->patreonUserLink)) {
             $result = $this->patreonUserLink->patreonBenefits->pluck(['key']);
@@ -321,7 +321,7 @@ class User extends Authenticatable implements LaratrustUser
                     $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                     if ($newAdmin !== null) {
                         // Appoint someone else admin
-                        $team->changeRole(User::find($newAdmin->id), 'admin');
+                        $team->changeRole(User::find($newAdmin->id), TeamUser::ROLE_ADMIN);
                     } else {
                         // There's no new admin to be appointed - delete the team instead
                         $team->delete();

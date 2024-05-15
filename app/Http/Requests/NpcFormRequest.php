@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
+use App\Models\Laratrust\Role;
 use App\Models\Npc;
 use App\Models\NpcClass;
 use App\Models\NpcClassification;
@@ -18,7 +19,7 @@ class NpcFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
     /**

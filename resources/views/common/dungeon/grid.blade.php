@@ -1,10 +1,18 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Service\Expansion\ExpansionService;
+use Illuminate\Support\Collection;
+
 /**
- * @var $expansionService \App\Service\Expansion\ExpansionService
- * @var $expansion \App\Models\Expansion
- * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
- * @var $route string|null
+ * @var ExpansionService    $expansionService
+ * @var Expansion           $expansion
+ * @var Collection<Dungeon> $dungeons
+ * @var string|null         $route
+ * @var callable|null       $subtextFn
  */
+
 $dungeons ??= $expansion->dungeons()->active()->get();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
@@ -13,6 +21,7 @@ $names      ??= true;
 $links      ??= collect();
 $route      ??= null;
 $selectable ??= false;
+$subtextFn  ??= null;
 
 // @formatter:off
 for( $i = 0; $i < $rowCount; ++$i ) { ?>
@@ -28,23 +37,27 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
                 class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}"
                 data-id="{{ $dungeon->id }}">
                 <div class="card-img-caption">
-                    @if($names)
-                        <h5 class="card-text text-white pr-2">
-                            {{ __($dungeon->name) }}
-                        </h5>
-                    @endif
-
                     @isset($link)
-                        <a href="{{ $link['link'] }}">
-                            @endisset
+                    <a href="{{ $link['link'] }}">
+                        @endisset
+                        @if($names)
+                            <h5 class="card-text text-white">
+                                {{ __($dungeon->name) }}
+                            </h5>
+                        @endif
 
-                            <img class="card-img-top"
-                                 src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg"
-                                 style="width: 100%" alt="{{ __($dungeon->name) }}"/>
+                        @isset($subtextFn)
+                        <div class="card-text subtext text-white">
+                            {!! $subtextFn($dungeon) !!}
+                        </div>
+                        @endisset
 
-                            @isset($link)
-                        </a>
-                    @endisset
+                        <img class="card-img-top"
+                             src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg"
+                             style="width: 100%" alt="{{ __($dungeon->name) }}"/>
+                        @isset($link)
+                    </a>
+                @endisset
                 </div>
             </div>
         <?php

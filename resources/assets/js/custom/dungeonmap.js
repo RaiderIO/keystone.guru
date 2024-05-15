@@ -53,9 +53,6 @@ class DungeonMap extends Signalable {
         this.enemyVisualManager = new EnemyVisualManager(this);
         this.enemyForcesManager = new EnemyForcesManager(this);
 
-        // Pather instance
-        this.pather = null;
-
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroupManager.mapObjectGroups.length; i++) {
             let mapObjectGroup = this.mapObjectGroupManager.mapObjectGroups[i];
@@ -157,6 +154,12 @@ class DungeonMap extends Signalable {
         this.mapObjects = [];
         /** @var Array Stores all UI elements that are drawn on the map */
         this.mapControls = [];
+
+        /** @var Array Any map enhancement through 3rd-party javascript */
+        this.mapPlugins = [
+            this.pluginPather = new PatherPlugin(this),
+            this.pluginHeat = new HeatPlugin(this)
+        ];
         /** @type MapState */
         this.mapState = null;
 
@@ -179,11 +182,11 @@ class DungeonMap extends Signalable {
         // this.leafletMap.zoomControl.setPosition('topright');
 
         // Special handling for brush drawing
-        this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function (e) {
+        this.leafletMap.on(L.Draw.Event.DRAWSTART + ' ' + L.Draw.Event.EDITSTART + ' ' + L.Draw.Event.DELETESTART, function () {
             // Disable pather if we were doing it
             self.togglePather(false);
         });
-        this.leafletMap.on(L.Draw.Event.DRAWSTOP, function (e) {
+        this.leafletMap.on(L.Draw.Event.DRAWSTOP, function () {
             // After adding, there may be layers when there were none. Fix the edit/delete tooltips
             refreshTooltips();
         });
@@ -234,27 +237,27 @@ class DungeonMap extends Signalable {
             refreshTooltips();
         });
 
-        this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function (e) {
+        this.leafletMap.on(L.Draw.Event.TOOLBAROPENED, function () {
             self.toolbarActive = true;
             // If we were doing anything, we're no longer doing it
             // self.setMapState(null);
         });
-        this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function (e) {
+        this.leafletMap.on(L.Draw.Event.TOOLBARCLOSED, function () {
             self.toolbarActive = false;
         });
-        this.leafletMap.on(L.Draw.Event.DELETESTART, function (e) {
+        this.leafletMap.on(L.Draw.Event.DELETESTART, function () {
             self.setMapState(new DeleteMapState(self));
         });
-        this.leafletMap.on(L.Draw.Event.DELETESTOP, function (e) {
+        this.leafletMap.on(L.Draw.Event.DELETESTOP, function () {
             if (self.getMapState() instanceof DeleteMapState) {
                 self.setMapState(null);
             }
         });
 
-        this.leafletMap.on(L.Draw.Event.EDITSTART, function (e) {
+        this.leafletMap.on(L.Draw.Event.EDITSTART, function () {
             self.setMapState(new EditMapState(self));
         });
-        this.leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+        this.leafletMap.on(L.Draw.Event.EDITSTOP, function () {
             if (self.getMapState() instanceof EditMapState) {
                 self.setMapState(null);
             }
@@ -524,7 +527,7 @@ class DungeonMap extends Signalable {
             if (!getState().isMapAdmin()) {
                 if (getState().getMapContext().isDungeonSpeedrunEnabled()) {
                     mapControls.push(new DungeonSpeedrunRequiredNpcsControls(this));
-                } else if(this.options.showControls.enemyForces) {
+                } else if (this.options.showControls.enemyForces) {
                     mapControls.push(new EnemyForcesControls(this));
                 }
             }
@@ -636,8 +639,6 @@ class DungeonMap extends Signalable {
     refreshLeafletMap(clearMapState = true, center = null, zoom = null) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        let self = this;
-
         this._refreshingMap = true;
 
         this.signal('map:beforerefresh', {dungeonmap: this});
@@ -687,40 +688,13 @@ class DungeonMap extends Signalable {
             $('.leaflet-control-attribution').hide();
         }
 
-        // Pather for drawing lines
-        if (this.pather !== null) {
-            this.leafletMap.removeLayer(this.pather);
+        for (let index in this.mapPlugins) {
+            this.mapPlugins[index].removeFromMap();
         }
 
-        this.pather = new L.Pather();
-        this.pather.on('created', function (patherEvent) {
-            // Add the newly created polyline to our system
-            let mapObjectGroup = self.mapObjectGroupManager.getByName('brushline');
-
-            // Create a new brushline
-            let points = [];
-
-            // Convert the latlngs into something the polyline constructor understands
-            let vertices = patherEvent.latLngs;
-            for (let i = 0; i < vertices.length; i++) {
-                let vertex = vertices[i];
-                points.push([vertex.lat, vertex.lng]);
-            }
-
-            let layer = L.polyline(points);
-
-            let object = mapObjectGroup.onNewLayerCreated(layer);
-            object.save();
-
-            // Remove it from Pather, we only use Pather for creating the actual layer
-            self.pather.removePath(patherEvent.polyline);
-        });
-        this.leafletMap.addLayer(this.pather);
-        this.pather.setMode(L.Pather.MODE.VIEW);
-        // Set its options properly
-        this.refreshPather();
-        // Not enabled at this time
-        this.togglePather(false);
+        for (let index in this.mapPlugins) {
+            this.mapPlugins[index].addToMap();
+        }
 
         // Add new controls; we're all loaded now and user should now be able to edit their route
         this._addMapControls(this.editableLayers);
@@ -790,43 +764,18 @@ class DungeonMap extends Signalable {
 
     /**
      * Toggle pather to be enabled or not.
-     * @param enabled
+     * @param enabled {boolean}
      */
     togglePather(enabled) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
-        // May be null when initializing
-        if (this.pather !== null) {
-            //  When enabled, add to the map
-            if (enabled) {
-                this.pather.setMode(L.Pather.MODE.CREATE);
-                if (!(this.getMapState() instanceof PatherMapState)) {
-                    this.setMapState(new PatherMapState(this));
-                    this.signal('map:pathertoggled', {enabled: enabled});
-                }
-            } else {
-                this.pather.setMode(L.Pather.MODE.VIEW);
-                // Only disable it when we're actively in the pather map state
-                if (this.getMapState() instanceof PatherMapState) {
-                    this.setMapState(null);
-                    this.signal('map:pathertoggled', {enabled: enabled});
-                }
-            }
-        }
+        this.pluginPather.toggle(enabled);
     }
 
-    /**
-     *
-     */
     refreshPather() {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
-        console.assert(this.pather instanceof L.Pather, 'this.pather is not a L.Pather', this.pather);
 
-        this.pather.setOptions({
-            strokeWidth: c.map.polyline.defaultWeight,
-            smoothFactor: 5,
-            pathColour: c.map.polyline.defaultColor()
-        });
+        this.pluginPather.refresh();
     }
 
     /**

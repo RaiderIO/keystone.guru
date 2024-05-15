@@ -12,10 +12,10 @@ use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
-use App\Http\Requests\DungeonRoute\APIDungeonRouteDataFormRequest;
-use App\Http\Requests\DungeonRoute\APIDungeonRouteFormRequest;
-use App\Http\Requests\DungeonRoute\APIDungeonRouteSearchFormRequest;
-use App\Http\Requests\DungeonRoute\APISimulateFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDataFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxSimulateFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -32,6 +32,7 @@ use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
@@ -217,7 +218,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function htmlsearch(APIDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService)
+    public function htmlsearch(AjaxDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService)
     {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -440,11 +441,11 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        APIDungeonRouteFormRequest $request,
-        SeasonService              $seasonService,
-        ExpansionServiceInterface  $expansionService,
-        ThumbnailServiceInterface  $thumbnailService,
-        ?DungeonRoute              $dungeonRoute = null
+        AjaxDungeonRouteFormRequest $request,
+        SeasonService               $seasonService,
+        ExpansionServiceInterface   $expansionService,
+        ThumbnailServiceInterface   $thumbnailService,
+        ?DungeonRoute               $dungeonRoute = null
     ): DungeonRoute {
         $this->authorize('edit', $dungeonRoute);
 
@@ -668,7 +669,7 @@ class AjaxDungeonRouteController extends Controller
         // Enemy packs
         if (in_array('enemypack', $fields)) {
             // If logged in, and we're NOT an admin
-            if (Auth::check() && !Auth::user()->hasRole('admin')) {
+            if (Auth::check() && !Auth::user()->hasRole(Role::ROLE_ADMIN)) {
                 // Don't expose vertices
                 $enemyPackEnemies = true;
             }
@@ -739,7 +740,7 @@ class AjaxDungeonRouteController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function simulate(APISimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
+    public function simulate(AjaxSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
     {
         $this->authorize('view', $dungeonRoute);
 
@@ -759,7 +760,7 @@ class AjaxDungeonRouteController extends Controller
         return response()->noContent();
     }
 
-    public function getDungeonRoutesData(APIDungeonRouteDataFormRequest $request, CoordinatesServiceInterface $coordinatesService): Collection
+    public function getDungeonRoutesData(AjaxDungeonRouteDataFormRequest $request, CoordinatesServiceInterface $coordinatesService): Collection
     {
         $publicKeys = $request->validated()['public_keys'];
 

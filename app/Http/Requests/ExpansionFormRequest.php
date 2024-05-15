@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Expansion;
+use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,7 +15,7 @@ class ExpansionFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
     /**

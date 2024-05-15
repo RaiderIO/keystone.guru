@@ -7,10 +7,10 @@ use Illuminate\Support\Collection;
 
 class ActivePull
 {
-    /** @var Collection|ActivePullEnemy[] */
+    /** @var Collection<ActivePullEnemy> */
     protected Collection $enemiesInCombat;
 
-    /** @var Collection|ActivePullEnemy[] */
+    /** @var Collection<ActivePullEnemy> */
     protected Collection $enemiesKilled;
 
     protected Collection $spellsCast;
@@ -44,7 +44,7 @@ class ActivePull
     }
 
     /**
-     * @return Collection|ActivePullEnemy[]
+     * @return Collection<ActivePullEnemy>
      */
     public function getEnemiesInCombat(): Collection
     {
@@ -52,7 +52,7 @@ class ActivePull
     }
 
     /**
-     * @return Collection|ActivePullEnemy[]
+     * @return Collection<ActivePullEnemy>
      */
     public function getEnemiesKilled(): Collection
     {

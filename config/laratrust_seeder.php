@@ -1,16 +1,22 @@
 <?php
 
+use App\Models\Laratrust\Role;
+
 return [
     'create_users'         => true,
     'roles_structure'      => [
-        'admin' => [
+        Role::ROLE_ADMIN         => [
             'dungeons'     => 'c,r,u,d',
             'expansions'   => 'c,r,u,d',
             'npcs'         => 'c,r,u,d',
             'profile'      => 'r,u',
             'dungeonroute' => 'c,r,u,d',
         ],
-        'user'  => [
+        Role::ROLE_INTERNAL_TEAM => [
+            'profile'      => 'r,u',
+            'dungeonroute' => 'c,r,u,d',
+        ],
+        Role::ROLE_USER          => [
             'profile'      => 'r,u',
             'dungeonroute' => 'c,r,u,d',
         ],

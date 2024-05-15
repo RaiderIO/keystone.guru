@@ -46,7 +46,7 @@ return [
             'throw'      => false,
         ],
 
-        'public_uploads' => [
+        'public_local' => [
             'driver'     => 'local',
             'root'       => public_path(),
             'visibility' => 'public',

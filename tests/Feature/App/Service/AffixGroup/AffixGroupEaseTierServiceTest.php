@@ -8,9 +8,9 @@ use DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Tests\Fixtures\LoggingFixtures;
+use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\LoggingFixtures;
-use Tests\Unit\Fixtures\ServiceFixtures;
 use Throwable;
 
 final class AffixGroupEaseTierServiceTest extends PublicTestCase

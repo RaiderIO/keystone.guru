@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\APIDungeonRouteThumbnailJobController;
 Route::prefix('v1')->group(static function () {
     Route::prefix('combatlog')->group(static function () {
         Route::post('route', (new APICombatLogController())->createRoute(...))->name('api.v1.combatlog.route.create');
+        Route::post('event', (new APICombatLogController())->createEvent(...))->name('api.v1.combatlog.event.create');
     });
     Route::prefix('route')->group(static function () {
         Route::get('/', (new APIDungeonRouteController())->get(...))->name('api.v1.route.list');

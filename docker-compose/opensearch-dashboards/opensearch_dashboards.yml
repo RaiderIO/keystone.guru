@@ -192,7 +192,7 @@
 # data_source.encryption.wrappingKeyNamespace: 'changeme'
 # data_source.encryption.wrappingKey: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-opensearch.hosts: ["http://keystone.guru-opensearch-node1:9200", "http://keystone.guru-opensearch-node2:9200"]
+opensearch.hosts: ["http://keystone.guru-opensearch-node1:9201", "http://keystone.guru-opensearch-node2:9201"]
 opensearch.ssl.verificationMode: none
 opensearch.username: kibanaserver
 opensearch.password: kibanaserver

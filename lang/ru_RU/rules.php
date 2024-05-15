@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'create_route_npc_chronological_rule' => [
         'message' => '',
     ],
@@ -16,4 +17,5 @@ return [
     'map_icon_type_role_check_rule'       => [
         'message' => '',
     ],
+
 ];

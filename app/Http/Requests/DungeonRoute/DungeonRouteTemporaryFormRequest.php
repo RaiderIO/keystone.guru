@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
+use App\Models\Laratrust\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -14,7 +15,7 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Auth::user()->hasRole(["user", "admin"]);
+        return true;
     }
 
     /**
@@ -30,7 +31,7 @@ class DungeonRouteTemporaryFormRequest extends FormRequest
         ];
 
         // Validate demo state, optional or numeric
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
+        if (Auth::user()?->hasRole(Role::ROLE_ADMIN)) {
             $rules['demo'] = 'numeric';
         }
 

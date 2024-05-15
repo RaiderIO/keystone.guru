@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\AdProvider\SyncAdsTxt;
 use App\Console\Commands\Cache\RedisClearIdleKeys;
+use App\Console\Commands\ChallengeModeRunData\ConvertToEvents;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\CreateMappingVersion;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
@@ -18,6 +19,7 @@ use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
+use App\Console\Commands\Generate\Repository as GenerateRepository;
 use App\Console\Commands\Github\CreateGithubRelease;
 use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
@@ -78,6 +80,9 @@ class Kernel extends ConsoleKernel
         // Cache
         RedisClearIdleKeys::class,
 
+        // Challenge Mode Run Data
+        ConvertToEvents::class,
+
         // CombatLog
         CreateDungeonRoutes::class,
         CreateMappingVersion::class,
@@ -101,6 +106,9 @@ class Kernel extends ConsoleKernel
         // Environment
         EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
+
+        // Generate
+        GenerateRepository::class,
 
         // Github
         CreateGithubRelease::class,
