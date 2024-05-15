@@ -355,8 +355,8 @@ return [
     'heatmap' => [
         'service' => [
             'data' => [
-                'sizeX' => 200,
-                'sizeY' => 150,
+                'sizeX' => 800,
+                'sizeY' => 600,
             ],
         ],
     ],

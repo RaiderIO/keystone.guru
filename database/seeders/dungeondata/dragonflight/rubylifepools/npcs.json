@@ -7,7 +7,7 @@
         "npc_class_id": 1,
         "display_id": 102140,
         "name": "Infused Whelp",
-        "base_health": 245260,
+        "base_health": 2315989,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -19,6 +19,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16177,
+                "mapping_version_id": 327,
+                "npc_id": 187894,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15934,
                 "mapping_version_id": 313,
@@ -64,7 +71,7 @@
         "npc_class_id": 1,
         "display_id": 107106,
         "name": "Defier Draghar",
-        "base_health": 1839450,
+        "base_health": 20139032,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -76,6 +83,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16178,
+                "mapping_version_id": 327,
+                "npc_id": 187897,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15935,
                 "mapping_version_id": 313,
@@ -121,7 +135,7 @@
         "npc_class_id": 1,
         "display_id": 107409,
         "name": "Flashfrost Earthshaper",
-        "base_health": 613150,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -133,6 +147,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16174,
+                "mapping_version_id": 327,
+                "npc_id": 187969,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15931,
                 "mapping_version_id": 313,
@@ -178,7 +199,7 @@
         "npc_class_id": 1,
         "display_id": 79800,
         "name": "Primal Terrasentry",
-        "base_health": 613150,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -190,6 +211,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16175,
+                "mapping_version_id": 327,
+                "npc_id": 188011,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15932,
                 "mapping_version_id": 313,
@@ -235,7 +263,7 @@
         "npc_class_id": 1,
         "display_id": 107397,
         "name": "Flashfrost Chillweaver",
-        "base_health": 613150,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -247,6 +275,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16176,
+                "mapping_version_id": 327,
+                "npc_id": 188067,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15933,
                 "mapping_version_id": 313,
@@ -292,7 +327,7 @@
         "npc_class_id": 1,
         "display_id": 101209,
         "name": "Primal Juggernaut",
-        "base_health": 1226300,
+        "base_health": 13426021,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -304,6 +339,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16173,
+                "mapping_version_id": 327,
+                "npc_id": 188244,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15930,
                 "mapping_version_id": 313,
@@ -349,7 +391,7 @@
         "npc_class_id": 1,
         "display_id": 106891,
         "name": "Melidrussa Chillworn",
-        "base_health": 4292050,
+        "base_health": 46843573,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -370,7 +412,7 @@
         "npc_class_id": 1,
         "display_id": 106851,
         "name": "Kokia Blazehoof",
-        "base_health": 4292050,
+        "base_health": 40151634,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -391,7 +433,7 @@
         "npc_class_id": 1,
         "display_id": 102505,
         "name": "Blazebound Destroyer",
-        "base_health": 1042355,
+        "base_health": 11412119,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -403,6 +445,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16182,
+                "mapping_version_id": 327,
+                "npc_id": 190034,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15939,
                 "mapping_version_id": 313,
@@ -448,7 +497,7 @@
         "npc_class_id": 1,
         "display_id": 102535,
         "name": "Scorchling",
-        "base_health": 122630,
+        "base_health": 1342602,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -460,6 +509,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16179,
+                "mapping_version_id": 327,
+                "npc_id": 190205,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15936,
                 "mapping_version_id": 313,
@@ -505,7 +561,7 @@
         "npc_class_id": 1,
         "display_id": 102969,
         "name": "Primalist Flamedancer",
-        "base_health": 735780,
+        "base_health": 7384312,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -517,6 +573,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16183,
+                "mapping_version_id": 327,
+                "npc_id": 190206,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15940,
                 "mapping_version_id": 313,
@@ -562,7 +625,7 @@
         "npc_class_id": 1,
         "display_id": 102886,
         "name": "Primalist Cinderweaver",
-        "base_health": 613150,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -574,6 +637,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16181,
+                "mapping_version_id": 327,
+                "npc_id": 190207,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15938,
                 "mapping_version_id": 313,
@@ -619,7 +689,7 @@
         "npc_class_id": 1,
         "display_id": 107137,
         "name": "Kyrakka",
-        "base_health": 2452600,
+        "base_health": 24090980,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -640,7 +710,7 @@
         "npc_class_id": 1,
         "display_id": 108318,
         "name": "Erkhart Stormvein",
-        "base_health": 3065750,
+        "base_health": 30113726,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -661,7 +731,7 @@
         "npc_class_id": 1,
         "display_id": 108753,
         "name": "Primalist Shockcaster",
-        "base_health": 981040,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -673,6 +743,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16184,
+                "mapping_version_id": 327,
+                "npc_id": 195119,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15941,
                 "mapping_version_id": 313,
@@ -718,7 +795,7 @@
         "npc_class_id": 1,
         "display_id": 102516,
         "name": "Primal Thundercloud",
-        "base_health": 91589,
+        "base_health": 995103,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -739,7 +816,7 @@
         "npc_class_id": 1,
         "display_id": 102943,
         "name": "High Channeler Ryvati",
-        "base_health": 1839450,
+        "base_health": 20139032,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -751,6 +828,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16189,
+                "mapping_version_id": 327,
+                "npc_id": 197535,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15946,
                 "mapping_version_id": 313,
@@ -796,7 +880,7 @@
         "npc_class_id": 1,
         "display_id": 106023,
         "name": "Flamegullet",
-        "base_health": 1839450,
+        "base_health": 20139032,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -808,6 +892,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16185,
+                "mapping_version_id": 327,
+                "npc_id": 197697,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15942,
                 "mapping_version_id": 313,
@@ -853,7 +944,7 @@
         "npc_class_id": 1,
         "display_id": 106435,
         "name": "Thunderhead",
-        "base_health": 1839450,
+        "base_health": 20139032,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -865,6 +956,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16180,
+                "mapping_version_id": 327,
+                "npc_id": 197698,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15937,
                 "mapping_version_id": 313,
@@ -910,7 +1008,7 @@
         "npc_class_id": 1,
         "display_id": 107116,
         "name": "Storm Warrior",
-        "base_health": 613150,
+        "base_health": 6713011,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -922,6 +1020,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16186,
+                "mapping_version_id": 327,
+                "npc_id": 197982,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15943,
                 "mapping_version_id": 313,
@@ -967,7 +1072,7 @@
         "npc_class_id": 1,
         "display_id": 102888,
         "name": "Flame Channeler",
-        "base_health": 981040,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -979,6 +1084,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16188,
+                "mapping_version_id": 327,
+                "npc_id": 197985,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15945,
                 "mapping_version_id": 313,
@@ -1024,7 +1136,7 @@
         "npc_class_id": 1,
         "display_id": 102868,
         "name": "Tempest Channeler",
-        "base_health": 981040,
+        "base_health": 10740817,
         "health_percentage": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -1036,6 +1148,13 @@
         "npcbolsteringwhitelists": [],
         "npcspells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16187,
+                "mapping_version_id": 327,
+                "npc_id": 198047,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15944,
                 "mapping_version_id": 313,
