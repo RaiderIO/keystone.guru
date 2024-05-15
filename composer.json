@@ -78,7 +78,7 @@
         "laravel/horizon": "^5.12",
         "laravel/pennant": "^1.7",
         "laravel/socialite": "^5.6",
-        "laravel/telescope": "^4.12",
+        "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
         "laravelcollective/html": "^6.4",
