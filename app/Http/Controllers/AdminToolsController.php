@@ -962,6 +962,7 @@ class AdminToolsController extends Controller
         $feature = (string)$request->get('feature');
 
         Feature::forget($feature);
+        Feature::for(null)->forget($feature);
 
         Session::flash('status', __('controller.admintools.flash.feature_forgotten', ['feature' => $feature]));
 
