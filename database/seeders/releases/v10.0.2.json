@@ -1,0 +1,23 @@
+{
+    "id": 236,
+    "release_changelog_id": 243,
+    "version": "v10.0.2",
+    "title": "Fixed routes that use comments\/pull descriptions not loading correctly",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2024-05-15T20:53:22+00:00",
+    "updated_at": "2024-05-15T20:53:22+00:00",
+    "changelog": {
+        "id": 243,
+        "release_id": 236,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 243,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2376,
+                "change": "Fixed routes that use comments\/pull descriptions not loading correctly"
+            }
+        ]
+    }
+}

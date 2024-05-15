@@ -613,7 +613,7 @@ let c = {
                 }
             }
 
-            return filterHTML(text,);
+            return filterHTML(text, allowedTags);
         }
     }
 };
