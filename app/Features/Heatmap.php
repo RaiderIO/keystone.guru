@@ -10,9 +10,11 @@ class Heatmap
     /**
      * Resolve the feature's initial value.
      */
-    public function resolve(User $user): bool
+    public function resolve(?User $user): bool
     {
         // Only if we have Opensearch setup and we have the correct roles!
-        return !empty(config('opensearch-laravel.host')) && $user->hasRole([Role::ROLE_INTERNAL_TEAM, Role::ROLE_ADMIN]);
+        return $user instanceof User &&
+            !empty(config('opensearch-laravel.host')) &&
+            $user->hasRole([Role::ROLE_INTERNAL_TEAM, Role::ROLE_ADMIN]);
     }
 }

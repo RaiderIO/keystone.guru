@@ -26,7 +26,7 @@
                 "source": {
                     "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
                     "type": "git",
-                    "reference": "b4ee9d0ec6f6f697c4db606300f8e7152e3fe499"
+                    "reference": "58201cb1fd91da900c34bf4d1ba85eaea4063328"
                 }
             }
         },
@@ -71,6 +71,7 @@
         "genealabs/laravel-model-caching": "^11.0",
         "graham-campbell/github": "^12.4",
         "guzzlehttp/guzzle": "^7.2",
+        "haydenpierce/class-finder": "^0.5.3",
         "intervention/image": "^3.4",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.45",
@@ -104,7 +105,6 @@
         "deployer/deployer": "^7.3",
         "driftingly/rector-laravel": "^1.0",
         "filp/whoops": "^2.8",
-        "haydenpierce/class-finder": "^0.5.3",
         "larastan/larastan": "^2.0",
         "lukasss93/laravel-larex": "^4.4",
         "lukasss93/laravel-larex-crowdin": "^2.2",

@@ -12,6 +12,12 @@ use Illuminate\Support\Collection;
  */
 abstract class OpensearchModel extends Model implements OpenSearchable
 {
+    final public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
+
     public function setAttributes(array $attributes): void
     {
         foreach ($attributes as $key => $value) {

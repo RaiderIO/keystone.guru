@@ -4,7 +4,6 @@ namespace Tests\Unit\App\Service\Spell;
 
 use App\Models\CharacterClass;
 use Illuminate\Support\Collection;
-use JetBrains\PhpStorm\NoReturn;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -33,7 +32,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidClassBasedRowClassName_DataProvider')]
@@ -148,7 +146,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName_DataProvider')]
@@ -200,7 +197,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     public function getCategoryNameFromRowClassName_ShouldReturnNull_GivenInvalidRowClassName(): void
@@ -241,7 +237,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     public function getCategoryNameFromRowClassName_ShouldReturnNull_GivenNewClassButNoCategory(): void
