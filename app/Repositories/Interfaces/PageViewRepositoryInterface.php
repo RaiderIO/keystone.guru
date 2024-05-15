@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method PageView create(array $attributes)
- * @method PageView find(int $id, array $columns = [])
- * @method PageView findOrFail(int $id, array $columns = [])
- * @method PageView findOrNew(int $id, array $columns = [])
+ * @method PageView|null find(int $id, array|string $columns = ['*'])
+ * @method PageView findOrFail(int $id, array|string $columns = ['*'])
+ * @method PageView findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(PageView $model)
  * @method bool update(PageView $model, array $attributes = [], array $options = [])
  * @method bool delete(PageView $model)

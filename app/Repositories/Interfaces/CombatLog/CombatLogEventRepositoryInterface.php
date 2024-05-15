@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method CombatLogEvent create(array $attributes)
- * @method CombatLogEvent find(int $id, array $columns = [])
- * @method CombatLogEvent findOrFail(int $id, array $columns = [])
- * @method CombatLogEvent findOrNew(int $id, array $columns = [])
+ * @method CombatLogEvent|null find(int $id, array|string $columns = ['*'])
+ * @method CombatLogEvent findOrFail(int $id, array|string $columns = ['*'])
+ * @method CombatLogEvent findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(CombatLogEvent $model)
  * @method bool update(CombatLogEvent $model, array $attributes = [], array $options = [])
  * @method bool delete(CombatLogEvent $model)

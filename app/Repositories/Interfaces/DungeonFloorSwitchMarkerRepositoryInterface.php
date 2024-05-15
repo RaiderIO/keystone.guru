@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method DungeonFloorSwitchMarker create(array $attributes)
- * @method DungeonFloorSwitchMarker find(int $id, array $columns = [])
- * @method DungeonFloorSwitchMarker findOrFail(int $id, array $columns = [])
- * @method DungeonFloorSwitchMarker findOrNew(int $id, array $columns = [])
+ * @method DungeonFloorSwitchMarker|null find(int $id, array|string $columns = ['*'])
+ * @method DungeonFloorSwitchMarker findOrFail(int $id, array|string $columns = ['*'])
+ * @method DungeonFloorSwitchMarker findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(DungeonFloorSwitchMarker $model)
  * @method bool update(DungeonFloorSwitchMarker $model, array $attributes = [], array $options = [])
  * @method bool delete(DungeonFloorSwitchMarker $model)

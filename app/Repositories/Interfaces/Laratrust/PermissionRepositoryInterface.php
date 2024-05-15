@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Permission create(array $attributes)
- * @method Permission find(int $id, array $columns = [])
- * @method Permission findOrFail(int $id, array $columns = [])
- * @method Permission findOrNew(int $id, array $columns = [])
+ * @method Permission|null find(int $id, array|string $columns = ['*'])
+ * @method Permission findOrFail(int $id, array|string $columns = ['*'])
+ * @method Permission findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Permission $model)
  * @method bool update(Permission $model, array $attributes = [], array $options = [])
  * @method bool delete(Permission $model)

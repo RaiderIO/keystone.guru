@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method PatreonUserLink create(array $attributes)
- * @method PatreonUserLink find(int $id, array $columns = [])
- * @method PatreonUserLink findOrFail(int $id, array $columns = [])
- * @method PatreonUserLink findOrNew(int $id, array $columns = [])
+ * @method PatreonUserLink|null find(int $id, array|string $columns = ['*'])
+ * @method PatreonUserLink findOrFail(int $id, array|string $columns = ['*'])
+ * @method PatreonUserLink findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(PatreonUserLink $model)
  * @method bool update(PatreonUserLink $model, array $attributes = [], array $options = [])
  * @method bool delete(PatreonUserLink $model)

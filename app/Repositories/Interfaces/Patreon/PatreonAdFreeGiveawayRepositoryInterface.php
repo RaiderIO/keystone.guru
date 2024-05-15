@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method PatreonAdFreeGiveaway create(array $attributes)
- * @method PatreonAdFreeGiveaway find(int $id, array $columns = [])
- * @method PatreonAdFreeGiveaway findOrFail(int $id, array $columns = [])
- * @method PatreonAdFreeGiveaway findOrNew(int $id, array $columns = [])
+ * @method PatreonAdFreeGiveaway|null find(int $id, array|string $columns = ['*'])
+ * @method PatreonAdFreeGiveaway findOrFail(int $id, array|string $columns = ['*'])
+ * @method PatreonAdFreeGiveaway findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(PatreonAdFreeGiveaway $model)
  * @method bool update(PatreonAdFreeGiveaway $model, array $attributes = [], array $options = [])
  * @method bool delete(PatreonAdFreeGiveaway $model)

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -40,17 +41,20 @@ class Random extends Command
         CombatLogEventServiceInterface       $combatLogEventService,
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
         CoordinatesServiceInterface          $coordinatesService,
+        DungeonRouteRepositoryInterface      $dungeonRouteRepository
     ): int {
 
-        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
-        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+        $dungeonRouteRepository->find(1234);
 
-        $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-            $hallsOfInfusion->currentMappingVersion,
-            $dungeonFloorSwitchMarker->getLatLng()
-        );
-
-        dd($latLng->toArrayWithFloor());
+//        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
+//        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+//
+//        $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+//            $hallsOfInfusion->currentMappingVersion,
+//            $dungeonFloorSwitchMarker->getLatLng()
+//        );
+//
+//        dd($latLng->toArrayWithFloor());
 
 //        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
 //            Season::findOrFail(13),

@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method FloorUnionArea create(array $attributes)
- * @method FloorUnionArea find(int $id, array $columns = [])
- * @method FloorUnionArea findOrFail(int $id, array $columns = [])
- * @method FloorUnionArea findOrNew(int $id, array $columns = [])
+ * @method FloorUnionArea|null find(int $id, array|string $columns = ['*'])
+ * @method FloorUnionArea findOrFail(int $id, array|string $columns = ['*'])
+ * @method FloorUnionArea findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(FloorUnionArea $model)
  * @method bool update(FloorUnionArea $model, array $attributes = [], array $options = [])
  * @method bool delete(FloorUnionArea $model)

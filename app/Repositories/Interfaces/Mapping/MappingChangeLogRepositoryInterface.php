@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method MappingChangeLog create(array $attributes)
- * @method MappingChangeLog find(int $id, array $columns = [])
- * @method MappingChangeLog findOrFail(int $id, array $columns = [])
- * @method MappingChangeLog findOrNew(int $id, array $columns = [])
+ * @method MappingChangeLog|null find(int $id, array|string $columns = ['*'])
+ * @method MappingChangeLog findOrFail(int $id, array|string $columns = ['*'])
+ * @method MappingChangeLog findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(MappingChangeLog $model)
  * @method bool update(MappingChangeLog $model, array $attributes = [], array $options = [])
  * @method bool delete(MappingChangeLog $model)

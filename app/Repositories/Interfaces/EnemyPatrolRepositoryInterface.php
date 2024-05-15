@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method EnemyPatrol create(array $attributes)
- * @method EnemyPatrol find(int $id, array $columns = [])
- * @method EnemyPatrol findOrFail(int $id, array $columns = [])
- * @method EnemyPatrol findOrNew(int $id, array $columns = [])
+ * @method EnemyPatrol|null find(int $id, array|string $columns = ['*'])
+ * @method EnemyPatrol findOrFail(int $id, array|string $columns = ['*'])
+ * @method EnemyPatrol findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(EnemyPatrol $model)
  * @method bool update(EnemyPatrol $model, array $attributes = [], array $options = [])
  * @method bool delete(EnemyPatrol $model)

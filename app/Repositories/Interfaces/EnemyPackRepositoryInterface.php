@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method EnemyPack create(array $attributes)
- * @method EnemyPack find(int $id, array $columns = [])
- * @method EnemyPack findOrFail(int $id, array $columns = [])
- * @method EnemyPack findOrNew(int $id, array $columns = [])
+ * @method EnemyPack|null find(int $id, array|string $columns = ['*'])
+ * @method EnemyPack findOrFail(int $id, array|string $columns = ['*'])
+ * @method EnemyPack findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(EnemyPack $model)
  * @method bool update(EnemyPack $model, array $attributes = [], array $options = [])
  * @method bool delete(EnemyPack $model)

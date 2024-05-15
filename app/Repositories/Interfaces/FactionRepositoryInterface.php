@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Faction create(array $attributes)
- * @method Faction find(int $id, array $columns = [])
- * @method Faction findOrFail(int $id, array $columns = [])
- * @method Faction findOrNew(int $id, array $columns = [])
+ * @method Faction|null find(int $id, array|string $columns = ['*'])
+ * @method Faction findOrFail(int $id, array|string $columns = ['*'])
+ * @method Faction findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Faction $model)
  * @method bool update(Faction $model, array $attributes = [], array $options = [])
  * @method bool delete(Faction $model)

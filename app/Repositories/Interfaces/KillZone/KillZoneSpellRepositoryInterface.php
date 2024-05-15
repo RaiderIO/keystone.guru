@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method KillZoneSpell create(array $attributes)
- * @method KillZoneSpell find(int $id, array $columns = [])
- * @method KillZoneSpell findOrFail(int $id, array $columns = [])
- * @method KillZoneSpell findOrNew(int $id, array $columns = [])
+ * @method KillZoneSpell|null find(int $id, array|string $columns = ['*'])
+ * @method KillZoneSpell findOrFail(int $id, array|string $columns = ['*'])
+ * @method KillZoneSpell findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(KillZoneSpell $model)
  * @method bool update(KillZoneSpell $model, array $attributes = [], array $options = [])
  * @method bool delete(KillZoneSpell $model)

@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method MapObjectToAwakenedObeliskLink create(array $attributes)
- * @method MapObjectToAwakenedObeliskLink find(int $id, array $columns = [])
- * @method MapObjectToAwakenedObeliskLink findOrFail(int $id, array $columns = [])
- * @method MapObjectToAwakenedObeliskLink findOrNew(int $id, array $columns = [])
+ * @method MapObjectToAwakenedObeliskLink|null find(int $id, array|string $columns = ['*'])
+ * @method MapObjectToAwakenedObeliskLink findOrFail(int $id, array|string $columns = ['*'])
+ * @method MapObjectToAwakenedObeliskLink findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(MapObjectToAwakenedObeliskLink $model)
  * @method bool update(MapObjectToAwakenedObeliskLink $model, array $attributes = [], array $options = [])
  * @method bool delete(MapObjectToAwakenedObeliskLink $model)

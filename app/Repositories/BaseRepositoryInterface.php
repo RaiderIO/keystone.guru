@@ -11,11 +11,11 @@ interface BaseRepositoryInterface
 
     public function insert(array $attributes): bool;
 
-    public function find(int $id, array $columns = []): Model;
+    public function find(int $id, string|array $columns = ['*']): ?Model;
 
-    public function findOrFail(int $id, array $columns = []): Model;
+    public function findOrFail(int $id, array|string $columns = ['*']): Model;
 
-    public function findOrNew(int $id, array $columns = []): Model;
+    public function findOrNew(int $id, array|string $columns = ['*']): Model;
 
     public function save(Model $model): bool;
 

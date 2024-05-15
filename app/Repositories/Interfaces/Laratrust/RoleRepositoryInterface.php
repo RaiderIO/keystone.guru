@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Role create(array $attributes)
- * @method Role find(int $id, array $columns = [])
- * @method Role findOrFail(int $id, array $columns = [])
- * @method Role findOrNew(int $id, array $columns = [])
+ * @method Role|null find(int $id, array|string $columns = ['*'])
+ * @method Role findOrFail(int $id, array|string $columns = ['*'])
+ * @method Role findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Role $model)
  * @method bool update(Role $model, array $attributes = [], array $options = [])
  * @method bool delete(Role $model)

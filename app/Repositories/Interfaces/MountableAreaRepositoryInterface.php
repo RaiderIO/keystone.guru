@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method MountableArea create(array $attributes)
- * @method MountableArea find(int $id, array $columns = [])
- * @method MountableArea findOrFail(int $id, array $columns = [])
- * @method MountableArea findOrNew(int $id, array $columns = [])
+ * @method MountableArea|null find(int $id, array|string $columns = ['*'])
+ * @method MountableArea findOrFail(int $id, array|string $columns = ['*'])
+ * @method MountableArea findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(MountableArea $model)
  * @method bool update(MountableArea $model, array $attributes = [], array $options = [])
  * @method bool delete(MountableArea $model)
