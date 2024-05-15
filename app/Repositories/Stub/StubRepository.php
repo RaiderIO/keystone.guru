@@ -22,19 +22,19 @@ abstract class StubRepository extends BaseRepository
         return true;
     }
 
-    public function find(int $id, array $columns = []): Model
+    public function find(int $id, string|array $columns = ['*']): Model
     {
         return new $this->class([
             'id' => $id,
         ]);
     }
 
-    public function findOrFail(int $id, array $columns = []): Model
+    public function findOrFail(int $id, string|array $columns = ['*']): Model
     {
         return $this->find($id, $columns);
     }
 
-    public function findOrNew(int $id, array $columns = []): Model
+    public function findOrNew(int $id, string|array $columns = ['*']): Model
     {
         return $this->find($id, $columns);
     }
