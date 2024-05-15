@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method MapIcon create(array $attributes)
- * @method MapIcon find(int $id, array $columns = [])
- * @method MapIcon findOrFail(int $id, array $columns = [])
- * @method MapIcon findOrNew(int $id, array $columns = [])
+ * @method MapIcon|null find(int $id, array|string $columns = ['*'])
+ * @method MapIcon findOrFail(int $id, array|string $columns = ['*'])
+ * @method MapIcon findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(MapIcon $model)
  * @method bool update(MapIcon $model, array $attributes = [], array $options = [])
  * @method bool delete(MapIcon $model)

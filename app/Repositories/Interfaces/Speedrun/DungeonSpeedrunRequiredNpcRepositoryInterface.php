@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method DungeonSpeedrunRequiredNpc create(array $attributes)
- * @method DungeonSpeedrunRequiredNpc find(int $id, array $columns = [])
- * @method DungeonSpeedrunRequiredNpc findOrFail(int $id, array $columns = [])
- * @method DungeonSpeedrunRequiredNpc findOrNew(int $id, array $columns = [])
+ * @method DungeonSpeedrunRequiredNpc|null find(int $id, array|string $columns = ['*'])
+ * @method DungeonSpeedrunRequiredNpc findOrFail(int $id, array|string $columns = ['*'])
+ * @method DungeonSpeedrunRequiredNpc findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(DungeonSpeedrunRequiredNpc $model)
  * @method bool update(DungeonSpeedrunRequiredNpc $model, array $attributes = [], array $options = [])
  * @method bool delete(DungeonSpeedrunRequiredNpc $model)

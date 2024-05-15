@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Dungeon create(array $attributes)
- * @method Dungeon find(int $id, array $columns = [])
- * @method Dungeon findOrFail(int $id, array $columns = [])
- * @method Dungeon findOrNew(int $id, array $columns = [])
+ * @method Dungeon|null find(int $id, array|string $columns = ['*'])
+ * @method Dungeon findOrFail(int $id, array|string $columns = ['*'])
+ * @method Dungeon findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Dungeon $model)
  * @method bool update(Dungeon $model, array $attributes = [], array $options = [])
  * @method bool delete(Dungeon $model)

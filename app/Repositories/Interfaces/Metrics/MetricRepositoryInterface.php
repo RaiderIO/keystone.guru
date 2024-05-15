@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Metric create(array $attributes)
- * @method Metric find(int $id, array $columns = [])
- * @method Metric findOrFail(int $id, array $columns = [])
- * @method Metric findOrNew(int $id, array $columns = [])
+ * @method Metric|null find(int $id, array|string $columns = ['*'])
+ * @method Metric findOrFail(int $id, array|string $columns = ['*'])
+ * @method Metric findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Metric $model)
  * @method bool update(Metric $model, array $attributes = [], array $options = [])
  * @method bool delete(Metric $model)

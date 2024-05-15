@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method LiveSession create(array $attributes)
- * @method LiveSession find(int $id, array $columns = [])
- * @method LiveSession findOrFail(int $id, array $columns = [])
- * @method LiveSession findOrNew(int $id, array $columns = [])
+ * @method LiveSession|null find(int $id, array|string $columns = ['*'])
+ * @method LiveSession findOrFail(int $id, array|string $columns = ['*'])
+ * @method LiveSession findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(LiveSession $model)
  * @method bool update(LiveSession $model, array $attributes = [], array $options = [])
  * @method bool delete(LiveSession $model)

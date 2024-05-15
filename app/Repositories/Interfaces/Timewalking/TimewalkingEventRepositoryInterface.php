@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method TimewalkingEvent create(array $attributes)
- * @method TimewalkingEvent find(int $id, array $columns = [])
- * @method TimewalkingEvent findOrFail(int $id, array $columns = [])
- * @method TimewalkingEvent findOrNew(int $id, array $columns = [])
+ * @method TimewalkingEvent|null find(int $id, array|string $columns = ['*'])
+ * @method TimewalkingEvent findOrFail(int $id, array|string $columns = ['*'])
+ * @method TimewalkingEvent findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(TimewalkingEvent $model)
  * @method bool update(TimewalkingEvent $model, array $attributes = [], array $options = [])
  * @method bool delete(TimewalkingEvent $model)

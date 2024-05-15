@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method OverpulledEnemy create(array $attributes)
- * @method OverpulledEnemy find(int $id, array $columns = [])
- * @method OverpulledEnemy findOrFail(int $id, array $columns = [])
- * @method OverpulledEnemy findOrNew(int $id, array $columns = [])
+ * @method OverpulledEnemy|null find(int $id, array|string $columns = ['*'])
+ * @method OverpulledEnemy findOrFail(int $id, array|string $columns = ['*'])
+ * @method OverpulledEnemy findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(OverpulledEnemy $model)
  * @method bool update(OverpulledEnemy $model, array $attributes = [], array $options = [])
  * @method bool delete(OverpulledEnemy $model)

@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method KillZoneEnemy create(array $attributes)
- * @method KillZoneEnemy find(int $id, array $columns = [])
- * @method KillZoneEnemy findOrFail(int $id, array $columns = [])
- * @method KillZoneEnemy findOrNew(int $id, array $columns = [])
+ * @method KillZoneEnemy|null find(int $id, array|string $columns = ['*'])
+ * @method KillZoneEnemy findOrFail(int $id, array|string $columns = ['*'])
+ * @method KillZoneEnemy findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(KillZoneEnemy $model)
  * @method bool update(KillZoneEnemy $model, array $attributes = [], array $options = [])
  * @method bool delete(KillZoneEnemy $model)

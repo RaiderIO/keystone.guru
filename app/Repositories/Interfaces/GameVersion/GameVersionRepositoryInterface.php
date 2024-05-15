@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method GameVersion create(array $attributes)
- * @method GameVersion find(int $id, array $columns = [])
- * @method GameVersion findOrFail(int $id, array $columns = [])
- * @method GameVersion findOrNew(int $id, array $columns = [])
+ * @method GameVersion|null find(int $id, array|string $columns = ['*'])
+ * @method GameVersion findOrFail(int $id, array|string $columns = ['*'])
+ * @method GameVersion findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(GameVersion $model)
  * @method bool update(GameVersion $model, array $attributes = [], array $options = [])
  * @method bool delete(GameVersion $model)

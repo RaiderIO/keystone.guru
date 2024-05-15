@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method OpensearchModel create(array $attributes)
- * @method OpensearchModel find(int $id, array $columns = [])
- * @method OpensearchModel findOrFail(int $id, array $columns = [])
- * @method OpensearchModel findOrNew(int $id, array $columns = [])
+ * @method OpensearchModel|null find(int $id, array|string $columns = ['*'])
+ * @method OpensearchModel findOrFail(int $id, array|string $columns = ['*'])
+ * @method OpensearchModel findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(OpensearchModel $model)
  * @method bool update(OpensearchModel $model, array $attributes = [], array $options = [])
  * @method bool delete(OpensearchModel $model)

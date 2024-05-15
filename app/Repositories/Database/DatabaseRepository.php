@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Database;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -18,17 +19,17 @@ abstract class DatabaseRepository extends BaseRepository
         return $this->class::insert($attributes);
     }
 
-    public function find(int $id, array $columns = []): Model
+    public function find(int $id, array|string $columns = ['*']): ?Model
     {
         return $this->class::find($id, $columns);
     }
 
-    public function findOrFail(int $id, array $columns = []): Model
+    public function findOrFail(int $id, array|string $columns = ['*']): Model
     {
         return $this->class::findOrFail($id, $columns);
     }
 
-    public function findOrNew(int $id, array $columns = []): Model
+    public function findOrNew(int $id, array|string $columns = ['*']): Model
     {
         return $this->class::findOrNew($id, $columns);
     }

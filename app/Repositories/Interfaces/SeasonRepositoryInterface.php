@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Season create(array $attributes)
- * @method Season find(int $id, array $columns = [])
- * @method Season findOrFail(int $id, array $columns = [])
- * @method Season findOrNew(int $id, array $columns = [])
+ * @method Season|null find(int $id, array|string $columns = ['*'])
+ * @method Season findOrFail(int $id, array|string $columns = ['*'])
+ * @method Season findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Season $model)
  * @method bool update(Season $model, array $attributes = [], array $options = [])
  * @method bool delete(Season $model)

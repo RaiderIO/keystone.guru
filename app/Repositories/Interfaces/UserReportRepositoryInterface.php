@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method UserReport create(array $attributes)
- * @method UserReport find(int $id, array $columns = [])
- * @method UserReport findOrFail(int $id, array $columns = [])
- * @method UserReport findOrNew(int $id, array $columns = [])
+ * @method UserReport|null find(int $id, array|string $columns = ['*'])
+ * @method UserReport findOrFail(int $id, array|string $columns = ['*'])
+ * @method UserReport findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(UserReport $model)
  * @method bool update(UserReport $model, array $attributes = [], array $options = [])
  * @method bool delete(UserReport $model)

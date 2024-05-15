@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method DungeonRouteThumbnailJob create(array $attributes)
- * @method DungeonRouteThumbnailJob find(int $id, array $columns = [])
- * @method DungeonRouteThumbnailJob findOrFail(int $id, array $columns = [])
- * @method DungeonRouteThumbnailJob findOrNew(int $id, array $columns = [])
+ * @method DungeonRouteThumbnailJob|null find(int $id, array|string $columns = ['*'])
+ * @method DungeonRouteThumbnailJob findOrFail(int $id, array|string $columns = ['*'])
+ * @method DungeonRouteThumbnailJob findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(DungeonRouteThumbnailJob $model)
  * @method bool update(DungeonRouteThumbnailJob $model, array $attributes = [], array $options = [])
  * @method bool delete(DungeonRouteThumbnailJob $model)

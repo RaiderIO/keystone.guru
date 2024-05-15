@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method DungeonRouteEnemyRaidMarker create(array $attributes)
- * @method DungeonRouteEnemyRaidMarker find(int $id, array $columns = [])
- * @method DungeonRouteEnemyRaidMarker findOrFail(int $id, array $columns = [])
- * @method DungeonRouteEnemyRaidMarker findOrNew(int $id, array $columns = [])
+ * @method DungeonRouteEnemyRaidMarker|null find(int $id, array|string $columns = ['*'])
+ * @method DungeonRouteEnemyRaidMarker findOrFail(int $id, array|string $columns = ['*'])
+ * @method DungeonRouteEnemyRaidMarker findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(DungeonRouteEnemyRaidMarker $model)
  * @method bool update(DungeonRouteEnemyRaidMarker $model, array $attributes = [], array $options = [])
  * @method bool delete(DungeonRouteEnemyRaidMarker $model)

@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Path create(array $attributes)
- * @method Path find(int $id, array $columns = [])
- * @method Path findOrFail(int $id, array $columns = [])
- * @method Path findOrNew(int $id, array $columns = [])
+ * @method Path|null find(int $id, array|string $columns = ['*'])
+ * @method Path findOrFail(int $id, array|string $columns = ['*'])
+ * @method Path findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Path $model)
  * @method bool update(Path $model, array $attributes = [], array $options = [])
  * @method bool delete(Path $model)

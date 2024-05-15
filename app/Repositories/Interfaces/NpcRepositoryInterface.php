@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method Npc create(array $attributes)
- * @method Npc find(int $id, array $columns = [])
- * @method Npc findOrFail(int $id, array $columns = [])
- * @method Npc findOrNew(int $id, array $columns = [])
+ * @method Npc|null find(int $id, array|string $columns = ['*'])
+ * @method Npc findOrFail(int $id, array|string $columns = ['*'])
+ * @method Npc findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(Npc $model)
  * @method bool update(Npc $model, array $attributes = [], array $options = [])
  * @method bool delete(Npc $model)

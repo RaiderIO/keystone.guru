@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @method AffixGroupEaseTier create(array $attributes)
- * @method AffixGroupEaseTier find(int $id, array $columns = [])
- * @method AffixGroupEaseTier findOrFail(int $id, array $columns = [])
- * @method AffixGroupEaseTier findOrNew(int $id, array $columns = [])
+ * @method AffixGroupEaseTier|null find(int $id, array|string $columns = ['*'])
+ * @method AffixGroupEaseTier findOrFail(int $id, array|string $columns = ['*'])
+ * @method AffixGroupEaseTier findOrNew(int $id, array|string $columns = ['*'])
  * @method bool save(AffixGroupEaseTier $model)
  * @method bool update(AffixGroupEaseTier $model, array $attributes = [], array $options = [])
  * @method bool delete(AffixGroupEaseTier $model)
