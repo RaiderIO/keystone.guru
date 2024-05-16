@@ -798,6 +798,19 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             );
         }
 
+        if ($latLng->getFloor()->facade) {
+            $this->log->parseObjectCommentAfterConversionFloorStillOnFacade($latLng->toArrayWithFloor());
+
+            $importStringObjects->getWarnings()->push(
+                new ImportWarning(
+                    __('logic.mdt.io.import_string.category.object'),
+                    __('logic.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']])
+                )
+            );
+
+            return;
+        }
+
         $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
 
         // Try to see if we can import this comment and apply it to our pulls directly instead

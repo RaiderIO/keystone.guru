@@ -4,6 +4,8 @@ namespace App\Service\MDT\Logging;
 
 interface MDTImportStringServiceLoggingInterface
 {
+    public function parseObjectCommentAfterConversionFloorStillOnFacade(array $latLngWithFloor): void;
+
     public function getDetailsStart(): void;
 
     public function getDetailsEnd(): void;

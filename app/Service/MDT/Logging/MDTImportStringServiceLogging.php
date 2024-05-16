@@ -6,6 +6,11 @@ use App\Logging\StructuredLogging;
 
 class MDTImportStringServiceLogging extends StructuredLogging implements MDTImportStringServiceLoggingInterface
 {
+    public function parseObjectCommentAfterConversionFloorStillOnFacade(array $latLngWithFloor): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
 
     public function getDetailsStart(): void
     {
