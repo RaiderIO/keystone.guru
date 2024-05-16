@@ -57,6 +57,11 @@ class IngameXY implements Arrayable
         ];
     }
 
+    public function toArrayWithFloor(): array
+    {
+        return ['x' => $this->x, 'y' => $this->y, 'floor_id' => optional($this->floor)->id];
+    }
+
     public function __clone()
     {
         return new IngameXY(

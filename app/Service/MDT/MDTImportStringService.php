@@ -33,6 +33,7 @@ use App\Models\PublishedState;
 use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
@@ -63,9 +64,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     public function __construct(
         /** @var SeasonService Used for grabbing info about the current M+ season. */
-        private readonly SeasonServiceInterface      $seasonService,
-        private readonly CacheServiceInterface       $cacheService,
-        private readonly CoordinatesServiceInterface $coordinatesService
+        private readonly SeasonServiceInterface                 $seasonService,
+        private readonly CacheServiceInterface                  $cacheService,
+        private readonly CoordinatesServiceInterface            $coordinatesService,
+        private readonly MDTImportStringServiceLoggingInterface $log
     ) {
     }
 
@@ -796,6 +798,19 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             );
         }
 
+        if ($latLng->getFloor()->facade) {
+            $this->log->parseObjectCommentAfterConversionFloorStillOnFacade($latLng->toArrayWithFloor());
+
+            $importStringObjects->getWarnings()->push(
+                new ImportWarning(
+                    __('logic.mdt.io.import_string.category.object'),
+                    __('logic.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']])
+                )
+            );
+
+            return;
+        }
+
         $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
 
         // Try to see if we can import this comment and apply it to our pulls directly instead
@@ -875,64 +890,70 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      */
     public function getDetails(Collection $warnings, Collection $errors): ImportStringDetails
     {
-        $decoded = $this->decode($this->encodedString);
+        try {
+            $this->log->getDetailsStart();
 
-        if ($decoded === null) {
-            throw new MDTStringParseException('Unable to decode MDT import string');
+            $decoded = $this->decode($this->encodedString);
+
+            if ($decoded === null) {
+                throw new MDTStringParseException('Unable to decode MDT import string');
+            }
+
+            // Check if it's valid
+            $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
+
+            if (!$isValid) {
+                throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
+            }
+
+            $warnings = collect();
+            $errors   = collect();
+
+            $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+
+            /** @var AffixGroup|null $affixGroup */
+            $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeon);
+
+            $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
+                $warnings,
+                $errors,
+                $dungeon,
+                $dungeon->currentMappingVersion,
+                $affixGroup?->hasAffix(Affix::AFFIX_TEEMING) ?? false,
+                null,
+                $decoded['value']['pulls']
+            ));
+
+            $importStringObjects = $this->parseObjects(new ImportStringObjects(
+                $warnings,
+                $errors,
+                $dungeon,
+                $importStringPulls->getKillZoneAttributes(),
+                $decoded['objects']
+            ));
+
+            $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
+            $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
+
+            return new ImportStringDetails(
+                $warnings,
+                $errors,
+                $dungeon,
+                collect([$affixGroup?->getTextAttribute() ?? '']),
+                $affixGroup !== null && $currentAffixGroupForDungeon !== null &&
+                $affixGroup->id === $currentAffixGroupForDungeon?->id,
+                $importStringPulls->getKillZoneAttributes()->count(),
+                $importStringObjects->getPaths()->count(),
+                $importStringObjects->getLines()->count(),
+                $importStringObjects->getMapIcons()->count(),
+                $importStringPulls->getEnemyForces(),
+                $importStringPulls->isRouteTeeming() ?
+                    $importStringPulls->getMappingVersion()->enemy_forces_required_teeming :
+                    $importStringPulls->getMappingVersion()->enemy_forces_required,
+            );
+        } finally {
+            $this->log->getDetailsEnd();
         }
-
-        // Check if it's valid
-        $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
-
-        if (!$isValid) {
-            throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
-        }
-
-        $warnings = collect();
-        $errors   = collect();
-
-        $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
-
-        /** @var AffixGroup|null $affixGroup */
-        $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeon);
-
-        $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
-            $warnings,
-            $errors,
-            $dungeon,
-            $dungeon->currentMappingVersion,
-            $affixGroup?->hasAffix(Affix::AFFIX_TEEMING) ?? false,
-            null,
-            $decoded['value']['pulls']
-        ));
-
-        $importStringObjects = $this->parseObjects(new ImportStringObjects(
-            $warnings,
-            $errors,
-            $dungeon,
-            $importStringPulls->getKillZoneAttributes(),
-            $decoded['objects']
-        ));
-
-        $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
-        $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
-
-        return new ImportStringDetails(
-            $warnings,
-            $errors,
-            $dungeon,
-            collect([$affixGroup?->getTextAttribute() ?? '']),
-            $affixGroup !== null && $currentAffixGroupForDungeon !== null &&
-            $affixGroup->id === $currentAffixGroupForDungeon?->id,
-            $importStringPulls->getKillZoneAttributes()->count(),
-            $importStringObjects->getPaths()->count(),
-            $importStringObjects->getLines()->count(),
-            $importStringObjects->getMapIcons()->count(),
-            $importStringPulls->getEnemyForces(),
-            $importStringPulls->isRouteTeeming() ?
-                $importStringPulls->getMappingVersion()->enemy_forces_required_teeming :
-                $importStringPulls->getMappingVersion()->enemy_forces_required,
-        );
     }
 
     /**
@@ -955,100 +976,105 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         bool       $save = false,
         bool       $importAsThisWeek = false
     ): DungeonRoute {
-        $decoded = $this->decode($this->encodedString);
+        try {
+            $this->log->getDungeonRouteStart($sandbox, $save, $importAsThisWeek);
+            $decoded = $this->decode($this->encodedString);
 
-        if ($decoded === null) {
-            throw new MDTStringParseException('Unable to decode MDT import string');
-        }
+            if ($decoded === null) {
+                throw new MDTStringParseException('Unable to decode MDT import string');
+            }
 
-        // Check if it's valid
-        $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
+            // Check if it's valid
+            $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
-        if (!$isValid) {
-            throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
-        }
+            if (!$isValid) {
+                throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
+            }
 
-        $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
-        $mappingVersion = $dungeon->currentMappingVersion;
+            $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+            $mappingVersion = $dungeon->currentMappingVersion;
 
-        // Create a dungeon route
-        $titleSlug    = Str::slug($decoded['text']);
-        $dungeonRoute = DungeonRoute::create([
-            'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
-            'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $mappingVersion->id,
+            // Create a dungeon route
+            $titleSlug    = Str::slug($decoded['text']);
+            $dungeonRoute = DungeonRoute::create([
+                'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $mappingVersion->id,
 
-            // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
-            'faction_id'         => isset($decoded['faction']) ?
-                ((int)$decoded['faction'] === 1 ? Faction::ALL[Faction::FACTION_HORDE] : Faction::ALL[Faction::FACTION_ALLIANCE])
-                : Faction::ALL[Faction::FACTION_UNSPECIFIED],
-            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
-            // Needs to be explicit otherwise redirect to edit will not have this value
-            'public_key'         => DungeonRoute::generateRandomPublicKey(),
-            'teeming'            => boolval($decoded['value']['teeming'] ?? false),
-            'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $titleSlug,
-            'difficulty'         => 'Casual',
-            'level_min'          => $decoded['difficulty'] ?? 2,
-            'level_max'          => $decoded['difficulty'] ?? 2,
-            'expires_at'         => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
-        ]);
+                // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
+                'faction_id'         => isset($decoded['faction']) ?
+                    ((int)$decoded['faction'] === 1 ? Faction::ALL[Faction::FACTION_HORDE] : Faction::ALL[Faction::FACTION_ALLIANCE])
+                    : Faction::ALL[Faction::FACTION_UNSPECIFIED],
+                'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                // Needs to be explicit otherwise redirect to edit will not have this value
+                'public_key'         => DungeonRoute::generateRandomPublicKey(),
+                'teeming'            => boolval($decoded['value']['teeming'] ?? false),
+                'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $titleSlug,
+                'difficulty'         => 'Casual',
+                'level_min'          => $decoded['difficulty'] ?? 2,
+                'level_max'          => $decoded['difficulty'] ?? 2,
+                'expires_at'         => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
+            ]);
 
-        // Set some relations here so we can reference them later
-        $dungeonRoute->setRelation('dungeon', $dungeon);
-        $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
+            // Set some relations here so we can reference them later
+            $dungeonRoute->setRelation('dungeon', $dungeon);
+            $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
 
-        // Set the affix for this route
-        $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeonRoute->dungeon, $importAsThisWeek);
+            // Set the affix for this route
+            $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeonRoute->dungeon, $importAsThisWeek);
 
-        $this->applyAffixGroupToDungeonRoute($affixGroup, $dungeonRoute);
+            $this->applyAffixGroupToDungeonRoute($affixGroup, $dungeonRoute);
 
-        // Create a path and map icons for MDT rift offsets
-        if (isset($decoded['value']['riftOffsets'])) {
-            $importStringRiftOffsets = $this->parseRiftOffsets(new ImportStringRiftOffsets(
+            // Create a path and map icons for MDT rift offsets
+            if (isset($decoded['value']['riftOffsets'])) {
+                $importStringRiftOffsets = $this->parseRiftOffsets(new ImportStringRiftOffsets(
+                    $warnings,
+                    $dungeon,
+                    $mappingVersion,
+                    $dungeonRoute->seasonal_index,
+                    $decoded['value']['riftOffsets'],
+                    $decoded['week'],
+                ));
+
+                $this->applyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute);
+            }
+
+            // Create killzones and attach enemies
+            $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
                 $warnings,
-                $dungeon,
-                $mappingVersion,
+                $errors,
+                $dungeonRoute->dungeon,
+                $dungeonRoute->mappingVersion,
+                $dungeonRoute->teeming,
                 $dungeonRoute->seasonal_index,
-                $decoded['value']['riftOffsets'],
-                $decoded['week'],
+                $decoded['value']['pulls']
             ));
 
-            $this->applyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute);
+            // For each object the user created
+            $importStringObjects = $this->parseObjects(new ImportStringObjects(
+                $warnings,
+                $errors,
+                $dungeonRoute->dungeon,
+                $importStringPulls->getKillZoneAttributes(),
+                $decoded['objects']
+            ));
+
+            if ($errors->isNotEmpty()) {
+                // Get rid of it again!
+                $dungeonRoute->delete();
+
+                throw new InvalidMDTStringException('Unable to MDT import string - there have been errors converting your string to a route');
+            } else {
+                // Only after parsing objects too since they may adjust the pulls before inserting
+                $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
+
+                $this->applyObjectsToDungeonRoute($importStringObjects, $dungeonRoute);
+            }
+
+            return $dungeonRoute;
+        } finally {
+            $this->log->getDungeonRouteEnd();
         }
-
-        // Create killzones and attach enemies
-        $importStringPulls = $this->parseValuePulls(new ImportStringPulls(
-            $warnings,
-            $errors,
-            $dungeonRoute->dungeon,
-            $dungeonRoute->mappingVersion,
-            $dungeonRoute->teeming,
-            $dungeonRoute->seasonal_index,
-            $decoded['value']['pulls']
-        ));
-
-        // For each object the user created
-        $importStringObjects = $this->parseObjects(new ImportStringObjects(
-            $warnings,
-            $errors,
-            $dungeonRoute->dungeon,
-            $importStringPulls->getKillZoneAttributes(),
-            $decoded['objects']
-        ));
-
-        if ($errors->isNotEmpty()) {
-            // Get rid of it again!
-            $dungeonRoute->delete();
-
-            throw new InvalidMDTStringException('Unable to MDT import string - there have been errors converting your string to a route');
-        } else {
-            // Only after parsing objects too since they may adjust the pulls before inserting
-            $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
-
-            $this->applyObjectsToDungeonRoute($importStringObjects, $dungeonRoute);
-        }
-
-        return $dungeonRoute;
     }
 
     private function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute): void
@@ -1294,6 +1320,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     public function setEncodedString(string $encodedString): self
     {
         $this->encodedString = $encodedString;
+
+        $this->log->setEncodedStringEncodedString($encodedString);
 
         return $this;
     }
