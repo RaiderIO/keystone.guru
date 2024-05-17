@@ -1,0 +1,2 @@
+www-data ALL=(ALL) NOPASSWD: /usr/bin/cli_weakauras_parser
+www-data ALL=(ALL) NOPASSWD: /root/.cargo/bin/cli_weakauras_parser
