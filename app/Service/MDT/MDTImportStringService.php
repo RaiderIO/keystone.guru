@@ -796,19 +796,20 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $mappingVersion,
                 $latLng
             );
-        }
 
-        if ($latLng->getFloor()->facade) {
-            $this->log->parseObjectCommentAfterConversionFloorStillOnFacade($latLng->toArrayWithFloor());
+            // @TODO this needs to be put everywhere in this class in a generic function of sorts, no time now
+            if ($latLng->getFloor()->facade) {
+                $this->log->parseObjectCommentAfterConversionFloorStillOnFacade($latLng->toArrayWithFloor());
 
-            $importStringObjects->getWarnings()->push(
-                new ImportWarning(
-                    __('logic.mdt.io.import_string.category.object'),
-                    __('logic.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']])
-                )
-            );
+                $importStringObjects->getWarnings()->push(
+                    new ImportWarning(
+                        __('logic.mdt.io.import_string.category.object'),
+                        __('logic.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']])
+                    )
+                );
 
-            return;
+                return;
+            }
         }
 
         $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
@@ -817,8 +818,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         foreach ($importStringObjects->getKillZoneAttributes() as $killZoneIndex => $killZoneAttribute) {
             foreach ($killZoneAttribute['killZoneEnemies'] as $killZoneEnemy) {
                 $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
-                    new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng, $floor)
+                    new LatLng($killZoneEnemy['enemy']->lat, $killZoneEnemy['enemy']->lng, $latLng->getFloor())
                 );
+
                 if ($this->coordinatesService->distanceBetweenPoints(
                         $enemyIngameXY->getX(), $ingameXY->getX(),
                         $enemyIngameXY->getY(), $ingameXY->getY()

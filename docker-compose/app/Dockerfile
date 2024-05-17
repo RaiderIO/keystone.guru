@@ -81,9 +81,6 @@ RUN apt-get update && apt-get install -y libssl-dev && \
 RUN /root/.cargo/bin/cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git && \
     ln -s ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
 
-# Give the www-data user rights to execute cli weakauras parser as sudo
-RUN echo "www-data ALL=NOPASSWD: /usr/bin/cli_weakauras_parser" >> /etc/sudoers
-
 # Install actual LUA language
 RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \
     ln -s /usr/include/lua5.3/ /usr/include/lua && \
@@ -112,7 +109,9 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     cp bit.so /usr/lib/lua/5.3/
 
 # Setup files/folders
-COPY etc/crontab /etc/crontab
+COPY etc/ /etc/
+
+RUN chmod -R 440 /etc/sudoers.d/
 
 COPY var/ /var/
 
