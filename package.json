@@ -13,7 +13,7 @@
         "terser": "3.14.1"
     },
     "devDependencies": {
-        "axios": "^1.6.4",
+        "axios": "^1.7.2",
         "cross-env": "^7.0.3",
         "git-revision-webpack-plugin": "^5.0.0",
         "jquery": "^3.6.0",
