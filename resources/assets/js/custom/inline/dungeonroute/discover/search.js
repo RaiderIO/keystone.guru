@@ -78,8 +78,6 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
      * @private
      */
     _selectExpansion(expansion) {
-        console.log(`Selecting expansion ${expansion}`);
-
         if (expansion !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#${expansion}-grid-content .grid_dungeon`).addClass('selectable');
@@ -99,8 +97,6 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
      * @private
      */
     _selectSeason(season) {
-        console.log(`Selecting season ${season}`);
-
         if (season !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#season-${season}-grid-content .grid_dungeon`).addClass('selectable');
