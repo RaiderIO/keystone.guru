@@ -27,10 +27,11 @@ class SearchInlineBase extends InlineCode {
 
         // Restore URL -> filters values
         for (let key in queryParams) {
-            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(key)) {
+            let filtersKey = key.replace('[]', '');
+            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(filtersKey)) {
                 let value = queryParams[key];
 
-                this.filters[key].setValue(value);
+                this.filters[filtersKey].setValue(value);
             }
         }
     }
