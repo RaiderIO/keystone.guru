@@ -48,7 +48,9 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
         // If we have seasons and should select one
         if (this.options.gameVersion.has_seasons && this.filters.expansion.getValue() === '') {
             // If we didn't have an expansion from the URL, select the first tab instead
-            let selectedSeason = this.filters.season.getValue() ?? this.options.nextSeason ?? this.options.currentSeason;
+            let selectedSeason = this.filters.season.getValue() !== ''
+                ? this.filters.season.getValue()
+                : this.options.nextSeason ?? this.options.currentSeason;
 
             $(`#season-${selectedSeason}-grid-tab`).tab('show');
             this._selectSeason(selectedSeason);
@@ -76,6 +78,8 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
      * @private
      */
     _selectExpansion(expansion) {
+        console.log(`Selecting expansion ${expansion}`);
+
         if (expansion !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#${expansion}-grid-content .grid_dungeon`).addClass('selectable');
@@ -95,6 +99,8 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
      * @private
      */
     _selectSeason(season) {
+        console.log(`Selecting season ${season}`);
+
         if (season !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#season-${season}-grid-content .grid_dungeon`).addClass('selectable');
