@@ -150,7 +150,8 @@ ul.light-slider {
 
 /** Prevents the title from jumping when it gets selected */
 .discover .grid_dungeon.selectable.selected h5 {
-    padding-right: 0.25rem !important
+    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
+    top: calc(15% - 0.125rem); /* 0.125 for the red border, but just one side since it's the top */
 }
 
 
@@ -165,7 +166,7 @@ ul.light-slider {
 
 .discover .card-img-caption .card-text {
     text-align: center;
-    width: calc(100% - 1rem);
+    width: calc(100% - 1rem); /* overcome the padding - this makes it fit exactly */
     top: 15%;
     position: absolute;
     z-index: 1;

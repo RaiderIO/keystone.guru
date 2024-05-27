@@ -49,9 +49,10 @@ trait ConvertsMDTStrings
             if ($fileName !== null) {
                 $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
                 // Performing sudo on local environment causes issues - but we're already root then
-                if (config('app.type') !== 'local') {
-                    $cmd = sprintf('%s %s', self::$SUDO, $cmd);
-                }
+                // ^ okay what issues then genius? It works fine locally
+//                if (config('app.type') !== 'local') {
+                $cmd = sprintf('%s %s', self::$SUDO, $cmd);
+//                }
 
                 $process = new Process(explode(' ', $cmd));
                 $process->run();

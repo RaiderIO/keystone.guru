@@ -48,7 +48,9 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
         // If we have seasons and should select one
         if (this.options.gameVersion.has_seasons && this.filters.expansion.getValue() === '') {
             // If we didn't have an expansion from the URL, select the first tab instead
-            let selectedSeason = this.filters.season.getValue() ?? this.options.nextSeason ?? this.options.currentSeason;
+            let selectedSeason = this.filters.season.getValue() !== ''
+                ? this.filters.season.getValue()
+                : this.options.nextSeason ?? this.options.currentSeason;
 
             $(`#season-${selectedSeason}-grid-tab`).tab('show');
             this._selectSeason(selectedSeason);
