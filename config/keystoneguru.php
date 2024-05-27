@@ -183,6 +183,11 @@ return [
          * The maximum attempts a thumbnail generation can take before it is failed and not queued again
          */
         'max_attempts'          => 3,
+
+        /**
+         * The maximum amount of thumbnails that will be queued in a single run.
+         */
+        'refresh_outdated_count' => 300,
     ],
 
     /**
