@@ -67,7 +67,7 @@ class RefreshOutdatedThumbnails extends Command
             // Newest first
             ->orderBy('id', 'desc')
             // Limit the amount of routes at a time, do not overflow the queue since we cannot process more anyway
-            ->limit(200)
+            ->limit(config('keystoneguru.thumbnail.refresh_outdated_count'))
             ->get();
 
         Log::channel('scheduler')->debug(sprintf('Scheduling %s routes for thumbnail generation', $routes->count()));
