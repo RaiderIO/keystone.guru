@@ -197,9 +197,9 @@ class CommonGroupAffixes extends InlineCode {
         for (let i = 0; i < seasons.length; i++) {
             let season = seasons[i];
             if (season !== null && typeof season !== 'undefined') {
-                for (let j = 0; j < season.affixgroups.length; j++) {
-                    if (season.affixgroups[j].id === id) {
-                        result = season.affixgroups[j];
+                for (let j = 0; j < season.affix_groups.length; j++) {
+                    if (season.affix_groups[j].id === id) {
+                        result = season.affix_groups[j];
                         break;
                     }
                 }

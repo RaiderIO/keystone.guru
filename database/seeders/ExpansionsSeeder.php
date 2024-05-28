@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Expansion;
 use App\Models\File;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 
 class ExpansionsSeeder extends Seeder implements TableSeederInterface

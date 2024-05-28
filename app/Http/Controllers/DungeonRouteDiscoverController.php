@@ -22,10 +22,18 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @return Factory|View
      */
-    public function search(): View
-    {
-        return view('dungeonroute.discover.search', [
+    public function search(
+        SeasonServiceInterface    $seasonService,
+        ExpansionServiceInterface $expansionService,
+    ): View {
+        $currentSeason = $seasonService->getCurrentSeason();
+        $nextSeason = $seasonService->getNextSeasonOfExpansion();
 
+        return view('dungeonroute.discover.search', [
+            'currentSeasonKeyLevelMin' => $currentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+            'currentSeasonKeyLevelMax' => $currentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+            'nextSeasonKeyLevelMin' => $nextSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+            'nextSeasonKeyLevelMax' => $nextSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
         ]);
     }
 

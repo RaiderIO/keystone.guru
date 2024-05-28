@@ -3,10 +3,9 @@
 namespace App\Rules;
 
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
-use Carbon\Carbon;
 use Closure;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Carbon;
 
 class CreateRouteNpcChronologicalRule implements ValidationRule
 {

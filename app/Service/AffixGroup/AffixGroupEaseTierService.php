@@ -9,7 +9,7 @@ use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
@@ -199,7 +199,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $affixList                = Affix::all();
         $currentSeason            = $this->seasonService->getCurrentSeason();
-        $currentSeasonAffixGroups = $currentSeason->affixgroups;
+        $currentSeasonAffixGroups = $currentSeason->affixGroups;
 
         $affixes = collect(explode(', ', $affixString));
 

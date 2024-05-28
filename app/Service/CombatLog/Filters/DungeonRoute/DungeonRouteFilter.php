@@ -15,8 +15,8 @@ use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 
 class DungeonRouteFilter implements CombatLogParserInterface
 {

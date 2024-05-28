@@ -8,7 +8,7 @@ use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface

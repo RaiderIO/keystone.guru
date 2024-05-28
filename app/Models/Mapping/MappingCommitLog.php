@@ -3,9 +3,9 @@
 namespace App\Models\Mapping;
 
 use App\Models\Traits\SeederModel;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int    $id

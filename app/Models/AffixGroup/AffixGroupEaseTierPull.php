@@ -3,10 +3,10 @@
 namespace App\Models\AffixGroup;
 
 use App\Models\CacheModel;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**

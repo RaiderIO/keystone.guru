@@ -12,8 +12,8 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CreateRouteBody

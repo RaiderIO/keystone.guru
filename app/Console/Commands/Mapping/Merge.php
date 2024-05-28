@@ -6,12 +6,12 @@ use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingCommitLog;
 use App\Service\Mapping\MappingService;
-use Carbon\Carbon;
 use Github\Api\PullRequest;
 use Github\Exception\MissingArgumentException;
 use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 
 class Merge extends Command
 {

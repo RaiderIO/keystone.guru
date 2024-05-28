@@ -15,6 +15,18 @@ class LevelHandler {
             max: this.max,
             from: this.min,
             to: this.max,
-        }, options));
+        }, options)).data('ionRangeSlider');
+    }
+
+    update(min, max) {
+        this.min = min;
+        this.max = max;
+
+        this.rangeSlider.update({
+            min: this.min,
+            max: this.max,
+            from: this.min,
+            to: this.max,
+        });
     }
 }

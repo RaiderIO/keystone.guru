@@ -6,8 +6,9 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
 
 @include('common.general.inline', ['path' => 'common/forms/createtemporaryroute', 'options' => [
     'levelSelector' => '#temporary_dungeon_route_level',
-    'levelMin' => config('keystoneguru.keystone.levels.min'),
-    'levelMax' => config('keystoneguru.keystone.levels.max'),
+    /** @TODO Fix this to use seasons? */
+    'levelMin' => config('keystoneguru.keystone.levels.default_min'),
+    'levelMax' => config('keystoneguru.keystone.levels.default_max'),
     'levelFrom' => $routeKeyLevelFrom,
     'levelTo' => $routeKeyLevelTo,
 ]])

@@ -6,10 +6,10 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Opensearch\OpensearchModel;
-use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $id

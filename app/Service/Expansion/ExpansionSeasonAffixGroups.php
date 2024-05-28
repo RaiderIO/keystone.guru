@@ -26,7 +26,7 @@ class ExpansionSeasonAffixGroups
         $this->nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
 
         if ($expansionSeason->getSeason() !== null) {
-            $this->allAffixGroups = $expansionSeason->getSeason()->affixgroups()
+            $this->allAffixGroups = $expansionSeason->getSeason()->affixGroups()
                 ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
                 ->get();
         } else {

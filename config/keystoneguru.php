@@ -28,8 +28,8 @@ return [
             'plusthreefactor' => 0.6,
         ],
         'levels' => [
-            'min' => 2,
-            'max' => 30,
+            'default_min' => 2,
+            'default_max' => 30,
         ],
 
         'scaling_factor'         => 1.08,

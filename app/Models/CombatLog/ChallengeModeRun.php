@@ -4,13 +4,13 @@ namespace App\Models\CombatLog;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**

@@ -5,7 +5,7 @@
 
 /** @var \App\Models\DungeonRoute\DungeonRoute $model */
 if (!isset($affixgroups)) {
-    $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
+    $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }
 
 $id ??= 'affixes';

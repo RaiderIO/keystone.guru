@@ -36,7 +36,7 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @return Collection|Season[]
+     * @return Collection<Season>
      */
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {
@@ -188,7 +188,7 @@ class SeasonService implements SeasonServiceInterface
         $simulatedTime        = $firstSeasonStart->copy();
         $totalWeeksToSimulate = $weeksSinceBeginning + 1;
         for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
-            if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
+            if ($nextSeason !== null && $nextSeason->affixGroups->isNotEmpty()) {
                 // If we should switch to the next season...
                 if ($simulatedTime->gte($nextSeason->start())) {
                     // Move to the next season
@@ -202,7 +202,7 @@ class SeasonService implements SeasonServiceInterface
                 // Append to the list of when we have which affix groups
                 $affixGroups->push([
                     'date_start' => $simulatedTime->copy(),
-                    'affixgroup' => $currentSeason->affixgroups[$i % $currentSeason->affix_group_count],
+                    'affixgroup' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
                 ]);
             }
 

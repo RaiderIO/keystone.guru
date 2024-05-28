@@ -18,8 +18,8 @@ use App\Models\Npc;
 use App\Models\NpcType;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface

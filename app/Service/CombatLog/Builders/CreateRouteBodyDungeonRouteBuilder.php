@@ -19,7 +19,7 @@ use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 /**
  * @author Wouter

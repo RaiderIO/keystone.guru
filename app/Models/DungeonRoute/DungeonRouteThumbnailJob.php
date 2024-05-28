@@ -4,10 +4,10 @@ namespace App\Models\DungeonRoute;
 
 use App\Models\Floor\Floor;
 use App\Service\DungeonRoute\ThumbnailService;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int          $id

@@ -16,7 +16,7 @@
 /** @var \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] $affixGroups */
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection
 if (isset($dungeonroute)) {
-    $defaultSelected     = $dungeonroute->affixgroups->pluck(['affix_group_id'])->toArray();
+    $defaultSelected = $dungeonroute->affixgroups->pluck(['affix_group_id'])->toArray();
     $defaultExpansionKey = $dungeonroute->dungeon->expansion->shortname;
 } // Fill it by default with the current week's affix group for the current user
 else if (empty($defaultSelected)) {
@@ -24,12 +24,12 @@ else if (empty($defaultSelected)) {
 }
 
 $teemingSelector ??= null;
-$names           ??= true;
-$id              ??= 'route_select_affixes';
+$names ??= true;
+$id ??= 'route_select_affixes';
 
 $allAffixGroupsWithSeasons = $allAffixGroups
-    ->merge($currentSeason->affixgroups)
-    ->merge($nextSeason?->affixgroups ?? collect());
+    ->merge($currentSeason->affixGroups)
+    ->merge($nextSeason?->affixGroups ?? collect());
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
@@ -52,7 +52,7 @@ $allAffixGroupsWithSeasons = $allAffixGroups
     {!! Form::select($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @if($nextSeason !== null)
-            @foreach($nextSeason->affixgroups as $affixGroup)
+            @foreach($nextSeason->affixGroups as $affixGroup)
                 @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $nextSeason, 'expansionKey' => $nextSeason->expansion->shortname])
             @endforeach
         @endif

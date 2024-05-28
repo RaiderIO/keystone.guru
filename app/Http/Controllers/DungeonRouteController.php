@@ -11,13 +11,13 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
+use App\Models\User;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -25,6 +25,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -375,8 +376,12 @@ class DungeonRouteController extends Controller
     /**
      * @throws InvalidArgumentException
      */
-    public function edit(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title = null): RedirectResponse
-    {
+    public function edit(
+        Request      $request,
+        Dungeon      $dungeon,
+        DungeonRoute $dungeonroute,
+        ?string      $title = null
+    ): RedirectResponse {
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->defaultOrFacade($dungeonroute->mappingVersion)
@@ -396,8 +401,9 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function editfloor(
-        Request                    $request,
         MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
+        Request                    $request,
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
@@ -446,6 +452,14 @@ class DungeonRouteController extends Controller
                 ]);
             }
 
+            $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
+
+            $season = $seasonService->getSeasonAt(
+                $dungeonroute->created_at,
+                $userOrDefaultRegion,
+                $dungeonroute->dungeon->expansion
+            ) ?? $seasonService->getCurrentSeason($dungeonroute->dungeon->expansion, $userOrDefaultRegion);
+
             return view('dungeonroute.edit', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -453,6 +467,8 @@ class DungeonRouteController extends Controller
                 'floor'        => $floor,
                 'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
                 'floorindex'   => $floorIndex,
+                'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+                'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
             ]);
         }
     }

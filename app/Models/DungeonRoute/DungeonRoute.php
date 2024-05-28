@@ -40,14 +40,13 @@ use App\Models\Traits\HasMetrics;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
-use App\Models\User;
-use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,6 +56,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -747,8 +747,17 @@ class DungeonRoute extends Model
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
         $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-        $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
-        $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
+        $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
+        $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+
+        if ($this->level_min === null || $this->level_max === null) {
+            $activeSeason = $seasonService->getCurrentSeason(
+                $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+            );
+
+            $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
+            $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
+        }
 
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
@@ -812,8 +821,17 @@ class DungeonRoute extends Model
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
         $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-        $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
-        $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
+        $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
+        $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+
+        if ($this->level_min === null || $this->level_max === null) {
+            $activeSeason = $seasonService->getCurrentSeason(
+                $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+            );
+
+            $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
+            $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
+        }
 
         if ($user?->hasRole(Role::ROLE_ADMIN)) {
             $this->demo = intval($request->get('demo', 0)) > 0;
@@ -897,7 +915,7 @@ class DungeonRoute extends Model
                     foreach ($newAffixes as $value) {
                         $value = (int)$value;
 
-                        if ($dungeonActiveSeason->affixgroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
+                        if ($dungeonActiveSeason->affixGroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
                             // Attempted to assign an affix that the dungeon cannot have - abort it
                             continue;
                         }
@@ -1408,7 +1426,7 @@ class DungeonRoute extends Model
 
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
-                'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ?? $activeSeason->affixgroups->first()->id,
+                'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ?? $activeSeason->affixGroups->first()->id,
                 'dungeon_route_id' => $this->id,
             ]);
 
@@ -1444,7 +1462,7 @@ class DungeonRoute extends Model
             }
 
             // Delete all API thumbnail jobs/thumbnails generated for it
-            foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob ) {
+            foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob) {
                 $dungeonRouteThumbnailJob->expire();
             }
 
