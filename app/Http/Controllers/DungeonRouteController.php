@@ -456,8 +456,8 @@ class DungeonRouteController extends Controller
 
             $season = $seasonService->getSeasonAt(
                 $dungeonroute->created_at,
-                $userOrDefaultRegion,
-                $dungeonroute->dungeon->expansion
+                $dungeonroute->dungeon->expansion,
+                $userOrDefaultRegion
             ) ?? $seasonService->getCurrentSeason($dungeonroute->dungeon->expansion, $userOrDefaultRegion);
 
             return view('dungeonroute.edit', [

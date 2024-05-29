@@ -1,14 +1,19 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
-
 <?php
-use App\Models\Laratrust\Role;
 
-/** @var $cacheService \App\Service\Cache\CacheServiceInterface */
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
-/** @var $tierAffixGroup \App\Models\AffixGroup\AffixGroup|null */
-/** @var $__env array */
-/** @var $cache boolean */
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
+use App\Service\Cache\CacheServiceInterface;
+
+/**
+ * @var CacheServiceInterface $cacheService
+ * @var DungeonRoute          $dungeonroute
+ * @var AffixGroup            $currentAffixGroup
+ * @var AffixGroup|null       $tierAffixGroup
+ * @var array                 $__env
+ * @var boolean               $cache
+ */
 
 $showAffixes      ??= true;
 $showDungeonImage ??= false;
@@ -25,6 +30,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
     }
 
+    $season        = $dungeonroute->getSeasonFromAffixes();
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
     if (!isset($tierAffixGroup)) {
         // Try to come up with a sensible default
@@ -32,7 +38,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(\App\Models\AffixGroup\AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
+            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
         }
     }
     // Attempt a default value if there's only one affix set

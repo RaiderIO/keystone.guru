@@ -85,8 +85,9 @@ class SeasonService implements SeasonServiceInterface
     /**
      * Get the season that was active at a specific date.
      */
-    public function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?Season
+    public function getSeasonAt(Carbon $date, ?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
+        $region    ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         /** @var Season $season */
@@ -110,7 +111,7 @@ class SeasonService implements SeasonServiceInterface
         $region    ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
-        return $this->getSeasonAt(Carbon::now(), $region, $expansion);
+        return $this->getSeasonAt(Carbon::now(), $expansion, $region);
     }
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
@@ -130,7 +131,7 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int
     {
-        $season      = $this->getSeasonAt($date, $region, $expansion);
+        $season      = $this->getSeasonAt($date, $expansion, $region);
         $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {

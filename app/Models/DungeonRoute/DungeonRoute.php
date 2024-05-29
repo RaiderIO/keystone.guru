@@ -77,8 +77,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string                                   $clone_of
  * @property string                                   $title
  * @property string                                   $description
- * @property int                                      $level_min
- * @property int                                      $level_max
+ * @property int|null                                 $level_min
+ * @property int|null                                 $level_max
  * @property string                                   $difficulty
  * @property int                                      $seasonal_index
  * @property int                                      $enemy_forces
@@ -191,6 +191,7 @@ class DungeonRoute extends Model
         'author_id',
         'dungeon_id',
         'mapping_version_id',
+        'season_id',
         'faction_id',
         'published_state_id',
         'teeming',
@@ -1255,6 +1256,19 @@ class DungeonRoute extends Model
     public function hasUniqueAffix(string $affix): bool
     {
         return $this->affixes->filter(static fn(AffixGroup $affixGroup) => $affixGroup->hasAffix($affix))->isNotEmpty();
+    }
+
+    /**
+     * Based on the assigned affixes, determine the season that this route was most likely created in
+     *
+     * @return Season|null
+     */
+    public function getSeasonFromAffixes(): ?Season
+    {
+        /** @var AffixGroup|null $affixGroup */
+        $affixGroup = $this->affixes->first();
+
+        return $affixGroup?->load('season')?->season;
     }
 
     public function getSeasonalAffix(): ?string
