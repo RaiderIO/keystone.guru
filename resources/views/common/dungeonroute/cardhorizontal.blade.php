@@ -30,7 +30,6 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
     }
 
-    $season        = $dungeonroute->getSeasonFromAffixes();
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
     if (!isset($tierAffixGroup)) {
         // Try to come up with a sensible default
@@ -144,7 +143,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                 </div>
             </div>
             <div class="row no-gutters p-2 enemy_forces">
-                <div class="col">
+                <div class="col-auto">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
                     @else
@@ -158,8 +157,12 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         ) }}
                 </div>
                 <div class="col">
-                    @if( $dungeonroute->level_min !== config('keystoneguru.keystone.levels.min') && $dungeonroute->level_max !== config('keystoneguru.keystone.levels.max'))
-                        @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
+                    @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min && $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
+                        @include('common.dungeonroute.level', [
+                            'season' => $dungeonroute->season,
+                            'levelMin' => $dungeonroute->level_min,
+                            'levelMax' => $dungeonroute->level_max
+                        ])
                     @endif
                 </div>
             </div>

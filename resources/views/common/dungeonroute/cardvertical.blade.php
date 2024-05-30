@@ -144,7 +144,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         </div>
                     </div>
                     <div class="row no-gutters p-2 enemy_forces">
-                        <div class="col-4">
+                        <div class="col-auto">
                             @if( $enemyForcesWarning )
                                 <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
                             @else
@@ -160,9 +160,14 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             {{--                            </span>--}}
                             {{ sprintf('%s%%', $enemyForcesPercentage) }}
                         </div>
-                        <div class="col-8">
-                            @if( $dungeonroute->level_min !== config('keystoneguru.keystone.levels.min') && $dungeonroute->level_max !== config('keystoneguru.keystone.levels.max'))
-                                @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
+                        <div class="col">
+                            @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min && $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
+                                @include('common.dungeonroute.level', [
+                                    'season' => $dungeonroute->season,
+                                    'levelMin' => $dungeonroute->level_min,
+                                    'levelMax' => $dungeonroute->level_max,
+                                    'minAnchorKeyLevelWidth' => 2,
+                                ])
                             @endif
                         </div>
                     </div>

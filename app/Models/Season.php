@@ -28,7 +28,9 @@ use Illuminate\Support\Facades\Log;
  * @property int                    $key_level_min
  * @property int                    $key_level_max
  * @property string                 $name Dynamic attribute
+ *
  * @property Expansion              $expansion
+ *
  * @property Collection<AffixGroup> $affixGroups
  * @property Collection<Dungeon>    $dungeons
  *

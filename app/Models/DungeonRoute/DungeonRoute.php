@@ -66,73 +66,76 @@ use Illuminate\Support\Str;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * @property int                                      $id
- * @property string                                   $public_key
- * @property int                                      $author_id
- * @property int                                      $dungeon_id
- * @property int                                      $mapping_version_id
- * @property int                                      $season_id
- * @property int                                      $faction_id
- * @property int|null                                 $team_id
- * @property int                                      $published_state_id
- * @property string                                   $clone_of
- * @property string                                   $title
- * @property string                                   $description
- * @property int|null                                 $level_min
- * @property int|null                                 $level_max
- * @property string                                   $difficulty
- * @property int                                      $seasonal_index
- * @property int                                      $enemy_forces
- * @property bool                                     $teeming
- * @property bool                                     $demo
- * @property array                                    $setup Attribute
- * @property bool                                     $has_thumbnail Attribute
- * @property string                                   $pull_gradient
- * @property bool                                     $pull_gradient_apply_always
- * @property int                                      $dungeon_difficulty
- * @property int                                      $views
- * @property int                                      $views_embed
- * @property int                                      $popularity
- * @property float                                    $rating
- * @property int                                      $rating_count
- * @property Carbon                                   $thumbnail_refresh_queued_at
- * @property Carbon                                   $thumbnail_updated_at
- * @property Carbon                                   $updated_at
- * @property Carbon                                   $created_at
- * @property Carbon                                   $published_at
- * @property Carbon                                   $expires_at
- * @property MappingVersion                           $mappingVersion
- * @property Dungeon                                  $dungeon
- * @property Path                                     $route
- * @property Faction                                  $faction
- * @property User|null                                $author Can be null in case of temporary route
- * @property MDTImport                                $mdtImport
- * @property Team                                     $team
- * @property PublishedState                           $publishedState
- * @property ChallengeModeRun|null                    $challengeModeRun Is only set if route is created through API
- * @property Collection                               $specializations
- * @property Collection                               $classes
- * @property Collection                               $races
- * @property Collection                               $playerspecializations
- * @property Collection                               $playerclasses
- * @property Collection                               $playerraces
- * @property Collection|AffixGroup[]                  $affixes
- * @property Collection|DungeonRouteAffixGroup[]      $affixgroups
- * @property Collection|DungeonRouteRating[]          $ratings
- * @property Collection|DungeonRouteFavorite[]        $favorites
- * @property Collection|LiveSession[]                 $livesessions
- * @property Collection|Brushline[]                   $brushlines
- * @property Collection|Path[]                        $paths
- * @property Collection|KillZone[]                    $killZones
- * @property Collection|PridefulEnemy[]               $pridefulEnemies
- * @property Collection|OverpulledEnemy[]             $overpulledenemies
- * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyRaidMarkers
- * @property Collection|MapIcon[]                     $mapicons
- * @property Collection|PageView[]                    $pageviews
- * @property Collection|Tag[]                         $tags
- * @property Collection                               $routeattributes
- * @property Collection                               $routeattributesraw
- * @property Collection<DungeonRouteThumbnailJob>     $dungeonRouteThumbnailJobs
+ * @property int                                     $id
+ * @property string                                  $public_key
+ * @property int                                     $author_id
+ * @property int                                     $dungeon_id
+ * @property int                                     $mapping_version_id
+ * @property int                                     $season_id
+ * @property int                                     $faction_id
+ * @property int|null                                $team_id
+ * @property int                                     $published_state_id
+ * @property string                                  $clone_of
+ * @property string                                  $title
+ * @property string                                  $description
+ * @property int|null                                $level_min
+ * @property int|null                                $level_max
+ * @property string                                  $difficulty
+ * @property int                                     $seasonal_index
+ * @property int                                     $enemy_forces
+ * @property bool                                    $teeming
+ * @property bool                                    $demo
+ * @property array                                   $setup Attribute
+ * @property bool                                    $has_thumbnail Attribute
+ * @property string                                  $pull_gradient
+ * @property bool                                    $pull_gradient_apply_always
+ * @property int                                     $dungeon_difficulty
+ * @property int                                     $views
+ * @property int                                     $views_embed
+ * @property int                                     $popularity
+ * @property float                                   $rating
+ * @property int                                     $rating_count
+ * @property Carbon                                  $thumbnail_refresh_queued_at
+ * @property Carbon                                  $thumbnail_updated_at
+ * @property Carbon                                  $updated_at
+ * @property Carbon                                  $created_at
+ * @property Carbon                                  $published_at
+ * @property Carbon                                  $expires_at
+ *
+ * @property MappingVersion                          $mappingVersion
+ * @property Dungeon                                 $dungeon
+ * @property Path                                    $route
+ * @property Season|null                             $season
+ * @property Faction                                 $faction
+ * @property User|null                               $author Can be null in case of temporary route
+ * @property MDTImport                               $mdtImport
+ * @property Team                                    $team
+ * @property PublishedState                          $publishedState
+ * @property ChallengeModeRun|null                   $challengeModeRun Is only set if route is created through API
+ *
+ * @property Collection                              $specializations
+ * @property Collection                              $classes
+ * @property Collection                              $races
+ * @property Collection                              $playerspecializations
+ * @property Collection                              $playerclasses
+ * @property Collection                              $playerraces
+ * @property Collection<AffixGroup>                  $affixes
+ * @property Collection<DungeonRouteAffixGroup>      $affixgroups
+ * @property Collection<DungeonRouteRating>          $ratings
+ * @property Collection<DungeonRouteFavorite>        $favorites
+ * @property Collection<LiveSession>                 $livesessions
+ * @property Collection<Brushline>                   $brushlines
+ * @property Collection<Path>                        $paths
+ * @property Collection<KillZone>                    $killZones
+ * @property Collection<PridefulEnemy>               $pridefulEnemies
+ * @property Collection<OverpulledEnemy>             $overpulledenemies
+ * @property Collection<DungeonRouteEnemyRaidMarker> $enemyRaidMarkers
+ * @property Collection<MapIcon>                     $mapicons
+ * @property Collection<PageView>                    $pageviews
+ * @property Collection<Tag>                         $tags
+ * @property Collection<RouteAttribute>              $routeattributes
+ * @property Collection<DungeonRouteAttribute>       $routeattributesraw
+ * @property Collection<DungeonRouteThumbnailJob>    $dungeonRouteThumbnailJobs
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -210,6 +213,7 @@ class DungeonRoute extends Model
     protected $with = [
         'mappingVersion',
         'dungeon',
+        'season',
         'faction',
         'specializations',
         'classes',
@@ -265,6 +269,12 @@ class DungeonRoute extends Model
     {
         return $this->hasMany(Path::class)->orderBy('id');
     }
+
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
+    }
+
 
     public function faction(): BelongsTo
     {
