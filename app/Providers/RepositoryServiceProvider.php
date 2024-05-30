@@ -2,28 +2,200 @@
 
 namespace App\Providers;
 
+use App\Repositories\Database\AffixGroup\AffixGroupBaseRepository;
+use App\Repositories\Database\AffixGroup\AffixGroupCouplingRepository;
+use App\Repositories\Database\AffixGroup\AffixGroupEaseTierPullRepository;
+use App\Repositories\Database\AffixGroup\AffixGroupEaseTierRepository;
 use App\Repositories\Database\AffixGroup\AffixGroupRepository;
+use App\Repositories\Database\AffixRepository;
+use App\Repositories\Database\BrushlineRepository;
+use App\Repositories\Database\CacheModelRepository;
+use App\Repositories\Database\CharacterClassRepository;
+use App\Repositories\Database\CharacterClassSpecializationRepository;
+use App\Repositories\Database\CharacterRaceClassCouplingRepository;
+use App\Repositories\Database\CharacterRaceRepository;
 use App\Repositories\Database\CombatLog\ChallengeModeRunDataRepository;
+use App\Repositories\Database\CombatLog\ChallengeModeRunRepository;
 use App\Repositories\Database\CombatLog\CombatLogEventRepository;
 use App\Repositories\Database\CombatLog\EnemyPositionRepository;
+use App\Repositories\Database\DungeonFloorSwitchMarkerRepository;
+use App\Repositories\Database\DungeonRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteAffixGroupRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteAttributeRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteEnemyRaidMarkerRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteFavoriteRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRoutePlayerClassRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRoutePlayerRaceRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRoutePlayerSpecializationRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteRatingRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
+use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailJobRepository;
+use App\Repositories\Database\Enemies\OverpulledEnemyRepository;
+use App\Repositories\Database\Enemies\PridefulEnemyRepository;
+use App\Repositories\Database\EnemyActiveAuraRepository;
+use App\Repositories\Database\EnemyPackRepository;
+use App\Repositories\Database\EnemyPatrolRepository;
+use App\Repositories\Database\EnemyRepository;
+use App\Repositories\Database\ExpansionRepository;
+use App\Repositories\Database\FactionRepository;
+use App\Repositories\Database\FileRepository;
+use App\Repositories\Database\Floor\FloorCouplingRepository;
+use App\Repositories\Database\Floor\FloorRepository;
+use App\Repositories\Database\Floor\FloorUnionAreaRepository;
+use App\Repositories\Database\Floor\FloorUnionRepository;
+use App\Repositories\Database\GameIconRepository;
+use App\Repositories\Database\GameServerRegionRepository;
+use App\Repositories\Database\GameVersion\GameVersionRepository;
 use App\Repositories\Database\KillZone\KillZoneEnemyRepository;
 use App\Repositories\Database\KillZone\KillZoneRepository;
 use App\Repositories\Database\KillZone\KillZoneSpellRepository;
+use App\Repositories\Database\Laratrust\PermissionRepository;
+use App\Repositories\Database\Laratrust\RoleRepository;
+use App\Repositories\Database\Laratrust\TeamRepository as LaratrustTeamRepository;
+use App\Repositories\Database\LiveSessionRepository;
+use App\Repositories\Database\MapIconRepository;
+use App\Repositories\Database\MapIconTypeRepository;
+use App\Repositories\Database\MapObjectToAwakenedObeliskLinkRepository;
+use App\Repositories\Database\Mapping\MappingChangeLogRepository;
+use App\Repositories\Database\Mapping\MappingCommitLogRepository;
+use App\Repositories\Database\Mapping\MappingVersionRepository;
+use App\Repositories\Database\MDTImportRepository;
+use App\Repositories\Database\Metrics\MetricAggregationRepository;
+use App\Repositories\Database\Metrics\MetricRepository;
+use App\Repositories\Database\MountableAreaRepository;
+use App\Repositories\Database\Npc\NpcEnemyForcesRepository;
+use App\Repositories\Database\NpcBolsteringWhitelistRepository;
+use App\Repositories\Database\NpcClassificationRepository;
+use App\Repositories\Database\NpcClassRepository;
+use App\Repositories\Database\NpcRepository;
+use App\Repositories\Database\NpcSpellRepository;
+use App\Repositories\Database\NpcTypeRepository;
+use App\Repositories\Database\Opensearch\OpensearchModelRepository;
+use App\Repositories\Database\PageViewRepository;
+use App\Repositories\Database\PathRepository;
+use App\Repositories\Database\Patreon\PatreonAdFreeGiveawayRepository;
+use App\Repositories\Database\Patreon\PatreonBenefitRepository;
+use App\Repositories\Database\Patreon\PatreonUserBenefitRepository;
+use App\Repositories\Database\Patreon\PatreonUserLinkRepository;
+use App\Repositories\Database\PolylineRepository;
+use App\Repositories\Database\PublishedStateRepository;
+use App\Repositories\Database\RaidMarkerRepository;
+use App\Repositories\Database\ReleaseChangelogCategoryRepository;
+use App\Repositories\Database\ReleaseChangelogChangeRepository;
+use App\Repositories\Database\ReleaseChangelogRepository;
+use App\Repositories\Database\ReleaseReportLogRepository;
+use App\Repositories\Database\ReleaseRepository;
+use App\Repositories\Database\RouteAttributeRepository;
+use App\Repositories\Database\SeasonDungeonRepository;
+use App\Repositories\Database\SeasonRepository;
+use App\Repositories\Database\SimulationCraft\SimulationCraftRaidEventsOptionsRepository;
+use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcRepository;
 use App\Repositories\Database\SpellRepository;
+use App\Repositories\Database\Tags\TagCategoryRepository;
+use App\Repositories\Database\Tags\TagRepository;
+use App\Repositories\Database\TeamRepository;
+use App\Repositories\Database\TeamUserRepository;
+use App\Repositories\Database\Timewalking\TimewalkingEventRepository;
+use App\Repositories\Database\UserReportRepository;
+use App\Repositories\Database\UserRepository;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupBaseRepositoryInterface;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupCouplingRepositoryInterface;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierPullRepositoryInterface;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\AffixRepositoryInterface;
+use App\Repositories\Interfaces\BrushlineRepositoryInterface;
+use App\Repositories\Interfaces\CacheModelRepositoryInterface;
+use App\Repositories\Interfaces\CharacterClassRepositoryInterface;
+use App\Repositories\Interfaces\CharacterClassSpecializationRepositoryInterface;
+use App\Repositories\Interfaces\CharacterRaceClassCouplingRepositoryInterface;
+use App\Repositories\Interfaces\CharacterRaceRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ChallengeModeRunDataRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ChallengeModeRunRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\EnemyPositionRepositoryInterface;
+use App\Repositories\Interfaces\DungeonFloorSwitchMarkerRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAttributeRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteEnemyRaidMarkerRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteFavoriteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerClassRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerRaceRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerSpecializationRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
+use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
+use App\Repositories\Interfaces\EnemyActiveAuraRepositoryInterface;
+use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
+use App\Repositories\Interfaces\EnemyPatrolRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\ExpansionRepositoryInterface;
+use App\Repositories\Interfaces\FactionRepositoryInterface;
+use App\Repositories\Interfaces\FileRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorCouplingRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorUnionAreaRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorUnionRepositoryInterface;
+use App\Repositories\Interfaces\GameIconRepositoryInterface;
+use App\Repositories\Interfaces\GameServerRegionRepositoryInterface;
+use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\Laratrust\PermissionRepositoryInterface;
+use App\Repositories\Interfaces\Laratrust\RoleRepositoryInterface;
+use App\Repositories\Interfaces\Laratrust\TeamRepositoryInterface as LaratrustTeamRepositoryInterface;
+use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
+use App\Repositories\Interfaces\MapIconRepositoryInterface;
+use App\Repositories\Interfaces\MapIconTypeRepositoryInterface;
+use App\Repositories\Interfaces\MapObjectToAwakenedObeliskLinkRepositoryInterface;
+use App\Repositories\Interfaces\Mapping\MappingChangeLogRepositoryInterface;
+use App\Repositories\Interfaces\Mapping\MappingCommitLogRepositoryInterface;
+use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
+use App\Repositories\Interfaces\MDTImportRepositoryInterface;
+use App\Repositories\Interfaces\Metrics\MetricAggregationRepositoryInterface;
+use App\Repositories\Interfaces\Metrics\MetricRepositoryInterface;
+use App\Repositories\Interfaces\MountableAreaRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
+use App\Repositories\Interfaces\NpcBolsteringWhitelistRepositoryInterface;
+use App\Repositories\Interfaces\NpcClassificationRepositoryInterface;
+use App\Repositories\Interfaces\NpcClassRepositoryInterface;
+use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\NpcSpellRepositoryInterface;
+use App\Repositories\Interfaces\NpcTypeRepositoryInterface;
+use App\Repositories\Interfaces\Opensearch\OpensearchModelRepositoryInterface;
+use App\Repositories\Interfaces\PageViewRepositoryInterface;
+use App\Repositories\Interfaces\PathRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonAdFreeGiveawayRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonBenefitRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonUserBenefitRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonUserLinkRepositoryInterface;
+use App\Repositories\Interfaces\PolylineRepositoryInterface;
+use App\Repositories\Interfaces\PublishedStateRepositoryInterface;
+use App\Repositories\Interfaces\RaidMarkerRepositoryInterface;
+use App\Repositories\Interfaces\ReleaseChangelogCategoryRepositoryInterface;
+use App\Repositories\Interfaces\ReleaseChangelogChangeRepositoryInterface;
+use App\Repositories\Interfaces\ReleaseChangelogRepositoryInterface;
+use App\Repositories\Interfaces\ReleaseReportLogRepositoryInterface;
+use App\Repositories\Interfaces\ReleaseRepositoryInterface;
+use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
+use App\Repositories\Interfaces\SeasonDungeonRepositoryInterface;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
+use App\Repositories\Interfaces\SimulationCraft\SimulationCraftRaidEventsOptionsRepositoryInterface;
+use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
+use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
+use App\Repositories\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Interfaces\TeamUserRepositoryInterface;
+use App\Repositories\Interfaces\Timewalking\TimewalkingEventRepositoryInterface;
+use App\Repositories\Interfaces\UserReportRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -32,23 +204,42 @@ class RepositoryServiceProvider extends ServiceProvider
         parent::register();
 
         // AffixGroup
+        $this->app->bind(AffixGroupBaseRepositoryInterface::class, AffixGroupBaseRepository::class);
+        $this->app->bind(AffixGroupCouplingRepositoryInterface::class, AffixGroupCouplingRepository::class);
+        $this->app->bind(AffixGroupEaseTierPullRepositoryInterface::class, AffixGroupEaseTierPullRepository::class);
+        $this->app->bind(AffixGroupEaseTierRepositoryInterface::class, AffixGroupEaseTierRepository::class);
         $this->app->bind(AffixGroupRepositoryInterface::class, AffixGroupRepository::class);
 
         // CombatLog
         $this->app->bind(ChallengeModeRunDataRepositoryInterface::class, ChallengeModeRunDataRepository::class);
-        $this->app->bind(ChallengeModeRunRepositoryInterface::class, ChallengeModeRunDataRepository::class);
+        $this->app->bind(ChallengeModeRunRepositoryInterface::class, ChallengeModeRunRepository::class);
         $this->app->bind(CombatLogEventRepositoryInterface::class, CombatLogEventRepository::class);
         $this->app->bind(EnemyPositionRepositoryInterface::class, EnemyPositionRepository::class);
 
         // DungeonRoute
         $this->app->bind(DungeonRouteAffixGroupRepositoryInterface::class, DungeonRouteAffixGroupRepository::class);
+        $this->app->bind(DungeonRouteAttributeRepositoryInterface::class, DungeonRouteAttributeRepository::class);
+        $this->app->bind(DungeonRouteEnemyRaidMarkerRepositoryInterface::class, DungeonRouteEnemyRaidMarkerRepository::class);
+        $this->app->bind(DungeonRouteFavoriteRepositoryInterface::class, DungeonRouteFavoriteRepository::class);
+        $this->app->bind(DungeonRoutePlayerClassRepositoryInterface::class, DungeonRoutePlayerClassRepository::class);
+        $this->app->bind(DungeonRoutePlayerRaceRepositoryInterface::class, DungeonRoutePlayerRaceRepository::class);
+        $this->app->bind(DungeonRoutePlayerSpecializationRepositoryInterface::class, DungeonRoutePlayerSpecializationRepository::class);
+        $this->app->bind(DungeonRouteRatingRepositoryInterface::class, DungeonRouteRatingRepository::class);
         $this->app->bind(DungeonRouteRepositoryInterface::class, DungeonRouteRepository::class);
+        $this->app->bind(DungeonRouteThumbnailJobRepositoryInterface::class, DungeonRouteThumbnailJobRepository::class);
 
         // Enemies
+        $this->app->bind(OverpulledEnemyRepositoryInterface::class, OverpulledEnemyRepository::class);
+        $this->app->bind(PridefulEnemyRepositoryInterface::class, PridefulEnemyRepository::class);
 
         // Floor
+        $this->app->bind(FloorCouplingRepositoryInterface::class, FloorCouplingRepository::class);
+        $this->app->bind(FloorRepositoryInterface::class, FloorRepository::class);
+        $this->app->bind(FloorUnionAreaRepositoryInterface::class, FloorUnionAreaRepository::class);
+        $this->app->bind(FloorUnionRepositoryInterface::class, FloorUnionRepository::class);
 
         // GameVersion
+        $this->app->bind(GameVersionRepositoryInterface::class, GameVersionRepository::class);
 
         // KillZone
         $this->app->bind(KillZoneEnemyRepositoryInterface::class, KillZoneEnemyRepository::class);
@@ -56,26 +247,93 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(KillZoneSpellRepositoryInterface::class, KillZoneSpellRepository::class);
 
         // Laratrust
+        $this->app->bind(PermissionRepositoryInterface::class, PermissionRepository::class);
+        $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
+        $this->app->bind(LaratrustTeamRepositoryInterface::class, LaratrustTeamRepository::class);
 
         // Mapping
+        $this->app->bind(MappingChangeLogRepositoryInterface::class, MappingChangeLogRepository::class);
+        $this->app->bind(MappingCommitLogRepositoryInterface::class, MappingCommitLogRepository::class);
+        $this->app->bind(MappingVersionRepositoryInterface::class, MappingVersionRepository::class);
 
         // Metrics
+        $this->app->bind(MetricAggregationRepositoryInterface::class, MetricAggregationRepository::class);
+        $this->app->bind(MetricRepositoryInterface::class, MetricRepository::class);
 
         // Npc
+        $this->app->bind(NpcEnemyForcesRepositoryInterface::class, NpcEnemyForcesRepository::class);
 
         // Opensearch
+        $this->app->bind(OpensearchModelRepositoryInterface::class, OpensearchModelRepository::class);
 
         // Patreon
+        $this->app->bind(PatreonAdFreeGiveawayRepositoryInterface::class, PatreonAdFreeGiveawayRepository::class);
+        $this->app->bind(PatreonBenefitRepositoryInterface::class, PatreonBenefitRepository::class);
+        $this->app->bind(PatreonUserBenefitRepositoryInterface::class, PatreonUserBenefitRepository::class);
+        $this->app->bind(PatreonUserLinkRepositoryInterface::class, PatreonUserLinkRepository::class);
 
         // SimulationCraft
+        $this->app->bind(SimulationCraftRaidEventsOptionsRepositoryInterface::class, SimulationCraftRaidEventsOptionsRepository::class);
 
         // Speedrun
+        $this->app->bind(DungeonSpeedrunRequiredNpcRepositoryInterface::class, DungeonSpeedrunRequiredNpcRepository::class);
 
         // Tags
+        $this->app->bind(TagCategoryRepositoryInterface::class, TagCategoryRepository::class);
+        $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
 
         // Timewalking
+        $this->app->bind(TimewalkingEventRepositoryInterface::class, TimewalkingEventRepository::class);
 
         // Root
+        // Root
+        $this->app->bind(AffixRepositoryInterface::class, AffixRepository::class);
+        $this->app->bind(BrushlineRepositoryInterface::class, BrushlineRepository::class);
+        $this->app->bind(CacheModelRepositoryInterface::class, CacheModelRepository::class);
+        $this->app->bind(CharacterClassRepositoryInterface::class, CharacterClassRepository::class);
+        $this->app->bind(CharacterClassSpecializationRepositoryInterface::class, CharacterClassSpecializationRepository::class);
+        $this->app->bind(CharacterRaceClassCouplingRepositoryInterface::class, CharacterRaceClassCouplingRepository::class);
+        $this->app->bind(CharacterRaceRepositoryInterface::class, CharacterRaceRepository::class);
+        $this->app->bind(DungeonFloorSwitchMarkerRepositoryInterface::class, DungeonFloorSwitchMarkerRepository::class);
+        $this->app->bind(DungeonRepositoryInterface::class, DungeonRepository::class);
+        $this->app->bind(EnemyActiveAuraRepositoryInterface::class, EnemyActiveAuraRepository::class);
+        $this->app->bind(EnemyPackRepositoryInterface::class, EnemyPackRepository::class);
+        $this->app->bind(EnemyPatrolRepositoryInterface::class, EnemyPatrolRepository::class);
+        $this->app->bind(EnemyRepositoryInterface::class, EnemyRepository::class);
+        $this->app->bind(ExpansionRepositoryInterface::class, ExpansionRepository::class);
+        $this->app->bind(FactionRepositoryInterface::class, FactionRepository::class);
+        $this->app->bind(FileRepositoryInterface::class, FileRepository::class);
+        $this->app->bind(GameIconRepositoryInterface::class, GameIconRepository::class);
+        $this->app->bind(GameServerRegionRepositoryInterface::class, GameServerRegionRepository::class);
+        $this->app->bind(LiveSessionRepositoryInterface::class, LiveSessionRepository::class);
+        $this->app->bind(MapIconRepositoryInterface::class, MapIconRepository::class);
+        $this->app->bind(MapIconTypeRepositoryInterface::class, MapIconTypeRepository::class);
+        $this->app->bind(MapObjectToAwakenedObeliskLinkRepositoryInterface::class, MapObjectToAwakenedObeliskLinkRepository::class);
+        $this->app->bind(MDTImportRepositoryInterface::class, MDTImportRepository::class);
+        $this->app->bind(MountableAreaRepositoryInterface::class, MountableAreaRepository::class);
+        $this->app->bind(NpcBolsteringWhitelistRepositoryInterface::class, NpcBolsteringWhitelistRepository::class);
+        $this->app->bind(NpcClassificationRepositoryInterface::class, NpcClassificationRepository::class);
+        $this->app->bind(NpcClassRepositoryInterface::class, NpcClassRepository::class);
+        $this->app->bind(NpcRepositoryInterface::class, NpcRepository::class);
+        $this->app->bind(NpcSpellRepositoryInterface::class, NpcSpellRepository::class);
+        $this->app->bind(NpcTypeRepositoryInterface::class, NpcTypeRepository::class);
+        $this->app->bind(PageViewRepositoryInterface::class, PageViewRepository::class);
+        $this->app->bind(PathRepositoryInterface::class, PathRepository::class);
+        $this->app->bind(PolylineRepositoryInterface::class, PolylineRepository::class);
+        $this->app->bind(PublishedStateRepositoryInterface::class, PublishedStateRepository::class);
+        $this->app->bind(RaidMarkerRepositoryInterface::class, RaidMarkerRepository::class);
+        $this->app->bind(ReleaseChangelogCategoryRepositoryInterface::class, ReleaseChangelogCategoryRepository::class);
+        $this->app->bind(ReleaseChangelogChangeRepositoryInterface::class, ReleaseChangelogChangeRepository::class);
+        $this->app->bind(ReleaseChangelogRepositoryInterface::class, ReleaseChangelogRepository::class);
+        $this->app->bind(ReleaseReportLogRepositoryInterface::class, ReleaseReportLogRepository::class);
+        $this->app->bind(ReleaseRepositoryInterface::class, ReleaseRepository::class);
+        $this->app->bind(RouteAttributeRepositoryInterface::class, RouteAttributeRepository::class);
+        $this->app->bind(SeasonDungeonRepositoryInterface::class, SeasonDungeonRepository::class);
+        $this->app->bind(SeasonRepositoryInterface::class, SeasonRepository::class);
         $this->app->bind(SpellRepositoryInterface::class, SpellRepository::class);
+        $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
+        $this->app->bind(TeamUserRepositoryInterface::class, TeamUserRepository::class);
+        $this->app->bind(UserReportRepositoryInterface::class, UserReportRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 }

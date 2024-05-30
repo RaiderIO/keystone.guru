@@ -2,6 +2,7 @@
 
 namespace App\Service\Season;
 
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
@@ -19,6 +20,8 @@ interface SeasonServiceInterface
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
+
+    public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season;
 
     public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int;
 

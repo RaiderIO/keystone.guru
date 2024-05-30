@@ -2,9 +2,11 @@
 
 namespace App\Service\Season;
 
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Traits\UserCurrentTime;
@@ -29,7 +31,8 @@ class SeasonService implements SeasonServiceInterface
     private ?Season $firstSeasonCache = null;
 
     public function __construct(
-        private ExpansionService $expansionService
+        private readonly ExpansionService          $expansionService,
+        private readonly SeasonRepositoryInterface $seasonRepository
     ) {
         $this->seasonCache      = collect();
         $this->firstSeasonCache = null;
@@ -120,6 +123,11 @@ class SeasonService implements SeasonServiceInterface
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         return $expansion->nextSeason($region);
+    }
+
+    public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        return $this->seasonRepository->getMostRecentSeasonForDungeon($dungeon);
     }
 
     /**

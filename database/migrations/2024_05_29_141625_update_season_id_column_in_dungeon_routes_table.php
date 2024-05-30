@@ -16,17 +16,9 @@ return new class extends Migration {
         DungeonRoute::whereNull('season_id')->chunk(100, function (Collection $collection) use ($seasonService) {
             /** @var Collection<DungeonRoute> $collection */
             foreach ($collection as $dungeonRoute) {
-
                 $season = $dungeonRoute->getSeasonFromAffixes() ??
+                    $seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon) ??
                     $seasonService->getSeasonAt($dungeonRoute->created_at);
-
-                if ($season === null) {
-                    dump([
-                        $dungeonRoute->created_at,
-                        $dungeonRoute->dungeon->expansion->id,
-                        $seasonService->getSeasonAt($dungeonRoute->created_at)?->id,
-                    ]);
-                }
 
                 if ($season?->hasDungeon($dungeonRoute->dungeon)) {
                     $dungeonRoute->update([
