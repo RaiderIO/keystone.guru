@@ -71,6 +71,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int                                      $author_id
  * @property int                                      $dungeon_id
  * @property int                                      $mapping_version_id
+ * @property int                                      $season_id
  * @property int                                      $faction_id
  * @property int|null                                 $team_id
  * @property int                                      $published_state_id
@@ -732,7 +733,14 @@ class DungeonRoute extends Model
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
         $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->currentMappingVersion->id;
+        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
+        $this->mapping_version_id = $dungeon->currentMappingVersion->id;
+
+        $activeSeason = $seasonService->getCurrentSeason(
+            $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+        ) ?? $seasonService->getMostRecentSeasonForDungeon($dungeon);
+        // Can still be null if there are no seasons for this dungeon, like in Classic
+        $this->season_id = $activeSeason->id ?? null;
 
         $this->faction_id     = 1;
         $this->difficulty     = 1;
@@ -752,10 +760,6 @@ class DungeonRoute extends Model
         $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
 
         if ($this->level_min === null || $this->level_max === null) {
-            $activeSeason = $seasonService->getCurrentSeason(
-                $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
-            );
-
             $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
             $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
         }
@@ -803,6 +807,13 @@ class DungeonRoute extends Model
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
+
+        $activeSeason = $seasonService->getCurrentSeason(
+            $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+        ) ?? $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+        // Can still be null if there are no seasons for this dungeon, like in Classic
+        $this->season_id = $activeSeason->id ?? null;
+
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty     = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
@@ -826,10 +837,6 @@ class DungeonRoute extends Model
         $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
 
         if ($this->level_min === null || $this->level_max === null) {
-            $activeSeason = $seasonService->getCurrentSeason(
-                $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
-            );
-
             $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
             $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
         }

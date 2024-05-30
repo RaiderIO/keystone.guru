@@ -34,6 +34,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        /** @noinspection SqlWithoutWhere */
         DB::update('
             UPDATE `dungeon_routes` SET `season_id` = null
         ');

@@ -127,6 +127,10 @@ class SeasonService implements SeasonServiceInterface
 
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season
     {
+        if (!$dungeon->gameVersion->has_seasons) {
+            return null;
+        }
+
         return $this->seasonRepository->getMostRecentSeasonForDungeon($dungeon);
     }
 

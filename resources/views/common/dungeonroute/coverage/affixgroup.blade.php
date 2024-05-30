@@ -1,5 +1,11 @@
 <?php
 
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
 /**
  * @var Collection|Dungeon[]      $dungeons
  * @var Collection|AffixGroup[]   $affixgroups
@@ -9,12 +15,6 @@
  * @var Season|null               $nextSeason
  * @var Season|null               $selectedSeason
  */
-
-use App\Models\AffixGroup\AffixGroup;
-use App\Models\Dungeon;
-use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Season;
-use Illuminate\Support\Collection;
 
 /**
  * @return Collection
