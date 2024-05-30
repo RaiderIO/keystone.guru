@@ -54,7 +54,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 'author_id'          => 1,
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $currentMappingVersion->id,
-                'season_id'          => $dungeon->getActiveSeason($this->seasonService)?->id,
+                'season_id'          => $this->seasonService->getMostRecentSeasonForDungeon($dungeon)?->id,
                 'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
                 'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
                 'title'              => __($dungeon->name),

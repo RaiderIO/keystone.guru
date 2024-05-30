@@ -17,22 +17,23 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int                    $id
- * @property int                    $expansion_id
- * @property int                    $seasonal_affix_id
- * @property int                    $index
- * @property Carbon                 $start
- * @property int                    $presets
- * @property int                    $affix_group_count
- * @property int                    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property int                    $key_level_min
- * @property int                    $key_level_max
- * @property string                 $name Dynamic attribute
+ * @property int                       $id
+ * @property int                       $expansion_id
+ * @property int                       $seasonal_affix_id
+ * @property int                       $index
+ * @property Carbon                    $start
+ * @property int                       $presets
+ * @property int                       $affix_group_count
+ * @property int                       $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property int                       $key_level_min
+ * @property int                       $key_level_max
+ * @property string                    $name Dynamic attribute
  *
- * @property Expansion              $expansion
+ * @property Expansion                 $expansion
  *
- * @property Collection<AffixGroup> $affixGroups
- * @property Collection<Dungeon>    $dungeons
+ * @property Collection<AffixGroup>    $affixGroups
+ * @property Collection<Dungeon>       $dungeons
+ * @property Collection<SeasonDungeon> $seasonDungeons
  *
  * @mixin Eloquent
  */
@@ -88,14 +89,14 @@ class Season extends CacheModel
         return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');
     }
 
-    public function seasondungeons(): HasMany
+    public function seasonDungeons(): HasMany
     {
         return $this->hasMany(SeasonDungeon::class);
     }
 
     public function hasDungeon(Dungeon $dungeon): bool
     {
-        return $this->seasondungeons()->where('dungeon_id', $dungeon->id)->exists();
+        return $this->seasonDungeons()->where('dungeon_id', $dungeon->id)->exists();
     }
 
     /**
