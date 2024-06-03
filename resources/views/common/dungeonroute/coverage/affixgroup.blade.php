@@ -16,23 +16,25 @@ use Illuminate\Support\Collection;
  * @var Season|null               $selectedSeason
  */
 
-/**
- * @return Collection
- */
-function getDungeonRoutesByDungeonIdAndAffixGroupId(Collection $dungeonRoutes, Dungeon $dungeon, AffixGroup $affixGroup): Collection {
-    if ($dungeonRoutes->has($dungeon->id)) {
-        /** @var Collection $dungeonRoutesList */
-        $dungeonRoutesList = $dungeonRoutes->get($dungeon->id);
-        $result            = $dungeonRoutesList->filter(
-            static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->affixes->filter(
-                static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id
-            )->isNotEmpty()
-        );
-    } else {
-        $result = collect();
-    }
+if(!function_exists('getDungeonRoutesByDungeonIdAndAffixGroupId') ) {
+    /**
+     * @return Collection
+     */
+    function getDungeonRoutesByDungeonIdAndAffixGroupId(Collection $dungeonRoutes, Dungeon $dungeon, AffixGroup $affixGroup): Collection {
+        if ($dungeonRoutes->has($dungeon->id)) {
+            /** @var Collection $dungeonRoutesList */
+            $dungeonRoutesList = $dungeonRoutes->get($dungeon->id);
+            $result            = $dungeonRoutesList->filter(
+                static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->affixes->filter(
+                    static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id
+                )->isNotEmpty()
+            );
+        } else {
+            $result = collect();
+        }
 
-    return $result;
+        return $result;
+    }
 }
 
 // Build a list of seasons that we use to make selections of
