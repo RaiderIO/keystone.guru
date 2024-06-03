@@ -10,11 +10,11 @@ use App\Models\Floor\Floor;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
-use Laravel\Pennant\FeatureManager;
 
 class DungeonExploreController extends Controller
 {
@@ -44,6 +44,7 @@ class DungeonExploreController extends Controller
         Request                        $request,
         MapContextServiceInterface     $mapContextService,
         CombatLogEventServiceInterface $combatLogEventService,
+        SeasonServiceInterface         $seasonService,
         Dungeon                        $dungeon,
         string                         $floorIndex = '1'): View|RedirectResponse
     {
@@ -77,6 +78,8 @@ class DungeonExploreController extends Controller
 
             $combatLogEventFilter = new CombatLogEventFilter($dungeon, CombatLogEvent::EVENT_TYPE_ENEMY_KILLED);
 
+            $mostRecentSeason = $seasonService->getMostRecentSeasonForDungeon($dungeon);
+
             return view('dungeon.explore.view', [
                 'dungeon'            => $dungeon,
                 'floor'              => $floor,
@@ -84,6 +87,8 @@ class DungeonExploreController extends Controller
                 'mapContext'         => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
                 'showHeatmapSearch'  => Feature::active(Heatmap::class) && $combatLogEventService->getRunCount($combatLogEventFilter),
                 'availableDateRange' => Feature::active(Heatmap::class) ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
+                'keyLevelMin'        => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+                'keyLevelMax'        => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
             ]);
         }
     }

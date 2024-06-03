@@ -12,6 +12,8 @@ use Carbon\CarbonPeriod;
  * @var MapContext   $mapContext
  * @var boolean      $showHeatmapSearch
  * @var CarbonPeriod $availableDateRange
+ * @var int          $keyLevelMin
+ * @var int          $keyLevelMax
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -47,6 +49,8 @@ use Carbon\CarbonPeriod;
             'controlOptions' => [
                 'heatmapSearch' => [
                     'availableDateRange' => $availableDateRange,
+                    'keyLevelMin' => $keyLevelMin,
+                    'keyLevelMax' => $keyLevelMax,
                 ],
             ],
             'hiddenMapObjectGroups' => [

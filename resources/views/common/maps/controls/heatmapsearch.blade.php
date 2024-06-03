@@ -19,6 +19,8 @@ use Illuminate\Support\Collection;
  * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
  * @var Collection<Affix>      $featuredAffixesByActiveExpansion
  * @var CarbonPeriod           $availableDateRange
+ * @var int                    $keyLevelMin
+ * @var int                    $keyLevelMax
  */
 
 // By default, show it if we're not mobile, but allow overrides
@@ -29,9 +31,9 @@ $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
 $hideOnMove                     ??= $isMobile;
 $showAds                        ??= true;
-/** @var $affixGroups Collection<AffixGroup> */
+/** @var Collection<AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($dungeon->expansion->shortname);
-/** @var $featuredAffixes Collection<Affix> */
+/** @var Collection<Affix> $featuredAffixes */
 $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->shortname);
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
@@ -43,8 +45,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'searchResultSelector' => '#heatmap_search_result',
     'searchResultDataDungeonRoutesSelector' => '#heatmap_search_result_data_dungeonroutes',
 
-    'levelMin' => config('keystoneguru.keystone.levels.min'),
-    'levelMax' => config('keystoneguru.keystone.levels.max'),
+    'keyLevelMin' => $keyLevelMin,
+    'keyLevelMax' => $keyLevelMax,
     'durationMin' => 5,
     'durationMax' => 60,
 
@@ -127,7 +129,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     </div>
                 </div>
 
-                <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100 mb-1" data-toggle="buttons">
+                <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100 mb-1"
+                     data-toggle="buttons">
                     <label class="btn btn-secondary active">
                         <input type="radio" name="event_type"
                                class="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
