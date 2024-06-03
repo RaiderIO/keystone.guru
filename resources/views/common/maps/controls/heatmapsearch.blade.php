@@ -28,6 +28,12 @@ $pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
 $defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
 $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
+$filterExpandedCookiePrefix = 'heatmap_search_expanded_';
+$expandedKeyLevel           = (bool)($_COOKIE[sprintf('%skey_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixes            = (bool)($_COOKIE[sprintf('%saffixes', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDateRange          = (bool)($_COOKIE[sprintf('%sdate_range', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDuration           = (bool)($_COOKIE[sprintf('%sduration', $filterExpandedCookiePrefix)] ?? 1);
+
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
 $hideOnMove                     ??= $isMobile;
 $showAds                        ??= true;
@@ -62,6 +68,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
     'filterDateRangeToClearBtnSelector' => '#filter_date_to_clear_btn',
     'filterDurationSelector' => '#filter_duration',
+
+    'filterCollapseNames' => ['level', 'affixes', 'date_range', 'duration'],
+    'filterCookiePrefix' => $filterExpandedCookiePrefix,
 
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
@@ -146,12 +155,12 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     </label>
                 </div>
 
-                @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level')])
+                @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level'), 'expanded' => $expandedKeyLevel])
                     <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
                 @endcomponent
 
                 @if($dungeon->gameVersion->has_seasons)
-                    @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_common.maps.controls.heatmapsearch.affixes')])
+                    @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_common.maps.controls.heatmapsearch.affixes'), 'expanded' => $expandedAffixes])
                         <div class="filter_affix">
                             <div class="row">
                                 <div class="col">
@@ -186,7 +195,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     @endcomponent
                 @endif
 
-                @component('common.search.filter', ['key' => 'date_range', 'text' => __('view_common.maps.controls.heatmapsearch.date_range')])
+                @component('common.search.filter', ['key' => 'date_range', 'text' => __('view_common.maps.controls.heatmapsearch.date_range'), 'expanded' => $expandedDateRange])
                     <div class="row">
                         <div class="col">
                             <div class="row no-gutters">
@@ -231,7 +240,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     </div>
                 @endcomponent
 
-                @component('common.search.filter', ['key' => 'duration', 'text' => __('view_common.maps.controls.heatmapsearch.duration')])
+                @component('common.search.filter', ['key' => 'duration', 'text' => __('view_common.maps.controls.heatmapsearch.duration'), 'expanded' => $expandedDuration])
                     <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
                 @endcomponent
 

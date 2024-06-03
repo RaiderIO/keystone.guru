@@ -22,6 +22,32 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'date_range_to': new SearchFilterInputDateTo(this.options.filterDateRangeToSelector, this._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };
+
+        this._setupFilterCollapseCookies();
+    }
+
+    _setupFilterCollapseCookies() {
+        // Return early if we don't have the required options
+        if (typeof this.options.filterCookiePrefix === 'undefined' || this.options.filterCookiePrefix === null ||
+            typeof this.options.filterCollapseNames === 'undefined' || this.options.filterCollapseNames.length === 0) {
+            return;
+        }
+
+        let self = this;
+
+        for (let key in this.options.filterCollapseNames) {
+            let collapseName = this.options.filterCollapseNames[key];
+
+            // Only if there's actually an accordeon for this filter
+            let $collapse = $(`#filter_accordeon_${collapseName}`);
+            if ($collapse.length > 0) {
+                $collapse.on('shown.bs.collapse', function () {
+                    Cookies.set(self.options.filterCookiePrefix + collapseName, '1', cookieDefaultAttributes);
+                }).on('hidden.bs.collapse', function () {
+                    Cookies.set(self.options.filterCookiePrefix + collapseName, '0', cookieDefaultAttributes);
+                });
+            }
+        }
     }
 
 
