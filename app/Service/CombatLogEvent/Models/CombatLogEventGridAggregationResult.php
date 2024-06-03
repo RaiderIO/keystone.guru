@@ -126,4 +126,17 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
         return $latLngArray;
     }
+
+    /**
+     * Only for unit tests really.
+     *
+     * @param bool $useFacade
+     * @return self
+     */
+    public function setUseFacade(bool $useFacade): self
+    {
+        $this->useFacade = $useFacade;
+
+        return $this;
+    }
 }

@@ -56,7 +56,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $rowCountPerFloor = 10;
         $runCount         = 20;
         $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
-        $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount);
+        $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount, true);
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
@@ -78,7 +78,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertEquals($runCount, $responseArr['run_count']);
     }
 
-    private function setUpTestForDungeon(Dungeon $dungeon, int $rowCountPerFloor, int $runCount): void
+    private function setUpTestForDungeon(Dungeon $dungeon, int $rowCountPerFloor, int $runCount, bool $useFacade = false): void
     {
         $combatLogEventFilter = new CombatLogEventFilter(
             $dungeon,
@@ -95,12 +95,12 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         $combatLogEventService->method('getGridAggregation')
             ->willReturn(
-                new CombatLogEventGridAggregationResult(
+                (new CombatLogEventGridAggregationResult(
                     $coordinatesService,
                     $combatLogEventFilter,
                     $this->createGridAggregationResult($dungeon, $rowCountPerFloor),
                     $runCount
-                )
+                ))->setUseFacade($useFacade)
             );
         app()->bind(CombatLogEventServiceInterface::class, fn() => $combatLogEventService);
     }
