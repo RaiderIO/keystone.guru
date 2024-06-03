@@ -84,7 +84,7 @@ return [
             'create_route'                                   => '',
             'save_settings'                                  => '',
         ],
-        'createtemporaryroute' => [
+        'createroutetemporary' => [
             'key_levels'                => '',
             'key_levels_title'          => '',
             'unregistered_user_message' => '',

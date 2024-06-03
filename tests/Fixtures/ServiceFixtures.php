@@ -3,6 +3,7 @@
 namespace Tests\Fixtures;
 
 use App\Models\Season;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
@@ -90,15 +91,17 @@ class ServiceFixtures
     }
 
     public static function getSeasonServiceMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-        ?Collection    $seasons = null): MockObject|SeasonServiceInterface
+        PublicTestCase            $testCase,
+        SeasonRepositoryInterface $seasonRepository = null,
+        array                     $methodsToMock = [],
+        ?Collection               $seasons = null): MockObject|SeasonServiceInterface
     {
         $methodsToMock[]          = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
             ->getMockBuilder(SeasonService::class)
             ->setConstructorArgs([
                 self::getExpansionServiceMock($testCase),
+                $seasonRepository ?? RepositoryFixtures::getSeasonRepositoryMock($testCase),
             ])
             ->onlyMethods($methodsToMock);
 

@@ -337,7 +337,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
-        view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer(['common.forms.createroute', 'common.forms.createroutetemporary'], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
 
