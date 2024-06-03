@@ -337,7 +337,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
-        view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], static function (View $view) {
+        view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+
             $routeKeyLevelDefault = '10;15';
             $routeKeyLevel        = $_COOKIE['route_key_level'] ?? $routeKeyLevelDefault;
             $explode              = explode(';', $routeKeyLevel);
@@ -346,8 +349,16 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $explode       = explode(';', $routeKeyLevel);
             }
 
-            $view->with('routeKeyLevelFrom', $explode[0]);
-            $view->with('routeKeyLevelTo', $explode[1]);
+            $view->with('routeKeyLevelFrom', (int)$explode[0]);
+            $view->with('routeKeyLevelTo', (int)$explode[1]);
+            $view->with('currentSeason', $regionViewVariables['currentSeason']
+                ->load(['seasonDungeons' => static function ($query) {
+                    $query->without(['season', 'dungeon']);
+                }])
+                ->makeHidden(['affixGroups', 'expansion', 'dungeons'])
+                ->makeVisible(['seasonDungeons'])
+            );
+            $view->with('nextSeason', $regionViewVariables['nextSeason']?->without(['affixGroups', 'expansion', 'dungeons'])->with(['seasonDungeons']));
         });
 
         // Displaying a release
@@ -442,7 +453,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Maps
-        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use($viewService, &$userOrDefaultRegion) {
+        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');

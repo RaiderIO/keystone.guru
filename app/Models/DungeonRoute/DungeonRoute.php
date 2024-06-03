@@ -818,9 +818,7 @@ class DungeonRoute extends Model
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
 
-        $activeSeason = $seasonService->getCurrentSeason(
-            $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
-        ) ?? $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+        $activeSeason = $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $this->season_id = $activeSeason->id ?? null;
 
@@ -1004,24 +1002,25 @@ class DungeonRoute extends Model
     public function cloneRoute(ThumbnailServiceInterface $thumbnailService, bool $unpublished = true): self
     {
         // Must save the new route first
-        $dungeonroute                     = new DungeonRoute();
-        $dungeonroute->public_key         = DungeonRoute::generateRandomPublicKey();
-        $dungeonroute->clone_of           = $this->public_key;
-        $dungeonroute->author_id          = Auth::id();
-        $dungeonroute->dungeon_id         = $this->dungeon_id;
-        $dungeonroute->mapping_version_id = $this->mapping_version_id;
-        $dungeonroute->faction_id         = $this->faction_id;
-        $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
-        // Do not clone team_id; user assigns the team himself
-        $dungeonroute->team_id        = null;
-        $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
-        $dungeonroute->seasonal_index = $this->seasonal_index;
-        $dungeonroute->teeming        = $this->teeming;
-        $dungeonroute->enemy_forces   = $this->enemy_forces;
-        $dungeonroute->level_min      = $this->level_min;
-        $dungeonroute->level_max      = $this->level_max;
+        $dungeonroute = DungeonRoute::create([
+            'public_key'         => DungeonRoute::generateRandomPublicKey(),
+            'clone_of'           => $this->public_key,
+            'author_id'          => Auth::id(),
+            'dungeon_id'         => $this->dungeon_id,
+            'mapping_version_id' => $this->mapping_version_id,
+            'season_id'          => $this->season_id,
+            'faction_id'         => $this->faction_id,
+            'published_state_id' => $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id,
 
-        $dungeonroute->save();
+            // Do not clone team_id, user assigns the team himself
+            'team_id'            => null,
+            'title'              => __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]),
+            'seasonal_index'     => $this->seasonal_index,
+            'teeming'            => $this->teeming,
+            'enemy_forces'       => $this->enemy_forces,
+            'level_min'          => $this->level_min,
+            'level_max'          => $this->level_max,
+        ]);
 
         // Clone the relations of this route into the new route.
         $this->cloneRelationsInto($dungeonroute, [
