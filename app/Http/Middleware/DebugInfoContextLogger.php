@@ -19,6 +19,10 @@ class DebugInfoContextLogger
 
     public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
+        if (\App::runningUnitTests()) {
+            return $next($request);
+        }
+
         $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
 
         $context = [
