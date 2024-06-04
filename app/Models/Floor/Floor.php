@@ -16,8 +16,8 @@ use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,8 +38,8 @@ use Illuminate\Support\Collection;
  * @property bool                                    $facade
  * @property int                                     $min_enemy_size
  * @property int                                     $max_enemy_size
- * @property int                                     $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
- * @property int                                     $enemy_engagement_max_range_patrols The max range after which we're considering patrols
+ * @property int|null                                $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int|null                                $enemy_engagement_max_range_patrols The max range after which we're considering patrols
  * @property float                                   $ingame_min_x
  * @property float                                   $ingame_min_y
  * @property float                                   $ingame_max_x

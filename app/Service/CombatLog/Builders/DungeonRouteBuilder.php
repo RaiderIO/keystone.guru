@@ -428,7 +428,7 @@ abstract class DungeonRouteBuilder
                     $closestEnemy->getEnemy()->id,
                     $closestEnemy->getDistanceBetweenEnemies(),
                     $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
-                    $this->currentFloor->enemy_engagement_max_range
+                    $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default')
                 );
 
                 $closestEnemy->setEnemy(null);
@@ -525,7 +525,7 @@ abstract class DungeonRouteBuilder
 
         // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
 
-        if ($distanceBetweenEnemies < $this->currentFloor->enemy_engagement_max_range) {
+        if ($distanceBetweenEnemies < $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default')) {
             // Calculate the location of the latLng
             /** @var IngameXY|null $previousPullIngameXY */
             $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?
