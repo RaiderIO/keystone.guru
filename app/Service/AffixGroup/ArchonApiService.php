@@ -14,7 +14,7 @@ class ArchonApiService implements ArchonApiServiceInterface
      */
     public function getDungeonEaseTierListOverall(): array
     {
-        $responseStr = $this->curlGet('https://www.archon.gg/wow/tier-list/dps-rankings/mythic-plus/20/all-dungeons/this-week/data.json');
+        $responseStr = $this->curlGet('https://www.archon.gg/wow/tier-list/dps-rankings/mythic-plus/10/all-dungeons/this-week/data.json');
 
         $response = json_decode($responseStr, true);
 

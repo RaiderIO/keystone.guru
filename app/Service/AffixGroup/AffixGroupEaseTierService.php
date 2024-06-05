@@ -19,6 +19,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
     ];
+    public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
@@ -71,8 +72,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $result    = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
+        $lastUpdatedAt = Carbon::createFromFormat(self::DATE_TIME_FORMAT, $tierListsResponse['lastUpdated']);
 
         if ($lastEaseTierPull === null ||
+            $lastEaseTierPull->created_at->isBefore($lastUpdatedAt) ||
             $lastEaseTierPull->affix_group_id !== $affixGroup->id ||
             $lastEaseTierPull->tiers_hash !== $tiersHash) {
 
@@ -80,7 +83,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             $affixGroupEaseTierPull = AffixGroupEaseTierPull::create([
                 'affix_group_id'  => $affixGroup->id,
                 'tiers_hash'      => $tiersHash,
-                'last_updated_at' => Carbon::now()->toDateTimeString(),
+                'last_updated_at' => $lastUpdatedAt,
             ]);
 
             $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
