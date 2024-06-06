@@ -2,9 +2,13 @@
 
 namespace App\Service\AffixGroup\Logging;
 
+use Exception;
+
 interface AffixGroupEaseTierServiceLoggingInterface
 {
     public function parseTierListUnknownAffixGroup(string $affixGroupString): void;
+
+    public function parseTierListInvalidLastUpdated(Exception $exception, string $lastUpdated): void;
 
     public function parseTierListParseTierStart(string $affixGroupString, string $tier, int $count): void;
 

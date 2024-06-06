@@ -9,6 +9,7 @@ use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -72,7 +73,13 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $result    = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
-        $lastUpdatedAt = Carbon::createFromFormat(self::DATE_TIME_FORMAT, $tierListsResponse['lastUpdated']);
+        try {
+            $lastUpdatedAt = Carbon::createFromFormat(self::DATE_TIME_FORMAT, $tierListsResponse['lastUpdated']);
+        } catch (InvalidFormatException $exception) {
+            $this->log->parseTierListInvalidLastUpdated($exception, $tierListsResponse['lastUpdated']);
+
+            return null;
+        }
 
         if ($lastEaseTierPull === null ||
             $lastEaseTierPull->created_at->isBefore($lastUpdatedAt) ||
