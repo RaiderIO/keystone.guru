@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Migrations\Migration;
@@ -13,10 +14,18 @@ return new class extends Migration {
     {
         $seasonService = app()->make(SeasonServiceInterface::class);
 
-        DungeonRoute::whereNull('season_id')->chunk(100, function (Collection $collection) use ($seasonService) {
+        $affixGroupCache = AffixGroup::with(['season'])->get()->keyBy('id');
+
+        DungeonRoute::whereNull('season_id')->chunk(100, function (Collection $collection) use ($seasonService, $affixGroupCache) {
             /** @var Collection<DungeonRoute> $collection */
             foreach ($collection as $dungeonRoute) {
-                $season = $dungeonRoute->getSeasonFromAffixes() ??
+                /** @var AffixGroup|null $affixGroup */
+                $affixGroup = $dungeonRoute->affixes->first();
+
+                /** @var AffixGroup|null $cachedAffixGroup */
+                $cachedAffixGroup = $affixGroupCache->get($affixGroup?->id);
+
+                $season = $cachedAffixGroup?->season ??
                     $seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon) ??
                     $seasonService->getSeasonAt($dungeonRoute->created_at);
 
