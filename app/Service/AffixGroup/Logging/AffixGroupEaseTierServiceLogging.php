@@ -3,10 +3,16 @@
 namespace App\Service\AffixGroup\Logging;
 
 use App\Logging\RollbarStructuredLogging;
+use Exception;
 
 class AffixGroupEaseTierServiceLogging extends RollbarStructuredLogging implements AffixGroupEaseTierServiceLoggingInterface
 {
     public function parseTierListUnknownAffixGroup(string $affixGroupString): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function parseTierListInvalidLastUpdated(Exception $exception, string $lastUpdated): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
