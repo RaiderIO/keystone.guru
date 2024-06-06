@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Dungeon;
-use App\Models\DungeonFloorSwitchMarker;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -41,10 +40,24 @@ class Random extends Command
         CombatLogEventServiceInterface       $combatLogEventService,
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
         CoordinatesServiceInterface          $coordinatesService,
+        SeasonServiceInterface               $seasonService,
         DungeonRouteRepositoryInterface      $dungeonRouteRepository
     ): int {
 
-        $dungeonRouteRepository->find(1234);
+//        $dungeonRoute = $dungeonRouteRepository->find(1715);
+//
+//        $season = $dungeonRoute->getSeasonFromAffixes() ??
+//            $seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon) ??
+//            $seasonService->getSeasonAt($dungeonRoute->created_at);
+//
+//        if ($season?->hasDungeon($dungeonRoute->dungeon)) {
+//            $this->info(sprintf('Would update season_id to %d', $season->id));
+////            $dungeonRoute->update([
+////                'season_id' => $season->id,
+////            ]);
+//        }
+//
+//        dd($dungeonRoute->id);
 
 //        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
 //        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
@@ -76,7 +89,7 @@ class Random extends Command
 //        )->toArray());
 
 //        $challengeModeRunDataService->convert();
-//        $challengeModeRunDataService->insertAllToOpensearch();
+        $challengeModeRunDataService->insertAllToOpensearch();
 
 //        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
 //            new CombatLogEventFilter(

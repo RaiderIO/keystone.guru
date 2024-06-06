@@ -1,8 +1,8 @@
 <?php
 /**
- * @var $key string
- * @var $text string
- * @var $expanded boolean
+ * @var string $key
+ * @var string $text
+ * @var boolean $expanded
  */
 $expanded ??= true;
 ?>

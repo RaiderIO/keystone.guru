@@ -97,13 +97,13 @@ $floor ??= null;
 
     <div class="form-group{{ $errors->has('enemy_engagement_max_range') ? ' has-error' : '' }}">
         {!! Form::label('enemy_engagement_max_range', sprintf(__('view_admin.floor.edit.enemy_engagement_max_range'), config('keystoneguru.enemy_engagement_max_range_default')), ['class' => 'font-weight-bold']) !!}
-        {!! Form::number('enemy_engagement_max_range', $floor?->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'), ['class' => 'form-control']) !!}
+        {!! Form::number('enemy_engagement_max_range', $floor?->enemy_engagement_max_range, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range'])
     </div>
 
     <div class="form-group{{ $errors->has('enemy_engagement_max_range_patrols') ? ' has-error' : '' }}">
         {!! Form::label('enemy_engagement_max_range_patrols', sprintf(__('view_admin.floor.edit.enemy_engagement_max_range_patrols'), config('keystoneguru.enemy_engagement_max_range_patrols_default')), ['class' => 'font-weight-bold']) !!}
-        {!! Form::number('enemy_engagement_max_range_patrols', $floor?->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'), ['class' => 'form-control']) !!}
+        {!! Form::number('enemy_engagement_max_range_patrols', $floor?->enemy_engagement_max_range_patrols, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range_patrols'])
     </div>
 

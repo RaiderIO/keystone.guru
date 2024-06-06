@@ -15,7 +15,7 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
             'expansion': new SearchFilterManualExpansion(this._search.bind(this)),
             'dungeons': new SearchFilterDungeons('.grid_dungeon.selectable', this._search.bind(this)),
             'title': new SearchFilterTitle('#title', this._search.bind(this)),
-            'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.levelMin, this.options.levelMax),
+            'level': new SearchFilterLevel('#level', this._search.bind(this), this.options.defaultKeyLevelMin, this.options.defaultKeyLevelMax),
             'affixgroups': new SearchFilterAffixGroups(`.filter_affix.${this.options.currentExpansion} select`, this._search.bind(this)),
             'affixes': new SearchFilterAffixes('.select_icon.class_icon.selectable', this._search.bind(this)),
             'enemy_forces': new SearchFilterEnemyForces('#enemy_forces', this._search.bind(this)),
@@ -107,6 +107,17 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
         this.filters.affixgroups.activate();
 
         $(`.filter_affix`).hide().filter(`.${this.options.currentExpansion}`).show();
+
+        // Update the key level range
+        if (season !== null) {
+            if (season === this.options.nextSeason) {
+                this.filters.level.setLevel(this.options.nextSeasonKeyLevelMin, this.options.nextSeasonKeyLevelMax);
+            } else {
+                this.filters.level.setLevel(this.options.currentSeasonKeyLevelMin, this.options.currentSeasonKeyLevelMax);
+            }
+        } else {
+            this.filters.level.setLevel(this.options.defaultKeyLevelMin, this.options.defaultKeyLevelMax);
+        }
 
         this.filters.season.setValue(season);
     }

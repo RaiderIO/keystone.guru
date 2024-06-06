@@ -17,18 +17,23 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int                    $id
- * @property int                    $expansion_id
- * @property int                    $seasonal_affix_id
- * @property int                    $index
- * @property Carbon                 $start
- * @property int                    $presets
- * @property int                    $affix_group_count
- * @property int                    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property string                 $name Dynamic attribute
- * @property Expansion              $expansion
- * @property Collection<AffixGroup> $affixgroups
- * @property Collection<Dungeon>    $dungeons
+ * @property int                       $id
+ * @property int                       $expansion_id
+ * @property int                       $seasonal_affix_id
+ * @property int                       $index
+ * @property Carbon                    $start
+ * @property int                       $presets
+ * @property int                       $affix_group_count
+ * @property int                       $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property int                       $key_level_min
+ * @property int                       $key_level_max
+ * @property string                    $name Dynamic attribute
+ *
+ * @property Expansion                 $expansion
+ *
+ * @property Collection<AffixGroup>    $affixGroups
+ * @property Collection<Dungeon>       $dungeons
+ * @property Collection<SeasonDungeon> $seasonDungeons
  *
  * @mixin Eloquent
  */
@@ -37,16 +42,28 @@ class Season extends CacheModel
     use HasStart;
     use SeederModel;
 
-    protected $fillable = ['expansion_id', 'seasonal_affix_id', 'index', 'start', 'presets', 'affix_group_count', 'start_affix_group_index'];
+    protected $fillable = [
+        'expansion_id',
+        'seasonal_affix_id',
+        'index',
+        'start',
+        'presets',
+        'affix_group_count',
+        'start_affix_group_index',
+        'key_level_min',
+        'key_level_max',
+    ];
 
-    public $with = ['expansion', 'affixgroups', 'dungeons'];
+    public $with = ['expansion', 'affixGroups', 'dungeons'];
 
     public $timestamps = false;
 
     protected $appends = ['name'];
 
     protected $casts = [
-        'start' => 'date',
+        'start'         => 'date',
+        'key_level_min' => 'integer',
+        'key_level_max' => 'integer',
     ];
 
     /** @var bool|null Cache for if we're a timewalking season or not */
@@ -62,7 +79,7 @@ class Season extends CacheModel
         return $this->belongsTo(Expansion::class);
     }
 
-    public function affixgroups(): HasMany
+    public function affixGroups(): HasMany
     {
         return $this->hasMany(AffixGroup::class);
     }
@@ -72,14 +89,14 @@ class Season extends CacheModel
         return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');
     }
 
-    public function seasondungeons(): HasMany
+    public function seasonDungeons(): HasMany
     {
         return $this->hasMany(SeasonDungeon::class);
     }
 
     public function hasDungeon(Dungeon $dungeon): bool
     {
-        return $this->seasondungeons()->where('dungeon_id', $dungeon->id)->exists();
+        return $this->seasonDungeons()->where('dungeon_id', $dungeon->id)->exists();
     }
 
     /**
@@ -127,7 +144,7 @@ class Season extends CacheModel
         $weeksSinceStart = $this->getWeeksSinceStartAt($date);
 
         // Round down
-        return (int)($weeksSinceStart / $this->affixgroups->count());
+        return (int)($weeksSinceStart / $this->affixGroups->count());
     }
 
     /**
@@ -232,7 +249,7 @@ class Season extends CacheModel
 
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
-            $result = $affixGroupIndex < $this->affixgroups->count() ? $this->affixgroups[$affixGroupIndex] : null;
+            $result = $affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null;
         }
 
         return $result;
@@ -244,12 +261,12 @@ class Season extends CacheModel
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
         $region          = GameServerRegion::getUserOrDefaultRegion();
-        $startIndex      = $this->affixgroups->search(
+        $startIndex      = $this->affixGroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );
-        $affixGroupIndex = $this->affixgroups->search($this->affixgroups->filter(static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
+        $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
-        return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixgroups->count()) % $this->presets + 1 : 0;
+        return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixGroups->count()) % $this->presets + 1 : 0;
     }
 
     /**

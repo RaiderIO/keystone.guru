@@ -8,7 +8,7 @@
 
 /** @var \App\Models\DungeonRoute\DungeonRoute $model */
 if (!isset($affixgroups)) {
-    $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
+    $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }
 
 /** @var App\Models\Team|null $team */
@@ -24,7 +24,7 @@ if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } else if (Auth::check()) {
     $tagCategoryId = \App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL];
-    $searchTags    = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
+    $searchTags = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
 } else {
     $searchTags = collect();
 }

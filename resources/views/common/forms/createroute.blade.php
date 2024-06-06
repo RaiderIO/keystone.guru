@@ -2,11 +2,14 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\Season;
 
 /**
  * @var DungeonRoute|null $dungeonroute
- * @var int $routeKeyLevelFrom
- * @var int $routeKeyLevelTo
+ * @var Season            $currentSeason
+ * @var Season|null       $nextSeason
+ * @var int               $routeKeyLevelFrom
+ * @var int               $routeKeyLevelTo
  */
 
 $teeming                = old('teeming') ?? false;
@@ -19,8 +22,11 @@ $dungeonSelectId = 'dungeon_id_select';
 
 @include('common.general.inline', ['path' => 'common/forms/createroute', 'options' => [
     'levelSelector' => '#dungeon_route_level',
-    'levelMin' => config('keystoneguru.keystone.levels.min'),
-    'levelMax' => config('keystoneguru.keystone.levels.max'),
+    'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
+    'currentSeason' => $currentSeason,
+    'nextSeason' => $nextSeason,
+    'keyLevelMinDefault' => config('keystoneguru.keystone.levels.default_min'),
+    'keyLevelMaxDefault' => config('keystoneguru.keystone.levels.default_max'),
     'levelFrom' => $routeKeyLevelFrom,
     'levelTo' => $routeKeyLevelTo,
 ]])

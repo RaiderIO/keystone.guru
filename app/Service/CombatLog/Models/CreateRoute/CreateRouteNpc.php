@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Models\CreateRoute;
 
 use App\Models\Enemy;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class CreateRouteNpc
 {

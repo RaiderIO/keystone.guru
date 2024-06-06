@@ -7,7 +7,7 @@ use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\Environmental
 use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\EnvironmentalDamageV9;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class EnvironmentalDamageBuilder implements SpecialEventBuilderInterface
 {

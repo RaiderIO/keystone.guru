@@ -12,7 +12,6 @@ use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
 use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
 use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
@@ -21,6 +20,7 @@ use Codeart\OpensearchLaravel\Aggregations\Types\Minimum;
 use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
 use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
@@ -422,12 +422,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 $runDurationMs = rand(600, $dungeon->currentMappingVersion->timer_max_seconds) * 1000;
 
                 /** @var AffixGroup $affixGroup */
-                $affixGroup = $season->affixgroups->random();
+                $affixGroup = $season->affixGroups->random();
 
-                $level = rand(
-                    config('keystoneguru.keystone.levels.min'),
-                    config('keystoneguru.keystone.levels.max'),
-                );
+                $level = rand($season->key_level_min, $season->key_level_max);
             }
 
             /** @var Enemy $enemy */

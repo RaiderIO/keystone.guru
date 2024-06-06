@@ -27,8 +27,8 @@ use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 

@@ -2,9 +2,11 @@
 
 namespace App\Service\Season;
 
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Traits\UserCurrentTime;
@@ -29,14 +31,15 @@ class SeasonService implements SeasonServiceInterface
     private ?Season $firstSeasonCache = null;
 
     public function __construct(
-        private ExpansionService $expansionService
+        private readonly ExpansionService          $expansionService,
+        private readonly SeasonRepositoryInterface $seasonRepository
     ) {
         $this->seasonCache      = collect();
         $this->firstSeasonCache = null;
     }
 
     /**
-     * @return Collection|Season[]
+     * @return Collection<Season>
      */
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {
@@ -85,8 +88,9 @@ class SeasonService implements SeasonServiceInterface
     /**
      * Get the season that was active at a specific date.
      */
-    public function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?Season
+    public function getSeasonAt(Carbon $date, ?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
+        $region    ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         /** @var Season $season */
@@ -110,7 +114,7 @@ class SeasonService implements SeasonServiceInterface
         $region    ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
-        return $this->getSeasonAt(Carbon::now(), $region, $expansion);
+        return $this->getSeasonAt(Carbon::now(), $expansion, $region);
     }
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
@@ -119,6 +123,15 @@ class SeasonService implements SeasonServiceInterface
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         return $expansion->nextSeason($region);
+    }
+
+    public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        if (!$dungeon->gameVersion->has_seasons) {
+            return null;
+        }
+
+        return $this->seasonRepository->getMostRecentSeasonForDungeon($dungeon);
     }
 
     /**
@@ -130,7 +143,7 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int
     {
-        $season      = $this->getSeasonAt($date, $region, $expansion);
+        $season      = $this->getSeasonAt($date, $expansion, $region);
         $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {
@@ -188,7 +201,7 @@ class SeasonService implements SeasonServiceInterface
         $simulatedTime        = $firstSeasonStart->copy();
         $totalWeeksToSimulate = $weeksSinceBeginning + 1;
         for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
-            if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
+            if ($nextSeason !== null && $nextSeason->affixGroups->isNotEmpty()) {
                 // If we should switch to the next season...
                 if ($simulatedTime->gte($nextSeason->start())) {
                     // Move to the next season
@@ -202,7 +215,7 @@ class SeasonService implements SeasonServiceInterface
                 // Append to the list of when we have which affix groups
                 $affixGroups->push([
                     'date_start' => $simulatedTime->copy(),
-                    'affixgroup' => $currentSeason->affixgroups[$i % $currentSeason->affix_group_count],
+                    'affixgroup' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
                 ]);
             }
 

@@ -40,14 +40,13 @@ use App\Models\Traits\HasMetrics;
 use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
-use App\Models\User;
-use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,6 +56,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -66,72 +66,76 @@ use Illuminate\Support\Str;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * @property int                                      $id
- * @property string                                   $public_key
- * @property int                                      $author_id
- * @property int                                      $dungeon_id
- * @property int                                      $mapping_version_id
- * @property int                                      $faction_id
- * @property int|null                                 $team_id
- * @property int                                      $published_state_id
- * @property string                                   $clone_of
- * @property string                                   $title
- * @property string                                   $description
- * @property int                                      $level_min
- * @property int                                      $level_max
- * @property string                                   $difficulty
- * @property int                                      $seasonal_index
- * @property int                                      $enemy_forces
- * @property bool                                     $teeming
- * @property bool                                     $demo
- * @property array                                    $setup Attribute
- * @property bool                                     $has_thumbnail Attribute
- * @property string                                   $pull_gradient
- * @property bool                                     $pull_gradient_apply_always
- * @property int                                      $dungeon_difficulty
- * @property int                                      $views
- * @property int                                      $views_embed
- * @property int                                      $popularity
- * @property float                                    $rating
- * @property int                                      $rating_count
- * @property Carbon                                   $thumbnail_refresh_queued_at
- * @property Carbon                                   $thumbnail_updated_at
- * @property Carbon                                   $updated_at
- * @property Carbon                                   $created_at
- * @property Carbon                                   $published_at
- * @property Carbon                                   $expires_at
- * @property MappingVersion                           $mappingVersion
- * @property Dungeon                                  $dungeon
- * @property Path                                     $route
- * @property Faction                                  $faction
- * @property User|null                                $author Can be null in case of temporary route
- * @property MDTImport                                $mdtImport
- * @property Team                                     $team
- * @property PublishedState                           $publishedState
- * @property ChallengeModeRun|null                    $challengeModeRun Is only set if route is created through API
- * @property Collection                               $specializations
- * @property Collection                               $classes
- * @property Collection                               $races
- * @property Collection                               $playerspecializations
- * @property Collection                               $playerclasses
- * @property Collection                               $playerraces
- * @property Collection|AffixGroup[]                  $affixes
- * @property Collection|DungeonRouteAffixGroup[]      $affixgroups
- * @property Collection|DungeonRouteRating[]          $ratings
- * @property Collection|DungeonRouteFavorite[]        $favorites
- * @property Collection|LiveSession[]                 $livesessions
- * @property Collection|Brushline[]                   $brushlines
- * @property Collection|Path[]                        $paths
- * @property Collection|KillZone[]                    $killZones
- * @property Collection|PridefulEnemy[]               $pridefulEnemies
- * @property Collection|OverpulledEnemy[]             $overpulledenemies
- * @property Collection|DungeonRouteEnemyRaidMarker[] $enemyRaidMarkers
- * @property Collection|MapIcon[]                     $mapicons
- * @property Collection|PageView[]                    $pageviews
- * @property Collection|Tag[]                         $tags
- * @property Collection                               $routeattributes
- * @property Collection                               $routeattributesraw
- * @property Collection<DungeonRouteThumbnailJob>     $dungeonRouteThumbnailJobs
+ * @property int                                     $id
+ * @property string                                  $public_key
+ * @property int                                     $author_id
+ * @property int                                     $dungeon_id
+ * @property int                                     $mapping_version_id
+ * @property int                                     $season_id
+ * @property int                                     $faction_id
+ * @property int|null                                $team_id
+ * @property int                                     $published_state_id
+ * @property string                                  $clone_of
+ * @property string                                  $title
+ * @property string                                  $description
+ * @property int|null                                $level_min
+ * @property int|null                                $level_max
+ * @property string                                  $difficulty
+ * @property int                                     $seasonal_index
+ * @property int                                     $enemy_forces
+ * @property bool                                    $teeming
+ * @property bool                                    $demo
+ * @property array                                   $setup Attribute
+ * @property bool                                    $has_thumbnail Attribute
+ * @property string                                  $pull_gradient
+ * @property bool                                    $pull_gradient_apply_always
+ * @property int                                     $dungeon_difficulty
+ * @property int                                     $views
+ * @property int                                     $views_embed
+ * @property int                                     $popularity
+ * @property float                                   $rating
+ * @property int                                     $rating_count
+ * @property Carbon                                  $thumbnail_refresh_queued_at
+ * @property Carbon                                  $thumbnail_updated_at
+ * @property Carbon                                  $updated_at
+ * @property Carbon                                  $created_at
+ * @property Carbon                                  $published_at
+ * @property Carbon                                  $expires_at
+ *
+ * @property MappingVersion                          $mappingVersion
+ * @property Dungeon                                 $dungeon
+ * @property Path                                    $route
+ * @property Season|null                             $season
+ * @property Faction                                 $faction
+ * @property User|null                               $author Can be null in case of temporary route
+ * @property MDTImport                               $mdtImport
+ * @property Team                                    $team
+ * @property PublishedState                          $publishedState
+ * @property ChallengeModeRun|null                   $challengeModeRun Is only set if route is created through API
+ *
+ * @property Collection                              $specializations
+ * @property Collection                              $classes
+ * @property Collection                              $races
+ * @property Collection                              $playerspecializations
+ * @property Collection                              $playerclasses
+ * @property Collection                              $playerraces
+ * @property Collection<AffixGroup>                  $affixes
+ * @property Collection<DungeonRouteAffixGroup>      $affixgroups
+ * @property Collection<DungeonRouteRating>          $ratings
+ * @property Collection<DungeonRouteFavorite>        $favorites
+ * @property Collection<LiveSession>                 $livesessions
+ * @property Collection<Brushline>                   $brushlines
+ * @property Collection<Path>                        $paths
+ * @property Collection<KillZone>                    $killZones
+ * @property Collection<PridefulEnemy>               $pridefulEnemies
+ * @property Collection<OverpulledEnemy>             $overpulledenemies
+ * @property Collection<DungeonRouteEnemyRaidMarker> $enemyRaidMarkers
+ * @property Collection<MapIcon>                     $mapicons
+ * @property Collection<PageView>                    $pageviews
+ * @property Collection<Tag>                         $tags
+ * @property Collection<RouteAttribute>              $routeattributes
+ * @property Collection<DungeonRouteAttribute>       $routeattributesraw
+ * @property Collection<DungeonRouteThumbnailJob>    $dungeonRouteThumbnailJobs
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -191,6 +195,7 @@ class DungeonRoute extends Model
         'author_id',
         'dungeon_id',
         'mapping_version_id',
+        'season_id',
         'faction_id',
         'published_state_id',
         'teeming',
@@ -208,6 +213,7 @@ class DungeonRoute extends Model
     protected $with = [
         'mappingVersion',
         'dungeon',
+        'season',
         'faction',
         'specializations',
         'classes',
@@ -263,6 +269,12 @@ class DungeonRoute extends Model
     {
         return $this->hasMany(Path::class)->orderBy('id');
     }
+
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
+    }
+
 
     public function faction(): BelongsTo
     {
@@ -731,7 +743,14 @@ class DungeonRoute extends Model
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
         $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
-        $this->mapping_version_id = Dungeon::findOrFail($this->dungeon_id)->currentMappingVersion->id;
+        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
+        $this->mapping_version_id = $dungeon->currentMappingVersion->id;
+
+        $activeSeason = $seasonService->getCurrentSeason(
+            $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
+        ) ?? $seasonService->getMostRecentSeasonForDungeon($dungeon);
+        // Can still be null if there are no seasons for this dungeon, like in Classic
+        $this->season_id = $activeSeason->id ?? null;
 
         $this->faction_id     = 1;
         $this->difficulty     = 1;
@@ -747,8 +766,13 @@ class DungeonRoute extends Model
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
         $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-        $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
-        $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
+        $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
+        $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+
+        if ($this->level_min === null || $this->level_max === null) {
+            $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
+            $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
+        }
 
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
@@ -793,6 +817,11 @@ class DungeonRoute extends Model
         $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
+
+        $activeSeason = $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+        // Can still be null if there are no seasons for this dungeon, like in Classic
+        $this->season_id = $activeSeason->id ?? null;
+
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
         $this->difficulty     = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
@@ -812,8 +841,13 @@ class DungeonRoute extends Model
 
         $dungeonRouteLevel      = $request->get('dungeon_route_level');
         $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-        $this->level_min        = $dungeonRouteLevelParts[0] ?? config('keystoneguru.keystone.levels.min');
-        $this->level_max        = $dungeonRouteLevelParts[1] ?? config('keystoneguru.keystone.levels.max');
+        $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
+        $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+
+        if ($this->level_min === null || $this->level_max === null) {
+            $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
+            $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
+        }
 
         if ($user?->hasRole(Role::ROLE_ADMIN)) {
             $this->demo = intval($request->get('demo', 0)) > 0;
@@ -897,7 +931,7 @@ class DungeonRoute extends Model
                     foreach ($newAffixes as $value) {
                         $value = (int)$value;
 
-                        if ($dungeonActiveSeason->affixgroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
+                        if ($dungeonActiveSeason->affixGroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
                             // Attempted to assign an affix that the dungeon cannot have - abort it
                             continue;
                         }
@@ -968,24 +1002,25 @@ class DungeonRoute extends Model
     public function cloneRoute(ThumbnailServiceInterface $thumbnailService, bool $unpublished = true): self
     {
         // Must save the new route first
-        $dungeonroute                     = new DungeonRoute();
-        $dungeonroute->public_key         = DungeonRoute::generateRandomPublicKey();
-        $dungeonroute->clone_of           = $this->public_key;
-        $dungeonroute->author_id          = Auth::id();
-        $dungeonroute->dungeon_id         = $this->dungeon_id;
-        $dungeonroute->mapping_version_id = $this->mapping_version_id;
-        $dungeonroute->faction_id         = $this->faction_id;
-        $dungeonroute->published_state_id = $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id;
-        // Do not clone team_id; user assigns the team himself
-        $dungeonroute->team_id        = null;
-        $dungeonroute->title          = __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]);
-        $dungeonroute->seasonal_index = $this->seasonal_index;
-        $dungeonroute->teeming        = $this->teeming;
-        $dungeonroute->enemy_forces   = $this->enemy_forces;
-        $dungeonroute->level_min      = $this->level_min;
-        $dungeonroute->level_max      = $this->level_max;
+        $dungeonroute = DungeonRoute::create([
+            'public_key'         => DungeonRoute::generateRandomPublicKey(),
+            'clone_of'           => $this->public_key,
+            'author_id'          => Auth::id(),
+            'dungeon_id'         => $this->dungeon_id,
+            'mapping_version_id' => $this->mapping_version_id,
+            'season_id'          => $this->season_id,
+            'faction_id'         => $this->faction_id,
+            'published_state_id' => $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id,
 
-        $dungeonroute->save();
+            // Do not clone team_id, user assigns the team himself
+            'team_id'            => null,
+            'title'              => __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]),
+            'seasonal_index'     => $this->seasonal_index,
+            'teeming'            => $this->teeming,
+            'enemy_forces'       => $this->enemy_forces,
+            'level_min'          => $this->level_min,
+            'level_max'          => $this->level_max,
+        ]);
 
         // Clone the relations of this route into the new route.
         $this->cloneRelationsInto($dungeonroute, [
@@ -1239,6 +1274,19 @@ class DungeonRoute extends Model
         return $this->affixes->filter(static fn(AffixGroup $affixGroup) => $affixGroup->hasAffix($affix))->isNotEmpty();
     }
 
+    /**
+     * Based on the assigned affixes, determine the season that this route was most likely created in
+     *
+     * @return Season|null
+     */
+    public function getSeasonFromAffixes(): ?Season
+    {
+        /** @var AffixGroup|null $affixGroup */
+        $affixGroup = $this->affixes->first();
+
+        return $affixGroup?->load('season')?->season;
+    }
+
     public function getSeasonalAffix(): ?string
     {
         $foundSeasonalAffix = null;
@@ -1408,7 +1456,7 @@ class DungeonRoute extends Model
 
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
-                'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ?? $activeSeason->affixgroups->first()->id,
+                'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ?? $activeSeason->affixGroups->first()->id,
                 'dungeon_route_id' => $this->id,
             ]);
 
@@ -1444,7 +1492,7 @@ class DungeonRoute extends Model
             }
 
             // Delete all API thumbnail jobs/thumbnails generated for it
-            foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob ) {
+            foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob) {
                 $dungeonRouteThumbnailJob->expire();
             }
 

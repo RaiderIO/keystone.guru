@@ -6,6 +6,8 @@ use App\Models\Floor\Floor;
 /**
  * @var DungeonRoute $dungeonroute
  * @var Floor        $floor
+ * @var int          $keyLevelMin
+ * @var int          $keyLevelMax
  */
 
 $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
@@ -19,8 +21,8 @@ $sandbox = $dungeonroute->isSandbox();
     'dependencies' => ['common/maps/map'],
     'options' => [
         'dungeonroute' => $dungeonroute,
-        'levelMin' => config('keystoneguru.keystone.levels.min'),
-        'levelMax' => config('keystoneguru.keystone.levels.max'),
+        'levelMin' => $keyLevelMin,
+        'levelMax' => $keyLevelMax,
     ],
 ])
 

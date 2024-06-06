@@ -3,8 +3,8 @@
 namespace App\Console\Commands\Thumbnail;
 
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class DeleteExpiredJobs extends Command

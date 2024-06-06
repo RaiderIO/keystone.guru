@@ -17,14 +17,13 @@ use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
 use App\Models\Spell;
+use App\Models\User;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
-use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
 class ViewService implements ViewServiceInterface
 {

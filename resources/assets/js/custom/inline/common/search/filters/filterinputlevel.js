@@ -35,4 +35,17 @@ class SearchFilterLevel extends SearchFilterInput {
             to: value.split(';')[1],
         });
     }
+
+    /**
+     *
+     * @param min {Number}
+     * @param max {Number}
+     */
+    setLevel(min, max) {
+        this.levelMin = min;
+        this.levelMax = max;
+
+        this.levelHandler.update(min, max);
+    }
+
 }

@@ -78,7 +78,7 @@ class Cache extends Command
                 $discoverService->newByDungeon($dungeon);
                 $discoverService->popularUsersByDungeon($dungeon);
 
-                foreach ($currentSeason?->affixgroups ?? [] as $affixGroup) {
+                foreach ($currentSeason?->affixGroups ?? [] as $affixGroup) {
                     //                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
                     $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup);
                     $discoverService->newByDungeonAndAffixGroup($dungeon, $affixGroup);
@@ -90,7 +90,7 @@ class Cache extends Command
             // :expansion/season/:season page. Remember, an expansion's season can have dungeons from any other expansion into it
             // The cache key changes when you assign a season to the DiscoverService so those pages need to be cached again
             if ($currentSeason !== null) {
-                foreach ($currentSeason->affixgroups ?? [] as $affixGroup) {
+                foreach ($currentSeason->affixGroups ?? [] as $affixGroup) {
                     $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
                     $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
                 }
@@ -104,7 +104,7 @@ class Cache extends Command
                     $discoverService->newByDungeon($dungeon);
                     $discoverService->popularUsersByDungeon($dungeon);
 
-                    foreach ($currentSeason->affixgroups ?? [] as $affixGroup) {
+                    foreach ($currentSeason->affixGroups ?? [] as $affixGroup) {
                         $this->info(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
                         $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
                     }

@@ -16,7 +16,7 @@ use App\Service\CombatLog\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingIn
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**

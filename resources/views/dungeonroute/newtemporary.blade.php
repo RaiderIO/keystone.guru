@@ -2,6 +2,6 @@
 @section('header-title', __('view_dungeonroute.newtemporary.header'))
 
 @section('content')
-    @include('common.forms.createtemporaryroute')
+    @include('common.forms.createroutetemporary')
 @endsection
 

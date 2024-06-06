@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Models\Dungeon;
 use App\Models\Season;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -18,5 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface SeasonRepositoryInterface extends BaseRepositoryInterface
 {
-
+    public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season;
 }

@@ -47,9 +47,9 @@ use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 

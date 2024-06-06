@@ -84,7 +84,7 @@ return [
             'create_route'                                   => 'Hodor',
             'save_settings'                                  => 'Hodor',
         ],
-        'createtemporaryroute' => [
+        'createroutetemporary' => [
             'key_levels'                => 'Hodor',
             'key_levels_title'          => 'Hodor',
             'unregistered_user_message' => 'Hodor',

@@ -5,10 +5,10 @@ namespace App\Logic\CombatLog;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
-use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Error;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 

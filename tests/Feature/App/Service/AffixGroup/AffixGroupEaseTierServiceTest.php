@@ -20,7 +20,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
      * @throws Throwable
      */
     #[Test]
-    #[Group('AffixGroupEaseTierService2')]
+    #[Group('AffixGroupEaseTierService')]
     public function parseTierList_GivenCorrectResponseWithNoExistingPulls_ShouldCreateNewPull(): void
     {
         // Arrange
@@ -186,6 +186,33 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertNotEquals($previousAffixGroupEaseTierPull->id, $result->id);
         $this->assertNotEquals($previousAffixGroupEaseTierPull->affix_group_id, $result->affix_group_id);
         $this->assertNotEquals($previousAffixGroupEaseTierPull->tiers_hash, $result->tiers_hash);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function parseTierList_GivenResponseWithInvalidLastUpdated_ShouldLogUnknownLastUpdatedError(): void
+    {
+        // Arrange
+        $responseDifferentAffix = $this->getResponse('response_invalid_last_updated');
+
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            null,
+            $log
+        );
+
+        $log->expects($this->once())
+            ->method('parseTierListInvalidLastUpdated');
+
+        // Act
+        $result = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
+
+        // Assert
+        $this->assertNull($result);
     }
 
     /**

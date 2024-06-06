@@ -1,9 +1,19 @@
 <?php
-/** @var \App\Models\DungeonRoute\DungeonRoute $model */
-/** @var $specializations \Illuminate\Support\Collection|\App\Models\CharacterClassSpecialization[] */
-/** @var $classes \Illuminate\Support\Collection|\App\Models\CharacterClass[] */
-/** @var $racesClasses \Illuminate\Support\Collection|\App\Models\CharacterRace[] */
-/** @var $allFactions \Illuminate\Support\Collection|\App\Models\Faction[] */
+
+use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Faction;
+use Illuminate\Support\Collection;
+
+/**
+ * @var DungeonRoute                             $model
+ * @var Collection<CharacterClassSpecialization> $specializations
+ * @var Collection<CharacterClass>               $classes
+ * @var Collection<CharacterRace>                $racesClasses
+ * @var Collection<Faction>                      $allFactions
+ */
 
 $factions ??= $allFactions;
 // @TODO Upon form error, all specs/classes/races are cleared. It's really hard to get an error but it's gotta be handled at some point
@@ -21,7 +31,7 @@ $factions ??= $allFactions;
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->key) }}  {
+        .{{ strtolower($faction->key) }}                {
             color: {{ $faction->color }};
             font-weight: bold;
         }
@@ -125,7 +135,9 @@ $factions ??= $allFactions;
     @endisset
 </div>
 <div class="row">
-    <?php for($i = 1; $i <= config('keystoneguru.party_size'); ++$i){ ?>
+    <?php for ($i = 1;
+               $i <= config('keystoneguru.party_size');
+               ++$i){ ?>
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
@@ -149,5 +161,5 @@ $factions ??= $allFactions;
         </div>
     </div>
     <?php }
-             ?>
+    ?>
 </div>

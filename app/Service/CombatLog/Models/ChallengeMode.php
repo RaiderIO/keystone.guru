@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Models;
 
 use App\Models\Dungeon;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class ChallengeMode
 {

@@ -5,7 +5,6 @@ namespace App\Service\CombatLogEvent\Models;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
-use Carbon\Carbon;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Filter;
@@ -15,6 +14,7 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Term;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CombatLogEventFilter implements Arrayable

@@ -7,13 +7,13 @@ use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
-use Carbon\Carbon;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -43,10 +43,10 @@ class Expansion extends CacheModel
 
     public $with = ['timewalkingevent'];
 
-    protected $dates = [
-        // 'released_at',
-        'created_at',
-        'updated_at',
+    protected $casts = [
+        'released_at' => 'date',
+        'created_at'  => 'date',
+        'updated_at'  => 'date',
     ];
 
     public const EXPANSION_CLASSIC = 'classic';

@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use App\Vendor\SemVer\Version;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 

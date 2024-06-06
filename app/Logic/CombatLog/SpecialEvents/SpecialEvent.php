@@ -9,8 +9,8 @@ use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldBuilder;
 use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\DamageShieldMissedBuilder;
 use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\EnvironmentalDamageBuilder;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\SpellAbsorbedBuilder;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 abstract class SpecialEvent extends BaseEvent implements HasParameters

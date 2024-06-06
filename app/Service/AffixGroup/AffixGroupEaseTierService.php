@@ -9,7 +9,8 @@ use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
@@ -19,6 +20,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
     ];
+    public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
@@ -71,8 +73,16 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $result    = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
+        try {
+            $lastUpdatedAt = Carbon::createFromFormat(self::DATE_TIME_FORMAT, $tierListsResponse['lastUpdated']);
+        } catch (InvalidFormatException $exception) {
+            $this->log->parseTierListInvalidLastUpdated($exception, $tierListsResponse['lastUpdated']);
+
+            return null;
+        }
 
         if ($lastEaseTierPull === null ||
+            $lastEaseTierPull->created_at->isBefore($lastUpdatedAt) ||
             $lastEaseTierPull->affix_group_id !== $affixGroup->id ||
             $lastEaseTierPull->tiers_hash !== $tiersHash) {
 
@@ -80,7 +90,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             $affixGroupEaseTierPull = AffixGroupEaseTierPull::create([
                 'affix_group_id'  => $affixGroup->id,
                 'tiers_hash'      => $tiersHash,
-                'last_updated_at' => Carbon::now()->toDateTimeString(),
+                'last_updated_at' => $lastUpdatedAt,
             ]);
 
             $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
@@ -199,7 +209,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $affixList                = Affix::all();
         $currentSeason            = $this->seasonService->getCurrentSeason();
-        $currentSeasonAffixGroups = $currentSeason->affixgroups;
+        $currentSeasonAffixGroups = $currentSeason->affixGroups;
 
         $affixes = collect(explode(', ', $affixString));
 

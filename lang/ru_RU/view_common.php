@@ -84,7 +84,7 @@ return [
             'create_route'                                   => 'Создать маршрут',
             'save_settings'                                  => 'Сохранить настройки',
         ],
-        'createtemporaryroute' => [
+        'createroutetemporary' => [
             'key_levels'                => '',
             'key_levels_title'          => '',
             'unregistered_user_message' => 'Если вы незарегистрированный пользователь, все созданные вами маршруты будут временными, срок действия которых истечет через %d часа.',

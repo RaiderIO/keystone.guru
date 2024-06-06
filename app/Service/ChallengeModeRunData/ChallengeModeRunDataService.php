@@ -9,7 +9,7 @@ use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterface

@@ -1002,7 +1002,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $mappingVersion->id,
-
+                'season_id'          => $this->seasonService->getMostRecentSeasonForDungeon($dungeon)?->id,
                 // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
                 'faction_id'         => isset($decoded['faction']) ?
                     ((int)$decoded['faction'] === 1 ? Faction::ALL[Faction::FACTION_HORDE] : Faction::ALL[Faction::FACTION_ALLIANCE])

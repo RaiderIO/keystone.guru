@@ -2,7 +2,7 @@
 
 namespace App\Logic\CombatLog;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 abstract class BaseEvent
 {

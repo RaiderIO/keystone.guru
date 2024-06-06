@@ -17,43 +17,23 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
 
+    const EVENT_TYPE = CombatLogEvent::EVENT_TYPE_ENEMY_KILLED;
+
     #[Test]
     #[Group('Controller')]
     #[Group('HeatmapController')]
     public function getData_givenSimpleFilter_shouldReturnData(): void
     {
         // Arrange
-        $eventType            = CombatLogEvent::EVENT_TYPE_ENEMY_KILLED;
-        $rowCountPerFloor     = 10;
-        $runCount             = 20;
-        $dungeon              = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
-        $combatLogEventFilter = new CombatLogEventFilter(
-            $dungeon,
-            $eventType
-        );
-
-        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
-
-        $combatLogEventService = ServiceFixtures::getCombatLogEventServiceMock(
-            $this,
-            ['getGridAggregation'],
-            $coordinatesService
-        );
-        $combatLogEventService->method('getGridAggregation')
-            ->willReturn(
-                new CombatLogEventGridAggregationResult(
-                    $coordinatesService,
-                    $combatLogEventFilter,
-                    $this->createGridAggregationResult($dungeon, $rowCountPerFloor),
-                    $runCount
-                )
-            );
-        app()->bind(CombatLogEventServiceInterface::class, fn() => $combatLogEventService);
+        $rowCountPerFloor = 10;
+        $runCount         = 20;
+        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_FREEHOLD);
+        $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount);
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'event_type' => $eventType,
-            'dungeon_id' => $combatLogEventFilter->getDungeon()->id,
+            'event_type' => self::EVENT_TYPE,
+            'dungeon_id' => $dungeon->id,
         ]);
 
         // Assert
@@ -65,5 +45,63 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
             $this->assertCount($rowCountPerFloor, $floorRow['lat_lngs']);
         }
         $this->assertEquals($runCount, $responseArr['run_count']);
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    #[Group('HeatmapController')]
+    public function getData_givenDungeonWithFacade_shouldReturnData(): void
+    {
+        // Arrange
+        $rowCountPerFloor = 10;
+        $runCount         = 20;
+        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+        $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount, true);
+
+        // Act
+        $response = $this->post(route('ajax.heatmap.data'), [
+            'event_type' => self::EVENT_TYPE,
+            'dungeon_id' => $dungeon->id,
+        ]);
+
+        // Assert
+        $response->assertOk();
+
+        $responseArr = json_decode($response->content(), true);
+
+        // Just one floor!
+        $this->assertCount(1, $responseArr['data']);
+        $this->assertCount(
+            $rowCountPerFloor * $dungeon->floors()->where('facade', false)->count(),
+            $responseArr['data'][0]['lat_lngs']
+        );
+        $this->assertEquals($runCount, $responseArr['run_count']);
+    }
+
+    private function setUpTestForDungeon(Dungeon $dungeon, int $rowCountPerFloor, int $runCount, bool $useFacade = false): void
+    {
+        $combatLogEventFilter = new CombatLogEventFilter(
+            $dungeon,
+            self::EVENT_TYPE,
+        );
+
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+
+        $combatLogEventService = ServiceFixtures::getCombatLogEventServiceMock(
+            $this,
+            ['getGridAggregation'],
+            $coordinatesService
+        );
+
+        $combatLogEventService->method('getGridAggregation')
+            ->willReturn(
+                (new CombatLogEventGridAggregationResult(
+                    $coordinatesService,
+                    $combatLogEventFilter,
+                    $this->createGridAggregationResult($dungeon, $rowCountPerFloor),
+                    $runCount
+                ))->setUseFacade($useFacade)
+            );
+        app()->bind(CombatLogEventServiceInterface::class, fn() => $combatLogEventService);
     }
 }

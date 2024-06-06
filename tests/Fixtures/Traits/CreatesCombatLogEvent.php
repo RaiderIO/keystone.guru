@@ -41,9 +41,14 @@ trait CreatesCombatLogEvent
             $rows = [];
 
             for ($i = 0; $i < $rowCount; $i++) {
-                $coordinates              = $this->getRandomCoordinates($floor);
-                $coordinatesString        = sprintf('%s,%s', $coordinates['pos_x'], $coordinates['pos_y']);
-                $rows[$coordinatesString] = rand(1, 100);
+                $coordinates       = $this->getRandomCoordinates($floor);
+                $coordinatesString = sprintf('%s,%s', $coordinates['pos_x'], $coordinates['pos_y']);
+                // Just in case the coordinates already exist and it randomly fails the test
+                if (isset($rows[$coordinatesString])) {
+                    $i--;
+                } else {
+                    $rows[$coordinatesString] = rand(1, 100);
+                }
             }
 
             $result->put($floor->id, $rows);

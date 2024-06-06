@@ -8,7 +8,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\Season;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -36,7 +36,7 @@ class CombatLogEventFactory extends Factory
             ->first();
 
         /** @var AffixGroup $affixGroup */
-        $affixGroup = $season->affixgroups()
+        $affixGroup = $season->affixGroups()
             ->inRandomOrder()
             ->first();
 
@@ -66,8 +66,8 @@ class CombatLogEventFactory extends Factory
             ),
             'challenge_mode_id' => $dungeon->challenge_mode_id,
             'level'             => $this->faker->numberBetween(
-                config('keystoneguru.keystone.levels.min'),
-                config('keystoneguru.keystone.levels.max'),
+                config('keystoneguru.keystone.levels.default_min'),
+                config('keystoneguru.keystone.levels.default_max'),
             ),
             'affix_id'          => $affixGroup->affixes->pluck('affix_id')->toArray(),
             'success'           => $dungeon->currentMappingVersion->timer_max_seconds > $runDurationMin * 60,

@@ -1,14 +1,19 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
-
 <?php
-use App\Models\Laratrust\Role;
 
-/** @var $cacheService \App\Service\Cache\CacheServiceInterface */
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup */
-/** @var $tierAffixGroup \App\Models\AffixGroup\AffixGroup|null */
-/** @var $__env array */
-/** @var $cache boolean */
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
+use App\Service\Cache\CacheServiceInterface;
+
+/**
+ * @var CacheServiceInterface $cacheService
+ * @var DungeonRoute          $dungeonroute
+ * @var AffixGroup            $currentAffixGroup
+ * @var AffixGroup|null       $tierAffixGroup
+ * @var array                 $__env
+ * @var boolean               $cache
+ */
 
 $showAffixes      ??= true;
 $showDungeonImage ??= false;
@@ -32,7 +37,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(\App\Models\AffixGroup\AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
+            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
         }
     }
     // Attempt a default value if there's only one affix set
@@ -138,7 +143,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                 </div>
             </div>
             <div class="row no-gutters p-2 enemy_forces">
-                <div class="col">
+                <div class="col-auto">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
                     @else
@@ -152,8 +157,12 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         ) }}
                 </div>
                 <div class="col">
-                    @if( $dungeonroute->level_min !== config('keystoneguru.keystone.levels.min') && $dungeonroute->level_max !== config('keystoneguru.keystone.levels.max'))
-                        @include('common.dungeonroute.level', ['levelMin' => $dungeonroute->level_min, 'levelMax' => $dungeonroute->level_max])
+                    @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min && $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
+                        @include('common.dungeonroute.level', [
+                            'season' => $dungeonroute->season,
+                            'levelMin' => $dungeonroute->level_min,
+                            'levelMax' => $dungeonroute->level_max
+                        ])
                     @endif
                 </div>
             </div>

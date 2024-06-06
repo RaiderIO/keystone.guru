@@ -4,7 +4,7 @@ namespace App\Service\CombatLog\Models\ActivePull;
 
 use App\Logic\Structs\IngameXY;
 use App\Models\Enemy;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class ActivePullEnemy
 {
