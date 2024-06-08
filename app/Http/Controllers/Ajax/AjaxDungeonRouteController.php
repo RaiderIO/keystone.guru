@@ -88,6 +88,7 @@ class AjaxDungeonRouteController extends Controller
 
         $routes = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'dungeon', 'affixes',
                                       'author', 'routeattributes', 'ratings', 'metricAggregations', $tagsRelationshipName])
+            ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')

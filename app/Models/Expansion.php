@@ -43,11 +43,17 @@ class Expansion extends CacheModel
 
     public $with = ['timewalkingevent'];
 
-    protected $casts = [
-        'released_at' => 'date',
-        'created_at'  => 'date',
-        'updated_at'  => 'date',
+    protected $dates = [
+        // 'released_at',
+        'created_at',
+        'updated_at',
     ];
+
+//    protected $casts = [
+//        'released_at' => 'date',
+//        'created_at'  => 'date',
+//        'updated_at'  => 'date',
+//    ];
 
     public const EXPANSION_CLASSIC = 'classic';
 
