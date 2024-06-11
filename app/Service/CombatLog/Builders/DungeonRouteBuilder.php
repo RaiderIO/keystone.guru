@@ -92,11 +92,8 @@ abstract class DungeonRouteBuilder
             ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
 
-        dump($this->availableEnemies->keys());
-
         // #1818 Filter out any NPC ids that are invalid
         $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
-        dump($this->validNpcIds);
 
         $this->validSpellIds        = Spell::all('id')->pluck(['id']);
         $this->activePullCollection = new ActivePullCollection();
