@@ -11,6 +11,7 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\NpcClassification;
 use App\Models\Spell;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
@@ -91,8 +92,12 @@ abstract class DungeonRouteBuilder
             ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
 
+        dump($this->availableEnemies->keys());
+
         // #1818 Filter out any NPC ids that are invalid
         $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
+        dump($this->validNpcIds);
+
         $this->validSpellIds        = Spell::all('id')->pluck(['id']);
         $this->activePullCollection = new ActivePullCollection();
 
@@ -408,17 +413,16 @@ abstract class DungeonRouteBuilder
         }
 
         if ($closestEnemy->getEnemy() === null) {
-            $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                null,
+            $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
                 $closestEnemy->getDistanceBetweenEnemies(),
                 $closestEnemy->getDistanceBetweenLastPullAndEnemy()
             );
         } else if ($closestEnemy->getDistanceBetweenEnemies() >
             ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-            if ($closestEnemy->getEnemy()->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
+            if ($closestEnemy->getEnemy()->npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
             } else {
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
+                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
                     $closestEnemy->getEnemy()->id,
                     $closestEnemy->getDistanceBetweenEnemies(),
                     $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
@@ -519,7 +523,7 @@ abstract class DungeonRouteBuilder
 
         // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
 
-        if ($distanceBetweenEnemies < $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default')) {
+        if ($distanceBetweenEnemies < ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
             // Calculate the location of the latLng
             /** @var IngameXY|null $previousPullIngameXY */
             $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?

@@ -15,7 +15,7 @@ class APICombatLogControllerTest extends APIPublicTestCase
     use LoadsJsonFiles;
 
     #[Test]
-    public function store_givenNewValidBrushline_shouldReturnBrushline(): void
+    public function create_givenAlgetharAcademyBunten16Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('s4_algethar_academy_bunten_16');

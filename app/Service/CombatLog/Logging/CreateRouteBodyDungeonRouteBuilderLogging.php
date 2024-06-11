@@ -2,10 +2,13 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\RollbarStructuredLogging;
-
-class CreateRouteBodyDungeonRouteBuilderLogging extends RollbarStructuredLogging implements CreateRouteBodyDungeonRouteBuilderLoggingInterface
+class CreateRouteBodyDungeonRouteBuilderLogging extends DungeonRouteBuilderLogging implements CreateRouteBodyDungeonRouteBuilderLoggingInterface
 {
+    public function buildKillZonesNewCurrentFloor(int $floorId, int $uiMapId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function buildKillZonesCreateNewActivePull(): void
     {
         $this->debug(__METHOD__);

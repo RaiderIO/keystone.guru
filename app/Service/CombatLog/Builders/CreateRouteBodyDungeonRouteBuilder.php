@@ -118,6 +118,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
                 $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+                $this->log->buildKillZonesNewCurrentFloor($this->currentFloor->id, $this->currentFloor->ui_map_id);
             }
 
             $uniqueUid = $event['npc']->getUniqueId();
