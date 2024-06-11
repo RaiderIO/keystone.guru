@@ -40,16 +40,17 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         /** @var Collection|BaseResultEvent[] */
         private readonly Collection      $resultEvents
     ) {
-        parent::__construct($coordinatesService,
+        $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
+
+        parent::__construct(
+            $coordinatesService,
             $dungeonRouteRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
-            $dungeonRoute);
-
-        /** @var ResultEventDungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
-        $this->log = $log;
+            $dungeonRoute,
+            $this->log
+        );
     }
 
     public function build(): DungeonRoute

@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 {
-    protected CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
+    private CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
 
     /**
      * @throws DungeonNotSupportedException
@@ -44,6 +44,8 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
         protected readonly CreateRouteBody        $createRouteBody
     ) {
+        $log = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
+
         parent::__construct($coordinatesService,
             $dungeonRouteRepository,
             $killZoneRepository,
@@ -54,11 +56,11 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
                 $dungeonRouteRepository,
                 $affixGroupRepository,
                 $dungeonRouteAffixGroupRepository
-            )
+            ),
+            $log
         );
 
         /** @var CreateRouteBodyDungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
         $this->log = $log;
     }
 

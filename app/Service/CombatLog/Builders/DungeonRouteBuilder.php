@@ -68,28 +68,22 @@ abstract class DungeonRouteBuilder
     /** @var Collection<KillZone> */
     protected Collection $killZones;
 
-    private readonly DungeonRouteBuilderLoggingInterface $log;
-
     public function __construct(
-        protected CoordinatesServiceInterface      $coordinatesService,
-        protected DungeonRouteRepositoryInterface  $dungeonRouteRepository,
-        protected KillZoneRepositoryInterface      $killZoneRepository,
-        protected KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
-        protected KillZoneSpellRepositoryInterface $killZoneSpellRepository,
-        protected DungeonRoute                     $dungeonRoute
+        protected CoordinatesServiceInterface         $coordinatesService,
+        protected DungeonRouteRepositoryInterface     $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface         $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface    $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface    $killZoneSpellRepository,
+        protected DungeonRoute                        $dungeonRoute,
+        private readonly DungeonRouteBuilderLoggingInterface $log
     ) {
-        /** @var DungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(DungeonRouteBuilderLoggingInterface::class);
-        $this->log = $log;
-
         $this->currentFloor     = null;
         $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
             'floor',
             'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
-        ])
-            ->get()
+        ])->get()
             ->each(static function (Enemy $enemy) {
                 // Ensure that the kill priority is 0 if it wasn't set
                 $enemy->kill_priority ??= 0;

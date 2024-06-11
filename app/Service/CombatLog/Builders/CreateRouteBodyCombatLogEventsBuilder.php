@@ -26,6 +26,8 @@ use Illuminate\Support\Collection;
  */
 class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteBuilder
 {
+    private CreateRouteBodyCombatLogEventsBuilderLoggingInterface $log;
+
     public function __construct(
         SeasonServiceInterface                    $seasonService,
         CoordinatesServiceInterface               $coordinatesService,
@@ -37,6 +39,9 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
         CreateRouteBody                           $createRouteBody
     ) {
+        /** @var CreateRouteBodyCombatLogEventsBuilderLoggingInterface $log */
+        $this->log = App::make(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class);
+
         parent::__construct(
             $seasonService,
             $coordinatesService,
@@ -48,10 +53,6 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
             $killZoneSpellRepository,
             $createRouteBody
         );
-
-        /** @var CreateRouteBodyCombatLogEventsBuilderLoggingInterface $log */
-        $log       = App::make(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class);
-        $this->log = $log;
     }
 
     public function getCombatLogEvents(): Collection
