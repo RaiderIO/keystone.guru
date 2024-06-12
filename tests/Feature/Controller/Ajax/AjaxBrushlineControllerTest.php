@@ -17,7 +17,10 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Floor $randomFloor */
-        $randomFloor = $this->dungeonRoute->dungeon->floors->random();
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->inRandomOrder()
+            ->first();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor);
 

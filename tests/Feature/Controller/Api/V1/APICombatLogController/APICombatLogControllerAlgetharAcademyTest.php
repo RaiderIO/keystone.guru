@@ -11,7 +11,7 @@ use Tests\Traits\ValidatesUrls;
 #[Group('API')]
 #[Group('APICombatLog')]
 #[Group('AlgetharAcademy')]
-class APICombatLogControllerAlgetharAcademyTest extends APICombatLogControllerBaseTest
+class APICombatLogControllerAlgetharAcademyTest extends APICombatLogControllerTestBase
 {
     use LoadsJsonFiles, ValidatesUrls;
 

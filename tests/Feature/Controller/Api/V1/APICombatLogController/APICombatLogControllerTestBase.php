@@ -8,7 +8,7 @@ use Tests\Feature\Traits\LoadsJsonFiles;
 use Tests\TestCases\APIPublicTestCase;
 use Tests\Traits\ValidatesUrls;
 
-abstract class APICombatLogControllerBaseTest extends APIPublicTestCase
+abstract class APICombatLogControllerTestBase extends APIPublicTestCase
 {
     use LoadsJsonFiles, ValidatesUrls;
 
