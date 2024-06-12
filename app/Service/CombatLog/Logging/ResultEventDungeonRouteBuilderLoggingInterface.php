@@ -2,7 +2,7 @@
 
 namespace App\Service\CombatLog\Logging;
 
-interface ResultEventDungeonRouteBuilderLoggingInterface
+interface ResultEventDungeonRouteBuilderLoggingInterface extends DungeonRouteBuilderLoggingInterface
 {
     public function buildStart(string $toDateTimeString, string $eventName): void;
 

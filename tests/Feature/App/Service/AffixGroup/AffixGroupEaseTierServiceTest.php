@@ -8,6 +8,7 @@ use DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Tests\Feature\Traits\LoadsJsonFiles;
 use Tests\Fixtures\LoggingFixtures;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
@@ -15,6 +16,8 @@ use Throwable;
 
 final class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
+    use LoadsJsonFiles;
+
     /**
      * @throws Exception
      * @throws Throwable
@@ -25,7 +28,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     {
         // Arrange
         $affixGroupId = 124;
-        $response     = $this->getResponse();
+        $response     = $this->getJsonData('response');
 
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
@@ -83,7 +86,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function parseTierList_GivenResponseWithUnknownAffix_ShouldLogUnknownAffixError(): void
     {
         // Arrange
-        $response = $this->getResponse('response_unknown_affix');
+        $response = $this->getJsonData('response_unknown_affix');
 
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
@@ -122,7 +125,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function parseTierList_GivenResponseWithUnknownDungeon_ShouldLogUnknownDungeonError(): void
     {
         // Arrange
-        $response = $this->getResponse('response_unknown_dungeon');
+        $response = $this->getJsonData('response_unknown_dungeon');
 
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
@@ -155,8 +158,8 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function parseTierList_GivenResponseWithDifferentAffixes_ShouldCreateNewPull(): void
     {
         // Arrange
-        $response               = $this->getResponse();
-        $responseDifferentAffix = $this->getResponse('response_different_affix');
+        $response               = $this->getJsonData('response');
+        $responseDifferentAffix = $this->getJsonData('response_different_affix');
 
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
@@ -196,7 +199,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function parseTierList_GivenResponseWithInvalidLastUpdated_ShouldLogUnknownLastUpdatedError(): void
     {
         // Arrange
-        $responseDifferentAffix = $this->getResponse('response_invalid_last_updated');
+        $responseDifferentAffix = $this->getJsonData('response_invalid_last_updated');
 
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
@@ -223,7 +226,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function parseTierList_GivenSameResponse_ShouldReturnNull(): void
     {
         // Arrange
-        $response = $this->getResponse();
+        $response = $this->getJsonData('response');
 
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
@@ -248,10 +251,5 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertGreaterThan(0, $previousAffixGroupEaseTierPull->id);
 
         $this->assertNull($result);
-    }
-
-    private function getResponse(string $fileName = 'response'): array
-    {
-        return json_decode(file_get_contents(sprintf('%s/Fixtures/%s.json', __DIR__, $fileName)), true);
     }
 }

@@ -1,0 +1,23 @@
+{
+    "id": 241,
+    "release_changelog_id": 248,
+    "version": "v10.1.1",
+    "title": "Fixed auto route creator generating empty routes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-06-11T20:58:44+00:00",
+    "updated_at": "2024-06-11T20:58:44+00:00",
+    "changelog": {
+        "id": 248,
+        "release_id": 241,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 248,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2405,
+                "change": "Algeth'ar Academy and potentially other dungeons no longer generate empty routes when using the Auto-Route Creator (thanks Bunten!)"
+            }
+        ]
+    }
+}

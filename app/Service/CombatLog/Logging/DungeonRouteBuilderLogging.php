@@ -77,17 +77,17 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
+    public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck(): void
+    public function findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck(): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $maxDistance): void
+    public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $maxDistance): void
     {
         $this->warning(__METHOD__, get_defined_vars());
     }

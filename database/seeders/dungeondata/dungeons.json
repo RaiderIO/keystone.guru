@@ -7259,7 +7259,7 @@
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range": 500,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 3514.85,
                 "ingame_min_y": 2002.08,
@@ -7269,7 +7269,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 490,
+                        "id": 947,
                         "floor1_id": 145,
                         "floor2_id": 144,
                         "direction": "down"
