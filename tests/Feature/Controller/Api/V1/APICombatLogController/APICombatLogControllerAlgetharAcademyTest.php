@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController;
 
+use App\Models\Affix;
+use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Traits\LoadsJsonFiles;
-use Tests\Traits\ValidatesUrls;
 
 #[Group('Controller')]
 #[Group('API')]
@@ -13,13 +13,16 @@ use Tests\Traits\ValidatesUrls;
 #[Group('AlgetharAcademy')]
 class APICombatLogControllerAlgetharAcademyTest extends APICombatLogControllerTestBase
 {
-    use LoadsJsonFiles, ValidatesUrls;
+    protected function getDungeonKey(): string
+    {
+        return Dungeon::DUNGEON_ALGETH_AR_ACADEMY;
+    }
 
     #[Test]
     public function create_givenAlgetharAcademyBunten16Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('s4_algethar_academy_bunten_16');
+        $postBody = $this->getJsonData('df_s4_algethar_academy_bunten_16');
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -29,17 +32,8 @@ class APICombatLogControllerAlgetharAcademyTest extends APICombatLogControllerTe
 
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
-
-        // Main data
-        $this->assertEquals(67, $responseArr['data']['dungeon_id']); // Algethar Academy
-        $this->assertEquals('Algeth\'ar Academy', $responseArr['data']['title']);
-        $this->assertEquals(13, $responseArr['data']['pulls']);
-        $this->assertEquals(450, $responseArr['data']['enemy_forces']);
-        $this->assertEquals(450, $responseArr['data']['enemy_forces_required']);
-
-        // Affixes
-        $this->assertEquals(10, $responseArr['data']['affix_groups'][0]['affixes'][0]['id']);
-        $this->assertEquals(124, $responseArr['data']['affix_groups'][0]['affixes'][1]['id']);
-        $this->assertEquals(11, $responseArr['data']['affix_groups'][0]['affixes'][2]['id']);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 13, 450);
+        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

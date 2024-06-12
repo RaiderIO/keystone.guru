@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
+use App\Models\Affix;
+use App\Models\Dungeon;
 use Tests\Feature\Traits\LoadsJsonFiles;
 use Tests\TestCases\APIPublicTestCase;
 use Tests\Traits\ValidatesUrls;
@@ -11,6 +11,17 @@ use Tests\Traits\ValidatesUrls;
 abstract class APICombatLogControllerTestBase extends APIPublicTestCase
 {
     use LoadsJsonFiles, ValidatesUrls;
+
+    protected Dungeon $dungeon;
+
+    protected abstract function getDungeonKey(): string;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->dungeon = Dungeon::where('key', $this->getDungeonKey())->first();
+    }
 
     protected function validateResponseStaticData(array $response): void
     {
@@ -32,6 +43,31 @@ abstract class APICombatLogControllerTestBase extends APIPublicTestCase
         $this->assertNotEmpty($response['data']['links']['thumbnails']);
         foreach ($response['data']['links']['thumbnails'] as $thumbnail) {
             $this->assertTrue($this->isValidUrl($thumbnail));
+        }
+    }
+
+    protected function validateDungeon(array $response): void
+    {
+        $this->assertEquals($this->dungeon->id, $response['data']['dungeon_id']);
+        $this->assertEquals(__($this->dungeon->name, [], 'en'), $response['data']['title']);
+    }
+
+    protected function validatePulls(mixed $responseArr, int $pulls, int $enemyForces)
+    {
+        $this->assertEquals($pulls, $responseArr['data']['pulls']);
+        $this->assertEquals($enemyForces, $responseArr['data']['enemy_forces']);
+        $this->assertEquals($this->dungeon->currentMappingVersion->enemy_forces_required, $responseArr['data']['enemy_forces_required']);
+    }
+
+    protected function validateAffixes(mixed $responseArr, string ...$affixes)
+    {
+        $validAffixIds = array_map(function (array $affix) {
+            return $affix['id'];
+        }, $responseArr['data']['affix_groups'][0]['affixes']);
+
+        foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
+            /** @var Affix $affix */
+            $this->assertContains($affix->affix_id, $validAffixIds);
         }
     }
 }
