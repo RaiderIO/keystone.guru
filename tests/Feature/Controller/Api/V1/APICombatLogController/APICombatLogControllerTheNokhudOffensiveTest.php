@@ -20,18 +20,21 @@ class APICombatLogControllerTheNokhudOffensiveTest extends APICombatLogControlle
     }
 
     #[Test]
-    public function create_givenTheNokhudOffensive21Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTheNokhudOffensive14Json_shouldReturnValidDungeonRoute(): void
     {
-//        // Arrange
-//        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_21');
-//
-//        // Act
-//        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
-//
-//        // Assert
-//        $response->assertCreated();
-//
+        // Arrange
+        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_14');
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
 //        $responseArr = json_decode($response->content(), true);
+//
+//        dump($responseArr);
+//
 //        $this->validateResponseStaticData($responseArr);
 //        $this->validateDungeon($responseArr);
 //        $this->validatePulls($responseArr, 13, 450);
