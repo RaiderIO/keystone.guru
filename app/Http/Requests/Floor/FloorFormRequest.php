@@ -34,6 +34,7 @@ class FloorFormRequest extends FormRequest
             'enemy_engagement_max_range'         => ['nullable', 'integer'],
             'enemy_engagement_max_range_patrols' => ['nullable', 'integer'],
             'percentage_display_zoom'            => ['nullable', 'integer'],
+            'zoom_max'                           => ['nullable', 'integer'],
         ];
     }
 }

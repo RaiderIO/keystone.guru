@@ -32,6 +32,7 @@
                 "ingame_max_x": -5306.75,
                 "ingame_max_y": 3665.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -72,6 +73,7 @@
                 "ingame_max_x": -7843.12,
                 "ingame_max_y": 3530,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -101,6 +103,7 @@
                 "ingame_max_x": -7491.19,
                 "ingame_max_y": 3215,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -136,6 +139,7 @@
                 "ingame_max_x": -7482.51,
                 "ingame_max_y": 3267.67,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -171,6 +175,7 @@
                 "ingame_max_x": -7526.25,
                 "ingame_max_y": 3337.65,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -206,6 +211,7 @@
                 "ingame_max_x": -7469.5,
                 "ingame_max_y": 3240,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -241,6 +247,7 @@
                 "ingame_max_x": -7488.75,
                 "ingame_max_y": 3245,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -270,6 +277,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -310,6 +318,7 @@
                 "ingame_max_x": -2839.06,
                 "ingame_max_y": -302.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -332,6 +341,7 @@
                 "ingame_max_x": -2778.44,
                 "ingame_max_y": -365,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -354,6 +364,7 @@
                 "ingame_max_x": -2779.56,
                 "ingame_max_y": -352.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -376,6 +387,7 @@
                 "ingame_max_x": -2751.78,
                 "ingame_max_y": -410,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -398,6 +410,7 @@
                 "ingame_max_x": -2660.03,
                 "ingame_max_y": -480,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -438,6 +451,7 @@
                 "ingame_max_x": -3887.5,
                 "ingame_max_y": 1470.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -478,6 +492,7 @@
                 "ingame_max_x": -2241.67,
                 "ingame_max_y": 3354.17,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -518,6 +533,7 @@
                 "ingame_max_x": -5439.58,
                 "ingame_max_y": -2806.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -558,6 +574,7 @@
                 "ingame_max_x": -2952.12,
                 "ingame_max_y": 3366.67,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -587,6 +604,7 @@
                 "ingame_max_x": -1137.5,
                 "ingame_max_y": 3875,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -622,6 +640,7 @@
                 "ingame_max_x": -1311.25,
                 "ingame_max_y": 3300,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -669,6 +688,7 @@
                 "ingame_max_x": 1624.23,
                 "ingame_max_y": -10802.9,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -710,6 +730,7 @@
                 "ingame_max_x": 1698.43,
                 "ingame_max_y": -10813.2,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -745,6 +766,7 @@
                 "ingame_max_x": 1669.98,
                 "ingame_max_y": -10772.9,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -792,6 +814,7 @@
                 "ingame_max_x": 1787.43,
                 "ingame_max_y": -10836.2,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -833,6 +856,7 @@
                 "ingame_max_x": 1823.56,
                 "ingame_max_y": -11017.1,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -874,6 +898,7 @@
                 "ingame_max_x": 1674.98,
                 "ingame_max_y": -10822.9,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -933,6 +958,7 @@
                 "ingame_max_x": 7508.33,
                 "ingame_max_y": 7608.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -962,6 +988,7 @@
                 "ingame_max_x": -1000,
                 "ingame_max_y": 3083.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -997,6 +1024,7 @@
                 "ingame_max_x": -1000,
                 "ingame_max_y": 3083.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1044,6 +1072,7 @@
                 "ingame_max_x": -2266.67,
                 "ingame_max_y": 3329.17,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1084,6 +1113,7 @@
                 "ingame_max_x": 1875.23,
                 "ingame_max_y": -10987.9,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1113,6 +1143,7 @@
                 "ingame_max_x": 1898.33,
                 "ingame_max_y": -11012.3,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1148,6 +1179,7 @@
                 "ingame_max_x": 1679.98,
                 "ingame_max_y": -10942.9,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1183,6 +1215,7 @@
                 "ingame_max_x": 2106.25,
                 "ingame_max_y": -4425,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1218,6 +1251,7 @@
                 "ingame_max_x": 2043.75,
                 "ingame_max_y": -4175,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1253,6 +1287,7 @@
                 "ingame_max_x": 1985.25,
                 "ingame_max_y": 4225,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1288,6 +1323,7 @@
                 "ingame_max_x": 1983.75,
                 "ingame_max_y": 4015,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1323,6 +1359,7 @@
                 "ingame_max_x": 1557.19,
                 "ingame_max_y": 4065,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1370,6 +1407,7 @@
                 "ingame_max_x": -11156.3,
                 "ingame_max_y": 6304.17,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1410,6 +1448,7 @@
                 "ingame_max_x": 286.25,
                 "ingame_max_y": 4535,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1439,6 +1478,7 @@
                 "ingame_max_x": -30.63,
                 "ingame_max_y": 4783.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1474,6 +1514,7 @@
                 "ingame_max_x": -212.5,
                 "ingame_max_y": 4575,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1521,6 +1562,7 @@
                 "ingame_max_x": -2867.64,
                 "ingame_max_y": -508.28,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1550,6 +1592,7 @@
                 "ingame_max_x": -2481.25,
                 "ingame_max_y": -700,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1597,6 +1640,7 @@
                 "ingame_max_x": 129.17,
                 "ingame_max_y": -1277.08,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1637,6 +1681,7 @@
                 "ingame_max_x": -3280.94,
                 "ingame_max_y": -679.68,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1677,6 +1722,7 @@
                 "ingame_max_x": 743.75,
                 "ingame_max_y": 4225,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1706,6 +1752,7 @@
                 "ingame_max_x": 1225,
                 "ingame_max_y": 3804.17,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1753,6 +1800,7 @@
                 "ingame_max_x": -733.33,
                 "ingame_max_y": 1333.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1793,6 +1841,7 @@
                 "ingame_max_x": -3916.67,
                 "ingame_max_y": 3937.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1822,6 +1871,7 @@
                 "ingame_max_x": -3972,
                 "ingame_max_y": 4285.42,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1869,6 +1919,7 @@
                 "ingame_max_x": 2877.08,
                 "ingame_max_y": 1470.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1909,6 +1960,7 @@
                 "ingame_max_x": -1718.75,
                 "ingame_max_y": 1227.08,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1938,6 +1990,7 @@
                 "ingame_max_x": -1608.13,
                 "ingame_max_y": 1300,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -1985,6 +2038,7 @@
                 "ingame_max_x": 2372.92,
                 "ingame_max_y": 364.58,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2014,6 +2068,7 @@
                 "ingame_max_x": 2562.5,
                 "ingame_max_y": 225,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2049,6 +2104,7 @@
                 "ingame_max_x": 2555.18,
                 "ingame_max_y": 244.27,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2084,6 +2140,7 @@
                 "ingame_max_x": 2568.75,
                 "ingame_max_y": 225,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2119,6 +2176,7 @@
                 "ingame_max_x": 2568.75,
                 "ingame_max_y": 225,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2154,6 +2212,7 @@
                 "ingame_max_x": 2500.75,
                 "ingame_max_y": 275.58,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2189,6 +2248,7 @@
                 "ingame_max_x": 2561.25,
                 "ingame_max_y": 235,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2236,6 +2296,7 @@
                 "ingame_max_x": 27.5,
                 "ingame_max_y": -365,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2271,6 +2332,7 @@
                 "ingame_max_x": 90,
                 "ingame_max_y": -429.17,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2300,6 +2362,7 @@
                 "ingame_max_x": 181.25,
                 "ingame_max_y": -450,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2335,6 +2398,7 @@
                 "ingame_max_x": 167.5,
                 "ingame_max_y": -485,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2370,6 +2434,7 @@
                 "ingame_max_x": 255,
                 "ingame_max_y": -405,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2399,6 +2464,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -2439,6 +2505,7 @@
                 "ingame_max_x": -1287.43,
                 "ingame_max_y": 1547.85,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2468,6 +2535,7 @@
                 "ingame_max_x": -1287.43,
                 "ingame_max_y": 1547.85,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2515,6 +2583,7 @@
                 "ingame_max_x": -330.23,
                 "ingame_max_y": 586.98,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2544,6 +2613,7 @@
                 "ingame_max_x": -476.25,
                 "ingame_max_y": 715,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2579,6 +2649,7 @@
                 "ingame_max_x": -720,
                 "ingame_max_y": 945,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2626,6 +2697,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2655,6 +2727,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2702,6 +2775,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -2742,6 +2816,7 @@
                 "ingame_max_x": 1700,
                 "ingame_max_y": 3140,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2783,6 +2858,7 @@
                 "ingame_max_x": 1950,
                 "ingame_max_y": 2570,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2812,6 +2888,7 @@
                 "ingame_max_x": 1565,
                 "ingame_max_y": 2883.33,
                 "percentage_display_zoom": 2,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2841,6 +2918,7 @@
                 "ingame_max_x": 2404.17,
                 "ingame_max_y": 3068.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2888,6 +2966,7 @@
                 "ingame_max_x": -5685.42,
                 "ingame_max_y": -1933.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2917,6 +2996,7 @@
                 "ingame_max_x": -5727.5,
                 "ingame_max_y": -2125,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2952,6 +3032,7 @@
                 "ingame_max_x": -5750,
                 "ingame_max_y": -2112.5,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -2999,6 +3080,7 @@
                 "ingame_max_x": -3047.92,
                 "ingame_max_y": -6741.67,
                 "percentage_display_zoom": 2,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -3039,6 +3121,7 @@
                 "ingame_max_x": 2541.67,
                 "ingame_max_y": 2266.67,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3068,6 +3151,7 @@
                 "ingame_max_x": 3401.25,
                 "ingame_max_y": 1265,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3115,6 +3199,7 @@
                 "ingame_max_x": -6643.13,
                 "ingame_max_y": -1155,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3144,6 +3229,7 @@
                 "ingame_max_x": -6612.5,
                 "ingame_max_y": -1225,
                 "percentage_display_zoom": 2,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3191,6 +3277,7 @@
                 "ingame_max_x": 5946.88,
                 "ingame_max_y": -1139.17,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3220,6 +3307,7 @@
                 "ingame_max_x": 6047.5,
                 "ingame_max_y": -540,
                 "percentage_display_zoom": 2,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3255,6 +3343,7 @@
                 "ingame_max_x": 6875,
                 "ingame_max_y": 180,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3290,6 +3379,7 @@
                 "ingame_max_x": 7350,
                 "ingame_max_y": 71.67,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3337,6 +3427,7 @@
                 "ingame_max_x": 3300,
                 "ingame_max_y": -3143.75,
                 "percentage_display_zoom": 2,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3366,6 +3457,7 @@
                 "ingame_max_x": -1500000,
                 "ingame_max_y": 1000000,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3401,6 +3493,7 @@
                 "ingame_max_x": -1000000,
                 "ingame_max_y": 1000000,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3448,6 +3541,7 @@
                 "ingame_max_x": 2100,
                 "ingame_max_y": 3137.5,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3477,6 +3571,7 @@
                 "ingame_max_x": 2382.5,
                 "ingame_max_y": 2950,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3518,6 +3613,7 @@
                 "ingame_max_x": 2081.25,
                 "ingame_max_y": 3290,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3547,6 +3643,7 @@
                 "ingame_max_x": 2235,
                 "ingame_max_y": 2995,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3582,6 +3679,7 @@
                 "ingame_max_x": 2235,
                 "ingame_max_y": 2995,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3635,6 +3733,7 @@
                 "ingame_max_x": 627.75,
                 "ingame_max_y": 4050,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3676,6 +3775,7 @@
                 "ingame_max_x": 1097.5,
                 "ingame_max_y": 3520,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3705,6 +3805,7 @@
                 "ingame_max_x": 1013.75,
                 "ingame_max_y": 3750,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3734,6 +3835,7 @@
                 "ingame_max_x": 998.75,
                 "ingame_max_y": 3970,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3781,6 +3883,7 @@
                 "ingame_max_x": -14464.6,
                 "ingame_max_y": 12695.8,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3810,6 +3913,7 @@
                 "ingame_max_x": -14116.3,
                 "ingame_max_y": 12512.5,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3845,6 +3949,7 @@
                 "ingame_max_x": 11027.1,
                 "ingame_max_y": -12287.5,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3880,6 +3985,7 @@
                 "ingame_max_x": 630,
                 "ingame_max_y": 3690,
                 "percentage_display_zoom": 1,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -3927,6 +4033,7 @@
                 "ingame_max_x": 2150,
                 "ingame_max_y": 3501.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -3967,6 +4074,7 @@
                 "ingame_max_x": 2600,
                 "ingame_max_y": 468.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4007,6 +4115,7 @@
                 "ingame_max_x": 200,
                 "ingame_max_y": 7082.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4047,6 +4156,7 @@
                 "ingame_max_x": -1784.38,
                 "ingame_max_y": 1806.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4076,6 +4186,7 @@
                 "ingame_max_x": -1784.38,
                 "ingame_max_y": 1806.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4111,6 +4222,7 @@
                 "ingame_max_x": -1760,
                 "ingame_max_y": 1750,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4146,6 +4258,7 @@
                 "ingame_max_x": -2056,
                 "ingame_max_y": 1720,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4193,6 +4306,7 @@
                 "ingame_max_x": 233.3,
                 "ingame_max_y": 848.68,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4233,6 +4347,7 @@
                 "ingame_max_x": -722.97,
                 "ingame_max_y": 794.12,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4262,6 +4377,7 @@
                 "ingame_max_x": -692.97,
                 "ingame_max_y": 645.79,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4297,6 +4413,7 @@
                 "ingame_max_x": -829.62,
                 "ingame_max_y": 640,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4344,6 +4461,7 @@
                 "ingame_max_x": 307.07,
                 "ingame_max_y": -182.57,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4373,6 +4491,7 @@
                 "ingame_max_x": 382.07,
                 "ingame_max_y": -182.57,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4420,6 +4539,7 @@
                 "ingame_max_x": -1164.92,
                 "ingame_max_y": 2068.87,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4460,6 +4580,7 @@
                 "ingame_max_x": -283.69,
                 "ingame_max_y": 1534.54,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4489,6 +4610,7 @@
                 "ingame_max_x": -169.69,
                 "ingame_max_y": 1431.88,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4536,6 +4658,7 @@
                 "ingame_max_x": -2349.01,
                 "ingame_max_y": 5713.01,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4576,6 +4699,7 @@
                 "ingame_max_x": -1126.52,
                 "ingame_max_y": 1375.91,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4616,6 +4740,7 @@
                 "ingame_max_x": -839.58,
                 "ingame_max_y": 1256.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4656,6 +4781,7 @@
                 "ingame_max_x": -2152.08,
                 "ingame_max_y": 2297.92,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4685,6 +4811,7 @@
                 "ingame_max_x": -1856.36,
                 "ingame_max_y": 2641.96,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4732,6 +4859,7 @@
                 "ingame_max_x": -3134.13,
                 "ingame_max_y": 5779.93,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4772,6 +4900,7 @@
                 "ingame_max_x": -393.21,
                 "ingame_max_y": 798.26,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -4812,6 +4941,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4841,6 +4971,7 @@
                 "ingame_max_x": -1301.96,
                 "ingame_max_y": 1220.21,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4876,6 +5007,7 @@
                 "ingame_max_x": -1376.96,
                 "ingame_max_y": 1370.21,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4911,6 +5043,7 @@
                 "ingame_max_x": -1301.96,
                 "ingame_max_y": 1270.21,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4946,6 +5079,7 @@
                 "ingame_max_x": -1191.96,
                 "ingame_max_y": 1186.87,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -4993,6 +5127,7 @@
                 "ingame_max_x": 78.75,
                 "ingame_max_y": 1472,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -5033,6 +5168,7 @@
                 "ingame_max_x": -807.41,
                 "ingame_max_y": 876.11,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -5073,6 +5209,7 @@
                 "ingame_max_x": -424.18,
                 "ingame_max_y": 515.39,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5102,6 +5239,7 @@
                 "ingame_max_x": -242.93,
                 "ingame_max_y": 304.39,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5137,6 +5275,7 @@
                 "ingame_max_x": -225.68,
                 "ingame_max_y": 415.72,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5184,6 +5323,7 @@
                 "ingame_max_x": 148.62,
                 "ingame_max_y": 552.88,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5213,6 +5353,7 @@
                 "ingame_max_x": -8.62,
                 "ingame_max_y": 661.96,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5260,6 +5401,7 @@
                 "ingame_max_x": -2739.8,
                 "ingame_max_y": 138.81,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5295,6 +5437,7 @@
                 "ingame_max_x": -2698,
                 "ingame_max_y": -43.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5342,6 +5485,7 @@
                 "ingame_max_x": -449.99,
                 "ingame_max_y": 2311.8,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5377,6 +5521,7 @@
                 "ingame_max_x": 4528.22,
                 "ingame_max_y": 2767.28,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5406,6 +5551,7 @@
                 "ingame_max_x": -3364.8,
                 "ingame_max_y": 4768.23,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5459,6 +5605,7 @@
                 "ingame_max_x": -2960.28,
                 "ingame_max_y": 4704.88,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5494,6 +5641,7 @@
                 "ingame_max_x": -2271.55,
                 "ingame_max_y": -2271.55,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5529,6 +5677,7 @@
                 "ingame_max_x": 579.39,
                 "ingame_max_y": -2400.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 0,
                 "floorcouplings": [
                     {
@@ -5576,6 +5725,7 @@
                 "ingame_max_x": 98.2458,
                 "ingame_max_y": 111.383,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -5616,6 +5766,7 @@
                 "ingame_max_x": 2640.27,
                 "ingame_max_y": 3615.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5757,6 +5908,7 @@
                 "ingame_max_x": 3140.27,
                 "ingame_max_y": 3615.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -5876,6 +6028,7 @@
                 "ingame_max_x": 2587,
                 "ingame_max_y": 3136,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6006,6 +6159,7 @@
                 "ingame_max_x": 3087.02,
                 "ingame_max_y": 3136.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6125,6 +6279,7 @@
                 "ingame_max_x": 2330.28,
                 "ingame_max_y": 3691.22,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6178,6 +6333,7 @@
                 "ingame_max_x": 4866.35,
                 "ingame_max_y": 3816.54,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6225,6 +6381,7 @@
                 "ingame_max_x": 693.019,
                 "ingame_max_y": 328.731,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -6247,6 +6404,7 @@
                 "ingame_max_x": 926.354,
                 "ingame_max_y": 528.736,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -6287,6 +6445,7 @@
                 "ingame_max_x": 897.841,
                 "ingame_max_y": 1466.78,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -6327,6 +6486,7 @@
                 "ingame_max_x": 3616.6665,
                 "ingame_max_y": 1133.3333,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -6367,6 +6527,7 @@
                 "ingame_max_x": 3429.167,
                 "ingame_max_y": 902.083,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -6407,6 +6568,7 @@
                 "ingame_max_x": -583.33,
                 "ingame_max_y": 1168.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6470,6 +6632,7 @@
                 "ingame_max_x": -224.22,
                 "ingame_max_y": 1839.01,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6617,6 +6780,7 @@
                 "ingame_max_x": -1336,
                 "ingame_max_y": 2530,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -6946,6 +7110,7 @@
                 "ingame_max_x": -2219,
                 "ingame_max_y": 250,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7115,6 +7280,7 @@
                 "ingame_max_x": -3254.45,
                 "ingame_max_y": 3168.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7144,6 +7310,7 @@
                 "ingame_max_x": -309.45,
                 "ingame_max_y": 2247.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7191,6 +7358,7 @@
                 "ingame_max_x": 298.09,
                 "ingame_max_y": 585.736,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -7231,6 +7399,7 @@
                 "ingame_max_x": 2429.17,
                 "ingame_max_y": 2093.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7266,6 +7435,7 @@
                 "ingame_max_x": 2637.5,
                 "ingame_max_y": 2587.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7295,6 +7465,7 @@
                 "ingame_max_x": 3067.5,
                 "ingame_max_y": 1565,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 0,
                 "floorcouplings": [
                     {
@@ -7324,6 +7495,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7383,6 +7555,7 @@
                 "ingame_max_x": -4781.25,
                 "ingame_max_y": -2893.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7412,6 +7585,7 @@
                 "ingame_max_x": -3847.5,
                 "ingame_max_y": -3230,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 0,
                 "floorcouplings": [
                     {
@@ -7441,6 +7615,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7494,6 +7669,7 @@
                 "ingame_max_x": -375,
                 "ingame_max_y": 221.67,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7523,6 +7699,7 @@
                 "ingame_max_x": -593.75,
                 "ingame_max_y": 440,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7552,6 +7729,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7605,6 +7783,7 @@
                 "ingame_max_x": 206.25,
                 "ingame_max_y": 250,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7634,6 +7813,7 @@
                 "ingame_max_x": 250,
                 "ingame_max_y": 63.54,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7663,6 +7843,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7707,15 +7888,16 @@
                 "name": "dungeons.dragonflight.the_nokhud_offensive.floors.the_nokhud_offensive",
                 "default": 1,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
+                "min_enemy_size": 10,
+                "max_enemy_size": 18,
+                "enemy_engagement_max_range": 300,
+                "enemy_engagement_max_range_patrols": 150,
                 "ingame_min_x": 754.17,
                 "ingame_min_y": -3629.17,
                 "ingame_max_x": -6822.92,
                 "ingame_max_y": 1422.92,
                 "percentage_display_zoom": null,
+                "zoom_max": 10,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -7731,17 +7913,18 @@
                 "facade": 1,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
+                "enemy_engagement_max_range": 300,
+                "enemy_engagement_max_range_patrols": 100,
                 "ingame_min_x": 0,
                 "ingame_min_y": 0,
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 930,
+                        "id": 949,
                         "floor1_id": 278,
                         "floor2_id": 153,
                         "direction": "down"
@@ -7785,6 +7968,7 @@
                 "ingame_max_x": -75,
                 "ingame_max_y": 1685,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7814,6 +7998,7 @@
                 "ingame_max_x": -181.25,
                 "ingame_max_y": 1868.75,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7843,6 +8028,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7896,6 +8082,7 @@
                 "ingame_max_x": -1480,
                 "ingame_max_y": -4909.17,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7925,6 +8112,7 @@
                 "ingame_max_x": -1550,
                 "ingame_max_y": -4951.66,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7960,6 +8148,7 @@
                 "ingame_max_x": -1315,
                 "ingame_max_y": -5082.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -7995,6 +8184,7 @@
                 "ingame_max_x": -1333.13,
                 "ingame_max_y": -5135,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8030,6 +8220,7 @@
                 "ingame_max_x": -1330,
                 "ingame_max_y": -5160,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8059,6 +8250,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8130,6 +8322,7 @@
                 "ingame_max_x": 425,
                 "ingame_max_y": 412.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8159,6 +8352,7 @@
                 "ingame_max_x": 240,
                 "ingame_max_y": 827.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8188,6 +8382,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8241,6 +8436,7 @@
                 "ingame_max_x": -318.99,
                 "ingame_max_y": 2019.58,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8270,6 +8466,7 @@
                 "ingame_max_x": 200,
                 "ingame_max_y": 2117.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8305,6 +8502,7 @@
                 "ingame_max_x": 700,
                 "ingame_max_y": 1790.83,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8352,6 +8550,7 @@
                 "ingame_max_x": 2315,
                 "ingame_max_y": 1118.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -8392,6 +8591,7 @@
                 "ingame_max_x": -1107.79,
                 "ingame_max_y": -111.33,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -8432,6 +8632,7 @@
                 "ingame_max_x": -87.667,
                 "ingame_max_y": 502.924,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8461,6 +8662,7 @@
                 "ingame_max_x": -337.66696,
                 "ingame_max_y": 302.924,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8496,6 +8698,7 @@
                 "ingame_max_x": -687.66565,
                 "ingame_max_y": 2.926,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8543,6 +8746,7 @@
                 "ingame_max_x": -522.337,
                 "ingame_max_y": 1186.6804,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8572,6 +8776,7 @@
                 "ingame_max_x": -572.337,
                 "ingame_max_y": 1500.0103,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8619,6 +8824,7 @@
                 "ingame_max_x": 35.3335,
                 "ingame_max_y": -237.358,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8648,6 +8854,7 @@
                 "ingame_max_x": 65.3333,
                 "ingame_max_y": -517.357,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8695,6 +8902,7 @@
                 "ingame_max_x": -650,
                 "ingame_max_y": 200,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8730,6 +8938,7 @@
                 "ingame_max_x": -718.75,
                 "ingame_max_y": 175,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8759,6 +8968,7 @@
                 "ingame_max_x": -1075,
                 "ingame_max_y": 250,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8806,6 +9016,7 @@
                 "ingame_max_x": -180.88,
                 "ingame_max_y": 491.89,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8835,6 +9046,7 @@
                 "ingame_max_x": -200.88,
                 "ingame_max_y": 691.89,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8870,6 +9082,7 @@
                 "ingame_max_x": -387.55,
                 "ingame_max_y": 741.89,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8905,6 +9118,7 @@
                 "ingame_max_x": -357.55,
                 "ingame_max_y": 942.66,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8952,6 +9166,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -8987,6 +9202,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9022,6 +9238,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9069,6 +9286,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9104,6 +9322,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9145,6 +9364,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9198,6 +9418,7 @@
                 "ingame_max_x": -147.5,
                 "ingame_max_y": 1200,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9227,6 +9448,7 @@
                 "ingame_max_x": -478.75,
                 "ingame_max_y": 883.333,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9274,6 +9496,7 @@
                 "ingame_max_x": 39.6232,
                 "ingame_max_y": 452.871,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9314,6 +9537,7 @@
                 "ingame_max_x": -1279.94,
                 "ingame_max_y": 2682.55,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9354,6 +9578,7 @@
                 "ingame_max_x": -2058.92,
                 "ingame_max_y": 2349.64,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9394,6 +9619,7 @@
                 "ingame_max_x": 2030.18,
                 "ingame_max_y": 1567.96,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9434,6 +9660,7 @@
                 "ingame_max_x": 307.36,
                 "ingame_max_y": -162.27,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9474,6 +9701,7 @@
                 "ingame_max_x": 2009.09,
                 "ingame_max_y": 50.27,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9514,6 +9742,7 @@
                 "ingame_max_x": 1281.29,
                 "ingame_max_y": 1743.98,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -9554,6 +9783,7 @@
                 "ingame_max_x": 317.69,
                 "ingame_max_y": 251.41,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9583,6 +9813,7 @@
                 "ingame_max_x": 337.69,
                 "ingame_max_y": 311.41,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9624,6 +9855,7 @@
                 "ingame_max_x": 307.7,
                 "ingame_max_y": 296.43,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9659,6 +9891,7 @@
                 "ingame_max_x": 287.7,
                 "ingame_max_y": 356.92,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9712,6 +9945,7 @@
                 "ingame_max_x": -84.92,
                 "ingame_max_y": 2356.19,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9747,6 +9981,7 @@
                 "ingame_max_x": -161.59,
                 "ingame_max_y": 2359.98,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9782,6 +10017,7 @@
                 "ingame_max_x": -91.59,
                 "ingame_max_y": 2256.19,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9817,6 +10053,7 @@
                 "ingame_max_x": -91.59,
                 "ingame_max_y": 2256.19,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9852,6 +10089,7 @@
                 "ingame_max_x": -91.59,
                 "ingame_max_y": 2256.19,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9887,6 +10125,7 @@
                 "ingame_max_x": -50.25,
                 "ingame_max_y": 2279.19,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9916,6 +10155,7 @@
                 "ingame_max_x": -96.59,
                 "ingame_max_y": 2296.19,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9969,6 +10209,7 @@
                 "ingame_max_x": 2911.96,
                 "ingame_max_y": 3809.45,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -9998,6 +10239,7 @@
                 "ingame_max_x": 2961.9597,
                 "ingame_max_y": 4169.45,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10045,6 +10287,7 @@
                 "ingame_max_x": 220.63,
                 "ingame_max_y": 189.82,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -10085,6 +10328,7 @@
                 "ingame_max_x": -442.75,
                 "ingame_max_y": -255.16,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10114,6 +10358,7 @@
                 "ingame_max_x": -442.75,
                 "ingame_max_y": -255.16,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10149,6 +10394,7 @@
                 "ingame_max_x": -442.75,
                 "ingame_max_y": -255.16,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10196,6 +10442,7 @@
                 "ingame_max_x": -442.75,
                 "ingame_max_y": -255.16,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10225,6 +10472,7 @@
                 "ingame_max_x": -442.75,
                 "ingame_max_y": -255.16,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10278,6 +10526,7 @@
                 "ingame_max_x": -645.11,
                 "ingame_max_y": 204.3,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10307,6 +10556,7 @@
                 "ingame_max_x": -545.11,
                 "ingame_max_y": 270.6,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10354,6 +10604,7 @@
                 "ingame_max_x": -550.14,
                 "ingame_max_y": 310.52,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -10394,6 +10645,7 @@
                 "ingame_max_x": -1625,
                 "ingame_max_y": 2052.08,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -10434,6 +10686,7 @@
                 "ingame_max_x": -887.5,
                 "ingame_max_y": 1050,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -10474,6 +10727,7 @@
                 "ingame_max_x": 99.9992,
                 "ingame_max_y": 251.667,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10503,6 +10757,7 @@
                 "ingame_max_x": -112.5,
                 "ingame_max_y": 450,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10550,6 +10805,7 @@
                 "ingame_max_x": -2354.167,
                 "ingame_max_y": 956.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10579,6 +10835,7 @@
                 "ingame_max_x": 1066.7,
                 "ingame_max_y": 1066.7,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 0,
                 "floorcouplings": [
                     {
@@ -10626,6 +10883,7 @@
                 "ingame_max_x": -1307.07,
                 "ingame_max_y": -14,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10655,6 +10913,7 @@
                 "ingame_max_x": -1307.07,
                 "ingame_max_y": 336,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10684,6 +10943,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -10724,6 +10984,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10753,6 +11014,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10788,6 +11050,7 @@
                 "ingame_max_x": -10.587,
                 "ingame_max_y": 304.398,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10835,6 +11098,7 @@
                 "ingame_max_x": 2838.75,
                 "ingame_max_y": -1400,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10864,6 +11128,7 @@
                 "ingame_max_x": 3014.625,
                 "ingame_max_y": -1550.67,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10899,6 +11164,7 @@
                 "ingame_max_x": 4085,
                 "ingame_max_y": -1782.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -10940,6 +11206,7 @@
                 "ingame_max_x": 4888.75,
                 "ingame_max_y": -2075,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 0,
                 "floorcouplings": [
                     {
@@ -10975,6 +11242,7 @@
                 "ingame_max_x": 4714.58,
                 "ingame_max_y": -2114.58,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11010,6 +11278,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11081,6 +11350,7 @@
                 "ingame_max_x": 2838.75,
                 "ingame_max_y": -1400,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 0,
                 "floorcouplings": [
                     {
@@ -11116,6 +11386,7 @@
                 "ingame_max_x": 3014.625,
                 "ingame_max_y": -1550.67,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11157,6 +11428,7 @@
                 "ingame_max_x": 4085,
                 "ingame_max_y": -1782.5,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11198,6 +11470,7 @@
                 "ingame_max_x": 4714.58,
                 "ingame_max_y": -2114.58,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11233,6 +11506,7 @@
                 "ingame_max_x": 2595,
                 "ingame_max_y": -1080,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11268,6 +11542,7 @@
                 "ingame_max_x": 3474.99,
                 "ingame_max_y": -2322.08,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11309,6 +11584,7 @@
                 "ingame_max_x": 3857.18,
                 "ingame_max_y": -951.25,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11350,6 +11626,7 @@
                 "ingame_max_x": 0,
                 "ingame_max_y": 0,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11433,6 +11710,7 @@
                 "ingame_max_x": -180.88,
                 "ingame_max_y": 491.89,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11462,6 +11740,7 @@
                 "ingame_max_x": -200.88,
                 "ingame_max_y": 691.89,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11520,6 +11799,7 @@
                 "ingame_max_x": -387.55,
                 "ingame_max_y": 741.89,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {
@@ -11600,6 +11880,7 @@
                 "ingame_max_x": -357.55,
                 "ingame_max_y": 942.66,
                 "percentage_display_zoom": null,
+                "zoom_max": null,
                 "active": 1,
                 "floorcouplings": [
                     {

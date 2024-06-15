@@ -109,7 +109,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
 
         // Inverse zoom
-        width += (c.map.settings.maxZoom - getState().getMapZoomLevel());
+        width += (c.map.leafletSettings.maxZoom - getState().getMapZoomLevel());
 
         return width;
     }

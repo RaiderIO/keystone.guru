@@ -124,6 +124,9 @@ return [
     /** The range after which we start considering patrols too */
     'enemy_engagement_max_range_patrols_default' => 50,
 
+    /** The default max zoom level on the map */
+    'zoom_max_default'                           => 5,
+
     /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something
@@ -162,27 +165,27 @@ return [
         /**
          * A secret key that must be provided to get access to the preview routes (no other auth available)
          */
-        'preview_secret'        => env('THUMBNAIL_PREVIEW_SECRET'),
+        'preview_secret'         => env('THUMBNAIL_PREVIEW_SECRET'),
 
         /**
          * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
          */
-        'refresh_min'           => 30,
+        'refresh_min'            => 30,
 
         /**
          * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
          */
-        'refresh_anyways_days'  => 30,
+        'refresh_anyways_days'   => 30,
 
         /**
          * The amount of hours where a thumbnail refresh must be in the queue for before it is re-queued
          */
-        'refresh_requeue_hours' => 12,
+        'refresh_requeue_hours'  => 12,
 
         /**
          * The maximum attempts a thumbnail generation can take before it is failed and not queued again
          */
-        'max_attempts'          => 3,
+        'max_attempts'           => 3,
 
         /**
          * The maximum amount of thumbnails that will be queued in a single run.

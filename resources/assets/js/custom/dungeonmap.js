@@ -175,7 +175,7 @@ class DungeonMap extends Signalable {
             // Simple 1:1 coordinates to meters, don't use Mercator or anything like that
             crs: L.CRS.Simple,
             gestureHandling: this.options.gestureHandling
-        }, c.map.settings));
+        }, c.map.leafletSettings));
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();
         // Top left is reserved for the sidebar
@@ -652,19 +652,27 @@ class DungeonMap extends Signalable {
             this.leafletMap.removeLayer(this.mapTileLayer);
         }
         this.leafletMap.setView(center ?? [-128, 192], zoom ?? this.options.defaultZoom);
-        let southWest = this.leafletMap.unproject([0, 8192], this.leafletMap.getMaxZoom());
-        let northEast = this.leafletMap.unproject([12288, 0], this.leafletMap.getMaxZoom());
+
+        let tileSize = L.point(384, 256);
+        let currentFloor = getState().getCurrentFloor();
+        let floorMaxZoomLevel = currentFloor.zoom_max ?? this.options.defaultZoomMax;
+        let zoomSizeFactor = Math.pow(2, floorMaxZoomLevel);
+        let southWest = this.leafletMap.unproject([0, tileSize.y * zoomSizeFactor], floorMaxZoomLevel);
+        let northEast = this.leafletMap.unproject([tileSize.x * zoomSizeFactor, 0], floorMaxZoomLevel);
 
 
         let dungeonData = getState().getMapContext().getDungeon();
-        this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${getState().getCurrentFloor().index}/{z}/{x}_{y}.png`, {
-            maxZoom: 5,
+        this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.png`, {
+            maxNativeZoom: 5,
+            maxZoom: floorMaxZoomLevel,
             attribution: 'Map data © Blizzard Entertainment',
-            tileSize: L.point(384, 256),
+            tileSize: tileSize,
             noWrap: true,
             continuousWorld: true,
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
+
+        this.leafletMap.setMaxZoom(floorMaxZoomLevel);
 
         // if( typeof this.drawnLayers !== 'undefined' ) {
         //     this.leafletMap.removeLayer(this.drawnLayers);
