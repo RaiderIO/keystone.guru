@@ -768,6 +768,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     197857,
                     // Nokhud Offensive: War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
+                    // Stormsurge Totem
+                    194897,
+                    // Unstable Squall
+                    194895,
+                    // Primal Gust
+                    195579,
                 ]);
             })
             ->get();
