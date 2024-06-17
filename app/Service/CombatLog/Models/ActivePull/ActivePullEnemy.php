@@ -10,8 +10,14 @@ class ActivePullEnemy
 {
     private ?Enemy $resolvedEnemy = null;
 
-    public function __construct(private readonly string $uniqueId, private readonly int $npcId, private readonly float $x, private readonly float $y, private readonly Carbon $engagedAt, private readonly ?Carbon $diedAt)
-    {
+    public function __construct(
+        private readonly string  $uniqueId,
+        private readonly int     $npcId,
+        private readonly float   $x,
+        private readonly float   $y,
+        private readonly Carbon  $engagedAt,
+        private readonly ?Carbon $diedAt
+    ) {
     }
 
     public function getUniqueId(): string
