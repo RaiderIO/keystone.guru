@@ -229,6 +229,29 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_NELTHARUS,
                     ])->orderBy('expansions.released_at')
                     ->get(),
+            ],[
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
+                'seasonal_affix_id'       => null,
+                'index'                   => 4,
+                'start'                   => '2024-09-09 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 10,
+                'start_affix_group_index' => 4,
+                'key_level_min'           => 2,
+                'key_level_max'           => 22,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_THE_STONEVAULT,
+                        Dungeon::DUNGEON_THE_DAWNBREAKER,
+                        Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
+                        Dungeon::DUNGEON_CITY_OF_THREADS,
+                        Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE,
+                        Dungeon::DUNGEON_THE_NECROTIC_WAKE,
+                        Dungeon::DUNGEON_SIEGE_OF_BORALUS,
+                        Dungeon::DUNGEON_GRIM_BATOL,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
             ],
         ];
 

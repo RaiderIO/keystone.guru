@@ -32,5 +32,13 @@ return [
     'dragonflight'       => [
         'name' => 'Dragonflight',
     ],
-
+    'tww'                => [
+        'name' => 'The War Within',
+    ],
+    'midnight'           => [
+        'name' => 'Midnight',
+    ],
+    'tlt'     => [
+        'name' => 'The Last Titan',
+    ],
 ];

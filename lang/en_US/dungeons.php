@@ -836,5 +836,55 @@ return [
             ],
         ],
     ],
+    'tww'          => [
+        'ara_karacityofechoes'   => [
+            'name'   => 'Ara-Kara: City of Echoes',
+            'floors' => [
+                'ara_karacityofechoes' => 'Ara-Kara: City of Echoes',
+            ],
+        ],
+        'cityofthreads'          => [
+            'name'   => 'City of Threads',
+            'floors' => [
+                'cityofthreads' => 'City of Threads',
+            ],
+        ],
+        'cinderbrewmeadery'      => [
+            'name'   => 'Cinderbrew Meadery',
+            'floors' => [
+                'cinderbrewmeadery' => 'Cinderbrew Meadery',
+            ],
+        ],
+        'darkflamecleft'         => [
+            'name'   => 'Darkflame Cleft',
+            'floors' => [
+                'darkflamecleft' => 'Darkflame Cleft',
+            ],
+        ],
+        'prioryofthesacredflame' => [
+            'name'   => 'Priory of the Sacred Flame',
+            'floors' => [
+                'prioryofthesacredflame' => 'Priory of the Sacred Flame',
+            ],
+        ],
+        'thedawnbreaker'         => [
+            'name'   => 'The Dawnbreaker',
+            'floors' => [
+                'thedawnbreaker' => 'The Dawnbreaker',
+            ],
+        ],
+        'therookery'             => [
+            'name'   => 'The Rookery',
+            'floors' => [
+                'therookery' => 'The Rookery',
+            ],
+        ],
+        'thestonevault'          => [
+            'name'   => 'The Stonevault',
+            'floors' => [
+                'thestonevault' => 'The Stonevault',
+            ],
+        ],
+    ],
 
 ];

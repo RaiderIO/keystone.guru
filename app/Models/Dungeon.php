@@ -267,6 +267,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public const DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL = 'dawn_of_the_infinite_galakronds_fall';
     public const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  = 'dawn_of_the_infinite_murozonds_rise';
 
+    // The War Within
+    public const DUNGEON_ARA_KARA_CITY_OF_ECHOES    = 'ara_karacityofechoes';
+    public const DUNGEON_CITY_OF_THREADS            = 'cityofthreads';
+    public const DUNGEON_CINDERBREW_MEADERY         = 'cinderbrewmeadery';
+    public const DUNGEON_DARKFLAME_CLEFT            = 'darkflamecleft';
+    public const DUNGEON_THE_DAWNBREAKER            = 'thedawnbreaker';
+    public const DUNGEON_THE_ROOKERY                = 'therookery';
+    public const DUNGEON_THE_STONEVAULT             = 'thestonevault';
+    public const DUNGEON_PRIORY_OF_THE_SACRED_FLAME = 'prioryofthesacredflame';
+
     public const ALL = [
         Expansion::EXPANSION_CLASSIC      => [
             self::DUNGEON_BLACKFATHOM_DEEPS,
@@ -420,6 +430,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
             self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
             self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
+        ],
+        Expansion::EXPANSION_TWW          => [
+            self::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
+            self::DUNGEON_CITY_OF_THREADS,
+            self::DUNGEON_CINDERBREW_MEADERY,
+            self::DUNGEON_DARKFLAME_CLEFT,
+            self::DUNGEON_THE_DAWNBREAKER,
+            self::DUNGEON_THE_ROOKERY,
+            self::DUNGEON_THE_STONEVAULT,
+            self::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
         ],
     ];
 
