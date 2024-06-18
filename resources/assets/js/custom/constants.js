@@ -257,11 +257,14 @@ let c = {
     },
     map: {
         settings: {
+            defaultMaxZoom: 5,
+        },
+        leafletSettings: {
             // Context menu when right clicking stuff
             contextmenu: true,
             zoomControl: false,
             minZoom: 1,
-            maxZoom: 5,
+            maxZoom: 10,
             zoomSnap: 0,
             boxZoom: false,
             wheelDebounceTime: 100,

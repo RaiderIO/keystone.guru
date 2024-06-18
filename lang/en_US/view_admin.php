@@ -123,6 +123,7 @@ return [
             'enemy_engagement_max_range'         => 'Enemy engagement max range (default: %d)',
             'enemy_engagement_max_range_patrols' => 'Enemy engagement max range for patrols (default: %d)',
             'percentage_display_zoom'            => 'Map zoom level at which percentages are displayed (higher is more zoomed in)',
+            'zoom_max'                           => 'Max zoom level on the map (default: %d)',
             'default'                            => 'Default',
             'default_title'                      => 'If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)',
             'facade'                             => 'Facade',

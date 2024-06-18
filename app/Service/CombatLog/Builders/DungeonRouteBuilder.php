@@ -339,11 +339,7 @@ abstract class DungeonRouteBuilder
         // Therefore, these enemies should be in combat with us regardless
         /** @var Collection|Enemy[] $preferredEnemiesInEngagedGroups */
         $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
-            if ($availableEnemy->enemy_pack_id === null) {
-                return false;
-            }
-
-            return $preferredGroups->has($availableEnemy->enemyPack->group);
+            return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
         });
 
         if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {

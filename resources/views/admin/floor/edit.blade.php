@@ -113,6 +113,12 @@ $floor ??= null;
         @include('common.forms.form-error', ['key' => 'percentage_display_zoom'])
     </div>
 
+    <div class="form-group{{ $errors->has('zoom_max') ? ' has-error' : '' }}">
+        {!! Form::label('zoom_max', sprintf(__('view_admin.floor.edit.zoom_max'), config('keystoneguru.zoom_max_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('zoom_max', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'zoom_max'])
+    </div>
+
     <div class="form-group">
         @include('admin.floor.connectedfloors', ['floor' => $floor])
 

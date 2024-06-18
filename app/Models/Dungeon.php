@@ -766,6 +766,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194469,
                     // Gutstabbers give 0 enemy forces but are in the mapping regardless
                     197857,
+                    // Nokhud Offensive: War Ohuna gives 0 enemy forces but is in the mapping regardless
+                    192803,
+                    // Stormsurge Totem
+                    194897,
+                    // Unstable Squall
+                    194895,
+                    // Primal Gust
+                    195579,
                 ]);
             })
             ->get();

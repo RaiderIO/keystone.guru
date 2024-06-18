@@ -1485,6 +1485,8 @@ class DungeonRoute extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(static function (DungeonRoute $dungeonRoute) {
+            $dungeonRoute->load(['dungeonRouteThumbnailJobs', 'brushlines', 'paths', 'killZones', 'livesessions']);
+
             // Delete thumbnails
             foreach ($dungeonRoute->dungeon->floors as $floor) {
                 // @ because we don't care if it fails
@@ -1503,6 +1505,7 @@ class DungeonRoute extends Model
             $dungeonRoute->playerraces()->delete();
             $dungeonRoute->playerspecializations()->delete();
             $dungeonRoute->tags()->delete();
+
             // Mapping related items
             $dungeonRoute->enemyRaidMarkers()->delete();
             foreach ($dungeonRoute->brushlines as $brushline) {
