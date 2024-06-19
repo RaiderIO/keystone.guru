@@ -19,6 +19,26 @@ services:
     networks:
       - keystone.guru
 
+  cron:
+    build:
+      context: docker-compose/cron
+      dockerfile: Dockerfile
+    image: keystone.guru-cron
+    container_name: keystone.guru-cron
+    depends_on:
+      - db
+      - db-combatlog
+      - redis
+    restart: no
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ~/.ssh:/root/.ssh
+    networks:
+      - keystone.guru
+
+
   horizon:
     build:
       context: docker-compose/app
