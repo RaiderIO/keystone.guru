@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\V1\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\Dungeon\APIDungeonController;
-use App\Http\Controllers\Api\V1\RaiderIO\APIRaiderIOController;
 use App\Http\Controllers\Api\V1\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Route\APIDungeonRouteThumbnailJobController;
 
@@ -26,10 +25,6 @@ Route::prefix('v1')->group(static function () {
         Route::get('/', (new APIDungeonRouteController())->get(...))->name('api.v1.route.list');
         Route::post('/{dungeonRoute}/thumbnail', (new APIDungeonRouteController())->createThumbnails(...))->name('api.v1.route.thumbnail.create');
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', (new APIDungeonRouteThumbnailJobController())->get(...))->name('api.v1.thumbnailjob.get');
-    });
-
-    Route::prefix('raiderio')->group(static function () {
-        Route::post('/heatmapdata', (new APIRaiderIOController())->getHeatmapData(...))->name('api.v1.raiderio.heatmapdata.get');
     });
 
     // Static data

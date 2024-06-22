@@ -42,19 +42,24 @@ trait Curl
         return file_put_contents($filePath, $rawImage) !== false;
     }
 
-    public function curlPost(string $url, array $postBody): string
+    public function curlPost(string $url, array $postBody = [], array $headers = []): string
     {
         // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord
         $ch = curl_init();
+
+        $combinedHeaders = [];
+        foreach ($headers as $key => $value) {
+            $combinedHeaders[] = sprintf('%s: %s', $key, $value);
+        }
 
         curl_setopt_array($ch, [
             CURLOPT_URL        => $url,
             CURLOPT_POST       => true,
             // Found no way to disable this behaviour from json_encode
             CURLOPT_POSTFIELDS => str_replace('\\\\n', '\\n', json_encode($postBody)),
-            CURLOPT_HTTPHEADER => [
+            CURLOPT_HTTPHEADER => array_merge([
                 'Content-Type: application/json',
-            ],
+            ], $combinedHeaders),
         ]);
 
         try {

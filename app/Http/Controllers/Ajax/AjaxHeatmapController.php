@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\AjaxGetDataFormRequest;
-use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
-use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
+use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Teapot\StatusCode;
 
@@ -25,12 +24,12 @@ class AjaxHeatmapController extends Controller
 //    }
 
     public function getData(
-        AjaxGetDataFormRequest         $request,
-        CombatLogEventServiceInterface $combatLogEventService
+        AjaxGetDataFormRequest      $request,
+        RaiderIOApiServiceInterface $raiderIOApiService
     ): JsonResponse {
         return \response()->json(
-            $combatLogEventService->getGridAggregation(
-                CombatLogEventFilter::fromArray($request->validated())
+            $raiderIOApiService->getHeatmapData(
+                HeatmapDataFilter::fromArray($request->validated())
             )->toArray(),
             StatusCode::OK
         );

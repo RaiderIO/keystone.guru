@@ -194,8 +194,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    }
                                  ', [
                                      // @TODO #2419
-                                    ':sizeX' => config('keystoneguru.heatmap.service.data.arc.sizeX'),
-                                    ':sizeY' => config('keystoneguru.heatmap.service.data.arc.sizeY'),
+                                    ':sizeX' => config('keystoneguru.heatmap.service.data.raw.sizeX'),
+                                    ':sizeY' => config('keystoneguru.heatmap.service.data.raw.sizeY'),
                                     ':minX'  => $floor->ingame_min_x,
                                     ':minY'  => $floor->ingame_min_y,
                                     ':maxX'  => $floor->ingame_max_x,
