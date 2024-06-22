@@ -39,7 +39,7 @@ class CombatLogEventFilter implements Arrayable
 
     public function __construct(
         private readonly Dungeon $dungeon,
-        private readonly string $eventType
+        private readonly string  $eventType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -224,8 +224,29 @@ class CombatLogEventFilter implements Arrayable
 
     public function toOpensearchQuery(array $must = []): array
     {
-        $must[] = MatchOne::make('challenge_mode_id', $this->getDungeon()->challenge_mode_id);
+        $dungeon = $this->getDungeon();
+
+        $must[] = MatchOne::make('challenge_mode_id', $dungeon->challenge_mode_id);
         $must[] = MatchOne::make('event_type', $this->eventType);
+
+//        /** @var Floor $firstFloor */
+//        $firstFloor = $dungeon->floors->first();
+//
+////        dd($firstFloor);
+//
+//        $must[]     = BoolQuery::make([
+//            Should::make([
+//                BoolQuery::make([
+//                    Must::make([
+//                        MatchOne::make('ui_map_id', $firstFloor->ui_map_id),
+//                        Range::make('pos_x', [
+//                            'gte' => $firstFloor->ingame_min_x,
+//                            'lte' => $firstFloor->ingame_max_x,
+//                        ]),
+//                    ]),
+//                ]),
+//            ]),
+//        ]);
 
         if ($this->levelMin !== null && $this->levelMax !== null) {
             $must[] = Range::make('level', [

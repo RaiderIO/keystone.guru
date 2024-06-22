@@ -363,8 +363,19 @@ return [
     'heatmap' => [
         'service' => [
             'data' => [
-                'sizeX' => 800,
-                'sizeY' => 600,
+                // Raw data can get away with less accurate positioning
+                'raw' => [
+                    'sizeX' => 400,
+                    'sizeY' => 300,
+                ],
+                // Arc requires precise positioning, this resolution is too much
+                // for raw since the buckets would be too small, but since the coordinates
+                // are equal to enemy positions this only just increases the accuracy of the
+                // points, while still having a low bucket count.
+                'arc' => [
+                    'sizeX' => 800,
+                    'sizeY' => 600,
+                ],
             ],
         ],
     ],

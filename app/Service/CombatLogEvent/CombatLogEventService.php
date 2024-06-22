@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\Season;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
@@ -140,6 +141,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
+                /** @var Floor $floor */
                 $filterQuery = $filters->toOpensearchQuery([
                     MatchOne::make('ui_map_id', $floor->ui_map_id),
                 ]);
@@ -155,7 +157,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     ->search($filterQuery)
                     ->aggregations([
                         Aggregation::make(
-                            name: "heatmap",
+                            name: 'heatmap',
                             aggregationType: ScriptedMetric::make(
                                 mapScript: strtr('
                                    int sizeX = :sizeX;
@@ -171,8 +173,19 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    float stepX = width / sizeX;
                                    float stepY = height / sizeY;
 
+                                   // @TODO #2422
+                                   // if( (doc[\'pos_x\'].value < minX) || (doc[\'pos_x\'].value > maxX) ||
+                                   //     (doc[\'pos_y\'].value < minY) || (doc[\'pos_y\'].value > maxY)) {
+                                   //   return;
+                                   // }
+
                                    int gx = ((doc[\'pos_x\'].value - minX) / width * sizeX).intValue();
                                    int gy = ((doc[\'pos_y\'].value - minY) / height * sizeY).intValue();
+
+                                   // @TODO #2422
+                                   if( gx < 0 || gx >= sizeX || gy < 0 || gy >= sizeY ) {
+                                     return;
+                                   }
                                    String key = ((gx * stepX) + minX).toString() + \',\' + ((gy * stepY) + minY).toString();
                                    if (state.map.containsKey(key)) {
                                      state.map[key] += 1;
@@ -180,8 +193,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                      state.map[key] = 1;
                                    }
                                  ', [
-                                    ':sizeX' => config('keystoneguru.heatmap.service.data.sizeX'),
-                                    ':sizeY' => config('keystoneguru.heatmap.service.data.sizeY'),
+                                     // @TODO #2419
+                                    ':sizeX' => config('keystoneguru.heatmap.service.data.arc.sizeX'),
+                                    ':sizeY' => config('keystoneguru.heatmap.service.data.arc.sizeY'),
                                     ':minX'  => $floor->ingame_min_x,
                                     ':minY'  => $floor->ingame_min_y,
                                     ':maxX'  => $floor->ingame_max_x,

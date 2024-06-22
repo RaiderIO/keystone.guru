@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V1\Dungeon;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Dungeon\DungeonCollectionResource;
