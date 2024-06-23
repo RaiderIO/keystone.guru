@@ -58,6 +58,12 @@ PUT _index_template/combat_log_events-template
         "pos_y": {
           "type": "float"
         },
+        "pos_npc_x": {
+          "type": "float"
+        },
+        "pos_npc_y": {
+          "type": "float"
+        },
         "event_type": {
           "type": "keyword"
         },
@@ -110,8 +116,7 @@ PUT _plugins/_ism/policies/combat_log_events-ILM-policy
               "delay": "1m"
             },
             "rollover": {
-              "min_size": "50gb",
-              "min_index_age": "30d"
+              "min_size": "50gb"
             }
           },
           {
@@ -232,6 +237,12 @@ PUT /combat_log_events-000001
         "type": "float"
       },
       "pos_y": {
+        "type": "float"
+      },
+      "pos_npc_x": {
+        "type": "float"
+      },
+      "pos_npc_y": {
         "type": "float"
       },
       "event_type": {

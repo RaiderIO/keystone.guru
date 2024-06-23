@@ -16,6 +16,10 @@ use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * @property Collection<CreateRouteNpc>   $npcs
+ * @property Collection<CreateRouteSpell> $spells
+ */
 class CreateRouteBody
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
@@ -25,9 +29,7 @@ class CreateRouteBody
         public CreateRouteMetadata      $metadata,
         public CreateRouteSettings      $settings,
         public CreateRouteChallengeMode $challengeMode,
-        /** @var Collection<CreateRouteNpc> */
         public Collection               $npcs,
-        /** @var Collection<CreateRouteSpell> */
         public Collection               $spells
     ) {
     }

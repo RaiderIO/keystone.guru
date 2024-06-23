@@ -12,9 +12,9 @@ class LatLng implements Arrayable
     {
     }
 
-    public function getLat(): float
+    public function getLat(?int $precision = null): float
     {
-        return $this->lat;
+        return $precision === null ? $this->lat : round($this->lat, $precision);
     }
 
     public function setLat(float $lat): LatLng
@@ -24,9 +24,9 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    public function getLng(): float
+    public function getLng(int $precision = null): float
     {
-        return $this->lng;
+        return $precision === null ? $this->lng : round($this->lng, $precision);
     }
 
     public function setLng(float $lng): LatLng

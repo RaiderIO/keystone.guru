@@ -40,7 +40,8 @@ class CreateRouteBodyCombatLogEventsBuilder extends CreateRouteBodyDungeonRouteB
         CreateRouteBody                           $createRouteBody
     ) {
         /** @var CreateRouteBodyCombatLogEventsBuilderLoggingInterface $log */
-        $this->log = App::make(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class);
+        $log       = App::make(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class);
+        $this->log = $log;
 
         parent::__construct(
             $seasonService,

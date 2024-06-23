@@ -24,6 +24,8 @@ use App\Service\CombatLog\Logging\CombatLogSplitServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteBodyCombatLogEventsBuilderLogging;
 use App\Service\CombatLog\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingInterface;
+use App\Service\CombatLog\Logging\CreateRouteBodyCorrectionBuilderLogging;
+use App\Service\CombatLog\Logging\CreateRouteBodyCorrectionBuilderLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLogging;
@@ -90,6 +92,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(MappingVersionCombatFilterLoggingInterface::class, MappingVersionCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);
         $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);
+        $this->app->bind(CreateRouteBodyCorrectionBuilderLoggingInterface::class, CreateRouteBodyCorrectionBuilderLogging::class);
 
         // Combat log event
         $this->app->bind(CombatLogEventServiceLoggingInterface::class, CombatLogEventServiceLogging::class);

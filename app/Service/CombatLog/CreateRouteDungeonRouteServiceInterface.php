@@ -11,8 +11,10 @@ interface CreateRouteDungeonRouteServiceInterface
 {
     public function convertCreateRouteBodyToDungeonRoute(CreateRouteBody $createRouteBody): DungeonRoute;
 
-    /** @return Collection<CombatLogEvent */
+    /** @return Collection<CombatLogEvent> */
     public function convertCreateRouteBodyToCombatLogEvents(CreateRouteBody $createRouteBody): Collection;
+
+    public function correctCreateRouteBody(CreateRouteBody $createRouteBody): CreateRouteBody;
 
     public function getCreateRouteBody(string $combatLogFilePath): CreateRouteBody;
 }
