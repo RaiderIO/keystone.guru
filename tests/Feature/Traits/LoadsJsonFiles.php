@@ -8,7 +8,7 @@ trait LoadsJsonFiles
 {
     protected function getJsonData(string $fileName): array
     {
-        $filePath = sprintf('%s/Fixtures/%s.json', $this->getImplementingClassDir(), $fileName);
+        $filePath = sprintf('%s/../Fixtures/%s.json', $this->getImplementingClassDir(), $fileName);
         return json_decode(file_get_contents($filePath), true);
     }
 

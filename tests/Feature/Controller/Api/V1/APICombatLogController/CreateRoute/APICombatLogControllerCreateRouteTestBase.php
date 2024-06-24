@@ -3,26 +3,10 @@
 namespace Controller\Api\V1\APICombatLogController\CreateRoute;
 
 use App\Models\Affix;
-use App\Models\Dungeon;
-use Tests\Feature\Traits\LoadsJsonFiles;
-use Tests\TestCases\APIPublicTestCase;
-use Tests\Traits\ValidatesUrls;
+use Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
-abstract class APICombatLogControllerCreateRouteTestBase extends APIPublicTestCase
+abstract class APICombatLogControllerCreateRouteTestBase extends APICombatLogControllerTestBase
 {
-    use LoadsJsonFiles, ValidatesUrls;
-
-    protected Dungeon $dungeon;
-
-    protected abstract function getDungeonKey(): string;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->dungeon = Dungeon::where('key', $this->getDungeonKey())->first();
-    }
-
     protected function validateResponseStaticData(array $response): void
     {
         // AffixGroups
@@ -52,14 +36,14 @@ abstract class APICombatLogControllerCreateRouteTestBase extends APIPublicTestCa
         $this->assertEquals(__($this->dungeon->name, [], 'en'), $response['data']['title']);
     }
 
-    protected function validatePulls(mixed $responseArr, int $pulls, int $enemyForces)
+    protected function validatePulls(mixed $responseArr, int $pulls, int $enemyForces): void
     {
         $this->assertEquals($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemy_forces']);
         $this->assertEquals($this->dungeon->currentMappingVersion->enemy_forces_required, $responseArr['data']['enemy_forces_required']);
     }
 
-    protected function validateAffixes(mixed $responseArr, string ...$affixes)
+    protected function validateAffixes(mixed $responseArr, string ...$affixes): void
     {
         $validAffixIds = array_map(function (array $affix) {
             return $affix['id'];

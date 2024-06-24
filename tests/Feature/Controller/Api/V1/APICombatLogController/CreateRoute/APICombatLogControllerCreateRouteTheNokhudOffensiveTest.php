@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 #[Group('Controller')]
 #[Group('API')]
 #[Group('APICombatLog')]
+#[Group('CreateRoute')]
 #[Group('NokhudOffensive')]
 class APICombatLogControllerCreateRouteTheNokhudOffensiveTest extends APICombatLogControllerCreateRouteTestBase
 {
