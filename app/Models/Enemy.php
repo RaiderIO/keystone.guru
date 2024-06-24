@@ -91,6 +91,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     public $timestamps = false;
 
     protected $casts = [
+        'id'                 => 'integer',
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'npc_id'             => 'integer',

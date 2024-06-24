@@ -19,6 +19,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Dawn of the Infinite: Galakrond's Fall" => "Galakrond's Fall",
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
+        'Uldaman: Legacy of Tyr'                 => 'Uldaman',
     ];
     public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
 

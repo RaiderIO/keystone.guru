@@ -57,7 +57,7 @@ class KillZone extends Model
 
     protected $appends = ['enemies'];
 
-    protected $with = ['spells:id'];
+    protected $with = ['spells:id,icon_name'];
 
     protected $fillable = [
         'id',
