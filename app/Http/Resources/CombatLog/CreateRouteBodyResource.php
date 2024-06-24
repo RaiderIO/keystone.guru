@@ -27,6 +27,6 @@ class CreateRouteBodyResource extends JsonResource
     public function toArray(Request $request): array
     {
         // All the properties in the CreateRouteBody class are public, so we can just cast it to an array
-        return (array)$this;
+        return (array)$this->resource;
     }
 }
