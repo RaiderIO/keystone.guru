@@ -1,9 +1,9 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents;
 
-use Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 use PHPUnit\Framework\Attributes\Group;
+use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 #[Group('Controller')]
 #[Group('API')]

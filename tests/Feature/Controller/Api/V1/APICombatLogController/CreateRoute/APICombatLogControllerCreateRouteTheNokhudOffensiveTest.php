@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CreateRoute;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CreateRoute;
 
 use App\Models\Affix;
 use App\Models\Dungeon;
@@ -24,7 +24,7 @@ class APICombatLogControllerCreateRouteTheNokhudOffensiveTest extends APICombatL
     public function create_givenTheNokhudOffensive14Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_14');
+        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_14', '../');
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -45,7 +45,7 @@ class APICombatLogControllerCreateRouteTheNokhudOffensiveTest extends APICombatL
     public function create_givenTheNokhudOffensive8Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_8');
+        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_8', '../');
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);

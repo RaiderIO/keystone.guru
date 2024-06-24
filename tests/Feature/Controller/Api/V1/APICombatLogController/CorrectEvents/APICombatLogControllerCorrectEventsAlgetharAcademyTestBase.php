@@ -1,12 +1,11 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents;
 
-use App\Models\Affix;
 use App\Models\Dungeon;
-use Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 #[Group('Controller')]
 #[Group('API')]
@@ -23,7 +22,7 @@ class APICombatLogControllerCorrectEventsAlgetharAcademyTestBase extends APIComb
     public function create_givenAlgetharAcademyBunten16Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('df_s4_algethar_academy_bunten_16');
+        $postBody = $this->getJsonData('df_s4_algethar_academy_bunten_16', '../');
 
         // Act
         $response = $this->post(route('api.v1.combatlog.event.correct'), $postBody);

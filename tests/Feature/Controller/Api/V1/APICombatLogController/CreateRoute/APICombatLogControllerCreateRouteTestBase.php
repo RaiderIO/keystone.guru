@@ -1,9 +1,9 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CreateRoute;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CreateRoute;
 
 use App\Models\Affix;
-use Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
+use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCreateRouteTestBase extends APICombatLogControllerTestBase
 {

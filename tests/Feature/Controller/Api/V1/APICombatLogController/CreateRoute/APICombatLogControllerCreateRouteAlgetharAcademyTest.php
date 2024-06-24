@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CreateRoute;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CreateRoute;
 
 use App\Models\Affix;
 use App\Models\Dungeon;
@@ -23,7 +23,7 @@ class APICombatLogControllerCreateRouteAlgetharAcademyTest extends APICombatLogC
     public function create_givenAlgetharAcademyBunten16Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('df_s4_algethar_academy_bunten_16');
+        $postBody = $this->getJsonData('df_s4_algethar_academy_bunten_16', '../');
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);

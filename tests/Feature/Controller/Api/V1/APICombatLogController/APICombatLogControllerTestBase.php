@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController;
 
 use App\Models\Dungeon;
 use Tests\Feature\Traits\LoadsJsonFiles;
