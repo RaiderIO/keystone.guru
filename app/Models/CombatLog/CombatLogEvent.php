@@ -45,6 +45,14 @@ class CombatLogEvent extends OpensearchModel
         self::EVENT_TYPE_SPELL_CAST,
     ];
 
+    public const DATA_TYPE_PLAYER_POSITION = 'player_position';
+    public const DATA_TYPE_ENEMY_POSITION  = 'enemy_position';
+
+    public const ALL_DATA_TYPE = [
+        self::DATA_TYPE_PLAYER_POSITION,
+        self::DATA_TYPE_ENEMY_POSITION,
+    ];
+
     protected $connection = 'combatlog';
 
     protected $fillable = [

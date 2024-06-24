@@ -40,7 +40,8 @@ class CombatLogEventFilter implements Arrayable
 
     public function __construct(
         private readonly Dungeon $dungeon,
-        private readonly string  $eventType
+        private readonly string  $eventType,
+        private readonly string  $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -54,6 +55,11 @@ class CombatLogEventFilter implements Arrayable
     public function getEventType(): string
     {
         return $this->eventType;
+    }
+
+    public function getDataType(): string
+    {
+        return $this->dataType;
     }
 
     public function getLevelMin(): ?int
@@ -279,7 +285,8 @@ class CombatLogEventFilter implements Arrayable
     {
         $combatLogEventFilter = new CombatLogEventFilter(
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
-            eventType: $requestArray['event_type']
+            eventType: $requestArray['event_type'],
+            dataType: $requestArray['data_type']
         );
 
         if (isset($requestArray['level'])) {
@@ -315,7 +322,8 @@ class CombatLogEventFilter implements Arrayable
     {
         $combatLogEventFilter = new CombatLogEventFilter(
             $heatmapDataFilter->getDungeon(),
-            $heatmapDataFilter->getEventType()
+            $heatmapDataFilter->getEventType(),
+            $heatmapDataFilter->getDataType()
         );
 
         $combatLogEventFilter->setLevelMin($heatmapDataFilter->getLevelMin());

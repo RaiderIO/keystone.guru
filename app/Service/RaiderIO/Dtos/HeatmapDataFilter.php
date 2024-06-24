@@ -32,7 +32,8 @@ class HeatmapDataFilter implements Arrayable
 
     public function __construct(
         private readonly Dungeon $dungeon,
-        private readonly string  $eventType
+        private readonly string  $eventType,
+        private readonly string  $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -46,6 +47,11 @@ class HeatmapDataFilter implements Arrayable
     public function getEventType(): string
     {
         return $this->eventType;
+    }
+
+    public function getDataType(): string
+    {
+        return $this->dataType;
     }
 
     public function getLevelMin(): ?int
@@ -163,6 +169,7 @@ class HeatmapDataFilter implements Arrayable
         $result = [
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
             'event_type'        => $this->getEventType(),
+            'data_type'         => $this->getDataType(),
         ];
 
         if ($this->getLevelMin() !== null) {
@@ -201,7 +208,8 @@ class HeatmapDataFilter implements Arrayable
     {
         $heatmapDataFilter = new HeatmapDataFilter(
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
-            eventType: $requestArray['event_type']
+            eventType: $requestArray['event_type'],
+            dataType: $requestArray['data_type']
         );
 
         if (isset($requestArray['level'])) {

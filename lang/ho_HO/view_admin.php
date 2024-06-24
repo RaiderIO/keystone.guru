@@ -36,11 +36,11 @@ return [
 
             'mapping_versions' => [
                 'title'                    => 'Hodor',
-                'add_bare_mapping_version' => '',
+                'add_bare_mapping_version' => 'Hodor',
                 'add_mapping_version'      => 'Hodor',
                 'delete'                   => 'Hodor',
                 'table_header_merged'      => 'Hodor',
-                'table_header_facade'      => '',
+                'table_header_facade'      => 'Hodor',
                 'table_header_id'          => 'Hodor',
                 'table_header_version'     => 'Hodor',
                 'table_header_created_at'  => 'Hodor',
@@ -123,6 +123,7 @@ return [
             'enemy_engagement_max_range'         => 'Hodor',
             'enemy_engagement_max_range_patrols' => 'Hodor',
             'percentage_display_zoom'            => 'Hodor',
+            'zoom_max'                           => 'Hodor',
             'default'                            => 'Hodor',
             'default_title'                      => 'Hodor',
             'facade'                             => 'Hodor',
@@ -266,12 +267,12 @@ return [
             'game_id'           => 'Hodor',
             'name'              => 'Hodor',
             'icon_name'         => 'Hodor',
-            'category'          => '',
+            'category'          => 'Hodor',
             'dispel_type'       => 'Hodor',
-            'cooldown_group'    => '',
+            'cooldown_group'    => 'Hodor',
             'schools'           => 'Hodor',
             'aura'              => 'Hodor',
-            'selectable'        => '',
+            'selectable'        => 'Hodor',
             'submit'            => 'Hodor',
             'save_as_new_spell' => 'Hodor',
         ],
@@ -335,6 +336,21 @@ return [
                 'header'                    => 'Hodor',
                 'select_exception_to_throw' => 'Hodor',
                 'submit'                    => 'Hodor',
+            ],
+        ],
+        'features'     => [
+            'list' => [
+                'title'        => 'Hodor',
+                'header'       => 'Hodor',
+                'table_header' => [
+                    'enabled' => 'Hodor',
+                    'feature' => 'Hodor',
+                    'actions' => 'Hodor',
+                ],
+                'actions'      => [
+                    'toggle' => 'Hodor',
+                    'forget' => 'Hodor',
+                ],
             ],
         ],
         'mdt'          => [
@@ -418,6 +434,9 @@ return [
 
             'subheader_mapping'  => 'Hodor',
             'force_sync_mapping' => 'Hodor',
+
+            'subheader_features' => 'Hodor',
+            'manage_features'    => 'Hodor',
 
             'subheader_actions'   => 'Hodor',
             'export_dungeon_data' => 'Hodor',

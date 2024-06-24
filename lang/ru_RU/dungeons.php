@@ -836,5 +836,55 @@ return [
             ],
         ],
     ],
+    'tww'          => [
+        'ara_karacityofechoes'   => [
+            'name'   => '',
+            'floors' => [
+                'ara_karacityofechoes' => '',
+            ],
+        ],
+        'cityofthreads'          => [
+            'name'   => '',
+            'floors' => [
+                'cityofthreads' => '',
+            ],
+        ],
+        'cinderbrewmeadery'      => [
+            'name'   => '',
+            'floors' => [
+                'cinderbrewmeadery' => '',
+            ],
+        ],
+        'darkflamecleft'         => [
+            'name'   => '',
+            'floors' => [
+                'darkflamecleft' => '',
+            ],
+        ],
+        'prioryofthesacredflame' => [
+            'name'   => '',
+            'floors' => [
+                'prioryofthesacredflame' => '',
+            ],
+        ],
+        'thedawnbreaker'         => [
+            'name'   => '',
+            'floors' => [
+                'thedawnbreaker' => '',
+            ],
+        ],
+        'therookery'             => [
+            'name'   => '',
+            'floors' => [
+                'therookery' => '',
+            ],
+        ],
+        'thestonevault'          => [
+            'name'   => '',
+            'floors' => [
+                'thestonevault' => '',
+            ],
+        ],
+    ],
 
 ];

@@ -29,6 +29,7 @@ $defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
 $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
 $filterExpandedCookiePrefix = 'heatmap_search_expanded_';
+$expandedDataType           = (bool)($_COOKIE[sprintf('%sdata_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
 $expandedKeyLevel           = (bool)($_COOKIE[sprintf('%skey_level', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixes            = (bool)($_COOKIE[sprintf('%saffixes', $filterExpandedCookiePrefix)] ?? 1);
 $expandedDateRange          = (bool)($_COOKIE[sprintf('%sdate_range', $filterExpandedCookiePrefix)] ?? 1);
@@ -60,6 +61,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'enabledStateSelector' => '#heatmap_search_toggle',
     'filterEventTypeContainerSelector' => '#filter_event_type_container',
     'filterEventTypeSelector' => 'input[name="event_type"]',
+    'filterDataTypeContainerSelector' => '#filter_data_type_container',
+    'filterDataTypeSelector' => 'input[name="data_type"]',
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
@@ -138,22 +141,48 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     </div>
                 </div>
 
-                <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100 mb-1"
-                     data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="event_type"
-                               class="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
-                               value="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
-                               checked>
-                        <i class="fas fa-users"></i> {{ __('combatlogeventtypes.enemy_killed') }}
-                    </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="event_type"
-                               class="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}"
-                               value="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}">
-                        <i class="fas fa-skull-crossbones"></i> {{ __('combatlogeventtypes.player_death') }}
-                    </label>
+                <div class="form-group">
+                    <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100"
+                         data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="event_type"
+                                   class="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
+                                   value="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
+                                   checked>
+                            <i class="fas fa-users"></i> {{ __('combatlogeventtypes.enemy_killed') }}
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="event_type"
+                                   class="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}"
+                                   value="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}">
+                            <i class="fas fa-skull-crossbones"></i> {{ __('combatlogeventtypes.player_death') }}
+                        </label>
+                    </div>
                 </div>
+
+                @component('common.search.filter', [
+                    'key' => 'data_type',
+                    'text' => __('view_common.maps.controls.heatmapsearch.data_type'),
+                    'expanded' => $expandedDataType,
+                    'title' => __('view_common.maps.controls.heatmapsearch.data_type_title')
+                ])
+                    <div id="filter_data_type_container" class="btn-group btn-group-toggle w-100 mb-1"
+                         data-toggle="buttons">
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="data_type"
+                                   class="{{ CombatLogEvent::DATA_TYPE_ENEMY_POSITION }}"
+                                   value="{{ CombatLogEvent::DATA_TYPE_ENEMY_POSITION }}">
+                            <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
+                        </label>
+                        <label class="btn btn-secondary active">
+                            <input type="radio" name="data_type"
+                                   class="{{ CombatLogEvent::DATA_TYPE_PLAYER_POSITION }}"
+                                   value="{{ CombatLogEvent::DATA_TYPE_PLAYER_POSITION }}"
+                                   checked>
+                            <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
+                        </label>
+                    </div>
+                @endcomponent
 
                 @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level'), 'expanded' => $expandedKeyLevel])
                     <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>

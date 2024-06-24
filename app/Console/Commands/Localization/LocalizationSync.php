@@ -14,7 +14,7 @@ use Illuminate\Console\Command;
  */
 class LocalizationSync extends Command
 {
-    private const LANG_HODOR = 'ho-HO';
+    private const LANG_HODOR = 'ho_HO';
 
     /**
      * The name and signature of the console command.

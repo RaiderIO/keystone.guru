@@ -32,5 +32,13 @@ return [
     'dragonflight'       => [
         'name' => 'Hodor',
     ],
-
+    'tww'                => [
+        'name' => 'Hodor',
+    ],
+    'midnight'           => [
+        'name' => 'Hodor',
+    ],
+    'tlt'     => [
+        'name' => 'Hodor',
+    ],
 ];
