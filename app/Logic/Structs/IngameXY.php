@@ -27,7 +27,7 @@ class IngameXY implements Arrayable
 
     public function getY(?int $precision = null): float
     {
-        return $precision === null ? $this->x : round($this->y, $precision);
+        return $precision === null ? $this->y : round($this->y, $precision);
     }
 
     public function setY(float $y): IngameXY
