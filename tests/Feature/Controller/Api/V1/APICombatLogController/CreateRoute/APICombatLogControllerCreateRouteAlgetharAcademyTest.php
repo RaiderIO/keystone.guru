@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controller\Api\V1\APICombatLogController;
+namespace Controller\Api\V1\APICombatLogController\CreateRoute;
 
 use App\Models\Affix;
 use App\Models\Dungeon;
@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 #[Group('API')]
 #[Group('APICombatLog')]
 #[Group('AlgetharAcademy')]
-class APICombatLogControllerAlgetharAcademyTest extends APICombatLogControllerTestBase
+class APICombatLogControllerCreateRouteAlgetharAcademyTest extends APICombatLogControllerCreateRouteTestBase
 {
     protected function getDungeonKey(): string
     {
