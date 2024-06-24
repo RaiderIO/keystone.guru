@@ -23,7 +23,20 @@ class DungeonRouteFactory extends Factory
         $seasonService = app()->make(SeasonServiceInterface::class);
 
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::with('currentMappingVersion')->inRandomOrder()->first();
+        $count    = 0;
+        $maxCount = 10;
+        do {
+            // Prevent infinite loops
+            if ($count >= $maxCount) {
+                throw new \Exception('Unable to find a dungeon to create a route for!');
+            }
+
+            $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+
+            $count++;
+        } while ($dungeon === null);
+
+        $dungeon->load('currentMappingVersion');
 
         $activeSeason = $dungeon->getActiveSeason($seasonService);
 

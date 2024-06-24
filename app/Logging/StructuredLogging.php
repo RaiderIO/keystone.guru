@@ -28,7 +28,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         /** @var Application|Container $app */
         $app = app();
 
-        if ($app->runningInConsole()) {
+        if ($app->runningInConsole() && !$app->runningUnitTests()) {
             $this->setChannel('stderr');
         }
 
@@ -153,9 +153,9 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     {
         $levelName = $level->getName();
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
-        $fixedLength  = 7;
+        $fixedLength     = 7;
         $levelNameLength = strlen($levelName);
-        $startPadding = str_repeat(' ', max(0, $fixedLength - $levelNameLength));
+        $startPadding    = str_repeat(' ', max(0, $fixedLength - $levelNameLength));
 
         $messageWithContextCounts = trim(
             sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0])
