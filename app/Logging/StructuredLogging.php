@@ -12,6 +12,8 @@ use Psr\Log\LoggerInterface;
 
 abstract class StructuredLogging implements StructuredLoggingInterface
 {
+    private static bool $ENABLED = true;
+
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
 
@@ -151,6 +153,10 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private function log(Level $level, string $functionName, array $context = []): void
     {
+        if (!self::$ENABLED) {
+            return;
+        }
+
         $levelName = $level->getName();
         // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
         $fixedLength     = 7;
@@ -182,5 +188,15 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         foreach ($this->groupedContexts as $key => $context) {
             $this->cachedContext = array_merge($this->cachedContext, $context);
         }
+    }
+
+    public static function enable(): void
+    {
+        self::$ENABLED = true;
+    }
+
+    public static function disable(): void
+    {
+        self::$ENABLED = false;
     }
 }

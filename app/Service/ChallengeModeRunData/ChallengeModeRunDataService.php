@@ -9,7 +9,7 @@ use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterface
@@ -25,14 +25,17 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
         $this->dungeonCache = collect();
     }
 
-    public function convert(): bool
+    public function convert(bool $force = false, ?callable $onProcess = null): bool
     {
         $result = true;
 
         try {
             $this->log->convertStart();
 
-            ChallengeModeRunData::chunk(100, function (Collection $rows) use (&$result) {
+            ChallengeModeRunData::when(!$force, function (Builder $builder) {
+                $builder->where('processed', false);
+            })->chunk(100, function (Collection $rows) use (&$result, $onProcess) {
+                /** @var Collection<ChallengeModeRunData> $rows */
                 // Stop if there was an error
                 if (!$result) {
                     return false;
@@ -40,6 +43,10 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
 
                 foreach ($rows as $row) {
                     $result = $result && $this->convertChallengeModeRunData($row);
+
+                    if ($onProcess !== null) {
+                        $onProcess($row);
+                    }
                 }
 
                 return true;
@@ -60,8 +67,8 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
             $decoded = json_decode($challengeModeRunData->post_body, true);
 
             if (!isset($decoded['challengeMode']['challengeModeId'])) {
-                $decoded['challengeMode']['challengeModeId'] = $this->getDungeonFromMapId($decoded['challengeMode']['mapId'])
-                    ?->challenge_mode_id;
+                $decoded['challengeMode']['challengeModeId'] =
+                    $this->getDungeonFromMapId($decoded['challengeMode']['mapId'])?->challenge_mode_id;
             }
 
             if ($decoded['challengeMode']['challengeModeId'] === null) {
@@ -79,7 +86,8 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
                 $attributes[] = $combatLogEvent->getAttributes();
             }
 
-            $result = $this->combatLogEventRepository->insert($attributes);
+            $result = $this->combatLogEventRepository->insert($attributes)
+                && $challengeModeRunData->update(['processed' => true]);
         } finally {
             $this->log->convertChallengeModeRunDataEnd($combatLogEventsAttributes->count());
         }
